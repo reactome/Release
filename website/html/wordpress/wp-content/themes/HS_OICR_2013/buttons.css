@@ -1,0 +1,81 @@
+@charset "UTF-8";
+/**************BUTTONS***********************/
+/*styles the button in general*/
+a.button {
+	background-image: -moz-linear-gradient(top, #ffffff, #dbdbdb);
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #ffffff),color-stop(1, #dbdbdb));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#dbdbdb');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#dbdbdb')";
+	border: 1px solid #fff;
+	-moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
+	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
+	border-radius: 18px;
+	-webkit-border-radius: 18px;
+	-moz-border-radius: 18px;
+	padding-top: 5px;
+	text-decoration: none;
+	text-shadow: #fff 0 1px 0;
+	float: left;
+	display: block;
+	margin-top:10px;
+	color: #4C4C74;
+	line-height: 23px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align:center;
+	width:190px;
+}
+a.button:hover {
+	background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #ffffff),color-stop(1, #eeeeee));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eeeeee');
+	-ms	-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#eeeeee')";
+	color: #9BB3EB;
+	display: block;
+}
+a.button:active {
+	background-image: -moz-linear-gradient(top, #dbdbdb, #ffffff);
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #dbdbdb),color-stop(1, #ffffff));
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#dbdbdb', EndColorStr='#ffffff');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#dbdbdb', EndColorStr='#ffffff')";
+	text-shadow: 0px -1px 0 rgba(255, 255, 255, 0.5);
+	position:relative;
+	top:1px;
+	}
+/* this is IE specific */
+a.button {
+border: 1px solid #979797;
+}
+/*adding icons to the buttons*/
+a.button.icon {
+padding-top: 75px;
+padding-bottom: 5px;
+}
+a.button.icon span{
+padding-top: 70px;
+background: url(./images/icons/icons.png) no-repeat;
+}
+a.button.icon:hover span{
+padding-top: 70px;
+background: url(./images/icons/icons_hover.png) no-repeat;
+}
+a.button.icon.browse span {
+background-position: center 0;
+margin
+}
+a.button.icon.data span {
+background-position: center -90px;
+}
+a.button.icon.download span {
+background-position: center -200px;
+}
+a.button.icon.cytoscape span {
+background-position: center -300px;
+}
+a.button.icon.overview span {
+background-position: center -500px;
+}
+a.button.icon.contact span {
+background-position: center -395px;
+}

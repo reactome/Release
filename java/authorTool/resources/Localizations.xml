@@ -1,0 +1,20 @@
+<!-- This list is compiled from the values of compartment slots that are used in the gk_central -->
+<Localizations>
+<Localization name="cytosol" />
+<Localization name="endosome" />
+<Localization name="endosome membrane" />
+<Localization name="endoplasmic reticulum lumen" />
+<Localization name="endoplasmic reticulum membrane" />
+<Localization name="extracellular" />
+<Localization name="Golgi lumen" />
+<Localization name="Golgi membrane" />
+<Localization name="mitochondrial inner membrane" />
+<Localization name="mitochondrial intermembrane space" />
+<Localization name="mitochondrial matrix" />
+<Localization name="mitochondrial outer membrane" />
+<Localization name="nuclear membrane" />
+<Localization name="nucleoplasm" />
+<Localization name="peroxisomal matrix" />
+<Localization name="peroxisomal membrane" />
+<Localization name="plasma membrane" />
+</Localizations>

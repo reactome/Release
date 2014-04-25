@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema-doc>
+<classes>
+<class name="Activity">
+<desc>This class contains the GO Molecular Function ontology.  An Activity term is used to cross-reference a GK CatalystActivity.  Curators should never create instances of class Activity directly. If curators want to use a GO term that is not in GK (yet) they should mail the list about it.</desc>
+</class>
+<class name="Affiliation">
+<desc>An Affiliation is the name and address of an institution, e.g., Cold Spring Harbor Laboratory / 1 Bungtown Road, Cold Spring Harbor NY USA.  Affiliations can be created for any Person, but at present are created only for Persons actively involved in the GK project as authors or curators.</desc>
+</class>
+<class name="CatalystActivity">
+<desc>A CatalystActivity instance records the Activity of a  specific PhysicalEntity, e.g., glucose transporter activity of GLUT1 homotetramer [plasma membrane].  A PhysicalEntity should have as many CatalystActivity instances associated with it as it has distinct activities.</desc>
+</class>
+<class name="ConcurrentEventSet">
+<desc>A ConcurrentEventSet is a group of otherwise independent GK Events that are linked to one another because they occur simultaneously &lt;IV&gt;This is actually not the point. The point is non-competitiveness which may result in 2 Event happening to the same PE simultaneously.&lt;/IV&gt; and because one of the PhysicalEntities involved in the events, the FocusEntity, is common to all of them.  An example is GK_74667, which links three GenericEvents in the pathway of insulin receptor activation and recycling via the FocusEntity GK_74678, activated insulin receptor [integral to plasma membrane].
+&lt;IV&gt;A ConcurrentEventSet is a group of GK Events which act upon a given PhysicalEntity (value of the focusEntity slot) non-competitively. An example is IRS and Shc2 binding to insulin:insulin receptor complex. IRS and Shc2 bind the active insulin receptor independently of each other, e.g. binding of IRS and the following IRS-specific signaling events happens regardless of binding of Shc2 and vice versa.
+Without the ConcurrentEventSet the reactions of Shc2 binding and IRS binding would compete with each other and hence would seem as alterantives rather than parallels.&lt;/IV&gt;</desc>
+</class>
+<class name="DatabaseIdentifier">
+<desc>This class holds database identifiers from databases other than GK. Database identifiers for nucleotide or protein sequences are held in the subclass SequenceDatabaseIdentifier.</desc>
+</class>
+<class name="Event">
+<desc>An event is any biological process in which input entities are converted to output entities in one or more steps.  The GK Event class is the abstract superclass of ConcreteEvent and GenericEvent.  GK Events should not be created directly.</desc>
+</class>
+<class name="ConcreteEvent">
+<desc>ConcreteEvent is the abstract superclass of ConcretePathway and ConcreteReaction.  ConcreteEvents should not be created directly.</desc>
+</class>
+<class name="ConcreteReaction">
+<desc>A ConcreteReaction is an Event in which all Inputs, Outputs, and Catalysts are ConcreteEntities, and in which the conversion of inputs to outputs occurs in a single step.  Note that a freely reversible chemical reaction, A + B &lt;=&gt; C + D, is annotated in GK as two ConcreteReactions, one in which A + B as inputs are converted to C + D as outputs, and one in which C + D as inputs are converted to A + B as outputs.</desc>
+</class>
+<class name="ConcretePathway">
+<desc>A ConcretePathway is a multi-step ConcreteEvent whose Components are ConcreteReactions, ConcretePathways, or both, listed in the order in which they occur.</desc>
+</class>
+<class name="GenericEvent">
+<desc>GenericEvent is the abstract superclass of GenericPathway and GenericReaction.  GenericEvents should not be created directly.</desc>
+</class>
+<class name="GenericReaction">
+<desc>A GenericReaction is a single-step Event in which, at least one input, output, or catalyst is non-Concrete.</desc>
+</class>
+<class name="GenericPathway">
+<desc>A GK Pathway is a multi-step Event in which, at least one component Reaction or Pathway is non-Concrete.</desc>
+</class>
+<class name="EvidenceType">
+<desc>This class holds GO evidence codes - for definitions see http://www.geneontology.org/doc/GO.evidence.html      At present mainly used for flagging inferred orthologous events: IEA = inferred by electronic annotation.</desc>
+</class>
+<class name="Figure">
+<desc>A url that holds a jpg file that illustrates an Event on the Event Page at the GK website.</desc>
+</class>
+<class name="FrontPage">
+<desc>This class is used to specify the topics on the frontpage at the GK website.  Curators do not need to add anything here.</desc>
+</class>
+<class name="GO_BiologicalProcess">
+<desc>This constitutes of the GO Biological Process terms.  This class is only to be used for cross-referencing our Events.  Curators should never create instances of class GO_Biologicalprocess. If curators want to use a GO term that is not in GK (yet) they should mail the list about it.</desc>
+</class>
+<class name="InstanceEdit">
+<desc>This constitutes the evidence for modifications of existing instances or addition of new instances to the database. This has the name of the curator/author doing the changes (added by curators), date or datetime of the modification (will be set to current datetime at the time of commit if not entered manually). Curators should create a new InstanceEdit in their protege project and check the relevant box (_applyToAllEditedInstances) to apply this stamp to all the instances that are modified in that project.</desc>
+</class>
+<class name="LiteratureReference">
+<desc>This class enables the curators to link their annotations in Regulation, Entities, Events, Summation and CatalystActivity classes to published articles, chapters in books etc. If a Pubmed ID (PMID) is available, fill it in the relevant slot in the LiteratureReference form. The complete citations will be filled in informatically. However, for double-checking to avoid errors, a new slot for the surname of the first author should be filled in as well (to be added by Imre). If the source does not have PMID (e.g. is a published book), it is necessary to fill in the appropriate slots for authors, title and other details in the form.</desc>
+</class>
+<class name="ModifiedResidue">
+<desc>This is be used  to represent a specific modification of any residue in an AccesionedEntity.
+A modification is carried out by simple chemical entities (a ConcreteEntity)  on a residue (a  ConcreteEntity) at a specific position in an AccessionedEntity. While the position could be unknown, the nature of modification should be a defined one. 
+For eg. ModifiedResidue 74588: Orthophosphate on Serine [nucleus] 427 of SPTREMBL:O46469 where the 427th aminoacid, a serine residue of the protein with STREMBL ID: O46469, is phosphorylated by the addition of an orthophosphate moiety.
+&lt;IV&gt; Represents a covalent modification of a given residue of a sequence, i.e. phosphorylations of Ser 427 in SWALL:O46469. The ModifiedResidue instance should be put into AccessionedEntity's hasModifiedResidue slot to indicate that this AccessionedEntity has this modification. I.e. just creating a ModifiedResidue does not imply that all AccessionedEntities which refer to the same sequence have this modification. It is important to note that the SequenceDatabaseIdentifer referred by an AccessionedEntity and its ModifiedResidue should be the same, i.e. AccessionedEntity referring to say SWALL:O12345 should not have a ModifiedResidue referring to SWALL:P98765. This is unfortunately impossible to enforce in protege.</desc>
+</class>
+<class name="Person">
+<desc>This class is used to hold the names of  editors, authos, reviewers or the authors of the publication sources referred to in LiteratureReferences. The Person is referred by InstanceEdit, Summation and LiteratureReference instances.</desc>
+</class>
+<class name="PhysicalEntity">
+<desc>GK looks at a PE as  "something which can interact physically with something else". This enables the inclusion of all kinds of small molecules, proteins, nucleic acids, chemical compounds, complexes etc. (&lt;IV&gt;even photon ;-)&lt;/IV&gt;) under this superclass. 
+PEs can be ConcreteEntity or GenericEntity.  GK looks at PEs  in four top abstract classes: Complexes, Concrete, Generic and Simple Entities. 
+It  is an abstract superclass, direct instances of PhysicalEntities should not be created. </desc>
+</class>
+<class name="ConcreteEntity">
+<desc>&lt;IV&gt;An abstract superclass for representing PhysicalEntities which are "individual", i.e. do not represent a generalisation of a group of PhysicalEntities.  E.g. ATP,GTP,CTP,GTP and UTP are all ConcreteEntities while NTP or nucleoside is a GenericEntity representing any of the 5 ConcreteEntities above. Direct instances of this class should not be created. See subclasses AccessionedEntity, ConcreteSimpleEntity, AccessionedEntityPart and ConcreteComplex for further information.&lt;/IV&gt;</desc>
+</class>
+<class name="AccesionedEntity">
+<desc>These are ConcreteEntities (proteins and mRNA) with a stable identification number in SPTrEMBL, EMBL or RefSeq databases. These identification numbers are incorporated into 
+GK under SequenceDatabaseidentifier class. An AE can have a CatalystActivity, ModifiedResidue or an AccesionedEntityPart . It can participate in forming complexes.
+&lt;IV&gt;ConcreteEntities (i.e. individual molecules and not something representing a group) representing Protein and nucleic acid molecules with known sequence. Proteins must have a SequenceDatabaseIdentifier from SWALL (called UniProt in the future), RNAs SequenceDatabaseIdentifier from RefSeq or (if the RefSeq entry does not exist) from GenBank/EMBL/DDBJ&lt;/IV&gt;</desc>
+</class>
+<class name="AccesionedEntityPart">
+<desc>:&lt;IV&gt;This is an ambiguous class at the moment. Instances of it represent both domains/sequence features in the whole sequence context as well as independently existing fragments derived from the full sequence (e.g. chains of insulin receptor). The latter is the true meaning of this class. I.e. we need to create a separate class to represent domains if we want to represent them.&lt;/IV&gt;</desc>
+</class>
+<class name="ConcreteSimpleEntity">
+<desc>This class includes small molecules and ligands such as ATP, glucose, glucose-6-phosphate, zinc ion etc. Corresponding IDs from KEGG's Compound database incorporated into GK under DatabaseIdentifier class are used to generate CSE. CSEs can participate in forming complexes, present in ModifiedResidues or participate in Reactions.
+&lt;IV&gt;Instances of this class represent individual molecules, ions and particles (e.g. ATP, glucose, glucose-6-phosphate, zinc ion, photon  etc) which are not sequences such as proteins and RNAs&lt;/IV&gt;</desc>
+</class>
+<class name="ConcreteComplex">
+<desc>This class includes molecular complexes made up only of GK's concrete entities  including other ConcreteComplexes.  A CC can particpate in  Reactions and/or have CatalystActivities.</desc>
+</class>
+<class name="GenericEntity">
+<desc>This is an abstract class under PE.  It is expected to include  only the  GO cellular_component entries that are imported into GK. Curators should not annotate any entities under this category directly but use it's two subcategories for Simple Entities (GSE) and Complexes (GC). GK looks at GEs as those entities that cannot be classified under ConcreteEntity class.  GSE or GC can participate only in GenericEvents.
+&lt;IV&gt;This class is in a bit of a mess due to GO cellular_components. It should be abstract, i.e. w/o direct instances, so please don't create them.&lt;/IV&gt;</desc>
+</class>
+<class name="GenericSimpleEntity">
+<desc>An instance of this class is used to generalise, i.e. give a collective name, for a set of ConcreteSimpleEntities (either directly of via intermediate GenericSimpleEntity instances). GenericSimpleEntity instance does not refer to it's Concrete instances, it is the ConcreteSimpleEntity instance which has to point (instanceOf slot) to the appropriate GenericSimpleEntity instance. I.e. "ConcreteSimpleEntity ATP" can have "GenericSimpleEntity nucleoside" in its. instanceOf slot. This effectively means that ATP is a kind of nucleoside and that everything applicable to the nucleoside (i.e. reaction which consume and produce it, complexes it participates etc) is also applicable to its instances such as ATP (and others). This means that assigning ConcreteSimpleEntities as instances of GenericSimpleEntities should be done with care and thought in order not to imply incorrect things.</desc>
+</class>
+<class name="GenericComplex">
+<desc>This class includes molecular complexes that consist of one or more generic entities.</desc>
+</class>
+<class name="ReferenceDatabase">
+<desc>This class describes the source (database) of an identifier in the DatabaseIdentifier (and SequenceDatabaseIdentifier) instance. Generally there shouldn't be a need to create RefrenceDatabase instances. Contact the gkb-dev list 1st if you think you need a new ReferenceDatabase instance.</desc>
+</class>
+<class name="Regulation">
+<desc>In GK, Events and CatalystActivities may be regulated by other Events, PhysicalEntities, CatalystActivities.  The description of an instance of regulation includes 1) the regulatedentity (Event or CatalystActivity) , the regulator (Event, PhysicalEntity, or CatalystActivity) and the mechanism by which regulation is achieved (Regulationtype). Regulation may be positive (if the Regulator facilitates an Event/increases a CatalystActivity), negative (if the Regulator inhibits an Event/decreases CatalystActivity) or a Requirement if the regulator is required for the CatalystActivity/ or for the Event to occur.
+For example: 'GTP' positively regulates 'glutamate dehydrogenase (NAD(P)+) activity of glutamate dehydrogenase 1, homohexamer'
+RegulatedEntity= CatalystActivity:'glutamate dehydrogenase (NAD(P)+) activity of glutamated dehydrogenase 1,homohexamer'
+Regulator=GTP</desc>
+</class>
+<class name="RegulationType">
+<desc>This describes how an Event/CatalystActivity is regulated by the Regulator (via ie: allosteric activation, allosteric inhibition, competitive inhibition, &lt;IV&gt;phosphorylation - this is wrong now. It use d to be like that in the past but not any more.&lt;/IV&gt;).</desc>
+</class>
+<class name="SequenceDatabaseIdentifier">
+<desc>This class holds database identifiers for nucleotide or protein sequences from sequence databases. In the future the curators should not need to create SequenceDatabaseIdentifier instances since most relevant ones should be imported into gk_central. At the moment though we just have human SWALL entries and few non-human SWALLs. If you do find it necessary to create a new SequenceDatabaseIdentifier instance please make sure that you fill the species slot. This is necessary to overcome a "feature" in SWALL by which identical sequences from different organisms are merged into cross-species sequence entries. In GK those are handled by multiple SequenceDatabaseIdentifier instances with same databaseIdentifier but different species.</desc>
+</class>
+<class name="Summation">
+<desc>Holds the text description for an event, citations that are not the primary data for the Event, and the information for the frontpage regarding author, editor, review, and release date. Any references supporting the event itself (in the organism for which the event was created)should go under the LiteratureReferences of the Event rather than the Summation. </desc>
+</class>
+<class name="Taxon">
+<desc>Taxon describes the organism in which GK events occur/ PhysicalEntities exist. The list of Taxons in GK is a subset of those listed in the NCBI Taxonomy database. Although other groupings (SuperTaxons) are listed under Taxon (ie: Class, Family, Genus) only the instances of species should be applied. The taxon slot should be filled out for all Events and all PhysicalEntities which are or involve species specific PhysicalEntities (i.e. AccessionedEntities).</desc>
+</class>
+</classes>
+</schema-doc>

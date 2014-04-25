@@ -1,0 +1,36 @@
+#!/bin/csh
+
+# This is a shell script that can be used as a launcher for
+# Reactome perl scripts.  It sets up the environment for
+# perl, so that you don't have to do this yourself.  Usage:
+#
+# run <perl command> <argument 1> <argument 2> ....
+
+umask 0002
+
+# First, find the location of the root of the GKB hierarchy
+set path_to_script=$0
+set script_dir=`echo $path_to_script | awk '{ sub(/\/[^\/]+$/, ""); print }'`
+set GKB=$script_dir/../../..
+
+# Set up libraries and things needed by Perl
+setenv PATH /usr/local/bin:${PATH}
+setenv PERL5LIB $PWD
+setenv PERL5LIB ${PERL5LIB}:$GKB/modules
+setenv PERL5LIB ${PERL5LIB}:/usr/local/bioperl-1.0
+setenv PERL /usr/local/bin/perl
+
+# Put a link to the root of the GKB hierarchy into the
+# user's home directory
+setenv HOME $home
+set gkb_at_home=$HOME/GKB
+echo gkb_at_home=$gkb_at_home
+if ( -e $gkb_at_home ) then
+    ; # do nothing if link is already there
+else
+    ln -s $GKB gkb_at_home
+endif
+
+# Execute the perl script
+$PERL $argv
+

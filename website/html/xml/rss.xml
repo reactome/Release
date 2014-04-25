@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="/xml/rss.xsl"?><rss version="2.0"><channel>
+    <title>Reactome</title>
+    <link>http://www.reactome.org</link>
+    <description>
+    Reactome is an open, on-line knowledgebase of biological processes.
+    </description>
+    <language>en-us</language>
+
+  <item>
+
+    <title>Reactome release 35</title>
+    <link>http://www.reactome.org</link>
+    <description>    
+
+Version 35 includes the new topic Circadian clock. New and revised pathways include four in the immune system signaling module (Interferon signaling, RIG-I/MDA5 mediated induction of IFN alpha/beta, Advanced Glycosylation End product Receptor signaling, and Toll like Receptor Cascades), Interactions of the DSCAM immunoglobulin superfamily proteins, GABA receptor activation in synaptic transmission, Regulation of mRNA stability by AU-rich elements, Vitamin B1 metabolism and Molybdenum cofactors biosynthesis, Vitamin A uptake in enterocytes, Transport of glycoproteins to the Golgi, and in our project to catalog transport processes systematically, Iron uptake and transport and Ion channel transport. G Dall’Olio and R Stephan are our external authors in this release. U Albrecht, S Akira, J Clemens, F Delaunay, P Gagneux, L He, T Kawai, S Kay, S Restituito, AA Sater, C Schindler, H Tsuyoshi, J Wilusz, and SD Yan are our external reviewers.
+
+A new feature for the Reactome website is “Pathway of the Month” which highlights a particular pathway from Reactome. This month’s pathway is TNF signaling.
+
+The Reactome FI Cytoscape Plugin provides access to the Reactome Functional Interaction (FI) Network, a set of protein-protein interaction pairs scored by quality that links proteins curated in Reactome to other human proteins and covers close to 50% of human proteins (Wu et al. 2010). This plugin is useful in the discovery of network patterns related to cancer and other types of disease. The Reactome FI plugin is available for download (search term: Reactome FI) and the user guide is accessible here.
+
+Reactome will appear in the annual Database Issue of Nucleic Acids Research (Croft et al. 2011).
+    </description>
+    <pubDate>16 Dec 2010, 12:00:00 GMT</pubDate>
+  </item>
+</channel>
+</rss>
+
+<!--
+Please don't use any html elements in the description - it should be just plain text
+-->
