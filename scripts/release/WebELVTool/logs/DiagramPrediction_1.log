@@ -1,0 +1,11 @@
+2012-09-18 19:04:59,456 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:2029401] Diagram of Collagen formation
+2012-09-18 19:05:00,289 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:8016888] Diagram of Collagen formation (Caenorhabditis elegans)
+2012-09-18 19:05:00,371 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:8016891] Diagram of Collagen formation (Sus scrofa)
+2012-09-18 19:05:00,443 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:8016893] Diagram of Collagen formation (Bos taurus)
+2012-09-18 19:05:00,519 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:8016895] Diagram of Collagen formation (Canis familiaris)
+2012-09-18 19:05:00,596 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:8016897] Diagram of Collagen formation (Mus musculus)
+2012-09-18 19:05:00,655 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:8016899] Diagram of Collagen formation (Rattus norvegicus)
+2012-09-18 19:05:00,723 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:8016901] Diagram of Collagen formation (Gallus gallus)
+2012-09-18 19:05:00,797 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:8016903] Diagram of Collagen formation (Taeniopygia guttata)
+2012-09-18 19:05:00,874 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:8016905] Diagram of Collagen formation (Xenopus tropicalis)
+2012-09-18 19:05:00,937 [main] INFO  org.gk.pathwaylayout.DiagramGeneratorFromDB  - generateELVInstancesAndFiles() on diagram: [PathwayDiagram:8016907] Diagram of Collagen formation (Danio rerio)

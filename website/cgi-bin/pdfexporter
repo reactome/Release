@@ -1,0 +1,134 @@
+#!/usr/local/bin/perl -w
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+use lib "/tmp/libs/bioperl-1.0";
+use lib "/tmp/libs/my_perl_stuff";
+
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+use GKB::DocumentGeneration::ReactomeDatabaseReader;
+use GKB::DocumentGeneration::GenerateTextPDF;
+
+use strict;
+
+my $script_name = $0;
+$script_name =~ s/.*[^0-9A-Za-z]([0-9A-Za-z]+)$/$1/;
+my ($DBA,$WU,$INSTANCES,$IN_HTML,$DB,$ID,$FS);
+my $CGI = CGI->new();
+
+eval {
+
+# Pull useful information from the URL
+$WU = GKB::WebUtils->new_from_cgi(
+    -CGI => $CGI,
+    );
+$DBA = $WU->dba;
+$ID = $CGI->param('ID');
+$DB = $CGI->param('DB');
+$FS = $CGI->param('FS');
+# There's a bug in the -base operation, it doesn't get the port number,
+# this little hack should get round it in most cases.
+my $base_url = $CGI->url();
+if ($base_url =~ /^(html:\/\/[^\/]+)/) {
+    $base_url =~ $1;
+} else {
+    $base_url = $CGI->url(-base => 1);
+}
+
+my $id_for_filename = "UNKNOWN";
+if ($ID =~ /^([0-9]+)$/) {
+    # De-taint ID, if it looks sensible
+    $id_for_filename = $1;
+}
+
+# Invent a fancy filename and use it to generate an absolute path
+# in the local filesystem as well as a URL that the browser will
+# understand.
+my $cache_filename = "event_DB_ID_" . $id_for_filename . ".pdf";
+my $cache_path = "$GK_TMP_IMG_DIR/$cache_filename";
+my $url = "/img-tmp/$cache_filename";
+
+# If the file is already in the cache, don't bother to regenerate it
+if ( !(-e $cache_path) || !$CACHE_GENERATED_DOCUMENTS ) {
+    # Set up output formatting parameters
+    my %params = ("depth_limit" => 100);
+    $params{"output_file_name"} = $cache_path;
+
+    my @ids = ($ID);
+
+    # Set up reader for pulling information out of Reactome
+    my $reader = GKB::DocumentGeneration::ReactomeDatabaseReader->new();
+    $reader->set_dba($DBA);
+    $reader->init_pathways(\@ids);
+    $reader->set_reaction_representation(2);
+    if ($CACHE_GENERATED_DOCUMENTS) {
+    	$reader->set_document_style_report();
+    } else {
+    	$reader->set_document_style_reviewers_report();
+    }
+    if (defined $base_url) {
+		$reader->set_hyperlink_base_url($base_url);
+    }
+	if (defined $DB) {
+		$reader->set_hyperlink_db($DB);
+	}
+
+    # Generate PDF
+    my $text_generator = GKB::DocumentGeneration::GenerateTextPDF->new;
+	if (defined $FS) {
+		$text_generator->set_regular_text_font_size($FS);
+	}
+    $text_generator->set_params(\%params);
+    $text_generator->set_reader($reader);
+    $text_generator->open();
+    $text_generator->generate_prolog("", "", "", "");
+    $text_generator->generate_chapters();
+    $text_generator->close();
+}
+
+# Pass the PDF back to the browser
+print $CGI->redirect($url);
+
+}; $@ && handle_error("$@");
+
+sub handle_error {
+    print_page_start();
+    ($IN_HTML) ? print qq(<PRE>@_</PRE>) : print @_;
+    print_page_end();
+    exit;   
+}
+
+sub print_page_start {
+    $IN_HTML = 1;
+    print $CGI->header(-charset => 'UTF-8');
+    print $CGI->start_html(
+	-style => {-src => '/stylesheet.css'},
+	-title => "$PROJECT_NAME ($script_name)",
+	);
+    print $WU->top_navigation_box;
+}
+
+sub print_page_end {
+    ($WU && $IN_HTML) &&  print $WU->make_footer;
+    ($IN_HTML) && print $CGI->end_html;
+    ($DBA) && $DBA->db_handle->disconnect;
+}

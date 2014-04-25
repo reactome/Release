@@ -1,0 +1,95 @@
+; Thu Jan 12 15:16:39 GMT 2006
+; 
+;+ (version "2.0.1")
+;+ (build "Build 168")
+
+
+(defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS
+	(is-a USER)
+	(role concrete)
+	(single-slot targetX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot species_id
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot DB_ID
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot sourceY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot species_DB_ID
+		(type INTEGER)
+		(create-accessor read-write))
+	(single-slot targetY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot databaseColumnSpecification
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(associated-facet _databaseColumnSpecification)
+		(create-accessor read-write))
+	(single-slot sourceX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot _displayName
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot indirectIdentifier
+		(type STRING)
+		(create-accessor read-write)))
+
+(defclass %3AEXTENDED-SLOT
+	(is-a %3ASTANDARD-SLOT)
+	(role concrete)
+	(single-slot databaseColumnSpecification
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Reaction
+	(is-a USER)
+	(role concrete)
+	(single-slot species_id
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot targetX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot DB_ID
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot sourceY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot species_DB_ID
+		(type INTEGER)
+		(create-accessor read-write))
+	(single-slot targetY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot sourceX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot _displayName
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot indirectIdentifier
+		(type STRING)
+;+		(user-facet _databaseColumnSpecification "VARCHAR(40)")
+		(create-accessor read-write)))

@@ -1,0 +1,85 @@
+#!/usr/local/bin/perl -w -T
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+#To get rid of taint-checker complaints about Insecure $ENV{PATH}
+$ENV{PATH} = '';
+
+use strict;
+use CGI qw(:standard);
+use GKB::WebUtils;
+use GKB::Config;
+
+my $cgi = CGI->new();
+
+my $dba = GKB::WebUtils::get_db_connection($cgi);
+
+my ($id,$st_id,$level);
+if ($id = $cgi->param('ID')) {
+    $id =~ /^(\d+)$/;
+    $id = $1;
+} elsif ($st_id = $cgi->param('ST_ID')) {
+    $id = db_id_for_stable_id($dba,$st_id);
+    $id || die2("No instance with stable id " + $st_id);
+}
+$level = $cgi->param('level') || 3; # default level 3
+$id || die2("Need ID or ST_ID");
+
+my $db = $dba->db_name;
+my $host = $GK_DB_HOST;
+my $user = $GK_DB_USER;
+my $pass = $GK_DB_PASS;
+my $JAVA_PATH = "/usr/bin/java";
+
+chdir("$GK_ROOT_DIR/biopaxexporter") || die2($!);
+
+my $cmd = "$JAVA_PATH -Dfile.encoding=UTF-8 -Xmx256M -cp lib/jdom/jdom.jar:lib/owl/xercesImpl.jar:lib/owl/xml-apis.jar:lib/owl/xmlParserAPIs.jar:lib/mysql/mysql.jar:lib/reactome/reactome.jar:classes";
+
+if ($level == 2) {
+     $cmd .= " org.reactome.biopax.ReactomeToBioPAXXMLConverter";
+}
+else {
+    $cmd .= " org.reactome.biopax.ReactomeToBioPAX3XMLConverter";
+} 
+
+# Prevents perl -T security problems
+my $temp_path = $ENV{PATH};
+$ENV{PATH} = '';
+
+open(FH, "$cmd $host $db $user $pass 3306 $id |") or die2("Can't do '$cmd': $!"); 
+
+print $cgi->header(
+    -type => 'application/rdf+xml',
+    -attachment => "$ {PROJECT_NAME}_$ {id}.owl"
+    );
+
+while(<FH>) {
+    print $_;
+}
+
+sub die2 {
+    print $cgi->header('text/plain');    
+    print shift;
+    exit 0;
+}
+
+sub db_id_for_stable_id {
+    my ($dba,$stid) = @_;
+    $stid =~ s/\.\d+$//;
+    my $i = $dba->fetch_instance_by_remote_attribute('DatabaseObject',[['stableIdentifier.identifier','=',[$stid]]])->[0];
+    return ($i) ? $i->db_id : undef;
+}

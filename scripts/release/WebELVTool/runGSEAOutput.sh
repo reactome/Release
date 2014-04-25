@@ -1,0 +1,2 @@
+#!/bin/bash
+java -Xmx1024m -cp GSEAExport.jar:webELVTool.jar:mysql.jar:log4j.jar:jgraph.jar:xml-apis.jar:xerces.jar:jdom.jar:commons-lang.jar org.reactome.gsea.ReactomeToMsigDBExport $1 $2 $3 $4 $5 $6 $7 $8

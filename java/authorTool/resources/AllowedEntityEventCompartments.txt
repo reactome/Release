@@ -1,0 +1,2 @@
+// This is a list of allowable single entityCompartment and eventCompartment relationship. This list is based on Esther's Script. The first value is the DB_ID for reaction compartment, while the second for entity compartment
+70101,13325 #cytosol - glycogen granule7660,350 #nucleoplasm - nucleolus7660,78322  #nucleoplasm - chromatin17957,17960  #endopl. ret. lumen - smooth ER12045,17960  #endopl. ret. membrane - smooth ER70101,5659  #cytosol - internal side of plasma membrane

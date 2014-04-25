@@ -1,0 +1,1 @@
+javac -verbose -sourcepath src -classpath .;lib\skin\skinlf.jar src\org\gk\util\*.java src\org\gk\schema\*.java src\org\gk\model\*.java src\org\gk\render\*.java src\org\gk\graphEditor\*.java src\org\gk\property\*.java src\org\gk\database\*.java src\org\gk\gkEditor\*.java -d .

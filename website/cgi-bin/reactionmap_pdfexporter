@@ -1,0 +1,62 @@
+#!/usr/local/bin/perl -wT
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+#use lib "/tmp/libs/bioperl-1.0";
+#use lib "/tmp/libs/my_perl_stuff";
+
+use strict;
+
+use GKB::Utils;
+use GKB::Config;
+use CGI qw(:standard);
+use CGI::Carp qw(warningsToBrowser fatalsToBrowser);
+
+delete $ENV{PATH};
+
+my $cgi = new CGI;
+my $SVG = $cgi->param('SVG');
+if ($SVG =~ /^([\d\.]+\.svg)$/) {
+    $SVG = $1;
+} else {
+    die "Invalid SVG file name.\n";
+}
+
+
+if (-f "../html/img-tmp/$SVG" && substr($SVG, -3) eq 'svg') {
+    my $link = createPDF($SVG);
+    print redirect($link);
+} else {
+    die "Necessary svg file ($SVG) does not exist.\n";
+}
+
+sub createPDF{
+    my ($par) = @_; 
+    my $pdfmaker = 
+	"$JAVA_PATH " .
+	"-Djava.awt.headless=true ".
+	"-jar ".
+	"../html/jars/batik-1.6/batik-rasterizer.jar ".
+	"-m ".
+	"application/pdf ".
+	"../html/img-tmp/$par > /dev/null";
+    system($pdfmaker) == 0 or die "$pdfmaker failed\n";
+    $par =~ s/\.svg$/.pdf/;
+    return "/img-tmp/$par";
+}
+
+1;

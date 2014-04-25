@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="SlicingTool" default="jarProjectTool" basedir="..">
+    <description>
+    	Jar all class files into one file to be run by the slicing tool.
+    </description>
+	
+	<!-- Defining a list of directory names to be used -->
+	<property name="targetDir" value="${basedir}/../slicingTool" />
+	<property name="classDir" value="${basedir}/classes" />
+	<property name="orgDir" value="${classDir}/org" />
+	<property name="libDir" value="${basedir}/lib" />
+	
+	<!-- Empty the direcotry. If nothing there, it should do nothing -->
+	<target name="delete">
+		<delete dir="${targetDir}" />
+	</target>
+	
+	<!-- make a directory first. If it is there, it should do nothing -->
+	<target name="mkdir" depends="delete">
+		<mkdir dir="${targetDir}" /> 
+	</target>
+	
+	<!-- copy all files to the target directory -->
+	<target name="jarProjectTool" depends="mkdir">
+		<jar destfile="${targetDir}/ProjectSlicingTool.jar">
+			<fileset dir="${classDir}">
+				<include name="org/gk/util/**" />
+				<include name="org/gk/schema/**" />
+				<include name="org/gk/persistence/**" />
+				<include name="org/gk/model/**" />
+				<include name="org/gk/database/util/**" />
+				<include name="org/gk/slicing/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="org.gk.slicing.SlicingEngine" />
+				<attribute name="Class-Path" value="mysql.jar" />
+			</manifest>
+		</jar>
+		<!-- Don't try to use mysql-connector-java-5.**.jar. There is a memory usage problem in this jar file.
+		     use this jar file will always get out of memeory problem -->
+		<copy file="${libDir}/mysql-connector-java-3.0.11-stable-bin.jar" tofile="${targetDir}/mysql.jar" />
+	</target>	
+	
+	<!-- copy all files to the target directory -->
+	<target name="jar" depends="mkdir">
+		<jar destfile="${targetDir}/slicingTool.jar">
+			<fileset dir="${classDir}">
+				<include name="org/gk/util/**" />
+				<include name="org/gk/schema/**" />
+				<include name="org/gk/persistence/**" />
+				<include name="org/gk/model/**" />
+				<include name="org/gk/database/util/**" />
+				<include name="org/gk/slicing/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="org.gk.slicing.SlicingEngine" />
+				<attribute name="Class-Path" value="mysql.jar" />
+			</manifest>
+		</jar>
+		<!-- Don't try to use mysql-connector-java-5.**.jar. There is a memory usage problem in this jar file.
+		     use this jar file will always get out of memeory problem -->
+		<copy file="${libDir}/mysql-connector-java-3.0.11-stable-bin.jar" tofile="${targetDir}/mysql.jar" />
+	</target>	
+</project>  

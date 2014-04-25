@@ -1,0 +1,112 @@
+#!/usr/local/bin/perl
+
+# Prints a page listing all pathways with DOIs, arranged alphabetically,
+# and also displaying the DOIs.
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+umask(002);
+use lib "/tmp/libs/bioperl-1.0";
+use lib "/tmp/libs/my_perl_stuff";
+
+use strict;
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+use Carp;
+use GKB::FrontPage3;
+
+my $header = undef;
+my $footer = undef;
+my $enclosing_div_start = undef;
+my $enclosing_div_end = undef;
+my $reactome_version_num = "2";
+if (defined $REACTOME_VERSION && !($REACTOME_VERSION eq '')) {
+    $REACTOME_VERSION =~ /^([0-9]+).*$/;
+    $reactome_version_num = $1;
+}
+if ($reactome_version_num eq "3") {
+    my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (DOI table)", "/stylesheet.css");
+    $header = $front_page->get_header();
+    $footer = $front_page->get_footer();
+    $enclosing_div_start = $front_page->get_enclosing_div_start();
+    $enclosing_div_end = $front_page->get_enclosing_div_end();
+}
+
+
+$NO_SCHEMA_VALIDITY_CHECK = 1;
+
+my ($CGI,$DB,$WU,$DBA);
+
+$CGI = CGI->new();
+print $CGI->header(-charset => 'UTF-8');
+eval {
+    $WU = GKB::WebUtils->new_from_cgi(-CGI => $CGI);
+    $DBA = $WU->dba;
+    $WU->urlmaker->script_name('/cgi-bin/eventbrowser');
+
+    if (defined $header) {
+        print $header;
+        print $enclosing_div_start;
+    } else {
+        print $CGI->start_html(
+    	-style => {-src => '/stylesheet.css'},
+    	-title => "$PROJECT_NAME: table of contents",
+    	);
+        print $WU->navigation_bar;
+        $WU->print_simple_query_form;
+    }
+    create_TOC_if_necessary_and_print($WU,$CGI->param('DB'));
+    if (defined $footer) {
+        print $enclosing_div_end;
+        print $footer;
+    } else {
+        print $WU->make_footer;
+        print $CGI->end_html;  
+    }
+    $DBA && $DBA->db_handle->disconnect;
+};
+if ($@) {
+    handle_error($@);
+}
+
+sub handle_error {
+    print @_;
+}
+
+sub create_TOC_if_necessary_and_print {
+    my ($wu,$db_name) = @_;
+    my $dir_name = "$FRONTPAGE_IMG_DIR/$db_name";
+    unless (-e $dir_name) {
+		mkdir($dir_name) || confess("Can't create '$dir_name': $!");
+    }
+    my $file = "$dir_name/doi_toc";
+    unless (-e $file) {
+		open (TOC, ">$file") || $wu->throw($! . ", file=$file");
+		my $tmp = select(TOC);
+		$wu->print_DOI_TOC;
+		close TOC;
+		select($tmp);
+    }
+    open (TOC, $file) || $wu->throw($!);
+    local $/ = undef;
+    print <TOC>;
+    close TOC;
+}

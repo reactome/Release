@@ -1,0 +1,204 @@
+Build 27 notes:
+
+The version number has been changed to 3.0 in this build.
+
+A renovation of the author tool: An entity-level view is used to draw pathways; Different types of entities are inserted by using different icons; Properties are editing via another tab instead of a dialog; auto popup menu is used to choose the types between two nodes; the list in the left side trees has been changed.
+
+Known issues:
+
+1. Compartment is not supported in the graph editor. However, the user can use Rectangle to mimic a compartment.
+2. Components in a complex cannot be laid out manually. Right now only auto-layout is available.
+
+Build 25 notes:
+
+This build is targeted to make the communication between the author tool and the curator tool easy. Most of changes are hidden from the user. 
+
+1. User interface change: if an object (Entity, Complex, Reaction or Pathway) is newly created or changed, it will be displayed by flagging ">" as in the curator tool. 
+
+2. File format change: XML text is well formatted now. 
+
+Known issue:
+
+1. ">" cannot be displayed immediately for an event if its preceding event value is changed. Click this event in the tree will make ">" display, but the display name for this event cannot be displayed in full. This will be fixed in the next build.
+
+Build 24 notes:
+
+This is a maintenance build. No new features are implemented. Two bug fixes are related to drag-and-drop (DnD):
+
+1. Sometimes for a big project, DnD is stuck.
+2. A checking is added to prevent circular reference in Pathway or Complex: a pathway or complex is contained by its high level container.
+
+Build 23 notes:
+
+The version number has been changed from 1.2 to 2.0. 
+
+New feeatures:
+
+1. These two panels, "Entities from DB" and "Property panel" at the bottom, have been removed. The task tree has been hidden as default, but can be displayed as an option.
+
+2. The property dialog for entity, complex, reaction or pathway is reorganized. Only two tabs are used: required and optional. Localization is added as a required property to entity now.
+
+3. The menu "Tool/Database browser" is removed. A new button called "Browse DB" is added to the property dialog for inserting new Pathway, Reaction, Complex and Entity. When this button is clicked, the appropriate list of instances from the database will be displayed. An HTML table is displayed for the selected instance. The user can drag and drop a selected instance to the editing graphical pane to pull out an instance from the database. The database that is used is configurable.
+
+4. The graphical view can be zoomed now via the buttons or menus or keys. The user can zoom in, zoom out, zoom to fit window, or un-zoom.
+
+5. Back and forward menus and buttons are added. The popup menu "Go to Parent" is removed.
+
+6. A new menu called "View" is added. Menu items for zooming and navigation (back and forward) are listed under "View".
+
+7. Stoichiometry table for both complex composition and reaction inputs and outputs is not used any more. A popup menu is added to the complex editor and reaction editor to set stoichiometry for the selected node. Stoichiometries for subunits in a complex is displayed in the complex editor now.
+
+8. Cursor in the graphic editor pane will be changed based on the position of the mouse to indicate different functions.
+
+9. An organism or localization can be edited in the property dialog. With this new feature, the user can use any organism or localization.
+
+10. "Use Insert Mode" option in both the main menu and the toolbar is removed. 
+
+Bug fixes:
+
+1. Sometimes Copy/Paste or Drag-and-Drop will clash the application.
+
+2. Unpack a pathway will invalidate the contained reactions.
+
+Known Issues:
+
+1. The tutorial has not be updated.
+
+
+build 21 notes:
+
+Bug fix:
+
+1. Detailed information in PubMed cannot be retrieved because of the format change in the pubmed side.
+
+build 20 notes:
+
+New features:
+
+1. A list of selected pathways or reactions can be packed into a new pathway.
+2. A selected pathway can be unpacked. All child events will be added to its containing pathway. The pathway will be deleted.
+
+Bug fixes:
+
+1. A list of complexes is not displayed correctly
+2. The database browser cannot open.
+
+build 15 notes:
+
+Changes:
+
+1. Only one graph pane can be opened. The property pane for the displayed object is attached at the bottom of the graph pane. The tables for stoichiometries for reaction or complex have been merged into the property pane.
+2. Only single pathway can be checked out from the database browser as a project. The file name instead of directory name is needed.
+3. An empty reaction (a reaction without nodes attached) can be switched to a pathway. An empty pathway (a pathway without events) can be switched to a reaction.
+4. Search capabiliy is expanded: The user can do case insensitive and containing searching.
+5. Deleting an node in the reaction editor will also delete the branch attached to the deleted node.
+6. The author tool tutorial and help files are updated based on the above changes.
+
+build 14 notes:
+
+Changes since last build:
+
+1. The help file (short list of common actions) is updated
+2. Start time and end time properties for reactions and pathways are removed
+3. Automatic assignment of taxon based on parent instances is disabled
+4. Compartment list is updated based on the new flat list
+5. The directions of the north and south link widgets (the gray arrows around the nodes in the graph pane for pathways) are switched
+6. DB_ID is removed in the modifiction table for the simple entity
+
+Bugs fixed:
+
+1. Properties menu are added back for the reaction editor and complex editor when nothing is selected
+
+build 13 notes:
+
+Changes since last build:
+
+1. The caption in the entity tree has been changed to "Molecules from GK Database"
+2. "Format display" works for a multiple-selection
+3. The tutorial has been updated
+4. Add a new help: A table list of common actions in the tool
+5. DB_ID is not displayed in the composition table in the complex editor
+
+Bugs fixed:
+
+1. Adding a existing input or output will change the stoichiometry
+2. Desc task is fixed for the top-level project
+
+build 12 notes:
+
+Changes in the build 12:
+
+1. The DB_ID column is removed in the table in the reaction editor.
+
+
+build 10 notes:
+
+This build is mostly for database connections. The following new features are added:
+
+1). Check out pathways as projects
+2). Check out pathways and reactions into opened project
+3). A list of pre-compiled entities: The authors can drag-drop or use a button to add entities from this list to an opened reaction.
+4). Check out PhysicalEntities to the above list.
+5). Add PhysicalEntities to Reactions directly from the database browser
+
+More bugs fixed.
+ 
+
+build 6 notes:
+
+This build mostly is for MacOS X except the changes 1, 2.
+
+Changes in build 6:
+
+1) Tabs are replaced by frames. Add a new Window menu for controling the opened frames. Move Close, Close All menu items under File to Window Menu.
+2) Add references: A new dialog is used to add references. The user only needs to copy and paste PMIDs, all other information will be fetched by the application.
+3) Add the delete button to the main toolbar.
+4) Under MacOS X: About, Preference(Options) and Quit(Exit) menus are moved to the application menu
+5) Use disk image as MacOS installer. The old installer created by InstallAnywhere cannot work properly.
+6) Under MacOS X: The user doesn't need to specify web browser to connect to the PubMed or tutorial file. 
+7) The menu bar is placed in the top of the screen just like a native MacOS application.
+
+Known Issue:
+
+1) Under MacOS X, the graph frames cannot be iconified. Because of a bug in Java under MacOS X, the application cannot control iconified frames. So I have to make frames un-iconfiable.
+
+build 5 notes:
+
+1) Add search function for the database browser.
+2) Implements a tool plug-in mechanism for the database browser. A plug-in of checking if the compartment settings for inputs, outputs and catalysts are "compatible" to the setting for the reaction is implemented as an example.
+3) Stoichiometries for input, output of the reaction are rendered in the reaction pane.
+4) Add a new property tab for attaching image files for complexes, reactions, and pathways.
+5) Add an option for sorting/unsorting the objects in the process tree.
+6) Arrange the toolbar buttons for inserting entity, complex, pathway, reaction and flow arrow. Add text options to the buttons. Make these buttons floatable so that the user can drag them around.
+
+
+build 4 notes:
+
+New features:
+
+1) GKB database browser under Tools menu to browse the GKB MySQL database
+2) Event and Physical Entity instances can be inserted from the browser to the graph editor panes for editing by drag and drop. The instance properties in the db are kept.
+3) A warning dialog before deletion
+
+Changes:
+
+1) The tabs for summation and references for pathways, reaction and complexes have been removed and are merged into the property dialogs for these classes
+2) Double clicking an task will bring up a dialog specified for the clicked task instead of the whole property dialog
+3) GO Term property for pathways and reactions have be removed
+4) Definition property has been removed
+5) Reaction is not listed under reaction node in the process tree any more
+6) Selection in the graph editor panes is indicated by blue colored bold border instead of the small rectangles
+7) Inserted nodes are highlighted for editing name during inserting mode
+8) During name editing in the graph pane, the name can be empty. No warning dialog will appear when the editing name is empty. However, an empty name cannot be accepted.
+9) Inserting entity and insert complex buttons at the top-right corner of the table for the reaction editor has been changed. The user should select the role (input, output and catalyst) for inserting entity or complex
+
+Known Bugs:
+
+1) Internet browser action cannot work under MacOS X. The default browser cannot be set under MacOS X
+2) Paste function in the reference editing panel cannot work under MacOS X and Linux mozilla
+
+Known Issues:
+
+1) Tutorial has not been updated
+2) DB ID for nodes are not listed in the reaction entity table when a reaction is imported from the db browser
+3) The taxon values in the imported instances from the db are not checked vs. the one in the editing pane

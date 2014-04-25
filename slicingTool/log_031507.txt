@@ -1,0 +1,75 @@
+"[Pathway:164952] The role of Nef in HIV-1 replication and disease pathogenesis" in "hasEvent" for "[Pathway:162909] Host Interactions of HIV factors" is not in the slice and removed from the attribute list!
+"[Pathway:173108] Role of CypA protein in HIV-1 infection" in "hasEvent" for "[Pathway:162909] Host Interactions of HIV factors" is not in the slice and removed from the attribute list!
+"[Reaction:109699] PIP2 conversion to PIP3" in "precedingEvent" for "[Pathway:109703] PKB-mediated events" is not in the slice and removed from the attribute list!
+"[Pathway:179461] Immune work in progress" in "hasEvent" for "[Pathway:168256] Immune System signaling" is not in the slice and removed from the attribute list!
+"[Reaction:190695] Connexin oligomerization in  ER-Golgi-intermediate compartment" in "inferredFrom" for "[Pathway:190827] Transport of connexins along the secretory pathway" is not in the slice and removed from the attribute list!
+"[Reaction:190695] Connexin oligomerization in  ER-Golgi-intermediate compartment" in "inferredFrom" for "[Reaction:190698] Transport of connexins to the ER-Golgi intermediate compartment" is not in the slice and removed from the attribute list!
+"[Pathway:191650] Regulation of gap junction activity" in "hasEvent" for "[Pathway:157858] Gap junction trafficking and regulation" is not in the slice and removed from the attribute list!
+"[Pathway:179419] APC:Cdc20 mediated degradation of cell cycle proteins prior to satisfation of the cell cycle checkpoint" in "hasEvent" for "[Pathway:176409] APC/C:Cdc20 mediated degradation of mitotic proteins" is not in the slice and removed from the attribute list!
+"[Reaction:165129] GDP is exchanged for GTP on DRheb" in "hasEvent" for "[Pathway:110523] TOR signaling pathway" is not in the slice and removed from the attribute list!
+"[Pathway:190873] Gap junction degradation" in "hasEvent" for "[Pathway:190828] Gap junction trafficking" is not in the slice and removed from the attribute list!
+"[Reaction:165129] GDP is exchanged for GTP on DRheb" in "orthologousEvent" for "[Reaction:165195] GTP loading by Rheb" is not in the slice and removed from the attribute list!
+"[Reaction:163154] Phospho:Mnk-1 activates eIF4E by phosphorylation" in "precedingEvent" for "[Pathway:72662] Activation of the mRNA upon binding of the cap-binding complex and eIFs, and subsequent binding to 43S" is not in the slice and removed from the attribute list!
+"[Reaction:188544] Assembly of M2 tetramers" in "hasEvent" for "[Pathway:168316] Assembly of Viral Components at the Budding Site" is not in the slice and removed from the attribute list!
+"[Reaction:111956] Calmodulin activates Cam-PDE 1" in "precedingEvent" for "[Reaction:111955] cAMP hydrolysis by Cam-PDE 1" is not in the slice and removed from the attribute list!
+"[Reaction:190695] Connexin oligomerization in  ER-Golgi-intermediate compartment" in "inferredFrom" for "[Reaction:190687] Connexin oligomerization in  ER-Golgi-Intermediate Compartment" is not in the slice and removed from the attribute list!
+"[Pathway:190333] Downstream signaling of activated FGFR" in "hasEvent" for "[Pathway:190236] Fibroblast Growth Factor Receptor (FGFR) signaling" is not in the slice and removed from the attribute list!
+"[Reaction:182564] Phosphorylation of Cyclin D1 on Thr-286 by GSK-3 beta" in "inferredFrom" for "[Reaction:75820] Phosphorylation of Cyclin D1 at T286 by glycogen synthase kinase-3 beta" is not in the slice and removed from the attribute list!
+"[Pathway:174497] Emergence and release of bud" in "hasEvent" for "[Pathway:162588] Budding and maturation of HIV-1 virion" is not in the slice and removed from the attribute list!
+"[Pathway:162598] Host protein interactions during HIV budding" in "hasEvent" for "[Pathway:162588] Budding and maturation of HIV-1 virion" is not in the slice and removed from the attribute list!
+"[Pathway:174487] Maturation of released virion into infective form" in "hasEvent" for "[Pathway:162588] Budding and maturation of HIV-1 virion" is not in the slice and removed from the attribute list!
+"[Pathway:190872] Transport of connexons to the plasma membrane" in "hasEvent" for "[Pathway:190861] Gap junction assembly" is not in the slice and removed from the attribute list!
+"[Reaction:191737] Docking of Cx43 at the plasma membrane through interactions with ZO-1, alpha-catenin  and beta-catenin" in "hasEvent" for "[Pathway:190861] Gap junction assembly" is not in the slice and removed from the attribute list!
+"[Reaction:190877] Insertion of connexons in the membrane forming hemi-channels" in "hasEvent" for "[Pathway:190861] Gap junction assembly" is not in the slice and removed from the attribute list!
+"[Reaction:190788] Formation of junctional channels" in "hasEvent" for "[Pathway:190861] Gap junction assembly" is not in the slice and removed from the attribute list!
+"[Reaction:190790] Formation of gap junction plaques" in "hasEvent" for "[Pathway:190861] Gap junction assembly" is not in the slice and removed from the attribute list!
+"[Reaction:109699] PIP2 conversion to PIP3" in "precedingEvent" for "[Reaction:109701] PDK1 attachment to plasma membrane" is not in the slice and removed from the attribute list!
+"[Reaction:109699] PIP2 conversion to PIP3" in "hasEvent" for "[Pathway:109704] PI3K Cascade" is not in the slice and removed from the attribute list!
+"[Reaction:165129] GDP is exchanged for GTP on DRheb" in "precedingEvent" for "[Reaction:165131] GEF dissociates from DRheb-GTP" is not in the slice and removed from the attribute list!
+"[Reaction:193101] Dihydroxycholesterol is cleaved to yield pregnenolone" in "precedingEvent" for "[Reaction:193068] 17alpha-hydroxylation of pregnenolone" is not in the slice and removed from the attribute list!
+"[Reaction:167239] Association of Tat:P-TEFb(Cyclin T1:Cdk9) with the TAR sequence" in "precedingEvent" for "[Reaction:167191] Hyperphosphorylation (Ser2) of RNA Pol II CTD by the P-TEFb(Cyclin T1:Cdk9) complex" is not in the slice and removed from the attribute list!
+"[Reaction:109803] Transient dissociation of 14-3-3 upon RAS binding" in "precedingEvent" for "[Reaction:109802] Stabilisation of RAS:RAF by 14-3-3" is not in the slice and removed from the attribute list!
+"[Reaction:109699] PIP2 conversion to PIP3" in "precedingEvent" for "[Reaction:109700] PKB attachment to plasma membrane" is not in the slice and removed from the attribute list!
+"[Pathway:194223] HDL-mediated lipid transport" in "hasEvent" for "[Pathway:174824] Lipoprotein metabolism" is not in the slice and removed from the attribute list!
+"[Reaction:109813] GRB2 binds SOS" in "precedingEvent" for "[Reaction:74736] GRB2:SOS binds IRS-P" is not in the slice and removed from the attribute list!
+"[Pathway:174495] Synthesis and organization of GAG, GAGPOL polyproteins" in "hasEvent" for "[Pathway:175474] Assembly of HIV virion" is not in the slice and removed from the attribute list!
+"[Pathway:171286] Synthesis and processing of ENV polyprotein" in "hasEvent" for "[Pathway:175474] Assembly of HIV virion" is not in the slice and removed from the attribute list!
+"[Pathway:174489] Synthesis and processing of accessory proteins" in "hasEvent" for "[Pathway:175474] Assembly of HIV virion" is not in the slice and removed from the attribute list!
+"[Reaction:189328] Encapsidation of viral RNA" in "hasEvent" for "[Pathway:175474] Assembly of HIV virion" is not in the slice and removed from the attribute list!
+"[Pathway:162597] Packaging of HIV-1 virion on the host cell plasma membrane" in "hasEvent" for "[Pathway:175474] Assembly of HIV virion" is not in the slice and removed from the attribute list!
+"[Reaction:177284] PKA phosphorylates PDE4B" in "precedingEvent" for "[Reaction:111962] cAMP hydrolysis by PDE 4" is not in the slice and removed from the attribute list!
+"[Reaction:170676] Adenylate cyclase converts ATP into cyclic AMP" in "precedingEvent" for "[Reaction:111962] cAMP hydrolysis by PDE 4" is not in the slice and removed from the attribute list!
+"[Pathway:192076] Steroid metabolism" in "hasEvent" for "[Pathway:73923] Metabolism of lipids and lipoproteins" is not in the slice and removed from the attribute list!
+"[Reaction:188467] Gly-3-P+FAD->DHAP+FADH2 (catalyzed by mitochondrial Gly-Phos dehydrogenase)" in "hasEvent" for "[Pathway:73923] Metabolism of lipids and lipoproteins" is not in the slice and removed from the attribute list!
+"[Reaction:178189] I-SMAD binds to phosphatase GADD34-PP1c" in "hasEvent" for "[Pathway:177106] I-SMAD recruits type I receptor phosphatase and ubiquitin ligases to mediate receptor downregulation" is not in the slice and removed from the attribute list!
+"[Reaction:178166] I-SMAD:GADD34 binds to type I receptor" in "hasEvent" for "[Pathway:177106] I-SMAD recruits type I receptor phosphatase and ubiquitin ligases to mediate receptor downregulation" is not in the slice and removed from the attribute list!
+"[Reaction:178178] GADD34-PP1c dephosphorylates type I receptor" in "hasEvent" for "[Pathway:177106] I-SMAD recruits type I receptor phosphatase and ubiquitin ligases to mediate receptor downregulation" is not in the slice and removed from the attribute list!
+"[Reaction:178208] I-SMAD binds to SMURF" in "hasEvent" for "[Pathway:177106] I-SMAD recruits type I receptor phosphatase and ubiquitin ligases to mediate receptor downregulation" is not in the slice and removed from the attribute list!
+"[Reaction:178215] The I-SMAD:SMURF complex is exported to the cytosol" in "hasEvent" for "[Pathway:177106] I-SMAD recruits type I receptor phosphatase and ubiquitin ligases to mediate receptor downregulation" is not in the slice and removed from the attribute list!
+"[Reaction:178218] I-SMAD:SMURF complex binds to type I receptor" in "hasEvent" for "[Pathway:177106] I-SMAD recruits type I receptor phosphatase and ubiquitin ligases to mediate receptor downregulation" is not in the slice and removed from the attribute list!
+"[Reaction:178214] SMURF ubiquitylates the receptor" in "hasEvent" for "[Pathway:177106] I-SMAD recruits type I receptor phosphatase and ubiquitin ligases to mediate receptor downregulation" is not in the slice and removed from the attribute list!
+"[Pathway:179812] Grb2 events in EGFR signaling" in "hasEvent" for "[Pathway:177929] Epidermal Growth Factor Receptor (EGFR) signaling" is not in the slice and removed from the attribute list!
+"[Pathway:180336] Shc events in EGFR signaling" in "hasEvent" for "[Pathway:177929] Epidermal Growth Factor Receptor (EGFR) signaling" is not in the slice and removed from the attribute list!
+"[Pathway:180292] GAB1 signalosome" in "hasEvent" for "[Pathway:177929] Epidermal Growth Factor Receptor (EGFR) signaling" is not in the slice and removed from the attribute list!
+"[Pathway:182971] EGFR downregulation" in "hasEvent" for "[Pathway:177929] Epidermal Growth Factor Receptor (EGFR) signaling" is not in the slice and removed from the attribute list!
+"[Reaction:110053] RAF phosphorylates MEK2" in "inferredFrom" for "[Reaction:109852] RAF phosphorylates MEK2" is not in the slice and removed from the attribute list!
+"[Reaction:110053] RAF phosphorylates MEK2" in "orthologousEvent" for "[Reaction:109852] RAF phosphorylates MEK2" is not in the slice and removed from the attribute list!
+"[Reaction:180086] 1-LTR circle synthesis from reverse transcription intermediate" in "hasEvent" for "[Pathway:164525] Plus-strand DNA synthesis" is not in the slice and removed from the attribute list!
+"[Reaction:188544] Assembly of M2 tetramers" in "precedingEvent" for "[Pathway:168874] Transport of HA trimer, NA tetramer and M2 tetramer from the endoplasmic reticulum to the Golgi Apparatus" is not in the slice and removed from the attribute list!
+"[Reaction:109803] Transient dissociation of 14-3-3 upon RAS binding" in "hasEvent" for "[Pathway:110029] RAF activation" is not in the slice and removed from the attribute list!
+"[Reaction:182616] Phosphorylation of Cdc25A by Cyclin B:Cdc2" in "hasMember" for "[Reaction:170157] Phosphorylation of M phase proteins by active Cyclin B1:Cdc2 complexes" is not in the slice and removed from the attribute list!
+"[Reaction:190685] Transport of Connexin to the trans-Golgi network" in "precedingEvent" for "[Reaction:190708] Connexin oligomerization in the Trans-Golgi network" is not in the slice and removed from the attribute list!
+"[Reaction:109813] GRB2 binds SOS" in "precedingEvent" for "[Reaction:74746] GRB2:SOS binds to SHC-P" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:167217] Phospho-Shc dissociates from the TrkA receptor" in "precedingEvent" for "[Reaction:74746] GRB2:SOS binds to SHC-P" is not in the slice and removed from the attribute list!
+"[Pathway:111931] PKA-mediated phosphorylation of CREB" in "hasEvent" for "[Pathway:111933] Calmodulin induced events" is not in the slice and removed from the attribute list!
+"[Pathway:111932] CaMK IV-mediated phosphorylation of CREB" in "hasEvent" for "[Pathway:111933] Calmodulin induced events" is not in the slice and removed from the attribute list!
+"[Pathway:111957] Cam-PDE 1 activation" in "hasEvent" for "[Pathway:111933] Calmodulin induced events" is not in the slice and removed from the attribute list!
+"[Reaction:111966] Inhibition of GRK2 by calmodulin" in "hasEvent" for "[Pathway:111933] Calmodulin induced events" is not in the slice and removed from the attribute list!
+"[Reaction:109699] PIP2 conversion to PIP3" in "orthologousEvent" for "[Reaction:110453] Phosphorylation of PIP2 to PIP3 by Dp110" is not in the slice and removed from the attribute list!
+"[Reaction:109825] (Controversial - not included in public release.) SOS mediated nucleotide exchange of RAS (IRS, Crk)" in "precedingEvent" for "[Reaction:109827] SOS phosphorylation and dissociation (IRS, Crk)" is not in the slice and removed from the attribute list!
+"[Pathway:189483] Heme degradation" in "hasEvent" for "[Pathway:189445] Metabolism of porphyrins" is not in the slice and removed from the attribute list!
+"[Reaction:74447] Calcium binds calmodulin" in "inferredFrom" for "[BlackBoxEvent:111884] Formation of active Calmodulin" is not in the slice and removed from the attribute list!
+"[Reaction:111876] Calcium is released from the ER to the cytosol" in "precedingEvent" for "[BlackBoxEvent:111884] Formation of active Calmodulin" is not in the slice and removed from the attribute list!
+"[Reaction:169683] Release of calcium from intracellular stores by IP3 receptor activation" in "precedingEvent" for "[BlackBoxEvent:111884] Formation of active Calmodulin" is not in the slice and removed from the attribute list!
+"[Reaction:74031] cGMP-gated ion channel opening" in "precedingEvent" for "[BlackBoxEvent:111884] Formation of active Calmodulin" is not in the slice and removed from the attribute list!
+"[Pathway:168928] RIG-I Mediated Induction of the Antiviral Cytokine IFN-alpha/beta Cascades" in "hasEvent" for "[Pathway:168249] Innate Immunity Signaling" is not in the slice and removed from the attribute list!

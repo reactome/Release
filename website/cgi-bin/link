@@ -1,0 +1,155 @@
+#!/usr/local/bin/perl
+
+# CGI to allow linking from external databases to Reactome
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+
+## These should be deleted eventually. However, I keep them in for the time being
+## in case the BEGIN block turns out to be a bad idea after all.
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+
+use strict;
+
+my ($CGI,$WU,$DBA);
+
+$CGI = CGI->new();
+
+eval {
+	
+    $WU = GKB::WebUtils->new_from_cgi(
+	-CGI => $CGI,
+	-debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+	);
+
+    my $dbname = $CGI->param('SOURCE');
+    my $id = $CGI->param('ID');
+    if ((!defined $dbname || $dbname eq "") && defined $id && $id =~ /^([a-zA-Z]+):(.+)$/) {
+    	# Deal with the case where the URL looks like this:
+    	# http://www.reactome.org/cgi-bin/link?ID=CHEBI:15422
+    	$dbname = $1;
+    	$id = $2;
+    } else {
+	    ($dbname && $id) || print_search_form_page_w_message(qq(Need SOURCE and ID));
+	}
+    
+    # Deal with multiple, comma-separated IDs
+    my $ids = [$id];
+    if ($id =~ /,/) {
+    	@{$ids} = split(/,/, $id);
+    }
+
+    $DBA = $WU->dba;
+
+    $dbname = uc($dbname);
+    $dbname =~ s/\s+//g;
+    my $ar = [];
+    if (@{$ids}) {
+    eval {
+    if ($dbname eq 'SWALL' or 
+	$dbname eq 'SPTREMBL' or 
+	$dbname eq 'SPTR' or 
+	$dbname eq 'UNIPROT' or
+	$dbname eq 'SWISSPROT' or
+	$dbname eq 'TREMBL') {
+		$ar = $DBA->fetch_instance_by_attribute
+		    ('ReferenceGeneProduct',[['identifier',$ids]]);
+		unless (@{$ar}) {
+		    $ar = $DBA->fetch_instance_by_attribute
+		    ('ReferenceGeneProduct',[['secondaryIdentifier',$ids]]);
+		}
+		unless (@{$ar}) {
+		    $ar = $DBA->fetch_instance_by_attribute
+		    ('ReferenceGeneProduct',[['variantIdentifier',$ids]]);
+		}
+    } elsif ($dbname eq 'ENTREZGENE' or
+	     $dbname eq 'GENEID' or
+	     $dbname eq 'KEGGGENE') {
+		$ar = $DBA->fetch_instance_by_remote_attribute('ReferenceGeneProduct',[['referenceGene.identifier','=',$ids]]);
+    } elsif ($dbname eq 'EMBL' or 
+	     $dbname eq 'GB' or 
+	     $dbname eq 'GENBANK' or 
+	     $dbname eq 'DDBJ') {
+		$ar = $DBA->fetch_class_instance_by_string_type_attribute('ReferenceSequence',$ids->[0],'=');
+    } elsif ($dbname eq 'COMPOUND') {
+		$ar = $DBA->fetch_instance_by_remote_attribute('ReferenceEntity',[['crossReference.identifier','=',$ids]]);
+    } elsif ($dbname eq 'CHEBI') {
+		$ar = $DBA->fetch_instance_by_remote_attribute('ReferenceEntity',[['identifier','=',$ids],['referenceDatabase.name','=',['ChEBI']]]);
+    } elsif ($dbname eq 'EC') {
+		$ar = $DBA->fetch_instance_by_attribute('GO_MolecularFunction',[['ecNumber',$ids]]);
+    } elsif  ($dbname eq 'GO') {
+    	# Check through function, process and compartment to find this ID
+		$ar = $DBA->fetch_instance_by_attribute('GO_MolecularFunction',[['accession',$ids,'MATCH IN BOOLEAN MODE']]);
+		unless (@{$ar}) {
+		    $ar = $DBA->fetch_instance_by_attribute('GO_BiologicalProcess',[['accession',$ids,'MATCH IN BOOLEAN MODE']]);
+		}
+		unless (@{$ar}) {
+		    $ar = $DBA->fetch_instance_by_attribute('GO_CellularComponent',[['accession',$ids,'MATCH IN BOOLEAN MODE']]);
+		}
+    } elsif ($dbname eq 'ENSEMBL') {
+		$ar = $DBA->fetch_instance_by_attribute('ReferenceEntity',[['identifier',$ids]]) ||
+		    $DBA->fetch_instance_by_attribute('ReferenceEntity',[['otherIdentifier',$ids]]);
+    } elsif ($dbname eq 'HAPMAP') {
+		$ar = $DBA->fetch_instance_by_remote_attribute('ReferenceGeneProduct',[['referenceTranscript.identifier','=',$ids]]);
+    } elsif ($dbname eq 'REFSEQ') {
+			if ($ids->[0] =~ /^NM/) {
+			    $ar = $DBA->fetch_instance_by_remote_attribute('ReferenceGeneProduct',[['referenceTranscript.identifier','=',$ids]]);
+			} else {
+			    $ar = $DBA->fetch_instance_by_remote_attribute('ReferenceGeneProduct',[['crossReference.identifier','=',$ids]]);
+			}
+    } elsif ($dbname eq 'REACTOME') {
+		$ar = $DBA->fetch_instance_by_remote_attribute('DatabaseObject',[['stableIdentifier.identifier','=',$ids]]);
+    } else {
+		# Take our chances and see if we can pull out a corresponding ReferenceEntity instance
+		$ar = $DBA->fetch_instance_by_attribute('ReferenceEntity',[['identifier',$ids]]) ||
+		    $DBA->fetch_instance_by_attribute('ReferenceEntity',[['otherIdentifier',$ids]]);
+    };
+    }
+    }
+    @{$ar} || print_search_form_page_w_message("No matches for $dbname:$id");
+
+    print $CGI->redirect('/cgi-bin/eventbrowser?DB=' . $CGI->param('DB') . join('', map {'&ID=' . $_->db_id} @{$ar}) . ((scalar(@{$ar}) == 1) ? '' : '&FORMAT=list'));
+
+};
+$@ && handle_error("$@");
+
+clean_up();
+exit 0;
+
+sub clean_up {
+    $DBA && $DBA->db_handle->disconnect;
+}
+
+sub handle_error {
+    print $CGI->header('text/plain');
+    print "@_";
+}
+
+sub print_search_form_page_w_message {
+    my $msg = shift;
+    $WU || die($msg);
+    $WU->print_simple_search_page_top;
+    print qq(<DIV CLASS="nothingfound">$msg</DIV>);
+    $WU->print_simple_search_page_bottom;
+    clean_up();
+    exit;
+}

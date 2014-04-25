@@ -1,0 +1,1 @@
+<?php get_header(); ?><div id="mainwrapper" class="clearfix">    <div id="maincontent">    	<div class="post">        	<div class="postnohit">				<h2 class="pagetitle">Error 404 - Not Found</h2>            </div>        </div>    	</div></div><?php get_footer(); ?>
