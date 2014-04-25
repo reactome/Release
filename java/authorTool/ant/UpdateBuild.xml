@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="createFile" default="updateJar" basedir="..">
+    <description>
+    	Create five jar files for updating
+    </description>
+	
+	<!-- Defining a list of directory names to be used -->
+	<property name="targetDir" value="${basedir}/../ReactomeUpdate" />
+	<property name="classDir" value="${basedir}/classes" />
+	<property name="orgDir" value="${classDir}/org" />
+	<property name="launchDir" value="${classDir}/launcher" />
+	<property name="resourcesDir" value="${basedir}/resources" />
+	<property name="imagesDir" value="${basedir}/images" />
+	<property name="docsDir" value="${basedir}/docs" />
+	<property name="docsImagesDir" value="${docsDir}/images" />
+	<property name="libDir" value="${basedir}/lib" />
+	
+	<!-- Empty the direcotry. If nothing there, it should do nothing -->
+	<target name="delete">
+		<delete dir="${targetDir}" />
+	</target>
+	
+	<!-- make a directory first. If it is there, it should do nothing -->
+	<target name="mkdir" depends="delete">
+		<mkdir dir="${targetDir}" /> 
+	</target>
+	
+	<!-- copy all files to the target directory -->
+	<target name="updateJar" depends="mkdir">
+		<jar destfile="${targetDir}/org.jar"> 
+			<fileset dir="${orgDir}">
+				<exclude name="reactome/**" />
+			</fileset>
+		</jar>
+		<jar destfile="${targetDir}/resources.jar">
+			<fileset dir="${resourcesDir}" >
+				<exclude name="*.prop" />
+				<exclude name="update.xml" />
+				<exclude name="Timings.xml" />
+			</fileset>
+		</jar>
+		<jar destfile="${targetDir}/images.jar">
+			<fileset dir="${imagesDir}" />
+		</jar>
+		<jar destfile="${targetDir}/docs.jar">
+			<fileset dir="${docsDir}">
+			</fileset>
+		</jar>
+		<jar destfile="${targetDir}/lib.jar">
+			<fileset dir="${libDir}">
+				<exclude name="skin/themepack.zip" />
+			</fileset>
+		</jar>
+	</target>
+	<taskdef name="updateFile" 
+		     classname="org.reactome.ant.UpdateFileTask"
+		     classpath="${basedir}/classes">
+	</taskdef>
+	<target name="createFile" depends="updateJar">
+		<updateFile dir="${targetDir}" uri="http://brie8.cshl.org/download/tools/curatorTool/update">
+			<resource name="org.jar" deleteDir="true" />
+			<resource name="docs.jar" deleteDir="true" />
+			<resource name="resources.jar" deleteDir="false" />
+			<resource name="lib.jar" deleteDir="true" />
+			<resource name="images.jar" deleteDir="true" />
+		</updateFile>
+	</target>
+</project>

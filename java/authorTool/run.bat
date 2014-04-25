@@ -1,0 +1,1 @@
+java -classpath .;lib\skin\skinLF.jar org.gk.gkEditor.GKEditorFrame

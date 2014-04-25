@@ -1,0 +1,380 @@
+<INSTRUCTIONLIBRARY>
+  <INSTRUCTION ID="1" LABEL="Protein identifiers" DESCRIPTION="Identifiers of protein sequences involved in this process">
+    <CLASS>Pathway</CLASS>
+    <CLASS>Reaction</CLASS>
+    <CLASS>BlackBoxEvent</CLASS>
+    <CLASS>Polymerisation</CLASS>
+    <CLASS>Depolymerisation</CLASS>
+    <FOLLOWINGINSTRUCTION name="CatalystActivity">
+      <attributes>physicalEntity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Complex">
+      <attributes>hasComponent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Polymer">
+      <attributes>repeatedUnit</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="EntitySet">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="EntityWithAccessionedSequence">
+      <attributes>referenceEntity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReactionlikeEvent">
+      <attributes>input</attributes>
+      <attributes>output</attributes>
+      <attributes>catalystActivity</attributes>
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Event">
+      <attributes>input</attributes>
+      <attributes>output</attributes>
+      <attributes>catalystActivity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Pathway">
+      <attributes>hasComponent</attributes>
+      <attributes>hasEvent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Reaction">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>ReferencePeptideSequence</OUTPUTCLASS>
+    <OUTPUTCLASS>ReferenceGeneProduct</OUTPUTCLASS>
+<!--
+    <OUTPUTINSTRUCTION>referenceDatabase.name[0]</OUTPUTINSTRUCTION>
+-->
+    <OUTPUTINSTRUCTION>identifier</OUTPUTINSTRUCTION>
+  </INSTRUCTION>
+
+  <INSTRUCTION ID="2" LABEL="Protein identifiers" DESCRIPTION="Identifiers of protein sequences in this complex">
+    <CLASS>Complex</CLASS>
+    <FOLLOWINGINSTRUCTION name="Complex">
+      <attributes>hasComponent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="EntityWithAccessionedSequence">
+      <attributes>referenceEntity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="EntitySet">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>ReferencePeptideSequence</OUTPUTCLASS>
+    <OUTPUTCLASS>ReferenceGeneProduct</OUTPUTCLASS>
+<!--
+    <OUTPUTINSTRUCTION>referenceDatabase.name[0]</OUTPUTINSTRUCTION>
+-->
+    <OUTPUTINSTRUCTION>identifier</OUTPUTINSTRUCTION>
+  </INSTRUCTION>
+
+  <INSTRUCTION ID="3" LABEL="ChEBI identifiers" DESCRIPTION="ChEBI identifiers of compounds involved in this process">
+    <CLASS>Pathway</CLASS>
+    <CLASS>Reaction</CLASS>
+    <CLASS>BlackBoxEvent</CLASS>
+    <CLASS>Polymerisation</CLASS>
+    <CLASS>Depolymerisation</CLASS>
+    <FOLLOWINGINSTRUCTION name="CatalystActivity">
+      <attributes>physicalEntity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Complex">
+      <attributes>hasComponent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="EntitySet">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="SimpleEntity">
+      <attributes>referenceEntity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReactionlikeEvent">
+      <attributes>input</attributes>
+      <attributes>output</attributes>
+      <attributes>catalystActivity</attributes>
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Event">
+      <attributes>input</attributes>
+      <attributes>output</attributes>
+      <attributes>catalystActivity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Pathway">
+      <attributes>hasComponent</attributes>
+      <attributes>hasEvent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Reaction">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>ReferenceMolecule</OUTPUTCLASS>
+<!--
+    <OUTPUTINSTRUCTION>referenceDatabase.name[0]</OUTPUTINSTRUCTION>
+-->
+    <OUTPUTINSTRUCTION>identifier</OUTPUTINSTRUCTION>
+    <OUTPUTCONDITION>
+      <attribute>referenceDatabase.name</attribute>
+      <comparator>=</comparator>
+      <value>ChEBI</value>
+    </OUTPUTCONDITION>
+  </INSTRUCTION>
+
+  <INSTRUCTION ID="4" LABEL="KEGG COMPOUND identifiers" DESCRIPTION="KEGG COMPOUND identifiers of compounds involved in this process">
+    <CLASS>Pathway</CLASS>
+    <CLASS>Reaction</CLASS>
+    <CLASS>BlackBoxEvent</CLASS>
+    <CLASS>Polymerisation</CLASS>
+    <CLASS>Depolymerisation</CLASS>
+    <FOLLOWINGINSTRUCTION name="CatalystActivity">
+      <attributes>physicalEntity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Complex">
+      <attributes>hasComponent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="EntitySet">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="SimpleEntity">
+      <attributes>referenceEntity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReactionlikeEvent">
+      <attributes>input</attributes>
+      <attributes>output</attributes>
+      <attributes>catalystActivity</attributes>
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Event">
+      <attributes>input</attributes>
+      <attributes>output</attributes>
+      <attributes>catalystActivity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Pathway">
+      <attributes>hasComponent</attributes>
+      <attributes>hasEvent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Reaction">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReferenceMolecule">
+      <attributes>crossReference</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>DatabaseIdentifier</OUTPUTCLASS>
+<!--
+    <OUTPUTINSTRUCTION>referenceDatabase.name[0]</OUTPUTINSTRUCTION>
+-->
+    <OUTPUTINSTRUCTION>identifier</OUTPUTINSTRUCTION>
+    <OUTPUTCONDITION>
+      <attribute>referenceDatabase.name</attribute>
+      <comparator>=</comparator>
+      <value>COMPOUND</value>
+    </OUTPUTCONDITION>
+  </INSTRUCTION>
+
+  <INSTRUCTION ID="5" LABEL="GO molecular function" DESCRIPTION="GO molecular function accessions">
+    <CLASS>ReferencePeptideSequence</CLASS>
+    <CLASS>ReferenceGeneProduct</CLASS>
+    <FOLLOWINGINSTRUCTION name="ReferencePeptideSequence">
+      <reverse_attributes>referenceEntity</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReferenceGeneProduct">
+      <reverse_attributes>referenceEntity</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="PhysicalEntity">
+      <reverse_attributes>hasComponent</reverse_attributes>
+      <reverse_attributes>physicalEntity</reverse_attributes>
+      <reverse_attributes>hasMember</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="CatalystActivity">
+      <attributes>activity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>GO_MolecularFunction</OUTPUTCLASS>
+    <OUTPUTINSTRUCTION>accession</OUTPUTINSTRUCTION>
+  </INSTRUCTION>
+
+<!--
+  <INSTRUCTION ID="6" LABEL="Protein identifiers" DESCRIPTION="Identifiers of protein sequences involved in this process">
+    <CLASS>Pathway</CLASS>
+    <CLASS>Reaction</CLASS>
+    <FOLLOWINGINSTRUCTION name="CatalystActivity">
+      <attributes>physicalEntity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Complex">
+      <attributes>hasComponent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="EntitySet">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="EntityWithAccessionedSequence">
+      <attributes>referenceEntity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Event">
+      <attributes>input</attributes>
+      <attributes>output</attributes>
+      <attributes>catalystActivity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Pathway">
+      <attributes>hasComponent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>ReferencePeptideSequence</OUTPUTCLASS>
+    <OUTPUTCLASS>ReferenceGeneProduct</OUTPUTCLASS>
+    <OUTPUTINSTRUCTION>identifier</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION><INSTRUCTION ID="5" /></OUTPUTINSTRUCTION>
+  </INSTRUCTION>
+-->
+<!--
+  <INSTRUCTION ID="7" LABEL="Component Events' class, ID, name &amp; GO molecular function" DESCRIPTION="Class, DB_ID, name and GO molecular function accession component processes">
+    <CLASS>Pathway</CLASS>
+    <FOLLOWINGINSTRUCTION name="Pathway">
+      <attributes>hasComponent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>Event</OUTPUTCLASS>
+    <OUTPUTINSTRUCTION>_class</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>DB_ID</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>_displayName</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>catalystActivity.activity.accession</OUTPUTINSTRUCTION>
+  </INSTRUCTION>
+
+  <INSTRUCTION ID="8" LABEL="Pathways" DESCRIPTION="Pathway DB_ID, name and GO biological process accession number">
+    <CLASS>ReferencePeptideSequence</CLASS>
+    <CLASS>ReferenceGeneProduct</CLASS>
+    <CLASS>ReferenceRNASequence</CLASS>
+    <CLASS>ReferenceDNASequence</CLASS>
+    <CLASS>ReferenceMolecule</CLASS>
+    <CLASS>DatabaseIdentifier</CLASS>
+    <CLASS>EntityWithAccessionedSequence</CLASS>
+    <FOLLOWINGINSTRUCTION name="ReferenceEntity">
+      <reverse_attributes>referenceEntity</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="DatabaseIdentifier">
+      <reverse_attributes>crossReference</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReferenceDNASequence">
+      <reverse_attributes>referenceGene</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReferenceRNASequence">
+      <reverse_attributes>referenceEntity</reverse_attributes>
+      <reverse_attributes>referenceTranscript</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="PhysicalEntity">
+      <reverse_attributes>hasComponent</reverse_attributes>
+      <reverse_attributes>hasMember</reverse_attributes>
+      <reverse_attributes>input</reverse_attributes>
+      <reverse_attributes>output</reverse_attributes>
+      <reverse_attributes>physicalEntity</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="CatalystActivity">
+      <reverse_attributes>catalystActivity</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Event">
+      <reverse_attributes>hasComponent</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>Pathway</OUTPUTCLASS>
+    <OUTPUTINSTRUCTION>DB_ID</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>_displayName</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>goBiologicalProcess.accession</OUTPUTINSTRUCTION>
+  </INSTRUCTION>
+-->
+  <INSTRUCTION ID="9" LABEL="Component Events' stable ID, name &amp; GO molecular function" DESCRIPTION="Stable ID, name and GO molecular function accession component processes">
+    <CLASS>Pathway</CLASS>
+    <FOLLOWINGINSTRUCTION name="Pathway">
+      <attributes>hasComponent</attributes>
+      <attributes>hasEvent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Reaction">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReactionlikeEvent">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>Event</OUTPUTCLASS>
+    <OUTPUTINSTRUCTION>stableIdentifier.identifier</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>_displayName</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>catalystActivity.activity.accession</OUTPUTINSTRUCTION>
+  </INSTRUCTION>
+
+  <INSTRUCTION ID="10" LABEL="Pathways" DESCRIPTION="Pathway stable ID, name and GO biological process accession number">
+    <CLASS>ReferencePeptideSequence</CLASS>
+    <CLASS>ReferenceGeneProduct</CLASS>
+    <CLASS>ReferenceRNASequence</CLASS>
+    <CLASS>ReferenceDNASequence</CLASS>
+    <CLASS>ReferenceMolecule</CLASS>
+    <CLASS>DatabaseIdentifier</CLASS>
+    <CLASS>EntityWithAccessionedSequence</CLASS>
+    <FOLLOWINGINSTRUCTION name="ReferenceEntity">
+      <reverse_attributes>referenceEntity</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="DatabaseIdentifier">
+      <reverse_attributes>crossReference</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReferenceDNASequence">
+      <reverse_attributes>referenceGene</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReferenceRNASequence">
+      <reverse_attributes>referenceEntity</reverse_attributes>
+      <reverse_attributes>referenceTranscript</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="PhysicalEntity">
+      <reverse_attributes>hasComponent</reverse_attributes>
+      <reverse_attributes>hasMember</reverse_attributes>
+      <reverse_attributes>input</reverse_attributes>
+      <reverse_attributes>output</reverse_attributes>
+      <reverse_attributes>physicalEntity</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="CatalystActivity">
+      <reverse_attributes>catalystActivity</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Event">
+      <reverse_attributes>hasComponent</reverse_attributes>
+      <reverse_attributes>hasEvent</reverse_attributes>
+      <reverse_attributes>hasMember</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>Pathway</OUTPUTCLASS>
+    <OUTPUTINSTRUCTION>stableIdentifier.identifier</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>_displayName</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>goBiologicalProcess.accession</OUTPUTINSTRUCTION>
+  </INSTRUCTION>
+
+  <INSTRUCTION ID="11" LABEL="Small molecules" DESCRIPTION="ChEBI identifier and display name of small molecules participating in reactions in this species">
+    <CLASS>Species</CLASS>
+    <FOLLOWINGINSTRUCTION name="Species">
+      <reverse_attributes>species</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Event">
+      <attributes>input</attributes>
+      <attributes>output</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="ReactionlikeEvent">
+      <attributes>input</attributes>
+      <attributes>output</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Complex">
+      <attributes>hasComponent</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="EntitySet">
+      <attributes>hasMember</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="SimpleEntity">
+      <attributes>referenceEntity</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>ReferenceMolecule</OUTPUTCLASS>
+    <OUTPUTINSTRUCTION>identifier</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>_displayName</OUTPUTINSTRUCTION>
+  </INSTRUCTION>
+
+  <INSTRUCTION ID="12" LABEL="Literature references" DESCRIPTION="DB_ID and PMID of literature references associated with processes in this species">
+    <CLASS>Species</CLASS>
+    <FOLLOWINGINSTRUCTION name="Species">
+      <reverse_attributes>species</reverse_attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Event">
+      <attributes>literatureReference</attributes>
+      <attributes>summation</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="Regulation">
+      <attributes>literatureReference</attributes>
+      <attributes>summation</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <FOLLOWINGINSTRUCTION name="PhysicalEntity">
+      <attributes>literatureReference</attributes>
+      <attributes>summation</attributes>
+    </FOLLOWINGINSTRUCTION>
+    <OUTPUTCLASS>LiteratureReference</OUTPUTCLASS>
+    <OUTPUTINSTRUCTION>DB_ID</OUTPUTINSTRUCTION>
+    <OUTPUTINSTRUCTION>pubMedIdentifier</OUTPUTINSTRUCTION>
+  </INSTRUCTION>
+
+</INSTRUCTIONLIBRARY>

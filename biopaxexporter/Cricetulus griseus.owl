@@ -1,0 +1,1714 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bp="http://www.biopax.org/release/biopax-level2.owl#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xml:base="http://www.reactome.org/biopax/63514#">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.biopax.org/release/biopax-level2.owl" />
+  </owl:Ontology>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction1">
+    <bp:LEFT rdf:resource="#sequenceParticipant1" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant1" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant2" />
+    <bp:RIGHT rdf:resource="#sequenceParticipant2" />
+    <bp:EC-NUMBER rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2.4.1.38</bp:EC-NUMBER>
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galactosylation of Pre-Notch</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galactosylation of Pre-Notch</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref11" />
+    <bp:XREF rdf:resource="#unificationXref12" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Using Chinese hamster (Cricetulus griseus) ovarian cell lines deficient in different galactosyltransferases, Chen et al. established that beta-4-galactosyltransferase 1 (B4galt1) was necessary for galactosylation of beta 1,3-linked N-acetylglucosaminyl group added by fringe enzymes to O-linked fucosyl residues on Notch1. B4galt1-mediated galactosylation of Notch1 was necessary for fringe-induced modulation of Notch1 signaling. Since the genome of C. griseus has not been completely sequenced, it is possible that annotated C. griseus Notch isoforms do not represent full-length proteins. Annotated C. griseus Notch2 in particular seems truncated. Only those fucosylation and glycosylation sites that are conserved between Chinese hamster, mouse, human and rat are shown. Since the exact preference, if any, of fringe enzymes for Notch O-fucose sites is not known, the extension of an O-fucosyl residue at an unknown position is shown.</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref1" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: Egan, SE, Orlic-Milacic, M, 2011-11-14</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reviewed: Haw, R, 2012-02-06</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: Orlic-Milacic, M, 2012-02-10</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: D'Eustachio, P, 2012-02-06</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant1">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2032302</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary1">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Golgi membrane</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref1" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref1">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0000139</bp:ID>
+  </bp:unificationXref>
+  <bp:protein rdf:ID="protein1">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glc,GlcNAc-Fuc-Pre-Notch [Golgi membrane]</bp:NAME>
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome. Each synonym is a name of a PhysicalEntity, and each XREF points to one PhysicalEntity</bp:COMMENT>
+    <bp:XREF rdf:resource="#unificationXref3" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glc,GlcNAc-Fuc-Pre-Notch1 [Golgi membrane]</bp:SYNONYMS>
+  </bp:protein>
+  <bp:dataSource rdf:ID="dataSource1">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:NAME>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://www.reactome.org</bp:COMMENT>
+  </bp:dataSource>
+  <bp:bioSource rdf:ID="bioSource1">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cricetulus griseus</bp:NAME>
+    <bp:TAXON-XREF rdf:resource="#unificationXref2" />
+  </bp:bioSource>
+  <bp:unificationXref rdf:ID="unificationXref2">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NCBI Taxonomy</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">10029</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref3">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">G3I6Z6</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant1">
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 735682</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary2">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Golgi lumen</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref4" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref4">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0005796</bp:ID>
+  </bp:unificationXref>
+  <bp:smallMolecule rdf:ID="smallMolecule1">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UDP-D-galactose [ChEBI:18307]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UDP-D-galactose</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UDP-D-galactopyranose</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UDPgalactose</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref5" />
+  </bp:smallMolecule>
+  <bp:unificationXref rdf:ID="unificationXref5">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">18307</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant2">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 205687</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:smallMolecule rdf:ID="smallMolecule2">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">uridine 5'-diphosphate [ChEBI:17659]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">uridine 5'-diphosphate</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UDP</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref6" />
+  </bp:smallMolecule>
+  <bp:unificationXref rdf:ID="unificationXref6">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17659</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant2">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2032300</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein2">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glc,Gal-GlcNAc-Fuc-Pre-Notch [Golgi membrane]</bp:NAME>
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome. Each synonym is a name of a PhysicalEntity, and each XREF points to one PhysicalEntity</bp:COMMENT>
+    <bp:XREF rdf:resource="#unificationXref3" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glc,Gal-GlcNAc-Fuc-Pre-Notch1 [Golgi membrane]</bp:SYNONYMS>
+  </bp:protein>
+  <bp:catalysis rdf:ID="catalysis1">
+    <bp:CONTROLLER rdf:resource="#physicalEntityParticipant3" />
+    <bp:CONTROLLED rdf:resource="#biochemicalReaction1" />
+    <bp:DIRECTION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PHYSIOL-LEFT-TO-RIGHT</bp:DIRECTION>
+    <bp:CONTROL-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ACTIVATION</bp:CONTROL-TYPE>
+    <bp:XREF rdf:resource="#relationshipXref1" />
+    <bp:XREF rdf:resource="#unificationXref10" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:catalysis>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant3">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2023202</bp:COMMENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex1">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant3" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">B4galt1 homodimer [Golgi membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">B4galt1 homodimer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref8" />
+    <bp:XREF rdf:resource="#unificationXref9" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant3">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein3" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2023200</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein3">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:Q99PC2 B4galt1</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">B4galt1</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Beta-1,4-galactosyltransferase 1</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">beta4GalT-1</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref7" />
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref7">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Q99PC2</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature1">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval1" />
+  </bp:sequenceFeature>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary3">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chain Coordinates</bp:TERM>
+  </bp:openControlledVocabulary>
+  <bp:sequenceInterval rdf:ID="sequenceInterval1">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite1" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite2" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite1">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite2">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">393</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:unificationXref rdf:ID="unificationXref8">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2023202</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2023202</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref9">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_120179</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_120179.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:relationshipXref rdf:ID="relationshipXref1">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0003831</bp:ID>
+    <bp:RELATIONSHIP-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO molecular function</bp:RELATIONSHIP-TYPE>
+  </bp:relationshipXref>
+  <bp:unificationXref rdf:ID="unificationXref10">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2029554</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2029554</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref11">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2032355</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2032355</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref12">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_118586</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_118586.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref1">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">11707585</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2001</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fringe modulation of Jagged1-induced Notch signaling requires the action of beta 4galactosyltransferase-1</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chen, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Moloney, DJ</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Stanley, P</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Proc Natl Acad Sci U S A 98:13716-21</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction2">
+    <bp:LEFT rdf:resource="#physicalEntityParticipant4" />
+    <bp:LEFT rdf:resource="#sequenceParticipant6" />
+    <bp:LEFT rdf:resource="#sequenceParticipant7" />
+    <bp:LEFT rdf:resource="#sequenceParticipant8" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant6" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2:SCAP Binds CopII Coat Complex</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2:SCAP Binds CopII Coat Complex</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBF2:SCAP Binds CopII Coat Complex</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref27" />
+    <bp:XREF rdf:resource="#unificationXref28" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2 (SREBF2 and by inference SREBP1A and SREBP1C) is a transmembrane protein that binds SCAP in the endoplasmic reticulum membrane (Sakai et al. 1997). In the presence of cholesterol or oxysterols SCAP:SREBP2 binds INSIG and is retained in the endoplasmic reticulum (Espenshade et al. 2002, Yabe et al. 2002, Yang et al. 2002, Adams et al. 2003, Dobrosotskaya et al. 2003, Adams et al. 2004, Radhakrishnan et al. 2004, Sun et al. 2005, Sun et al. 2007, Motamed et al. 2011). At cholesterol concentrations below 5 mol%  SCAP changes conformation, SCAP:SREBP2 loses interaction with INSIG, binds the CopII coat complex, and is translocated to the Golgi (Adams et al 2004, Feramisco et al. 2005, Radhakrishnan et al. 2008, Motamed et al. 2011).</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref2" />
+    <bp:XREF rdf:resource="#publicationXref3" />
+    <bp:XREF rdf:resource="#publicationXref4" />
+    <bp:XREF rdf:resource="#publicationXref5" />
+    <bp:XREF rdf:resource="#publicationXref6" />
+    <bp:XREF rdf:resource="#publicationXref7" />
+    <bp:XREF rdf:resource="#publicationXref8" />
+    <bp:XREF rdf:resource="#publicationXref9" />
+    <bp:XREF rdf:resource="#publicationXref10" />
+    <bp:XREF rdf:resource="#publicationXref11" />
+    <bp:XREF rdf:resource="#publicationXref12" />
+    <bp:XREF rdf:resource="#publicationXref13" />
+    <bp:XREF rdf:resource="#publicationXref14" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: May, B, 2011-09-28</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: May, B, 2011-09-28</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant4">
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2317524</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary4">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endoplasmic reticulum membrane</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref13" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref13">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0005789</bp:ID>
+  </bp:unificationXref>
+  <bp:complex rdf:ID="complex2">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant4" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant5" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP:SREBP2 [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP:SREBP2</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP:SREBF2</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref19" />
+    <bp:XREF rdf:resource="#unificationXref20" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant4">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein4" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655733</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein4">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource2" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:Q12772 SREBF2</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBF2</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">BHLHD2</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBF2</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref15" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Transcriptional activator required for lipid homeostasis. Regulates transcription of the LDL receptor gene as well as the cholesterol and to a lesser degree the fatty acid synthesis pathway (By similarity). Binds the sterol regulatory element 1 (SRE-1) (5'-ATCACCCCAC-3') found in the flanking region of the LDRL and HMG-CoA synthase genes.SUBUNIT Forms a tight complex with SCAP in the ER membrane. Efficient DNA binding of the soluble transcription factor fragment requires dimerization with another bHLH protein. Interacts with LMNA. Component of SCAP/SREBP complex composed of SREBF2, SCAP and RNF139; the complex hampers the interaction between SCAP and SEC24B, thereby reducing SREBF2 proteolytic processing. Interacts (via C-terminus domain) with RNF139.TISSUE SPECIFICITY Ubiquitously expressed in adult and fetal tissues.PTM At low cholesterol the SCAP/SREBP complex is recruited into COPII vesicles for export from the ER. In the Golgi complex SREBPs are cleaved sequentially by site-1 and site-2 protease. The first cleavage by site-1 protease occurs within the luminal loop, the second cleavage by site-2 protease occurs within the first transmembrane domain and releases the transcription factor from the Golgi membrane. Apoptosis triggers cleavage by the cysteine proteases caspase-3 and caspase-7.SIMILARITY Belongs to the SREBP family.SIMILARITY Contains 1 bHLH (basic helix-loop-helix) domain.</bp:COMMENT>
+  </bp:protein>
+  <bp:bioSource rdf:ID="bioSource2">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Homo sapiens</bp:NAME>
+    <bp:TAXON-XREF rdf:resource="#unificationXref14" />
+  </bp:bioSource>
+  <bp:unificationXref rdf:ID="unificationXref14">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NCBI Taxonomy</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">9606</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref15">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Q12772</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature2">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval2" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval2">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite3" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite4" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite3">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite4">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1141</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant5">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655722</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex3">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant5" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP tetramer [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP tetramer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref17" />
+    <bp:XREF rdf:resource="#unificationXref18" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant5">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein5" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655763</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein5">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P97260 SCAP</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref16" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Escort protein required for cholesterol as well as lipid homeostasis. Regulates export of the SCAP/SREBF complex from the ER upon low cholesterol. Formation of a ternary complex with INSIG at high sterol concentrations leads to masking of an ER-export signal in SCAP and retention of the complex in the ER. Low sterol concentrations trigger release of INSIG, a conformational change in the SSC domain of SCAP, unmasking of the ER export signal, recruitment into COPII-coated vesicles, transport to the Golgi complex, proteolytic cleavage of SREBF in the Golgi, release of the transcription factor fragment of SREBF from the membrane, its import into the nucleus and up-regulation of LDLR, INSIG1 and the mevalonate pathway.DOMAIN Cholesterol bound to SSC domain of SCAP or oxysterol bound to INSIG1/2 leads to masking of an ER export signal on SCAP possibly by moving the signal further away from the ER membrane.DISRUPTION PHENOTYPE CHO cells show loss of site-1 cleavage of SREBF1/2, reduced synthesis of cholesterol, a reduced level of LDLR and cholesterol auxotrophy.SIMILARITY Belongs to the WD repeat SCAP family.SIMILARITY Contains 1 SSD (sterol-sensing) domain.SIMILARITY Contains 7 WD repeats.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref16">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P97260</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature3">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval3" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval3">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite5" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite6" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite5">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite6">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1276</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:unificationXref rdf:ID="unificationXref17">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1655722</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=1655722</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref18">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_148244</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_148244.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref19">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2317524</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2317524</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref20">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_148265</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_148265.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant6">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein6" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 203987</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein6">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource2" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P53992 SEC24C</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SEC24C</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">KIAA0079</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SEC24C</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref21" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Component of the COPII coat, that covers ER-derived vesicles involved in transport from the endoplasmic reticulum to the Golgi apparatus. COPII acts in the cytoplasm to promote the transport of secretory, plasma membrane, and vacuolar proteins from the endoplasmic reticulum to the Golgi complex.SUBUNIT Interacts with SLC6A4 (By similarity). COPII is composed of at least five proteins: the Sec23/24 complex, the Sec13/31 complex and Sar1. SEC24C is capable of forming heterodimers with SEC24A. Interacts with TMED2 and TMED10.TISSUE SPECIFICITY Ubiquitous.SIMILARITY Belongs to the SEC23/SEC24 family. SEC24 subfamily.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref21">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P53992</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature4">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval4" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval4">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite7" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite8" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite7">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite8">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1094</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant7">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein7" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655715</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein7">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:Q9QVY3 SAR1B</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SAR1B</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SAR1</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SARA2</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SAR1B</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref22" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Involved in transport from the endoplasmic reticulum to the Golgi apparatus. Activated by the guanine nucleotide exchange factor PREB. Involved in the selection of the protein cargo and the assembly of the COPII coat complex.SUBUNIT Homodimer. Binds PREB. Part of the COPII coat complex. Binds to the cytoplasmic tails of target proteins in the endoplasmic reticulum.SIMILARITY Belongs to the small GTPase superfamily. SAR1 family.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref22">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Q9QVY3</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature5">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval5" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval5">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite9" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite10" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite9">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite10">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">198</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant8">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein8" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature6" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655767</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein8">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource3" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:Q01405 Sec23a</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sec23a</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sec23</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sec23r</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sec23a</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref24" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SUBUNIT COPII is composed of at least five proteins: the Sec23/24 complex, the Sec13/31 complex and Sar1. Interacts with SEC23IP. Interacts with HTR4. Interacts with SEC16A (By similarity). Interacts with SLC6A4.TISSUE SPECIFICITY High levels in brain and fibroblasts.SIMILARITY Belongs to the SEC23/SEC24 family. SEC23 subfamily.</bp:COMMENT>
+  </bp:protein>
+  <bp:bioSource rdf:ID="bioSource3">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Mus musculus</bp:NAME>
+    <bp:TAXON-XREF rdf:resource="#unificationXref23" />
+  </bp:bioSource>
+  <bp:unificationXref rdf:ID="unificationXref23">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NCBI Taxonomy</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">10090</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref24">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Q01405</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature6">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval6" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval6">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite11" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite12" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite11">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite12">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">765</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant6">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655768</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex4">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant9" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant7" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant10" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant11" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant12" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2:SCAP:CopII Coat [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2:SCAP:CopII Coat</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref25" />
+    <bp:XREF rdf:resource="#unificationXref26" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant9">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein4" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655733</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceFeature rdf:ID="sequenceFeature7">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval7" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval7">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite13" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite14" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite13">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite14">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1141</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant7">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655722</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant10">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein6" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature8" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 203987</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceFeature rdf:ID="sequenceFeature8">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval8" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval8">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite15" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite16" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite15">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite16">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1094</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant11">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein8" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature9" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655767</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceFeature rdf:ID="sequenceFeature9">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval9" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval9">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite17" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite18" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite17">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite18">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">765</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant12">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein7" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature10" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655715</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceFeature rdf:ID="sequenceFeature10">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval10" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval10">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite19" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite20" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite19">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite20">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">198</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:unificationXref rdf:ID="unificationXref25">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1655768</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=1655768</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref26">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_148034</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_148034.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref27">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1655838</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=1655838</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref28">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_147890</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_147890.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref2">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15452130</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2004</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cholesterol and 25-hydroxycholesterol inhibit activation of SREBPs by different mechanisms, both involving SCAP and Insigs</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Adams, CM</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reitz, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">De Brabander, JK</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Feramisco, JD</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Li, L</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Biol Chem 279:52772-80</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref3">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12242332</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2002</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Insig-2, a second endoplasmic reticulum protein that binds SCAP and blocks export of sterol regulatory element-binding proteins</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Yabe, D</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Proc Natl Acad Sci U S A 99:12753-8</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref4">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">19041766</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2008</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Switch-like control of SREBP-2 transport triggered by small changes in ER cholesterol: a delicate balance</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Radhakrishnan, A</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">McDonald, JG</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cell Metab 8:512-21</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref5">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12202038</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2002</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Crucial step in cholesterol homeostasis: sterols promote binding of SCAP to INSIG-1, a membrane protein that facilitates retention of SREBPs in ER</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Yang, T</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Espenshade, PJ</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Wright, ME</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Yabe, D</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gong, Y</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Aebersold, R</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cell 110:489-500</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref6">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12842885</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2003</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reconstitution of sterol-regulated endoplasmic reticulum-to-Golgi transport of SREBP-2 in insect cells by co-expression of mammalian SCAP and Insigs</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Dobrosotskaya, IY</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Rawson, RB</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Biol Chem 278:35837-43</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref7">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12193656</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2002</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sterols block binding of COPII proteins to SCAP, thereby controlling SCAP sorting in ER</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Espenshade, PJ</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Li, WP</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Yabe, D</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Proc Natl Acad Sci U S A 99:11694-9</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref8">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15260976</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2004</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Direct binding of cholesterol to the purified membrane region of SCAP: mechanism for a sterol-sensing domain</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Radhakrishnan, A</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sun, LP</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kwon, HJ</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Mol Cell 15:259-68</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref9">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12963821</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2003</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cholesterol-induced conformational change in SCAP enhanced by Insig proteins and mimicked by cationic amphiphiles</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Adams, CM</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Proc Natl Acad Sci U S A 100:10647-52</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref10">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15899885</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2005</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Insig required for sterol-mediated inhibition of Scap/SREBP binding to COPII proteins in vitro</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sun, LP</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Li, L</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Biol Chem 280:26483-90</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref11">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">21454655</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2011</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Identification of luminal Loop 1 of Scap protein as the sterol sensor that maintains cholesterol homeostasis</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Motamed, M</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Zhang, Y</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Wang, ML</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Seemann, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kwon, HJ</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Biol Chem 286:18002-12</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref12">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15728349</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2005</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Intramembrane aspartic acid in SCAP protein governs cholesterol-induced conformational change</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Feramisco, JD</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Radhakrishnan, A</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ikeda, Y</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reitz, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Proc Natl Acad Sci U S A 102:3242-7</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref13">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">9242699</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1997</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Identification of complexes between the COOH-terminal domains of sterol regulatory element-binding proteins (SREBPs) and SREBP cleavage-activating protein</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sakai, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nohturfft, A</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cheng, D</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ho, YK</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Biol Chem 272:20213-21</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref14">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17428919</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2007</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sterol-regulated transport of SREBPs from endoplasmic reticulum to Golgi: Insig renders sorting signal in Scap inaccessible to COPII proteins</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sun, LP</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Seemann, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Proc Natl Acad Sci U S A 104:6519-26</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction3">
+    <bp:LEFT rdf:resource="#physicalEntityParticipant8" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant9" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant11" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2 (SREBF2) is retained in the endoplasmic reticulum by SCAP:INSIG2:oxysterol</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2 (SREBF2) is retained in the endoplasmic reticulum by SCAP:INSIG2:oxysterol</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref35" />
+    <bp:XREF rdf:resource="#unificationXref36" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INSIG binds oxysterols and the INSIG:oxysterol complex interacts with SCAP subunits of the SREBP2:SCAP (SREBF2:SCAP) complex (Adams et al. 2004, Radhakrishnan et al. 2007). This interaction retains the SREBP2:SCAP:INSIG:oxysterol complex in the endoplasmic reticulum. From this reaction it is inferred that SREBP1A (SREBF1A) and SREBP1C (SREBF1C) are retained similarly.</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref2" />
+    <bp:XREF rdf:resource="#publicationXref15" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: May, B, 2012-06-10</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: May, B, 2012-06-10</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant8">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2317524</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant9">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2317521</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex5">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant13" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant10" />
+    <bp:ORGANISM rdf:resource="#bioSource2" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INSIG2:oxysterol [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INSIG2:oxysterol</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref31" />
+    <bp:XREF rdf:resource="#unificationXref32" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant13">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein9" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature11" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655736</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein9">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource2" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:Q9Y5U4 INSIG2</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INSIG2</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INSIG2</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref29" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Mediates feedback control of cholesterol synthesis by controlling SCAP and HMGCR. Functions by blocking the processing of sterol regulatory element-binding proteins (SREBPs). Capable of retaining the SCAP-SREBF2 complex in the ER thus preventing it from escorting SREBPs to the Golgi. Seems to regulate the ubiquitin-mediated proteasomal degradation of HMGCR.SUBUNIT Binds to the SCAP-SREBF2 complex only in the presence of sterols. Interacts with RNF139.MISCELLANEOUS Does not require nuclear SREBPs for its expression. When nuclear SREBP activity is low, is the only form of INSIG present in the cell.SIMILARITY Belongs to the INSIG family.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref29">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Q9Y5U4</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature11">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval11" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval11">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite21" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite22" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite21">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite22">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">225</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant10">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2317518</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:smallMolecule rdf:ID="smallMolecule3">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">oxysterol [ChEBI:53030]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">oxysterol</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">oxysterols</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref30" />
+  </bp:smallMolecule>
+  <bp:unificationXref rdf:ID="unificationXref30">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">53030</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref31">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2317521</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2317521</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref32">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_148058</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_148058.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant11">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex6" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2317523</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex6">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant14" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant12" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant13" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2:SCAP:INSIG2:oxysterol [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2:SCAP:INSIG2:oxysterol</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBF2:SCAP:INSIG2:oxysterol</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref33" />
+    <bp:XREF rdf:resource="#unificationXref34" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant14">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein4" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature12" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655733</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceFeature rdf:ID="sequenceFeature12">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval12" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval12">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite23" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite24" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite23">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite24">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1141</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant12">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655722</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant13">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2317521</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:unificationXref rdf:ID="unificationXref33">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2317523</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2317523</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref34">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_148178</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_148178.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref35">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2317528</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2317528</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref36">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_147768</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_147768.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref15">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17428920</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2007</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sterol-regulated transport of SREBPs from endoplasmic reticulum to Golgi: oxysterols block transport by binding to Insig</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Radhakrishnan, Arun</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ikeda, Yukio</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kwon, Hyock Joo</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brown, MS</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Goldstein, JL</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Proc. Natl. Acad. Sci. U.S.A. 104:6511-8</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction4">
+    <bp:LEFT rdf:resource="#physicalEntityParticipant14" />
+    <bp:LEFT rdf:resource="#sequenceParticipant15" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant15" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant18" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP1A/1C/2 is retained in the endoplasmic reticulum by SCAP:cholesterol:INSIG</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP1A/1C/2 is retained in the endoplasmic reticulum by SCAP:cholesterol:INSIG</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref47" />
+    <bp:XREF rdf:resource="#unificationXref48" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBPs (SREBP1A/1C/2, SREBFs) bind SCAP in the endoplasmic reticulum membrane. Luminal loop 1 of SCAP binds cholesterol (Adams et al. 2003) which prevents SCAP from interacting with Sec24 in the CopII coat complex and allows SCAP to interact with INSIG instead (Sakai et al. 1997, Yang et al. 2002, Dobrosotskaya et al. 2003, Adams et al. 2004, Feramisco et al. 2005, Sun et al. 2005). These interactions retain SCAP:SREBP1A/1C/2 in the endoplasmic reticulum.</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref2" />
+    <bp:XREF rdf:resource="#publicationXref5" />
+    <bp:XREF rdf:resource="#publicationXref6" />
+    <bp:XREF rdf:resource="#publicationXref12" />
+    <bp:XREF rdf:resource="#publicationXref9" />
+    <bp:XREF rdf:resource="#publicationXref13" />
+    <bp:XREF rdf:resource="#publicationXref10" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: May, B, 2012-06-10</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: May, B, 2012-06-10</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant14">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 193384</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:smallMolecule rdf:ID="smallMolecule4">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cholesterol [ChEBI:16113]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cholesterol</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cholest-5-en-3beta-ol</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref37" />
+  </bp:smallMolecule>
+  <bp:unificationXref rdf:ID="unificationXref37">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">16113</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant15">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein10" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655749</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein10">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INSIG [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:ORGANISM rdf:resource="#bioSource2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome. Each synonym is a name of a PhysicalEntity, and each XREF points to one PhysicalEntity</bp:COMMENT>
+    <bp:XREF rdf:resource="#unificationXref29" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INSIG2 [endoplasmic reticulum membrane]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref38" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INSIG1 [endoplasmic reticulum membrane]</bp:SYNONYMS>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref38">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">O15503</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant15">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2326883</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex7">
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant16" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant17" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP1A/1C/2:SCAP [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP1A/1C/2:SCAP</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBF1A/1C/2:SCAP</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref41" />
+    <bp:XREF rdf:resource="#unificationXref42" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant16">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655722</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant17">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655730</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntity rdf:ID="physicalEntity1">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBF1A,1C,2 [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome. Each synonym is a name of a PhysicalEntity, and each XREF points to one PhysicalEntity</bp:COMMENT>
+    <bp:XREF rdf:resource="#unificationXref15" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBF2(1-1141) [endoplasmic reticulum membrane]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref39" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBF1-3 [endoplasmic reticulum membrane]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref40" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBF1-1 [endoplasmic reticulum membrane]</bp:SYNONYMS>
+  </bp:physicalEntity>
+  <bp:unificationXref rdf:ID="unificationXref39">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P36956-3</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref40">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P36956-1</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref41">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2326883</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2326883</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref42">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_148327</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_148327.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant18">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex8" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655727</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex8">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant16" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant19" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant20" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP1A/1C/2:SCAP:cholesterol:INSIG [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP1A/1C/2:SCAP:cholesterol:INSIG</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref45" />
+    <bp:XREF rdf:resource="#unificationXref46" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant16">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein10" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655749</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant19">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655730</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant20">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex9" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655758</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex9">
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant21" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant22" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP:cholesterol [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP:cholesterol</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref43" />
+    <bp:XREF rdf:resource="#unificationXref44" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant21">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 193384</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant22">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655722</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:unificationXref rdf:ID="unificationXref43">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1655758</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=1655758</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref44">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_148574</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_148574.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref45">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1655727</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=1655727</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref46">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_147975</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_147975.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref47">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2317526</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2317526</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref48">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_147840</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_147840.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction5">
+    <bp:LEFT rdf:resource="#sequenceParticipant17" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant23" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant24" />
+    <bp:RIGHT rdf:resource="#sequenceParticipant18" />
+    <bp:EC-NUMBER rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2.4.1.221</bp:EC-NUMBER>
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fucosylation of Pre-Notch by POFUT1</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fucosylation of Pre-Notch by POFUT1</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref55" />
+    <bp:XREF rdf:resource="#unificationXref56" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">In the endoplasmic reticulum, Notch receptor precursors are fucosylated on conserved serine and threonine residues in their EGF repeats. The consensus fucosylation site sequence is C2-X(4-5)-S/T-C3, where C2 and C3 are the second and third cysteine residue within the EGF repeat, and X(4-5) is four to five amino acid residues of any type. Only those fucosylation sites that are conserved between human, mouse and rat Notch isoforms are annotated. Fucosylation is performed by the endoplasmic reticulum resident O-fucosyl transferase POFUT1. Fucosylation by POFUT1, initially discovered in Drosophila, is considered to be an essential step in Notch processing and production of a fully functional receptor. Fucosylation of mammalian Notch proteins was studied by exogenously expressing mouse Notch1 in Chinese hamster ovary cell lines.</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref16" />
+    <bp:XREF rdf:resource="#publicationXref17" />
+    <bp:XREF rdf:resource="#publicationXref18" />
+    <bp:XREF rdf:resource="#publicationXref19" />
+    <bp:XREF rdf:resource="#publicationXref20" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: Egan, SE, Orlic-Milacic, M, 2011-11-14</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reviewed: Haw, R, 2012-02-06</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: Orlic-Milacic, M, 2012-02-10</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: D'Eustachio, P, 2012-02-06</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant17">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein11" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1984033</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein11">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pre-Notch [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:ORGANISM rdf:resource="#bioSource3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome. Each synonym is a name of a PhysicalEntity, and each XREF points to one PhysicalEntity</bp:COMMENT>
+    <bp:XREF rdf:resource="#unificationXref49" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pre-Notch1 [endoplasmic reticulum membrane]</bp:SYNONYMS>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref49">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Q01705</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant23">
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1463452</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">70</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary5">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endoplasmic reticulum lumen</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref50" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref50">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0005788</bp:ID>
+  </bp:unificationXref>
+  <bp:smallMolecule rdf:ID="smallMolecule5">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GDP-L-fucose [ChEBI:5221]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GDP-L-fucose</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref51" />
+  </bp:smallMolecule>
+  <bp:unificationXref rdf:ID="unificationXref51">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17009</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant24">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary5" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule6" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1467290</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">70</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:smallMolecule rdf:ID="smallMolecule6">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GDP [ChEBI:17552]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GDP</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guanosine 5'-diphosphate</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guanosine diphosphate</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref52" />
+  </bp:smallMolecule>
+  <bp:unificationXref rdf:ID="unificationXref52">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17552</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant18">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein12" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1986582</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein12">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fuc-Pre-Notch [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:ORGANISM rdf:resource="#bioSource3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome. Each synonym is a name of a PhysicalEntity, and each XREF points to one PhysicalEntity</bp:COMMENT>
+    <bp:XREF rdf:resource="#unificationXref49" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fuc-Pre-Notch1 [endoplasmic reticulum membrane]</bp:SYNONYMS>
+  </bp:protein>
+  <bp:catalysis rdf:ID="catalysis2">
+    <bp:CONTROLLER rdf:resource="#sequenceParticipant19" />
+    <bp:CONTROLLED rdf:resource="#biochemicalReaction5" />
+    <bp:DIRECTION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PHYSIOL-LEFT-TO-RIGHT</bp:DIRECTION>
+    <bp:CONTROL-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ACTIVATION</bp:CONTROL-TYPE>
+    <bp:XREF rdf:resource="#relationshipXref2" />
+    <bp:XREF rdf:resource="#unificationXref54" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:catalysis>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant19">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein13" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature13" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 5149526</bp:COMMENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein13">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P83337 POFUT1</bp:NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">POFUT1</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref53" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION: Catalyzes the reaction that attaches fucose through an O-glycosidic linkage to a conserved serine or threonine residue found in the consensus sequence C2-X(4,5)-[S/T]-C3 of EGF domains, where C2 and C3 are the second and third conserved cysteines. Specifically uses GDP-fucose as donor substrate and proper disulfide pairing of the substrate EGF domains is required for fucose transfer. Plays a crucial role in NOTCH signaling. Initial fucosylation of NOTCH by POFUT1 generates a substrate for FRINGE/RFNG, an acetylglucosaminyltransferase that can then extend the fucosylation on the NOTCH EGF repeats. This extended fucosylation is required for optimal ligand binding and canonical NOTCH signaling induced by DELTA1 or JAGGED1 (By similarity). Fucosylates AGRN and determines its ability to cluster acetylcholine receptors (AChRs) (By similarity).</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref53">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P83337</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature13">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval13" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval13">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite25" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite26" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite25">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite26">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">392</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:relationshipXref rdf:ID="relationshipXref2">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0046922</bp:ID>
+    <bp:RELATIONSHIP-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO molecular function</bp:RELATIONSHIP-TYPE>
+  </bp:relationshipXref>
+  <bp:unificationXref rdf:ID="unificationXref54">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1986586</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=1986586</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref55">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1986584</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=1986584</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref56">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_118648</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_118648.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref16">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">11524432</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2001</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Modification of epidermal growth factor-like repeats with O-fucose. Molecular cloning and expression of a novel GDP-fucose protein O-fucosyltransferase</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Wang, Y</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Shao, L</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Shi, S</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Harris, RJ</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Spellman, MW</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Stanley, P</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Haltiwanger, RS</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Biol Chem 276:40338-45</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref17">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15692013</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2005</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chaperone activity of protein O-fucosyltransferase 1 promotes notch receptor folding</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Okajima, T</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Xu, A</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lei, L</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Irvine, KD</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Science 307:1599-603</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref18">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12486116</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2003</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fringe modifies O-fucose on mouse Notch1 at epidermal growth factor-like repeats within the ligand-binding site and the Abruptex region</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Shao, L</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Moloney, DJ</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Haltiwanger, RS</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Biol Chem 278:7775-82</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref19">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">21464368</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2011</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Protein O-fucosyltransferase 1 (Pofut1) regulates lymphoid and myeloid homeostasis through modulation of Notch receptor ligand interactions</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Yao, D</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Huang, Y</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Huang, X</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Wang, W</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Yan, Q</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Wei, L</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Xin, W</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gerson, S</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Stanley, P</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lowe, JB</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Zhou, L</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Blood 117:5652-62</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref20">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">18347015</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2008</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Roles of Pofut1 and O-fucose in mammalian Notch signaling</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Stahl, M</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Uemura, K</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ge, C</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Shi, S</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Tashima, Y</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Stanley, P</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Biol Chem 283:13638-51</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction6">
+    <bp:LEFT rdf:resource="#physicalEntityParticipant25" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant26" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2:SCAP Transits to the Golgi</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBP2:SCAP Transits to the Golgi</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SREBF2:SCAP Transits to the Golgi</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref61" />
+    <bp:XREF rdf:resource="#unificationXref62" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">In low concentrations of cholesterol SCAP interacts with Sec24 of the CopII coat complex causing SCAP:SREBP1A/1C/2 to be transported with the CopII complex from the endoplasmic reticulum to the Golgi.</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref6" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: May, B, 2011-09-28</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: May, B, 2011-09-28</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant25">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary4" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655768</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant26">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex10" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655759</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex10">
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant27" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant21" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP:SREBP2 [Golgi membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP:SREBP2</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP:SREBF2</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref59" />
+    <bp:XREF rdf:resource="#unificationXref60" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant27">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex11" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655751</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex11">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant20" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP tetramer [Golgi membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SCAP tetramer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref57" />
+    <bp:XREF rdf:resource="#unificationXref58" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant20">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein5" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature14" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655750</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceFeature rdf:ID="sequenceFeature14">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval14" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval14">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite27" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite28" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite27">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite28">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1276</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:unificationXref rdf:ID="unificationXref57">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1655751</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=1655751</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref58">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_148424</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_148424.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant21">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein4" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature15" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 1655747</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceFeature rdf:ID="sequenceFeature15">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval15" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval15">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite29" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite30" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite29">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite30">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1141</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:unificationXref rdf:ID="unificationXref59">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1655759</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=1655759</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref60">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_148336</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_148336.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref61">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1655840</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=1655840</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref62">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_147893</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_147893.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction7">
+    <bp:LEFT rdf:resource="#physicalEntityParticipant28" />
+    <bp:LEFT rdf:resource="#sequenceParticipant22" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant29" />
+    <bp:RIGHT rdf:resource="#sequenceParticipant23" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sialylation of Pre-Notch</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Sialylation of Pre-Notch</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref66" />
+    <bp:XREF rdf:resource="#unificationXref67" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Using Chinese hamster (Cricetulus griseus) ovary cells that express endogenous Notch1 but do not express endogenous Fringe proteins, Moloney et al. found after introduction of mouse Mfng that mature Notch1 had the Sia-alpha2,3-Gal-beta1,4-GlcNAc-beta1,3-fucitol tetrasaccharide attached to conserved serine and threonine residues in EGF repeats of Notch1 (Moloney et al. 2000). Sialyltransferases that could be involved in formation of this type of tetrasaccharide are St3gal3, St3gal4 and St3gal6 (Harduin-Lepers et al. 2001).</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref21" />
+    <bp:XREF rdf:resource="#publicationXref22" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: Egan, SE, Orlic-Milacic, M, 2011-11-14</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reviewed: Haw, R, 2012-02-06</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: Orlic-Milacic, M, 2012-02-10</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: D'Eustachio, P, 2012-02-06</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant28">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 727815</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:smallMolecule rdf:ID="smallMolecule7">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CMP-N-acetylneuraminate [ChEBI:3278]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CMP-N-acetylneuraminate</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref63" />
+  </bp:smallMolecule>
+  <bp:unificationXref rdf:ID="unificationXref63">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">16556</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant22">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2032300</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant29">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule8" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 727810</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:smallMolecule rdf:ID="smallMolecule8">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CMP [ChEBI:17361]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CMP</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cytidine-5'-monophosphate</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cytidylic acid</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref64" />
+  </bp:smallMolecule>
+  <bp:unificationXref rdf:ID="unificationXref64">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17361</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant23">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein14" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2032991</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein14">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glc,Sia-Gal-GlcNAc-Fuc-Pre-Notch [Golgi lumen]</bp:NAME>
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome. Each synonym is a name of a PhysicalEntity, and each XREF points to one PhysicalEntity</bp:COMMENT>
+    <bp:XREF rdf:resource="#unificationXref3" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glc,Sia-Gal-GlcNAc-Fuc-Pre-Notch1 [Golgi lumen]</bp:SYNONYMS>
+  </bp:protein>
+  <bp:catalysis rdf:ID="catalysis3">
+    <bp:CONTROLLER rdf:resource="#physicalEntityParticipant30" />
+    <bp:CONTROLLED rdf:resource="#biochemicalReaction7" />
+    <bp:DIRECTION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PHYSIOL-LEFT-TO-RIGHT</bp:DIRECTION>
+    <bp:CONTROL-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ACTIVATION</bp:CONTROL-TYPE>
+    <bp:XREF rdf:resource="#relationshipXref3" />
+    <bp:XREF rdf:resource="#unificationXref65" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:catalysis>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant30">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 2033000</bp:COMMENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntity rdf:ID="physicalEntity2">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">St3gal3/4/6 [Golgi membrane]</bp:NAME>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome. Each synonym is a name of a PhysicalEntity, and each XREF points to one PhysicalEntity</bp:COMMENT>
+  </bp:physicalEntity>
+  <bp:relationshipXref rdf:ID="relationshipXref3">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0008373</bp:ID>
+    <bp:RELATIONSHIP-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO molecular function</bp:RELATIONSHIP-TYPE>
+  </bp:relationshipXref>
+  <bp:unificationXref rdf:ID="unificationXref65">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2033002</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2033002</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref66">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2033005</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=2033005</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref67">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_118591</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_118591.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref21">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">11530204</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2001</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The human sialyltransferase family</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Harduin-Lepers, A</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Vallejo-Ruiz, V</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Krzewinski-Recchi, MA</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Samyn-Petit, B</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Julien, S</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Delannoy, P</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Biochimie 83:727-37</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref22">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">10935626</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2000</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fringe is a glycosyltransferase that modifies Notch</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Moloney, DJ</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Panin, VM</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Johnston, SH</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chen, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Shao, L</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Wilson, R</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Wang, Y</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Stanley, P</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Irvine, KD</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Haltiwanger, RS</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Vogt, TF</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nature 406:369-75</bp:SOURCE>
+  </bp:publicationXref>
+</rdf:RDF>
+

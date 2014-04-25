@@ -1,0 +1,1783 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bp="http://www.biopax.org/release/biopax-level2.owl#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xml:base="http://www.reactome.org/biopax/168245#">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.biopax.org/release/biopax-level2.owl" />
+  </owl:Ontology>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction1">
+    <bp:LEFT rdf:resource="#physicalEntityParticipant1" />
+    <bp:LEFT rdf:resource="#sequenceParticipant2" />
+    <bp:LEFT rdf:resource="#sequenceParticipant3" />
+    <bp:LEFT rdf:resource="#sequenceParticipant4" />
+    <bp:LEFT rdf:resource="#sequenceParticipant5" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant2" />
+    <bp:LEFT rdf:resource="#sequenceParticipant14" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant3" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant4" />
+    <bp:LEFT rdf:resource="#sequenceParticipant17" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant5" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Association with M1 at cell membrane</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Association with M1 at cell membrane</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref31" />
+    <bp:XREF rdf:resource="#unificationXref32" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">As influenza viruses bud from the plasma membrane of infected cells, complete virions are not seen inside cells.  In polarized epithelial cells, assembly and budding of influenza occurs from the apical plasma membrane (Schmitt, 2004). For efficient assembly, all virion components must accumulate at the budding site, and it is believed that the viral glycoprotein accumulation determines the site of virus assembly and budding (Nayak, 2004).  M1 is thought to be the bridge between the envelope glycoproteins and the RNPs for assembly (Schmitt, 2004). M2 is also required, because if it is not present RNPs are not packaged into budding virions (McCown, 2005), however it role is not known.</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref1" />
+    <bp:XREF rdf:resource="#publicationXref2" />
+    <bp:XREF rdf:resource="#publicationXref3" />
+    <bp:XREF rdf:resource="#publicationXref4" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: Marsh, G, 2007-04-30 20:49:40</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reviewed: Squires, B, Rush, MG, 2007-04-30 20:48:45</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant1">
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195732</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">60</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary1">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">plasma membrane</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref1" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref1">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0005886</bp:ID>
+  </bp:unificationXref>
+  <bp:complex rdf:ID="complex1">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">palmitylated M2 Tetramer [plasma membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">palmitylated M2 Tetramer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref4" />
+    <bp:XREF rdf:resource="#unificationXref5" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant1">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195729</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein1">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P06821 M</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">M</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">M</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ENZYME REGULATION The M2 protein from most influenza A strains is inhibited by amantadine and rimantadine, resulting in viral uncoating incapacity. Emergence of amantadine-resistant variants is usually rapid.MISCELLANEOUS When the channel is activated, one or more imidazole moities of His-37 probably become bi-protonated.SIMILARITY Belongs to the influenza viruses matrix protein M2 family.</bp:COMMENT>
+  </bp:protein>
+  <bp:dataSource rdf:ID="dataSource1">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:NAME>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://www.reactome.org</bp:COMMENT>
+  </bp:dataSource>
+  <bp:bioSource rdf:ID="bioSource1">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Influenza A virus</bp:NAME>
+    <bp:TAXON-XREF rdf:resource="#unificationXref2" />
+  </bp:bioSource>
+  <bp:unificationXref rdf:ID="unificationXref2">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NCBI Taxonomy</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">11320</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref3">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P06821</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref4">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195732</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195732</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref5">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10389</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10389.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant2">
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195948</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">37</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary2">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cytosol</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref6" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref6">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0005829</bp:ID>
+  </bp:unificationXref>
+  <bp:protein rdf:ID="protein2">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P03433 PA</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PA</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PA</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Implicated in endonuclease cleavage of capped RNA primers. Displays an elongation factor activity in viral RNA synthesis. Dispensable for viral transcription, but not replication.SUBUNIT Influenza RNA polymerase is composed of three subunits: PB1, PB2 and PA.SIMILARITY Belongs to the influenza viruses PA family.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref7">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P03433</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant3">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 169073</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2992</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein3">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P03485 M</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">M</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">M</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref8" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Plays critical roles in virus replication, from virus entry and uncoating to assembly and budding of the virus particle. M1 binding to ribonucleocapsids (RNPs) in nucleus seems to inhibit viral transcription. Interaction of viral NEP with M1-RNP is thought to promote nuclear export of the complex, which is targeted to the virion assembly site at the apical plasma membrane in polarized epithelial cells. Interactions with NA and HA may bring M1, a non-raft-associated protein, into lipid rafts. Forms a continuous shell on the inner side of the lipid bilayer in virion, where it binds the RNP. During virus entry into cell, the M2 ion channel acidifies the internal virion core, inducing M1 dissociation from the RNP. M1-free RNPs are transported to the nucleus, where viral transcription and replication can take place.FUNCTION Determines the virion's shape: spherical or filamentous. Clinical isolates of influenza are characterized by the presence of significant proportion of filamentous virions, whereas after multiple passage on eggs or cell culture, virions have only spherical morphology. Filamentous virions are thought to be important to infect neighboring cells, and spherical virions more suited to spread through aerosol between hosts organisms.SUBUNIT Homodimer and homomultimer. Interacts with NEP. Binds ribonucleocapsid by both interacting with genomic RNA and NP protein. May interact with HA and NA (By similarity). Cannot bind NP without genomic RNA.MISCELLANEOUS Most abundant protein in virion. When expressed alone can form virus-like particles in transfected cells.SIMILARITY Belongs to the influenza viruses Matrix protein M1 family.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref8">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P03485</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant4">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195946</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">37</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein4">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P03428 PB2</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PB2</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PB2</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref9" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SUBUNIT Influenza RNA polymerase is composed of three subunits: PB1, PB2 and PA.SIMILARITY Belongs to the influenza viruses PB2 family.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref9">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P03428</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant5">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195752</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">976</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein5">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P03466 NP</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NP</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NP</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref10" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Encapsidates the negative strand viral RNA, protecting it from nucleases. The encapsidated genomic RNA is termed the ribonucleoprotein (RNP) and serves as template for transcription and replication. The RNP needs to be localized in the nucleus to start an infectious cycle, but is too large to diffuse through the nuclear pore complex. NP comprises at least 2 nuclear localization signals and is responsible of the active RNP import into the nucleus through the cellular importin alpha/beta pathway. Later in the infection, nucleus export of RNP are mediated through viral proteins NEP interacting with M1 which binds nucleoproteins. It is possible that the nucleoprotein binds directly exportin-1 (XPO1) and plays an active role in RNP nuclear export. M1 interaction with RNP seems to hide nucleoprotein's nuclear localization signals. Soon after a virion infects a new cell, M1 dissociates from the RNP under acidification of the virion driven by M2 protein. Dissociation of M1 from RNP unmask nucleoprotein's nuclear localization signals, targeting the RNP to the nucleus.SUBUNIT Homomultimerizes to form the nucleocapsid. May bind human exportin-1. Binds to viral genomic RNA. Protein-RNA contacts are mediated by a combination of electrostatic interactions between positively charged residues and the phosphate backbone and planar interactions between aromatic side chains and bases.SIMILARITY Belongs to the influenza viruses nucleoprotein family.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref10">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P03466</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant2">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 196496</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex2">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant6" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant7" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant8" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant9" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant10" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant11" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant12" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant13" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RNP pre-assembly complex [cytosol]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RNP pre-assembly complex</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref15" />
+    <bp:XREF rdf:resource="#unificationXref16" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant6">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195948</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">8</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant7">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188856</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:rna rdf:ID="rna1">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL:AF389118 H1N1 Genomic RNA Segment 4</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">H1N1 Genomic RNA Segment 4</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref11" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Influenza A virus (A/Puerto Rico/8/34/Mount Sinai(H1N1)) segment 4, complete sequence.</bp:COMMENT>
+  </bp:rna>
+  <bp:unificationXref rdf:ID="unificationXref11">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AF389118</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant8">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 169073</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">8</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant9">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195946</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">8</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant10">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein6" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192845</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">8</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein6">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P03508 NS</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NS</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NS</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref12" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Mediates the nuclear export of encapsidated genomic RNAs (ribonucleoproteins, RNPs). Acts as an adapter between viral RNPs complexes and the nuclear export machinery of the cell. Possesses no intrinsic RNA-binding activity, but includes a C-terminal M1-binding domain. This domain is believed to allow recognition of RNPs to which the M1 protein is bound. Because the M1 protein is not available in large quantities until the later stages of infection, such an indirect recognition mechanism probably ensures that genomic RNPs are not exported from the nucleus before sufficient quantities of viral mRNA and progeny genomic RNA have been synthesized. Furthermore, the RNPs enters the cytoplasm only when they have associated with the M1 protein that is necessary to guide them to the plasma membrane. May down-regulate viral RNA synthesis when overproduced.SUBUNIT Binds M1 protein. May interact with human nucleoporin RAB/HRB and exportin XPO1/CRM1.MISCELLANEOUS Average number present in a viral particle is estimated to be 130-200 molecules.SIMILARITY Belongs to the influenza viruses NEP family.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref12">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P03508</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant11">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195940</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">8</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein7">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P03431 PB1</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PB1</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PB1</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref13" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION RNA-dependent RNA polymerase which is responsible for replication and transcription of virus segments. Binds the promoter sequence of the encapsidated viral RNA. Displays an endonuclease activity involved in cap-stealing. Cleaves cellular pre-mRNA to generate primers for viral transcription.CATALYTIC ACTIVITY Nucleoside triphosphate + RNA(n) = diphosphate + RNA(n+1).SUBUNIT Influenza RNA polymerase is composed of three subunits: PB1, PB2 and PA.SIMILARITY Belongs to the influenza viruses polymerase PB1 family.SIMILARITY Contains 1 RdRp catalytic domain.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref13">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P03431</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant12">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188874</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:rna rdf:ID="rna2">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL:AF389122 H1N1 Genomic RNA Segment 8</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">H1N1 Genomic RNA Segment 8</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref14" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Influenza A virus (A/Puerto Rico/8/34/Mount Sinai(H1N1)) segment 8, complete sequence.</bp:COMMENT>
+  </bp:rna>
+  <bp:unificationXref rdf:ID="unificationXref14">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AF389122</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant13">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188848</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">24</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:unificationXref rdf:ID="unificationXref15">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">196496</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=196496</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref16">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_11005</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_11005.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant14">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein6" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192845</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">157</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant3">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195728</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">100</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex3">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant15" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gycosylated NA Tetramer [plasma membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gycosylated NA Tetramer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref18" />
+    <bp:XREF rdf:resource="#unificationXref19" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant15">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein8" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195750</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein8">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P03468 NA</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NA</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NA</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref17" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Catalyzes the removal of terminal sialic acid residues from viral and cellular glycoconjugates. Cleaves off the terminal sialic acids on the glycosylated HA during virus budding to facilitate virus release. Additionally helps virus spread through the circulation by further removing sialic acids from the cell surface. These cleavages prevent self-aggregation and ensure the efficient spread of the progeny virus from cell to cell. Otherwise, infection would be limited to one round of replication. Described as a receptor-destroying enzyme because it cleaves a terminal sialic acid from the cellular receptors. May facilitate viral invasion of the upper airways by cleaving the sialic acid moities on the mucin of the airway epithelial cells. Likely to plays a role in the budding process through its association with lipid rafts during intracellular transport. May additionally display a raft-association independent effect on budding. Plays a role in the determination of host range restriction on replication and virulence. Sialidase activity in late endosome/lysosome traffic seems to enhance virus replication.CATALYTIC ACTIVITY Hydrolysis of alpha-(2-&amp;gt;3)-, alpha-(2-&amp;gt;6)-, alpha-(2-&amp;gt;8)- glycosidic linkages of terminal sialic acid residues in oligosaccharides, glycoproteins, glycolipids, colominic acid and synthetic substrates.ENZYME REGULATION Inhibited by the neuraminidase inhibitors zanamivir (Relenza) and oseltamivir (Tamiflu). These drugs interfere with the release of progeny virus from infected cells and are effective against all influenza strains. Resistance to neuraminidase inhibitors is quite rare.MISCELLANEOUS The influenza A genome consist of 8 RNA segments. Genetic variation of hemagglutinin and/or neuraminidase genes results in the emergence of new influenza strains. The mechanism of variation can be the result of point mutations or the result of genetic reassortment between segments of two different strains.SIMILARITY Belongs to the glycosyl hydrolase 34 family.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref17">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P03468</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref18">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195728</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195728</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref19">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10841</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10841.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant4">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195738</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">500</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex4">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant16" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glycosylated, palmitylated and folded HA trimer [plasma membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glycosylated, palmitylated and folded HA trimer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref21" />
+    <bp:XREF rdf:resource="#unificationXref22" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant16">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein9" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195762</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">3</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein9">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P03452 HA</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HA</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HA</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref20" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Binds to sialic acid-containing receptors on the cell surface, bringing about the attachment of the virus particle to the cell. This attachment induces virion internalization of about two third of the virus particles through clathrin-dependent endocytosis and about one third through a clathrin- and caveolin-independent pathway. Plays a major role in the determination of host range restriction and virulence. Class I viral fusion protein. Responsible for penetration of the virus into the cell cytoplasm by mediating the fusion of the membrane of the endocytosed virus particle with the endosomal membrane. Low pH in endosomes induces an irreversible conformational change in HA2, releasing the fusion hydrophobic peptide. Several trimers are required to form a competent fusion pore.SUBUNIT Homotrimer of disulfide-linked HA1-HA2.MISCELLANEOUS Major glycoprotein, comprises over 80% of the envelope proteins present in virus particle.MISCELLANEOUS The extent of infection into host organism is determined by HA. Influenza viruses bud from the apical surface of polarized epithelial cells (e.g. bronchial epithelial cells) into lumen of lungs and are therefore usually pneumotropic. The reason is that HA is cleaved by tryptase clara which is restricted to lungs. However, HAs of H5 and H7 pantropic avian viruses subtypes can be cleaved by furin and subtilisin-type enzymes, allowing the virus to grow in other organs than lungs.MISCELLANEOUS The influenza A genome consist of 8 RNA segments. Genetic variation of hemagglutinin and/or neuraminidase genes results in the emergence of new influenza strains. The mechanism of variation can be the result of point mutations or the result of genetic reassortment between segments of two different strains.SIMILARITY Belongs to the influenza viruses hemagglutinin family.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref20">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P03452</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref21">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195738</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195738</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref22">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10978</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10978.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant17">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195940</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">37</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant5">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195925</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex5">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant18" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant19" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant20" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant21" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant22" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant23" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant24" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant25" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant26" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant27" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant6" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant28" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant29" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant30" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant7" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant8" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant31" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Intracellular assembly complex [plasma membrane, cytosol]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Intracellular assembly complex</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Matrix associated RNP pre-assembly complex</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ribonucleoprotein (RNP) Complex</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">matrix associated complete RNP complex</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref29" />
+    <bp:XREF rdf:resource="#unificationXref30" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant18">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 196477</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:rna rdf:ID="rna3">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL:AF389121 H1N1 Genomic RNA Segment 7</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">H1N1 Genomic RNA Segment 7</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref23" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Influenza A virus (A/Puerto Rico/8/34/Mount Sinai(H1N1)) segment 7, complete sequence.</bp:COMMENT>
+  </bp:rna>
+  <bp:unificationXref rdf:ID="unificationXref23">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AF389121</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant19">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 196479</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:rna rdf:ID="rna4">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL:AF389120 H1N1 Genomic RNA Segment 6</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">H1N1 Genomic RNA Segment 6</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref24" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Influenza A virus (A/Puerto Rico/8/34/Mount Sinai(H1N1)) segment 6, complete sequence.</bp:COMMENT>
+  </bp:rna>
+  <bp:unificationXref rdf:ID="unificationXref24">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AF389120</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant20">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 196489</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:rna rdf:ID="rna5">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL:AF389117 H1N1 Genomic RNA Segment 3</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">H1N1 Genomic RNA Segment 3</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref25" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Influenza A virus (A/Puerto Rico/8/34/Mount Sinai(H1N1)) segment 3, complete sequence.</bp:COMMENT>
+  </bp:rna>
+  <bp:unificationXref rdf:ID="unificationXref25">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AF389117</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant21">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195948</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">45</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant22">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188856</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant23">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195946</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">45</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant24">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein6" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192845</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">165</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant25">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195940</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">45</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant26">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188874</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant27">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna6" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 196499</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:rna rdf:ID="rna6">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL:AF389119 H1N1 Genomic RNA Segment 5</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">H1N1 Genomic RNA Segment 5</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref26" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Influenza A virus (A/Puerto Rico/8/34/Mount Sinai(H1N1)) segment 5, complete sequence.</bp:COMMENT>
+  </bp:rna>
+  <bp:unificationXref rdf:ID="unificationXref26">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AF389119</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant6">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195732</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">60</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant28">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 169073</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">3000</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant29">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 196492</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:rna rdf:ID="rna7">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL:AF389116 H1N1 Genomic RNA Segment 2</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">H1N1 Genomic RNA Segment 2</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref27" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Influenza A virus (A/Puerto Rico/8/34/Mount Sinai(H1N1)) segment 2, complete sequence.</bp:COMMENT>
+  </bp:rna>
+  <bp:unificationXref rdf:ID="unificationXref27">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AF389116</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant30">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195752</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1000</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant7">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195728</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">100</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant8">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195738</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">500</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant31">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna8" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 196480</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:rna rdf:ID="rna8">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL:AF389115 H1N1 Genomic RNA Segment 1</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">H1N1 Genomic RNA Segment 1</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref28" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Influenza A virus (A/Puerto Rico/8/34/Mount Sinai(H1N1)) segment 1, complete sequence</bp:COMMENT>
+  </bp:rna>
+  <bp:unificationXref rdf:ID="unificationXref28">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBL</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AF389115</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref29">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195925</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195925</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref30">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10426</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10426.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref31">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195926</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195926</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref32">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10077</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">4</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10077.4</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref1">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15298170</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2004</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Escaping from the cell: assembly and budding of negative-strand RNA viruses</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Schmitt, AP</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lamb, RA</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Curr Top Microbiol Immunol 283:145-96</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref2">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15567494</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2004</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Assembly and budding of influenza virus</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nayak, DP</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Hui, EK</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Barman, S</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Virus Res 106:147-65</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref3">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15731254</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2005</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The influenza A virus M2 cytoplasmic tail is required for infectious virus production and efficient genome packaging</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">McCown, MF</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pekosz, A</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Virol 79:3595-605</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref4">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15298170</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2004</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Escaping from the cell: assembly and budding of negative-strand RNA viruses</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Schmitt, AP</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lamb, RA</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Curr Top Microbiol Immunol 283:145-96</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction2">
+    <bp:LEFT rdf:resource="#sequenceParticipant32" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant9" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant11" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Binding of M1 to vRNP</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Binding of M1 to vRNP</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref40" />
+    <bp:XREF rdf:resource="#unificationXref41" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">M1 protein binds to viral RNP through its C-terminal domain (Baudin, 2001).  The influenza M1 protein accumulates in the infected cell nucleus through a nuclear localization signal (NLS) RKLKR (residues 101-105) in its N-terminus (Ye, 1999).  A host cell protein, HSP70, is thought to inhibit M1 binding at nonpermissive temperatures (Hirayama et al., 2004).</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref5" />
+    <bp:XREF rdf:resource="#publicationXref6" />
+    <bp:XREF rdf:resource="#publicationXref7" />
+    <bp:XREF rdf:resource="#publicationXref8" />
+    <bp:XREF rdf:resource="#publicationXref9" />
+    <bp:XREF rdf:resource="#publicationXref10" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: Bortz, E, Garcia-Sastre, A, 2007-02-12 19:39:05</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reviewed: Squires, B, 2007-02-12 19:39:22</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant32">
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 186959</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary3">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">nucleoplasm</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref33" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref33">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0005654</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant9">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex6" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192922</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex6">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant33" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant34" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant10" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant37" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vRNP destined for Export [nucleoplasm]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vRNP destined for Export</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref36" />
+    <bp:XREF rdf:resource="#unificationXref37" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant33">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188843</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant34">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188857</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant10">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 193302</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex7">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant35" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant36" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vRNA (Genomic):NP Complex [nucleoplasm]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vRNA (Genomic):NP Complex</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref34" />
+    <bp:XREF rdf:resource="#unificationXref35" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant35">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188832</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">3</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant36">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#rna9" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192849</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:rna rdf:ID="rna9">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vRNA (genomic) [nucleoplasm]</bp:NAME>
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome. Each synonym is a name of a PhysicalEntity, and each XREF points to one PhysicalEntity</bp:COMMENT>
+    <bp:XREF rdf:resource="#unificationXref23" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Genomic RNA Segment 7 [nucleoplasm]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref27" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Genomic RNA Segment 2 [nucleoplasm]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref11" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Genomic RNA Segment 4 [nucleoplasm]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref25" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Genomic RNA Segment 3 [nucleoplasm]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref24" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Genomic RNA Segment 6 [nucleoplasm]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref26" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Genomic RNA Segment 5 [nucleoplasm]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref28" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Genomic RNA Segment 1 [nucleoplasm]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref14" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Genomic RNA Segment 8 [nucleoplasm]</bp:SYNONYMS>
+  </bp:rna>
+  <bp:unificationXref rdf:ID="unificationXref34">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">193302</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=193302</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref35">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_9729</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_9729.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant37">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188877</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:unificationXref rdf:ID="unificationXref36">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">192922</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=192922</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref37">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_9574</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_9574.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant11">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex8" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192906</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex8">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant38" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant12" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vRNP:M1 for Export [nucleoplasm]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vRNP:M1 for Export</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref38" />
+    <bp:XREF rdf:resource="#unificationXref39" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant38">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 186959</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant12">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex6" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192922</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:unificationXref rdf:ID="unificationXref38">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">192906</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=192906</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref39">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_9769</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_9769.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref40">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">192746</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=192746</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref41">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_9407</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_9407.3</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref5">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">10644350</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2000</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Role of the influenza virus M1 protein in nuclear export of viral ribonucleoproteins</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Bui, M</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Wills, EG</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Helenius, A</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Whittaker, GR</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Virol 74:1781-6</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref6">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">11531417</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2001</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Effect of influenza virus matrix protein and viral RNA on ribonucleoprotein formation and nuclear export</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Huang, X</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Liu, T</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Muller, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Levandowski, RA</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ye, Z</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Virology 287:405-16</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref7">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">10438836</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1999</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Association of influenza virus matrix protein with ribonucleoproteins</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ye, Z</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Liu, T</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Offringa, DP</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">McInnis, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Levandowski, RA</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Virol 73:7467-73</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref8">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12490406</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2002</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Association of influenza virus matrix protein with ribonucleoproteins may control viral growth and morphology</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Liu, T</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Muller, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ye, Z</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Virology 304:89-96</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref9">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">14722281</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2004</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Heat shock protein 70 is related to thermal inhibition of nuclear export of the influenza virus ribonucleoprotein complex</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Hirayama, E</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Atagi, H</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Hiraki, A</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kim, J</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Virol 78:1263-70</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref10">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">11222100</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2001</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">In vitro dissection of the membrane and RNP binding activities of influenza virus M1 protein</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Baudin, F</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Petit, I</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Weissenhorn, W</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ruigrok, RW</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Virology 281:102-8</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:control rdf:ID="control1">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">'HSP70' negatively regulates 'Binding of M1 to vRNP'</bp:NAME>
+    <bp:CONTROL-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INHIBITION</bp:CONTROL-TYPE>
+    <bp:XREF rdf:resource="#unificationXref42" />
+    <bp:XREF rdf:resource="#unificationXref43" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:CONTROLLER rdf:resource="#sequenceParticipant39" />
+    <bp:CONTROLLED rdf:resource="#biochemicalReaction2" />
+  </bp:control>
+  <bp:unificationXref rdf:ID="unificationXref42">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">192889</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=192889</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref43">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_9918</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_9918.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant39">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein10" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192715</bp:COMMENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein10">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource2" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P08107 HSPA1A</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HSPA1A</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;/gene&gt;</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;gene&gt;</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HSX70</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HSPA1</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HSPA1A</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HSPA1B</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref45" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION In cooperation with other chaperones, Hsp70s stabilize preexistent proteins against aggregation and mediate the folding of newly translated polypeptides in the cytosol as well as within organelles. These chaperones participate in all these processes through their ability to recognize nonnative conformations of other proteins. They bind extended peptide segments with a net hydrophobic character exposed by polypeptides during translation and membrane translocation, or following stress-induced damage. In case of rotavirus A infection, serves as a post-attachment receptor for the virus to facilitate entry into the cell.SUBUNIT Component of the CatSper complex (By similarity). Identified in a mRNP granule complex, at least composed of ACTB, ACTN4, DHX9, ERG, HNRNPA1, HNRNPA2B1, HNRNPAB, HNRNPD, HNRNPL, HNRNPR, HNRNPU, HSPA1, HSPA8, IGF2BP1, ILF2, ILF3, NCBP1, NCL, PABPC1, PABPC4, PABPN1, RPLP0, RPS3, RPS3A, RPS4X, RPS8, RPS9, SYNCRIP, TROVE2, YBX1 and untranslated mRNAs. Interacts with CHCHD3, DNAJC7, IRAK1BP1, PPP5C and TSC2. Interacts with TERT; the interaction occurs in the absence of the RNA component, TERC, and dissociates once the TERT complex has formed. Interacts with TRIM5 (via B30.2/SPRY domain). Interacts with METTL21A.TISSUE SPECIFICITY HSPA1B is testis-specific.INDUCTION By heat shock.SIMILARITY Belongs to the heat shock protein 70 family.</bp:COMMENT>
+  </bp:protein>
+  <bp:bioSource rdf:ID="bioSource2">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Homo sapiens</bp:NAME>
+    <bp:TAXON-XREF rdf:resource="#unificationXref44" />
+  </bp:bioSource>
+  <bp:unificationXref rdf:ID="unificationXref44">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NCBI Taxonomy</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">9606</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref45">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P08107</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature1">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary4" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval1" />
+  </bp:sequenceFeature>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary4">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chain Coordinates</bp:TERM>
+  </bp:openControlledVocabulary>
+  <bp:sequenceInterval rdf:ID="sequenceInterval1">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite1" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite2" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite1">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite2">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">641</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction3">
+    <bp:LEFT rdf:resource="#sequenceParticipant40" />
+    <bp:LEFT rdf:resource="#sequenceParticipant41" />
+    <bp:LEFT rdf:resource="#sequenceParticipant42" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant13" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Viral Polymerase Assembly</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Viral Polymerase Assembly</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref48" />
+    <bp:XREF rdf:resource="#unificationXref49" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The mature ternary influenza viral polymerase complex consists of PB1, PB2, and PA.  The N-terminus of PB1 (residues 1-48) interacts with PB2, and amino acids 506-659 in PB1 interact with the PA subunit (Gonzalez, 1996; Perez, 2001).  Although monomeric PB1, PB2 and PA, as well as PB1-PB2 and PB1-PA dimers are likely to exist in infected cells, it is believed that most of the polymerase proteins are assembled into the trimeric PB1-PB2-PA complex (Detjen, 1987). Newly synthesized subunits of the polymerase are imported into the nucleus through nuclear localization signals (NLS), which interact with cellular importin family proteins (Jones, 1986; Buolo, 2006).  Importin beta-3 (Ran binding protein 5) facilitates nuclear import of PB1 and a PB1-PA dimer (Deng, 2006); coexpression of PA with PB1 was shown to enhance the import of PB1 (Fodor, 2004).  A PB1-PB2 dimer has been found to interact with the molecular chaperone heat shock protein 90 (HSP90) to facilitate import (Naito, 2007).  The three subunits assembled in the nucleus form a mature ternary polymerase complex that binds viral vRNA or cRNA (Jones, 1986; Buolo, 2006).</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref11" />
+    <bp:XREF rdf:resource="#publicationXref12" />
+    <bp:XREF rdf:resource="#publicationXref13" />
+    <bp:XREF rdf:resource="#publicationXref14" />
+    <bp:XREF rdf:resource="#publicationXref15" />
+    <bp:XREF rdf:resource="#publicationXref16" />
+    <bp:XREF rdf:resource="#publicationXref17" />
+    <bp:XREF rdf:resource="#publicationXref18" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: Bortz, E, Garcia-Sastre, A, 2007-02-12 19:39:05</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reviewed: Squires, B, 2007-02-12 19:39:22</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant40">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188843</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant41">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188857</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant42">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188877</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant13">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex9" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192720</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex9">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant43" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant44" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant45" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Viral Polymerase [nucleoplasm]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Viral Polymerase</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Viral RNA dependent RNA polymerase</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref46" />
+    <bp:XREF rdf:resource="#unificationXref47" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant43">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein7" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188843</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant44">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188857</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant45">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 188877</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:unificationXref rdf:ID="unificationXref46">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">192720</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=192720</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref47">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_9586</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_9586.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref48">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">192830</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=192830</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref49">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_9428</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">4</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_9428.4</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref11">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17081640</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2006</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nuclear traffic of influenza virus proteins and ribonucleoprotein complexes</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Boulo, S</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Akarsu, H</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ruigrok, RW</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Baudin, F</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Virus Res 124:12-21</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref12">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15308710</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2004</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The PA subunit is required for efficient nuclear accumulation of the PB1 subunit of the influenza A virus RNA polymerase complex</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fodor, E</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Smith, M</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Virol 78:9144-53</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref13">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17005651</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2006</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Role of ran binding protein 5 in nuclear import and assembly of the influenza virus RNA polymerase complex</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Deng, T</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Engelhardt, OG</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Thomas, B</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Akoulitchev, AV</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Brownlee, GG</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fodor, E</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Virol 80:11911-9</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref14">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">11483758</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2001</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Functional analysis of PA binding by influenza a virus PB1: effects on polymerase activity and viral infectivity</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Perez, DR</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Donis, RO</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Virol 75:8127-36</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref15">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17121807</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2007</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Involvement of hsp90 in assembly and nuclear import of influenza virus RNA polymerase subunits</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Naito, T</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Momose, F</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kawaguchi, A</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nagata, K</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Virol 81:1339-49</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref16">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3783823</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1987</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The three influenza virus polymerase (P) proteins not associated with viral nucleocapsids in the infected cell are in the form of a complex</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Detjen, BM</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">St, Angelo C</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Katze, MG</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Krug, RM</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">J Virol 61:16-22</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref17">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">3023071</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1986</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nuclear location of all three influenza polymerase proteins and a nuclear signal in polymerase PB2</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Jones, IM</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reay, PA</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Philpott, KL</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBO J 5:2371-6</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref18">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">8948635</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1996</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Identification of two separate domains in the influenza virus PB1 protein involved in the interaction with the PB2 and PA subunits: a model for the viral RNA polymerase structure</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gonzalez, S</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Zurcher, T</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ortin, J</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nucleic Acids Res 24:4456-63</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:control rdf:ID="control2">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">'HSP90 [nucleoplasm]' positively regulates 'Viral Polymerase Assembly'</bp:NAME>
+    <bp:CONTROL-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ACTIVATION</bp:CONTROL-TYPE>
+    <bp:XREF rdf:resource="#unificationXref50" />
+    <bp:XREF rdf:resource="#unificationXref51" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:CONTROLLER rdf:resource="#sequenceParticipant46" />
+    <bp:CONTROLLED rdf:resource="#biochemicalReaction3" />
+  </bp:control>
+  <bp:unificationXref rdf:ID="unificationXref50">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">192953</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=192953</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref51">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_9915</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_9915.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant46">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein11" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192864</bp:COMMENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein11">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource2" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P07900 HSP90AA1</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HSP90AA1</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HSP90AA1</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HSPCA</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HSPC1</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HSP90A</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref52" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Molecular chaperone that promotes the maturation, structural maintenance and proper regulation of specific target proteins involved for instance in cell cycle control and signal transduction. Undergoes a functional cycle that is linked to its ATPase activity. This cycle probably induces conformational changes in the client proteins, thereby causing their activation. Interacts dynamically with various co-chaperones that modulate its substrate recognition, ATPase cycle and chaperone function.SUBUNIT Homodimer. Identified in NR3C1/GCR steroid receptor-chaperone complexes formed at least by NR3C1, HSP90AA1 and a variety of proteins containing TPR repeats such as FKBP4, FKBP5, PPID, PPP5C STIP1. Interacts with AHSA1, FNIP1, HSF1, SMYD3 and TOM34. Interacts with TERT; the interaction, together with PTGES3, is required for correct assembly and stabilization of the TERT holoenzyme complex. Interacts with CHORDC1 and DNAJC7. Interacts with STUB1 and UBE2N; may couple the chaperone and ubiquitination systems. Interacts (via TPR repeat-binding motif) with PPP5C (via TPR repeats); the interaction is direct and activates PPP5C phosphatase activity.DOMAIN The TPR repeat-binding motif mediates interaction with TPR repeat-containing proteins like the co-chaperone STUB1.PTM ISGylated.PTM S-nitrosylated; negatively regulates the ATPase activity and the activation of eNOS by HSP90AA1.SIMILARITY Belongs to the heat shock protein 90 family.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref52">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P07900</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature2">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary4" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval2" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval2">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite3" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite4" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite3">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite4">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">732</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:control rdf:ID="control3">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">'Importin beta-3 [nucleoplasm]' positively regulates 'Viral Polymerase Assembly'</bp:NAME>
+    <bp:CONTROL-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ACTIVATION</bp:CONTROL-TYPE>
+    <bp:XREF rdf:resource="#unificationXref53" />
+    <bp:XREF rdf:resource="#unificationXref54" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:CONTROLLER rdf:resource="#sequenceParticipant47" />
+    <bp:CONTROLLED rdf:resource="#biochemicalReaction3" />
+  </bp:control>
+  <bp:unificationXref rdf:ID="unificationXref53">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">192952</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=192952</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref54">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_9924</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_9924.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant47">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary3" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein12" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 192675</bp:COMMENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein12">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource2" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:O00410 IPO5</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">IPO5</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RANBP5</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">IPO5</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">KPNB3</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref55" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Functions in nuclear protein import as nuclear transport receptor. Serves as receptor for nuclear localization signals (NLS) in cargo substrates. Is thought to mediate docking of the importin/substrate complex to the nuclear pore complex (NPC) through binding to nucleoporin and the complex is subsequently translocated through the pore by an energy requiring, Ran-dependent mechanism. At the nucleoplasmic side of the NPC, Ran binds to the importin, the importin/substrate complex dissociates and importin is re-exported from the nucleus to the cytoplasm where GTP hydrolysis releases Ran. The directionality of nuclear import is thought to be conferred by an asymmetric distribution of the GTP- and GDP-bound forms of Ran between the cytoplasm and nucleus (By similarity). Mediates the nuclear import of ribosomal proteins RPL23A, RPS7 and RPL5. Binds to a beta-like import receptor binding (BIB) domain of RPL23A. In vitro, mediates nuclear import of H2A, H2B, H3 and H4 histones. In case of HIV-1 infection, binds and mediates the nuclear import of HIV-1 Rev.SUBUNIT Binds RPL23A, RPS7 and RPL5. Interacts with H2A, H2B, H3 and H4 histones (By similarity). Binds to HIV-1 Rev.SIMILARITY Belongs to the importin beta family.SIMILARITY Contains 6 HEAT repeats.SIMILARITY Contains 1 importin N-terminal domain.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref55">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">O00410</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceFeature rdf:ID="sequenceFeature3">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary4" />
+    <bp:FEATURE-LOCATION rdf:resource="#sequenceInterval3" />
+  </bp:sequenceFeature>
+  <bp:sequenceInterval rdf:ID="sequenceInterval3">
+    <bp:SEQUENCE-INTERVAL-BEGIN rdf:resource="#sequenceSite5" />
+    <bp:SEQUENCE-INTERVAL-END rdf:resource="#sequenceSite6" />
+  </bp:sequenceInterval>
+  <bp:sequenceSite rdf:ID="sequenceSite5">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:sequenceSite rdf:ID="sequenceSite6">
+    <bp:SEQUENCE-POSITION rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1097</bp:SEQUENCE-POSITION>
+    <bp:POSITION-STATUS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EQUAL</bp:POSITION-STATUS>
+  </bp:sequenceSite>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction4">
+    <bp:LEFT rdf:resource="#sequenceParticipant48" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant14" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Assembly of M2 tetramers</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Assembly of M2 tetramers</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref59" />
+    <bp:XREF rdf:resource="#unificationXref60" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The M2 from influenza A virus is a 97-residue protein with a single transmembrane helix that associates to form a tetramer in the endoplasmic reticulum (Salom et al, 2000).  A 15-20-residue segment C-terminal to the membrane-spanning region has been postulated to aid in the stabilization of the tetrameric assembly (Kochendoerfer et al 1999).</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref19" />
+    <bp:XREF rdf:resource="#publicationXref20" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: Steel, J, 2007-04-30 20:49:24</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reviewed: Squires, B, Rush, MG, 2007-04-30 20:48:45</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant48">
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195756</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary5">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">endoplasmic reticulum membrane</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref56" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref56">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0005789</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant14">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary5" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex10" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195797</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex10">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant49" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">M2 Tetramer [endoplasmic reticulum membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">M2 Tetramer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref57" />
+    <bp:XREF rdf:resource="#unificationXref58" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant49">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary5" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195756</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:unificationXref rdf:ID="unificationXref57">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195797</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195797</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref58">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10501</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10501.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref59">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">188544</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=188544</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref60">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10123</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">4</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10123.4</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref19">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">10508393</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1999</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Total chemical synthesis of the integral membrane protein influenza A virus M2: role of its C-terminal domain in tetramer assembly</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kochendoerfer, GG</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Salom, D</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lear, JD</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Wilk-Orescan, R</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kent, SB</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DeGrado, WF</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Biochemistry 38:11905-13</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:publicationXref rdf:ID="publicationXref20">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">11087364</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2000</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pH-dependent tetramerization and amantadine binding of the transmembrane helix of M2 from the influenza A virus</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Salom, D</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Hill, BR</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lear, JD</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DeGrado, WF</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Biochemistry 39:14160-70</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction5">
+    <bp:LEFT rdf:resource="#physicalEntityParticipant15" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant17" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant18" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant21" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant24" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant25" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant27" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant30" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Transport of processed viral proteins to the cell membrane</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Transport of processed viral proteins to the cell membrane</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref80" />
+    <bp:XREF rdf:resource="#unificationXref81" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Once processed, the viral proteins are transported from the golgi apparatus to the plasma membrane.</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref21" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: Steel, J, 2007-04-30 20:49:24</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reviewed: Squires, B, Rush, MG, 2007-04-30 20:48:45</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant15">
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex11" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195737</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary6">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Golgi membrane</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref61" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref61">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0000139</bp:ID>
+  </bp:unificationXref>
+  <bp:complex rdf:ID="complex11">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant50" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant16" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NP:Lipid Raft [Golgi membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NP:Lipid Raft</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref62" />
+    <bp:XREF rdf:resource="#unificationXref63" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant50">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195740</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant16">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195764</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntity rdf:ID="physicalEntity1">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lipid Raft [Golgi membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lipid Raft</bp:SHORT-NAME>
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:physicalEntity>
+  <bp:unificationXref rdf:ID="unificationXref62">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195737</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195737</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref63">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10315</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10315.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant17">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex12" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195761</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex12">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant51" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">palmitylated M2 Tetramer [Golgi membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">palmitylated M2 Tetramer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref64" />
+    <bp:XREF rdf:resource="#unificationXref65" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant51">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195741</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:unificationXref rdf:ID="unificationXref64">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195761</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195761</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref65">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10582</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10582.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant18">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex13" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195723</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex13">
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant19" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant20" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glycosylated, palmitylated and folded HA trimer:Lipid Raft Complex [Golgi membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glycosylated, palmitylated and folded HA trimer:Lipid Raft Complex</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref68" />
+    <bp:XREF rdf:resource="#unificationXref69" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant19">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195764</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant20">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex14" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195725</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex14">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant52" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glycosylated, palmitylated and folded HA trimer [Golgi membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glycosylated, palmitylated and folded HA trimer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref66" />
+    <bp:XREF rdf:resource="#unificationXref67" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant52">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein9" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195743</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">3</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:unificationXref rdf:ID="unificationXref66">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195725</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195725</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref67">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10197</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10197.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref68">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195723</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195723</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref69">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10369</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10369.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant21">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex15" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195736</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex15">
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant22" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant23" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gycosylated NA Tetramer:Lipid Raft [Golgi membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gycosylated NA Tetramer:Lipid Raft</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref72" />
+    <bp:XREF rdf:resource="#unificationXref73" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant22">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195764</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant23">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex16" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195724</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex16">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant53" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glycosylated NA Tetramer [Golgi membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glycosylated NA Tetramer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref70" />
+    <bp:XREF rdf:resource="#unificationXref71" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant53">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary6" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein8" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195751</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">4</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:unificationXref rdf:ID="unificationXref70">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195724</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195724</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref71">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10176</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10176.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref72">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195736</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195736</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref73">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10954</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10954.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant24">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195732</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant25">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex17" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195766</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex17">
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant26" />
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant54" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NP:Lipid Raft [plasma membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NP:Lipid Raft</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref74" />
+    <bp:XREF rdf:resource="#unificationXref75" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant26">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195731</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntity rdf:ID="physicalEntity2">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lipid Raft [plasma membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lipid Raft</bp:SHORT-NAME>
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:physicalEntity>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant54">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein5" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195752</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:unificationXref rdf:ID="unificationXref74">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195766</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195766</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref75">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10830</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10830.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant27">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex18" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195755</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex18">
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant28" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant29" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glycosylated, palmitylated and folded HA trimer:Lipid Raft Complex [plasma membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Glycosylated, palmitylated and folded HA trimer:Lipid Raft Complex</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref76" />
+    <bp:XREF rdf:resource="#unificationXref77" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant28">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195731</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant29">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex4" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195738</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:unificationXref rdf:ID="unificationXref76">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195755</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195755</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref77">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10581</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10581.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant30">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex19" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195735</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex19">
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant31" />
+    <bp:COMPONENTS rdf:resource="#physicalEntityParticipant32" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gycosylated NA Tetramer:Lipid Raft [plasma membrane]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gycosylated NA Tetramer:Lipid Raft</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref78" />
+    <bp:XREF rdf:resource="#unificationXref79" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant31">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195731</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant32">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 195728</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:unificationXref rdf:ID="unificationXref78">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195735</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195735</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref79">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10662</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10662.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref80">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">195730</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=195730</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref81">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_10039</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">4</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_10039.4</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref21">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">10890900</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2000</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Dissecting the role of the golgi complex and lipid rafts in biosynthetic transport of cholesterol to the cell surface</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Heino, S</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lusa, S</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Somerharju, P</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ehnholm, C</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Olkkonen, VM</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ikonen, E</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Proc Natl Acad Sci U S A 97:8375-80</bp:SOURCE>
+  </bp:publicationXref>
+</rdf:RDF>
+
