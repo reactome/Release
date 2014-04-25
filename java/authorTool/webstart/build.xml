@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     Mar 25, 2005 1:53:32 PM                                                        
+
+     project description: Build and deploy the curator tool as a Java Web Start 
+     				      project.
+                   
+     wgm                                                                
+     ====================================================================== -->
+<project name="curatorWebstart" default="deployReactomeJar" basedir="..">
+    <description>
+            build and deploy the curator tool as a Java Web Start project
+    </description>
+	
+	<property name="TOMCAT_WEB" value="/home/wgm/programFiles/tomcat/jakarta-tomcat-5.0.28/webapps/webstart" />
+	<property name="classDir" value="${basedir}/classes" />
+	<property name="orgDir" value="${classDir}/org" />
+	<property name="launchDir" value="${classDir}/launcher" />
+	<property name="resourcesDir" value="${basedir}/resources" />
+	<property name="imagesDir" value="${basedir}/images" />
+	<property name="docsDir" value="${basedir}/docs" />
+	<property name="docsImagesDir" value="${docsDir}/images" />
+	<property name="webstartDir" value="${basedir}/webstart" />
+	<property name="tempdir" value="/home/wgm/tmp/webstart" />
+	
+	<target name="deleteTemp">
+		<delete dir="${tempdir}" />
+	</target>
+	
+	<target name="createTemp" depends="deleteTemp">
+		<mkdir dir="${tempdir}" />
+	</target>
+		
+    <target name="copyFiles">
+    	<copy todir="${tempdir}">
+        	<fileset dir="${webstartDir}">
+        		<include name="**/*.html" />
+        		<include name="**/*.jnlp" />
+        	</fileset>
+        </copy>
+    </target>
+	
+	<target name="copyJar">
+		<description>
+			Copy the lib folder
+		</description>
+		<copy todir="${tempdir}">
+			<fileset dir="${basedir}">
+				<include name="lib/**/*.*" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="signJar" depends="createJars, copyJar">
+		<description>
+			Sign the jar files in the lib folder
+		</description>
+		<signjar lazy="true" alias="curatorTool" keystore="${webstartDir}/reactome" storepass="reactome" >
+			<fileset dir="${tempdir}">
+				<include name="**/*.jar" />
+				<include name="**/*.zip" />
+				<!-- exclude name="lib/skin/**/*.*" / -->
+			</fileset>
+		</signjar>
+	</target>
+		
+	<target name="createJars" depends="createTemp">
+		<description>
+			Create the jar files for the curator tool resources
+		</description>
+		<jar destfile="${tempdir}/reactome.jar"> 
+			<fileset dir="${classDir}">
+				<include name="org/gk/**" />
+				<include name="launcher/**" />
+			</fileset>
+			<fileset dir="${basedir}">
+				<!-- handle resources folder -->
+				<include name="resources/**" />
+				<exclude name="resources/*.prop" />
+				<exclude name="resources/update.xml" />
+				<exclude name="resources/Timings.xml" />
+				<exclude name="resources/process.ontology" />
+				<!-- handle images folder -->
+				<include name="images/**" />
+				<!-- handle docs folder -->
+				<include name="docs/**" />
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="copy" depends="signJar, copyFiles" />
+	
+	<target name="deploy" depends="copy">
+		<description>
+			copy all files to the tomcat folder
+		</description>
+		<copy todir="${TOMCAT_WEB}">
+			<fileset dir="${tempdir}" />
+		</copy>
+		<delete dir="${tempdir}" />
+	</target>
+	
+	<target name="deployFiles">
+		<description>copy html and jnlp files to the tomcat folder</description>
+		<copy todir="${TOMCAT_WEB}">
+			<fileset dir="${webstartDir}">
+				<include name="**/*.html" />
+				<include name="**/*.jnlp" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="deployReactomeJar">
+		<description>Copy, Jar, Sign and move Reactome Jar File</description>
+		<delete file="${tempdir}" />
+		<mkdir dir="${tempdir}" />
+		<jar destfile="${tempdir}/reactome.jar"> 
+			<fileset dir="${classDir}">
+				<include name="org/gk/**" />
+				<include name="launcher/**" />
+			</fileset>
+			<fileset dir="${basedir}">
+				<include name="resources/**" />
+				<exclude name="resources/*.prop" />
+				<exclude name="resources/update.xml.bak" />
+				<exclude name="resources/Timings.xml" />
+				<exclude name="resources/process.ontology" />
+				<!-- handle images folder -->
+				<include name="images/**" />
+				<!-- handle docs folder -->
+				<include name="docs/**" />	
+				<!-- handle zip files in skin -->
+				<include name="lib/skin/**.zip" />
+			</fileset>
+		</jar>
+		<signjar alias="curatorTool" keystore="${webstartDir}/reactome" storepass="reactome">
+			<fileset dir="${tempdir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</signjar>
+		<copy todir="${TOMCAT_WEB}">
+			<fileset dir="${tempdir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+		<delete dir="${tempdir}" />
+	</target>
+	
+</project>

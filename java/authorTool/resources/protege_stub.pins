@@ -1,0 +1,565 @@
+; Wed Sep 01 16:49:21 BST 2004
+; 
+;+ (version "2.0.1")
+;+ (build "Build 168")
+
+([_1stAuthorSurname] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [LiteratureReference]))
+
+([__is_ghost] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [DatabaseObject]))
+
+([_applyToAllEditedInstances] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [InstanceEdit]))
+
+([_AttributeValueBeforeChange] of %3AEXTENDED-CLASS)
+
+([_databaseColumnSpecification] of %3ASTANDARD-FACET
+	(%3AASSOCIATED-SLOT [databaseColumnSpecification]))
+
+([_displayName] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [DatabaseObject]))
+
+([_doNotRelease] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Pathway]))
+
+([_identityDefinedBy] of %3ASTANDARD-FACET
+	(%3AASSOCIATED-SLOT [identityDefinedBy]))
+
+([_InstanceBeforeChange] of %3AEXTENDED-CLASS)
+
+([_Protege_id] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [DatabaseObject]))
+
+([_slotDisplayName] of %3ASTANDARD-FACET
+	(%3AASSOCIATED-SLOT [slotDisplayName]))
+
+([accession] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[GO_MolecularFunction]
+		[GO_BiologicalProcess]
+		[GO_CellularComponent]))
+
+([accessUrl] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceDatabase]))
+
+([activeUnit] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [CatalystActivity]))
+
+([activity] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [CatalystActivity]))
+
+([address] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Affiliation]))
+
+([Affiliation] of %3AEXTENDED-CLASS)
+
+([affiliation] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Person]))
+
+([atomicConnectivity] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceEntity]))
+
+([attributeValuesBeforeChange] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [_InstanceBeforeChange]))
+
+([author] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[InstanceEdit]
+		[LiteratureReference]))
+
+([CatalystActivity] of %3AEXTENDED-CLASS)
+
+([catalystActivity] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([changedAttribute] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [_AttributeValueBeforeChange])
+	(databaseColumnSpecification "VARCHAR(64)"))
+
+([changedInstance] of %3AEXTENDED-SLOT)
+
+([changedInstanceDB_ID] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [_InstanceBeforeChange]))
+
+([classDisplayName] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [%3AEXTENDED-CLASS]))
+
+([comment] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceSequence]))
+
+([compartment] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Event]
+		[PhysicalEntity]))
+
+([Compartment] of %3AEXTENDED-CLASS)
+
+([Complex] of %3AEXTENDED-CLASS)
+
+([ComplexDomain] of %3AEXTENDED-CLASS)
+
+([componentOf] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[GO_MolecularFunction]
+		[GO_BiologicalProcess]
+		[GO_CellularComponent]))
+
+([ConcreteComplex] of %3AEXTENDED-CLASS)
+
+([ConcreteEntity] of %3AEXTENDED-CLASS)
+
+([ConcreteEvent] of %3AEXTENDED-CLASS)
+
+([ConcretePathway] of %3AEXTENDED-CLASS)
+
+([ConcreteReaction] of %3AEXTENDED-CLASS)
+
+([ConcreteSimpleEntity] of %3AEXTENDED-CLASS)
+
+([concurrentEvents] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ConcurrentEventSet])
+	(identityDefinedBy ALL))
+
+([ConcurrentEventSet] of %3AEXTENDED-CLASS)
+
+([coordinate] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ModifiedResidue]))
+
+([created] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [DatabaseObject]))
+
+([creatingActivity] of %3AEXTENDED-SLOT)
+
+([crossReference] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Event]
+		[PhysicalEntity]
+		[DatabaseIdentifier]
+		[Taxon]
+		[ReferenceEntity]))
+
+([databaseColumnSpecification] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [%3AEXTENDED-SLOT])
+	(%3AASSOCIATED-FACET [_databaseColumnSpecification]))
+
+([databaseIdentifier] of %3AEXTENDED-SLOT)
+
+([DatabaseIdentifier] of %3AEXTENDED-CLASS)
+
+([DatabaseObject] of %3AEXTENDED-CLASS)
+
+([dateAccepted] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Summation]))
+
+([dateRevised] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Summation]))
+
+([dateSubmitted] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Summation]))
+
+([dateTime] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [InstanceEdit]))
+
+([DB_ID] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [DatabaseObject]))
+
+([definition] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Event]
+		[PhysicalEntity]
+		[GO_MolecularFunction]
+		[EvidenceType]
+		[GO_BiologicalProcess]
+		[GO_CellularComponent]))
+
+([description] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceSequence]))
+
+([Domain] of %3AEXTENDED-CLASS)
+
+([ecNumber] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [GO_MolecularFunction]))
+
+([editor] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Summation]))
+
+([eMailAddress] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Person]))
+
+([endCoordinate] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[SequenceEntityFragment]
+		[SequenceDomain]))
+
+([EntityCompartment] of %3AEXTENDED-CLASS)
+
+([Event] of %3AEXTENDED-CLASS)
+
+([eventLocationContext] of %3AEXTENDED-SLOT)
+
+([evidenceType] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([Figure] of %3AEXTENDED-CLASS)
+
+([figure] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Event]
+		[PhysicalEntity]
+		[Regulation]
+		[Species]
+		[Person]))
+
+([fingerPrintString] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceEntity]))
+
+([firstname] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Person]))
+
+([focusEntity] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ConcurrentEventSet])
+	(identityDefinedBy ALL))
+
+([formula] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceEntity]))
+
+([FrontPage] of %3AEXTENDED-CLASS)
+
+([frontPageItem] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [FrontPage]))
+
+([geneName] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceSequence]))
+
+([GenericComplex] of %3AEXTENDED-CLASS)
+
+([GenericDomain] of %3AEXTENDED-CLASS)
+
+([GenericEntity] of %3AEXTENDED-CLASS)
+
+([GenericEvent] of %3AEXTENDED-CLASS)
+
+([GenericPathway] of %3AEXTENDED-CLASS)
+
+([GenericReaction] of %3AEXTENDED-CLASS)
+
+([GenericSimpleEntity] of %3AEXTENDED-CLASS)
+
+([GKB_core_00388] of %3ASTANDARD-FACET)
+
+([GO_BiologicalProcess] of %3AEXTENDED-CLASS)
+
+([GO_CellularComponent] of %3AEXTENDED-CLASS)
+
+([GO_MolecularFunction] of %3AEXTENDED-CLASS)
+
+([goBiologicalProcess] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([goCellularComponent] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [PhysicalEntity]))
+
+([hasComponent] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Pathway]
+		[Complex]
+		[ComplexDomain]))
+
+([hasDomain] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[PhysicalEntity]
+		[Complex]))
+
+([hasInstance] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[GenericEvent]
+		[GenericEntity]
+		[GenericDomain]))
+
+([hasModifiedResidue] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [SequenceEntity]))
+
+([identifier] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[DatabaseIdentifier]
+		[ReferenceEntity]))
+
+([identityDefinedBy] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [%3AEXTENDED-SLOT])
+	(%3AASSOCIATED-FACET [_identityDefinedBy]))
+
+([inferredFrom] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Event]
+		[Complex]))
+
+([initial] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Person]))
+
+([input] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([instanceEdit] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [_InstanceBeforeChange]))
+
+([InstanceEdit] of %3AEXTENDED-CLASS)
+
+([instanceOf] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[GO_MolecularFunction]
+		[RegulationType]
+		[EvidenceType]
+		[GO_BiologicalProcess]
+		[GO_CellularComponent]))
+
+([journal] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [LiteratureReference]))
+
+([keyword] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceSequence]))
+
+([literatureReference] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Event]
+		[PhysicalEntity]
+		[Regulation]
+		[CatalystActivity]
+		[Summation]))
+
+([LiteratureReference] of %3AEXTENDED-CLASS)
+
+([locatedEvent] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReactionCoordinates])
+	(identityDefinedBy ALL))
+
+([locationContext] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReactionCoordinates]))
+
+([maxCount] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceGroupCount]))
+
+([minCount] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceGroupCount]))
+
+([modification] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ModifiedResidue]))
+
+([modified] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [DatabaseObject]))
+
+([ModifiedResidue] of %3AEXTENDED-CLASS)
+
+([name] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Event]
+		[PhysicalEntity]
+		[Regulation]
+		[Taxon]
+		[ReferenceDatabase]
+		[GO_MolecularFunction]
+		[Affiliation]
+		[RegulationType]
+		[EvidenceType]
+		[GO_BiologicalProcess]
+		[GO_CellularComponent]
+		[Domain]
+		[ReferenceEntity]))
+
+([NegativeRegulation] of %3AEXTENDED-CLASS)
+
+([note] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [InstanceEdit]))
+
+([orthologousEvent] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([output] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([pages] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [LiteratureReference]))
+
+([Pathway] of %3AEXTENDED-CLASS)
+
+([Person] of %3AEXTENDED-CLASS)
+
+([physicalEntity] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [CatalystActivity]))
+
+([PhysicalEntity] of %3AEXTENDED-CLASS)
+
+([PositiveRegulation] of %3AEXTENDED-CLASS)
+
+([precedingEvent] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([previousValue] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [_AttributeValueBeforeChange])
+	(databaseColumnSpecification "TEXT"))
+
+([pubMedIdentifier] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [LiteratureReference]))
+
+([Reaction] of %3AEXTENDED-CLASS)
+
+([ReactionCoordinates] of %3AEXTENDED-CLASS)
+
+([referenceDatabase] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[DatabaseIdentifier]
+		[GO_MolecularFunction]
+		[GO_BiologicalProcess]
+		[GO_CellularComponent]
+		[ReferenceEntity]))
+
+([ReferenceDatabase] of %3AEXTENDED-CLASS)
+
+([ReferenceDNASequence] of %3AEXTENDED-CLASS)
+
+([ReferenceEntity] of %3AEXTENDED-CLASS)
+
+([referenceEntity] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[SimpleEntity]
+		[SequenceDomain]))
+
+([referenceGene] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[ReferencePeptideSequence]
+		[ReferenceRNASequence]))
+
+([ReferenceGroup] of %3AEXTENDED-CLASS)
+
+([referenceGroup] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceGroupCount]))
+
+([referenceGroupCount] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceEntity]))
+
+([ReferenceGroupCount] of %3AEXTENDED-CLASS)
+
+([ReferenceMolecule] of %3AEXTENDED-CLASS)
+
+([ReferencePeptideSequence] of %3AEXTENDED-CLASS)
+
+([ReferenceRNASequence] of %3AEXTENDED-CLASS)
+
+([ReferenceSequence] of %3AEXTENDED-CLASS)
+
+([referenceSequence] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ModifiedResidue]))
+
+([referenceTranscript] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferencePeptideSequence]))
+
+([regulatedEntity] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Regulation]))
+
+([Regulation] of %3AEXTENDED-CLASS)
+
+([regulationType] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Regulation]))
+
+([RegulationType] of %3AEXTENDED-CLASS)
+
+([regulator] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Regulation]))
+
+([removingActivity] of %3AEXTENDED-SLOT)
+
+([ReplacedResidue] of %3AEXTENDED-CLASS)
+
+([requiredCatalystComponent] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([requiredInputComponent] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([Requirement] of %3AEXTENDED-CLASS)
+
+([residue] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ModifiedResidue]))
+
+([reverseReaction] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([reviewer] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Summation]))
+
+([secondaryIdentifier] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceSequence]))
+
+([SequenceDomain] of %3AEXTENDED-CLASS)
+
+([SequenceEntity] of %3AEXTENDED-CLASS)
+
+([SequenceEntityFragment] of %3AEXTENDED-CLASS)
+
+([SimpleEntity] of %3AEXTENDED-CLASS)
+
+([slotDisplayName] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [%3AEXTENDED-SLOT])
+	(%3AASSOCIATED-FACET [_slotDisplayName]))
+
+([sourceX] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReactionCoordinates]))
+
+([sourceY] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReactionCoordinates]))
+
+([species] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReferenceSequence]))
+
+([Species] of %3AEXTENDED-CLASS)
+
+([startCoordinate] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[SequenceEntityFragment]
+		[SequenceDomain]))
+
+([summation] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Event]
+		[PhysicalEntity]
+		[Regulation]))
+
+([Summation] of %3AEXTENDED-CLASS)
+
+([superTaxon] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Taxon]))
+
+([surname] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Person]))
+
+([targetX] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReactionCoordinates]))
+
+([targetY] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [ReactionCoordinates]))
+
+([Taxon] of %3AEXTENDED-CLASS)
+
+([taxon] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Event]
+		[PhysicalEntity]))
+
+([text] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Summation]))
+
+([title] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [LiteratureReference]))
+
+([update_200405_intermediate_Instance_7] of %3APAL-CONSTRAINT)
+
+([url] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[ReferenceDatabase]
+		[Figure]))
+
+([volume] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [LiteratureReference]))
+
+([year] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [LiteratureReference]))

@@ -1,0 +1,47 @@
+<?xml version = '1.0' encoding = 'utf-8'?>
+<jnlp spec="1.0+" codebase="http://brie8.cshl.edu:8080/ReactomeTools/CuratorTool" href="curatorTool.jnlp">
+   <information>
+      <title>Reactome Curator Tool</title>
+      <vendor>The Reactome Project</vendor>
+      <homepage href="http://www.reactome.org"/>
+      <description>The Java tool for annotation in the Reactome project</description>
+      <offline-allowed />
+   </information>
+   <security>
+      <all-permissions/>
+   </security>
+   <resources>
+      <j2se version="1.5+" max-heap-size="512m" />
+      <jar href="reactome.jar" main="true" />
+	  <jar href="batik-awt-util.jar" />
+	  <jar href="batik-bridge.jar" />
+	  <jar href="batik-css.jar" />
+	  <jar href="batik-dom.jar" />
+	  <jar href="batik-ext.jar" />
+	  <jar href="batik-extension.jar" />
+	  <jar href="batik-gui-util.jar" />
+	  <jar href="batik-gvt.jar" />
+	  <jar href="batik-parser.jar" />
+	  <jar href="batik-script.jar" />
+	  <jar href="batik-svg-dom.jar" />
+	  <jar href="batik-svggen.jar" />
+	  <jar href="batik-swing.jar" />
+	  <jar href="batik-transcoder.jar" />
+	  <jar href="batik-util.jar" />
+	  <jar href="batik-xml.jar" />
+	  <jar href="js.jar" />
+	  <jar href="pdf-transcoder.jar" />
+	  <jar href="xerces_2_5_0.jar" />
+	  <jar href="xml-apis.jar" />
+      <jar href="jdom.jar" />
+	  <jar href="mysql.jar" />
+	  <jar href="osxAdapter.jar" />
+      <jar href="jaxen-core.jar" />
+      <jar href="jaxen-jdom.jar" />
+      <jar href="saxpath.jar" />
+      <property name="file.encoding" value="UTF-8"/>
+      <property name="apple.laf.useScreenMenuBar" value="true" />
+   </resources>
+   <!-- Tool in Java Web Start doesn't need auto-update. -->
+   <application-desc main-class="org.gk.gkCurator.GKCuratorFrame"/>
+</jnlp>

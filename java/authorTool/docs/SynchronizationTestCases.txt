@@ -1,0 +1,257 @@
+Starting Point
+--------------
+
+Two copies of the curator tool, A and B, each with it's own directory.
+
+Both refer to the same database.
+
+In both cases, the same GenericReaction instance is checked out of the
+database into the local repository.
+
+After checking out, both tools are left open.
+
+Test 1: Using Database -> CheckIn I
+-----------------------------------
+
+*Method*
+
+Initialize to the starting point.
+
+In tool A, make a change to the definition field of the GenericReaction
+and select "Check In" from the database menu.  You will be informed
+of the instances that have been checked in but there will be no
+exceptions or errors.
+
+In tool B, choose the GenericReaction, but make a different change to the
+definition field.  Select "Check In" from the database menu.  You will be
+informed of the instances that have been checked in but there will be no
+exceptions or errors.
+
+*Analysis*
+
+There is an incorrect behaviour here: it should not be possible to
+check in the GenericReaction in tool B.  Tool B has overwritten tool
+A's GenericReaction without warning the user that he or she is
+destroying data.
+
+*Conclusion*
+
+When doing a database check in from the database menu, an
+additional check against the database needs to be performed in order
+to ensure that nothing has changed in the database between opening
+the dialog and doing the actual check in.
+
+Test 2: Using Database -> CheckIn II
+------------------------------------
+
+*Method*
+
+Initialize to the starting point.
+
+Save to local repository in both tools, close them and then restart them both.
+Select the GenericReaction in both tools, such that the attributes are
+visible in the Properties pane.
+
+In tool A, make a change to the definition field of the GenericReaction
+and select "Check In" from the database menu.  You will be informed
+of the instances that have been checked in but there will be no
+exceptions or errors.
+
+In tool B, choose the GenericReaction, but make a different change to the
+definition field.  Select "Check In" from the database menu.   You will be
+told that you cannot do a check in because there are already changes in the
+database.
+
+*Analysis*
+
+This behaviour is safe.
+
+*Conclusion*
+
+The behaviour would be much more user-friendly if it presented the user with
+a dialog to allow either merging or updating of the offending instance.
+This is especially true in the case where multiple instances are being
+checked in.
+
+*Comment*
+
+The only difference between this test and Test 1 is that the tools were
+closed and reopened before making any changes or trying to commit.
+
+Test 3: Using Database -> CheckIn III
+-------------------------------------
+
+*Method*
+
+Initialize to the starting point.
+
+Save to local repository in both tools, close them and then restart them both.
+Select the GenericReaction in both tools, such that the attributes are
+visible in the Properties pane.
+
+In tool A, make a change to the definition field of the GenericReaction
+and select "Check In" from the database menu.  You will be informed
+of the instances that have been checked in but there will be no
+exceptions or errors.
+
+In tool B, select the GenericReaction and click the open the "Synchronize
+with DB" dialog from the database menu.  Select the GenericReaction.
+You should find that if you try to do a commit, the menu item for commit
+is grayed out and cannot be used.
+
+*Analysis*
+
+This is a safe behaviour.
+
+Test 4: Using the synchronization dialog
+----------------------------------------
+
+*Method*
+
+Initialize to the starting point.
+
+Save to local repository in both tools, close them and then restart them both.
+Select the GenericReaction in both tools, such that the attributes are
+visible in the Properties pane.
+
+In tool A, make a change to the definition field of the GenericReaction
+and then open the "Synchronize with DB" dialog from the database menu.
+
+Do the same for tool B, but make a different change to the definition
+field.
+
+Now both tools will have local versions of the GenericReaction that
+are different from each other AND different from the database.  Additionally,
+the synchronization dialog window will be open for both tools.
+
+For the synchronization dialog in tool A, select the GenericReaction
+and do a commit.  This may take a little while, but no exceptions
+or errors should be reported.
+
+Now try to do the same for tool B.  You should find that it too can
+check in its change without exceptions or errors.
+
+Then open schema views onto the database for tools A and B.  If you
+scroll down to and open the GenericReaction, you will see that it
+is different in tool A as compared with tool B.
+
+Finally, in tool A, try to relaunch the synchronization dialog.  You
+will get an "Error in Synchronizing" popup and will not be able to
+continue the synchronization.
+
+*Analysis*
+
+There are two incorrect behaviours here:
+
+* It should not be possible to check in the GenericReaction in tool B.
+  Tool B has overwritten tool A's GenericReaction without warning the
+  user that he or she is destroying data.
+* The database entity views for tools A and B should be identical,
+  since they are pointing to the same database.  However, in reality,
+  they are different.  This is wrong.
+* The discrepancy between the local instance and the database should
+  not cause an error during the second attempt to synchronize.
+
+*Conclusion*
+
+When doing a database check in from the synchronization dialog, an
+additional check against the database needs to be performed in order
+to ensure that nothing has changed in the database between opening
+the dialog and doing the actual check in.
+
+The seeming existence to two different entity views suggests that
+database caching is the problem here.  Either caching should be
+turned off or there should be more integrity tests to ensure that
+the cached values reflect the true state of the database.
+
+Instead of the "Error in synchronizing" popup, it would be more
+user-friendly if it presented the user with
+a dialog to allow either merging or updating of the offending instance.
+This is especially true in the case where multiple instances are being
+checked in.
+
+Test 5: Using Database -> Update
+---------------------------------
+
+*Method*
+
+Initialize to the starting point.
+
+Save to local repository in both tools, close them and then restart them both.
+Select the GenericReaction in both tools, such that the attributes are
+visible in the Properties pane.
+
+Do a database synchronization in tool B.  You will be told that there
+there are no differences between the database and the local repository,
+which is correct.
+
+In tool A, make a change to the definition field of the GenericReaction
+and select "Check In" from the database menu.  You will be informed
+of the instances that have been checked in but there will be no
+exceptions or errors.
+
+In tool B, select the GenericReaction and click the "Update from DB"
+item from the database menu.  You will be told that the local repository
+is already synchronized with the database, and no update will be performed.
+
+*Analysis*
+
+This is an incorrect behaviour: the change that you made to the
+GenericReaction in tool A should be noticed by tool B, but this does
+not happen.
+
+*Conclusion*
+
+When doing a database update from the database menu, an
+additional check against the database needs to be performed in order
+to ensure that nothing has changed in the database between opening
+the dialog and doing the actual update.
+
+*Comment*
+
+The update functionality works correctly if the synchronization in
+step 3 is *not* performed.
+
+Test 6: Using Database -> Synchronize twice
+-------------------------------------------
+
+*Method*
+
+Initialize to the starting point.
+
+Save to local repository in both tools, close them and then restart them both.
+Select the GenericReaction in both tools, such that the attributes are
+visible in the Properties pane.
+
+In tool A, make a change to the definition field of the GenericReaction
+and select "Check In" from the database menu.  You will be informed
+of the instances that have been checked in but there will be no
+exceptions or errors.
+
+In tool B, select the GenericReaction and click the "Synchronize with DB"
+item from the database menu.  You will be presented with a window containing
+the name of the GenericReaction.  Only two operations will be allowed
+on the GenericReaction, namely "Match Instance in DB" and "Update from
+DB".  Select the latter.  You will see in the "Prooerties of..." panel
+that the definition attribute has been changed to match the change made
+in tool A.
+
+This is the correct behaviour.
+
+Now switch back to tool A and change the "definition" slot again, to
+something completely new.  Select "Check In" from the database menu.
+You will be informed of the instances that have been checked in but
+there will be no exceptions or errors.
+
+Return to tool B, select the GenericReaction and click the "Synchronize with DB"
+item from the database menu.  You will be presented with a window containing
+the name of the GenericReaction.  Only two operations will be allowed
+on the GenericReaction, namely "Match Instance in DB" and "Update from
+DB".  Select the latter.  You will see in the "Prooerties of..." panel
+that the definition attribute remains unchanged.
+
+*Analysis*
+
+This is an incorrect behaviour: the tool notices that the database has
+been changed when you try to do a synchronize, and seemingly allows
+you to do an update, but in reality, the update is not performed.

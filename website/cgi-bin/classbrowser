@@ -1,0 +1,323 @@
+#!/usr/local/bin/perl
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+#use lib "/tmp/libs/bioperl-1.0";
+#use lib "/tmp/libs/GKB/modules";
+#use lib "/tmp/libs/my_perl_stuff";
+
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::Config;
+use Data::Dumper;
+use GKB::WebUtils;
+use strict;
+use GKB::FrontPage3;
+
+my $header = undef;
+my $footer = undef;
+my $enclosing_div_start = undef;
+my $enclosing_div_end = undef;
+my $reactome_version_num = "2";
+if (defined $REACTOME_VERSION && !($REACTOME_VERSION eq '')) {
+    $REACTOME_VERSION =~ /^([0-9]+).*$/;
+    $reactome_version_num = $1;
+}
+if ($reactome_version_num eq "3") {
+    my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (classbrowser)", "/stylesheet.css");
+    $header = $front_page->get_header();
+    $footer = $front_page->get_footer();
+    $enclosing_div_start = $front_page->get_enclosing_div_start();
+    $enclosing_div_end = $front_page->get_enclosing_div_end();
+}
+
+my $DBA;
+my $CGI;
+my $ONTOLOGY;
+
+
+print STDERR "new CGI\n";
+$CGI = CGI->new();
+(my $INSTANCEBROWSER = $CGI->script_name) =~ s/[^\/]+$/instancebrowser/;
+my $title;
+if ($CGI->param('CLASS')) {
+    $title = $CGI->param('CLASS') . ' (classbrowser)';
+} else {
+    $title = "$PROJECT_NAME (classbrowser)";
+}
+print $CGI->header(-charset => 'UTF-8');
+if (defined $header) {
+    print $header;
+} else {
+    print $CGI->start_html(
+    # \-dtd => "-//IETF//DTD HTML//EN",
+    -style => {-src => '/stylesheet.css'},
+    -title => $title,
+    );
+}
+
+if (defined $enclosing_div_start) {
+    print $enclosing_div_start;
+}
+
+my $DB = $CGI->param('DB') || $GK_DB_NAME;
+$CGI->param('DB', $DB);
+
+my $wu;
+eval {
+    $DBA = GKB::DBAdaptor->new
+	(
+	 -dbname => $DB,
+	 -user   => $GK_DB_USER,
+	 -host   => $GK_DB_HOST,
+	 -pass   => $GK_DB_PASS,
+	 -port   => $GK_DB_PORT,
+	 -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+	 );
+    $ONTOLOGY = $DBA->ontology;
+
+    $wu = GKB::WebUtils->new(
+				-CGI => $CGI,
+				-DBA => $DBA,
+				-DEBUG => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef,
+				);
+
+    if (!(defined $header)) {
+        print $wu->navigation_bar;
+    }
+
+    my $highlite = {};
+    $CGI->param('CLASS') || $CGI->param('CLASS', $ONTOLOGY->root_class);
+    map {$highlite->{$_} = 1} $CGI->param('CLASS');
+
+    my $sidebar_content = qq(<UL CLASS="classhierarchy">\n) ._make_class_tree($ONTOLOGY->root_class, $highlite) . qq(</UL>\n);
+
+    my $main_content = make_class_attribute_table([keys %{$highlite}]). "\n<P />\n" . make_class_referer_table([keys %{$highlite}]);
+
+    $main_content .=<<__HERE__;
+<HR>
+<DIV CLASS="instructions">
+<P />You can find documentation for the Reactome data model <a href="$DATA_MODEL_URL">here</a>.
+<P />Sidebar on the left shows the hierarchy of $PROJECT_NAME classes. The number of instances
+of this class is shown in square brackets and is hyperlinked to a page listing all instances in this class.
+<P />The main panel shows attributes of the selected class. Own attributes, i.e. the ones which are not
+inherited from a parent class are indicated in <A CLASS="own">colour</A>.
+<P />'+' in 'Cardinality' column indicates that this is a multi-value attribute. 
+<P />'Value defines instance' column indicates the attributes the values of which determine instance identity
+and are used to check if an identical instance has been stored in the database already. 'ALL' indicates that
+that all of the values of a given attribute must be identical while 'ANY' shows that identity of any single
+value of a given attribute is enough. Of course, if the identity is defined by multiple attributes each of them
+has to match.
+</DIV>
+__HERE__
+
+    print 
+	qq(<TABLE BORDER="0" WIDTH="$HTML_PAGE_WIDTH" CELLPADDING="0" CELLSPACING="0" CLASS="classbrowser">\n) .
+	qq(<TR><TD CLASS="sidebar" width="33%" valign="top">\n$sidebar_content\n</TD>\n) .
+	qq(<TD valign="top">\n$main_content\n</TD>) .
+	qq(</TR>\n) .
+	qq(</TABLE>\n);
+}; $@ && handle_error($@);
+
+
+eval {
+    if (defined $enclosing_div_end) {
+        print $enclosing_div_end;
+    }
+    
+    if (!(defined $footer)) {
+        print $wu->make_footer;
+    }
+}; $@ && handle_error($@);
+
+if (defined $footer) {
+    print $footer;
+} else {
+    print $CGI->end_html;  
+}
+$DBA && $DBA->db_handle->disconnect;
+
+exit;
+
+sub _make_class_tree {
+    my ($class,$highlite) = @_;
+    my $a_class = ($highlite->{$class}) ? 'currentclass' : 'sidebar';
+    my $out = qq(<LI>) . hyperlinked_class_name($class,$a_class) .' ['.
+	hyperlink2instancebrowser($class,$DBA->class_instance_count($class)) . "]\n";
+    if (my @kids = $ONTOLOGY->children($class)) {
+	$out .= qq(<UL CLASS="classhierarchy">\n);
+	foreach (sort {$a cmp $b} @kids) {
+	    $out .= _make_class_tree($_,$highlite);
+	}
+	$out .= qq(</UL>\n);
+    }
+    return $out;
+}
+
+sub hyperlink2instancebrowser {
+    my ($class,$str) = @_;
+    return qq(<A HREF="$INSTANCEBROWSER?DB=$DB&CLASS=$class&FORMAT=list">$str</A>);
+}
+
+sub make_class_referer_table {
+    my ($class_ar) = @_;
+    my $out = '';
+    foreach (@{$class_ar}) {
+	if (my $rows = class_referers_as_table_rows($_)) {
+	    $out .= $CGI->table({-width => "100%", -class => 'classattributes'}, $CGI->caption($CGI->h1("Referers of class '$_' instances")), $rows) . "\n";
+	}
+    }
+    return $out;
+}
+
+sub class_referers_as_table_rows {
+    my ($class) = @_;
+    my $out;
+    my $referers = $ONTOLOGY->class_referers($class);
+    if (@{$referers}) {
+	$out = make_table_row_as_th(undef,['Class name',
+				       'Attribute name',
+				       'Cardinality']);
+	foreach my $ar (@{$referers}) {
+	    $ar->[0] = hyperlinked_class_name($ar->[0]);
+	    $ar->[2] = ($ar->[2]) ? '+' : '1';
+	    $out .= make_table_row(undef,$ar);
+	}
+    }
+    return $out;
+}
+
+
+sub make_class_attribute_table {
+    my ($class_ar) = @_;
+    my $out = '';
+    foreach (@{$class_ar}) {
+	$out .= $CGI->table({-width => "100%", -class => 'classattributes'}, $CGI->caption($CGI->h1("Attributes of class '$_'")), class_attributes_as_table_rows($_)) . "\n";
+    }
+    return $out;
+}
+
+sub class_attributes_as_table_rows {
+    my ($class) = @_;
+    my $out .= make_table_row_as_th(undef,['Attribute name',
+					'Cardinality',
+					'Value type',
+					'Allowed classes',
+					'Attribute origin',
+					'Value defines instance',
+					'Db column type'
+					]);
+    foreach my $att (sort {$a cmp $b} grep {! /^_(class|Protege)/} $ONTOLOGY->list_class_attributes($class)) {
+	# attribute name
+	my @a = $att;
+	my $tr_class = '';
+	# cardinality
+	push @a, ($ONTOLOGY->is_multivalue_class_attribute($class,$att)) ? '+' : '1';
+	# value type
+	# allowed classes
+	if ($ONTOLOGY->class_attribute_type($class,$att) eq 'db_instance_type') {
+	    push @a, 'INSTANCE';
+	    push @a, join("<BR>",map {hyperlinked_class_name($_)} $ONTOLOGY->list_allowed_classes_for_class_attribute($class,$att));
+	} else {
+	    (my $type = $ONTOLOGY->class_attribute_type($class,$att)) =~ s/(^db_|_type$)//gi;
+	    $type =~ s/string/text/;
+	    push @a, uc($type);
+	    push @a, 'N/A'
+	}
+	# attribute origin
+	if ($ONTOLOGY->is_own_attribute($class,$att)) {
+	    $tr_class = 'own';
+	    push @a, $class;
+	} else {
+	    $tr_class = 'inherited';
+	    push @a, join("<BR>",hyperlinked_class_name($ONTOLOGY->class_attribute_origin($class,$att)));
+	}
+	if (my $deftype = $ONTOLOGY->get_class_attribute_defining_type($class,$att)) {
+	    push @a, uc($deftype);
+	} else {
+	    push @a, '&nbsp;';
+	}
+	# Db col type
+	if (my $coltype =$ONTOLOGY->class_attribute_db_col_type($class,$att)) {
+	    push @a, $coltype;
+	} elsif ($att eq 'DatabaseObject_id') {
+	    push @a, $DBA->primary_key_type;
+	} elsif ($att eq "${ class}_id") {
+	    push @a, $DBA->db_instance_type . ' PRIMARY KEY';
+	} else {
+	    my $type = $ONTOLOGY->class_attribute_type($class,$att);
+	    push @a, eval "\$DBA->$type" || $DBA->$type;
+	}
+	$out .= make_table_row($tr_class,\@a);
+    }
+    return $out;
+}
+
+sub make_table_row {
+    my ($tr_class,$ar)= @_;
+    if (defined $tr_class) {
+	return $CGI->Tr({-class => $tr_class},
+			[
+			 $CGI->td({-class => $tr_class},
+				  $ar
+				  )
+			 ]
+			);
+    } else {
+	return $CGI->Tr([$CGI->td($ar)]);
+    }
+}
+
+sub make_table_row_as_th {
+    my ($tr_class,$ar)= @_;
+    if (defined $tr_class) {
+	return $CGI->Tr({-class => $tr_class},
+			[
+			 $CGI->th({-class => $tr_class},
+				  $ar
+				  )
+			 ]
+			);
+    } else {
+	return $CGI->Tr([$CGI->th($ar)]);
+    }
+}
+
+sub handle_error {
+    p_print(@_);
+    print $CGI->end_html;
+    $DBA && $DBA->db_handle->disconnect;
+    exit;   
+}
+
+sub p_print {
+    print "<PRE>@_</PRE>\n";
+}
+
+sub hyperlinked_class_name {
+    if (!(defined $_[0]) || $_[0] eq '') {
+    	return '';
+    }
+    if (!(defined $CGI->script_name) || $CGI->script_name eq '') {
+    	return $_[0];
+    }
+    my $db_string = '';
+    if (defined $DB && !($DB eq '')) {
+    	$db_string = "DB=$DB&";
+    }
+    return qq(<A CLASS="$_[1]" HREF=\") . $CGI->script_name . "?${db_string}CLASS=" . $_[0] . qq(\">$_[0]</A>);
+}

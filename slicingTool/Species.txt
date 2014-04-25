@@ -1,0 +1,25 @@
+48887	Homo sapiens
+48892	Mus musculus
+48895	Rattus norvegicus
+49591	Gallus gallus
+56210	Drosophila melanogaster
+68320	Caenorhabditis elegans
+170905	Arabidopsis thaliana
+48898	Bos taurus
+68322	Saccharomyces cerevisiae
+68324	Schizosaccharomyces pombe
+879693  Taeniopygia guttata
+170941	Dictyostelium discoideum
+170928	Plasmodium falciparum
+879695	Staphylococcus aureus subsp. aureus N315
+159879	Escherichia coli
+49633	Sus scrofa
+176806	Mycobacterium tuberculosis
+186860	Oryza sativa
+49646	Canis familiaris
+205621	Xenopus tropicalis
+68323   Danio rerio
+
+
+
+

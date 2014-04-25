@@ -1,0 +1,997 @@
+/*
+   Import specialized stylesheets (imports must come before
+   other stylesheet definitions)
+*/
+@import "stylesheets/reactome_navbar_stylesheet.css";
+/*
+The following import result is navigation bar disappearing for some reason
+@import "/javascript/yui/build/container/assets/skins/sam/container.css";*/
+/*
+@import "/stylesheets/reset-fonts-grids.css";
+@import "/stylesheets/menu.css";
+*/
+
+
+/* 
+########
+ colours
+########
+
+#6495ED : cornflowerblue - colour of cells
+#A52A2A : brown
+#FFEBCD : blanchedalmond
+#ADD8E6 : lightblue
+#4169E1 : royalblue - text colour
+#F0F8FF : aliceblue - 
+#E0FFFF : lightcyan - show hierarchy button, hover, + and - tabs
+#B0C4DE : lightsteelblue - general border
+#DCDCDC : gainsboro
+#F5DEB3 : wheat - highlight in classbrowser page
+#FAFAD2 : lightgoldenrodyellow - input, output, catalyst cells
+#FFD700 : gold
+#BDB76B : darkkhaki
+#00FFFF : cyan
+#DC143C : crimson
+#D0D0D0 : button grey
+#909090 : button shadow grey
+*/
+
+
+/*
+############
+ body attrs (NB for whole GK)
+############
+*/
+
+BODY	{ background-color: white; font-family:  Arial, Helvetica, sans-serif; }
+
+
+/*
+BODY	{ background-color: white; font-family:  Arial, Helvetica, sans-serif; background-image: url('/icons/internal_repository_bg.png'); background-repeat: repeat}
+*/
+
+
+/*
+BODY	{ background-color: white; font-family:  Arial, Helvetica, sans-serif; background-image: url('/icons/test_site_bg.png'); background-repeat: repeat}
+*/
+
+/* 
+##############################
+grouping selectors and general  
+##############################
+*/
+
+/* the font size controls the text size in the main table */
+H1, H2, DT, DL, DIV, TH, TD, P, BR, INPUT, SELECT, UL { font-family:  Arial, Helvetica, sans-serif; font-size: 9pt; }
+
+/* gets rid of the border spacing between cells  and a general border for cells in a table */
+/* Fixed layout causes problems in IE7 with GWT menus, let's see what happens without it. */
+/*TABLE { border-collapse: collapse; table-layout: fixed; }*/
+TABLE { border-collapse: collapse; }
+
+/* border and bgd colour around ALL table elements */
+TH { background-color: #6495ED; text-align: left;  border: thin solid #B0C4DE; padding-left: 4px; padding-top: 2px; padding-bottom: 2px;}
+
+TD.created, TD.input,TD.output, TD.taxon, TD.precedingEvent, TD.precedingEventRev, TD.compartment, TD.inputCatalyst, TD.outputCatalyst, TD.catalystActivity, TD.name, TD.physicalEntityRev, TD.catalystActivity, TD.formula, TD.crossReference, TD.outputRev, TD.inputRev, TD.databaseIdentifierRev, TD.databaseIdentifier, TD.definition, TD.activityRev, TD.definition, TD.goBiologicalProcess, TH.regulation, TH.inferredFrom, TD.literatureReferenceRev, TD.orthologousEvent, TD.referenceGroupCount, TD.identifier, TD.referenceDatabase, TD.referenceEntity, TD.hasModifiedResidue, TD.startEndCoordinates, TD.hasMember, TD.hasSpecialisedForm , TD.hasMemberRev, TD.hasSpecialisedFormRev, TD.hasCandidate,  TD.hasCandidateRev, TD.authored, TD.reviewed, TD.revised, TD.organism, TD.inferredFromRev, TD.inferredFrom, TD.species, TD.superTaxon, TD.text, TD.summationRev, TD.stableIdentifier {border: thin solid #B0C4DE; padding-left: 4px; padding-top: 2px; padding-bottom: 2px;} 
+
+TD.descButtonCell { border: thin solid #B0C4DE; } 
+
+/*
+##################
+general attributes
+##################
+*/
+
+/* general list 'dots' style  */
+/* TD.componentOf UL.attributes LI {list-style-type: square ; } */
+/* TD.componentOf UL.attributes LI A {background: #F0F8FF;} */
+TD.participants UL LI {list-style-type: square ; }
+
+LI { font-family:  Arial, Helvetica, sans-serif; }
+LI.normalsize { font-size: 9pt; padding-bottom: 4px;}
+
+H1 { text-align: center; font-size: 14pt; }
+H2.summary { background-color: #6495ED; }
+
+P.summary { text-align: justify; }    
+
+H2.direct_evidence { color: #A52A2A; }
+
+.direct_evidence { background-color: #FFEBCD; }
+
+UL.direct_evidence { list-style-type: none; 
+	             font-style: italic;
+                   }
+
+LI.direct_evidence { 
+		     text-indent: -28px; 
+	           }
+
+H2.indirect_evidence_top { color: #A52A2A; }
+.indirect_evidence_top { background-color: #FFEBCD; }
+.indirect_evidence { background-color: white; }
+
+.relationship_top { background-color: #ADD8E6; }
+.relationship { background-color: white; }
+TH.relationship { background-color: silver; text-align: left; }
+
+DT { color: #A52A2A; }
+DD { font-style: italic; 
+	text-indent: -50px;
+	margin-left: 50px;
+
+	}
+
+
+
+/*
+#########################################
+GK-wide general font and hover attributes
+#########################################
+*/
+
+A { color: #4169E1; text-decoration: none; }
+A:hover { color: black; text-decoration: none; background: #B0C4DE; }
+
+
+
+/*
+###############################################################################
+#              								      #
+# FRONTPAGE                     					      #
+#              								      #
+###############################################################################
+*/
+
+H1.frontpage { font-size: 20pt; color: navy; text-align: center; } 
+TD.frontpagetoc, TD.frontpageauthors, TD.frontpagereleasedate { vertical-align: top; padding-left: 4px; padding-top: 4px;}
+TR.odd, TR.even {border: thin solid #B0C4DE; padding-left: 4px; padding-top: 2px; padding-bottom: 2px;}
+TD.newsandnotes {
+	background-color: #F0F8FF;
+	border: thin solid #B0C4DE;
+	text-align: justify;
+	color:navy;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 4px;
+	padding-right: 4px;
+	vertical-align: top;
+}
+TD.about {
+	border: thin solid #B0C4DE;
+	color:navy;
+	text-align: justify;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 4px;
+	padding-right: 4px;
+	vertical-align: top;
+}
+TD.newsandnotes UL LI  { padding-left: 4px; margin-left: -25px; padding-bottom: 4px; }
+TH.spacer {background-color:white; border:0;}
+TH.newsandnotes { text-align: center; background-color:navy; border: thin solid #B0C4DE; color:white; }
+TABLE.newsandnotes { margin-top: 10px; }
+
+
+TABLE.frontpageitems { table-layout: fixed; }
+TD.frontpageitem { text-align: center; vertical-align: middle; padding-top: 8px; padding-bottom: 8px; padding-left: 4px;  padding-right: 4px; font-weight: bold; border: thin solid #B0C4DE; }
+TD.frontpageitem2 { text-align: center; vertical-align: middle; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;  padding-right: 4px; border: thin solid #B0C4DE; }
+TD.frontpageitem2 A.curated { font-weight:bold; }
+TD.frontpageadvert { text-align: center; vertical-align: middle; padding-top: 4px; padding-bottom: 4px; padding-left: 4px;  padding-right: 4px; border: thin solid red; background-color: #F0F8FF; color: navy; }
+/* TD.frontpageadvert A { color: red; font-weight: bold; } */
+SPAN.greyed { color:silver; } 
+
+/* hyperlink color in news and notes  */
+/* LI.normalsize A:link {color:red; } */
+/* LI.normalsize A:visited {color:red;  } */
+/* LI.normalsize A:active {color:red; } */
+
+TABLE.frontpagetitle { margin-top: 10px; }
+TD.frontpagetitle {
+	text-align: center;
+	font-size: 16pt;
+	color: navy;
+	font-weight: bold;
+	font-stretch: ultra-expanded;
+	letter-spacing: 0.05em;
+}
+
+/*
+###############################################################################
+#              								      #
+# EVENTBROWSER                    					      #
+#              								      #
+###############################################################################
+*/
+
+DIV.pagetitle {
+	text-align: center;
+	font-size: 16pt;
+}
+DIV.pagetitle A {
+	color: navy;
+	font-weight: bold;
+}
+
+/*
+##################
+TOP NAVIGATION BOX
+##################
+*/
+
+
+/* Positioning of the nav options, table round the navigation links */
+
+TD.navigation { font-size: 9pt; background-color:  #DCDCDC; text-align: center; border: thin solid #B0C4DE; vertical-align: middle; }
+TD.navigationselected { font-size: 8pt; background-color: white; text-align: center; border: thin solid #B0C4DE; vertical-align: middle; }
+#TD.navigation INPUT { color: black; background-color: #F0F8FF; border: none; }
+TD.navigation INPUT { color: black; background-color: #EEEEEE; border: none; }
+
+/* This selector is needed for IE top nav layout to be correct, otherwise
+it screws up!  */
+TABLE.navigation {table-layout: auto; border-spacing: 0; }
+
+
+/*
+####################
+SIDEBAR (LEFT PANEL)
+####################
+*/
+
+TABLE.sidebar {table-layout:auto;}
+
+A.sidebar:hover { background:#E0FFFF; color:black; } /* hover over text */
+
+A.sidebar:visited { color: black; }	
+
+A.sidebar:active  { color: black; }
+
+A.sidebar:link    { color: black; }
+
+/* colour of left panel and outline */
+
+TD.sidebar { background-color: #F0F0F0; border: thin solid #B0C4DE; }
+TABLE.classbrowser TD.sidebar { background-color: #B0C4DE; border: thin solid #B0C4DE; }
+
+/* colour and text size of the button Show heirarchy types and of C and I */
+
+INPUT.sidebar { background-color: #E0FFFF;  font-size: 8pt; }
+
+/* Unordered list general attrs */
+
+UL.attributes { font-size: 9pt; list-style-type: square;}
+
+/* attrs for each level of the tree  */
+
+.level0  { list-style-type: none; font-size: 8pt; }
+UL.level1 { list-style-type: none; font-size: 8pt; }
+UL.level2 { list-style-type: none; font-size: 8pt; }
+UL.level3 { list-style-type: none; font-size: 8pt; }
+UL.level4 { list-style-type: none; font-size: 8pt; }
+UL.level5 { list-style-type: none; font-size: 8pt; }
+UL.level6 { list-style-type: none; font-size: 8pt; }
+UL.level7 { list-style-type: none; font-size: 8pt; }
+UL.level8 { list-style-type: none; font-size: 8pt; }
+UL.level9 { list-style-type: none; font-size: 8pt; }
+UL.level10 { list-style-type: none; font-size: 8pt; }
+UL.level11 { list-style-type: none; font-size: 8pt; }
+UL.level12 { list-style-type: none; font-size: 8pt; }
+UL.level13 { list-style-type: none; font-size: 8pt; }
+
+UL.expanded { display:block; list-style-type: none; font-size: 8pt; }
+UL.collapsed { display: none; }
+
+UL.classhierarchy { list-style-type: none; font-size: 8pt; }
+
+/* colour of the current event selected */
+
+A.current { color: black; font-weight: bold; }
+A.current:hover {background-color: #E0FFFF;}
+
+/*
+TD.sidebar UL {background-color:skyblue;}
+*/
+/* colour of '[GK Home]' */
+TD.sidebar P.level0 A.sidebar {background-color:#E0FFFF; }
+
+.components_top { background-color: #B0C4DE; }
+
+/* the attrs for the + and - buttons next to the levels  */
+
+A.ecbutton { font-size: 8pt; font-family: monospace; color: black; text-decoration: none; background-color: #E0FFFF; list-style-type: none; margin-left: 5px; }
+
+
+/* 
+###############
+MAIN TABLE AREA
+###############
+*/
+
+/* the attrs for the current event eg name of the reaction */
+
+.eventname { background-color: #F5DEB3; text-align: center; font-weight: bold; border-left: thin solid #B0C4DE; border-right: thin solid #B0C4DE; border-top: thin solid #B0C4DE; padding-left: 4px; padding-top: 2px; padding-bottom: 2px;}
+
+TR.header { background-color: white; }
+TABLE.footer { margin-top: 10px; }
+TR.footer { }
+TD.footer { font-size: 7pt; text-align: justify; padding-top: 5px; padding-bottom: 5px; }
+
+TH.entityhierarchy,
+TH.databaseIdentifier, 
+TH.databaseIdentifierRev, 
+TH.hasModifiedResidue, 
+TH.hasModifiedResidueRev, 
+TH.hasComponent, 
+TH.hasComponentRev, 
+TH.taxon, 
+TH.taxonRev,
+TH.identifier,
+TH.referenceDatabase, 
+TH.referenceGroupCount { background-color: #6495ED; text-align: left;}
+ 
+TH.input,
+TH.inputRev,
+TH.output,
+TH.outputRev,
+TH.catalystActivity,
+TH.physicalEntityRev { background-color: #FAFAD2; text-align: left;}
+
+/* Following means do this when TD and TH (for eg where class = catAct) are descendants of TR  */ 
+TR TH + TD {border: thin solid #B0C4DE; padding-left: 4px; padding-top: 2px; padding-bottom: 2px;}
+
+/* TR TD[colspan="2"] UL {border: thin solid #B0C4DE; padding-left: 4px; padding-top: 2px; padding-bottom: 2px;}
+*/
+
+
+TH.inputCatalyst TD + A {color:red;}
+
+#TD.inputRev { font-size: 8pt; }
+#TD.outputRev { font-size: 8pt; }
+TD.figure { text-align: center; border-left: thin solid #B0C4DE; border-right: thin solid #B0C4DE; background-color: white; }
+#TD.physicalEntityRev { font-size: 8pt; } 
+#TD.created { font-size: 8pt; }
+
+TD.literatureReference {border: thin solid #B0C4DE; padding-left: 4px; padding-top: 2px; padding-bottom: 2px; text-align: justify;}
+TH.literatureReference {border-top: none; border-bottom: none;}
+TD.text {  text-align: justify; }
+TD.summation {  text-align: justify; border-left: thin solid #B0C4DE; border-right: thin solid #B0C4DE; padding: 4px;}
+.technicalities { font-size: 9pt; }
+.entrypoints { background-color: #FFD700; }
+TH.entrypoints { background-color: #BDB76B; }
+
+
+.JPhysicalEntity { background-color: #00FFFF; }
+.Jcatalyst { background-color: red; }
+.Jinput { background-color: rgb(70,220,70); }
+.Joutput { background-color: rgb(70,70,220); }
+.ViewerAppButtonApplet {text-align: center;}
+
+
+TABLE.Pathway, TABLE.Reaction, TABLE.ConceptualEvent, TABLE.EquivalentEventSet, TABLE.BlackBoxEvent, TABLE.ReactionlikeEvent, TABLE.Depolymerisation, TABLE.Polymerisation { border-spacing: 1px 1px; width: 100%; table-layout:auto;}
+
+
+P.SummationSection { text-align: justify; }
+UL.SummationSection { text-align: justify; }
+DIV.nothingfound { margin-top: 10px; left: 10px; right: 10px; text-align: center; color: white; font-size: 12pt; background-color: #DC143C; font-weight: bold; }
+
+
+#TD { background-color: white; border: thin solid black; } 
+
+
+/* display of heirarchical tree for participants in processes */
+
+/* general  */
+/* text general */
+
+TD.participantInEvents { border: thin solid #B0C4DE; } 
+
+/* hover over text attrs */
+
+TD.participantInEvents A:hover { background:#B0C4DE; color:black; }
+
+/* indent of level0 events and underlining them */
+
+TD.participantInEvents P.level0 A { margin-left: 4px; padding-bottom: 1px; text-decoration: underline; color: #4169E1;}
+
+/* spacing between level1 events - looks neater */
+
+TD.participantInEvents UL {margin-bottom:5px; padding-bottom: 4px; padding-left: 20px}
+
+/* left line next to lower level events */
+
+TD.participantInEvents UL.level1 LI { border-left: 2px solid black; }
+
+/* making the reaction name bold */
+
+TD.participantInEvents A.bold { font-weight: bold; }
+
+/* makin the current instance bold in instanceOf hirearchy */
+
+TD.instanceOf A.bold { font-weight: bold; }
+TD.instanceOfRev A.bold { font-weight: bold; }
+
+TABLE.contents { table-layout:auto; margin-top: 10px; }
+TD.author,
+TD.releaseDate,
+TD.reviewer,
+TD.editor {
+	text-align: left;
+	vertical-align: top;
+	padding-left: 4px;
+	padding-top: 4px;
+	border: thin solid #B0C4DE;
+	}
+TR.contents TD.sidebar { background-color: #B0C4DE; border: thin solid white; }
+TR.contents TH { text-align: center; background-color:navy; border: thin solid #B0C4DE; color:white; }
+
+A.LocusLink, A.EntrezGene, A.RefSeq {background-color: #C6E7F7; color: #002173; font-weight: bold;}
+A.ENSEMBL {color: white; background-color: #5A85D6; font-weight: bold;}
+A.UniProt, A.SWALL, A.SPTREMBL, A.SPTR, A.SwissProt {background-color: #ABADBA; color: #B50E16; font-weight: bold;}
+A.COMPOUND, A.KEGG, A.GLYCAN, A.KEGGGene{background-color: #A70158; color: #FFD600; font-weight: bold;}
+A.ChEBI {background-color: #003061; color: white; font-weight: bold; }
+A.MIM, A.OMIM {color: #105A21; background-color: #ADCEB5; font-weight: bold; }
+A.UCSC {color: #8D6C01; background-color: #FEF9D1; font-weight: bold;}
+A.EMBL {background-color: #005826; color: white; font-weight: bold;}
+A.GO {background-color: #3875D7; color: #E9EFFA; font-weight: bold;}
+A.PubMed {color: white; background-color: #326599; font-weight: bold;}
+A.PubChemSubstance {background-color: #336699; color: white; font-weight: bold;}
+A.PubChemCompound {color: #336699; background-color: #CCFF00; font-weight: bold;}
+A.HapMap {color: #024F63; background-color: #FFFFCC; font-weight: bold;}
+
+A.DOI {background-color: #E9EFF; color: #3875D7; font-weight: bold;}
+
+/* 
+###################
+REACTIONMAP and TIP
+###################
+*/
+
+
+#TD.reactionmap { background-color: #6495ED; font-size: 7pt; vertical-align: bottom; padding-bottom: 2px; }
+TD.reactionmap { background-color: navy; font-size: 7pt; color: white; vertical-align: middle; padding-top: 2px; padding-bottom: 2px;}
+
+TR.reactionmap { background-color: navy; }
+TABLE.reactionmap { table-layout: auto; border-spacing: 0; border: thin solid #B0C4DE; }
+#INPUT.reactionmap { width: 10px; height: 10px;}
+
+INPUT.tip { border:none; width:797px; color: #4169E1; font-weight: bold;}
+
+
+.maincontents {
+	border-spacing: 1px 1px;
+	width: 100%;
+	height: 100%;
+	}
+
+
+/*
+###############################################################################
+#              								      #
+# ADVANCED SEARCH                   					      #
+#              								      #
+###############################################################################
+*/
+
+/* margin for gap in MOZ (no gap seen between search and nav bar!), already a gap in IE */
+/*
+TABLE.Person, TABLE.LiteratureReference, TABLE.ReferenceGroup,  TABLE.ReferenceGroupCount, TABLE.Affiliation {table-layout: auto; margin-top: 10px;}
+*/
+
+TABLE.search {table-layout: auto; }
+
+/* background colour and border of whole table  */
+/* TABLE.search * TR TD.search {background-color: #B0C4DE ; } 
+TABLE.search TD.search {background-color: #B0C4DE ; border: 0;}
+TR.header TD[colspan=5] {background-color: #B0C4DE ; border: 0;} */
+TABLE.search TR TD {background-color: #B0C4DE; border: 0; padding-top: 2px; padding-bottom: 2px;}
+
+/* general attrs of text in table */
+TD.search { color: black; text-align: center; vertical-align: middle; }
+
+/* colour of entered text and submit button */
+TD.search INPUT { font-weight: bolder; color: black; background-color: #F0F8FF; z-index: 99;}
+
+/* colour of pull-down menu  */
+TD.search select {color: black; background-color: #F0F8FF; border: none; z-index: 99;}
+
+
+/* ##### search2 ##### */
+
+/* table colours and border  */
+TABLE.search2, TABLE.search TD { background-color: #B0C4DE ; border: thin solid #4169E1; table-layout:auto; }
+
+/* submit button tr attrs  */
+.search2center { text-align: center; color: black; background-color: #B0C4DE; border: 0; }
+
+/* submit button */
+TR TH.search2center INPUT { font-weight: bolder; color: black; background-color: #F0F8FF; }
+
+TR TH.search2center TR TD TR select {color: black; background-color: #F0F8FF; }
+
+
+TD.search2 { vertical-align: middle; }
+.search2 { font-size: 9pt; text-align: justify; }
+
+DIV.search_no_popups {background-color: #B0C4DE; margin-top: 10px;}
+
+/* ##### Results type selector ##### */
+TABLE.results_type {background-color: #D1E5FF; border: 0; font-weight: normal; font-size: xx-small;}
+TABLE.results_type TR { font-weight: normal; font-size: xx-small;}
+TABLE.results_type TR TD { font-weight: normal; font-size: xx-small;}
+TABLE.results_type TR TD LABEL { font-weight: normal; font-size: xx-small;}
+TABLE.results_type TR TD INPUT { font-weight: normal; font-size: xx-small;}
+
+
+TABLE.skypainter { border-collapse: collapse; border: thin solid #4169E1; table-layout:auto; margin-top: 10px; }
+TABLE.skypainter TD.form { background-color: #B0C4DE ; }
+TABLE.skypainter TD P { text-align: justify; }
+TABLE.skypainter TD.form TEXTAREA { font-family: monospace; }
+
+/*
+###############################################################################
+#              								      #
+# CLASSBROWSER (GK SCHEMA)           					      #
+#              								      #
+###############################################################################
+*/
+
+TABLE.classbrowser { table-layout:auto; margin-top: 10px; }
+
+/* left panel number colour   */ 
+UL.classhierarchy LI A {color:black;}
+
+/* colour to hover over numbers in left panel  */
+TABLE TD.sidebar UL>LI A:hover { background-color: #E0FFFF;}
+
+/* left panel - highlights the selected class  */
+A.currentclass, A.currentclass + A { font-weight: bold; background-color: #E0FFFF; }
+
+
+/* main table heading  */
+TABLE caption H1 {color: white; font-size:14pt; background-color: navy; border: thin solid navy; }
+
+/* main table */
+TABLE.classattributes { table-layout:auto; } 
+TABLE.classattributes TH {font-size:8pt;}
+TABLE.classattributes TD {font-size:8pt;}
+TABLE.classattributes TD A {font-size:8pt;}
+TD.inherited {font-size:8pt;}
+TD.own {font-size:8pt;}
+
+/* main table rows  */
+TABLE TR.own TD.own { background-color: #F5DEB3; } 
+
+
+/* draw lines down the hierarchical tree in ... */ 
+ 
+/* ...classbrowser  */
+/* indenting tree from left and between levels */
+UL.classhierarchy UL { list-style-type: none; padding-left: 30px; margin: 3px;}
+/* indent of sub-level  */
+UL.classhierarchy UL UL {padding-left: 30px; } 
+/* UL.classhierarchy UL LI { padding-left: 5px; margin-left: 2px; } */
+/* drawing the left border line 
+UL.classhierarchy UL UL {border-left: 2px solid black; } */
+
+
+
+/* ...and eventbrowser */
+/* The extra UL in the line drawing needed to make IE look a bit better. Just means we lose the line next to the level 0 (top) event. Also -30px to start the list off below the main heading instead of indented (gives more space to events lower in the tree) */
+TD.sidebar UL LI  { padding-left: 3px; margin-left: -30px; } 
+/* TD.sidebar UL.level0 UL LI {border-left: 2px solid black; } */
+TD.sidebar UL LI {border-left: 2px solid black; }
+
+/* various borders */
+TD.entityhierarchy, TD.hasComponent, TD.componentOf, TD.instanceOfRev, TD.participants, TD.instanceOf, TD.hasComponentRev { border: thin solid #B0C4DE; }
+
+
+/* the 'View in instancebrowser' link  */
+TD.viewswitch {border: thin solid #B0C4DE; background-color: #6495ED; font-weight: bold;}
+A.viewswitch {color:black;}
+A.viewswitch:hover { color: black; text-decoration: none; background: #E0FFFF; }
+
+/* instancebrowser - To put border round values and make blue title boxes not so wide! */
+TABLE.instancebrowser { table-layout:auto; margin-bottom:10px; margin-top:10px; }
+TABLE.instancebrowser TR TD { border: thin solid #B0C4DE;}
+TABLE.instancebrowser TR TH.id { width:300px; }
+
+/* tooltip stuff */
+
+.dhtmltooltip {
+        position: absolute;
+        border: 1px dotted navy;
+        padding: 2px;
+        visibility: hidden;
+        text-align: center;
+        color: #4169E1;
+        font-weight: bold;
+        z-index: 102;
+        background: #DCDCDC;
+        filter: alpha(opacity=85);
+        moz-opacity: 0.85;
+        -khtml-opacity: 0.85;
+        opacity: 0.85;
+}
+
+.dhtmltooltip TABLE TD {
+	border: 1px solid navy;
+	padding: 2px;
+	text-align: center;
+	color: #4169E1;
+	font-weight: bold;
+        font-size: 14pt;
+        background: #DCDCDC;
+}
+
+.dhtmltooltip TABLE TD.dcdcdc {
+	border: 1px solid navy;
+	padding: 2px;
+	text-align: center;
+	color: #4169E1;
+	font-weight: bold;
+        font-size: 14pt;
+        background: #DCDCDC;
+}
+
+/* make the links all black, as if just text. They are not links anyway! */
+TH A:link, TH A:visited, TH A:active, TH A {color:black; font-weight:bold;}
+
+
+/* Amount ofindent between the sidebar list elements */
+TD.sidebar UL LI LI {margin-left:-15px;}
+
+TABLE.categorycount { margin-top: 10px; border: thin solid #B0C4DE; }
+TABLE.categorycount TD {
+	text-align: center;
+	vertical-align: top;
+	padding-left: 4px;
+	padding-top: 4px;
+	border: thin solid #B0C4DE;}
+
+/* Data model page */
+
+A.classname { color: black; text-decoration: none; font-style: italic; }
+A.classname:hover { text-decoration: none; background: none; font-style: italic; }
+A.attributename { font-family: monospace; font-size: 8pt; background-color: black; color: white; }
+#A.attributename:hover { color: black; background: none; font-family: monospace; }
+A.linkedclassname { font-style: italic; }
+#A.linkedclassname H2 { font-style: italic; }
+LI.attributelist { list-style-type: circle; }
+
+/* TOC */
+SPAN.newtopic { color: red; } 
+
+.section { margin-top: 10px; }
+SPAN.sectionname {padding-left: 5px; font-weight:bold; }
+
+.diagram { border: thin solid #B0C4DE; background: white; }
+
+TD.sidebar DIV.eventhierarchy { overflow: auto; width: 300px; border: none; }
+
+TD.sidebar DIV.eventhierarchy DIV { font-size: 9pt; }
+
+DIV.controls {
+	font-size: 8pt;
+	padding-top: 3px;
+	padding-bottom: 0px;
+        white-space:nowrap;
+}
+
+DIV.controls A { border: 2px outset; padding: 1px; }
+DIV.controls A:active { border: 2px inset; padding: 1px; }
+
+DIV.controls TABLE { border-collapse: separate; border: 0px; border-spacing: 2px; }
+DIV.controls TD {
+	font-size: 8pt;
+        color: #4169E1; 
+/*	background-color: white; */
+	text-align: center;
+        border: 2px outset;
+}
+
+.boxedsection { 
+         border: thin solid #B0C4DE; 
+}
+
+.boxedsection P { padding-left: 1px; padding-right: 1px; text-align: justify; }
+DIV.rowdiv { width: 100%; }
+DIV.rowdiv * { vertical-align: middle; font-size: 10px; }
+DIV.search { background-color: #B0C4DE ; padding: 2px; }
+
+#overrepresentation_ TABLE.instancebrowser TR TH { font-size: 8pt; }
+
+/* Reactome GWT */
+.banner_image
+{
+	text-align:center;
+	margin-top:0px;
+	margin-bottom:0px;
+	padding:0px;
+}
+
+.paragraph {
+	margin-top: 5px;
+}
+
+/* Generic text box */
+.textbox {
+	margin: 5px;
+	color:navy;
+	text-align: justify;
+	vertical-align: top;
+	line-height:1.5em;
+}
+
+.centred_textbox {
+	margin: 5px;
+	color:navy;
+	text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+	vertical-align: top;
+	line-height:1.5em;
+}
+
+.textbox_disabled {
+	margin: 5px;
+	color:navy;
+	text-align: justify;
+	vertical-align: top;
+	line-height:1.5em;
+	background-color: #B0B0B0;
+}
+
+.pale_blue_textbox {
+	margin: 5px;
+	color:navy;
+	text-align: justify;
+	vertical-align: top;
+	background-color: #B0C4DE;
+	border: 1px solid #4169E1;
+}
+
+.half_height_banner_filler {
+	text-align: justify;
+	vertical-align: top;
+	background-color: #295DAB;
+}
+
+.site_map {
+	color:white;
+	text-align: justify;
+	vertical-align: top;
+}
+
+A.site_map_item {
+	color:white;
+}
+
+.site_map_item_header {
+	font-style: italic;
+}
+
+A.site_map_item_header {
+	color:white;
+}
+
+.front_page_button {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.menu_bar {
+	background-color:#EEEEEE;
+}
+
+.horizontal_inner_panel {
+        margin-top: 5px;
+        margin-bottom: 5px;
+}
+
+.inner_panel_left_align {
+        margin: 5px;
+        text-align: left;
+}
+
+.vertical_inner_panel {
+        margin-left: 5px;
+        margin-right: 5px;
+}
+
+.horizontal_spacer {
+        margin-left: 5px;
+        margin-right: 5px;
+}
+
+.white_panel {
+	background-color:white;
+}
+
+.log_panel {
+        color:red;
+}
+
+.link_to_button_panel {
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.link_to_button pre{
+	color:black;
+	background-color:#D0D0D0;
+	border-top:2px solid white;
+	border-left:2px solid white;
+	border-bottom:2px solid #909090;
+	border-right:2px solid #909090;
+	margin:2px 2px 2px 0;
+	padding:3px 4px 3px 4px;
+	text-decoration:none;
+	/*line-height:2.2;*/
+	white-space:nowrap;
+}
+
+.link_to_button:hover { color: black; text-decoration: none; }
+
+.hyperlink_button a pre, .anchor_button pre {
+	color:black;
+	background-color:#D0D0D0;
+	border-top:2px solid white;
+	border-left:2px solid white;
+	border-bottom:2px solid #909090;
+	border-right:2px solid #909090;
+	margin:2px 2px 2px 0;
+	padding:3px 4px 3px 4px;
+	text-decoration:none;
+	white-space:nowrap;
+}
+
+.button_colors {color: black; background-color: #D0D0D0;}
+
+.section_heading {
+	text-align: center;
+	background-color:navy;
+	color:white;
+}
+
+/* MenuBar */
+.gwt-MenuItem
+{
+    border: 1px solid #999;
+    /* top, right, bottom, left */
+    padding: 4px 15px 4px 15px;
+    margin: 0px;/* no effect */
+    background-color: #e0e0e0;
+    border-color:#ccc;
+    border-collapse: separate;
+    
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9pt;
+    font-weight: bold;
+    color: #4169E1;
+}
+
+/* Use the browser's wait cursor, e.g. rotating hourglass. */
+.waitCursor {
+  cursor: wait;
+}
+
+/* Use the browser's pointer cursor, e.g. rotating hourglass. */
+.pointerCursor {
+  cursor: pointer;
+}
+
+.clickable_cell {
+  cursor: pointer;
+}
+
+.clickable_cell:hover {
+  background-color:gray;
+}
+
+.sortable_table_cell {
+  border-bottom: thin solid #B0C4DE;
+  border-top: none;
+  border-left: thin solid #B0C4DE;
+  border-right: thin solid #B0C4DE;
+}
+
+.sortable_table_first_col {
+  background-color: #B0C4DE;
+  border-bottom: thin solid white;
+  border-top: none;
+  border-left: thin solid #B0C4DE;
+  border-right: none;
+}
+
+.sortable_table_header {
+  text-align: center;
+  background-color:navy;
+  border: thin solid #B0C4DE;
+  color:white;
+}
+
+.sortable_table {
+  border: none;
+}
+
+.popup {
+  margin: 5px;
+  padding: 20px;
+  background-color:white;
+  border: 2px solid #4169E1;
+  color:navy;
+}
+
+/* Regular progress bar */
+.gwt-ProgressBar-shell {
+  border: 2px solid navy;
+  background-color: #AAAAAA;
+  height: 14pt;
+}
+.gwt-ProgressBar-shell .gwt-ProgressBar-bar {
+  background-color: navy;
+}
+.gwt-ProgressBar-shell .gwt-ProgressBar-text {
+  padding: 0px;
+  margin: 0px;
+  color: white;
+}
+
+/* Progress bar used to show species comparison, etc.*/
+.comparison-ProgressBar-shell {
+  border: 2px solid #B0C4DE;
+  background-color: white;
+  height: 10pt;
+}
+.comparison-ProgressBar-shell .gwt-ProgressBar-bar {
+  background-color: #B0C4DE;
+}
+.comparison-ProgressBar-shell .gwt-ProgressBar-text {
+  padding: 0px;
+  margin: 0px;
+  color: black;
+}
+
+.tooltip {
+  margin: 5px;
+  padding: 2px 3px 3px 3px;
+  background-color:white;
+  border: 2px solid #4169E1;
+  color:navy;
+}
+
+/* Stuff for Maulik's pathway summary view */
+
+.mainInterface {
+        margin-left: auto;
+        margin-right: auto;
+        width: 95%;
+}
+
+.mainCanvas{
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+  z-index:2;
+}
+
+.dialogVPanel {
+  margin: 5px;
+}
+
+.expression-panel{
+        text-align:center;
+}
+.expression-form{
+        margin: 10px;
+        background-color: #B0C4DE;
+    border: 1px solid #4169E1;
+    color: navy;
+    margin: 5px;
+    text-align: justify;
+    vertical-align: top;
+}
+

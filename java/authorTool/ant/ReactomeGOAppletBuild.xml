@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     Feb 17, 2005 4:45:25 PM                                                        
+
+     project	   Reactome GO Applet
+     description   Create jar files for the applet
+     notes		   To make this applet work, some code that related to loading
+                   image icons in HierarchicalEventPane and HierarchicalEventPaneActions
+                   should be changed to remove all calls to new ImageIcon(). The loading
+                   species list from species.txt in HierarchicalEventPane should be commented
+                   out too. 
+                   It will be much easier to work under Windows machine.         
+     wgm                                                                
+     ====================================================================== -->
+<project name="project" default="ReactomeGOMapper" basedir="..">
+    <description>
+            create jar files for the applet.
+    </description>
+
+	<!-- Defining a list of directory names to be used -->
+	<property name="targetDir" value="${basedir}/../../GOApplet" />
+	<property name="classDir" value="${basedir}/classes" />
+	<property name="libDir" value="${basedir}/lib" />
+	<property name="imageDir" value="${basedir}/images" />
+	<property name="srcDir" value="${basedir}/src" />
+	<property name="goSrcDir" value="${srcDir}/org/reactome/go" />
+	<property name="resourcesDir" value="{basedir}/resources" />
+	
+	<!-- Empty the direcotry. If nothing there, it should do nothing -->
+	<target name="delete">
+		<delete dir="${targetDir}" />
+	</target>
+	
+	<!-- make a directory first. If it is there, it should do nothing -->
+	<target name="mkdir" depends="delete">
+		<mkdir dir="${targetDir}" /> 
+	</target>
+	
+	<!-- Generate a runnable jar file for creating a map between Reactome and GO -->
+	<target name="ReactomeGOMapper" depends="mkdir">
+		<jar destfile="${targetDir}/Reactome2GoMapper.jar">
+			<fileset dir="${classDir}">
+				<include name="org/gk/util/**" />
+				<include name="org/gk/schema/**" />
+				<include name="org/gk/persistence/**" />
+				<include name="org/gk/model/**" />
+			    <include name="org/gk/scripts/**" />
+				<include name="org/reactome/go/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="org.gk.scripts.GOMapGenerator" />
+				<attribute name="Class-Path" value="mysql.jar" />
+			</manifest>
+		</jar>
+		<copy file="${libDir}/mysql-connector-java-3.0.11-stable-bin.jar" tofile="${targetDir}/mysql.jar" />
+	</target>
+	
+	<!-- copy all files to the target directory -->
+	<target name="jar" depends="mkdir">
+		<jar destfile="${targetDir}/eventGo.jar">
+			<fileset dir="${classDir}">
+				<include name="org/gk/util/**" />
+				<include name="org/gk/schema/**" />
+				<include name="org/gk/persistence/**" />
+				<include name="org/gk/model/**" />
+				<include name="org/gk/database/**" />
+				<include name="org/reactome/go/**" />
+			</fileset>
+			<fileset dir="${basedir}">
+				<include name="images/Pathway.gif" />
+				<include name="images/Reaction.gif" />
+				<include name="images/Generic.gif" />
+				<include name="images/Concrete.gif" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="org.reactome.go.ReactomeGOComparisonApplet" />
+				<attribute name="Class-Path" value="mysql.jar skinlf.jar" />
+			</manifest>
+		</jar>
+		<copy todir="${targetDir}" file="${goSrcDir}/ReactomeGOComparison.html" />
+		<copy tofile="${targetDir}/mysql.jar">
+			<fileset dir="${libDir}">
+				<include name="mysql-connector-java-3.0.11-stable-bin.jar" />
+			</fileset>
+	    </copy>
+		<copy tofile="${targetDir}/skinlf.jar">
+			<fileset dir="${libDir}">
+			    <include name="skin/skinlf.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${targetDir}">
+			<fileset dir="${basedir}">
+				<include name="resources/Species.txt" />
+			</fileset>
+		</copy>
+		<!-- Copy the source code -->
+		<jar destfile="${targetDir}/src.jar">
+			<fileset dir="${srcDir}">
+				<include name="org/gk/util/**" />
+				<include name="org/gk/schema/**" />
+				<include name="org/gk/persistence/**" />
+				<include name="org/gk/model/**" />
+				<include name="org/gk/database/**" />
+				<include name="org/reactome/go/**" />
+			</fileset>
+		</jar>
+	</target>
+</project>
+
