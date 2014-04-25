@@ -1,0 +1,123 @@
+#!/usr/local/bin/perl
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+#use lib "/tmp/libs/bioperl-1.0";
+#use lib "/tmp/libs/my_perl_stuff";
+use CGI qw(:standard);
+use strict;
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+use GKB::FrontPage3;
+
+my $header = undef;
+my $footer = undef;
+my $enclosing_div_start = undef;
+my $enclosing_div_end = undef;
+my $reactome_version_num = "2";
+if (defined $REACTOME_VERSION && !($REACTOME_VERSION eq '')) {
+    $REACTOME_VERSION =~ /^([0-9]+).*$/;
+    $reactome_version_num = $1;
+}
+if ($reactome_version_num eq "3") {
+    my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (extended search)", "/stylesheet.css");
+    $header = $front_page->get_header();
+    $footer = $front_page->get_footer();
+    $enclosing_div_start = $front_page->get_enclosing_div_start();
+    $enclosing_div_end = $front_page->get_enclosing_div_end();
+}
+
+my ($DBA,$wu,$INSTANCES,$IN_HTML,$DB);
+my $CGI = CGI->new();
+
+eval {
+    $wu = GKB::WebUtils->new_from_cgi(
+        -CGI => $CGI,
+        -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+        );
+    $DBA = $wu->dba;
+    $DB = $CGI->param('DB');
+    
+    $wu->urlmaker->script_name('/cgi-bin/eventbrowser');
+
+    if (defined $header) {
+        print $CGI->header(-charset => 'UTF-8');
+        print $header;
+        print $enclosing_div_start;
+    }
+
+    if ($CGI->param('SUBMIT')) {
+        $INSTANCES = $wu->handle_big_query_form;
+        my $qcls = $CGI->param('QUERY_CLASS');
+        if (! $qcls) {
+    
+        } elsif ($qcls ne $DBA->ontology->root_class) {
+    	$CGI->param('FORMAT','list');
+        }
+        if (!(defined $header)) {
+            print_page_start();
+        }
+        $wu->print_view($INSTANCES,1);
+    } else {
+        if (!(defined $header)) {
+            print_page_start();
+        }
+        $wu->print_big_query_form;
+    }
+    if (defined $footer) {
+        print $enclosing_div_end;
+        print $footer;
+    } else {
+        print_page_end();
+    }
+}; $@ && handle_error("$@");
+
+sub handle_error {
+    ($IN_HTML) ? print qq(<PRE>@_</PRE>) : print @_;
+    print_page_end();
+    exit;   
+}
+
+sub print_page_start {
+    $IN_HTML = 1;
+    print $CGI->header(-charset => 'UTF-8');
+    print $CGI->start_html(
+	# \-dtd => "-//IETF//DTD HTML//EN",
+	-style => {-src => '/stylesheet.css'},
+	-title => "$PROJECT_NAME (extendedsearch)",
+	);
+    if (is_decorated()) {
+        print $wu->top_navigation_box;
+    }
+}
+
+sub print_page_end {
+    (is_decorated() && $wu && $IN_HTML) &&  print $wu->make_footer;
+    ($IN_HTML) && print $CGI->end_html;
+    ($DBA) && $DBA->db_handle->disconnect;
+}
+
+sub is_decorated {
+    my $undecorated = $CGI->param('UNDECORATED');
+    if (defined $undecorated && $undecorated == 1) {
+        return 0;
+    }
+    return 1;
+}

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<string>true</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>JavaApplicationStub</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Reactome Curator Tool</string>
+	<key>CFBundleIconFile</key>
+	<string>Reactome.icns</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>ReactomeCuratorTool</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>44</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>3.0</string>
+	<key>Java</key>
+	<dict>
+		<key>ClassPath</key>
+		<array>
+			<string>$JAVAROOT/reactome.jar</string>
+			<string>$JAVAROOT/batik-awt-util.jar</string>
+			<string>$JAVAROOT/batik-bridge.jar</string>
+			<string>$JAVAROOT/batik-css.jar</string>
+			<string>$JAVAROOT/batik-dom.jar</string>
+			<string>$JAVAROOT/batik-ext.jar</string>
+			<string>$JAVAROOT/batik-extension.jar</string>
+			<string>$JAVAROOT/batik-gui-util.jar</string>
+			<string>$JAVAROOT/batik-gvt.jar</string>
+			<string>$JAVAROOT/batik-parser.jar</string>
+			<string>$JAVAROOT/batik-script.jar</string>
+			<string>$JAVAROOT/batik-svg-dom.jar</string>
+			<string>$JAVAROOT/batik-svggen.jar</string>
+			<string>$JAVAROOT/batik-swing.jar</string>
+			<string>$JAVAROOT/batik-transcoder.jar</string>
+			<string>$JAVAROOT/batik-util.jar</string>
+			<string>$JAVAROOT/batik-xml.jar</string>
+			<string>$JAVAROOT/js.jar</string>
+			<string>$JAVAROOT/pdf-transcoder.jar</string>
+			<string>$JAVAROOT/xerces_2_5_0.jar</string>
+			<string>$JAVAROOT/xml-apis.jar</string>
+			<string>$JAVAROOT/commons-lang-2.3.jar</string>
+			<string>$JAVAROOT/javaws.jar</string>
+			<string>$JAVAROOT/jgraph.5.7.4.6.jar</string>
+			<string>$JAVAROOT/log4j-1.2.12.jar</string>
+			<string>$JAVAROOT/mysql-connector-java-5.0.8-bin.jar</string>
+			<string>$JAVAROOT/osxAdapter.jar</string>
+			<string>$JAVAROOT/servlet-api.jar</string>
+			<string>$JAVAROOT/jaxen-core.jar</string>
+			<string>$JAVAROOT/jaxen-jdom.jar</string>
+			<string>$JAVAROOT/jdom.jar</string>
+			<string>$JAVAROOT/saxpath.jar</string>
+			<string>$JAVAROOT/junit.jar</string>
+			<string>$JAVAROOT/itext-2.0.4.jar</string>
+			<string>$JAVAROOT/axis-1.4.jar</string>
+			<string>$JAVAROOT/commons-discovery-0.2.jar</string>
+			<string>$JAVAROOT/commons-logging-1.0.4.jar</string>
+			<string>$JAVAROOT/jaxrpc.jar</string>
+			<string>$JAVAROOT/ols-client.jar</string>
+			<string>$JAVAROOT/wsdl4j-1.5.1.jar</string>
+		</array>
+		<key>JVMVersion</key>
+		<string>1.5+</string>
+		<key>MainClass</key>
+		<string>launcher.Launcher</string>
+		<key>Properties</key>
+		<dict>
+			<key>apple.laf.useScreenMenuBar</key>
+			<string>true</string>
+		</dict>
+		<key>VMOptions</key>
+		<string>-Dfile.encoding=UTF-8 -Xmx1024m</string>
+		<key>WorkingDirectory</key>
+		<string>$APP_PACKAGE/Contents/Resources/Java</string>
+	</dict>
+</dict>
+</plist>

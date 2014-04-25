@@ -1,0 +1,114 @@
+#!/usr/local/bin/perl -w -T
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+#use lib "/tmp/libs/bioperl-1.0";
+#use lib "/tmp/libs/my_perl_stuff";
+
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+
+use strict;
+
+my $CGI = CGI->new();
+
+my $DB = $CGI->param('DB') || $GK_DB_NAME;
+$CGI->param('DB', $DB);
+
+
+my $qstr;
+unless ($qstr = $CGI->param('QUERY')) {
+    print $CGI->redirect('/cgi-bin/search2?DB=' . $DB);
+}
+
+my $DBA;
+eval {
+    # Get a handle to db
+    $DBA = GKB::DBAdaptor->new
+	(
+	 -dbname => $DB,
+	 -user   => $GK_DB_USER,
+	 -host   => $GK_DB_HOST,
+	 -pass   => $GK_DB_PASS,
+	 -port   => $GK_DB_PORT,
+	 -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef 
+	 );
+}; $@ && handle_error($@);
+
+eval {
+    print $CGI->header(-charset => 'UTF-8');
+    print $CGI->start_html(
+	# \-dtd => "-//IETF//DTD HTML//EN",
+	-style => {-src => '/stylesheet.css'},
+	-title => "$PROJECT_NAME (extended search)",
+    );
+    
+    my $wu = GKB::WebUtils->new(-DBA => $DBA,
+				-CGI => $CGI,
+			    );
+    $wu->urlmaker->script_name('/cgi-bin/eventbrowser');
+    print $wu->top_navigation_box;
+    $wu->print_simple_query_form;
+
+    my ($dbname,$id) = split(/:/,$qstr);
+    $dbname = uc($dbname);
+    my $ar = [];
+#    $DBA->debug(1);print qq(<PRE>);
+    if ($dbname eq 'SWALL' or $dbname eq 'SPTREMBL' or $dbname eq 'SPTR' or $dbname eq 'UNIPROT' or $dbname eq 'TREMBL') {
+	$ar = $DBA->fetch_class_instance_by_string_type_attribute('ReferencePeptideSequence',$id,'=');
+    } elsif ($dbname eq 'COMPOUND') {
+	$ar = $DBA->fetch_instance_by_remote_attribute('ReferenceEntity',[['crossReference.identifier','=',[$id]]]);
+    } elsif ($dbname eq 'EC') {
+	$ar = $DBA->fetch_instance_by_attribute('GO_MolecularFunction',[['ecNumber',[$id]]]);
+    } elsif  ($dbname eq 'GO') {
+	$ar = $DBA->fetch_instance_by_attribute('GO_MolecularFunction',[['accession',[$id],'MATCH IN BOOLEAN MODE']]);
+	unless (@{$ar}) {
+	    $ar = $DBA->fetch_instance_by_attribute('GO_BiologicalProcess',[['accession',[$id],'MATCH IN BOOLEAN MODE']]);
+	}
+	unless (@{$ar}) {
+	    $ar = $DBA->fetch_instance_by_attribute('GO_CellularComponent',[['accession',[$id],'MATCH IN BOOLEAN MODE']]);
+	}
+    }
+#    $DBA->debug(undef);print qq(</PRE>\n);
+    
+    my $WU = GKB::WebUtils->new(-DBA => $DBA,
+			     -CGI => $CGI,
+			     -DEBUG => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+			     ); 
+    $WU->urlmaker->script_name('/cgi-bin/eventbrowser');
+    if (@{$ar} == 1) {
+	GKB::WebUtils::set_cgi_format_parameter_if_unset($CGI);
+    } else {
+	$CGI->param('FORMAT','list');
+    }
+    $WU->print_view($ar,1);
+    print $WU->make_footer;
+}; $@ && handle_error("$@");
+
+print $CGI->end_html;  
+$DBA && $DBA->db_handle->disconnect;
+exit;
+
+sub handle_error {
+    print qq(<PRE CLASS="error">\n@_\n</PRE>\n);
+}
+
+
