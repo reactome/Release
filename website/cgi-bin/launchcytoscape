@@ -1,0 +1,122 @@
+#!/usr/local/bin/perl -w -T
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+
+use strict;
+use CGI;
+use GKB::Config;
+
+$CGI::DISABLE_UPLOADS = 0;
+
+my $cgi = new CGI;
+
+# Description:
+# Dynamically generates the jnlp file to launch Cytoscape
+# Author: Allan Kuchinsky (allan_kuchinsky@agilent.com)
+#     with thanks to Rod Gonzaga (rgonzaga@blueprint.org)
+
+# Load the URL parameters to the cgi script
+my $db_id = $cgi->param("ID");
+my $netloc = $cgi->url(-base => 1);
+my $codeBase = "$netloc/jars/cytoscape/webstart";
+my $db = $cgi->param("DB") || '';
+
+print <<__END__;
+Content-type: application/x-java-jnlp-file
+Content-Disposition: attachment; filename="$ {PROJECT_NAME}_$ {db_id}.jnlp"
+
+<?xml version="1.0" encoding="utf-8"?>
+    <jnlp spec="1.0+" codebase="$codeBase">
+        <information>
+            <title>Cytoscape</title>
+            <vendor>Cytoscape Collaboration</vendor>
+            <homepage href="index.html"/>
+            <description>Cytoscape</description>
+        </information>
+        <security><all-permissions/></security>
+        <resources>
+            <j2se version="1.4+" initial-heap-size="128m" max-heap-size="1024m"/>
+            <jar href="cytoscape.jar"/>
+            <jar href="lib/fing.jar"/>
+            <jar href="lib/coltginy.jar"/>
+            <jar href="lib/cytoscape-graph-dynamic.jar"/>
+            <jar href="lib/cytoscape-graph-fixed.jar"/>
+            <jar href="lib/cytoscape-graph-layout.jar"/>
+            <jar href="lib/cytoscape-graph-legacy.jar"/>
+            <jar href="lib/cytoscape-task.jar"/>
+            <jar href="lib/cytoscape-util-intr.jar"/>
+            <jar href="lib/colt.jar"/>
+            <jar href="lib/com-nerius-math-xform.jar"/>
+            <jar href="lib/concurrent.jar"/>
+            <jar href="lib/freehep-base.jar"/>
+            <jar href="lib/freehep-graphics2d.jar"/>
+            <jar href="lib/freehep-graphicsio-gif.jar"/>
+            <jar href="lib/freehep-graphicsio.jar"/>
+            <jar href="lib/freehep-graphicsio-pdf.jar"/>
+            <jar href="lib/freehep-graphicsio-ps.jar"/>
+            <jar href="lib/freehep-graphicsio-svg.jar"/>
+            <jar href="lib/freehep-graphicsio-swf.jar"/>
+            <jar href="lib/cytoscape-cruft-obo.jar"/>
+            <jar href="lib/getopt.jar"/>
+            <jar href="lib/giny.jar"/>
+            <jar href="lib/glf.jar"/>
+            <jar href="lib/jdom.jar"/>
+            <jar href="lib/jhall.jar"/>
+            <jar href="lib/jnlp.jar"/>
+            <jar href="lib/junit.jar"/>
+            <jar href="lib/looks-1.1.3.jar"/>
+            <jar href="lib/phoebe.jar"/>
+            <jar href="lib/piccolo.jar"/>
+            <jar href="lib/piccolox.jar"/>
+            <jar href="lib/tclib.jar"/>
+            <jar href="lib/violinstrings-1.0.2.jar"/>
+            <jar href="plugins/Reactome2Cytoscape.jar"/>
+            <jar href="plugins/biopax_core_0_4.jar"/>
+            <jar href="plugins/biopax_plugin_0_4.jar"/>
+            <jar href="plugins/exesto.jar"/>
+            <jar href="plugins/browser.jar"/>
+            <jar href="plugins/filter.jar"/>
+            <jar href="plugins/yLayouts.jar"/>
+            <jar href="data.jar"/>
+        </resources>
+        <application-desc main-class="cytoscape.CyMain">
+            <argument>-rp</argument>
+            <argument>yfiles.YFilesLayoutPlugin</argument>
+            <argument>-rp</argument>
+            <argument>org.mskcc.biopax_plugin.task.ImportBioPax</argument>
+            <argument>-rp</argument>
+            <argument>org.mskcc.biopax_plugin.view.BioPaxDetailsPanel</argument>
+            <argument>-rp</argument>
+            <argument>browser.BrowserPlugin</argument>
+            <argument>-rp</argument>
+            <argument>exesto.TagListener</argument>
+            <argument>-rp</argument>
+            <argument>filter.cytoscape.FilterPlugin</argument>
+            <argument>-rp</argument>
+            <argument>cytoscape.reactome.Reactome2Cytoscape</argument>
+            <argument>-vp</argument>
+            <argument>href="$codeBase"</argument>
+            <argument>-ReactomeID</argument>
+            <argument>$db_id</argument>
+            <argument>-ReactomeURL</argument>
+            <argument>$netloc</argument>
+            <argument>-ReactomeDB</argument>
+            <argument>$db</argument>
+        </application-desc>
+    </jnlp>
+__END__

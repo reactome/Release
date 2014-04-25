@@ -1,0 +1,58 @@
+#!/usr/local/bin/perl -w 
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+#To get rid of taint-checker complaints about Insecure $ENV{PATH}
+$ENV{PATH} = '';
+
+use strict;
+use GKB::WebUtils;
+use GKB::Config;
+use CGI qw(:standard);
+
+my $cgi = new CGI;
+GKB::WebUtils::untaint_DB_and_ID($cgi);
+
+my $id = $cgi->param('ID') || die2("Need ID.\n");
+my $db = $cgi->param('DB');
+
+chdir("$GK_ROOT_DIR/biopaxexporter") || die2($!);
+
+my $cmd = qq($JAVA_PATH -cp lib/jdom/jdom.jar:lib/owl/xercesImpl.jar:lib/owl/xml-apis.jar:lib/owl/xmlParserAPIs.jar:lib/mysql/mysql.jar:lib/reactome/reactome.jar:classes org.gk.gkCurator.GraphvizDotGenerator);
+
+# Prevents perl -T security problems
+my $temp_path = $ENV{PATH};
+$ENV{PATH} = ''; 
+
+open(FH, "$cmd $GK_DB_HOST $db $GK_DB_USER $GK_DB_PASS $GK_DB_PORT $id '/usr/local/bin/dot' '/cgi-bin/eventbrowser?DB=$db'|") || die2("$cmd failed: $!"); 
+
+print $cgi->header("image/svg+xml");
+while (<FH>) {
+    s/"font-family:.*?"/"font-family:Arial,Helvetica,sans-serif;font-size:14.00;fill:navy"/gms;
+    s/black/navy/gms;
+    print $_;
+}
+close FH;
+
+# Reinstate PATH to environment, just in case.
+$ENV{PATH} = $temp_path;
+
+sub die2 {
+    print $cgi->header('text/plain');    
+    print shift;
+    exit 0;
+}

@@ -1,0 +1,100 @@
+#!/usr/local/bin/perl -w -T
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+use lib "/tmp/libs/bioperl-1.0";
+use lib "/tmp/libs/my_perl_stuff";
+
+use CGI qw(:standard);
+use GKB::WebUtils;
+use XML::Simple;
+use Data::Dumper;
+use GKB::Utils::InstructionLibrary;
+use strict;
+
+my $CGI = CGI->new();
+
+my @ids = $CGI->param('ID');
+@ids || die2("Need DB_IDs (as 'ID' parameters) for instances to start off with");
+
+my $instruction;
+
+my @params = $CGI->param();
+
+if (my $instructionid = $CGI->param('INSTRUCTIONID')) {
+    $instruction = GKB::Utils::InstructionLibrary::get_instruction_by_id($instructionid);
+} elsif (my $str = $CGI->param('CUSTOMINSTRUCTION')) {
+    $instruction = GKB::Utils::InstructionLibrary::get_instruction_from_string($str);
+} else {
+#    die2("No instructions.");
+}
+
+if (my @tmp = $CGI->param('OUTPUTCLASS')) {
+    $instruction->{'OUTPUTCLASS'} = \@tmp;
+}
+
+if (my @tmp = $CGI->param('OUTPUTINSTRUCTION')) {
+    @tmp = map {split /\s*\n\s*/, $_} @tmp; # */
+    $instruction->{'OUTPUTINSTRUCTION'} = \@tmp; 
+}
+	
+if (scalar(keys(%{$instruction}))>0) {
+	print $CGI->header('text/plain');
+
+#	print Dump(), "<PRE>\n";
+
+	my $dba = GKB::WebUtils::get_db_connection($CGI);
+
+	if (my @tmp = $CGI->param('OUTPUTCLASS')) {
+	    $instruction->{'OUTPUTCLASS'} = \@tmp;
+	}
+	
+	if (my @tmp = $CGI->param('OUTPUTINSTRUCTION')) {
+	    @tmp = map {split /\s*\n\s*/, $_} @tmp; # */
+	    $instruction->{'OUTPUTINSTRUCTION'} = \@tmp; 
+	}
+	
+	GKB::Utils::InstructionLibrary::check_instruction($instruction);
+	
+	my $instances = $dba->fetch_instance_by_attribute('DatabaseObject', [['DB_ID',\@ids]]);
+	
+	my %output_instances;
+	if ($instruction->{'FOLLOWINGINSTRUCTION'}) {
+	    foreach my $i (@{$instances}) {
+		
+		my $ar = $i->follow_class_attributes(-INSTRUCTIONS => $instruction->{'FOLLOWINGINSTRUCTION'},
+						     -OUT_CLASSES => $instruction->{'OUTPUTCLASS'},
+						     -OUT_CONDITION => $instruction->{'OUTPUTCONDITION'});
+		map {$output_instances{$_->db_id} = $_} @{$ar};
+	    } 
+	} else {
+	    map {$output_instances{$_->db_id} = $_} @{$instances};
+	}
+	
+	GKB::Utils::print_values_according_to_instructions([values %output_instances],$instruction->{'OUTPUTINSTRUCTION'});
+} else {
+	# Redirect to referring URL if no instructions could be found
+	my $referrer = $CGI->referer();
+	print $CGI->redirect($referrer);
+	exit(0);
+}
+
+sub die2 {
+    print STDERR "taboutputter: ", @_;
+    print @_;
+    exit;
+}

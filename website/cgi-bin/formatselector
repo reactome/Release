@@ -1,0 +1,108 @@
+#!/usr/local/bin/perl -w -T
+
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+
+use strict;
+use GKB::WebUtils;
+
+my $WU = GKB::WebUtils->new_from_cgi();
+my $CGI = $WU->cgi();
+
+if (my $format = $CGI->param('FORMAT')) {
+    my $cookie = $CGI->cookie(-name => 'format', -value => $format);
+    if (my $referer = $CGI->referer()) {
+	print $CGI->redirect(-cookie => $cookie, -location => $referer);
+    } else {
+	my $port = $CGI->virtual_port() || $CGI->server_port();
+	my $host = $CGI->virtual_host() || $CGI->server_name();
+	print $CGI->redirect(-cookie => $cookie, -location => "http://$host:$port");
+    }
+    exit;
+}
+
+print $CGI->header(-charset => 'UTF-8');
+
+print $CGI->start_html('select default viewing format');
+print <<__END__;
+<script language="JavaScript">
+
+    function setFormatCookie() {
+	var field = document.FORMATS.FORMAT;
+	var value;
+	for (i = 0; i < field.length; i++) {
+	    if (field[i].checked) {
+		value = field[i].value;
+		break;
+	    }
+	}
+	if (value == "elv") {
+	    if (opener) {
+		var loc = opener.window.location + "";
+		loc = loc.replace(/cgi-bin\\/eventbrowser\\?/,"entitylevelview/PathwayBrowser.html#");
+		opener.window.location = loc;
+		self.close();
+	    }
+	    return;
+	}
+	document.cookie = escape('format') + '=' + escape(value);
+	if (opener) {
+	    opener.window.location.reload();
+	    self.close(); 
+	} else {
+	    var loc = window.location;
+	    loc.replace(loc.protocol + '//' + loc.host);
+	}
+    }
+</script>
+__END__
+
+my $default_format = $CGI->cookie('format');
+$CGI->delete('FORMAT');
+#print qq(<PRE>$default_format</PRE>\n);
+print qq(<DIV STYLE="font-family:Arial,Helvetica,sans-serif;font-size:10pt;" ALIGN="left">\n);
+print $CGI->startform(-name => 'FORMATS');
+if ($WU->dba->ontology->is_valid_class('SpeciesSpecificView') 
+    && $WU->dba->class_instance_count('SpeciesSpecificView') > 0) {
+    print $CGI->radio_group(-name => 'FORMAT',
+			    -values => [qw(sectioned sidebarwithdynamichierarchy instancebrowser elv)],
+			    -labels => 
+			    {
+				'sectioned' => 'sectioned',
+				'sidebarwithdynamichierarchy' => 'event hierarchy in the side bar',
+				'instancebrowser' => 'as seen in instancebrowser',
+				'elv' => 'entity level view of pathways',
+			    },
+			    -linebreak => 'true',
+			    -default => ($default_format || 'none'),
+			    -onClick => 'setFormatCookie()'
+	);
+} else {
+    print $CGI->radio_group(-name => 'FORMAT',
+			    -values => [qw(sectioned sidebarwithdynamichierarchy instancebrowser)],
+			    -labels => 
+			    {
+				'sectioned' => 'sectioned',
+				'sidebarwithdynamichierarchy' => 'event hierarchy in the side bar',
+				'instancebrowser' => 'as seen in instancebrowser',
+			    },
+			    -linebreak => 'true',
+			    -default => ($default_format || 'none'),
+			    -onClick => 'setFormatCookie()'
+	);
+}
+print $CGI->endform;
+print qq(</DIV>\n);
+print $CGI->end_html;
+

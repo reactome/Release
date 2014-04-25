@@ -1,0 +1,1 @@
+../generate_stable_ids/generate_stable_ids.sh

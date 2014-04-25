@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<jsmoothproject>
+<JVMSearchPath>registry</JVMSearchPath>
+<JVMSearchPath>javahome</JVMSearchPath>
+<JVMSearchPath>jrepath</JVMSearchPath>
+<JVMSearchPath>jdkpath</JVMSearchPath>
+<JVMSearchPath>exepath</JVMSearchPath>
+<JVMSearchPath>jview</JVMSearchPath>
+<arguments></arguments>
+<classPath>C:\Program Files\ReactomeCuratorTool45\reactome.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\commons-lang-2.3.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\javaws.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\jgraph.5.7.4.6.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\log4j-1.2.12.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\mysql-connector-java-5.0.8-bin.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\osxAdapter.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\servlet-api.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-awt-util.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-bridge.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-css.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-dom.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-ext.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-extension.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-gui-util.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-gvt.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-parser.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-script.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-svg-dom.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-svggen.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-swing.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-transcoder.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-util.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\batik-xml.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\js.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\pdf-transcoder.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\xerces_2_5_0.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\batik\xml-apis.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\jdom\jaxen-core.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\jdom\jaxen-jdom.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\jdom\jdom.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\jdom\saxpath.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\junit\junit.jar</classPath>
+<classPath>C:\Program Files\ReactomeCuratorTool45\lib\itext-2.0.4.jar</classPath>
+<currentDirectory>C:\Program Files\ReactomeCuratorTool45\ReactomeCuratorTool.exe\${EXECUTABLEPATH}</currentDirectory>
+<embeddedJar>false</embeddedJar>
+<executableName>Z:\Documents\EclipseWorkspace\gkdev\ReactomeCuratorTool.exe</executableName>
+<iconLocation>Z:\Documents\EclipseWorkspace\gkdev\images\ReactomeCuratorTool.ico</iconLocation>
+<initialMemoryHeap>-1</initialMemoryHeap>
+<javaProperties>
+<name>file.encoding</name>
+<value>UTF-8</value>
+</javaProperties>
+<mainClassName>launcher.Launcher</mainClassName>
+<maximumMemoryHeap>536870912</maximumMemoryHeap>
+<maximumVersion></maximumVersion>
+<minimumVersion>1.5.0</minimumVersion>
+<skeletonName>Console Wrapper</skeletonName>
+<skeletonProperties>
+<key>Message</key>
+<value>This program needs Java to run.
+Please download it at http://www.java.com</value>
+</skeletonProperties>
+<skeletonProperties>
+<key>PressKey</key>
+<value>0</value>
+</skeletonProperties>
+<skeletonProperties>
+<key>Debug</key>
+<value>0</value>
+</skeletonProperties>
+</jsmoothproject>
