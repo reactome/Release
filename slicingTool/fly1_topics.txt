@@ -1,0 +1,5 @@
+209392	Hedgehog pathway
+209405	JAK/STAT pathway
+209412	Wingless pathway
+209449 Toll pathway
+209459 Imd pathway

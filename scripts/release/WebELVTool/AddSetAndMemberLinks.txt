@@ -1,0 +1,637 @@
+Default IE: [InstanceEdit:1679954] Wu, G, 2011-10-20
+1: [PathwayDiagram:1660600] Diagram of Sphingolipid metabolism
+Creating set and member link: NAD(P)+ <- NADP+
+Creating set and member link: NAD(P)+ <- NADP+
+Creating set and member link: NAD(P)H <- NADPH
+Creating set and member link: NAD(P)H <- NADPH
+2: [PathwayDiagram:981850] Diagram of O-linked glycosylation of mucins
+Creating set and member link: GCNTs <- GCNT3
+3: [PathwayDiagram:615505] Diagram of Myogenesis
+Creating set and member link: phospho-E proteins <- phospho-E12/E47
+4: [PathwayDiagram:629656] Diagram of Opioid Signalling
+Creating set and member link: PDE 4 <- cAMP-specific 3',5'-cyclic phosphodiesterase 4B
+Creating set and member link: PKA catalytic subunit <- cAMP-dependent protein kinase, alpha-catalytic subunit
+Creating set and member link: PKA catalytic subunit <- cAMP-dependent protein kinase, alpha-catalytic subunit
+5: [PathwayDiagram:453169] Diagram of Platelet Adhesion to exposed collagen
+Creating set and member link: Collagen I <- Procollagen type I
+6: [PathwayDiagram:500279] Diagram of Complement cascade
+Creating set and member link: C4 activator <- Antigen: antibody: C1 (activated C1R and C1S) complex
+Creating set and member link: C4 activator <- Activated MBL bound to mannose-based carbohydrates on bacterial surfaces
+Creating set and member link: C4bC2a, C3bBb <- Cell surface:C3b:Factor Bb
+Creating set and member link: C4bC2a, C3bBb <- Cell membrane:C4b:C2a
+Creating set and member link: MCP, CR1:C4b:C3b complexes <- MCP:C3b
+Creating set and member link: MCP, CR1:C4b:C3b complexes <- MCP:C4b
+Creating set and member link: MCP, CR1:C4b:C3b complexes <- CR1:C3b
+Creating set and member link: MCP, CR1:C4b:C3b complexes <- CR1:C4b
+Creating set and member link: MCP, CR1 <- Membrane cofactor protein
+Creating set and member link: MCP, CR1 <- Complement receptor type 1
+Creating set and member link: C4c, C3f <- C3f
+Creating set and member link: C4c, C3f <- C4c
+Creating set and member link: C5 convertases <- C4b:C2a:C3b
+Creating set and member link: C5 convertases <- C3b:Factor Bb:C3b:Properdin complex
+Creating set and member link: C4d, iC3b <- iC3b
+Creating set and member link: C4d, iC3b <- C4d
+Creating set and member link: C4b, C3b <- C3b
+Creating set and member link: C4b, C3b <- Cell membrane:C4b
+Creating set and member link: C3 convertases <- C3(H2O):Factor Bb
+Creating set and member link: C3 convertases <- Cell surface:C3b:Factor Bb
+Creating set and member link: C3 convertases <- Cell surface:C3b:Factor Bb:Properdin
+Creating set and member link: C3 convertases <- Cell membrane:C4b:C2a
+Creating set and member link: C3 convertases <- C4b:C2a:C3b
+7: [PathwayDiagram:462446] Diagram of Metabolism of carbohydrates
+Creating set and member link: fructose, galactose, glucose <- D-fructose
+Creating set and member link: fructose, galactose, glucose <- D-galactose
+Creating set and member link: fructose, galactose, glucose <- alpha-D-glucose
+Creating set and member link: fructose, galactose, glucose <- D-fructose
+Creating set and member link: fructose, galactose, glucose <- D-galactose
+Creating set and member link: fructose, galactose, glucose <- alpha-D-glucose
+Creating set and member link: fructose, galactose, glucose <- alpha-D-glucose
+Creating set and member link: galactose, glucose <- D-galactose
+Creating set and member link: galactose, glucose <- alpha-D-glucose
+Creating set and member link: phosphoribosyl pyrophosphate synthetase holoenzyme <- phosphoribosyl pyrophosphate synthetase 1 holoenzyme
+Creating set and member link: limit dextrin-glycogenin dimer <- limit dextrin-glycogenin-1 dimer
+Creating set and member link: limit dextrin-glycogenin dimer <- limit dextrin-glycogenin-2 dimer
+Creating set and member link: glycogen-glycogenin dimer <- glycogen-glycogenin-1 dimer
+Creating set and member link: glycogen-glycogenin dimer <- glycogen-glycogenin-2 dimer
+Creating set and member link: glucokinase and hexokinases <- glucokinase
+Creating set and member link: galactose, glucose <- D-galactose
+Creating set and member link: galactose, glucose <- alpha-D-glucose
+Creating set and member link: galactose, glucose <- alpha-D-glucose
+Creating set and member link: aldolase tetramer <- ALDOB tetramer
+Creating set and member link: glycogenin dimer <- glycogenin-1 dimer
+Creating set and member link: glycogenin dimer <- glycogenin-2 dimer
+Creating set and member link: active PYGM and PYGB dimers <- PGYM b dimer:AMP
+Creating set and member link: active PYGM and PYGB dimers <- PGYM dimer, a form
+Creating set and member link: poly((1,4)-alpha-glucosyl) glycogenin dimer <- poly((1,4)-alpha-glucosyl) glycogenin-1 dimer
+Creating set and member link: poly((1,4)-alpha-glucosyl) glycogenin dimer <- poly((1,4)-alpha-glucosyl) glycogenin-2 dimer
+Creating set and member link: poly((1,4)-alpha-glucosyl) glycogenin dimer <- poly((1,4)-alpha-glucosyl) glycogenin-1 dimer
+Creating set and member link: poly((1,4)-alpha-glucosyl) glycogenin dimer <- poly((1,4)-alpha-glucosyl) glycogenin-2 dimer
+Creating set and member link: PFKFB dimers <- PFKFB1 dimer
+Creating set and member link: GLUT tetramers <- GLUT1 tetramer
+Creating set and member link: GLUT tetramers <- GLUT2 tetramer
+8: [PathwayDiagram:561303] Diagram of Prostanoid metabolism
+Creating set and member link: PTGS dimers <- PGHS2 dimer
+9: [PathwayDiagram:1448706] Diagram of SCF-KIT signaling
+Creating set and member link: Grb2:SOS:p-c-Kit/p-APS:p-c-Kit complex <- GRB2:SOS1:p-KIT complex
+Creating set and member link: Grb2:SOS:p-c-Kit/p-APS:p-c-Kit complex <- p-APS dimer:p-KIT complex
+10: [PathwayDiagram:555067] Diagram of L1CAM interactions
+Creating set and member link: Ankyrins <- Ankyrin-G
+Creating set and member link: Ankyrins <- Ankyrin-G
+11: [PathwayDiagram:1172028] Diagram of Growth hormone receptor signaling
+Creating set and member link: Activated cytokine-like hormone receptors <- Growth Hormone: Activated Growth Hormone Receptor-JAK2 dimer
+Creating set and member link: Activated cytokine-like hormone receptors, p(Y1007)-JAK2 <- Growth Hormone: Activated Growth Hormone Receptor- p(Y1007)-JAK2 dimer
+12: [PathwayDiagram:469683] Diagram of Elevation of cytosolic Ca2+ levels
+Creating set and member link: Cations <- Ca2+
+Creating set and member link: Cations <- Ca2+
+13: [PathwayDiagram:933405] Diagram of GABA synthesis, release, reuptake and degradation
+Creating set and member link: ligands of SLC6A12 (BGT-1) <- GABA
+Creating set and member link: ligands of SLC6A12 (BGT-1) <- GABA
+Creating set and member link: ligands of SLC6A12 (BGT-1) <- GABA
+14: [PathwayDiagram:814440] Diagram of Regulation of mRNA Stability by Proteins that Bind AU-rich Elements
+Creating set and member link: HuR:mRNA Complex <- HuR with Unknown Phosphorylation: mRNA Complex
+Creating set and member link: HuR:mRNA Complex <- HuR with phosphoserine221 and phosphoserine158:mRNA Complex
+Creating set and member link: HuR:mRNA Complex <- HuR with phosphoserine221 and phosphoserine318:mRNA Complex
+15: [PathwayDiagram:500277] Diagram of MAPK targets/ Nuclear events mediated by MAP kinases
+Creating set and member link: Activated MAPK kinases ERK1/2, JNK, p38 <- Phospho-MAP kinase p38 alpha/beta
+Creating set and member link: Activated MAPK kinases ERK1/2, JNK, p38 <- Phosphorylated JNKs: MAPK8, MAPK9, MAPK10
+Creating set and member link: Phospho-ERK1/2/5 <- p-T218,Y220-ERK5
+16: [PathwayDiagram:538687] Diagram of Fatty acid, triacylglycerol, and ketone body metabolism
+Creating set and member link: Proteins Upregulated by PPAR-alpha <- CPT2
+Creating set and member link: Proteins Upregulated by PPAR-alpha <- PPARA
+Creating set and member link: Proteins Upregulated by PPAR-alpha <- Fatty acid synthase
+17: [PathwayDiagram:660253] Diagram of Regulation of Insulin-like Growth Factor (IGF) Activity by Insulin-like Growth Factor Binding Proteins (IGFBPs)
+Creating set and member link: PAPP-A and PAPP-A2 <- PAPP-A
+18: [PathwayDiagram:453208] Diagram of GPVI-mediated activation cascade
+Creating set and member link: SYK/LCK <- SYK
+Creating set and member link: PI3K alpha, beta, gamma <- PI3K beta
+Creating set and member link: PI3K alpha, beta, gamma <- PI3K gamma
+19: [PathwayDiagram:1217518] Diagram of Innate immune response mediated by toll like receptors
+Creating set and member link: Activated chicken TAK1 complexes <- pUB-TRAF6:TAB2:TAB3:TAB1:free K63-pUb chain:phospho TAK1
+Creating set and member link: Activated chicken TAK1 complexes <- p-IRAK2: pUb_oligo TRAF6 : phospho TAK1 :TAB1 : TAB2/TAB3 : K63linked free pUb chain
+Creating set and member link: ch p-IRAK4 bound to the activated TLR complex <- activated TLR : MyD88 : p-IRAK4
+Creating set and member link: ch p-IRAK4 bound to the activated TLR complex <- activated TLR : TIRAP : MyD88 ; p-IRAK4
+Creating set and member link: activated TLR7 or 21 bound to ligand <- TLR21 bound to unmethylated CpG DNA
+Creating set and member link: activated TLR7 or 21 bound to ligand <- chicken TLR7  homodimer bound to recognized ligands
+Creating set and member link: activated TLR5 or 15 bound to ligand <- bacterial flagellin bound to chicken TLR5 homodimer
+Creating set and member link: activated TLR5 or 15 bound to ligand <- TLR15 bound to recognized ligand
+Creating set and member link: activated TLR2 or 4 bound to ligand <- 2 x (TLR4 : MD2) : LPS complex
+Creating set and member link: activated TLR2 or 4 bound to ligand <- chicken TLR2-1 : TLR1-1 bound to its ligand
+Creating set and member link: activated TLR2 or 4 bound to ligand <- chicken TLR2-1 :TLR1-2 bound to its ligand
+Creating set and member link: Ligand recognized by chicken TLR2-1 : TLR1-2 heterodimer <- Triacyl lipopeptide
+20: [PathwayDiagram:1679287] Diagram of Trafficking and processing of intracellular TLR
+Creating set and member link: intracellular TLR3/7/8/9 <- TLR3
+21: [PathwayDiagram:500603] Diagram of Signaling by Insulin receptor
+Creating set and member link: Raptor <- Raptor Splice Alternative 1
+Creating set and member link: Activated PI3K <- phospho-IRS:activated insulin receptor
+22: [PathwayDiagram:453263] Diagram of TCR signaling
+Creating set and member link: Phosphorylated PLC-gamma1 bound to LAT or SLP-76 <- phosphorylated PLC-gamma1 bound to LAT
+Creating set and member link: Phosphorylated PLC-gamma1 bound to LAT or SLP-76 <- phopshorylated PLC-gamma1 bound to SLP-76
+Creating set and member link: ZAP-70 and ITK tyrosine kinases <- Activated ZAP-70
+Creating set and member link: ZAP-70 and ITK tyrosine kinases <- ITK bound to SLP-76:Gads:LAT
+Creating set and member link: PIP3, PI(3,4)P2 <- PI(3,4,5)P3
+Creating set and member link: PIP3, PI(3,4)P2 <- PI(3,4)P2
+Creating set and member link: PLC-gamma1 bound to LAT or SLP-76 <- PLC-gamma1 bound to SLP-76:Gads:LAT
+Creating set and member link: PLC-gamma1 bound to LAT or SLP-76 <- PLC-gamma1 bound to LAT at pY312
+23: [PathwayDiagram:1015872] Diagram of Factors involved in megakaryocyte development and platelet production
+Creating set and member link: Histone H3 mono or di-methylated at K9 <- Histone H3 methylated at lysine-9
+Creating set and member link: Histone H3 mono- or unmethylated at K9 <- Histone H3 methylated at lysine-9
+24: [PathwayDiagram:469687] Diagram of Platelet homeostasis
+Creating set and member link: Cations <- Ca2+
+Creating set and member link: Cations <- Na+
+Creating set and member link: Cations <- Ca2+
+Creating set and member link: Cations <- Na+
+25: [PathwayDiagram:532427] Diagram of Metabolism of bile acids and bile salts
+Creating set and member link: cholate; chenodeoxycholate <- cholate
+Creating set and member link: bile salts and acids (OATP-A) <- cholate
+26: [PathwayDiagram:1486154] Diagram of MyD88 cascade initiated on plasma membrane
+Creating set and member link: hp-IRAK1 or p-IRAK2 bound to the pIRAK4:MyD88:activated TLR5 or 10 complex <- p-S,2T-IRAK4:oligo-MyD88:activated TLR5 or 10
+Creating set and member link: K63-linked polyUb TRAF6 complexes <- p-IRAK2:K63-linked pUb oligo-TRAF6
+27: [PathwayDiagram:500219] Diagram of Signaling by Robo receptor
+Creating set and member link: Robo1/ Robo2 <- ROBO1
+28: [PathwayDiagram:419725] Diagram of Signaling by Notch
+Creating set and member link: NICD <- NICD2
+Creating set and member link: NICD <- NICD3
+Creating set and member link: NICD <- NICD4
+29: [PathwayDiagram:727723] Diagram of Neuroransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell
+Creating set and member link: kaiante Receptors <- GRIK 3 homomer
+30: [PathwayDiagram:500807] Diagram of GPCR downstream signaling
+Creating set and member link: G-protein alpha (12/13):GTP <- G-protein alpha (13):GTP
+31: [PathwayDiagram:554229] Diagram of Sphingolipid metabolism
+Creating set and member link: PPAP2 <- PPAP2A
+Creating set and member link: NAD(P)+ <- NADP+
+Creating set and member link: NAD(P)+ <- NADP+
+Creating set and member link: NAD(P)H <- NADPH
+Creating set and member link: NAD(P)H <- NADPH
+Creating set and member link: bHEX <- bHEXA
+32: [PathwayDiagram:1486164] Diagram of MyD88-independent cascade initiated on plasma membrane
+Creating set and member link: K63-linked polyUb TRAF6 complexes <- activated TLR4:TRAM:TRIF:K63-pUb-TRAF6
+33: [PathwayDiagram:500232] Diagram of Toll Receptor Cascades
+Creating set and member link: CD14 <- Secreted form of CD14
+Creating set and member link: CD14 <- GPI-N345-CD14
+Creating set and member link: LPS complexed with CD14 <- LPS complexed with secreted CD14
+Creating set and member link: LPS complexed with CD14 <- LPS complexed with GPI-anchored CD14
+34: [PathwayDiagram:451081] Diagram of Cell junction organization
+Creating set and member link: Nectin <- Nectin-1
+Creating set and member link: Nectin <- Nectin-3
+35: [PathwayDiagram:1227987] Diagram of Signaling by ERBB2
+Creating set and member link: NRGs/EGFLs:p-ERBB4:p-ERBB2 <- NRGs/EGFLs:p-ERBB4cyt2:p-ERBB2
+Creating set and member link: NRGs/EGFLs:p-ERBB4:p-ERBB2 <- NRGs/EGFLs:p-ERBB4cyt1:p-ERBB2
+36: [PathwayDiagram:528081] Diagram of TRKA signalling from the plasma membrane
+Creating set and member link: Phospho-ERK1/2/5 <- p-T218,Y220-ERK5
+37: [PathwayDiagram:535710] Diagram of Lipid digestion, mobilization, and transport
+Creating set and member link: sterols <- cholesterol
+Creating set and member link: sterols <- cholesterol
+Creating set and member link: sterols <- phytosterols
+Creating set and member link: sterols <- cholesterol
+Creating set and member link: sterols <- phytosterols
+38: [PathwayDiagram:1606738] Diagram of Mitochondrial Biogenesis
+Creating set and member link: p-PPARGC1A <- p-T178-S539-PPARGC1A
+Creating set and member link: p-PPARGC1A <- p-T263-S266-T299-PPARGC1A
+39: [PathwayDiagram:624280] Diagram of Netrin-1 signaling
+Creating set and member link: Src/Fyn <- SRC
+Creating set and member link: DCC/UNC5A <- DCC
+Creating set and member link: DCC/UNC5A <- DCC
+Creating set and member link: UNC-5 receptors <- UNC5B
+Creating set and member link: DCC/Neogenin <- DCC
+Creating set and member link: DCC/Neogenin <- DCC
+Creating set and member link: DCC/Neogenin <- Neogenin
+40: [PathwayDiagram:772537] Diagram of Interleukin-1 signaling
+Creating set and member link: Activated TAK complexes <- hp-IRAK1:K6-poly-Ub oligo-TRAF6:Activated TAK1 complex
+Creating set and member link: hp-IRAK1, IRAK4 <- IRAK4
+Creating set and member link: hp-IRAK1:p-Pellino, IRAK4:p-Pellino <- hp-IRAK1: p-Pellino-1,2,(3)
+Creating set and member link: Interleukin 1 receptors <- IL1R1
+Creating set and member link: Interleukin 1 receptors <- IL1R2
+41: [PathwayDiagram:426330] Diagram of DNA repair
+Creating set and member link: DNA-glycosylase <- UNG
+Creating set and member link: PI3-kinase family <- ATM
+Creating set and member link: PI3-kinase family <- DNA-PKcs, DNA-dependent protein kinase catalytic subunit
+Creating set and member link: PI3-kinase family <- ATR
+Creating set and member link: Ableson family members <- CABL
+42: [PathwayDiagram:1486158] Diagram of MyD88 dependent cascade initiated on endosome
+Creating set and member link: K63-linked polyUb TRAF6 complexes <- p-IRAK2:K63-linked pUb oligo-TRAF6
+43: [PathwayDiagram:451785] Diagram of Cell Cycle Checkpoints
+Creating set and member link: p21/p27 <- p21
+44: [PathwayDiagram:456931] Diagram of Thrombin signalling through proteinase activated receptors (PARs)
+Creating set and member link: Thrombin-activated PAR <- Activated PAR1
+45: [PathwayDiagram:1486163] Diagram of MyD88:Mal cascade initiated on plasma membrane
+Creating set and member link: K63-linked polyUb TRAF6 complexes <- p-IRAK2:K63-linked pUb oligo-TRAF6
+46: [PathwayDiagram:451240] Diagram of HIV Life Cycle
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- GTP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- GTP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- GTP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- GTP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- GTP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- GTP
+47: [PathwayDiagram:1234184] Diagram of Regulation of Hypoxia-inducible Factor (HIF) by Oxygen
+Creating set and member link: HIF-alpha <- EPAS1
+Creating set and member link: HIF-alpha <- HIF1A
+Creating set and member link: HIF-alpha <- HIF3A
+Creating set and member link: HIF1A/HIF2A <- EPAS1
+Creating set and member link: HIF1A/HIF2A <- HIF1A
+Creating set and member link: HIF-alpha <- EPAS1
+Creating set and member link: HIF-alpha <- HIF1A
+Creating set and member link: HIF-alpha <- HIF3A
+Creating set and member link: hydroxyPro-HIF-alpha <- hydroxyPro405,531-EPAS1
+Creating set and member link: hydroxyPro-HIF-alpha <- hydroxyPro402,564-HIF1A
+Creating set and member link: hydroxyPro-HIF-alpha <- hydroxyPro492-HIF3A
+Creating set and member link: hydroxyPro-HIF-alpha <- hydroxyPro405,531-EPAS1
+Creating set and member link: hydroxyPro-HIF-alpha <- hydroxyPro402,564-HIF1A
+Creating set and member link: hydroxyPro-HIF-alpha <- hydroxyPro492-HIF3A
+48: [PathwayDiagram:926534] Diagram of Advanced glycosylation endproduct receptor signaling
+Creating set and member link: AGER ligands <- AGE adducts:Peptide
+Creating set and member link: AGER ligands <- S100B homodimer
+49: [PathwayDiagram:1018383] Diagram of Kinesins
+Creating set and member link: Kinesins <- Kinesin-1
+Creating set and member link: Kinesins <- Kinesin-2
+Creating set and member link: Kinesins <- Kinesin-3 dimers
+Creating set and member link: Kinesins <- Chromokinesin dimers
+Creating set and member link: Kinesins <- Kinesin-5 homotetramer
+Creating set and member link: Kinesins <- Centralspindlin
+Creating set and member link: Kinesins <- KIF18A dimer
+Creating set and member link: Kinesins <- CENP-E dimer
+Creating set and member link: Kinesins <- KIF15 dimer
+Creating set and member link: Kinesins <- Kinesin-13 dimers
+Creating set and member link: Kinesin-3 monomers <- Kinesin-like protein KIF3A
+50: [PathwayDiagram:500685] Diagram of Apoptotic execution  phase
+Creating set and member link: caspase 3/caspase 7 <- active caspase-3
+Creating set and member link: caspase 3/caspase 7 <- active caspase-7
+Creating set and member link: DFF40 homodimer/homooligomer <- DFF40 homodimer
+51: [PathwayDiagram:847077] Diagram of Passive Transport by Aquaporins
+Creating set and member link: AQP9/10 <- AQP9 tetramer
+Creating set and member link: AQP0/1/2/3/4/5/7/8/9/10 <- AQP1 tetramer
+Creating set and member link: AQP0/1/2/3/4/5/7/8/9/10 <- p-S256-AQP2
+Creating set and member link: AQP0/1/2/3/4/5/7/8/9/10 <- AQP4 tetramer
+Creating set and member link: AQP0/1/2/3/4/5/7/8/9/10 <- AQP7 tetramer
+Creating set and member link: AQP0/1/2/3/4/5/7/8/9/10 <- AQP9 tetramer
+Creating set and member link: AQP3/7/9/10 <- AQP7 tetramer
+Creating set and member link: AQP3/7/9/10 <- AQP9 tetramer
+52: [PathwayDiagram:427205] Diagram of Cell surface interactions at the vascular wall
+Creating set and member link: Neutrophil CEACAMs affecting integrin binding to fibronectin <- Carcinoembryonic antigen-related cell adhesion molecule 1 precursor
+53: [PathwayDiagram:507701] Diagram of Costimulation by the CD28 family
+Creating set and member link: SHP-2/SHP-1 <- SHP2
+Creating set and member link: SHP-2/SHP-1 <- SHP2
+Creating set and member link: B7-1 homodimer/ B7-2 <- CD80 (B7-1) homodimer
+Creating set and member link: B7-1 homodimer/ B7-2 <- CD86 monomer
+Creating set and member link: Src family tyrosine kinases (SFKs) <- FYN
+Creating set and member link: Src family tyrosine kinases (SFKs) <- FYN
+Creating set and member link: Activated Rac-1 and Cdc42 <- CDC42:GTP
+Creating set and member link: Activated Rac-1 and Cdc42 <- RAC1-GTP
+Creating set and member link: Lck/Fyn <- FYN
+54: [PathwayDiagram:1486153] Diagram of MAP kinase activation in TLR cascade
+Creating set and member link: MEK1 <- p-S218,222-MEK1
+55: [PathwayDiagram:514603] Diagram of Botulinum neurotoxicity
+Creating set and member link: BoNT Light chain Types B,D,F,G <- BoNT Light chain Type B
+Creating set and member link: BoNT Light chain Types B,D,F,G <- BoNT Light chain Type D
+Creating set and member link: BoNT Light chain Types B,D,F,G <- BoNT Light chain Type F
+Creating set and member link: VAMP/Synaptobrevin <- VAMP2
+Creating set and member link: BoNT Light chain Types A,C and E <- BoNT Light chain Type A
+Creating set and member link: BoNT Light chain Types A,C and E <- BoNT Light chain Type E
+Creating set and member link: BoNT Light chain Types A,C and E <- BoNT Light chain Type C1
+56: [PathwayDiagram:426341] Diagram of Heme metabolism
+Creating set and member link: ALAS dimer <- ALAS1 dimer
+Creating set and member link: ALAS dimer <- ALAS2 dimer
+57: [PathwayDiagram:528078] Diagram of RAF/MAP kinase cascade
+Creating set and member link: MEK1 <- p-S218,222-MEK1
+58: [PathwayDiagram:1370511] Diagram of Prolactin receptor signaling
+Creating set and member link: Activated cytokine-like hormone receptors <- PRLR ligands:Activated PRLR dimer:JAK2
+Creating set and member link: Activated cytokine-like hormone receptors, p(Y1007)-JAK2 <- Activated PRLR dimer:PRLR ligands:p(Y1007)-JAK2
+59: [PathwayDiagram:507780] Diagram of RNA Polymerase I, RNA Polymerase III, and Mitochondrial Transcription
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+60: [PathwayDiagram:893504] Diagram of Circadian Clock
+Creating set and member link: CRY1/2 <- CRY1
+Creating set and member link: CRY1/2 <- CRY2
+61: [PathwayDiagram:450953] Diagram of Intrinsic Pathway for Apoptosis
+Creating set and member link: Bcl-XL interacting BH3-only proteins <- tBID
+Creating set and member link: Bcl-XL interacting BH3-only proteins <- BIM
+Creating set and member link: Bcl-XL interacting BH3-only proteins <- PUMA protein
+Creating set and member link: Bcl-XL interacting BH3-only proteins <- BAD
+Creating set and member link: Bcl-XL interacting BH3-only proteins <- NOXA protein
+Creating set and member link: Bcl-2 interacting BH-3 only proteins <- BID
+Creating set and member link: Bcl-2 interacting BH-3 only proteins <- BIM
+Creating set and member link: Bcl-2 interacting BH-3 only proteins <- PUMA protein
+62: [PathwayDiagram:877288] Diagram of Interferon gamma signaling
+Creating set and member link: PTPs-SHP1/2/PTP1B <- SHP1
+Creating set and member link: PTPs-SHP1/2/PTP1B <- PTP1B
+63: [PathwayDiagram:481024] Diagram of Integrin cell surface interactions
+Creating set and member link: Basigin-binding integrins <- Integrin alpha3beta1
+Creating set and member link: Basigin-binding integrins <- Integrin alpha6beta1
+64: [PathwayDiagram:426342] Diagram of Heme synthesis
+Creating set and member link: ALAS dimer <- ALAS1 dimer
+Creating set and member link: ALAS dimer <- ALAS2 dimer
+65: [PathwayDiagram:451063] Diagram of Gap junction trafficking and regulation
+Creating set and member link: Cx26/Cx32 <- Connexin 26
+66: [PathwayDiagram:918299] Diagram of Interferon alpha/beta signaling
+Creating set and member link: SHP-2/SHP-1 <- SHP1
+Creating set and member link: SHP-2/SHP-1 <- SHP2
+Creating set and member link: IRF 1-9 <- IRF9
+Creating set and member link: STAT1 <- STAT1-alpha
+67: [PathwayDiagram:601857] Diagram of Transport of vitamins, nucleosides, and related molecules
+Creating set and member link: Thyroid hormone transporting SLCOs <- SLCO1B1
+Creating set and member link: UDP-sugar  substrates of SLC35D2 <- UDP-GlcNAc
+Creating set and member link: UDP-sugar substrates of SLC35D2 <- UDP-GlcNAc
+68: [PathwayDiagram:1604756] Diagram of Activation of MMPs
+Creating set and member link: MMP13 intermediate forms <- MMP13 intermediate form 55-471
+Creating set and member link: MMP13 intermediate forms <- MMP13 intermediate form 58-471
+Creating set and member link: MMP13 intermediate forms <- MMP13 intermediate form 77-471
+Creating set and member link: MMP14 (15,16) <- MMP14
+Creating set and member link: MMP2,3,7,10,11 <- MMP2
+Creating set and member link: MMP2,3,7,10,11 <- MMP3
+Creating set and member link: MMP2,3,7,10,11 <- MMP7
+Creating set and member link: MMP2,3,7,10,11 <- MMP10
+Creating set and member link: MMP2,3,7,10,11 <- MMP11
+Creating set and member link: MMP1,7 <- MMP1
+Creating set and member link: MMP1,7 <- MMP7
+Creating set and member link: proMMP9 activating MMPs <- MMP1
+Creating set and member link: MT-MMPs <- MMP14
+69: [PathwayDiagram:615507] Diagram of CDO in myogenesis
+Creating set and member link: phospho-E proteins <- phospho-E12/E47
+70: [PathwayDiagram:500771] Diagram of Phase II conjugation
+Creating set and member link: SULT enzymes active on estrone <- SULT1E1 homodimer
+Creating set and member link: SULT enzymes active on estrone <- SULT2A1 homodimer
+Creating set and member link: SULT enzymes active on 3,3'-Triiodothyronine (T2) <- SULT1A1 homodimer
+Creating set and member link: SULT enzymes active on 3,3'-Triiodothyronine (T2) <- SULT1A3 homodimer
+Creating set and member link: SULT enzymes active on 3,3'-Triiodothyronine (T2) <- SULT1E1 homodimer
+Creating set and member link: SULT enzymes active on 3,3'-Triiodothyronine (T2) <- SULT2A1 homodimer
+Creating set and member link: SULT enzymes active on 27-hydroxycholesterol <- SULT2B1 b isoform homodimer
+Creating set and member link: NAT1 substrate <- N-Hydroxy-4-aminobiphenyl
+Creating set and member link: SULT enzymes active on pregnenolone <- SULT2B1 b isoform homodimer
+Creating set and member link: SULT enzymes active on pregnenolone <- SULT1E1 homodimer
+Creating set and member link: SULT enzymes active on DHEA <- SULT1E1 homodimer
+Creating set and member link: SULT enzymes active on DHEA <- SULT2A1 homodimer
+Creating set and member link: SULT enzymes active on DHEA <- SULT2B1 b isoform homodimer
+Creating set and member link: xenobiotic/medium-chain fatty acid:CoA ligases <- Xenobiotic/medium-chain fatty acid:CoA ligase
+Creating set and member link: xenobiotic/medium-chain fatty acid:CoA ligases <- Xenobiotic/medium-chain fatty acid:CoA ligase
+Creating set and member link: SULT enzymes active on p-nitrophenol <- SULT1A1 homodimer
+Creating set and member link: L-Amino Acids <- L-Glu
+Creating set and member link: L-Amino Acids <- L-Methionine
+Creating set and member link: L-Amino Acids <- L-Cys
+Creating set and member link: L-Amino Acids <- L-glycine
+Creating set and member link: NAT2 substrate <- N-Hydroxy-4-aminobiphenyl
+Creating set and member link: SULT enzymes active on 3,5,3'-Triiodothyronine (T3) <- SULT1A1 homodimer
+Creating set and member link: SULT enzymes active on 3,5,3'-Triiodothyronine (T3) <- SULT1A3 homodimer
+Creating set and member link: SULT enzymes active on 3,5,3'-Triiodothyronine (T3) <- SULT1E1 homodimer
+Creating set and member link: SULT enzymes active on 3,5,3'-Triiodothyronine (T3) <- SULT2A1 homodimer
+71: [PathwayDiagram:500790] Diagram of GPCR ligand binding
+Creating set and member link: CXCR1 ligands <- CXCL8
+Creating set and member link: Relaxins 2 and 3 <- Relaxin-3
+Creating set and member link: ATP:UTP <- ATP
+Creating set and member link: ATP:UTP <- UTP
+Creating set and member link: Neuromedin-U receptors <- Neuromedin-U receptor 2
+Creating set and member link: CXCR2 ligands <- CXCL8
+Creating set and member link: GPRC6A ligands <- Ca2+
+Creating set and member link: CCL19, CCL21, CCL25 <- CCL25
+Creating set and member link: EGF-7TMs <- CD97 antigen
+Creating set and member link: Relaxin-3 receptor 2 ligands <- Relaxin-3
+Creating set and member link: Anaphylatoxin ligands of GPR77 <- C5a
+Creating set and member link: CCBP2 ligands <- CCL5
+72: [PathwayDiagram:925713] Diagram of Nucleotide-binding domain, leucine rich repeat containing receptor (NLR) signaling pathways
+Creating set and member link: PAMP:NOD oligomer <- NOD1:iE-DAP oligomer
+Creating set and member link: PAMP:NOD oligomer <- MDP:NOD2 oligomer
+Creating set and member link: Activated TAK complexes <- PAMP:NOD oligomer:K63-polyUb-RIP2:NEMO:activated TAK1 complex
+Creating set and member link: NLRP3 elicitors:NLRP3 <- NLRP3 elicitor proteins:NLRP3
+Creating set and member link: NLRP3 elicitors:NLRP3 <- NLRP3 elicitor small molecules:NLRP3
+73: [PathwayDiagram:480121] Diagram of S Phase
+Creating set and member link: p21/p27 <- p21
+Creating set and member link: p21/p27 <- p27
+Creating set and member link: Cdc25 A/B <- Cdc25A
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+74: [PathwayDiagram:640729] Diagram of Synthesis, Secretion, and Deacylation of Ghrelin
+Creating set and member link: Proghrelin and Pro-des-Gln14-ghrelin <- Proghrelin
+75: [PathwayDiagram:1524162] Diagram of Glycerophospholipid Biosynthesis pathway
+Creating set and member link: PLA2 <- PLA2G2A:Ca2+
+Creating set and member link: PLA2 <- PLA2G2A:Ca2+
+Creating set and member link: PLA2 <- PLA2G2A:Ca2+
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G2A:Ca2+
+Creating set and member link: PLA2 <- PLA2G2A:Ca2+
+Creating set and member link: PLA2 <- PLA2G2A:Ca2+
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G4C
+Creating set and member link: PLA2 <- PLA2G2A:Ca2+
+Creating set and member link: PLA2 <- PLA2G2A:Ca2+
+Creating set and member link: PLA2 <- PLA2G2A:Ca2+
+Creating set and member link: CEPT1/EPT1 <- CEPT1:Mg2+/Mn2+
+76: [PathwayDiagram:478868] Diagram of Response to elevated platelet cytosolic Ca2+
+Creating set and member link: Platelet alpha granule contents <- GAS6
+Creating set and member link: Platelet alpha granule contents <- GAS6
+Creating set and member link: ABCC4 transported dense granule content <- ADP
+77: [PathwayDiagram:480128] Diagram of Mitotic G1-G1/S phases
+Creating set and member link: E2F1 targets <- CDT1
+Creating set and member link: E2F1 targets <- Cdc2
+Creating set and member link: E2F1 targets <- Cdc45
+Creating set and member link: E2F1 targets <- PCNA
+Creating set and member link: E2F1 targets <- CDC6
+Creating set and member link: p21/p27 <- p21
+Creating set and member link: p21/p27 <- p27Kip1
+Creating set and member link: p21/p27 <- p21
+Creating set and member link: p21/p27 <- p27
+78: [PathwayDiagram:666911] Diagram of Synthesis of DNA
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+79: [PathwayDiagram:1565008] Diagram of TRIF mediated TLR3 signaling
+Creating set and member link: Activated TAK complexes <- pUb-TRAF6:TAB1:TAB2/TAB3:free polyubiquitin chain : phospho-TAK1
+Creating set and member link: K63-linked polyUb TRAF6 complexes <- viral dsRNA : TLR3 : TRIF : pUb-TRAF6
+80: [PathwayDiagram:921156] Diagram of Interleukin-3, 5 and GM-CSF signaling
+Creating set and member link: SHP-2/SHP-1 <- SHP2
+Creating set and member link: Interleukin receptor complexes with activated SHC1 <- High affinity binding complex dimers of cytokine receptors using Bc, inactive JAK2, p-(Y593,628)-Bc:p(427,349,350)-SHC1
+Creating set and member link: Tyrosine kinases that phosphorylate the Common beta chain <- GM-CSF:GM-CSF receptor alpha subunit:Common beta chain:JAK2
+Creating set and member link: Tyrosine kinases that phosphorylate the Common beta chain <- IL5 homodimer:IL5RA:Common beta chain:JAK2
+Creating set and member link: High affinity binding complexes of interleukin receptors using the Common beta chain <- IL3:IL3RA:IL3RB:JAK2
+Creating set and member link: High affinity binding complexes of interleukin receptors using the Common beta chain <- GM-CSF:GM-CSF receptor alpha subunit:Common beta chain:JAK2
+Creating set and member link: High affinity binding complexes of interleukin receptors using the Common beta chain <- IL5 homodimer:IL5RA:Common beta chain:JAK2
+81: [PathwayDiagram:500221] Diagram of Semaphorin interactions
+Creating set and member link: LIM Kinases <- LIM domain kinase 1 (LIMK-1)
+Creating set and member link: LIM Kinases, phosphorylated <- pLIMK-1 (T508)
+82: [PathwayDiagram:450901] Diagram of Influenza Life Cycle
+Creating set and member link: viral mRNA <- M1 mRNA
+Creating set and member link: viral mRNA <- M2 mRNA
+Creating set and member link: viral mRNA <- NS1 mRNA
+Creating set and member link: viral mRNA <- NS2 mRNA
+Creating set and member link: viral mRNA <- M2 mRNA
+Creating set and member link: viral mRNA <- NS2 mRNA
+Creating set and member link: viral mRNA <- PB1 mRNA
+83: [PathwayDiagram:548980] Diagram of N-linked glycosylation
+Creating set and member link: Glycoproteins with Man8 N-glycans <- unfolded protein:(GlcNAc)2 (Man)8b
+Creating set and member link: Glycoproteins with Man8 N-glycans <- unfolded protein:(GlcNAc)2 (Man)8a
+Creating set and member link: Glycoproteins with Man8 N-glycans <- unfolded protein:(GlcNAc)2 (Man)8c
+84: [PathwayDiagram:919410] Diagram of Interleukin-2 signaling
+Creating set and member link: Interleukin receptor complexes with activated SHC1 <- IL2:IL2R trimer p-(Y338,392,510)-beta subunit:p-JAK1:JAK3:p-SHC
+85: [PathwayDiagram:480126] Diagram of Mitotic G2-G2/M phases
+Creating set and member link: Cdc25 <- Cdc25B
+Creating set and member link: Cdc25 <- Cdc25C
+Creating set and member link: Cdc25 <- Cdc25B
+Creating set and member link: Cdc25 <- phospho-Cdc25C
+Creating set and member link: Cdc25 <- Cdc25C
+Creating set and member link: active nuclear Cyclin B1:Cdc2 complexes <- phospho-Cyclin B1(CRS):phospho-Cdc2 (Thr 161)
+Creating set and member link: active nuclear Cyclin B1:Cdc2 complexes <- Cyclin B1:phospho-Cdc2(Thr 161)
+Creating set and member link: nuclear Cyclin B1:Cdc2 complexes <- nuclear Cyclin B1:phospho-Cdc2 ( Thr 14) complexes
+Creating set and member link: nuclear Cyclin B1:Cdc2 complexes <- Cyclin B1:phospho-Cdc2(Thr 161, Thr 14, Tyr 15)
+Creating set and member link: cytoplasmic Cyclin B1:Cdc2 complexes <- Cyclin B1:phospho-Cdc2(Thr 161, Thr 14, Tyr 15)
+Creating set and member link: cytoplasmic Cyclin B1:Cdc2 complexes <- phospho-cyclin B1(CRS):phosph-Cdc2(Thr 161)
+Creating set and member link: Cdc25 <- Cdc25B
+Creating set and member link: Cdc25 <- Cdc25C
+86: [PathwayDiagram:662639] Diagram of ABC-family proteins mediated transport
+Creating set and member link: sterols <- cholesterol
+Creating set and member link: sterols <- cholesterol
+Creating set and member link: sterols <- cholesterol
+Creating set and member link: sterols <- cholesterol
+Creating set and member link: ABCCs <- CFTR
+87: [PathwayDiagram:541418] Diagram of Hexose transport
+Creating set and member link: fructose, galactose, glucose <- D-fructose
+Creating set and member link: fructose, galactose, glucose <- alpha-D-glucose
+Creating set and member link: fructose, galactose, glucose <- D-fructose
+Creating set and member link: fructose, galactose, glucose <- alpha-D-glucose
+Creating set and member link: glucokinase and hexokinases <- glucokinase
+Creating set and member link: galactose, glucose <- alpha-D-glucose
+Creating set and member link: GLUT tetramers <- GLUT1 tetramer
+Creating set and member link: GLUT tetramers <- GLUT2 tetramer
+Creating set and member link: galactose, glucose <- alpha-D-glucose
+88: [PathwayDiagram:507988] Diagram of Signaling by EGFR and Signaling by EGFR in Cancer
+Creating set and member link: EGFR KD mutants active dimer <- EGF:EGFR KD mutants dimer
+Creating set and member link: EGFR KD mutants active dimer <- EGFR KD mutants dimer
+Creating set and member link: p-EGFR mutants dimer <- p-6Y-EGFR KD mutants dimer
+Creating set and member link: p-EGFR mutants dimer <- p-5Y-EGFRvIII mutant dimer
+89: [PathwayDiagram:1471382] Diagram of Defensins
+Creating set and member link: Alpha-defensins <- Defensin alpha 5
+Creating set and member link: Pro-defensins <- Pro-defensin alpha 5
+Creating set and member link: Beta-defensins <- Beta-defensin 103
+Creating set and member link: Beta-defensins <- Beta-defensin 103
+90: [PathwayDiagram:1606464] Diagram of Circadian Clock (mouse)
+Creating set and member link: Cry1/2 <- Cry1
+Creating set and member link: Cry1/2 <- Cry2
+91: [PathwayDiagram:500789] Diagram of Immunoregulatory interactions between a Lymphoid and a non-Lymphoid cell
+Creating set and member link: L-selectin ligands <- MADCAM1
+Creating set and member link: MHC Class I molecules interacting with CD160 <- HLA-C Cw3 (group 2)
+92: [PathwayDiagram:992776] Diagram of RIG-I/MDA5 mediated induction of IFN-alpha/beta pathways
+Creating set and member link: IRF3/ IRF7 <- IRF7
+Creating set and member link: Promoter region of type-I IFN genes <- Promotor region of interferon beta
+Creating set and member link: IFN alpha/beta (IFNA/B) <- IFNB1
+Creating set and member link: RIG-I/MDA5 <- RIG-I
+Creating set and member link: dsRNA:RIG-I/MDA5 <- dsRNA:MDA5
+Creating set and member link: dsRNA:RIG-I/MDA5 <- dsRNA:Ub-RIG-I:TRIM25
+Creating set and member link: phosphorylated IRF3/IRF7 <- p-S477,479-IRF7
+Creating set and member link: VAF/pIRF7:CBP/p300 <- CBP/p300:pIRF7:pIRF7
+Creating set and member link: VAF/pIRF7:CBP/p300 <- VAF (virus-activated factor)
+93: [PathwayDiagram:517498] Diagram of Metabolism of amino acids and derivatives
+Creating set and member link: isovaleryl-CoA, a-methylbutyryl-CoA, isobutyryl-CoA <- isovaleryl-CoA
+Creating set and member link: isovaleryl-CoA, a-methylbutyryl-CoA, isobutyryl-CoA <- alpha-methylbutyryl-CoA
+Creating set and member link: isovaleryl-CoA, a-methylbutyryl-CoA, isobutyryl-CoA <- isobutyryl-CoA
+Creating set and member link: NAD(P)+ <- NAD+
+Creating set and member link: NAD(P)+ <- NAD+
+Creating set and member link: NAD(P)+ <- NAD+
+Creating set and member link: NAD(P)+ <- NAD+
+Creating set and member link: NAD(P)+ <- NAD+
+Creating set and member link: NAD(P)+ <- NAD+
+Creating set and member link: NAD(P)+ <- NAD+
+Creating set and member link: NAD(P)+ <- NAD+
+Creating set and member link: NAD(P)+ <- NADP+
+Creating set and member link: NAD(P)+ <- NADP+
+Creating set and member link: NAD(P)+ <- NADP+
+Creating set and member link: NAD(P)H <- NADH
+Creating set and member link: NAD(P)H <- NADH
+Creating set and member link: NAD(P)H <- NADH
+Creating set and member link: NAD(P)H <- NADH
+Creating set and member link: NAD(P)H <- NADH
+Creating set and member link: NAD(P)H <- NADH
+Creating set and member link: NAD(P)H <- NADH
+Creating set and member link: NAD(P)H <- NADPH
+Creating set and member link: NAD(P)H <- NADPH
+Creating set and member link: NAD(P)H <- NADPH
+94: [PathwayDiagram:892241] Diagram of Regulatory RNA pathways
+Creating set and member link: RISC <- Endonucleolytic RISC
+Creating set and member link: RISC <- Nonendonucleolytic RISC
+95: [PathwayDiagram:925711] Diagram of DSCAM interactions
+Creating set and member link: DSCAM/DSCAML1 <- DSCAM
+96: [PathwayDiagram:508525] Diagram of RNA Polymerase II Transcription
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+Creating set and member link: NTP <- ATP
+97: [PathwayDiagram:482784] Diagram of APC/C-mediated degradation of cell cycle proteins
+Creating set and member link: Cdh1 <- phospho-Cdh1
+Creating set and member link: Cdh1 <- Cdh1
+Creating set and member link: (APC/C:Cdh1)-targeted cell cycle proteins <- Cdc20
+Creating set and member link: (APC/C:Cdh1)-targeted cell cycle proteins <- Securin
+Creating set and member link: Cdc20/Cdh1 <- Cdc20
+Creating set and member link: Cdc20/Cdh1 <- Cdh1
+98: [PathwayDiagram:1243100] Diagram of Latent infection of Homo sapiens with Mycobacterium tuberculosis
+Creating set and member link: Divalent metals transported by NRAMP1 <- Fe2+
+Creating set and member link: MsrA/B <- MsrB
+Creating set and member link: TrxA/B1 <- TrxA
+Creating set and member link: TrxA/B1 (ox.) <- TrxA(ox.)
+99: [PathwayDiagram:500335] Diagram of Signaling by FGFR
+Creating set and member link: FGFR4-binding FGFs <- FGF19
+Creating set and member link: Activated FGFR:p-FRS2 <- Activated FGFR:p-FRS2alpha
+Creating set and member link: Activated FGFR:p-FRS2 <- Activated FGFR:p-FRS2beta
+Creating set and member link: Activated FGFR <- Activated FGFR1b homodimer
+Creating set and member link: Activated FGFR <- Activated FGFR1c homodimer
+Creating set and member link: Activated FGFR <- Activated FGFR1c bound to FGF23:Klotho
+Creating set and member link: Activated FGFR <- Activated FGFR2b homodimer bound to FGF
+Creating set and member link: Activated FGFR <- Activated FGFR2c homodimer bound to FGF
+Creating set and member link: Activated FGFR <- Activated FGFR3b homodimer
+Creating set and member link: Activated FGFR <- Activated FGFR3c homodimer
+Creating set and member link: Activated FGFR <- Activated FGFR4 homodimer
+Creating set and member link: Activated FGFR <- Activated FGFR4 bound to FGF19:BetaKlotho
+100: [PathwayDiagram:1500841] Diagram of Signaling by constitutively active EGFR
+Creating set and member link: EGFR KD mutants active dimer <- EGF:EGFR KD mutants dimer
+Creating set and member link: EGFR KD mutants active dimer <- EGFR KD mutants dimer
+Creating set and member link: p-EGFR mutants dimer <- p-6Y-EGFR KD mutants dimer
+Creating set and member link: p-EGFR mutants dimer <- p-5Y-EGFRvIII mutant dimer
+Creating set and member link: p-EGFR mutants dimer <- p-6Y-EGFR KD mutants dimer
+Creating set and member link: p-EGFR mutants dimer <- p-5Y-EGFRvIII mutant dimer
+101: [PathwayDiagram:1164958] Diagram of Interleukin-6 signaling
+Creating set and member link: IL6:Trimeric IL-6 receptor:JAKs <- IL6:IL6RA:IL6RB:JAKs
+Creating set and member link: IL6:Trimeric IL-6 receptor:JAKs <- IL6:sIL6R:IL6RB:JAKs
+102: [PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds
+Creating set and member link: PTGS dimers <- PGHS2 dimer
+103: [PathwayDiagram:421530] Diagram of Telomere Maintenance
+Creating set and member link: NTP <- ATP
+Total Pathway Diagram needs to be changed: 103

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bp="http://www.biopax.org/release/biopax-level2.owl#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xml:base="http://www.reactome.org/biopax/68324#">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.biopax.org/release/biopax-level2.owl" />
+  </owl:Ontology>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction1">
+    <bp:LEFT rdf:resource="#physicalEntityParticipant1" />
+    <bp:LEFT rdf:resource="#physicalEntityParticipant2" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant3" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Association of Cdc13/Cdk1 with replicative origin</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Association of Cdc13/Cdk1 with replicative origin</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref2" />
+    <bp:XREF rdf:resource="#unificationXref3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">At the beginning of this reaction, 1 molecule of 'ORC:origin complex', and 1 molecule of 'Cdc13 (Cyclin B) protein ' are present. At the end of this reaction, 1 molecule of 'ORC:origin:Cdc13 (cyclin B) complex' is present.&lt;br&gt;&lt;br&gt; This reaction takes place in the 'nucleus'.&lt;br&gt;</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref1" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:biochemicalReaction>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant1">
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 113634</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary1">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">nucleoplasm</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref1" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref1">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0005654</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntity rdf:ID="physicalEntity1">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ORC:origin complex [nucleoplasm]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ORC:origin complex</bp:SHORT-NAME>
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:physicalEntity>
+  <bp:dataSource rdf:ID="dataSource1">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:NAME>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://www.reactome.org</bp:COMMENT>
+  </bp:dataSource>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant2">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 113624</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntity rdf:ID="physicalEntity2">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cdc13 (Cyclin B) protein  [nucleoplasm]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cdc13 (Cyclin B) protein</bp:SHORT-NAME>
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:physicalEntity>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant3">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#physicalEntity3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 113635</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:physicalEntity rdf:ID="physicalEntity3">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ORC:origin:Cdc13 (cyclin B) complex [nucleoplasm]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ORC:origin:Cdc13 (cyclin B) complex</bp:SHORT-NAME>
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:physicalEntity>
+  <bp:unificationXref rdf:ID="unificationXref2">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">113636</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=113636</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref3">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_269</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">4</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_269.4</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref1">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12419251</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2002</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Stable association of mitotic cyclin B/Cdc2 to replication origins prevents endoreduplication.</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Wuarin, J</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Buck, V</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nurse, P</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Millar, JB</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cell 111:419-31</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction2">
+    <bp:LEFT rdf:resource="#sequenceParticipant1" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant4" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kinesin-8 is a dimer</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kinesin-8 is a dimer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref10" />
+    <bp:XREF rdf:resource="#unificationXref11" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fission yeast expresses two kinesin-8s. These polypeptides colocalize throughout the vegetative cell cycle as they bind cytoplasmic microtubules during interphase, spindle microtubules, and/or kinetochores during early mitosis, and the interpolar spindle as it elongates in anaphase. Homo- and hetero-dimers can be produced in vitro.</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref2" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Authored: Akkerman, JW, 2010-10-29</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reviewed: Ouwehand, WH, 2010-11-12</bp:COMMENT>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Edited: Jupe, S, 2010-11-15</bp:COMMENT>
+  </bp:biochemicalReaction>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant1">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 984594</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary2">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cytosol</bp:TERM>
+    <bp:XREF rdf:resource="#unificationXref4" />
+  </bp:openControlledVocabulary>
+  <bp:unificationXref rdf:ID="unificationXref4">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0005829</bp:ID>
+  </bp:unificationXref>
+  <bp:protein rdf:ID="protein1">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kinesin-8 monomers [cytosol]</bp:NAME>
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome. Each synonym is a name of a PhysicalEntity, and each XREF points to one PhysicalEntity</bp:COMMENT>
+    <bp:XREF rdf:resource="#unificationXref6" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kinesin-like protein 6 [cytosol]</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref7" />
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kinesin-like protein 5 [cytosol]</bp:SYNONYMS>
+  </bp:protein>
+  <bp:bioSource rdf:ID="bioSource1">
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Schizosaccharomyces pombe</bp:NAME>
+    <bp:TAXON-XREF rdf:resource="#unificationXref5" />
+  </bp:bioSource>
+  <bp:unificationXref rdf:ID="unificationXref5">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NCBI Taxonomy</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">4896</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref6">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">O59751</bp:ID>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref7">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">O14343</bp:ID>
+  </bp:unificationXref>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant4">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#complex1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 984632</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:complex rdf:ID="complex1">
+    <bp:COMPONENTS rdf:resource="#sequenceParticipant2" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kinesin-8 dimer [cytosol]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kinesin-8 dimer</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref8" />
+    <bp:XREF rdf:resource="#unificationXref9" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:complex>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant2">
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Converted from EntitySet in Reactome</bp:COMMENT>
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary2" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 984594</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:unificationXref rdf:ID="unificationXref8">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">984632</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=984632</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref9">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_25949</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_25949.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref10">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">984665</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=984665</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref11">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_25388</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_25388.1</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref2">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">19037096</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2009</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kinesin-8 from fission yeast: a heterodimeric, plus-end-directed motor that can couple microtubule depolymerization to cargo movement</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Grissom, PM</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fiedler, T</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Grishchuk, EL</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nicastro, D</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">West, RR</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">McIntosh, JR</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Mol Biol Cell 20:963-72</bp:SOURCE>
+  </bp:publicationXref>
+  <bp:biochemicalReaction rdf:ID="biochemicalReaction3">
+    <bp:LEFT rdf:resource="#physicalEntityParticipant5" />
+    <bp:LEFT rdf:resource="#sequenceParticipant3" />
+    <bp:RIGHT rdf:resource="#sequenceParticipant4" />
+    <bp:RIGHT rdf:resource="#physicalEntityParticipant6" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Phosphorylation of Wee1 kinase by Chk1</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Phosphorylation of Wee1 kinase by Chk1</bp:SHORT-NAME>
+    <bp:XREF rdf:resource="#unificationXref17" />
+    <bp:XREF rdf:resource="#unificationXref18" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">At the beginning of this reaction, 1 molecule of 'ATP', and 1 molecule of 'Wee1 POMBE' are present. At the end of this reaction, 1 molecule of 'phospho-Wee1 Pombe', and 1 molecule of 'ADP' are present.&lt;br&gt;&lt;br&gt; This reaction takes place in the 'nucleoplasm' and  is mediated by the 'kinase activity' of 'CHK1 (POMBE)'.&lt;br&gt;</bp:COMMENT>
+    <bp:XREF rdf:resource="#publicationXref3" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:biochemicalReaction>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant5">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 29358</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:smallMolecule rdf:ID="smallMolecule1">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATP [ChEBI:15422]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATP</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Adenosine 5'-triphosphate</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref12" />
+  </bp:smallMolecule>
+  <bp:unificationXref rdf:ID="unificationXref12">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">15422</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant3">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 156495</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein2">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P07527 wee1</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">wee1</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">wee1</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SPCC18B5.03</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref13" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Protein kinase that acts both on serines and on tyrosines. It acts as a dosage-dependent negative regulator of entry into mitosis (G2 to M transition). Phosphorylates and inhibits cdc2.CATALYTIC ACTIVITY ATP + a [protein]-L-tyrosine = ADP + a [protein]-L-tyrosine phosphate.ENZYME REGULATION Negatively regulated by phosphorylation in the M-phase.PTM Phosphorylated in the C-terminal by NIM1/CDR1.SIMILARITY Belongs to the protein kinase superfamily. Ser/Thr protein kinase family. WEE1 subfamily.SIMILARITY Contains 1 protein kinase domain.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref13">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P07527</bp:ID>
+  </bp:unificationXref>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant4">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein2" />
+    <bp:SEQUENCE-FEATURE-LIST rdf:resource="#sequenceFeature1" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 156490</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:sequenceParticipant>
+  <bp:sequenceFeature rdf:ID="sequenceFeature1">
+    <bp:FEATURE-TYPE rdf:resource="#openControlledVocabulary3" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">O-phospho-L-serine at unknown position</bp:NAME>
+  </bp:sequenceFeature>
+  <bp:openControlledVocabulary rdf:ID="openControlledVocabulary3">
+    <bp:TERM rdf:datatype="http://www.w3.org/2001/XMLSchema#string">O-phospho-L-serine [MOD:00046]</bp:TERM>
+  </bp:openControlledVocabulary>
+  <bp:physicalEntityParticipant rdf:ID="physicalEntityParticipant6">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#smallMolecule2" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 113582</bp:COMMENT>
+    <bp:STOICHIOMETRIC-COEFFICIENT rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</bp:STOICHIOMETRIC-COEFFICIENT>
+  </bp:physicalEntityParticipant>
+  <bp:smallMolecule rdf:ID="smallMolecule2">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ADP [ChEBI:16761]</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ADP</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Adenosine 5'-diphosphate</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref14" />
+  </bp:smallMolecule>
+  <bp:unificationXref rdf:ID="unificationXref14">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ChEBI</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">16761</bp:ID>
+  </bp:unificationXref>
+  <bp:catalysis rdf:ID="catalysis1">
+    <bp:CONTROLLER rdf:resource="#sequenceParticipant5" />
+    <bp:CONTROLLED rdf:resource="#biochemicalReaction3" />
+    <bp:DIRECTION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PHYSIOL-LEFT-TO-RIGHT</bp:DIRECTION>
+    <bp:CONTROL-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ACTIVATION</bp:CONTROL-TYPE>
+    <bp:XREF rdf:resource="#relationshipXref1" />
+    <bp:XREF rdf:resource="#unificationXref16" />
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+  </bp:catalysis>
+  <bp:sequenceParticipant rdf:ID="sequenceParticipant5">
+    <bp:CELLULAR-LOCATION rdf:resource="#openControlledVocabulary1" />
+    <bp:PHYSICAL-ENTITY rdf:resource="#protein3" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome DB_ID: 75038</bp:COMMENT>
+  </bp:sequenceParticipant>
+  <bp:protein rdf:ID="protein3">
+    <bp:DATA-SOURCE rdf:resource="#dataSource1" />
+    <bp:ORGANISM rdf:resource="#bioSource1" />
+    <bp:NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt:P34208 chk1</bp:NAME>
+    <bp:SHORT-NAME rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chk1</bp:SHORT-NAME>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">chk1</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">rad27</bp:SYNONYMS>
+    <bp:SYNONYMS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SPCC1259.13</bp:SYNONYMS>
+    <bp:XREF rdf:resource="#unificationXref15" />
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">FUNCTION Serine/threonine-protein kinase which is required for checkpoint-mediated cell cycle arrest and activation of DNA repair in response to the presence of DNA damage or unreplicated DNA. May also negatively regulate cell cycle progression during unperturbed cell cycles. Binds to and phosphorylates CDC25. This leads to negative regulation of CDC25 and prevents mitotic entry.CATALYTIC ACTIVITY ATP + a protein = ADP + a phosphoprotein.SUBUNIT Interacts with rfp1.PTM Phosphorylated.SIMILARITY Belongs to the protein kinase superfamily. CAMK Ser/Thr protein kinase family. NIM1 subfamily.SIMILARITY Contains 1 protein kinase domain.</bp:COMMENT>
+  </bp:protein>
+  <bp:unificationXref rdf:ID="unificationXref15">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">UniProt</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">P34208</bp:ID>
+  </bp:unificationXref>
+  <bp:relationshipXref rdf:ID="relationshipXref1">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0016301</bp:ID>
+    <bp:RELATIONSHIP-TYPE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GO molecular function</bp:RELATIONSHIP-TYPE>
+  </bp:relationshipXref>
+  <bp:unificationXref rdf:ID="unificationXref16">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">75047</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=75047</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref17">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome Database ID Release 48</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">75040</bp:ID>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Database identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=75040</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:unificationXref rdf:ID="unificationXref18">
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome</bp:DB>
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REACT_1063</bp:ID>
+    <bp:ID-VERSION rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2</bp:ID-VERSION>
+    <bp:COMMENT rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Reactome stable identifier. Use this URL to connect to the web page of this instance in Reactome: http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=REACT_1063.2</bp:COMMENT>
+  </bp:unificationXref>
+  <bp:publicationXref rdf:ID="publicationXref3">
+    <bp:ID rdf:datatype="http://www.w3.org/2001/XMLSchema#string">9034337</bp:ID>
+    <bp:DB rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Pubmed</bp:DB>
+    <bp:YEAR rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1997</bp:YEAR>
+    <bp:TITLE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Chk1 is a wee1 kinase in the G2 DNA damage checkpoint inhibiting cdc2 by Y15 phosphorylation.</bp:TITLE>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">O'Connell, MJ</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Raleigh, JM</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Verkade, HM</bp:AUTHORS>
+    <bp:AUTHORS rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nurse, P</bp:AUTHORS>
+    <bp:SOURCE rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EMBO J 16:545-54</bp:SOURCE>
+  </bp:publicationXref>
+</rdf:RDF>
+

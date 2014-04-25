@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     Sep 7, 2005 10:33:11 AM                                                        
+
+     project        Reactome API Packaging	
+     description    Packaging all Reactome database related APIs into one jar file.
+                   
+     guanming                                                                
+     ====================================================================== -->
+<project name="project" default="jar" basedir="..">
+    <description>
+            Copy all class files and source files into one jar file.
+    </description>
+	<property name="targetDir" value="reactomeAPI" />
+	<property name="tmpDir" value="${targetDir}/tmp" />
+	<property name="srcDir" value="src" />
+	<property name="clsDir" value="classes" />
+	
+	<target name="copy">
+		<delete dir="${targetDir}"/>
+		<mkdir dir="${targetDir}"/>
+		<mkdir dir="${tmpDir}"/>
+		<copy todir="${tmpDir}">
+			<fileset dir="${clsDir}">
+				<include name="org/gk/model/**.class" />
+				<include name="org/gk/schema/**.class" />
+				<include name="org/gk/persistence/**.class" />
+				<include name="org/gk/util/**.class" />
+			</fileset>
+			<fileset dir="${srcDir}">
+				<include name="org/gk/model/**.java" />
+				<include name="org/gk/schema/**.java" />
+				<include name="org/gk/persistence/**.java" />
+				<include name="org/gk/util/**.java" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="jar" depends="copy">
+		<jar destfile="${targetDir}/reactomeAPI.jar">
+			<fileset dir="${tmpDir}">
+			</fileset>
+		</jar>
+		<delete dir="${tmpDir}" />
+	</target>
+
+</project>
+

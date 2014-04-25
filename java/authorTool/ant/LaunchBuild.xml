@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Aug 5, 2004 11:34:00 AM                                                        
+
+     project    
+     description
+                   
+     wugm                                                                
+     ====================================================================== -->
+<project name="UpdatableCuratorTool" default="runOnly" basedir="..">
+    <description>
+    	Copy all files needed to build the Reactome author tool by InstallAnywhere.
+    </description>
+	
+	<!-- Defining a list of directory names to be used -->
+	<property name="targetDir" value="${basedir}/../temp/curatorTool" />
+	<property name="classDir" value="${basedir}/classes" />
+	<property name="orgDir" value="${classDir}/org" />
+	<property name="launchDir" value="${classDir}/launcher" />
+	<property name="resourcesDir" value="${basedir}/resources" />
+	<property name="imagesDir" value="${basedir}/images" />
+	<property name="docsDir" value="${basedir}/docs" />
+	<property name="docsImagesDir" value="${docsDir}/images" />
+	<property name="libDir" value="${basedir}/lib" />
+	
+	<!-- Empty the direcotry. If nothing there, it should do nothing -->
+	<target name="delete">
+		<delete dir="${targetDir}" />
+	</target>
+	
+	<!-- make a directory first. If it is there, it should do nothing -->
+	<target name="mkdir" depends="delete">
+		<mkdir dir="${targetDir}" /> 
+	</target>
+	
+	<!-- copy all files to the target directory -->
+	<target name="copy" depends="mkdir">
+		<copy todir="${targetDir}/org">
+			<fileset dir="${orgDir}">
+				<exclude name="reactome/**" />
+			</fileset>
+		</copy>
+		<copy todir="${targetDir}/launcher">
+			<fileset dir="${launchDir}">
+			</fileset>
+		</copy>
+		<copy todir="${targetDir}/resources">
+			<fileset dir="${resourcesDir}" >
+				<exclude name="*.prop" />
+				<exclude name="Timings.xml" />
+			</fileset>
+		</copy>
+		<copy todir="${targetDir}/images">
+			<fileset dir="${imagesDir}" />
+		</copy>
+		<copy todir="${targetDir}/docs">
+			<fileset dir="${docsDir}">
+			</fileset>
+		</copy>
+		<copy todir="${targetDir}/lib">
+			<fileset dir="${libDir}">
+				<exclude name="skin/themepack.zip" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="run" depends="copy, runOnly">
+	</target>
+	
+	<target name="runOnly">
+		<java dir="${targetDir}" classpath="${targetDir}" classname="launcher.Launcher" fork="true">
+			<classpath>
+			      <fileset dir="lib">
+			        <include name="**/*.jar"/>
+			      </fileset>
+			</classpath>
+		</java>
+	</target>
+</project>

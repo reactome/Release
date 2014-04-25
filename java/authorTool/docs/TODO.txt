@@ -1,0 +1,163 @@
+1. Switch from a Reaction to Pathway should delete the ReactionCoordinate instance for this reaction in the database. This should be applied to delete a reaction too.
+Comments for build 18 (Guanming): It will be great if a way to control this in the schema. If not, probably some changes should be done in MySQLAdaptor.delete() method. Low priority. less than 1 day.
+
+2. There are two actions can be applied to two selected instances, compare and merge. A merge action also appears in compare dialog. But the result of this merging is not actually the merging because the original two instances are still there. Consider remove the merging in the compare dialog or make this merging work as the same as the first merging action. This is more like a bug.
+Comments for build 18 (Guanming): low priority. half a day.
+
+3. Clone should remove created slot value too. Prbably not necessary since it can be removed manually.
+Comments for build 18 (Guanming): curators should be considered. low priority. trivial.
+
+4. Create DTD or XML schema for both the curator and author tool xml formats.
+Comments for build 18 (Guanming): low priority. Will NOT be done for 18.
+
+5. Drag and drop an instance from bookmark to another instances' slot (From Imre).
+Comments for build 18 (Guanming): medium priority. May be in build 18. 3 days.
+Guanming: to be in build 19 (3/31/05)
+
+6. Spelling checking for text (From Lisa).
+Comments for build 18 (Guanming): low priority.
+
+7. DB_ID used as Long for a member variable in GKInstance but is Integer in attributes. This should be changed, since sometimes it will be treated as different.
+Comments for build 18 (Guanming): fixed in schema in build 17.
+
+8. Logging for the curator tool
+Comments for build 18 (Guanming): low priority. 1 week.
+
+9. DnD for fast adding from bookmark panel to attribute pane.
+Comments for build 18 (Guanming): Same as in 5
+
+10. Need for adding a virtual container for the author tool since by this way some discrete pathways can be checked out from the curator tool or from the database. An example from Marc.
+Comments for build 18 (Guanming): high priority. Will be in build 18. 2 days.
+Guanming(3/11/05): Done. A name will be asked for this vitual container.
+
+11. Let the curator tool update schema automatically if it found that the schema in the gk_central is newer than the one in the local folder.
+Comments for build 18 (Guanming): medium priority. Possible in build 18. 2 days.
+
+12. Bug: instances will not be removed from synchronization list after a matching action is done.
+Comments for build 18 (Guanming): high priority. Should be fixed in build 18. 1 day.
+
+13. ConcreteReaction cannot be listed at the top level in the hierarchical event view for the database (Gopal).
+Comments for build 18 (Guanming): high priority. will be fixed in build 18. 2 hours.
+Guanming (3/4/05): Fixed.
+
+14. It seems that a refresh button (or automatic refresh) should be added after merging action in synchronization dialog.
+Comments for build 18 (Guanming): high priority. Will be in build 18. 4 hours.
+
+15. Should save be done before synchronization? How about the curator just wants to see if any new changes are done?
+Comments for build 18 (Guanming): high priority. Should test all cases carefully. Should be done in build 18. 1 day.
+
+16. The list in the synchronization dialog should be refreshed after merging is done in the comparison dialog. A new instance or the result type might be changed after merging. Right now, the user has to refresh the list manual.
+Comments for build 18 (Guanming): high priority. Similar to 14. 4 hours.
+
+17. Entity level view: Something similar to hierarchical event view. More like a GenMap tool?
+Comments for build 18 (Guanming): high priority. 3 months. 
+
+18. Add QA to the curator tool. These methods can also be applied to the whole database directly. So the performance should be considered.
+Comments for build 18 (Guanming): high priority. 1 week. The framework and one or two implementations should be in build 18.
+Guanming: To be in build 19 (3/31/05)
+Guanming(4/13/05): two implementations (Imbalance check for Reactions and Required attrributes check for any classes) are done.
+
+19. Bring Generic/Concrete concepts into the author tool.
+Comments for build 18 (Guanming): low priority. 1 week. 
+
+20. More intelligent ways to import/export to/from the author tool file to the curator tool file.
+Comments for build 18 (Guanming): medium priority. 1 week. Will not be done for build 18.
+
+21. This requirement from Geeta: Set taxon or compartment should propagate its setting to all descendent instances in a hierarchical tree (I guess it should apply to "hasComponent" relationship).
+Comments for build 18 (Guanming): high priority. 2 days. Will be in build 18.
+The original text from Geeta's email:
+1) If a curator fills in the taxon for a pathway, then all its
+components get the same taxon filled in, by default. Further, if a
+reaction has a taxon on it, then its inputs and outputs get the same
+taxon filled in, by default. This fields is still left editable, so that
+the curator can change it manually in case of host-parasite,
+host-symbiont reactions etc.
+2) Same deal for compartments. Now this fields is still left editable,
+so that the curator can change it manually in case of
+transport/translocation/membrane disruption etc.
+Guanming (3/11/05): done. If there is a value in the downstream, the editing propagation will stop at that instance. Removing a value will NOT be propagated.
+
+22. Add a new popup menu for displaying referrers in InstanceListPane for referrer.
+Comments for build 18 (Guanming): medium priority. 1 day. Probaby not in build 18.
+Guanming: To be in build 19 (3/31/05)
+
+23. ComboBox cell editor in AttributePane should have word completion type search (Imre)
+Comments for build 18 (Guanming): before we spend too much time in this editor, should we wait for the curator to see if they like or use it much? To make it happen, some big changes are needed to AttributePane. medium priority. 3 days.
+
+24. Some of the attributes starting with an underscore should either be hidden or removed from the database (Imre)
+Comments for build 18 (Guanming): it is more like schema thing. medium priority.
+
+25. When cloning a complex, all instances in hierarchy should be cloned AND new compartment propagated to instances (Esther)
+Comments for build 18 (Guanming): I guess different curators have different views on this feature. Probably it will be great to do a survey before we do this change. medium priority. 1 day.
+
+26. If two instances are merged, what happens to the referring instances? (Esther)
+Comments for build 18 (Guanming): See discussions on this thread in december. To prevend unintended changes to instances in the database, warning should be displayed before committing a deletion to the database. medium priority. 
+
+27. When an instance is deleted, all referers are updated.  BUT: there is no change in the "modified" slot of the referers (Imre)
+Comments for build 18 (Guanming): high priority. should be fixed in 18.
+Guanming: To be in build 19 (3/31/05)
+
+28. ComboBox cell editor in AttributePane should give access to instances in database too, if database is available (Bijay)
+Comments for build 18 (Guanming): implementation should not be a problem. But performance might be a challenge. Before going to it, I suggest to do a refactor to remove the string array used for mapping display names to GKInstances. Use a customized cell renderer in the combobox editor to display GKInstance. medium priority. 1 day. (3 days to include refactoring).
+
+29. Some attributes, e.g. catalytic activity, provide access to schema classes that are not very interesting to the user.  In such cases, it would be better to create extra slots for these as part of a more complex instance.  E.g. give a generic pathway a catalyst activity and a catalyst physical entity slot.  This would hide some of the data model from the user (Imre)
+Comments for build 18 (Guanming): a good idea, but highly dependent on schema. If schema is stable enough, it is worthy to implementing. However, the schema view is try to mirror the schema without any changes. I suggest to implement such functions in the event view or entity-level view (see 17). low priority. Should not in 18.
+
+30. Additional slots in AttributePane giving access to parent or context information, e.g. the pathway in which a reaction occurs (Imre)
+Comments for build 18 (Guanming): Same as 29. 
+
+31. "Easy" view, in which classification of objects is done semi-automatically (Imre)
+Comments for build 18 (Guanming): ???
+
+32. Bug: The attribute pane popped by View action from menu or toolbar is not editable for the local instance (Marc).
+Guanming (3/2/05): high prority. Should be fixed in build 18.
+3/3/05: Fixed.
+
+33. Bug: If, in creating a new literatureReference instance, I enter a wrong PMID and then 'cancel' the newInstance window, new person instances are nevertheless created for each of the authors of the cancelled literatureReference. (Peter)
+Guanming (3/2/05): medium prority. 
+Guanming: To be in build 19 (3/31/05)
+
+34. Bug: Names of the form 'Firstname van Whatever' are handled incorrectly: the Initial slot value is set to 'F van' (should be 'F') and the Surname slot value is set to 'Whatever' (should be 'van Whatever'). (Peter)
+Guanming (3/2/05): high prority. Should be fixed in build 18.
+Guanming (3/4/05): fixed.
+
+35. Bug: If the inputs and outputs of a new concreteEvent instance are specified before the event name is specified, the _displayName autogenerates from the inputs and outputs rather than from the event name. (I think this is new in CuratorTool2, but I'm not sure.) (Peter)
+Comments for build 18 (Guanming): I cannot reproduce it. Have to ask Peter about this. However, a leading space is added to _displayName if name is generated from input/output.
+
+36. Bug. There are still some database integrity problems associated with commit etc. when more than one user is working on the same instance(s) (could happen during a jamboree).  Test cases for these are in a separate file, SynchronizationTestCases.txt (David).
+Guanming (3/2/05): high prority. David is working on them. Should be fixed in build 18.
+
+37. Add a VM property to the build file: -Dfile.encoding=UTF-8. If not, some OS might pick up wrong default encoding schema. Marc's MacOS is using ISO-8859-1. (Guanming)
+Guanming (3/2/05): high prority. Should be in build 18.
+
+38. A progress bar (or window) is needed for check-in (committing) since the check-in process is slow now (Gopal)
+Guanming (3/8/05): high prority. Should be in build 18.
+Guanming: To be in build 19 (3/31/05)
+
+39. It seems that _doNotRelease in ConcreteReaction is not getting stored in the database correctly - setting it to false in the curator tool sets it to undefined in the database.  This needs to be investigated. (Imre).
+Guanming (4/14): Fixed by David.
+
+40. In the "Search Instances" panel, it is possible to perform a search for a user-specified term in a preselected attribute slot of a preselected class.  By default, the attribute is always DB_ID.  It would be convenient for curators if a more common default were available, dependant on class (Bernard de Bono).
+
+41. Suggestion: the "Classes" panel currently shows the class hierarchy as it exists in the database.  Instead of showing a fixed hierarchy, the user could be presented with the classes in the leaves of the hierarchy only.  Extra structure could be shown as a pseudo-hierarchy, e.g. all of the Set classes vould be shown as being subclasses of a Set class, which in reality does not exist.  Mappings from classes to pseudo-subclasses could be put into a configuration file.  This would allow the GUI to be optimized for the curator (Esther).
+
+42. Followup to Geeta's point at the teleconference 3/29/05: what should happen when a slot in an editable instance is double-clicked? Currently, the user is presented with a combo box giving alternative values from the lical instances that could be inserted.  Would it be better to reinstate the old behaviour?  Could shift-double-click be used to get the combo box?  Or would it be better to set the behaviour via preferences?  After consultation with Geeta and Guanming, it looks like the best solution would be to put an extra button onto the attribute pane that simply toggles between the two behaviours.  The button setting would be persistent.  (David)
+
+43. Deploy the curator tool as Java Web Start project. (Guanming)
+Guanming (4/14): Done. Changes are in the source code.
+
+44. Bug: If the last opened project is moved (renamed or deleted), the class hierarchical cannot be opened. (Fixed)
+
+45. Could the tool be made to commit also the attribute value instance if it's class has changed? (Imre)  Otherwise, inconsistencies can be introduced into the database.
+
+46. An abbreviation for species should be added to the beginning of the display name, to allow disambiguation between instances with identical names but different species.  E.g. when building a pathway for human, one has to be very careful when selecting catalysts, since data is available for more than one species. (Esther)
+
+47. Required slots should be hightlighted and checked (Guanming)
+
+48. Bug: _displayName is not correct for ReferenceGroup (Guanming from Peter)
+Guanming (4/14): Fixed
+
+49. Add DB_ID, class information to the tool tip text in the panel for listing instances (Gopal).
+
+50. Bug: double-checking out a database instance (Gopal).
+Guanming (4/18): Not easy to reproduce. It is a thread control issue. If two threads try to check out the same instance, this instance might be checked out twice. Have to fix.

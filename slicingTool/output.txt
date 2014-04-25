@@ -1,0 +1,23 @@
+Tue Oct 25 10:58:24 EDT 2011
+runDumpCommand: mysqldump --skip-lock-tables -d -hlocalhost -ugopinath -pgpsmv02 gk_central
+
+runDumpCommand: mysqldump --skip-lock-tables -q --add-drop-table -e --add-locks -hlocalhost -ugopinath -pgpsmv02 gk_central DataModel
+
+runDumpCommand: mysqldump --skip-lock-tables -q --add-drop-table -e --add-locks -hlocalhost -ugopinath -pgpsmv02 gk_central Ontology
+
+
+
+
+
+Time for extractReferences: 371462
+SlicingEngine.checkReactionCooridnates(): 387283 has no locatedEvent!
+SlicingEngine.checkReactionCooridnates(): 397975 has no locatedEvent!
+SlicingEngine.checkReactionCooridnates(): 387274 has no locatedEvent!
+SlicingEngine.checkReactionCooridnates(): 188788 has no locatedEvent!
+SlicingEngine.checkReactionCooridnates(): 844604 has no locatedEvent!
+SlicingEngine.checkReactionCooridnates(): 532285 has no locatedEvent!
+SlicingEngine.checkReactionCooridnates(): 197443 has no locatedEvent!
+SlicingEngine.checkReactionCooridnates(): 387247 has no locatedEvent!
+SlicingEngine.checkReactionCooridnates(): 387272 has no locatedEvent!
+Time for dumpInstances(): 1442736
+Tue Oct 25 11:29:22 EDT 2011
