@@ -1,0 +1,54 @@
+#!/usr/local/bin/perl -w
+
+# This CGI script is the Reactome entry point for BioMart
+# queries.
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+#use lib "/tmp/libs/bioperl-1.0";
+#use lib "/tmp/libs/my_perl_stuff";
+
+use CGI qw(:standard);
+use GKB::WebUtils;
+use GKB::BioMart;
+use GKB::Config;
+use Data::Dumper;
+
+use strict;
+
+my $CGI = CGI->new();
+print $CGI->header;
+print $CGI->start_html(
+    # \-dtd => "-//IETF//DTD HTML//EN",
+    -style => {-src => '/stylesheet.css'},
+    -title => "$PROJECT_NAME (instancebrowser)",
+    -script => {-src => '/google.js'},
+    );
+
+eval {
+    my $WU = GKB::WebUtils->new_from_cgi(-CGI => $CGI);
+	my $bio_mart = GKB::BioMart->new();
+	$bio_mart->set_cgi($CGI);
+	$bio_mart->set_webutils($WU);
+	
+    $bio_mart->print_canned_query_page();
+}; $@ && handle_error($@);
+
+sub handle_error {
+    print qq(@_);
+    exit;   
+}

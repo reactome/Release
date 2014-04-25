@@ -1,0 +1,52 @@
+#!/usr/local/bin/perl -w
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+# Set the umask so that the files are group writeable. This way member of the
+# nobody group can delete them should the necessity arise.
+umask(002);
+
+#use lib "/tmp/libs/bioperl-1.0";
+#use lib "/tmp/libs/GKB/modules";
+#use lib "/tmp/libs/my_perl_stuff";
+
+use strict;
+use CGI qw(:standard);
+use GKB::WebUtils;
+use GKB::Render::HTML::FrontPage;
+use GKB::Config;
+
+my $cgi = CGI->new();
+
+my $classic = $cgi->param('CLASSIC');
+if (!(defined $classic)) {
+	$classic = $cgi->cookie('ClassicView');
+}
+
+if ($USE_REACTOME_GWT && !(defined $classic && $classic =~ /1/)) {
+	# Redirect the control to the Reactome GWT, if the appropriate
+	# flag is set.
+	print $cgi->redirect("/ReactomeGWT/entrypoint.html");
+} else {
+	# Use the traditional Reactome Perl CGI.
+	my $wu = GKB::WebUtils->new_from_cgi(-CGI => $cgi);
+	$wu->urlmaker->script_name('/cgi-bin/eventbrowser');
+	my $fp = GKB::Render::HTML::FrontPage->new(-WU => $wu);
+	umask(002);
+	
+	$fp->print_species_page($classic);
+}

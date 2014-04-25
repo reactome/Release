@@ -1,0 +1,18 @@
+109581	Apotosis
+69620	Cell Cycle Checkpoints
+69278	Cell Cycle, Mitotic
+73894	DNA Repair
+69306	DNA Replication
+74160	Gene Expression
+109582	Hemostasis
+74752	Insulin mediated signalling
+73923	Lipid metabolism
+71291	Metabolism of amino acids and related nitrogen-containg molecules
+71387	Metabolism of glucose, other sugars, and ethanol
+157118	Notch Signaling Pathway
+15869	Nucleotide metabolism
+71406	Oxidative decarboxylation of pyruvate and TCA cycle
+74159	Transcription
+72766	Tanslation
+75071	mRNA Processing
+140192	Xenobiotic metabolism

@@ -1,0 +1,54 @@
+<ReferenceDatabases>
+<ReferenceDatabase 
+	name="ChEBI" 
+	queryURL="http://www.ebi.ac.uk/chebi/index.jsp" 
+	accessURL="http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:###ID###" />
+<ReferenceDatabase 
+	name="COMPOUND" 
+	queryURL="http://www.genome.ad.jp/dbget-bin/www_bfind?compound" 
+	accessURL="http://www.genome.ad.jp/dbget-bin/www_bget?cpd:###ID###" />
+<ReferenceDatabase 
+	name="EC" 
+	queryURL="http://us.expasy.org/enzyme/" 
+	accessURL="http://us.expasy.org/cgi-bin/nicezyme.pl?###ID###" />
+<ReferenceDatabase 
+	name="EMBL" 
+	queryURL="http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz?-page+top+-newId"
+	accessURL="http://srs.ebi.ac.uk/srs6bin/cgi-bin/wgetz?([embl-ID:###ID###]|[embl-AccNumber:###ID###])+-e" />
+<ReferenceDatabase 
+	name="ENSEMBL_Rattus_norvegicus_PROTEIN" 
+	queryURL="http://www.ensembl.org/Rattus_norvegicus" 
+	accessURL="http://www.ensembl.org/Rattus_norvegicus/protview?peptide=###ID###&amp;db=core" />
+<ReferenceDatabase
+	name="ENSEMBL_Mus_musculus_PROTEIN"
+	queryURL="http://www.ensembl.org/Mus_musculus"
+	accessURL="http://www.ensembl.org/Mus_musculus/protview?peptide=###ID###&amp;db=core" />
+<ReferenceDatabase
+	name="ENSEMBL_Fugu_rubripes_PROTEIN"
+	queryURL="http://www.ensembl.org/Fugu_rubripes"
+	accessURL="http://www.ensembl.org/Fugu_rubripes/protview?peptide=###ID###&amp;db=core" />
+<ReferenceDatabase
+	name="ENSEMBL_Danio_rerio_PROTEIN"
+	queryURL="http://www.ensembl.org/Danio_rerio"
+	accessURL="http://www.ensembl.org/Danio_rerio/protview?peptide=###ID###&amp;db=core" />
+<ReferenceDatabase
+	name="ENSEMBL_Homo_sapiens_PROTEIN"
+	queryURL="http://www.ensembl.org/Homo_sapiens"
+	accessURL="http://www.ensembl.org/Homo_sapiens/protview?peptide=###ID###&amp;db=core" />
+<ReferenceDatabase
+	name="GO"
+	queryURL="http://www.ebi.ac.uk/ego"
+	accessURL="http://www.ebi.ac.uk/ego/QuickGO?mode=display&amp;entry=GO:###ID###" />
+<ReferenceDatabase
+	name="REACTION"
+	queryURL="http://www.genome.ad.jp/dbget-bin/www_bfind?reaction"
+	accessURL="http://www.genome.ad.jp/dbget-bin/www_bget?rn:###ID###" />
+<ReferenceDatabase
+	name="UniProt"
+	queryURL="http://www.pir.uniprot.org/search/textSearch.shtml"
+    accessURL="http://www.pir.uniprot.org/cgi-bin/upEntry?id=###ID###" />	
+<ReferenceDatabase
+	name="Reactome"
+	queryURL="http://brie8.cshl.edu"
+    accessURL="http://brie8.cshl.edu/cgi-bin/eventbrowser?DB=gk_central&amp;ID=###ID###" />
+</ReferenceDatabases>

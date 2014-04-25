@@ -1,0 +1,82 @@
+#!/usr/local/bin/perl -w -T
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+
+use strict;
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::WebUtils;
+use GKB::Config;
+use GKB::FrontPage3;
+
+my $header = undef;
+my $footer = undef;
+my $enclosing_div_start = undef;
+my $enclosing_div_end = undef;
+my $reactome_version_num = "2";
+if (defined $REACTOME_VERSION && !($REACTOME_VERSION eq '')) {
+    $REACTOME_VERSION =~ /^([0-9]+).*$/;
+    $reactome_version_num = $1;
+}
+if ($reactome_version_num eq "3") {
+    my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (search2)", "/stylesheet.css");
+    $header = $front_page->get_header();
+    $footer = $front_page->get_footer();
+    $enclosing_div_start = $front_page->get_enclosing_div_start();
+    $enclosing_div_end = $front_page->get_enclosing_div_end();
+}
+
+my $CGI = CGI->new();
+
+my $wu;
+eval {
+    $wu = GKB::WebUtils->new_from_cgi(
+	-CGI => $CGI,
+	-debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+	);
+    $wu->urlmaker->script_name('/cgi-bin/eventbrowser');
+
+    if ($CGI->param('SUBMIT') || $CGI->param('QUERY')) {
+        if (defined $header) {
+	    print $CGI->header(-charset => 'UTF-8');
+	    print $header;
+	    print $enclosing_div_start;
+	    $wu->handle_simple_query_form(1);
+	    print $enclosing_div_end;
+	    print $footer;
+        } else {
+	    $wu->handle_simple_query_form();
+	}
+    } else {
+	print $CGI->redirect('/');
+    }
+}; $@ && handle_error("$@");
+
+if ($wu && $wu->dba) {
+    $wu->dba->db_handle->disconnect;
+}
+$wu->in_html && print $CGI->end_html;
+
+sub handle_error {
+    if ($wu && $wu->in_html) {
+	print qq(<PRE CLASS="error">\n@_\n</PRE>\n);
+    } else {
+	print @_;
+    }
+}
+

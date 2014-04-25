@@ -1,0 +1,1373 @@
+; Wed Sep 01 16:49:22 BST 2004
+; 
+;+ (version "2.0.1")
+;+ (build "Build 168")
+
+([BROWSER_SLOT_NAMES] of Property_List
+	(properties
+		[update_200405_final_ProjectKB_Instance_36]
+		[update_200405_final_ProjectKB_Instance_37]
+		[update_200405_final_ProjectKB_Instance_38]
+		[update_200405_final_ProjectKB_Instance_39]
+		[update_200405_final_ProjectKB_Instance_40]))
+
+([CLSES_TAB] of Widget
+	(widget_class_name "edu.stanford.smi.protege.widget.ClsesTab")
+	(property_list [ProjectKB_4766_00016])
+	(label "Classes"))
+
+([FORMS_TAB] of Widget
+	(widget_class_name "edu.stanford.smi.protege.widget.FormsTab")
+	(property_list [ProjectKB_4766_00045])
+	(label "Forms"))
+
+([GKB_core_ProjectKB_00103] of String
+	(name "instances_file_name")
+	(string_value "$1.pins"))
+
+([GKB_core_ProjectKB_00203] of Widget
+	(x 0)
+	(height 0)
+	(property_list [GKB_core_ProjectKB_00303])
+	(name "__is_ghost")
+	(width 0)
+	(is_hidden FALSE)
+	(y 0))
+
+([GKB_core_ProjectKB_00254] of Widget
+	(x 0)
+	(height 435)
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
+	(property_list [GKB_core_ProjectKB_00484])
+	(name ":EXTENDED-SLOT")
+	(width 758)
+	(is_hidden FALSE)
+	(y 0))
+
+([GKB_core_ProjectKB_00303] of Property_List)
+
+([GKB_core_ProjectKB_00304] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(property_list [GKB_core_ProjectKB_00305])
+	(name "slotDisplayName")
+	(width 250)
+	(is_hidden FALSE)
+	(y 330))
+
+([GKB_core_ProjectKB_00305] of Property_List)
+
+([GKB_core_ProjectKB_00484] of Property_List
+	(properties
+		[GKB_core_ProjectKB_00485]
+		[GKB_core_ProjectKB_00486]
+		[GKB_core_ProjectKB_00487]
+		[GKB_core_ProjectKB_00488]
+		[GKB_core_ProjectKB_00489]
+		[GKB_core_ProjectKB_00495]
+		[GKB_core_ProjectKB_00496]
+		[GKB_core_ProjectKB_00497]
+		[GKB_core_ProjectKB_00503]
+		[GKB_core_ProjectKB_00504]
+		[GKB_core_ProjectKB_00505]
+		[GKB_core_ProjectKB_00506]
+		[GKB_core_ProjectKB_00507]
+		[GKB_core_ProjectKB_00508]
+		[GKB_core_ProjectKB_00509]
+		[GKB_core_ProjectKB_00510]
+		[GKB_core_ProjectKB_00801]
+		[GKB_core_ProjectKB_00920]
+		[GKB_core_ProjectKB_00304]
+		[PROJECT_3770_ProjectKB_Instance_59])
+	(name "slot widget properties"))
+
+([GKB_core_ProjectKB_00485] of Widget
+	(x 200)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.MinimumCardinalityWidget")
+	(label "Cardinality")
+	(name ":SLOT-MINIMUM-CARDINALITY")
+	(width 200)
+	(y 120))
+
+([GKB_core_ProjectKB_00486] of Widget
+	(x 200)
+	(height 35)
+	(widget_class_name "edu.stanford.smi.protege.widget.MaximumCardinalityWidget")
+	(name ":SLOT-MAXIMUM-CARDINALITY")
+	(width 200)
+	(y 175))
+
+([GKB_core_ProjectKB_00487] of Widget
+	(name ":SLOT-CONSTRAINTS"))
+
+([GKB_core_ProjectKB_00488] of Widget
+	(name ":DIRECT-TYPE"))
+
+([GKB_core_ProjectKB_00489] of Widget
+	(x 400)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.SlotValuesWidget")
+	(property_list [GKB_core_ProjectKB_00490])
+	(label "Template Values")
+	(name ":SLOT-VALUES")
+	(width 200)
+	(y 0))
+
+([GKB_core_ProjectKB_00490] of Property_List
+	(properties
+		[GKB_core_ProjectKB_00491]
+		[GKB_core_ProjectKB_00492]
+		[GKB_core_ProjectKB_00493]
+		[GKB_core_ProjectKB_00494]))
+
+([GKB_core_ProjectKB_00491] of Boolean
+	(name "ButtonDisplayed-View the selected value")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00492] of Boolean
+	(name "ButtonDisplayed-Create a new value")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00493] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00494] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00495] of Widget
+	(name ":DIRECT-SUPERSLOTS"))
+
+([GKB_core_ProjectKB_00496] of Widget
+	(name ":DIRECT-SUBSLOTS"))
+
+([GKB_core_ProjectKB_00497] of Widget
+	(x 400)
+	(height 150)
+	(widget_class_name "edu.stanford.smi.protege.widget.DefaultValuesWidget")
+	(property_list [GKB_core_ProjectKB_00498])
+	(label "Default")
+	(name ":SLOT-DEFAULTS")
+	(width 200)
+	(y 120))
+
+([GKB_core_ProjectKB_00498] of Property_List
+	(properties
+		[GKB_core_ProjectKB_00499]
+		[GKB_core_ProjectKB_00500]
+		[GKB_core_ProjectKB_00501]
+		[GKB_core_ProjectKB_00502]))
+
+([GKB_core_ProjectKB_00499] of Boolean
+	(name "ButtonDisplayed-View the selected value")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00500] of Boolean
+	(name "ButtonDisplayed-Create a new value")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00501] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00502] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00503] of Widget
+	(x 200)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.DocumentationWidget")
+	(label "Documentation")
+	(name ":DOCUMENTATION")
+	(width 200)
+	(y 0))
+
+([GKB_core_ProjectKB_00504] of Widget
+	(x 100)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.NumericMaximumWidget")
+	(label "Maximum")
+	(name ":SLOT-NUMERIC-MAXIMUM")
+	(width 100)
+	(y 210))
+
+([GKB_core_ProjectKB_00505] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.NumericMinimumWidget")
+	(label "Minimum")
+	(name ":SLOT-NUMERIC-MINIMUM")
+	(width 100)
+	(y 210))
+
+([GKB_core_ProjectKB_00506] of Widget
+	(name ":ASSOCIATED-FACET"))
+
+([GKB_core_ProjectKB_00507] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceNameWidget")
+	(label "Name")
+	(name ":NAME")
+	(width 200)
+	(y 0))
+
+([GKB_core_ProjectKB_00508] of Widget
+	(x 200)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.InverseSlotWidget")
+	(label "Inverse Slot")
+	(name ":SLOT-INVERSE")
+	(width 200)
+	(y 210))
+
+([GKB_core_ProjectKB_00509] of Widget
+	(x 0)
+	(height 150)
+	(widget_class_name "edu.stanford.smi.protege.widget.ValueTypeWidget")
+	(label "Value Type")
+	(name ":SLOT-VALUE-TYPE")
+	(width 200)
+	(y 60))
+
+([GKB_core_ProjectKB_00510] of Property_List
+	(name "layout properties"))
+
+([GKB_core_ProjectKB_00801] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.ComboBoxWidget")
+	(property_list [GKB_core_ProjectKB_00901])
+	(name "identityDefinedBy")
+	(width 150)
+	(is_hidden FALSE)
+	(y 270))
+
+([GKB_core_ProjectKB_00901] of Property_List)
+
+([GKB_core_ProjectKB_00920] of Widget
+	(x 350)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(property_list [GKB_core_ProjectKB_00921])
+	(name "databaseColumnSpecification")
+	(width 250)
+	(is_hidden FALSE)
+	(y 270))
+
+([GKB_core_ProjectKB_00921] of Property_List)
+
+([GKB_core_ProjectKB_00989] of Widget
+	(x 0)
+	(height 990)
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
+	(property_list [GKB_core_ProjectKB_00990])
+	(name "Summation")
+	(width 613)
+	(is_hidden FALSE)
+	(y 0))
+
+([GKB_core_ProjectKB_00990] of Property_List
+	(properties
+		[GKB_core_ProjectKB_00991]
+		[GKB_core_ProjectKB_00993]
+		[GKB_core_ProjectKB_01001]
+		[GKB_core_ProjectKB_01009]
+		[GKB_core_ProjectKB_01017]
+		[GKB_core_ProjectKB_01027]
+		[GKB_core_ProjectKB_01137]
+		[GKB_core_ProjectKB_01235]
+		[GKB_core_ProjectKB_01243]
+		[GKB_core_ProjectKB_01251]
+		[GKB_core_ProjectKB_01583]
+		[GKB_core_ProjectKB_01660]
+		[GKB_core_ProjectKB_06062]))
+
+([GKB_core_ProjectKB_00991] of Widget
+	(x 0)
+	(height 170)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextAreaWidget")
+	(property_list [GKB_core_ProjectKB_00992])
+	(name "text")
+	(width 510)
+	(is_hidden FALSE)
+	(y 0))
+
+([GKB_core_ProjectKB_00992] of Property_List)
+
+([GKB_core_ProjectKB_00993] of Widget
+	(x 0)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceListWidget")
+	(property_list [GKB_core_ProjectKB_00994])
+	(name "literatureReference")
+	(width 510)
+	(is_hidden FALSE)
+	(y 170))
+
+([GKB_core_ProjectKB_00994] of Property_List
+	(properties
+		[GKB_core_ProjectKB_00995]
+		[GKB_core_ProjectKB_00996]
+		[GKB_core_ProjectKB_00997]
+		[GKB_core_ProjectKB_00998]
+		[GKB_core_ProjectKB_00999]
+		[GKB_core_ProjectKB_01000]))
+
+([GKB_core_ProjectKB_00995] of Boolean
+	(name "ButtonDisplayed-View Selected Instances")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00996] of Boolean
+	(name "ButtonDisplayed-Create Instance")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00997] of Boolean
+	(name "ButtonDisplayed-References")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_00998] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_00999] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01000] of Boolean
+	(name "ButtonDisplayed-Delete Selected Instances")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01001] of Widget
+	(x 0)
+	(height 90)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceListWidget")
+	(property_list [GKB_core_ProjectKB_01002])
+	(name "editor")
+	(width 250)
+	(is_hidden FALSE)
+	(y 480))
+
+([GKB_core_ProjectKB_01002] of Property_List
+	(properties
+		[GKB_core_ProjectKB_01003]
+		[GKB_core_ProjectKB_01004]
+		[GKB_core_ProjectKB_01005]
+		[GKB_core_ProjectKB_01006]
+		[GKB_core_ProjectKB_01007]
+		[GKB_core_ProjectKB_01008]))
+
+([GKB_core_ProjectKB_01003] of Boolean
+	(name "ButtonDisplayed-View Selected Instances")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01004] of Boolean
+	(name "ButtonDisplayed-Create Instance")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01005] of Boolean
+	(name "ButtonDisplayed-References")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01006] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01007] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01008] of Boolean
+	(name "ButtonDisplayed-Delete Selected Instances")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01009] of Widget
+	(x 260)
+	(height 100)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceListWidget")
+	(property_list [GKB_core_ProjectKB_01010])
+	(name "reviewer")
+	(width 250)
+	(is_hidden FALSE)
+	(y 470))
+
+([GKB_core_ProjectKB_01010] of Property_List
+	(properties
+		[GKB_core_ProjectKB_01011]
+		[GKB_core_ProjectKB_01012]
+		[GKB_core_ProjectKB_01013]
+		[GKB_core_ProjectKB_01014]
+		[GKB_core_ProjectKB_01015]
+		[GKB_core_ProjectKB_01016]))
+
+([GKB_core_ProjectKB_01011] of Boolean
+	(name "ButtonDisplayed-View Selected Instances")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01012] of Boolean
+	(name "ButtonDisplayed-Create Instance")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01013] of Boolean
+	(name "ButtonDisplayed-References")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01014] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01015] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01016] of Boolean
+	(name "ButtonDisplayed-Delete Selected Instances")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01017] of Widget
+	(x 260)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(property_list [GKB_core_ProjectKB_01018])
+	(name "dateSubmitted")
+	(width 250)
+	(is_hidden FALSE)
+	(y 290))
+
+([GKB_core_ProjectKB_01018] of Property_List)
+
+([GKB_core_ProjectKB_01027] of Widget
+	(x 260)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(property_list [GKB_core_ProjectKB_01028])
+	(name "dateRevised")
+	(width 250)
+	(is_hidden FALSE)
+	(y 410))
+
+([GKB_core_ProjectKB_01028] of Property_List)
+
+([GKB_core_ProjectKB_01137] of Widget
+	(x 260)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(property_list [GKB_core_ProjectKB_01138])
+	(name "dateAccepted")
+	(width 250)
+	(is_hidden FALSE)
+	(y 350))
+
+([GKB_core_ProjectKB_01138] of Property_List)
+
+([GKB_core_ProjectKB_01234] of Widget
+	(x 0)
+	(height 634)
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
+	(property_list [GKB_core_ProjectKB_01435])
+	(name "DatabaseObject")
+	(width 774)
+	(is_hidden FALSE)
+	(y 0))
+
+([GKB_core_ProjectKB_01235] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(property_list [GKB_core_ProjectKB_01236])
+	(name "_Protege_id")
+	(width 250)
+	(is_hidden FALSE)
+	(y 570))
+
+([GKB_core_ProjectKB_01236] of Property_List)
+
+([GKB_core_ProjectKB_01243] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(property_list [GKB_core_ProjectKB_01244])
+	(name "_displayName")
+	(width 250)
+	(is_hidden FALSE)
+	(y 630))
+
+([GKB_core_ProjectKB_01244] of Property_List)
+
+([GKB_core_ProjectKB_01251] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceFieldWidget")
+	(property_list [GKB_core_ProjectKB_01252])
+	(name "created")
+	(width 250)
+	(is_hidden FALSE)
+	(y 690))
+
+([GKB_core_ProjectKB_01252] of Property_List
+	(properties
+		[GKB_core_ProjectKB_01559]
+		[GKB_core_ProjectKB_01560]
+		[GKB_core_ProjectKB_01561]
+		[GKB_core_ProjectKB_01562]
+		[GKB_core_ProjectKB_01563]
+		[GKB_core_ProjectKB_01564]))
+
+([GKB_core_ProjectKB_01435] of Property_List
+	(properties
+		[GKB_core_ProjectKB_01535]
+		[GKB_core_ProjectKB_01537]
+		[GKB_core_ProjectKB_01745]
+		[GKB_core_ProjectKB_01749]
+		[GKB_core_ProjectKB_01757]
+		[GKB_core_ProjectKB_00203]
+		[PROJECT_3770_ProjectKB_Instance_106]))
+
+([GKB_core_ProjectKB_01535] of Widget
+	(x 125)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(property_list [GKB_core_ProjectKB_01536])
+	(name "DB_ID")
+	(width 125)
+	(is_hidden FALSE)
+	(y 120))
+
+([GKB_core_ProjectKB_01536] of Property_List)
+
+([GKB_core_ProjectKB_01537] of Widget
+	(x 250)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceFieldWidget")
+	(property_list [GKB_core_ProjectKB_01538])
+	(name "created")
+	(width 250)
+	(is_hidden FALSE)
+	(y 0))
+
+([GKB_core_ProjectKB_01538] of Property_List
+	(properties
+		[GKB_core_ProjectKB_01640]
+		[GKB_core_ProjectKB_01740]
+		[GKB_core_ProjectKB_01741]
+		[GKB_core_ProjectKB_01742]
+		[GKB_core_ProjectKB_01743]
+		[GKB_core_ProjectKB_01744]))
+
+([GKB_core_ProjectKB_01559] of Boolean
+	(name "ButtonDisplayed-View Instance")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01560] of Boolean
+	(name "ButtonDisplayed-References")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01561] of Boolean
+	(name "ButtonDisplayed-Create Instance")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01562] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01563] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01564] of Boolean
+	(name "ButtonDisplayed-Delete Instance")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01583] of Widget
+	(x 0)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceListWidget")
+	(property_list [GKB_core_ProjectKB_01584])
+	(name "modified")
+	(width 250)
+	(is_hidden FALSE)
+	(y 750))
+
+([GKB_core_ProjectKB_01584] of Property_List
+	(properties
+		[GKB_core_ProjectKB_01615]
+		[GKB_core_ProjectKB_01616]
+		[GKB_core_ProjectKB_01617]
+		[GKB_core_ProjectKB_01618]
+		[GKB_core_ProjectKB_01619]
+		[GKB_core_ProjectKB_01620]))
+
+([GKB_core_ProjectKB_01615] of Boolean
+	(name "ButtonDisplayed-View Selected Instances")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01616] of Boolean
+	(name "ButtonDisplayed-Create Instance")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01617] of Boolean
+	(name "ButtonDisplayed-References")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01618] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01619] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01620] of Boolean
+	(name "ButtonDisplayed-Delete Selected Instances")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01640] of Boolean
+	(name "ButtonDisplayed-View Instance")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01660] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(property_list [GKB_core_ProjectKB_01661])
+	(name "DB_ID")
+	(width 125)
+	(is_hidden FALSE)
+	(y 870))
+
+([GKB_core_ProjectKB_01661] of Property_List)
+
+([GKB_core_ProjectKB_01740] of Boolean
+	(name "ButtonDisplayed-References")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01741] of Boolean
+	(name "ButtonDisplayed-Create Instance")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01742] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01743] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01744] of Boolean
+	(name "ButtonDisplayed-Delete Instance")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01745] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(property_list [GKB_core_ProjectKB_01746])
+	(name "_Protege_id")
+	(width 250)
+	(is_hidden FALSE)
+	(y 60))
+
+([GKB_core_ProjectKB_01746] of Property_List)
+
+([GKB_core_ProjectKB_01749] of Widget
+	(x 250)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceListWidget")
+	(property_list [GKB_core_ProjectKB_01750])
+	(name "modified")
+	(width 250)
+	(is_hidden FALSE)
+	(y 60))
+
+([GKB_core_ProjectKB_01750] of Property_List
+	(properties
+		[GKB_core_ProjectKB_01751]
+		[GKB_core_ProjectKB_01752]
+		[GKB_core_ProjectKB_01753]
+		[GKB_core_ProjectKB_01754]
+		[GKB_core_ProjectKB_01755]
+		[GKB_core_ProjectKB_01756]))
+
+([GKB_core_ProjectKB_01751] of Boolean
+	(name "ButtonDisplayed-View Selected Instances")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01752] of Boolean
+	(name "ButtonDisplayed-Create Instance")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01753] of Boolean
+	(name "ButtonDisplayed-References")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01754] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01755] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([GKB_core_ProjectKB_01756] of Boolean
+	(name "ButtonDisplayed-Delete Selected Instances")
+	(boolean_value FALSE))
+
+([GKB_core_ProjectKB_01757] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(property_list [GKB_core_ProjectKB_01758])
+	(name "_displayName")
+	(width 250)
+	(is_hidden FALSE)
+	(y 0))
+
+([GKB_core_ProjectKB_01758] of Property_List)
+
+([GKB_core_ProjectKB_06062] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.CheckBoxWidget")
+	(property_list [GKB_core_ProjectKB_06063])
+	(name "__is_ghost")
+	(width 125)
+	(is_hidden FALSE)
+	(y 930))
+
+([GKB_core_ProjectKB_06063] of Property_List)
+
+([GKB_test_ProjectKB_00050] of Integer
+	(name "ClsesTab.left_right")
+	(integer_value 293))
+
+([GKB_test_ProjectKB_00051] of Integer
+	(name "ClsesTab.left.top_bottom")
+	(integer_value 466))
+
+([GKB_test_ProjectKB_00052] of Integer
+	(name "SlotsTab.left_right")
+	(integer_value 247))
+
+([GKB_test_ProjectKB_00053] of Integer
+	(name "SlotTab.left.top_bottom")
+	(integer_value 400))
+
+([GKB_test_ProjectKB_00054] of Integer
+	(name "FormsTab.left_right")
+	(integer_value 250))
+
+([GKB_test_ProjectKB_00055] of Integer
+	(name "InstancesTab.left_right")
+	(integer_value 303))
+
+([GKB_test_ProjectKB_00056] of Integer
+	(name "InstancesTab.right.left_right")
+	(integer_value 271))
+
+([GKB_test_ProjectKB_00057] of String
+	(name "SearchTab_Query"))
+
+([GKB_test_ProjectKB_00060] of Map)
+
+([INSTANCE_ANNOTATION_FORM_WIDGET] of Widget
+	(x 0)
+	(height 476)
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
+	(property_list [KB_052872_Instance_33])
+	(name ":INSTANCE-ANNOTATION")
+	(width 603)
+	(is_hidden FALSE)
+	(y 0))
+
+([INSTANCES_TAB] of Widget
+	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab")
+	(property_list [ProjectKB_4766_00048])
+	(label "Instances"))
+
+([KB_052872_Instance_0] of Property_List
+	(properties
+		[KB_052872_Instance_1]
+		[KB_052872_Instance_2]
+		[KB_052872_Instance_3]
+		[KB_052872_Instance_4]
+		[KB_052872_Instance_5]
+		[KB_052872_Instance_6]
+		[KB_052872_Instance_7]
+		[KB_052872_Instance_8]
+		[KB_052872_Instance_9]
+		[KB_052872_Instance_10])
+	(name "class widget properties"))
+
+([KB_052872_Instance_1] of Widget
+	(x 400)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.ConstraintsWidget")
+	(property_list [update_200405_intermediate_ProjectKB_Instance_43])
+	(label "Constraints")
+	(name ":SLOT-CONSTRAINTS")
+	(width 200)
+	(y 0))
+
+([KB_052872_Instance_10] of Property_List
+	(properties [KB_052872_Instance_11])
+	(name "layout properties"))
+
+([KB_052872_Instance_11] of String
+	(name "vertical_stretcher")
+	(string_value ":DIRECT-TEMPLATE-SLOTS"))
+
+([KB_052872_Instance_12] of Property_List
+	(properties
+		[KB_052872_Instance_13]
+		[KB_052872_Instance_14]
+		[KB_052872_Instance_15]
+		[KB_052872_Instance_16]
+		[KB_052872_Instance_17]
+		[KB_052872_Instance_18]
+		[KB_052872_Instance_19]
+		[KB_052872_Instance_20]
+		[KB_052872_Instance_21]
+		[KB_052872_Instance_22]
+		[KB_052872_Instance_23]
+		[KB_052872_Instance_24]
+		[KB_052872_Instance_25]
+		[KB_052872_Instance_26]
+		[KB_052872_Instance_27]
+		[KB_052872_Instance_28])
+	(name "slot widget properties"))
+
+([KB_052872_Instance_13] of Widget
+	(x 200)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.MinimumCardinalityWidget")
+	(label "Cardinality")
+	(name ":SLOT-MINIMUM-CARDINALITY")
+	(width 200)
+	(y 120))
+
+([KB_052872_Instance_14] of Widget
+	(x 200)
+	(height 35)
+	(widget_class_name "edu.stanford.smi.protege.widget.MaximumCardinalityWidget")
+	(name ":SLOT-MAXIMUM-CARDINALITY")
+	(width 200)
+	(y 175))
+
+([KB_052872_Instance_15] of Widget
+	(name ":SLOT-CONSTRAINTS"))
+
+([KB_052872_Instance_16] of Widget
+	(name ":DIRECT-TYPE"))
+
+([KB_052872_Instance_17] of Widget
+	(name ":DIRECT-DOMAIN"))
+
+([KB_052872_Instance_18] of Widget
+	(x 400)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.SlotValuesWidget")
+	(label "Template Values")
+	(name ":SLOT-VALUES")
+	(width 200)
+	(y 0))
+
+([KB_052872_Instance_19] of Widget
+	(name ":DIRECT-SUPERSLOTS"))
+
+([KB_052872_Instance_2] of Widget
+	(name ":DIRECT-INSTANCES"))
+
+([KB_052872_Instance_20] of Widget
+	(name ":DIRECT-SUBSLOTS"))
+
+([KB_052872_Instance_21] of Widget
+	(x 400)
+	(height 150)
+	(widget_class_name "edu.stanford.smi.protege.widget.DefaultValuesWidget")
+	(label "Default")
+	(name ":SLOT-DEFAULTS")
+	(width 200)
+	(y 120))
+
+([KB_052872_Instance_22] of Widget
+	(x 200)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.DocumentationWidget")
+	(label "Documentation")
+	(name ":DOCUMENTATION")
+	(width 200)
+	(y 0))
+
+([KB_052872_Instance_23] of Widget
+	(x 100)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.NumericMaximumWidget")
+	(label "Maximum")
+	(name ":SLOT-NUMERIC-MAXIMUM")
+	(width 100)
+	(y 210))
+
+([KB_052872_Instance_24] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.NumericMinimumWidget")
+	(label "Minimum")
+	(name ":SLOT-NUMERIC-MINIMUM")
+	(width 100)
+	(y 210))
+
+([KB_052872_Instance_25] of Widget
+	(name ":ASSOCIATED-FACET"))
+
+([KB_052872_Instance_26] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceNameWidget")
+	(label "Name")
+	(name ":NAME")
+	(width 200)
+	(y 0))
+
+([KB_052872_Instance_27] of Widget
+	(x 200)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.InverseSlotWidget")
+	(label "Inverse Slot")
+	(name ":SLOT-INVERSE")
+	(width 200)
+	(y 210))
+
+([KB_052872_Instance_28] of Widget
+	(x 0)
+	(height 150)
+	(widget_class_name "edu.stanford.smi.protege.widget.ValueTypeWidget")
+	(label "Value Type")
+	(name ":SLOT-VALUE-TYPE")
+	(width 200)
+	(y 60))
+
+([KB_052872_Instance_29] of Property_List
+	(properties
+		[KB_052872_Instance_30]
+		[KB_052872_Instance_31]
+		[KB_052872_Instance_32])
+	(name "facet widget properties"))
+
+([KB_052872_Instance_3] of Widget
+	(name ":DIRECT-SUBCLASSES"))
+
+([KB_052872_Instance_30] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceNameWidget")
+	(label "Name")
+	(name ":NAME")
+	(width 200)
+	(y 0))
+
+([KB_052872_Instance_31] of Widget
+	(x 200)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.DocumentationWidget")
+	(label "Documentation")
+	(name ":DOCUMENTATION")
+	(width 200)
+	(y 0))
+
+([KB_052872_Instance_32] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceFieldWidget")
+	(label "Associated Slot")
+	(name ":ASSOCIATED-SLOT")
+	(width 200)
+	(y 60))
+
+([KB_052872_Instance_33] of Property_List
+	(properties
+		[KB_052872_Instance_34]
+		[KB_052872_Instance_35]
+		[KB_052872_Instance_36]
+		[KB_052872_Instance_37]))
+
+([KB_052872_Instance_34] of Widget
+	(name ":ANNOTATED-INSTANCE"))
+
+([KB_052872_Instance_35] of Widget
+	(name ":CREATOR"))
+
+([KB_052872_Instance_36] of Widget
+	(name ":CREATION-TIMESTAMP"))
+
+([KB_052872_Instance_37] of Widget
+	(x 0)
+	(height 100)
+	(widget_class_name "edu.stanford.smi.protege.widget.YellowStickyWidget")
+	(name ":ANNOTATION-TEXT")
+	(width 200)
+	(is_hidden FALSE)
+	(y 0))
+
+([KB_052872_Instance_38] of Property_List
+	(properties
+		[KB_052872_Instance_39]
+		[KB_052872_Instance_40]
+		[KB_052872_Instance_41]
+		[KB_052872_Instance_42]))
+
+([KB_052872_Instance_39] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(label "Name")
+	(name ":PAL-NAME")
+	(width 275)
+	(is_hidden FALSE)
+	(y 0))
+
+([KB_052872_Instance_4] of Widget
+	(name ":DIRECT-SUPERCLASSES"))
+
+([KB_052872_Instance_40] of Widget
+	(x 275)
+	(height 180)
+	(widget_class_name "edu.stanford.smi.protegex.widget.pal.constraint.PalRangeWidget")
+	(label "Range")
+	(name ":PAL-RANGE")
+	(width 250)
+	(is_hidden FALSE)
+	(y 180))
+
+([KB_052872_Instance_41] of Widget
+	(x 275)
+	(height 180)
+	(widget_class_name "edu.stanford.smi.protege.widget.TextAreaWidget")
+	(label "Description")
+	(name ":PAL-DESCRIPTION")
+	(width 250)
+	(is_hidden FALSE)
+	(y 0))
+
+([KB_052872_Instance_42] of Widget
+	(x 0)
+	(height 300)
+	(widget_class_name "edu.stanford.smi.protegex.widget.pal.constraint.PalConstraintWidget")
+	(label "Statement")
+	(name ":PAL-STATEMENT")
+	(width 275)
+	(is_hidden FALSE)
+	(y 60))
+
+([KB_052872_Instance_5] of Widget
+	(x 200)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.DocumentationWidget")
+	(label "Documentation")
+	(name ":DOCUMENTATION")
+	(width 200)
+	(y 0))
+
+([KB_052872_Instance_6] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceNameWidget")
+	(label "Name")
+	(name ":NAME")
+	(width 200)
+	(y 0))
+
+([KB_052872_Instance_7] of Widget
+	(x 0)
+	(height 60)
+	(widget_class_name "edu.stanford.smi.protege.widget.RoleWidget")
+	(label "Role")
+	(name ":ROLE")
+	(width 200)
+	(y 60))
+
+([KB_052872_Instance_8] of Widget
+	(name ":DIRECT-TYPE"))
+
+([KB_052872_Instance_9] of Widget
+	(x 0)
+	(height 150)
+	(widget_class_name "edu.stanford.smi.protege.widget.TemplateSlotsWidget")
+	(property_list [update_200405_intermediate_ProjectKB_Instance_50])
+	(label "Template Slots")
+	(name ":DIRECT-TEMPLATE-SLOTS")
+	(width 600)
+	(y 120))
+
+([PAL_FORM_WIDGET] of Widget
+	(x 0)
+	(height 476)
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
+	(property_list [KB_052872_Instance_38])
+	(name ":PAL-CONSTRAINT")
+	(width 603)
+	(is_hidden FALSE)
+	(y 0))
+
+([PROJECT] of Project
+	(property_map [GKB_test_ProjectKB_00060])
+	(default_cls_metaclass ":STANDARD-CLASS")
+	(customized_instance_widgets
+		[STANDARD_SLOT_FORM_WIDGET]
+		[STANDARD_CLASS_FORM_WIDGET]
+		[GKB_core_ProjectKB_01234]
+		[GKB_core_ProjectKB_00989]
+		[INSTANCE_ANNOTATION_FORM_WIDGET]
+		[STANDARD_FACET_FORM_WIDGET]
+		[GKB_core_ProjectKB_00254]
+		[PAL_FORM_WIDGET])
+	(default_slot_metaclass ":EXTENDED-SLOT")
+	(options [ProjectKB_4766_00003])
+	(sources [SOURCES])
+	(browser_slot_names [BROWSER_SLOT_NAMES])
+	(next_frame_number 0)
+	(default_instance_widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
+	(default_facet_metaclass ":STANDARD-FACET")
+	(tabs
+		[CLSES_TAB]
+		[SLOTS_TAB]
+		[FORMS_TAB]
+		[INSTANCES_TAB]
+		[QUERIES_TAB]
+		[ProjectKB_4766_00012]
+		[ProjectKB_4766_00014]))
+
+([PROJECT_3770_ProjectKB_Instance_106] of Property_List
+	(name "layout properties"))
+
+([PROJECT_3770_ProjectKB_Instance_59] of Widget
+	(x 0)
+	(height 120)
+	(widget_class_name "edu.stanford.smi.protege.widget.InstanceListWidget")
+	(property_list [PROJECT_3770_ProjectKB_Instance_60])
+	(name ":DIRECT-DOMAIN")
+	(width 250)
+	(is_hidden FALSE)
+	(y 390))
+
+([PROJECT_3770_ProjectKB_Instance_60] of Property_List
+	(properties
+		[PROJECT_3770_ProjectKB_Instance_61]
+		[PROJECT_3770_ProjectKB_Instance_62]
+		[PROJECT_3770_ProjectKB_Instance_63]
+		[PROJECT_3770_ProjectKB_Instance_64]
+		[PROJECT_3770_ProjectKB_Instance_65]
+		[PROJECT_3770_ProjectKB_Instance_66]))
+
+([PROJECT_3770_ProjectKB_Instance_61] of Boolean
+	(name "ButtonDisplayed-View Selected Instances")
+	(boolean_value TRUE))
+
+([PROJECT_3770_ProjectKB_Instance_62] of Boolean
+	(name "ButtonDisplayed-Create Instance")
+	(boolean_value TRUE))
+
+([PROJECT_3770_ProjectKB_Instance_63] of Boolean
+	(name "ButtonDisplayed-References")
+	(boolean_value FALSE))
+
+([PROJECT_3770_ProjectKB_Instance_64] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([PROJECT_3770_ProjectKB_Instance_65] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([PROJECT_3770_ProjectKB_Instance_66] of Boolean
+	(name "ButtonDisplayed-Delete Selected Instances")
+	(boolean_value FALSE))
+
+([ProjectKB_4766_00000] of String
+	(name "classes_file_name")
+	(string_value "$1.pont"))
+
+([ProjectKB_4766_00002] of String
+	(name "factory_class_name")
+	(string_value "edu.stanford.smi.protege.storage.clips.ClipsKnowledgeBaseFactory"))
+
+([ProjectKB_4766_00003] of Options
+	(display_multi_parent_class_icon TRUE)
+	(display_abstract_class_icon TRUE)
+	(is_readonly FALSE)
+	(update_modification_slots FALSE)
+	(display_hidden_classes TRUE)
+	(confirm_on_remove FALSE))
+
+([ProjectKB_4766_00012] of Widget
+	(widget_class_name "edu.stanford.smi.protege.widget.KAToolTab")
+	(property_list [ProjectKB_4766_00013])
+	(is_hidden TRUE))
+
+([ProjectKB_4766_00013] of Property_List)
+
+([ProjectKB_4766_00014] of Widget
+	(widget_class_name "edu.stanford.smi.protege.widget.ClsesAndInstancesTab")
+	(property_list [ProjectKB_4766_00015])
+	(is_hidden TRUE))
+
+([ProjectKB_4766_00015] of Property_List)
+
+([ProjectKB_4766_00016] of Property_List
+	(properties
+		[GKB_test_ProjectKB_00050]
+		[GKB_test_ProjectKB_00051]))
+
+([ProjectKB_4766_00033] of Property_List
+	(properties
+		[GKB_test_ProjectKB_00052]
+		[GKB_test_ProjectKB_00053]))
+
+([ProjectKB_4766_00045] of Property_List
+	(properties [GKB_test_ProjectKB_00054]))
+
+([ProjectKB_4766_00048] of Property_List
+	(properties
+		[GKB_test_ProjectKB_00055]
+		[GKB_test_ProjectKB_00056]))
+
+([ProjectKB_4766_00049] of Property_List
+	(properties [GKB_test_ProjectKB_00057]))
+
+([QUERIES_TAB] of Widget
+	(widget_class_name "edu.stanford.smi.protegex.queries_tab.QueriesTab")
+	(property_list [ProjectKB_4766_00049])
+	(label "Queries"))
+
+([SLOTS_TAB] of Widget
+	(widget_class_name "edu.stanford.smi.protege.widget.SlotsTab")
+	(property_list [ProjectKB_4766_00033])
+	(label "Slots"))
+
+([SOURCES] of Property_List
+	(properties
+		[ProjectKB_4766_00000]
+		[ProjectKB_4766_00002]
+		[GKB_core_ProjectKB_00103]))
+
+([STANDARD_CLASS_FORM_WIDGET] of Widget
+	(x 0)
+	(height 412)
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
+	(property_list [KB_052872_Instance_0])
+	(name ":STANDARD-CLASS")
+	(width 838)
+	(y 0))
+
+([STANDARD_FACET_FORM_WIDGET] of Widget
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
+	(property_list [KB_052872_Instance_29])
+	(name ":STANDARD-FACET"))
+
+([STANDARD_SLOT_FORM_WIDGET] of Widget
+	(x 0)
+	(height 435)
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
+	(property_list [KB_052872_Instance_12])
+	(name ":STANDARD-SLOT")
+	(width 758)
+	(y 0))
+
+([update_200405_final_ProjectKB_Instance_36] of String
+	(name "DatabaseObject")
+	(string_value "_displayName"))
+
+([update_200405_final_ProjectKB_Instance_37] of String
+	(name "Summation")
+	(string_value "title"))
+
+([update_200405_final_ProjectKB_Instance_38] of String
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([update_200405_final_ProjectKB_Instance_39] of String
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
+([update_200405_final_ProjectKB_Instance_40] of String
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([update_200405_intermediate_ProjectKB_Instance_43] of Property_List
+	(properties
+		[update_200405_intermediate_ProjectKB_Instance_44]
+		[update_200405_intermediate_ProjectKB_Instance_45]
+		[update_200405_intermediate_ProjectKB_Instance_46]
+		[update_200405_intermediate_ProjectKB_Instance_47]
+		[update_200405_intermediate_ProjectKB_Instance_48]
+		[update_200405_intermediate_ProjectKB_Instance_49]))
+
+([update_200405_intermediate_ProjectKB_Instance_44] of Boolean
+	(name "ButtonDisplayed-View Selected Instances")
+	(boolean_value TRUE))
+
+([update_200405_intermediate_ProjectKB_Instance_45] of Boolean
+	(name "ButtonDisplayed-Create Instance")
+	(boolean_value TRUE))
+
+([update_200405_intermediate_ProjectKB_Instance_46] of Boolean
+	(name "ButtonDisplayed-References")
+	(boolean_value FALSE))
+
+([update_200405_intermediate_ProjectKB_Instance_47] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([update_200405_intermediate_ProjectKB_Instance_48] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([update_200405_intermediate_ProjectKB_Instance_49] of Boolean
+	(name "ButtonDisplayed-Delete Selected Instances")
+	(boolean_value FALSE))
+
+([update_200405_intermediate_ProjectKB_Instance_50] of Property_List
+	(properties
+		[update_200405_intermediate_ProjectKB_Instance_51]
+		[update_200405_intermediate_ProjectKB_Instance_52]
+		[update_200405_intermediate_ProjectKB_Instance_53]
+		[update_200405_intermediate_ProjectKB_Instance_54]
+		[update_200405_intermediate_ProjectKB_Instance_55]
+		[update_200405_intermediate_ProjectKB_Instance_56]
+		[update_200405_intermediate_ProjectKB_Instance_57]
+		[update_200405_intermediate_ProjectKB_Instance_58]))
+
+([update_200405_intermediate_ProjectKB_Instance_51] of Boolean
+	(name "ButtonDisplayed-View selected slots")
+	(boolean_value TRUE))
+
+([update_200405_intermediate_ProjectKB_Instance_52] of Boolean
+	(name "ButtonDisplayed-View selected slots at class")
+	(boolean_value TRUE))
+
+([update_200405_intermediate_ProjectKB_Instance_53] of Boolean
+	(name "ButtonDisplayed-Create slot and attach to class")
+	(boolean_value TRUE))
+
+([update_200405_intermediate_ProjectKB_Instance_54] of Boolean
+	(name "ButtonDisplayed-Remove overrides from selected slots")
+	(boolean_value TRUE))
+
+([update_200405_intermediate_ProjectKB_Instance_55] of Boolean
+	(name "ButtonDisplayed-Add")
+	(boolean_value TRUE))
+
+([update_200405_intermediate_ProjectKB_Instance_56] of Boolean
+	(name "ButtonDisplayed-Remove")
+	(boolean_value TRUE))
+
+([update_200405_intermediate_ProjectKB_Instance_57] of Boolean
+	(name "ButtonDisplayed-Move up")
+	(boolean_value FALSE))
+
+([update_200405_intermediate_ProjectKB_Instance_58] of Boolean
+	(name "ButtonDisplayed-Move down")
+	(boolean_value FALSE))

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="WebELVTool" default="jar" basedir="..">
+    <description>
+    	Jar all class files into one file to be run by the slicing tool.
+    </description>
+	
+	<!-- Defining a list of directory names to be used -->
+	<property name="targetDir" value="${basedir}/../WebELVTool" />
+	<property name="classDir" value="${basedir}/classes" />
+	<property name="orgDir" value="${classDir}/org" />
+	<property name="libDir" value="${basedir}/lib" />
+	
+	<!-- Empty the direcotry. If nothing there, it should do nothing -->
+	<target name="delete">
+		<delete dir="${targetDir}" />
+	</target>
+	
+	<!-- make a directory first. If it is there, it should do nothing -->
+	<target name="mkdir" depends="delete">
+		<mkdir dir="${targetDir}" /> 
+	</target>
+	
+	<!-- copy all files to the target directory -->
+	<target name="jar" depends="mkdir">
+		<jar destfile="${targetDir}/webELVTool.jar">
+			<fileset dir="${classDir}">
+				<include name="org/gk/util/**" />
+				<include name="org/gk/schema/**" />
+				<include name="org/gk/persistence/**" />
+				<include name="org/gk/model/**" />
+				<include name="org/gk/database/**" />
+				<include name="org/gk/elv/**" />
+				<include name="org/gk/gkEditor/**" />
+				<include name="org/gk/graphEditor/**" />
+			 	<include name="org/gk/pathwaylayout/**" />
+			 	<include name="org/gk/property/**" />
+			 	<include name="org/gk/render/**" />
+				<include name="org/gk/database/util/**" />
+				<include name="org/gk/slicing/**" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="org.gk.pathwaylayout.DiagramGeneratorFromDB" />
+				<attribute name="Class-Path" value="mysql.jar jgraph.jar log4j.jar jdom.jar xerces.jar xml-apis.jar commons-lang.jar" />
+			</manifest>
+		</jar>
+		<copy file="${libDir}/mysql-connector-java-5.0.8-bin.jar" tofile="${targetDir}/mysql.jar" />
+		<copy file="${libDir}/jgraph.5.7.4.6.jar" tofile="${targetDir}/jgraph.jar" />
+		<copy file="${libDir}/log4j-1.2.12.jar" tofile="${targetDir}/log4j.jar" />
+		<copy file="${libDir}/jdom/jdom.jar" tofile="${targetDir}/jdom.jar" />
+		<copy file="${libDir}/batik/xerces_2_5_0.jar" tofile="${targetDir}/xerces.jar" />
+		<copy file="${libDir}/batik/xml-apis.jar" tofile="${targetDir}/xml-apis.jar" />
+		<copy file="${libDir}/commons-lang-2.3.jar" tofile="${targetDir}/commons-lang.jar" />
+		<copy file="${basedir}/shell/runWebELVTool.sh" todir="${targetDir}" />
+	</target>	
+</project>  

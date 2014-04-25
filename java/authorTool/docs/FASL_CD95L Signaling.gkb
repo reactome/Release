@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Process nextId="80">
+  <Properties>
+    <isChanged>true</isChanged>
+    <displayName>New Project</displayName>
+  </Properties>
+  <Nodes>
+    <org.gk.render.RenderableProtein id="24" position="106 36" bounds="75 20 62 33" textPosition="89 25" />
+    <org.gk.render.RenderableProtein id="25" position="51 149" bounds="20 133 62 33" textPosition="21 132" />
+    <org.gk.render.RenderableProtein id="29" position="238 86" bounds="207 70 62 33" textPosition="208 69" />
+    <org.gk.render.RenderableProtein id="30" position="301 86" bounds="270 70 62 33" textPosition="284 75" />
+    <org.gk.render.RenderableComplex id="28" position="269 98" bounds="206 69 127 58" textPosition="212 105" bgColor="204 255 255">
+      <Components>
+        <Component id="29" />
+        <Component id="30" />
+      </Components>
+    </org.gk.render.RenderableComplex>
+    <org.gk.render.RenderableProtein id="34" position="455 92" bounds="424 76 62 33" textPosition="425 75">
+      <Properties>
+        <isChanged>true</isChanged>
+        <displayName>FAS Receptor</displayName>
+      </Properties>
+      <Shortcuts>
+        <Shortcut id="25" />
+        <Shortcut id="29" />
+        <Shortcut id="34" />
+        <Shortcut id="53" />
+        <Shortcut id="62" />
+        <Shortcut id="72" />
+      </Shortcuts>
+    </org.gk.render.RenderableProtein>
+    <org.gk.render.RenderableProtein id="35" position="518 93" bounds="487 77 62 33" textPosition="501 82" />
+    <org.gk.render.RenderableComplex id="36" position="487 99" bounds="423 68 128 62" textPosition="430 108" bgColor="204 255 255" multimerMonomerNumber="3">
+      <Components>
+        <Component id="34" />
+        <Component id="35" />
+      </Components>
+    </org.gk.render.RenderableComplex>
+    <org.gk.render.RenderableProtein id="48" position="413 192" bounds="391 162 44 61" textPosition="393 181">
+      <NodeAttachments>
+        <org.gk.render.RenderableFeature relativeX="0.5" relativeY="1.0" description="DD" trackId="0" />
+        <org.gk.render.RenderableFeature relativeX="0.4772727272727273" relativeY="0.0" description="DED" trackId="1" />
+      </NodeAttachments>
+    </org.gk.render.RenderableProtein>
+    <org.gk.render.RenderableProtein id="54" position="667 234" bounds="618 217 98 35" textPosition="650 223" />
+    <org.gk.render.RenderableProtein id="53" position="667 234" bounds="618 217 98 35" textPosition="625 223" />
+    <org.gk.render.RenderableComplex id="52" position="667 234" bounds="618 217 98 35" textPosition="623 216" bgColor="204 255 255" multimerMonomerNumber="3" hideComponents="true">
+      <OldBounds>
+        <Bounds id="53" bounds="618 217 98 35" />
+        <Bounds id="52" bounds="618 217 98 35" />
+        <Bounds id="54" bounds="618 217 98 35" />
+      </OldBounds>
+      <Components>
+        <Component id="53" />
+        <Component id="54" />
+      </Components>
+    </org.gk.render.RenderableComplex>
+    <org.gk.render.RenderableProtein id="55" position="667 234" bounds="618 217 98 35" textPosition="647 223">
+      <Properties>
+        <isChanged>true</isChanged>
+        <displayName>FADD</displayName>
+      </Properties>
+      <Shortcuts>
+        <Shortcut id="48" />
+        <Shortcut id="55" />
+        <Shortcut id="64" />
+        <Shortcut id="74" />
+      </Shortcuts>
+      <NodeAttachments>
+        <org.gk.render.RenderableFeature relativeX="0.0" relativeY="0.5" description="DD" trackId="0" />
+        <org.gk.render.RenderableFeature relativeX="0.0" relativeY="0.5" description="DED" trackId="1" />
+      </NodeAttachments>
+    </org.gk.render.RenderableProtein>
+    <org.gk.render.RenderableComplex id="51" position="667 234" bounds="618 217 98 35" textPosition="623 216" bgColor="204 255 255" hideComponents="true">
+      <Properties>
+        <displayName>FAS Receptor:FASL:FADD</displayName>
+      </Properties>
+      <Shortcuts>
+        <Shortcut id="51" />
+        <Shortcut id="60" />
+        <Shortcut id="70" />
+      </Shortcuts>
+      <OldBounds>
+        <Bounds id="51" bounds="597 214 192 93" />
+        <Bounds id="53" bounds="601 230 62 33" />
+        <Bounds id="55" bounds="731 237 56 32" />
+        <Bounds id="52" bounds="600 224 127 58" />
+        <Bounds id="54" bounds="664 225 62 33" />
+      </OldBounds>
+      <Components>
+        <Component id="52" />
+        <Component id="55" />
+      </Components>
+    </org.gk.render.RenderableComplex>
+    <org.gk.render.RenderableProtein id="56" position="372 281" bounds="333 263 79 37" textPosition="334 263">
+      <Properties>
+        <isChanged>true</isChanged>
+        <displayName>Caspase-8 Precursor</displayName>
+      </Properties>
+      <Shortcuts>
+        <Shortcut id="56" />
+        <Shortcut id="65" />
+      </Shortcuts>
+    </org.gk.render.RenderableProtein>
+    <org.gk.render.RenderableProtein id="63" position="474 424" bounds="410 399 128 50" textPosition="457 413" />
+    <org.gk.render.RenderableComplex id="61" position="474 424" bounds="410 399 128 50" textPosition="417 427" bgColor="204 255 255" multimerMonomerNumber="3" hideComponents="true">
+      <OldBounds>
+        <Bounds id="62" bounds="410 399 128 50" />
+        <Bounds id="61" bounds="410 399 128 50" />
+        <Bounds id="63" bounds="410 399 128 50" />
+      </OldBounds>
+      <Components>
+        <Component id="62" />
+        <Component id="63" />
+      </Components>
+    </org.gk.render.RenderableComplex>
+    <org.gk.render.RenderableProtein id="62" position="474 424" bounds="410 399 128 50" textPosition="432 413" />
+    <org.gk.render.RenderableProtein id="64" position="474 424" bounds="410 399 128 50" textPosition="454 413">
+      <NodeAttachments>
+        <org.gk.render.RenderableFeature relativeX="0.0" relativeY="0.5" description="DD" trackId="0" />
+        <org.gk.render.RenderableFeature relativeX="0.0" relativeY="0.5" description="DED" trackId="1" />
+      </NodeAttachments>
+    </org.gk.render.RenderableProtein>
+    <org.gk.render.RenderableComplex id="60" position="474 424" bounds="410 399 128 50" textPosition="415 413" bgColor="204 255 255" hideComponents="true">
+      <OldBounds>
+        <Bounds id="64" bounds="410 399 128 50" />
+        <Bounds id="62" bounds="410 399 128 50" />
+        <Bounds id="60" bounds="410 399 128 50" />
+        <Bounds id="61" bounds="410 399 128 50" />
+        <Bounds id="63" bounds="410 399 128 50" />
+      </OldBounds>
+      <Components>
+        <Component id="61" />
+        <Component id="64" />
+      </Components>
+    </org.gk.render.RenderableComplex>
+    <org.gk.render.RenderableProtein id="65" position="474 424" bounds="410 399 128 50" textPosition="436 406" />
+    <org.gk.render.RenderableComplex id="59" position="474 424" bounds="410 399 128 50" textPosition="415 399" bgColor="204 255 255" hideComponents="true">
+      <Properties>
+        <displayName>FAS Receptor:FASL:FADD:Caspase-8 Precursor</displayName>
+      </Properties>
+      <OldBounds>
+        <Bounds id="64" bounds="484 381 98 35" />
+        <Bounds id="62" bounds="286 369 98 35" />
+        <Bounds id="65" bounds="583 391 79 37" />
+        <Bounds id="60" bounds="284 367 299 85" />
+        <Bounds id="61" bounds="285 368 199 60" />
+        <Bounds id="63" bounds="385 369 98 35" />
+        <Bounds id="59" bounds="283 366 380 110" />
+      </OldBounds>
+      <Components>
+        <Component id="60" />
+        <Component id="65" />
+      </Components>
+    </org.gk.render.RenderableComplex>
+    <org.gk.render.RenderableProtein id="66" position="551 278" bounds="507 258 89 40" textPosition="509 260" />
+    <org.gk.render.RenderableProtein id="74" position="667 369" bounds="616 337 102 64" textPosition="647 358">
+      <NodeAttachments>
+        <org.gk.render.RenderableFeature relativeX="0.0" relativeY="0.5" description="DD" trackId="0" />
+        <org.gk.render.RenderableFeature relativeX="0.0" relativeY="0.5" description="DED" trackId="1" />
+      </NodeAttachments>
+    </org.gk.render.RenderableProtein>
+    <org.gk.render.RenderableProtein id="73" position="667 369" bounds="616 337 102 64" textPosition="650 358">
+      <Properties>
+        <isChanged>true</isChanged>
+        <displayName>FASL</displayName>
+      </Properties>
+      <Shortcuts>
+        <Shortcut id="24" />
+        <Shortcut id="30" />
+        <Shortcut id="35" />
+        <Shortcut id="54" />
+        <Shortcut id="63" />
+        <Shortcut id="73" />
+      </Shortcuts>
+    </org.gk.render.RenderableProtein>
+    <org.gk.render.RenderableProtein id="72" position="667 369" bounds="616 337 102 64" textPosition="625 358" />
+    <org.gk.render.RenderableComplex id="71" position="667 369" bounds="616 337 102 64" textPosition="623 365" bgColor="204 255 255" multimerMonomerNumber="3" hideComponents="true">
+      <Properties>
+        <displayName>FAS Receptor:FASL</displayName>
+      </Properties>
+      <Shortcuts>
+        <Shortcut id="28" />
+        <Shortcut id="36" />
+        <Shortcut id="52" />
+        <Shortcut id="61" />
+        <Shortcut id="71" />
+      </Shortcuts>
+      <OldBounds>
+        <Bounds id="73" bounds="616 337 102 64" />
+        <Bounds id="72" bounds="616 337 102 64" />
+        <Bounds id="71" bounds="616 337 102 64" />
+      </OldBounds>
+      <Components>
+        <Component id="72" />
+        <Component id="73" />
+      </Components>
+    </org.gk.render.RenderableComplex>
+    <org.gk.render.RenderableComplex id="70" position="667 369" bounds="616 337 102 64" textPosition="623 365" bgColor="204 255 255" hideComponents="true">
+      <OldBounds>
+        <Bounds id="73" bounds="616 337 102 64" />
+        <Bounds id="70" bounds="616 337 102 64" />
+        <Bounds id="72" bounds="616 337 102 64" />
+        <Bounds id="74" bounds="616 337 102 64" />
+        <Bounds id="71" bounds="616 337 102 64" />
+      </OldBounds>
+      <Components>
+        <Component id="71" />
+        <Component id="74" />
+      </Components>
+    </org.gk.render.RenderableComplex>
+    <org.gk.render.RenderableProtein id="75" position="667 369" bounds="616 337 102 64" textPosition="625 351">
+      <Properties>
+        <isChanged>true</isChanged>
+        <displayName>Caspase-10 Precursor</displayName>
+      </Properties>
+      <Shortcuts>
+        <Shortcut id="66" />
+        <Shortcut id="75" />
+      </Shortcuts>
+    </org.gk.render.RenderableProtein>
+    <org.gk.render.RenderableComplex id="69" position="667 369" bounds="616 337 102 64" textPosition="623 337" bgColor="204 255 255" hideComponents="true">
+      <Properties>
+        <displayName>FAS Receptor:FASL:FADD:Caspase-10 Precursor</displayName>
+      </Properties>
+      <OldBounds>
+        <Bounds id="73" bounds="495 483 98 35" />
+        <Bounds id="75" bounds="594 480 89 40" />
+        <Bounds id="70" bounds="495 483 98 35" />
+        <Bounds id="72" bounds="495 483 98 35" />
+        <Bounds id="74" bounds="495 483 98 35" />
+        <Bounds id="71" bounds="495 483 98 35" />
+        <Bounds id="69" bounds="446 479 285 66" />
+      </OldBounds>
+      <Components>
+        <Component id="70" />
+        <Component id="75" />
+      </Components>
+    </org.gk.render.RenderableComplex>
+    <org.gk.render.RenderableCompartment id="76" position="355 260" bounds="45 94 621 333" textPosition="56 383" bgColor="250 240 240">
+      <Properties>
+        <isChanged>true</isChanged>
+        <displayName>cytosol</displayName>
+      </Properties>
+      <Components>
+        <Component id="27" />
+        <Component id="47" />
+        <Component id="50" />
+        <Component id="58" />
+        <Component id="68" />
+        <Component id="28" />
+        <Component id="36" />
+        <Component id="51" />
+        <Component id="56" />
+        <Component id="66" />
+        <Component id="48" />
+        <Component id="59" />
+        <Component id="69" />
+        <Component id="25" />
+      </Components>
+    </org.gk.render.RenderableCompartment>
+  </Nodes>
+  <Edges>
+    <org.gk.render.RenderableReaction id="27" points="106 97, 145 97, 203 97" position="145 97" lineWidth="1.0" reactionType="Association">
+      <Inputs>
+        <Input id="25" points="51 130, 51 97" />
+        <Input id="24" points="106 56" />
+      </Inputs>
+      <Outputs>
+        <Output id="28" />
+      </Outputs>
+      <Properties>
+        <displayName>Reaction</displayName>
+      </Properties>
+    </org.gk.render.RenderableReaction>
+    <org.gk.render.RenderableReaction id="47" points="336 97, 384 97, 420 97" position="384 97" lineWidth="1.0">
+      <Inputs>
+        <Input id="28" stoichiometry="3" />
+      </Inputs>
+      <Outputs>
+        <Output id="36" />
+      </Outputs>
+      <Properties>
+        <displayName>Reaction1</displayName>
+      </Properties>
+    </org.gk.render.RenderableReaction>
+    <org.gk.render.RenderableReaction id="50" points="487 162, 667 162, 667 214" position="667 162" lineWidth="1.0" reactionType="Association">
+      <Inputs>
+        <Input id="36" points="487 133" />
+        <Input id="48" points="438 192, 487 192" />
+      </Inputs>
+      <Outputs>
+        <Output id="51" />
+      </Outputs>
+      <Properties>
+        <displayName>Reaction2</displayName>
+      </Properties>
+    </org.gk.render.RenderableReaction>
+    <org.gk.render.RenderableReaction id="58" points="473 280, 473 345, 473 396" position="473 345" lineWidth="1.0" reactionType="Association">
+      <Inputs>
+        <Input id="51" points="615 234, 473 234" />
+        <Input id="56" points="415 280" />
+      </Inputs>
+      <Outputs>
+        <Output id="59" />
+      </Outputs>
+      <Properties>
+        <displayName>Reaction3</displayName>
+      </Properties>
+    </org.gk.render.RenderableReaction>
+    <org.gk.render.RenderableReaction id="68" points="666 277, 666 299, 666 334" position="666 299" lineWidth="1.0" reactionType="Association">
+      <Inputs>
+        <Input id="51" points="666 255" />
+        <Input id="66" points="599 277" />
+      </Inputs>
+      <Outputs>
+        <Output id="69" />
+      </Outputs>
+      <Properties>
+        <displayName>Reaction4</displayName>
+      </Properties>
+    </org.gk.render.RenderableReaction>
+  </Edges>
+  <Pathways />
+</Process>
+

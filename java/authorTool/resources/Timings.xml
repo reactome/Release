@@ -1,0 +1,14 @@
+<Timings>
+<Timing name="G1 phase of mitotic cell division" />
+<Timing name="G1/S transition of mitotic cell cycle" />
+<Timing name="G2 phase of mitotic cell division" />
+<Timing name="G2/M transition of mitotic cell cycle" />
+<Timing name="M phase of mitotic cell cycle" />
+<Timing name="M/G1 transition of mitotic cell cycle" />
+<Timing name="Mitotic anaphase" />
+<Timing name="Mitotic metaphase" />
+<Timing name="Mitotic prometaphase" />
+<Timing name="Mitotic prophase" />
+<Timing name="Mitotic telophase" />
+<Timing name="S phase of mitotic cell cycle" />
+</Timings>
