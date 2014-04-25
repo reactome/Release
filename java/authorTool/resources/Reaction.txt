@@ -1,0 +1,2093 @@
+(Controversial - not included in public release. )Src phosphorylates RAF
+(Controversial - not included in public release.) Crk:SOS binds IRS-P
+(Controversial - not included in public release.) SOS mediated nucleotide exchange of RAS (IRS, Crk)
+(S)-3-Hydroxydodecanoyl-CoA+NAD<=>3-Oxododecanoyl-CoA+NADH+H
+(S)-3-Hydroxyhexadecanoyl-CoA+NAD<=>3-Oxopalmitoyl-CoA+NADH+H
+(S)-3-Hydroxytetradecanoyl-CoA+NAD<=>3-Oxotetradecanoyl-CoA+NADH+H
+(S)-Hydroxybutanoyl-CoA+NAD<=>Acetoacetyl-CoA+NADH+H
+(S)-Hydroxydecanoyl-CoA+NAD<=>3-Oxodecanoyl-CoA+NADH+H
+(S)-Hydroxyhexanoyl-CoA+NAD<=>3-Oxohexanoyl-CoA+NADH+H
+(S)-Hydroxyoctanoyl-CoA+NAD<=>3-Oxooctanoyl-CoA+NADH+H
+(S)-Lactate + NAD+ <=> Pyruvate + NADH + H+
+(S)-Lactate + NAD+ <=> Pyruvate + NADH + H+
+(S)-Lactate + NAD+ <=> Pyruvate + NADH + H+
+(S)-Lactate + NAD+ <=> Pyruvate + NADH + H+
+(S)-Lactate + NAD+ <=> Pyruvate + NADH + H+
+(S)-Malate + NAD+ <=> Oxaloacetate + NADH + H+
+(S)-Malate <=> Fumarate + H2O
+(S)-dihydroorotate + ubiquinone => orotate + ubiquinol
+(ethanolamineP) mannose (a1-2) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI -> (ethanolamineP) mannose (a1-2) (ethanolamineP) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI
+(ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI + dolichol phosphate D-mannose -> mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI + dolichol phosphate
+11-cis retinal binds to CRALBP
+11-cis retinal binds to CRALBP
+2 ATP + NH4+ + HCO3- => 2 ADP + orthophosphate + carbamoyl phosphate [mitochondrial]
+2 H2O2 => O2 + 2 H2O
+2 acetyl-CoA <=> acetoacetyl-CoA+CoA
+2 glutathione, reduced + H2O2 => glutathione, oxidized + 2 H2O
+2 phosphorylated HSL monomers -> phosphorylated HSL dimer
+2 phosphorylated HSL monomers -> phosphorylated HSL dimer
+2'-Deoxyadenosine + ATP => dAMP + ADP
+2'-Deoxyadenosine + H2O => 2'-Deoxyinosine + NH3
+2'-deoxyadenosine + ATP => 2'-deoxyadenosine 5'-monophosphate + ADP
+2'-deoxyadenosine + ATP => 2'-deoxyadenosine 5'-monophosphate + ADP
+2'-deoxyadenosine + ATP => 2'-deoxyadenosine 5'-monophosphate + ADP
+2'-deoxyadenosine 5'-diphosphate (dADP) + ADP <=> 2'-deoxyadenosine 5'-monophosphate (dAMP) + ATP
+2'-deoxyadenosine 5'-diphosphate (dADP) + ADP <=> 2'-deoxyadenosine 5'-monophosphate (dAMP) + ATP
+2'-deoxyadenosine 5'-diphosphate (dADP) + ATP <=> dATP + adenosine 5'-diphosphate (ADP)
+2'-deoxyadenosine 5'-diphosphate (dADP) + ATP <=> dATP + adenosine 5'-diphosphate (ADP)
+2'-deoxyadenosine 5'-diphosphate (dADP) + ATP <=> dATP + adenosine 5'-diphosphate (ADP)
+2'-deoxyadenosine 5'-diphosphate (dADP) + ATP <=> dATP + adenosine 5'-diphosphate (ADP)
+2'-deoxyadenosine 5'-diphosphate (dADP) + ATP <=> dATP + adenosine 5'-diphosphate (ADP)
+2'-deoxyadenosine 5'-monophosphate (dAMP) + ATP <=> 2'-deoxyadenosine 5'-diphosphate (dADP) + ADP
+2'-deoxyadenosine 5'-monophosphate (dAMP) + ATP <=> 2'-deoxyadenosine 5'-diphosphate (dADP) + ADP
+2'-deoxyadenosine 5'-monophosphate (dAMP) + H2O => 2'-deoxyadenosine + orthophosphate
+2'-deoxyadenosine 5'-monophosphate (dAMP) + H2O => deoxyadenosine + orthophosphate
+2'-deoxyadenosine 5'-monophosphate (dAMP) + H2O => deoxyadenosine + orthophosphate
+2'-deoxyadenosine [extracellular] + Na+ [extracellular] => 2'deoxyadenosine [cytosol] + Na+ [cytosol]
+2'-deoxycytidine + ATP => 2'-deoxycytidine 5'-monophosphate (dCMP) + ADP
+2'-deoxycytidine + ATP => 2'-deoxycytidine 5'-monophosphate + ADP
+2'-deoxycytidine + H2O => 2'-deoxyuridine + NH4+
+2'-deoxycytidine 5'-diphosphate (dCDP) + ADP <=> 2'-deoxycytidine 5'-monophosphate (dCMP) + ATP
+2'-deoxycytidine 5'-diphosphate (dCDP) + ADP <=> deoxycytidine 5'-monophosphate (dCMP) + ATP
+2'-deoxycytidine 5'-diphosphate (dCDP) + ATP <=> dCTP + adenosine 5'-diphosphate (ADP)
+2'-deoxycytidine 5'-diphosphate (dCDP) + ATP <=> dCTP + adenosine 5'-diphosphate (ADP)
+2'-deoxycytidine 5'-diphosphate (dCDP) + ATP <=> dCTP + adenosine 5'-diphosphate (ADP)
+2'-deoxycytidine 5'-diphosphate (dCDP) + ATP <=> dCTP + adenosine 5'-diphosphate (ADP)
+2'-deoxycytidine 5'-diphosphate (dCDP) + ATP <=> dCTP + adenosine 5'-diphosphate (ADP)
+2'-deoxycytidine 5'-monophosphate (dCMP) + ATP <=> 2'-deoxycytidine 5'-diphosphate (dCDP) + ADP
+2'-deoxycytidine 5'-monophosphate (dCMP) + ATP <=> deoxycytidine 5'-diphosphate (dCDP) + ADP
+2'-deoxycytidine 5'-monophosphate (dCMP) + H2O => 2'-deoxycytidine + orthophosphate
+2'-deoxycytidine 5'-monophosphate (dCMP) + H2O => 2'-deoxycytidine + orthophosphate
+2'-deoxycytidine 5'-monophosphate (dCMP) + H2O => 2'-deoxyuridine 5'-monophosphate (dUMP) + NH4+
+2'-deoxycytidine 5'-monophosphate + H2O => 2'-deoxycytidine + orthophosphate
+2'-deoxyguanosine + ATP => 2'-deoxyguanosine 5'-monophosphate + ADP
+2'-deoxyguanosine + ATP => 2'-deoxyguanosine 5'-monophosphate + ADP
+2'-deoxyguanosine + orthophosphate <=> guanine + 2-deoxy-D-ribose 1-phosphate
+2'-deoxyguanosine 5'-diphosphate (dGDP) + ADP <=> 2'-deoxyguanosine 5'-monophosphate (dGMP) + ATP
+2'-deoxyguanosine 5'-diphosphate (dGDP) + ATP <=> dGTP + adenosine 5'-diphosphate (ADP)
+2'-deoxyguanosine 5'-diphosphate (dGDP) + ATP <=> dGTP + adenosine 5'-diphosphate (ADP)
+2'-deoxyguanosine 5'-diphosphate (dGDP) + ATP <=> dGTP + adenosine 5'-diphosphate (ADP)
+2'-deoxyguanosine 5'-diphosphate (dGDP) + ATP <=> dGTP + adenosine 5'-diphosphate (ADP)
+2'-deoxyguanosine 5'-diphosphate (dGDP) + ATP <=> dGTP + adenosine 5'-diphosphate (ADP)
+2'-deoxyguanosine 5'-monophosphate (dGMP) + ATP <=> 2'-deoxyguanosine 5'-diphosphate (dGDP) + ADP
+2'-deoxyguanosine 5'-monophosphate (dGMP) + H2O => 2'-deoxyguanosine + orthophosphate
+2'-deoxyguanosine 5'-monophosphate (dGMP) + H2O => 2'-deoxyguanosine + orthophosphate
+2'-deoxyguanosine 5'-monophosphate (dGMP) + H2O => 2'-deoxyguanosine + orthophosphate
+2'-deoxyinosine + ATP => 2'-deoxyinosine 5'-monophosphate + ADP
+2'-deoxyinosine + ATP => 2'-deoxyinosine 5'-monophosphate + ADP
+2'-deoxyinosine + ATP => 2'-deoxyinosine 5'-monophosphate + ADP
+2'-deoxyinosine + orthophosphate <=> hypoxanthine + 2-deoxy-D-ribose 1-phosphate
+2'-deoxyinosine 5'-monophosphate (dIMP) + H2O => 2'-deoxyinosine + orthophosphate
+2'-deoxyinosine 5'-monophosphate (dIMP) + H2O => 2'-deoxyinosine + orthophosphate
+2'-deoxyinosine 5'-monophosphate (dIMP) + H2O => 2'deoxyinosine + orthophosphate
+2'-deoxyuridine + ATP => 2'-deoxyuridine 5'-monophosphate (dUMP) + ADP
+2'-deoxyuridine + ATP => 2'-deoxyuridine 5'-monophosphate + ADP
+2'-deoxyuridine + orthophosphate <=> uracil + 2-deoxy-D-ribose 1-phosphate
+2'-deoxyuridine + orthophosphate <=> uracil + 2-deoxy-D-ribose 1-phosphate
+2'-deoxyuridine 3'-monophosphate + H2O => 2'-deoxyuridine + orthophosphate
+2'-deoxyuridine 5'-diphosphate (dUDP) + ADP <=> 2'deoxyuridine 5'-monophosphate (dUMP) + ATP
+2'-deoxyuridine 5'-diphosphate (dUDP) + ATP <=> dUTP + adenosine 5'-diphosphate (ADP)
+2'-deoxyuridine 5'-diphosphate (dUDP) + ATP <=> dUTP + adenosine 5'-diphosphate (ADP)
+2'-deoxyuridine 5'-diphosphate (dUDP) + ATP <=> dUTP + adenosine 5'-diphosphate (ADP)
+2'-deoxyuridine 5'-diphosphate (dUDP) + ATP <=> dUTP + adenosine 5'-diphosphate (ADP)
+2'-deoxyuridine 5'-diphosphate (dUDP) + ATP <=> deoxyuridine 5'-triphosphate (dUTP) + ADP
+2'-deoxyuridine 5'-monophosphate (dUMP) + ATP <=> 2'-deoxyuridine 5'-diphosphate (dUDP) + ADP
+2'-deoxyuridine 5'-monophosphate (dUMP) + H2O => 2'-deoxyuridine + orthophosphate
+2'-deoxyuridine 5'-monophosphate (dUMP) + H2O => 2'-deoxyuridine + orthophosphate
+2'-deoxyuridine 5'-monophosphate (dUMP) + H2O => 2'-deoxyuridine + orthophosphate
+2'-deoxyuridine 5'-monophosphate (dUMP) + H2O => 2'-deoxyuridine + orthophosphate
+2'-deoxyuridine 5'-monophosphate (dUMP) + N5,N10-methylene tetrahydrofolate => thymidine 5'-monophosphate (TMP) + dihydrofolate
+2'-deoxyuridine 5'-monophosphate + H2O => 2'-deoxyuridine + orthophosphate
+2'-deoxyuridine 5'-triphosphate (dUTP) + ADP <=> 2'-deoxyuridine 5'-diphosphate (dUDP) + ATP
+2'-deoxyuridine 5'-triphosphate (dUTP) + H2O <=> deoxyuridine 5'-monophosphate (dUMP) + pyrophosphate
+2-(alpha-hydroxyethyl)-TPP + lipoamide => S-acetyldihydrolipoamide + TPP
+2-4 nt.backtracking of Pol II complex on the template leading to elongation pausing
+2-Phospho-D-glycerate <=> 3-Phospho-D-glycerate
+2-Phospho-D-glycerate <=> 3-Phospho-D-glycerate
+2-Phospho-D-glycerate <=> Phosphoenolpyruvate + H2O ("lung" enolase)
+2-Phospho-D-glycerate <=> Phosphoenolpyruvate + H2O (enolase alpha)
+2-Phospho-D-glycerate <=> Phosphoenolpyruvate + H2O (enolase beta)
+2-Phospho-D-glycerate <=> Phosphoenolpyruvate + H2O (enolase gamma)
+2-acylglycerol + H2O -> glycerol + fatty acid
+2-acylglycerol + H2O -> glycerol + fatty acid
+2-amino-3-carboxymuconate semialdehyde => 2-aminomuconate semialdehyde + CO2
+2-amino-3-carboxymuconate semialdehyde => 2-aminomuconate semialdehyde + CO2 [rat]
+2-aminomuconate semialdehyde + NAD+ => aminomuconate + NADH + H+
+2-aminomuconate semialdehyde + NAD+ => aminomuconate + NADH + H+
+2-methyl-1-hydroxybutyl-TPP + lipoamide => S-(2-methylbutanoyl)-dihydrolipoamide + TPP
+2-methyl-1-hydroxypropyl-TPP + lipoamide => S-(isobutyryl)-dihydrolipoamide + TPP
+2-trans-Dodecenoyl-CoA+H2O<=>(S)-3-Hydroxydodecanoyl-CoA
+3' end cleavage of viral DNA
+3' incision of the lesioned strand of DNA in TC-NER
+3'- incision of DNA by XPG in GG-NER
+3-Oxodecanoyl-CoA+CoA-SH<=>Octanoyl-CoA
+3-Oxododecanoyl-CoA+CoA-SH<=>Decanoyl-CoA
+3-Oxohexanoyl-CoA+CoA-SH<=>Butanoyl-CoA
+3-Oxooctanoyl-CoA+CoA-SH<=>Hexanoyl-CoA
+3-Oxopalmitoyl-CoA+CoA-SH<=>myristoyl-CoA
+3-Oxotetradecanoyl-CoA+CoA-SH<=>Lauroyl-CoA
+3-Phospho-D-glycerate <=> 2-Phospho-D-glycerate
+3-Phospho-D-glycerate <=> 2-Phospho-D-glycerate
+3-Phospho-D-glyceroyl phosphate + NADH + H+ <=> (2R)-2-Hydroxy-3-(phosphonooxy)-propanal + Orthophosphate + NAD+
+3-carboxy-1-hydroxypropyl-TPP + lipoamide => S-succinyldihydrolipoamide + TPP
+3-hydroxyanthranilate + O2 => 2-amino-3-carboxymuconate semialdehyde
+3-hydroxykynurenine + H2O => 3-hydroxyanthranilate + alanine
+3-methyl-1-hydroxybutyl-TPP + lipoamide => S-isovaleryldihydrolipoamide + TPP
+4-aminobiphenyl + O<sub>2</sub> + NADPH + H<sup>+</sup> -> N-hydroxy-4-aminobiphenyl + H<sub>2</sub>O + NADP<sup>+</sup>
+4-carboxy-1-hydroxybutyl-TPP + lipoamide => S-glutaryldihydrolipoamide + TPP
+4-hydroxynonenal can form a glutathione conjugate
+4-imidazolone-5-propionate + H2O => N-formiminoglutamate
+4a-hydroxytetrahydrobiopterin => q-dihydrobiopterin + H2O
+5' incision leading to excision of DNA fragment with lesion in TC-NER
+5'-incision of DNA by ERCC1-XPF in GG-NER
+5'-phosphoribosyl-5-aminoimidazole (AIR) + CO2 <=> 5'-phosphoribosyl-5-aminoimidazole-4-carboxylate (CAIR)
+5'-phosphoribosyl-5-aminoimidazole-4-N-succinocarboxamide (SAICAR) <=> 5'-phosphoribosyl-5-aminoimidazole-4-carboxamide (AICAR) + fumarate
+5'-phosphoribosyl-5-aminoimidazole-4-carboxamide (AICAR) + 10-formyltetrahydrofolate => 5'-phosphoribosyl-5-formaminoimidazole-4-carboxamide (FAICAR) + tetrahydrofolate
+5'-phosphoribosyl-5-aminoimidazole-4-carboxylate (CAIR) + L-aspartate + ATP <=> 5'-phosphoribosyl-5-aminoimidazole-4-N-succinocarboxamide (SAICAR) + adenosine 5'-diphosphate + orthophosphate
+5'-phosphoribosyl-5-formaminoimidazole-4-carboxamide (FAICAR) <=> inosine 5'-monophosphate + H2O
+5'-phosphoribosylformylglycinamide (FGAR) + L-glutamine + ATP + H2O  => 5'-phosphoribosylformylglycinamidine (FGAM) + L-glutamate + adenosine 5'-diphosphate + orthophosphate
+5'-phosphoribosylformylglycinamidine (FGAM) + ATP => 5'-phosphoribosyl-5-aminoimidazole (AIR) + ADP + orthophosphate
+5,6-dihydrothymine + H2O => beta-ureidoisobutyrate
+5,6-dihydrouracil + H2O => beta-ureidopropionate
+5-hydroxytryptamine can form an N-methyl conjugate
+5-phospho-alpha-D-ribose 1-diphosphate (PRPP) + H2O + L-glutamine <=> 5-phosphoribosylamine + L-glutamate +pyrophosphate
+5-phosphoribosylamine + glycine + ATP <=> 5-phosphoribosylglycinamide (GAR) + adenosine 5'-diphosphate + orthophosphate
+5-phosphoribosylglycinamide (GAR) + 10-formyl-tetrahydrofolate => 5'-phosphoribosylformylglycinamide (FGAR) + tetrahydrofolate
+53BP1 associates with gamma H2AX at nuclear foci
+6-Methylmercaptopurine + O<sub>2</sub> + NADPH + H<sup>+</sup> -> 6-Mercaptopurine + H<sub>2</sub>O + NADP<sup>+</sup> + HCHO
+6-dehydrotestosterone can form an O-glucuronide
+6-mercaptopurine can form a methyl conjugate
+6-phospho-D-gluconate + NADP+ => D-ribulose 5-phosphate + CO2 + NADPH + H+
+7-14 nt. Backtracking of Pol II complex on the template leading to elongation arrest
+7-hydroxycoumarin can form an O-glucuronide
+ADP + 3-Phospho-D-glyceroyl phosphate <=> ATP + 3-Phospho-D-glycerate
+ADP + Orthophosphate + Succinyl-CoA <=> ATP + Succinate + CoA
+ADP + Phosphoenolpyruvate => ATP + Pyruvate (pyruvate kinase M2)
+ADP + Phosphoenolpyruvate => ATP + Pyruvate (pyruvate kinase R/L)
+ADP + Pi => ATP + H2O
+ADP [cytosol] + ATP [mitochondrial matrix] <=> ADP [mitochondrial matrix] + ATP [cytosol] (ANT1)
+ADP [cytosol] + ATP [mitochondrial matrix] <=> ADP [mitochondrial matrix] + ATP [cytosol] (ANT2)
+ADP [cytosol] + ATP [mitochondrial matrix] <=> ADP [mitochondrial matrix] + ATP [cytosol] (ANT3)
+ADP and Pi bind to ATPase
+AGE-1 mediated phosphorylation of PIP2 to PIP3  
+AMP binds to gamma subunit of AMP kinase heterotrimer
+APE1 mediated endonucleolytic cleavage at the 5' side of the base-free deoxyribose residue 
+APS binding to activated receptor
+ATAC spliceosome mediated 3' splice site cleavage, exon ligation
+ATAC spliceosome mediated Lariat formation,5' splice site cleavage 
+ATP + 3-Phospho-D-glycerate <=> ADP + 3-Phospho-D-glyceroyl phosphate
+ATP + Acetate + CoA <=> AMP + Pyrophosphate + Acetyl-CoA
+ATP + D-fructose 6-phosphate => ADP + D-fructose 1,6-bisphosphate [L4]
+ATP + D-fructose 6-phosphate => ADP + D-fructose 1,6-bisphosphate [M2L2]
+ATP + D-fructose 6-phosphate => ADP + D-fructose 1,6-bisphosphate [M3L]
+ATP + D-fructose 6-phosphate => ADP + D-fructose 1,6-bisphosphate [M4]
+ATP + D-fructose 6-phosphate => ADP + D-fructose 1,6-bisphosphate [ML3]
+ATP + D-fructose 6-phosphate => ADP + D-fructose 1,6-bisphosphate [P4]
+ATP + D-fructose 6-phosphate => ADP + D-fructose 2,6-bisphosphate [brain + placenta]
+ATP + D-fructose 6-phosphate => ADP + D-fructose 2,6-bisphosphate [heart]
+ATP + D-fructose 6-phosphate => ADP + D-fructose 2,6-bisphosphate [liver + muscle]
+ATP + D-fructose 6-phosphate => ADP + D-fructose 2,6-bisphosphate [testis]
+ATP + D-galactose => ADP + D-galactose 1-phosphate
+ATP + D-glyceraldehyde => ADP + D-glyceraldehyde 3-phosphate
+ATP + Pyruvate + HCO3- => ADP + Orthophosphate + Oxaloacetate
+ATP + Succinate + CoA <=> ADP + Orthophosphate + Succinyl-CoA
+ATP + alpha-D-Glucose => ADP + alpha-D-glucose 6-phosphate [glucokinase]
+ATP + alpha-D-Glucose => ADP + alpha-D-glucose 6-phosphate [hexokinase 1]
+ATP + alpha-D-Glucose => ADP + alpha-D-glucose 6-phosphate [hexokinase 2]
+ATP + alpha-D-Glucose => ADP + alpha-D-glucose 6-phosphate [hexokinase 3]
+ATP + aspartate + citrulline <=> argininosuccinate + AMP + pyrophosphate
+ATP + beta-D-fructose => ADP + D-fructose 1-phosphate
+ATP is synthesized from ADP and Pi by ATPase
+Abortive Initiation After Second Transition
+Abortive Initiation Before Second Transition
+Abortive initiation after formation of the first phosphodiester bond
+Abortive termination of early transcription elongation by DSIF:NELF
+Abortive termination of elongation after arrest
+Acetaldehyde + NAD+ <=> Acetate + NADH + H+ [cytosolic]
+Acetaldehyde + NAD+ <=> Acetate + NADH + H+ [mitochondrial]
+Acetaldehyde + O<sub>2</sub> + NADPH + H<sup>+</sup> -> Acetate + H<sub>2</sub>O + NADP<sup>+</sup>
+Acetaminophen can form an O- sulfate conjugate
+Acetaminophen can form an O-glucuronide
+Acetaminophen oxidised to N-acetylbenzoquinoneimine (NAPQI)
+Acetaminophen transport from ER lumen to the cytosol
+Acetyl-ACP(intermediate)  => Acetyl-synthase 
+Acetyl-CoA + H2O + Oxaloacetate => Citrate + CoA
+Acetylation of SL1
+Activated Adenylate cyclase catalyses cAMP synthesis
+Activated DAF-2 associates with AAP-1 and AGE-1
+Activated DAkt1 mediates DFOXO
+Activated DINR binds Chico
+Activated DTOR also phosphorylates D4EBP
+Activated DTOR phosphorylates DS6K
+Activated RAF complex binds MEK
+Activated RAF complex binds MEK
+Activation of  ORC1 by E2F1
+Activation of  PI3K
+Activation of AKT-1 by PDK-1
+Activation of AKT-2 by PDK-1
+Activation of BAD by calcineurin
+Activation of CDC25C
+Activation of CDC6 by E2F1
+Activation of Caspase 8 by autoproteolysis
+Activation of Cdc2 by E2F1
+Activation of Cdc25a (string) by E2F1
+Activation of Cdc45
+Activation of Cdc45 by E2F1
+Activation of Cdt1 by E2F1
+Activation of Cyclin A1 by E2F1
+Activation of Cyclin B/Cdk1 by Cdc25a (string) protein
+Activation of Cyclin E by E2F1
+Activation of DAkt1 by DPDK1
+Activation of Dihydrofoloate reductase by E2F1
+Activation of Dnk1
+Activation of GT
+Activation of Hormone Sensitive Lipase
+Activation of Hormone Sensitive Lipase
+Activation of PAK2 kinase activity by Nef binding
+Activation of PCNA
+Activation of PCNA by E2F1
+Activation of PKA by cAMP
+Activation of PKC
+Activation of PKC (alpha, beta, gamma)
+Activation of PKC (alpha, gamma, delta)
+Activation of PLC beta
+Activation of PLC beta 1
+Activation of PP2A by Xylulose-5-phosphate
+Activation of PolA catalytic subunit
+Activation of PolA catalytic subunit by E2F1
+Activation of RAC1
+Activation of Rheb GTPase activity by TSC
+Activation of Rho guanine nucleotide exchange factor 1 (p115-RhoGEF)
+Activation of Rir2
+Activation of Rir2 by E2F1
+Activation of S6K1
+Activation of String (Cdc25a) by dE2F1
+Activation of TK2 (Dnk1) by E2F1
+Activation of Thymidylate synthetase by E2F1
+Activation of phospho-PLA2
+Activation of rPP2A by  Xylulose-5-phosphate
+Activation of the Anaphase Promoting Complex (APC) by Plk1
+Acyl-CoA <=> trans-2-Enoyl-CoA
+Acylation of dihydroxyacetone phosphate (DHAP)
+Addition of Nucleotides 5 through 9 on the growing Transcript
+Addition of an electron (from either NADPH-cytochrome P450 reductase or cytochrome b5) and proton
+Addition of molecular oxygen
+Addition of nucleotides 10 and 11 on the growing transcript: Third Transition
+Addition of nucleotides between position +11 and +30
+Addition of nucleotides leads to transcript elongation
+Addition of the fourth nucleotide on the Nascent Transcript: Second Transition
+Addition of the third nucleotide on the nascent transcript
+Adenine + PRPP => AMP + PPi
+Adenosine + H2O => Inosine + NH3
+Adenylate cyclase produces cAMP
+Adhesion of alpha IIb beta 3 integrin to fibrin network
+Adhesion via alpha 2 beta 1 glycoprotein
+Aflatoxin B1 oxidized to Aflatoxin-8,9-oxide
+Aflatoxin exo-8,9-oxide can form a glutathione conjugate
+Aflatoxin exo-8,9-oxide transport from ER lumen to the cytosol
+Akt1 phosphorylates BAD protein
+Aminoacyl-tRNA  binds to the ribosome at the A-site
+Aminoacyl-tRNA  binds to the ribosome at the A-site
+Arachidonic acid oxidised to PGG2
+Arrestin binding
+Arrestin binding
+Arrestin dissociation
+Arrestin dissociation
+Arrestin dissociation
+Arrestin dissociation
+Arrestin phosphorylation
+Arrestin phosphorylation
+Arrestin phosphorylation
+Assembly of RNA Polymerase I Holoenzyme (human)
+Assembly of RNA Polymerase I Holoenzyme (mouse)
+Assembly of repair proteins at the site of Pol II blockage
+Association of  RPA complexes with ssDNA
+Association of  the XRCC4:DNA ligase IV complex with the DNA-PK:DNA synaptic complex
+Association of AGE-1 and AAP-1 with the activated DAF-2 receptor
+Association of BCL-xl with the mitochondrial membrane
+Association of BH3 proteins with pro-apoptotic multidomain BCL-2 members
+Association of BID with mitochondrial membrane
+Association of Cdc13/Cdk1 with replicative origin
+Association of Cyclin B/Cdk1 with replicative origin inhibits pre-RC formation
+Association of DNA-PKcs with Ku-bound ends of DNA double-strand breaks
+Association of Ku heterodimer with ends of DNA double-strand break
+Association of LBP with LPS
+Association of MRN with sites of DSB 
+Association of Mal to activated TLR4
+Association of Nef with lipid rafts
+Association of RAD50:MRE11 complex with NBS1 via MRE11 interaction 
+Association of RAD51 with BRCA2
+Association of RAD51 with RAD52:DNA double-strand break ends
+Association of RAD51 with the RPA complex
+Association of RAD51 with the resected ends of the DNA double-strand break
+Association of RAD52 with ssDNA at resected ends of double-strand break 
+Association of RAD52 with the RPA complex
+Association of RAD54 with RAD51
+Association of Ran:GTP with Crm1
+Association of TFAM:mt promoter complex with POLRMT:TFB2M
+Association of TRAM to activated TLR4
+Association of TRIF to TRAM complexed to activated TLR4
+Association of an helicase with 5' overhang at DSB ends and separation of DNA strands
+Association of gamma-H2AX with MDC1/NFBD1
+Association of gamma-H2AX with NBS1 
+Association of mTERF with the termination sequence
+Association of partially unwound transfer RNA primer with HIV-1 genomic RNA
+Association of phospho-Cdc25C(Ser 216) with 14-3-3 proteins
+Association of phospho-L13a with GAIT element of Ceruloplasmin mRNA
+Autohydrolysis of G(s)-alpha:GTP
+Autohydrolysis of G-alpha:GTP to G-alpha:GDP
+Autophosphorylation of DAF-2
+Autophosphorylation of DINR
+Autophosphorylation of DNA-PKcs
+Autophosphorylation of insulin receptor
+BAD displaces tBID from BCL-2 sequestration
+BRCA1 associates with 53BP1at the site of DNA double-strand break
+Base Pairing of RNA template (TERC) to Extended single stranded Chromosome-end
+Base Pairing of RNA template (TERC) to single stranded DNA
+Beginning of RNA Polymerase III Productive Transcription
+Benzene + O<sub>2</sub> + NADPH + H<sup>+</sup> -> Phenol + H<sub>2</sub>O + NADP<sup>+</sup>
+Benzo(a)pyrene-7,8-diol 9,10-epoxide (BPDE) can form a glutathione conjugate
+Benzoate forms the benzoyl-CoA thioester
+Benzoyl-CoA forms an amide bond with glycine
+Bilirubin can form a monoglucuronide
+Bilirubin monoglucuronide is further conjugated to Bilirubin diglucuronide
+Binding of ACF to stem-looped RNA
+Binding of ADAR1 homodimer to dsRNA duplex
+Binding of ADAR2 homodimer to dsRNA duplex
+Binding of APOBEC-1 to form editosome
+Binding of Activated Cdc42-1 to PAK1
+Binding of Activated Cdc42-2 to PAK1
+Binding of Activated RAC1 to PAK1
+Binding of CBL to APS-P:activated insulin receptor complex
+Binding of Cleavage factors and Poly(A)Polymerase to the CstF:CPSF:Pre-mRNA Complex
+Binding of ERCC1-XPF to preincision complex 
+Binding of GP VI:Fc Epsilon R1 gamma receptor complex with collagen
+Binding of GTP to Cdc42-1
+Binding of GTP to Cdc42-2
+Binding of HREV1 to lesioned DNA template
+Binding of IP3 to IP3 receptor
+Binding of IRS to insulin receptor
+Binding of Pol eta to lesioned DNA template
+Binding of Pol zeta to lesioned DNA template
+Binding of Rrn3 to RNA Polymerase I
+Binding of SHC to insulin receptor
+Binding of SLBP to Replication-Dependent Histone Pre-mRNA
+Binding of SNAPc, Oct-1, and Staf to Type 3 Promoter
+Binding of SRC tyrosine kinase
+Binding of Syk tyrosine kinase
+Binding of TERC to the Telomerase Holoenzyme
+Binding of TFIIA and TFIIB to the pol II promoter:TFIID complex
+Binding of TFIIE to the growing preinitiation complex
+Binding of TFIIIA To type 1 Promoter
+Binding of TFIIIB to SNAPc:Oct-1:Staf:Type 3 Promoter Complex
+Binding of TFIIIB to TFIIC: Type 2 Promoter Complex
+Binding of TFIIIB to TFIIIC:TFIIIA:Type I Promoter complex
+Binding of TFIIIC to TFIIIA:Type I Promoter complex 
+Binding of TFIIIC to Type 2 promoter
+Binding of calcium:calmodulin modulates calcium influx
+Binding of calcium:calmodulin modulates calcium influx
+Binding of phospho-DAF-16 to 14-3-3  and retention of the complex in the cytoplasm
+Binding of the MCC complex to the APC complex
+Binding of the trimeric viral envelope glycoprotein gp120/gp41 to cell surface
+Butanoyl-CoA+FAD<=>Crotonoyl-CoA+FADH2
+C4 deamination of cytidine
+CAK mediated phosphorylation of Cyclin D2:Cdk4 complexes
+CAP binding to CBL-P:APS-P:activated insulin receptor complex
+CDK and DDK associate with the Mcm10:pre-replicative complex
+Ca concentration drops, leading to neuron hyperpolarisation
+Ca concentration drops, leading to neuron hyperpolarisation
+Ca concentration rises, leading to neuron depolarisation
+Ca concentration rises, leading to neuron depolarisation
+Ca(2)CaM + Ca2+ => Ca(3)CaM
+Ca(2)CaM => Calmodulin + 2 Ca2+
+Ca(3)CaM + Ca2+ => Ca(4)CaM
+Ca(3)CaM => Ca(2)CaM + Ca2+
+Ca(4)CaM => Ca(3)CaM + Ca2+
+Ca++ entry from Platelet Dense Tubular System stores
+Ca++ entry from plasma
+CaMK IV autophosphorylation
+CaMK IV phosphorylates CREB
+Caffeine + O<sub>2</sub> + NADPH + H<sup>+</sup> -> Paraxanthine + H<sub>2</sub>O + NADP<sup>+</sup> + HCHO
+Calcium and calmodulin dissociate from ion channel
+Calcium and calmodulin dissociate from ion channel
+Calcium binds calmodulin
+Calcium binds calmodulin
+Calcium efflux
+Calcium efflux
+Calcium influx
+Calcium influx
+Calcium is relased from the ER to the cytosol
+Calmodulin activates Cam-PDE 1
+Calmodulin binds CaMK IV
+CamKIV enters the nucleus
+Cap-bound mRNA is activated by helicases 
+Capping complex formation
+Caspase-8 activates BID by cleavage
+Cdc45 associates with the pre-replicative complex at the origin
+Cdc6 protein associates with ORC:origin complexes
+Cdc6 protein is phosphorylated by CDK
+Cdc6 protein is synthesized under the control of E2F transcription factors
+Cdt1 associates with geminin
+Cdt1 is displaced from the pre-replicative complex.
+Chenodeoxycholate forms the chenodeoxycholoyl-CoA thioester
+Chenodeoxycholoyl-CoA forms an amide bond with glycine
+Chenodeoxycholoyl-CoA forms an amide bond with taurine
+Chico is phosphorylated
+Cholate forms the choloyl-CoA thioester
+Choloyl-CoA forms an amide bond with glycine
+Choloyl-CoA forms an amide bond with taurine
+Cimetidine S-oxidised to Cimetidine-S-oxide
+Citrate <=> Isocitrate
+Citrate <=> cis-Aconitate + H2O
+Cleavage 8-oxo guanine  by MYH glycosylase
+Cleavage and polyadenylation of Intronless Pre-mRNA
+Cleavage at the 3'-Splice Site and Exon Ligation
+Cleavage of  Procaspase-3 by the apoptosome
+Cleavage of  flap structures
+Cleavage of  thymine by MBD4 glycosylase
+Cleavage of  thymine by TDG glycosylase
+Cleavage of 3-methyladenine by MPG glycosylase 
+Cleavage of 5-hydroxyluracil by UNG2 glycosylase 
+Cleavage of 8-oxo guanine by hOGG1 glycosylase
+Cleavage of Intronless Pre-mRNA at 3'-end
+Cleavage of Procaspase-7 by the apoptosome
+Cleavage of Procaspase-9 to Caspase-9
+Cleavage of cytosine glycol by hNTH1 glycosylase
+Cleavage of dihydrouracil by hNTH1 glycosylase
+Cleavage of ethenoadenine by MPG glycosylase
+Cleavage of ethenocytosine by TDG glycosylase 
+Cleavage of formamidopyrimidine  by hNTH1 glycosylase 
+Cleavage of formamidopyrimidine by hOGG1 glycosylase
+Cleavage of hypoxanthine by MPG glycosylase
+Cleavage of mRNA at the 3'-end
+Cleavage of the 3'-end of Replication Dependent Histone Pre-mRNA
+Cleavage of the 3'-end of the Histone Pre-mRNA
+Cleavage of thymine glycol  by hNTH1 glycosylase  
+Cleavage of uracil by MBD4 glycosylase
+Cleavage of uracil by TDG glycosylase
+Cleavage of uracil by UNG2 glycosylase
+Cleavage of uracil by hSMUG1 glycosylase
+Completion of minus strand synthesis
+Condensation of Malonyl-ACP and FAS-bound Acetate to Acetoacetyl-ACP 
+Conformational change in CD4
+Conformational change in gp120
+Conversion of 11-cis retinol to 11-cis retinal
+Conversion of 11-cis retinol to 11-cis retinal
+Conversion of Diacylglycerol to Triacylglycerol
+Conversion of Dihyxroxyacetone Phosphate to Glycerol -3- phosphate
+Conversion of Glycerol to Glycerol-3-phosphate
+Conversion of Long Chain Fatty Acids to Fatty Acyl-CoAs
+Conversion of Malonyl-CoA to Malonyl-ACP
+Conversion of Palmitic Acid to Long Chain Fatty Acids
+Conversion of acylated DHAP to lysophosphatidic acid acid
+Conversion of glycerol-3-phosphate to lysophosphatidic acid
+Conversion of retinol to retinyl ester
+Conversion of retinol to retinyl ester
+CrK:C3G binds CBL-P:CAP:Flotillin
+Crk binds SOS
+Crk binds SOS
+Crk is phosphorylated by the insulin receptor
+Crk:SOS binds phospho-IRS:INSR
+CrkII binds C3G
+CrkII binds C3G
+Crotonoyl-CoA+H2O<=>(S)-3-Hydroxybutanoyl-CoA
+Cyclin D1:Cdk4 mediated phosphorylation of Rb and dissociation  of Rb from the Rb:E2F3:DP-1 complexes
+Cyclin D1:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F4:DP-1 complexes
+Cyclin D1:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F5:DP-1 complexes
+Cyclin D1:Cdk4 mediated phosphorylation of Rb and dissociation of Rb from the Rb:E2F1:DP-1 complexes
+Cyclin D1:Cdk4 mediated phosphorylation of Rb and dissociation of Rb from the Rb:E2F2:DP-1 complexes
+Cyclin D1:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F1:DP-1 complexes
+Cyclin D1:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F2:DP-1 complexes
+Cyclin D1:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F3:DP-1 complexes
+Cyclin D1:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F4:DP-1 complexes
+Cyclin D1:Cdk6 mediated phosphorylation of Rb and dissociation of Rb:E2F5:DP-1 complexes
+Cyclin D2:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F1:DP-1 complexes
+Cyclin D2:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F2:DP-1 complexes
+Cyclin D2:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F3:DP-1 complexes
+Cyclin D2:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F4:DP-1 complexes
+Cyclin D2:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F5:DP-1 complexes
+Cyclin D2:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F1:DP-1 complexes
+Cyclin D2:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F2:DP-1 complexes
+Cyclin D2:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F3:DP-1 complexes
+Cyclin D2:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F4:DP-1 complexes
+Cyclin D2:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F5:DP-1 complexes
+Cyclin D3:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F1:DP-1 complexes
+Cyclin D3:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F2:DP-1complexes
+Cyclin D3:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F3:DP-1 complexes
+Cyclin D3:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F4:DP-1 complexes
+Cyclin D3:Cdk4 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F5:DP-1 complexes
+Cyclin D3:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F1:DP-1 complexes
+Cyclin D3:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F2:DP-1 complexes
+Cyclin D3:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F3:DP-1 complexes
+Cyclin D3:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F4:DP-1 complexes
+Cyclin D3:Cdk6 mediated phosphorylation of Rb and dissociation of  Rb from the Rb:E2F5:DP-1 complexes
+Cytochrome C Binds to Apaf-1
+Cytochrome C:Apaf-1 binds Procaspase-9
+Cytoplasmic phosphorylated Cdc6 is ubiquitinated by the anaphase-promoting complex
+D-Glucose 1-phosphate <=> alpha-D-Glucose 6-phosphate
+D-beta hydroxybutyrate+NAD+ <=> acetoacetate+NADH+H+
+D-fructose 1,6-bisphosphate + H2O => D-fructose 6-phosphate + orthophosphate
+D-fructose 1,6-bisphosphate + H2O => D-fructose 6-phosphate + orthophosphate
+D-fructose 1,6-bisphosphate <=> dihydroxyacetone phosphate + D-glyceraldehyde 3-phosphate [aldolase A]
+D-fructose 1,6-bisphosphate <=> dihydroxyacetone phosphate + D-glyceraldehyde 3-phosphate [aldolase B]
+D-fructose 1,6-bisphosphate <=> dihydroxyacetone phosphate + D-glyceraldehyde 3-phosphate [aldolase C]
+D-fructose 1-phosphate <=> D-glyceraldehyde + dihydroxyacetone phosphate
+D-fructose 2,6-bisphosphate + H2O => D-fructose 6-phosphate + orthophosphate [brain + placenta]
+D-fructose 2,6-bisphosphate + H2O => D-fructose 6-phosphate + orthophosphate [heart]
+D-fructose 2,6-bisphosphate + H2O => D-fructose 6-phosphate + orthophosphate [liver + muscle]
+D-fructose 2,6-bisphosphate + H2O => D-fructose 6-phosphate + orthophosphate [testis]
+D-fructose 6-phosphate + D-erythrose 4-phosphate  <=>  sedoheptulose 7-phosphate + D-glyceraldehyde 3-phosphate
+D-fructose 6-phosphate <=> alpha-D-Glucose 6-phosphate
+D-galactose 1-phosphate + UDP-glucose <=> D-glucose 1-phosphate + UDP-galactose
+D-glucono-1,5-lactone 6-phosphate + H2O => 6-phospho-D-gluconate
+D-glyceraldehyde 3-phosphate + D-fructose 6-phosphate   <=> xylulose 5-phosphate + D-erythrose 4-phosphate
+D-glyceraldehyde 3-phosphate + orthophosphate + NAD+ <=> 1,3-bisphospho-D-glycerate + NADH + H+
+D-glyceraldehyde 3-phosphate + sedoheptulose 7-phosphate<=> xylulose 5-phosphate+ribose 5-phosphate 
+D-glyceraldehyde 3-phosphate <=> dihydroxyacetone phosphate
+D-methylmalonyl-CoA <=> L-methylmalonyl-CoA
+D-ribose 5-phosphate + 2'-deoxyadenosine 5'-triphosphate (dATP) => 5-Phospho-alpha-D-ribose 1-diphosphate (PRPP) + 2'-deoxyadenosine 5'-monophosphate
+D-ribose 5-phosphate + ATP => 5-phospho-alpha-D-ribose 1-diphosphate (PRPP) + adenosine 5'-monophosphate
+D-ribose 5-phosphate + ATP => 5-phospho-alpha-D-ribose 1-diphosphate (PRPP) + adenosine 5'-monophosphate
+D-ribose 5-phosphate + ATP => 5-phospho-alpha-D-ribose 1-diphosphate (PRPP) + adenosine 5'-monophosphate
+D-ribulose 5-phosphate <=> ribose 5-phosphate
+D-ribulose 5-phosphate <=> ribose 5-phosphate [budding yeast]
+D-ribulose 5-phosphate <=> ribose 5-phosphate [rat]
+D-ribulose 5-phosphate <=> xylulose 5-phosphate
+DAF-18 mediated dephosphorylation of PIP3  to PIP2 
+DILP binds to Drosophila insulin receptor (DINR)
+DNA Replication Factor A (RPA) associates with the pre-replicative complex at the origin
+DNA circularization
+DNA ligation via the single-nucleotide replacement pathway
+DNA polymerase alpha:primase binds at the origin
+DNA polymerase epsilon binds at the origin
+DNA repair synthesis 
+DNA strand displacement synthesis
+DPDK1 also phosphorylates DS6K
+DRheb is inhibited by the TSC1/2 complex
+DSIF complex binds to RNA Pol II (hypophosphorylated)
+DTOR is positively regulated by DRheb-GTP
+DTSC1 AND DTSC2 form a complex
+De novo formation of eIF2:GTP
+De-phosphorylation of CREB
+De-phosphorylation of CaMKIV
+De-phosphorylation of IRS
+De-phosphorylation of SHC
+Deamination at C6 position of adenosine in Editosome (ADAR1)
+Deamination at C6 position of adenosine in Editosome (ADAR2)
+Decanoyl-CoA+FAD<=>trans-Dec-2-enoyl-CoA+FADH2
+Dehalogenation of CCl4 to form CCl3. free radical 
+Dehalogenation of Halothane to form Trifluoroacetlychloride and  hydrogen bromide
+Dehydration of beta-Hydroxybutyryl-ACP to Crotonoyl-ACP 
+Dehydrogenation of Sparteine to form 2-Dehydrosparteine
+Dehydrogenation of Testosterone to form 6-Dehydrotestosterone
+Dephosphorylation of Cyclin A1:Cdc2 complexes by Cdc25A
+Dephosphorylation of Cyclin A1:Cdc2 complexes by Cdc25B
+Dephosphorylation of Cyclin A1:Cdc2 complexes by Cdc25C
+Dephosphorylation of Cyclin A2:Cdc2 complexes by Cdc25A
+Dephosphorylation of Cyclin A2:Cdc2 complexes by Cdc25B
+Dephosphorylation of Cyclin A2:Cdc2 complexes by Cdc25C
+Dephosphorylation of Cyclin B1:Cdc2 complexes by Cdc25A
+Dephosphorylation of Cyclin B1:Cdc2 complexes by Cdc25B
+Dephosphorylation of Cyclin B1:Cdc2 complexes by Cdc25C
+Dephosphorylation of Cyclin B2:Cdc2 complexes by Cdc25A
+Dephosphorylation of Cyclin B2:Cdc2 complexes by Cdc25B
+Dephosphorylation of Cyclin B2:Cdc2 complexes by Cdc25C
+Dephosphorylation of Cyclin E1:Cdk2 complexes by Cdc25A
+Dephosphorylation of Cyclin E2:Cdk2 complexes by Cdc25A
+Dephosphorylation of PF2K-Pase by  rPP2A complex
+Dephosphorylation of PF2K-Pase by PP2A complex
+Dephosphorylation of pChREBP (Ser 196) by PP2A
+Dephosphorylation of pChREBP (Ser 568) by PP2A
+Dephosphorylation of pChREBP (Thr 666) by PP2A
+Dephosphorylation of prChREBP (Ser 196) by rPP2A
+Dephosphorylation of prChREBP (Ser 568) by rPP2A complex
+Dephosphorylation of prChREBP (Thr 666) by rPP2A
+Detection of damage during initiation of  DNA synthesis in S-phase
+Detection of unreplicated DNA
+Dextromethorphan + O<sub>2</sub> + NADPH + H<sup>+</sup> -> Dextrorphan + H<sub>2</sub>O + NADP<sup>+</sup> + HCHO
+Dextrorphan can form an O-glucuronide
+Dietary tyramine is oxidatively deaminated to an aldehyde
+Dimerisation of CREB
+Dimerisation of phospho-ERK-1
+Dimerisation of phospho-ERK-2
+Dimerisation of phospho-ERK-2
+Dimerisation of phosphorylated IRF3
+Disassociation of Telomerase Holoenzyme and the Chromosome End
+Displacement of  MPG glycosylase by APE1 at the AP site
+Displacement of MBD4 glycosylase by APE1 at the AP site
+Displacement of MYH glycosylase by APE1 at the AP site
+Displacement of TDG glycosylase by APE1 at the AP site
+Displacement of UNG2 glycosylase by  APE1 at the AP site
+Displacement of hNTH1 glycosylase by APE1 at the AP site
+Displacement of hOGG1 glycosylase by APE1 at the AP site
+Displacement of hSMUG1 glycosylase by APE1 at the AP site
+Displacement of stalled Pol II  from the lesion site 
+Disscociation of phosphorylated 4EBP1 from eIF4E
+Dissociation of  transcript with 5'-GMP from GT
+Dissociation of Calmodulin from CaMKIV
+Dissociation of Caspase-3 from OMI:C-IAP1:Caspase-3
+Dissociation of Caspase-3 from OMI:C-IAP2:Caspase-3
+Dissociation of Caspase-3 from OMI:ILP-2:Caspase-3
+Dissociation of Caspase-3 from OMI:NAIP:Caspase-3
+Dissociation of Caspase-3 from OMI:Survivin:Caspase-3
+Dissociation of Caspase-3 from OMI:XIAP:Caspase-3
+Dissociation of Caspase-3 from SMAC:C-IAP1:Caspase-3
+Dissociation of Caspase-3 from SMAC:C-IAP2:Caspase-3
+Dissociation of Caspase-3 from SMAC:ILP-2:Caspase-3
+Dissociation of Caspase-3 from SMAC:XIAP:Caspase-3
+Dissociation of Caspase-7 from OMI:C-IAP1:Caspase-7
+Dissociation of Caspase-7 from OMI:C-IAP2:Caspase-7
+Dissociation of Caspase-7 from OMI:ILP-2:Caspase 7
+Dissociation of Caspase-7 from OMI:NAIP:Caspase-7
+Dissociation of Caspase-7 from OMI:Survivin:Caspase-7
+Dissociation of Caspase-7 from OMI:XIAP:Caspase-7
+Dissociation of Caspase-7 from SMAC:C-IAP1:Caspase-7
+Dissociation of Caspase-7 from SMAC:C-IAP2:Caspase-7
+Dissociation of Caspase-7 from SMAC:ILP-2:Caspase-7
+Dissociation of Caspase-7 from SMAC:XIAP:Caspase-7
+Dissociation of Caspase-9 from OMI:C-IAP1:Caspase-9
+Dissociation of Caspase-9 from OMI:C-IAP2:Caspase-9
+Dissociation of Caspase-9 from OMI:ILP-2:Caspase-9
+Dissociation of Caspase-9 from OMI:ML-IAP:Caspase-9
+Dissociation of Caspase-9 from OMI:Survivin:Caspase-9
+Dissociation of Caspase-9 from OMI:XIAP:Caspase-9
+Dissociation of Caspase-9 from SMAC:C-IAP1:Caspase-9
+Dissociation of Caspase-9 from SMAC:C-IAP2:Caspase-9
+Dissociation of Caspase-9 from SMAC:ILP-2:Caspase-9
+Dissociation of Caspase-9 from SMAC:ML-IAP:Caspase-9
+Dissociation of Caspase-9 from SMAC:XIAP:Caspase-9
+Dissociation of IRAK1-P from IRAK4 combined to the activate MyD88 receptor
+Dissociation of IRAK1-P(n) from TLR4
+Dissociation of IRS-P from insulin receptor
+Dissociation of L13a from the 60s ribosomal subunit
+Dissociation of LIG3:XRCC1 complex from site of BER
+Dissociation of PTRF:Polymerase I/Nascent Pre rRNA Complex:TTF-I:Sal Box
+Dissociation of SHC-P from insulin receptor
+Dissociation of dimeric phospho-ATM complexes
+Dissociation of gp120 from gp41
+Dissociation of insulin from insulin receptor
+Dissociation of p53-MDM2 complex
+Dissociation of phospho-ERK-1:MEK1
+Dissociation of phospho-ERK-2:MEK2
+Dissociation of phosphoribosyl pyrophosphate amidotransferase tetramer
+Dissociation of the extended strands 
+Dissolution of rhodopsin kinase:recoverin complex at low calcium concentration
+Dissolution of rhodopsin kinase:recoverin complex at low calcium concentration
+Docking of Mature Histone mRNA complex:TAP at the NPC
+Docking of Mature Replication Dependent Histone mRNA with the NPC
+Docking of the Mature intronless derived transcript derived mRNA, TAP and Aly/Ref at the NPC
+Docking of the TAP:EJC Complex with the NPC
+Dopamine can form an O-sulfate conjugate
+Down Regulation of Emi1 through Phosphorylation of Emi1
+Drosophila NICD trafficks to nucleus
+E2A and EBF synergestically activate Pax-5 expression
+ERK-2 phosphorylates Mnk-1
+Electron transfer from reduced cytochrome c to molecular oxygen
+Electron transfer from ubiquinol to cytochrome c of complex III
+Electron transfer from ubiquinone to ubiquinol
+Elongating transcript encounters a lesion in the template
+Elongation by HREV1 protein
+Elongation by Pol eta 
+Elongation by Pol zeta complex
+Elongation of pre-rRNA transcript
+Endosome acidification
+Entry of Ca++ from plasma
+Entry of Ca++ from platelet dense tubular system
+Enzyme-bound ATP is released
+Ethanol + NAD+ <=> Acetaldehyde + NADH + H+ [class I, alpha/alpha]
+Ethanol + NAD+ <=> Acetaldehyde + NADH + H+ [class I, alpha/beta]
+Ethanol + NAD+ <=> Acetaldehyde + NADH + H+ [class I, alpha/gamma]
+Ethanol + NAD+ <=> Acetaldehyde + NADH + H+ [class I, beta/beta]
+Ethanol + NAD+ <=> Acetaldehyde + NADH + H+ [class I, beta/gamma]
+Ethanol + NAD+ <=> Acetaldehyde + NADH + H+ [class I, gamma/gamma]
+Ethanol + NAD+ <=> Acetaldehyde + NADH + H+ [class II, pi/pi]
+Ethanol + NAD+ <=> Acetaldehyde + NADH + H+ [class IV, mu or sigma]
+Ethanol + NAD+ <=> Acetaldehyde + NADH + H+ [class V]
+Ethanol + O<sub>2</sub> + NADPH + H<sup>+</sup> -> Acetaldehyde + H<sub>2</sub>O + NADP<sup>+</sup>
+Ethanol is oxidized to acetaldehyde
+Ethylene oxide can form a glutathione conjugate
+Ethylene oxidized to Ethylene oxide
+Excision of  the abasic sugar phosphate (dRP) residue at the strand break 
+Exocytosis of ADP
+Exocytosis of ATP
+Exocytosis of C1 inhibitor
+Exocytosis of Ca++
+Exocytosis of EGF
+Exocytosis of GDP
+Exocytosis of GTP
+Exocytosis of Insulin-like growth factor
+Exocytosis of Mg++
+Exocytosis of PDGF
+Exocytosis of Platelet factor 4
+Exocytosis of TGF beta
+Exocytosis of VEGF
+Exocytosis of albumin
+Exocytosis of alpha 1 antitrypsin
+Exocytosis of alpha 2 antiplasmin
+Exocytosis of alpha 2 macroglobulin
+Exocytosis of beta-thromboglobulin
+Exocytosis of complement factor D
+Exocytosis of factor V
+Exocytosis of factor VIII
+Exocytosis of fibrinogen
+Exocytosis of fibronectin
+Exocytosis of hepatocyte growth factor
+Exocytosis of histidine rich glycoprotein
+Exocytosis of kininogen
+Exocytosis of low-affinity platelet factor IV 
+Exocytosis of multimerin
+Exocytosis of neutrophil-activating peptide 2
+Exocytosis of orthophosphate
+Exocytosis of osteonectin
+Exocytosis of plasminogen
+Exocytosis of plasminogen activator inhibitor
+Exocytosis of protease nexin II APP
+Exocytosis of pyrophosphate
+Exocytosis of serotonin
+Exocytosis of thrombospondin
+Exocytosis of vWF
+Extension of Chromosome End
+Extension of Extended Chromosome End
+Extrusion of 5'-end of 30 nt long transcript through the pore in Pol II complex
+FA anion diffuses laterally to UCP
+FA anion flip-flops to the opposite surface
+FA anion picks up a proton
+FA spontaneously flip-flops back to the matrix side
+FADD Mediated Activation of Pro-Caspase 8
+FADH2 + NAD+ => FAD + NADH + H+ [alpha-ketoglutarate dehydrogenase]
+FADH2 + NAD+ => FAD + NADH + H+ [branched-chain ketoacid dehydrogenase]
+FADH2 + NAD+ => FAD + NADH + H+ [pyruvate dehydrogenase]
+FAS Mediated Activation of Pro-caspase 8
+FASL binds FAS Receptor
+FASL:FAS Receptor Trimer:FADD complex binds pro-Caspase-10
+FASL:FAS Receptor Trimer:FADD complex binds pro-Caspase-8
+Fall Back to Closed Pre-initiation Complex
+FasL:Fas binds FADD
+Fill-in DNA synthesis
+First phosphorylation of IRAK1 by IRAK4 bound to activated TLR4
+Flotillin binds CAP and CBL-P detaching them from activated IR
+Flt3 signaling induces IL-7R protein
+Formation Of Cyclin E1:Cdk2 complexes
+Formation of ADAR1 homodimer
+Formation of ADAR2  homodimer
+Formation of AT-AC A complex
+Formation of AT-AC B Complex
+Formation of AT-AC C complex
+Formation of Acetyl-ACP(intermediate)
+Formation of Calcinuerin B complex
+Formation of Caspase-8 dimer
+Formation of ChREBP:MLX heterodimer
+Formation of Connexin26 Hemichannel
+Formation of Connexin30 Hemichannel
+Formation of Connexin37 Hemichannel
+Formation of Connexin43 Hemichannel
+Formation of Connexon36 Hemichannel
+Formation of Cyclin A1:Cdc2 complexes
+Formation of Cyclin A2:Cdc2 complexes
+Formation of Cyclin B1:Cdc2 complexes
+Formation of Cyclin B2:Cdc2 complexes
+Formation of Cyclin D1:Cdk4 complexes 
+Formation of Cyclin D1:Cdk6 complexes
+Formation of Cyclin D2:Cdk4 complexes
+Formation of Cyclin D2:Cdk6 complexes
+Formation of Cyclin D3:Cdk4 complexes 
+Formation of Cyclin D3:Cdk6 complexes 
+Formation of Cyclin E2:Cdk2 complexes
+Formation of DSIF complex 
+Formation of DSIF:NELF:early elongation complex
+Formation of ERCC1-XPF heterodimeric complex
+Formation of Elongin BC complex
+Formation of Exon Junction Complex
+Formation of FACT complex
+Formation of Malonyl-CoA from Acetyl-CoA
+Formation of NELF complex 
+Formation of Okazaki fragments
+Formation of P-Tefb complex
+Formation of Phospho-ERK2:MNK1 complex
+Formation of Pol zeta complex
+Formation of Processive Complex
+Formation of RAD50:MRE11 complex
+Formation of SL1
+Formation of TSC1:Activated TSC2 complex
+Formation of TSC1:TSC2 complex
+Formation of active Pol II complex with lesioned DNA template
+Formation of active mTORC1 complex
+Formation of an intermediate Spliceosomal C complex
+Formation of cap binding complex (CBC)
+Formation of connexon26 intercellular channel
+Formation of connexon30 intercellular channel
+Formation of connexon30 intercellular channel
+Formation of connexon36 intercellular channel
+Formation of connexon37 intercellular channel
+Formation of connexon43 intercellular channel
+Formation of dsRNA structure by looping 
+Formation of eEF1B complex
+Formation of eIF2:GDP:eIF2B intermediate
+Formation of elongin complex
+Formation of fatty acid synthase (FAS) dimer
+Formation of mChREBP:mMlx complex
+Formation of open bubble structure in DNA by helicases
+Formation of phosphoribosyl pyrophosphate amidotransferase tetramer
+Formation of pre-mRNPs
+Formation of stem-loop structure in ApoB mRNA
+Formation of the 43S pre-initiation complex
+Formation of the CE:GMP intermediate complex
+Formation of the Cleavage and Polyadenylation Complex
+Formation of the Editosome
+Formation of the Flap Intermediate
+Formation of the MCC complex
+Formation of the Spliceosomal A Complex
+Formation of the Spliceosomal B Complex
+Formation of the Spliceosomal E complex
+Formation of the active Spliceosomal C complex
+Formation of the cap-binding eIF4F complex
+Formation of the closed pre-initiation complex
+Formation of the pre-hairpin configuration of the ectodomain
+Formation of translation initiation complexes containing mRNA that does not circularize
+Formation of translation initiation complexes yielding circularized Ceruloplasmin mRNA in a  'closed-loop' conformation
+Free Cdt1 associates with Cdc6:ORC:origin complexes
+Fructose 2,6-bisphosphate is hydrolyzed to form fructose-6-phosphate and orthophosphate
+Fumarate + H2O <=> (S)-Malate
+Fumarate <=> Succinate (with FAD redox reaction on enzyme)
+Further oxidation of Dimethyl sulfoxide to form Sulfonylbismethane
+G(s)-alpha:GDP binds to beta and gamma subunits of G protein
+G(s)-alpha:GTP binds to Adenylate cyclase
+G-alpha:GDP binds G-betagamma to form G-GDP
+GDP + Orthophosphate + Succinyl-CoA <=> GTP + Succinate + CoA
+GDP is exchanged for GTP on DRheb
+GEF binds to the inactive DRheb
+GEF dissociates from DRheb-GTP
+GP Ib-IX-V binds to [vWF:Collagen] complex
+GPI-bound CD14 binds LPS
+GRB2 binds SOS
+GRB2:SOS binds IRS-P
+GRB2:SOS binds to SHC-P
+GRK1 activation
+GRK1 activation
+GRK1 activation
+GTP + Oxaloacetate <=> GDP + Phosphoenolpyruvate + CO2
+GTP Hydrolysis by eRF3 bound to the eRF1:mRNA:polypeptide:80S Ribosome complex
+GTP Hydrolysis by eRF3 bound to the eRF1:mRNA:polypeptide:80S Ribosome complex
+GTP [mitochondrial inner membrane] GTP [cytosol]
+GTP bound eRF3:eRF1 complex binds the peptidyl tRNA:mRNA:80S Ribosome complex
+GTP bound eRF3:eRF1 complex binds the peptidyl-tRNA:mRNA:Ribosome complex
+GTP exchange
+GTP exchange
+GTP loading by Rheb
+GTP loading of G alpha 12
+GTP loading of G alpha Q
+GTP-binding activates eEF2
+Gap repair
+Generation of Cytoplasmic Acetyl CoA from Citrate
+Glucagon binds to Glucagon receptor
+Glucagon:GCGR mediates GTP-GDP exchange
+Glucose 1-phosphate is converted to glucose 6-phosphate
+Granzyme-B activates BID by cleavage
+Gt-alpha dissociation
+Gt-alpha dissociation
+Gt-alpha dissociation and PDE inactivation
+Gt-alpha dissociation and PDE inactivation
+Gt-alpha-GTP binding to PDE
+Gt-alpha-GTP binding to PDE
+Gt-alpha-GTP hydrolysis
+Gt-alpha-GTP hydrolysis
+Gt-alpha-PDE* binds RGS9-Gb5
+Gt-alpha-PDE* binds RGS9-Gb5
+Guanine + H2O => Xanthine + NH3
+Guanine + PRPP => GMP + PPi
+HMG CoA => acetoacetic acid+ acetyl CoA
+Hexanoyl-CoA+FAD<=>trans-Hex-2-enoyl-CoA+FADH2
+Homo sapiens
+Hydrolysis of Carboxylic ester to form Carboxylate + Aldehyde
+Hydrolysis of Palmitoyl-ACP to Palmitic Acid
+Hydrolysis of Ran:GTP to Ran:GDP
+Hydrolysis of cAMP to 5' AMP by Phosphorylated PDE3B
+Hydrolysis of eEF1A:GTP
+Hydrolysis of phosphatidylcholine
+Hydrolysis of reEF1A:GTP
+Hydrolysis of the 5'-end of the nascent transcript by the capping enzyme
+Hyperphosphorylation (Ser2) of RNA Pol II CTD by P-Tefb complex
+Hypophosphorylation of RNA Pol II CTD by FCP1P protein
+Hypoxanthine + H2O + O2 => Xanthine + H2O2
+Hypoxanthine + PRPP => IMP + PPi
+INF-gamma induced phosphorylation of L13a
+INS-1 binds DAF-2
+IP3 opens Ca-channels in ER
+IRAK1 combines with activated TLR4 complexed with IRAK4 and MyD88
+IRAK1-P(n) combines with TRAF6
+IRAK4 combines with activated TLR4 receptor complexed with MyD88
+Ikaros induces Flt3 protein in progenitor cells
+Inactivation of APC via CDC20 sequestration
+Inactivation of Cyclin A:Cdc2 complex due to phosphorylation of Cdc2
+Inactivation of Cyclin E1:Cdk2 complex by CKIs
+Inactivation of Cyclin E2:Cdk2 complex by CKIs
+Inactivation of MEK1 by p34cdc2
+Inactivation of Myt1 kinase
+Inactivation of PLC beta
+Inactivation of Wee1 kinase
+Increased PIP3 levels recruit DAkt1 to the membrane
+Increased PIP3 recruits AKT-1 to the membrane
+Increased PIP3 recruits AKT-2 to the membrane
+Inhibition of GRK2 by calmodulin
+Inhibition of adenylate cyclase
+Inhibitory effect of Grb10 on insulin signalling
+Initiation of RNA Polymerase III Productive Transcription
+Insertion of correct bases opposite to the lesion by Pol eta
+Insertion of gp41 fusion peptide into the target membrane
+Insulin binding
+Insulin degradation
+Insulin receptor de-phosphorylation
+Integrase binds viral DNA ends
+Integration targeting the same viral DNA molecule
+Interaction  of BAD with BCL-xl   
+Interaction between FEN1 and PCNA
+Interaction of APE1 with DNA ligase I
+Interaction of APE1 with FEN1
+Interaction of BAD with BCL2  
+Interaction of BAD with Bcl-2
+Interaction of BIM with BCL-xl
+Interaction of BIM with BCL2 
+Interaction of BMF with Bcl-2
+Interaction of BMF with Bcl-XL
+Interaction of NOXA and Bcl-2
+Interaction of NOXA and Bcl-XL
+Interaction of NOXA with BCL-xl
+Interaction of NOXA with BCL2
+Interaction of PUMA and Bcl-2
+Interaction of PUMA and Bcl-XL
+Interaction of tBID with BCL-xl
+Intermolecular autophosphorylation of ATM within dimeric ATM complexes
+Internal Methylation of mRNA
+Internalisation of the insulin receptor
+Isocitrate + NAD+ => alpha-ketoglutarate + CO2 + NADH + H+
+Isocitrate <=> Citrate
+Isocitrate <=> cis-Aconitate + H2O
+Isomerisation / hydrolysis
+Isomerisation / hydrolysis
+Isomerization of 3-trans-decenoyl-CoA to form trans-dec-2-enoyl-CoA
+Isomerization of cis,cis-3,6-Dodecadienoyl-CoA to form trans,cis-Lauro-2,6-dienoyl-CoA
+Isoniazid can form an N-acetylated conjugate
+Joining of adjacent Okazaki fragments
+L-1-pyrroline-5-carboxylate + NADPH + H+ => proline + NADP+
+L-1-pyrroline-5-carboxylate <=> L-glutamate gamma-semialdehyde
+L-3-Hydroxyacyl-CoA <=> beta-Ketoacyl-CoA
+L-glutamate gamma-semialdehyde + NAD+ => glutamate + NADH + H+
+L-glutamate gamma-semialdehyde <=> L-1-pyrroline-5-carboxylate
+L-glutamine + 2 ATP + HCO3- + H2O => carbamoyl phosphate + L-glutamate + 2 adenosine 5'-diphosphate + orthophosphate
+L-methylmalonyl-CoA <=> succinyl-CoA
+LKB1 phosphorylates the alpha subunit of AMPK heterotrimer
+Lariat Formation and 5'-Splice Site Cleavage
+Ligation of DNA after branch migration
+Ligation of DNA and formation of Holliday structures following repair synthesis
+Ligation of DNA at sites of patch replacement
+Ligation of newly synthesized repair patch to incised DNA in GG-NER
+Ligation of newly synthesized repair patch to incised DNA in TC-NER
+Loading of PCNA - Sliding Clamp Formation
+Loss of Rrn3 from RNA Polymerase I promoter escape complex
+Loss of water after another proton addition
+MAD2 associates with the Mad1 kinetochore complex
+MAD2 converted  to an inhibitory state via interaction with Mad1
+MBD4 glycosylase mediated recognition and binding of a thymine opposite to a guanine at CpG sequences
+MBD4 glycosylase mediated recognition and binding of an uracil opposite to a guanine at CpG sequences
+MDC1/NFBD1associates with gamma H2AX at nuclear foci
+MEK1 binds ERK-1
+MEK1 phosphorylates ERK-1
+MEK2 binds ERK-2
+MEK2 phosphorylates ERK-2
+MGMT/hAGT mediated DNA Damage Reversal
+MOR mediates GDP-GTP exchange
+MPG glycosylase mediated recognition and binding of 3-methyladenine 
+MPG glycosylase mediated recognition and binding of ethenoadenine 
+MPG glycosylase mediated recognition and binding of hypoxanthine
+MRN 5'-3' exonuclease activity generates a short 5' overhang at ends of DSB   
+MYH glycosylase mediated recognition and binding of an adenine opposite to an 8-oxo guanine
+Mad1 binds kinetochore
+Maintenance of Cyclin B1:Cdk1 in T14 Y15 phosphorylated state
+Maintenance of Cyclin B2:Cdk1 in T14 Y15 phosphorylated state
+Mcm10 associates with the pre-replicative complex, stabilizing Mcm2-7
+Mcm2-7 associates with the Cdt1:Cdc6:ORC:origin complex, forming the pre-replicative complex (preRC)
+Mcm2-7 is phosphorylated by DDK
+Mcm4,6,7 trimer forms and associates with the replication fork
+Membrane merger/fusion
+Met-tRNAi binds to eIF2:GTP to form the ternary complex
+Methylation of GMP-cap by RNA Methyltransferase
+Migration to RPE
+Migration to RPE
+Migration to rods
+Migration to rods
+Misinsertion of  bases opposite to the lesion by HREV1
+Mm:Erk-2 phosphorylates Mnk-1
+Mono-halogenated hydrocarbon + O<sub>2</sub> + NADPH + H<sup>+</sup> -> Aldehyde + H<sub>2</sub>O + NADP<sup>+</sup>
+Multimerization of Rev
+Multiple IRAK1 autophosphorylation steps
+MyD88 combines with the activated TLR4 receptor in human
+MyD88 combines with the activated TLR4 receptor in mouse
+Myrisitoylation of Nef
+Myristoylation of tBID by NMT1
+N-Acetylbenzoquinoneimine can form a glutathione conjugate
+N-acetylglucosaminyl-PI + H2O -> glucosaminyl-PI + acetate
+N-acetylspermidine is oxidized to putrescine
+N-acetylspermine is oxidised spermidine
+N-carbamoyl L-aspartate + H+ <=> (S)-dihydroorotate + H2O
+N-formiminoglutamate + tetrahydrofolate => glutamate + 5-formiminotetrahydrofolate
+N-formylkynurenine + H2O => kynurenine + formate
+N-formylkynurenine + H2O => kynurenine + formate [mouse]
+N-hydroxy-4-aminobiphenyl can form a sulfate conjugate
+N-hydroxy-4-aminobiphenyl can form an O-acetylated conjugate
+N-hydroxy-4-aminobiphenyl can form an O-glucuronide
+N-hydroxy-4-aminobiphenyl transport from ER lumen to the cytosol
+N-oxygenation of Pyridine to form Pyridine N-oxide
+NADH enters the respiratory chain at Complex I
+NEXT1 is cleaved to produce NICD1
+NEXT2 is cleaved to produce NICD2
+NEXT3 is cleaved to produce NICD3
+NEXT4 is cleaved to produce NICD4
+NICD1 trafficks to the nucleus
+NICD2 trafficks to the nucleus
+NICD3 trafficks to the nucleus
+NICD4 trafficks to the nucleus
+NTM-NEC 1 receptor interacts with ligand Delta1 in the intracellular space
+NTM-NEC 1 receptor interacts with ligand Jagged1 in the intracellular space
+NTM-NEC 1 receptor interacts with ligand Jagged2 in the intracellular space
+NTM-NEC 2 receptor interacts with ligand Delta1 in the intracellular space
+NTM-NEC 2 receptor interacts with ligand Jagged1 in the intracellular space
+NTM-NEC 2 receptor interacts with ligand Jagged2 in the intracellular space
+NTM-NEC 3 receptor interacts with ligand Delta1 in the intracellular space
+NTM-NEC 3 receptor interacts with ligand Jagged1 in the intracellular space
+NTM-NEC 3 receptor interacts with ligand Jagged2 in the intracellular space
+NTP Binds Active Site of RNA Polymerase II
+Nef mediated activation of the T-cell receptor
+Nef mediated disruption of gp120 CD4 complexes
+Newly Formed Phosphodiester Bond Stabilized and PPi Released
+Nicotine N-oxidised to Nicotine-N-oxide
+Nicotine can form an N-glucuronide
+Notch 1 heterodimer binds with a Notch ligand in the extracellular space
+Notch 1 heterodimer trafficks to the plasma membrane
+Notch 1 precursor cleaved to form a heterodimer
+Notch 1 precursor transport to golgi
+Notch 1-ligand complex is cleaved to produce NEXT1
+Notch 2 heterodimer binds with a Notch ligand in the extracellular space
+Notch 2 heterodimer trafficks to the plasma membrane
+Notch 2 precursor cleaved to form a heterodimer
+Notch 2 precursor transport to golgi
+Notch 2-ligand complex is cleaved to produce NEXT2
+Notch 3 heterodimer binds with a Notch ligand in the extracellular space
+Notch 3 heterodimer trafficks to the plasma membrane
+Notch 3 precursor cleaved to form a heterodimer
+Notch 3 precursor transport to golgi
+Notch 3-ligand complex is cleaved to produce NEXT3
+Notch 4 heterodimer binds with a Notch ligand in the extracellular space
+Notch 4 heterodimer trafficks to the plasma membrane
+Notch 4 precursor cleaved to form a heterodimer
+Notch 4 precursor transport to golgi
+Notch 4-ligand complex is cleaved to produce NEXT4
+Notch1-Delta1 complex is cleaved to produce NEXT1
+Notch1-Jagged1 complex is cleaved to produce NEXT1
+Notch1-Jagged2 complex is cleaved to produce NEXT1
+Notch2-Delta1 complex is cleaved to produce NEXT2
+Notch2-Jagged1 complex is cleaved to produce NEXT2
+Notch2-Jagged2 complex is cleaved to produce NEXT2
+Notch3-Delta1 complex is cleaved to produce NEXT3
+Notch3-Jagged1 complex is cleaved to produce NEXT3
+Notch3-Jagged2 complex is cleaved to produce NEXT3
+Nuclear translocation of phospho-ERK-1 dimer
+Nuclear translocation of phospho-ERK-2 dimer
+Nuclear translocation of phospho-ERK-2 dimer
+Nuclear transport of pChREBP (Thr 666) protein
+Nucleophillic Attack by 3'-hydroxyl Oxygen of nascent transcript on the Alpha Phosphate of NTP
+OMI binds ILP-2:Caspase-3
+OMI binds ILP-2:Caspase-7
+OMI binds ILP-2:Caspase-9
+OMI binds ML-IAP:Caspase-9
+OMI binds NAIP:Caspase-3
+OMI binds NAIP:Caspase-7
+OMI binds Survivin:Caspase-3
+OMI binds Survivin:Caspase-7
+OMI binds Survivin:Caspase-9
+OMI binds XIAP:Caspase-3
+OMI binds XIAP:Caspase-7
+OMI binds XIAP:Caspase-9
+OMI binds XIAP:Caspase-9
+OMI binds cIAP1:Caspase-3
+OMI binds cIAP1:Caspase-7
+OMI binds cIAP1:Caspase-9
+OMI binds cIAP2:Caspase-3
+OMI binds cIAP2:Caspase-7
+OMI binds cIAP2:Caspase-9
+OMI cleaves C-IAP1
+OMI cleaves C-IAP2
+OMI cleaves ML-IAP
+OMI cleaves XIAP
+Octanoyl-CoA+FAD<=>trans-Oct-2-enoyl-CoA+FADH2
+Oligomerization  of BAK at the mitochondrial membrane
+Oligomerization of BAX at the mitochondrial membrane
+Opioid binds MOR
+Opioid dissociates from MOR
+Orc1 associates with Orc4:Orc5:Orc3:Orc2:origin complexes
+Orc1 is phosphorylated by cyclin A/CDK2
+Orc3 associates with Orc2 constitutively bound at origins of replication
+Orc4 associates with Orc5:Orc3:Orc2:origin complexes
+Orc5 associates with Orc3:Orc2:origin complexes
+Orc6 associates with Orc1:Orc4:Orc5:Orc3:Orc2:origin complexes, forming ORC:origin complexes
+Oxaloacetate + NADH + H+ <=> (S)-Malate + NAD+
+Oxaloacetate and GTP react to form phosphoenolpyruvate, CO2, and GDP
+Oxidative deamination of 5-Hydroxytryptamine
+Oxidative deamination of Phenyethylamine
+Oxidative demethylation of 1-EtA damaged DNA By ABH2
+Oxidative demethylation of 1-EtA damaged DNA By ABH3
+Oxidative demethylation of 1-MeA damaged DNA By ABH2
+Oxidative demethylation of 1-MeA damaged DNA By ABH3
+Oxidative demethylation of 3-MeC damaged DNA By ABH2
+Oxidative demethylation of 3-MeC damaged DNA By ABH3
+P450  reduced by electron from NADPH-cytochrome P450 reductase
+PDE-gamma conformational change
+PDE-gamma conformational change
+PDK1 attachment to plasma membrane
+PI3K activation
+PI3K activation
+PIC loses viral proteins
+PIP2 conversion to PIP3
+PIP2 hydrolysis
+PIP3 dephosphorylated to PIP2 by DPTEN
+PKA catalytic subunit translocates to the nucleus
+PKA phosphorylates CREB
+PKB attachment to plasma membrane
+PKC phosphorylates GRK2
+PKC phosphorylates RKIP
+PKC phosphorylates RKIP
+PLC beta 1-mediated hydrolysis
+PLC gamma 2-mediated hydrolysis
+POL Beta mediated incorporation of the first replacement nucleotide
+POL delta associates with AP site displacing POL Beta
+PTRF Binds the Polymerase I Transcription Complex/Nascent Pre rRNA Complex paused at the TTF-I:Sal Box
+PU.1 and E2A coordinately induce EBF expression in lymphoid progenitor cells
+PU.1 induces Flt3 protein in progenitor cells
+Paraxanthine can form an N-acetylated conjugate
+Peptide transfer from P-site tRNA to the A-site tRNA
+Peptide transfer from P-site tRNA to the A-site tRNA
+Peroxidative reduction of PGG2 to PGH2
+Phenol can form a sulfate conjugate
+Phenol can form an O-glucuronide
+Phosphatidic acid + H2O <=> Diacylglycerol +  phosphate (1)
+Phosphatidic acid + H2O <=> Diacylglycerol +  phosphate (2)
+Phosphatidic acid + H2O <=> Diacylglycerol +  phosphate (3)
+Phospho-Chico: Activated DINR binds p60:Dp110
+Phospho:Mnk-1 activates eIF4E by phosphorylation
+PhosphoChREBP (Thr 666)  is exported to cytosol
+Phosphoenolpyruvate + H2O <=> 2-Phospho-D-glycerate
+Phosphoenolpyruvate + H2O <=> 2-Phospho-D-glycerate
+Phosphoenolpyruvate + H2O <=> 2-Phospho-D-glycerate
+Phosphoenolpyruvate + H2O <=> 2-Phospho-D-glycerate
+Phosphorlation of UBF-1:rDNA Promoter
+Phosphorylated Cdc6 is exported from the nucleus
+Phosphorylated HSL dimer translocates from the cytosol to the lipid particle
+Phosphorylated HSL dimer translocates from the cytosol to the lipid particle
+Phosphorylated Orc1 is ubiquitinated while still associated with chromatin
+Phosphorylation  of SH-PTP2 protein
+Phosphorylation (Ser5) of RNA pol II CTD
+Phosphorylation and activation of CHK1 by ATM
+Phosphorylation and activation of CHK2 by ATM
+Phosphorylation and activation of Chk1 by ATM kinase
+Phosphorylation and activation of eIF4B by activated S6K1
+Phosphorylation and activation of eIF4G by activated S6K1
+Phosphorylation and inactivation of eEF2 by eEF2K
+Phosphorylation and inactivation of eEF2K by activated S6K1
+Phosphorylation of  BRCA1 at multiple sites by ATM
+Phosphorylation of  NBS1 by ATM
+Phosphorylation of 4E-BP1 by activated mTORC1
+Phosphorylation of APS
+Phosphorylation of CBL
+Phosphorylation of Cdc25A at Ser-123 by Chk1
+Phosphorylation of Cdc25A at Ser-123 by Chk2
+Phosphorylation of Cdc25C at Ser 216 by Chk1
+Phosphorylation of Cdc25C at Ser 216 by Chk2(Cds1)
+Phosphorylation of ChREBP at Serine 568 by AMPK
+Phosphorylation of ChREBP at Thr(666) by PKA
+Phosphorylation of Cyclin A1:Cdc2 complexes by Myt1
+Phosphorylation of Cyclin A1:Cdc2 complexes by Wee1
+Phosphorylation of Cyclin A2:Cdc2 complexes by Myt1
+Phosphorylation of Cyclin A2:Cdc2 complexes by Wee1
+Phosphorylation of Cyclin B1:Cdc2 complexes by Myt1
+Phosphorylation of Cyclin B1:Cdc2 complexes by Wee1
+Phosphorylation of Cyclin B2:Cdc2 complexes by Myt1
+Phosphorylation of Cyclin B2:Cdc2 complexes by Wee1
+Phosphorylation of Cyclin D1 at T286 by glycogen synthase kinase-3 beta
+Phosphorylation of Cyclin D1:Cdk4 complexes
+Phosphorylation of Cyclin D1:Cdk6 complexes
+Phosphorylation of Cyclin D2:Cdk4 complexes
+Phosphorylation of Cyclin D2:Cdk6 complexes
+Phosphorylation of Cyclin D3:Cdk4 complexes
+Phosphorylation of Cyclin D3:Cdk6 complexes
+Phosphorylation of Cyclin E1:Cdk2 complexes by Myt1
+Phosphorylation of Cyclin E1:Cdk2 complexes by Wee1
+Phosphorylation of Cyclin E2:Cdk2 complexes by Myt1
+Phosphorylation of Cyclin E2:Cdk2 complexes by Wee1
+Phosphorylation of DLC1 by MAPK 8
+Phosphorylation of DLC2 by MAPK-8
+Phosphorylation of FRS2 protein
+Phosphorylation of IRS
+Phosphorylation of MDC1/NFBD1 by ATM (within  2 c-term BRCT domains)
+Phosphorylation of MDM2 at serine-395 by ATM kinase
+Phosphorylation of PDE3B
+Phosphorylation of PDE3B by AKT-1
+Phosphorylation of PF2K-Pase by PKA catalytic subunit
+Phosphorylation of PIP2 to PIP3 by Dp110
+Phosphorylation of PKB by PDK1
+Phosphorylation of PLA2 by ERK-2
+Phosphorylation of PLA2 by PKC
+Phosphorylation of Platelet Sec-1
+Phosphorylation of Ribosomal protein S6 by activated S6K1
+Phosphorylation of SHC
+Phosphorylation of SHC1 protein
+Phosphorylation of Syntaxin-4
+Phosphorylation of TSC2 by PKB
+Phosphorylation of Wee1 kinase by Chk1
+Phosphorylation of Wee1 kinase by Chk1
+Phosphorylation of adenosine 5'-phosphate (AMP) to form adenosine 5-'diphosphate (ADP)
+Phosphorylation of complexed TSC2 by PKB
+Phosphorylation of histone H2AX at Serine-139 by ATM at the site of DSB
+Phosphorylation of mChREBP at Thr (666) residue by mPKA
+Phosphorylation of mpChREBP (Thr 666) at Ser(196) by mPKA
+Phosphorylation of p53 at ser-15 by ATM kinase
+Phosphorylation of p53 by ATM-activated Chk1
+Phosphorylation of p53 by ATM-activated Chk2
+Phosphorylation of pChREBP (Thr 666) at Ser(196) by PKA
+Phosphorylation of proteins involved in G1/S transition by active Cyclin E1:Cdk2 complexes
+Phosphorylation of proteins involved in G1/S transition by active Cyclin E2:Cdk2 complexes
+Phosphorylation of proteins involved in G2/M transition by active Cyclin A1:Cdc2 complexes
+Phosphorylation of proteins involved in G2/M transition by active Cyclin A2:Cdc2 complexes
+Phosphorylation of proteins involved in G2/M transition by active Cyclin B1:Cdc2 complexes
+Phosphorylation of proteins involved in G2/M transition by active Cyclin B2:Cdc2 complexes
+Phosphorylation of rChREBP(Ser 568) by rAMPK
+Phosphorylation of rPF2K-Pase by rPKA
+Phosphorylation of the SA2 Cohesion Complex
+Phosphorylation of the Scc1:Cohesion Complex
+Platelet glycoprotein IV [plasma membrane] GP IV : Collagen IV complex formation
+Plus strand synthesis continues until reverse transcribing part of the tRNA primer
+Pol II elongation complex moves on the template as transcript elongates
+Polymerase I Transcription Complex/Nascent Pre rRNA Complex pauses at the TTF-I:Sal Box
+Polypeptide release from the eRF3-GDP:eRF1:mRNA:80S Ribsome complex
+Polypeptide release from the eRF3-GDP:eRF1:mRNA:80S Ribsome complex
+Pp2a mediated localization of Rb protein in chromatin
+Pro-GAS6 is transported from the endoplasmic reticulum to the Golgi apparatus
+Pro-factor IX is transported from the endoplasmic reticulum to the Golgi apparatus
+Pro-factor VII is transported from the endoplasmic reticulum to the Golgi apparatus
+Pro-factor X is transported from the endoplasmic reticulum to the Golgi apparatus
+Pro-protein C is transported from the endoplasmic reticulum to the Golgi apparatus
+Pro-protein S is transported from the endoplasmic reticulum to the Golgi apparatus
+Pro-protein Z is transported from the endoplasmic reticulum to the Golgi apparatus
+Pro-prothrombin is transported from the endoplasmic reticulum to the Golgi apparatus
+Processive synthesis on the leading strand
+Prostaglandin H2 isomerizes to form Prostaglandin I2
+Prostaglandin H2 isomerizes to form Thromboxane A2
+Proteolytic Cleavage of HIV proteins
+Proteolytic degradation of ubiquitinated-Cdc25A
+Pyruvate + NADH + H+ <=> (S)-Lactate + NAD+
+Pyruvate + NADH + H+ <=> (S)-Lactate + NAD+
+Pyruvate + NADH + H+ <=> (S)-Lactate + NAD+
+Pyruvate + NADH + H+ <=> (S)-Lactate + NAD+
+Pyruvate + NADH + H+ <=> (S)-Lactate + NAD+
+Pyruvate, CO2, and ATP react to form oxaloacetate, ADP, and orthophosphate
+RAF phosphorylates MEK1
+RAF phosphorylates MEK1
+RAF phosphorylates MEK2
+RAF phosphorylates MEK2
+RFC binding displaces Pol Alpha
+RFC dissociates after sliding clamp formation
+RNA Pol II is blocked by the lesion leading to reduced transcription
+RNA Polymerase II CTD (phosphorylated) binds to CE
+RNA Polymerase II Promoter Opening: First Transition
+RNA Polymerase III Abortive Initiation
+RNA Polymerase III Abortive Initiation At Type 1 Open Promoters
+RNA Polymerase III Abortive Initiation At Type 2 Open Promoters
+RNA Polymerase III Abortive Initiation At Type 3 Open Promoters
+RNA Polymerase III Initiation At a Simple Start Sequence
+RNA Polymerase III Productive Transcription
+RNA Polymerase III Promoter Opening
+RNA Polymerase III Promoter Opening at Type 1 Promoters
+RNA Polymerase III Promoter Opening at Type 2 Promoters
+RNA Polymerase III Promoter Opening at Type 3 Promoters
+RNA Polymerase III Retractive RNase Activity at U-tract Pause Sites
+RNA Polymerase III Retractive RNase Activity at U-tract Pause Sites
+RNA Polymerase III Simple Start Sequence Initiation At Type 1 Promoters
+RNA Polymerase III Simple Start Sequence Initiation At Type 2 Promoters
+RNA Polymerase III Simple Start Sequence Initiation At Type 3 Promoters
+RNA Polymerase III Termination and release of transcribed mRNA
+RNA Polymerase III Termination and release of transcribed mRNA
+RNA Polymerase III Transcriptional Pause at Terminator Sequence
+RNA Polymerase III Transcriptional Pause at Terminator Sequence
+RNase H mediated degradation of the RNA strand of the sssDNA:RNA duplex
+RNase H mediated degradation of the primer tRNA
+RNase H mediated digestion of the template strand
+RPA binds to the Flap
+Re-arrangement of D-ribulose 5'-phosphate to form D-ribose 5'-phosphate
+Re-arrangement of D-ribulose 5'-phosphate to form D-ribose 5'-phosphate
+Re-integration of insulin receptor into plasma membrane
+Recognition and Binding of Core Promoter Elements by TFIID
+Recognition and binding of the mRNA cap by the cap-binding complex 
+Recognition of AAUAAA sequence by CPSF
+Recognition of DNA damage by error-prone polymerases
+Recoverin activation by calcium
+Recoverin activation by calcium
+Recoverin:calcium binding to rhodopsin kinase
+Recoverin:calcium binding to rhodopsin kinase
+Recruitment  of  LIG3:XRRC1 complex to the site of repair by POL Beta
+Recruitment of  RNA polymerase III to TFIIIB:TFIIIC:TFIIIA:Type 1 Promoter Complex
+Recruitment of Acetylated SL1 to phosUBF-1:rDNA Promoter
+Recruitment of Active RNA Polymerase I to SL1:phos.UBF-1:rDNA Promoter
+Recruitment of CstF to the CPSF Bound Pre-mRNA
+Recruitment of Dna2 endonuclease
+Recruitment of POL Beta to the AP site
+Recruitment of RNA Polymerase II Holoenzyme by TFIIF to the pol II promoter:TFIID:TFIIA:TFIIB complex
+Recruitment of RNA Polymerase III to TFIIIB:SNAPc:Type 3 Promoter Complex
+Recruitment of RNA Polymerase III to the TFIIIB:TFIIIC: Type 2 Promoter Complex
+Recruitment of TAP to the EJC
+Recruitment of Telomerase Holoenzyme to Chromosome End
+Recruitment of U7 snRNP:ZFP100 complex to the Histone Pre-mRNA
+Recruitment of U7 snRNP:ZFP100 complex to the SLBP Bound Pre-mRNA
+Recruitment of elongation factors to form elongation complex
+Recruitment of repair factors to form preincision complex
+Reduction of 2-trans-4-cis-decadienoyl-CoA to form 3-trans-decenoyl-CoA
+Reduction of Acetoacetate to beta-Hydroxybutyrate 
+Reduction of Acetoacetyl-ACP to beta-Hydroxybutyryl-ACP
+Reduction of Crotonoyl-ACP to Butyrl-ACP
+Regeneration of eEF1A:GTP by eEF1B activity
+Regulation of MKLP-1 by phosphorylation
+Regulation of MKLP-2 by phosphorylation
+Regulation of NudC by phosphorylation
+Regulation of RGS9 activity
+Regulation of RGS9 activity
+Release from the NPC and Disassembly of the mRNP
+Release of 40S and 60S subunits from the 80S ribosome 
+Release of AIF from mitochondria
+Release of Crm1 from Rev
+Release of Cytochrome c from mitochondria
+Release of ENDO G from mitochondria
+Release of OMI from the mitochondria
+Release of RNA Polymerase II from the cleaved transcript
+Release of SMAC from mitochondria
+Release of activated MAD2 from kinetochores
+Release of eIF4E from the inactive eIF4E:4E-BP complex 
+Release of the Mature intronless derived mRNA, TAP, and Aly/Ref from the NPC
+Release of the Mature intronless transcript derived Histone mRNA:SLBP:eIF4E Complex
+Release of the SLBP independent Histone mRNA from the NPC
+Relocalization of nuclearly localized Cyclin D1 to the cytoplasm
+Relocalization of nuclearly localized phospho-(T286):cyclin D1:Cdk4 to cytoplasm
+Removal of 2 Carbon atoms from trans,cis-Lauro-2,6-dienoyl-CoA to form 4-cis-decenoyl-CoA 
+Removal of RNA primer and dissociation of RPA and Dna2
+Removal of remaining Flap
+Removal of six carbons from Linoleoyl-CoA to form cis,cis-3,6- Dodecadienoyl-CoA
+Reorientation of dolichyl phosphate D-mannose in the endoplasmic reticulum membrane
+Reorientation of glucosaminyl-acyl-PI in the endoplasmic reticulum membrane
+Repair synthesis for gap-filling  by DNA pol delta  in TC-NER
+Repair synthesis for gap-filling by DNA pol epsilon in TC-NER
+Repair synthesis of patch ~27-30 bases long  by DNA Pol Delta
+Repair synthesis of ~27-30 bases long patch  by DNA Pol Epsilon
+Repeated (R) sequence mediated transfer of the sssDNA to the 3' R segment on viral genomic RNA
+Replication initiation regulation by E2F1/Rbf1
+Replication initiation regulation by Rb1/E2F1
+Resection  of 5' ends of separated strands by 5'-3' endonuclease activity of MRN
+Resumption of RNA Polymerase III Productive Transcription
+Resumption of elongation after recovery from pausing
+Resumption of transcription after TC-NER
+Resynthesis of excised residue
+Retinal reduction
+Retinal reduction
+Retinol binding to CRBP
+Retinol binding to CRBP
+Retinyl ester binds to RPE65
+Retinyl ester binds to RPE65
+Rev molecules assemble onto the RRE RNA sequence through their ARM sequence
+Rev multimer-bound  HIV-1 mRNA associates with Ran:GTP:Crm1
+Rev multimer-bound HIV-1 mRNA:Crm1:Ran:GTP complex associates with the NPC
+Rhodopsin activation
+Rhodopsin activation
+Rhodopsin de-phosphorylation
+Rhodopsin de-phosphorylation
+Rhodopsin phosphorylation
+Rhodopsin phosphorylation
+Ribosomal scanning 
+S-(2-methylbutanoyl)-dihydrolipoamide + CoA => alpha-methylbutyryl-CoA + dihydrolipoamide
+S-(isobutyryl)-dihydrolipoamide + CoA => isobutyryl-CoA + dihydrolipoamide
+S-acetyldihydrolipoamide + CoA => acetyl-CoA + dihydrolipoamide
+S-glutaryldihydrolipoamide + CoA => glutaryl-CoA + dihydrolipoamide
+S-isovaleryldihydrolipoamide + CoA => isovaleryl-CoA + dihydrolipoamide
+S-oxygenation of Dimethyl sufide to form Dimethyl sulfoxide
+S-succinyldihydrolipoamide + CoA => succinyl-CoA + dihydrolipoamide
+SMAC binds C-IAP1:Caspase-3
+SMAC binds C-IAP1:Caspase-7
+SMAC binds C-IAP1:Caspase-9
+SMAC binds C-IAP2:Caspase-3
+SMAC binds C-IAP2:Caspase-7
+SMAC binds C-IAP2:Caspase-9
+SMAC binds ILP-2:Caspase-3
+SMAC binds ILP-2:Caspase-7
+SMAC binds ILP-2:Caspase-9
+SMAC binds ML-IAP:Caspase-9
+SMAC binds XIAP:Caspase-3
+SMAC binds XIAP:Caspase-7
+SMAC binds XIAP:Caspase-9
+SOS mediated nucleotide exchange of RAS (IRS)
+SOS mediated nucleotide exchange of RAS (IRS)
+SOS mediated nucleotide exchange of RAS (SHC)
+SOS mediated nucleotide exchange of RAS (SHC)
+SOS phosphorylation and dissociation (IRS)
+SOS phosphorylation and dissociation (IRS, Crk)
+SOS phosphorylation and dissociation (SHC)
+SPT5 subunit of Pol II binds the RNA triphosphatase (RTP)
+Salicylate-CoA forms an amide bond with glycine
+Salicylic acid forms the salicylate-CoA thioester
+Second conformational change in gp120/gp41
+Second phosphorylation of IRAK1 by IRAK4 bound to activated TLR4
+Second strand transfer through complementary base pairing between PBS sequences in the minus-strand DNA and the +ssDNA
+Secondary Amine + O<sub>2</sub> + NADPH + H<sup>+</sup> -> nitrone + H<sub>2</sub>O +NADP<sup>+</sup>
+Secreted CD14 binds LPS
+Separation of elongating transcript from template
+Sequesteration of BAD protein by 14-3-3
+Sequestration of tBID by BCL-2
+Spermine is oxidized to spermidine
+Src autophosphorylation
+Src-mediated phoshorylation of FcR1 gamma
+Stabilisation of RAF by further phosphorylation
+Stabilisation of RAS:RAF by 14-3-3
+Start codon recognition
+Strand exchange/Branch migration
+Strand transfer
+Substrate binds to P450
+Substrate released, enzyme returns to initial state
+Succinate <=> Fumarate (with FAD redox reaction on enzyme)
+Surface deployment of CD63
+Surface deployment of CD9
+Surface deployment of GP Ib-IX-V complex
+Surface deployment of GpIV
+Surface deployment of LAMP2
+Surface deployment of P-selectin
+Surface deployment of PECAM-1
+Surface deployment of alpha IIb beta 3 integrin
+Syk-mediated phosphorylation of Phospholipase C gamma 2
+Synapsis, or interaction between two DNA-PK:DNA complexes at opposing ends of DNA DSB 
+Synthesis of minus strand strong stop DNA (-sssDNA)
+TBK1-mediated phosphorylation of IRF-3
+TDG glycosylase mediated recognition and binding of an ethenocytosine
+TDG glycosylase mediated recognition and binding of an thymine opposite to a guanine
+TDG glycosylase mediated recognition and binding of an uracil opposite to a guanine
+TFAM binds to mitochondrial promoters
+TFIIS-mediated recovery of elongation from arrest
+TFPI + TF:F7a + factor Xa -> TFPI:TF:F7a:factor Xa
+TNF Binds TNF-R1
+TNF Mediated Activation of Pro-caspase 8
+TNF:TNF-R1 binds TRADD, TRAF2 and RIP Complex
+TRADD:TRAF2:RIP1 complex binds FADD
+TRADD:TRAF2:RIP1 complex dissociates from the TNF-alpha:TNF-R1 complex.
+TRADD:TRAF2:RIP1:FADD complex binds Pro-Caspase 8  
+TRAIL Binds TRAIL-Receptor2
+TRAIL Mediated Activation of Pro-caspase 8
+TRAIL:TRAIL receptor-2 Trimer Binds FADD
+TRAIL:TRAIL-Receptor2 Trimer:FADD complex binds Caspase-10
+TRAIL:TRAIL-Receptor2 Trimer:FADD complex binds Caspase-8
+TTF-I binds to the Sal Box
+Tamoxifen can form an N-glucuronide
+Target DNA binding
+Tc10 binds CBL-P:CAP:Flotillin:Crk:C3G
+The 60S subunit joins the translation initiation complex 
+The FA anion diffuses away laterally from UCP
+The acetyl group from acetyl-CoA is transferred to the NAT2
+The geminin component of geminin:Cdt1 complexes is ubiquitinated, releasing Cdt1
+The polymerase component of DNA polymerase alpha:primase synthesizes a 20-nucleotide primer at the origin
+The primase component of DNA polymerase:primase synthesizes a 6-10 nucleotide RNA primer at the origin
+The proton is delivered to the matrix side
+The released DeIF4E is incorporated into the DeIFeF complex
+Thrombin-mediated activation of PAR1
+Thrombin-mediated activation of PAR3
+Thrombin-mediated activation of PAR4
+Tissues that oxidize glucose anaerobically release lactate, which is taken up by the liver
+Transactivation of NOXA by E2F1
+Transactivation of NOXA by p53
+Transactivation of PUMA by E2F1
+Transactivation of PUMA by p53
+Transcriptional activation of Acetyl-CoA carboxylase 2 by ChREBP:MLX
+Transcriptional activation of Citrate lyase monomer gene by ChREBP:MLX
+Transcriptional activation of FAS monomer gene by ChREBP:MLX
+Transcriptional activation of GP-acyl transferase gene by ChREBP:MLX
+Transcriptional activation of pyruvate kinase L isoform gene by mChREBP:mMLX
+Transcriptional activation of pyruvate kinase gene by ChREBP:MLX
+Transducin re-association
+Transducin re-association
+Transfer of GMP from the capping enzyme GT site to 5'-end of mRNA
+Transfer of LPS onto TLR4 from CD14
+Transfer of electrons from succinate to ubiquinone via bovine complex II
+Transfer of electrons from succinate to ubiquinone via complex II
+Transient dissociation of 14-3-3 upon RAS binding
+Translocation of AIF from the cytoplasm to the nucleus
+Translocation of BIM to mitochondria
+Translocation of BMF to mitochondria
+Translocation of Cyclin A1:Cdc2 complexes to the nucleus
+Translocation of Cyclin A2:Cdc2 complexes to the nucleus
+Translocation of Cyclin B1:Cdc2 complexes to the nucleus
+Translocation of Cyclin D1:Cdk4 from the cytoplasm to the nucleus
+Translocation of Cyclin D1:Cdk6 from the cytoplasm to the nucleus
+Translocation of Cyclin D2:Cdk4 from the cytoplasm to the nucleus
+Translocation of Cyclin D2:Cdk6 from the cytoplasm to the nucleus
+Translocation of Cyclin D3:Cdk4 from the cytoplasm to the nucleus
+Translocation of Cyclin D3:Cdk6 from the cytoplasm to the nucleus
+Translocation of ENDO G from the cytoplasm to the nucleus
+Translocation of NOXA to mitochondria
+Translocation of PUMA protein to mitochondria
+Translocation of RNA Polymerase one Nucleotide Along
+Translocation of Telomerase Holoenzyme Along the Newly Extended Chromosome End
+Translocation of activated BAD protein to mitochondria
+Translocation of activated BAX to the mitochondria
+Translocation of cyclin E1:Cdk2 complexes to the nucleus
+Translocation of cyclin E2:Cdk2 complexes to the nucleus
+Translocation of nuclear RNA transport complex to cytoplasm
+Translocation of ribosome by 3 bases in the 3' direction
+Translocation of ribosome by 3 bases in the 3' direction
+Translocation of tBID to mitochondria
+Transport of Citrate from Mitochondrial Matrix to cytosol
+Transport of cytosolic GDP to mitochondrial inner membrane
+Transport of the Mature Intronless Transcript Derived Histone mRNA:TAP:Aly/Ref Complex through the NPC
+Transport of the Mature IntronlessTranscript Derived Histone mRNA:SLBP:TAP:Aly/Ref complex through the NPC
+Transport of the Mature intronless transcript derived mRNA:TAP:Aly/Ref Complex through the NPC
+Transport of the export-competent complex through the NPC
+Trimerization of TRAIL: TRAIL receptor-2 complex
+Trimerization of the FASL:FAS receptor complex
+Trimethylamine N-oxidised to Trimethylamine-N-oxide
+U7 snRNP-specific Sm core complex [nucleus] U7 snRNP:ZFP100 Complex [nucleus]
+UBF-1 Binds rDNA Promoter
+UDP-galactose <=> UDP-glucose
+UNG glycosylase mediated recognition and binding of a 5-hydroxyuracil opposite to a guanine
+UNG glycosylase mediated recognition and binding of an uracil opposite to a guanine
+UTP + D-glucose 1-phosphate <=> pyrophosphate + UDP-glucose [liver]
+UTP + D-glucose 1-phosphate <=> pyrophosphate + UDP-glucose [muscle]
+Ubiquitinated Cdc6 is degraded by the proteasome
+Ubiquitinated Orc1 enters the cytosol
+Ubiquitinated Orc1 is degraded by the proteasome
+Ubiquitinated geminin is degraded by the proteasome
+Ubiquitination of Cyclin D1
+Ubiquitination of phosphorylated Cdc25A
+Unstable intermediate donates O to substrate
+Vinyl chloride oxidized to 2-Chloroethylene oxide
+Visual pigment regeneration
+Visual pigment regeneration
+XPC binds to HR23B forming a heterodimeric complex
+XPC:HR23B complex binds to damaged DNA site with lesion
+Xanthine + H2O + O2 => Urate + H2O2
+acetoacetate+succinyl-CoA <=> acetoacetyl-CoA+succinate
+acetoacetyl-CoA+CoA <=> 2 acetyl-CoA
+acetoacetyl-CoA+acetyl-CoA => HMG-CoA
+activated thrombin (factor IIa) + antithrombin III:heparin -> thrombin:antithrombin III:heparin
+activated thrombin (factor IIa) + thrombomodulin -> activated thrombin:thrombomodulin
+adenine [cytosol] <=> adenine [extracellular]
+adenine [extracellular] <=> adenine [cytosol]
+adenosine + ATP => adenosine 5'-monophosphate (AMP) + ADP
+adenosine 5'-diphosphate (ADP) + ADP <=> adenosine 5'-monophosphate (AMP) + ATP
+adenosine 5'-diphosphate (ADP) + ADP <=> adenosine 5'-monophosphate (AMP) + ATP
+adenosine 5'-diphosphate (ADP) + ADP <=> adenosine 5'-monophosphate (AMP) + ATP
+adenosine 5'-diphosphate (ADP) + CTP <=> ATP + cytidine 5'-diphosphate (CDP)
+adenosine 5'-diphosphate (ADP) + CTP <=> ATP + cytidine 5'-diphosphate (CDP)
+adenosine 5'-diphosphate (ADP) + CTP <=> ATP + cytidine 5'-diphosphate (CDP)
+adenosine 5'-diphosphate (ADP) + CTP <=> ATP + cytidine 5'-diphosphate (CDP)
+adenosine 5'-diphosphate (ADP) + CTP <=> ATP + cytidine 5'-diphosphate (CDP)
+adenosine 5'-diphosphate (ADP) + GTP <=> ATP + guanosine 5'-diphosphate (GDP)
+adenosine 5'-diphosphate (ADP) + GTP <=> ATP + guanosine 5'-diphosphate (GDP)
+adenosine 5'-diphosphate (ADP) + GTP <=> ATP + guanosine 5'-diphosphate (GDP)
+adenosine 5'-diphosphate (ADP) + GTP <=> ATP + guanosine 5'-diphosphate (GDP)
+adenosine 5'-diphosphate (ADP) + GTP <=> ATP + guanosine 5'-diphosphate (GDP)
+adenosine 5'-diphosphate (ADP) + TTP <=> ATP + thymidine 5'-diphosphate (TDP)
+adenosine 5'-diphosphate (ADP) + TTP <=> ATP + thymidine 5'-diphosphate (TDP)
+adenosine 5'-diphosphate (ADP) + TTP <=> ATP + thymidine 5'-diphosphate (TDP)
+adenosine 5'-diphosphate (ADP) + TTP <=> ATP + thymidine 5'-diphosphate (TDP)
+adenosine 5'-diphosphate (ADP) + TTP <=> ATP + thymidine 5'-diphosphate (TDP)
+adenosine 5'-diphosphate (ADP) + UTP <=> ATP + uridine 5'-diphosphate (UDP)
+adenosine 5'-diphosphate (ADP) + UTP <=> ATP + uridine 5'-diphosphate (UDP)
+adenosine 5'-diphosphate (ADP) + UTP <=> ATP + uridine 5'-diphosphate (UDP)
+adenosine 5'-diphosphate (ADP) + UTP <=> ATP + uridine 5'-diphosphate (UDP)
+adenosine 5'-diphosphate (ADP) + UTP <=> ATP + uridine 5'-diphosphate (UDP)
+adenosine 5'-diphosphate (ADP) + dATP <=> ATP + 2'-deoxyadenosine 5'-diphosphate (dADP)
+adenosine 5'-diphosphate (ADP) + dATP <=> ATP + 2'-deoxyadenosine 5'-diphosphate (dADP)
+adenosine 5'-diphosphate (ADP) + dATP <=> ATP + 2'-deoxyadenosine 5'-diphosphate (dADP)
+adenosine 5'-diphosphate (ADP) + dATP <=> ATP + 2'-deoxyadenosine 5'-diphosphate (dADP)
+adenosine 5'-diphosphate (ADP) + dATP <=> ATP + 2'-deoxyadenosine 5'-diphosphate (dADP)
+adenosine 5'-diphosphate (ADP) + dCTP <=> ATP + 2'-deoxycytidine 5'-diphosphate (dCDP)
+adenosine 5'-diphosphate (ADP) + dCTP <=> ATP + 2'-deoxycytidine 5'-diphosphate (dCDP)
+adenosine 5'-diphosphate (ADP) + dCTP <=> ATP + 2'-deoxycytidine 5'-diphosphate (dCDP)
+adenosine 5'-diphosphate (ADP) + dCTP <=> ATP + 2'-deoxycytidine 5'-diphosphate (dCDP)
+adenosine 5'-diphosphate (ADP) + dCTP <=> ATP + 2'-deoxycytidine 5'-diphosphate (dCDP)
+adenosine 5'-diphosphate (ADP) + dGTP <=> ATP + 2'-deoxyguanosine 5'-diphosphate (dGDP)
+adenosine 5'-diphosphate (ADP) + dGTP <=> ATP + 2'-deoxyguanosine 5'-diphosphate (dGDP)
+adenosine 5'-diphosphate (ADP) + dGTP <=> ATP + 2'-deoxyguanosine 5'-diphosphate (dGDP)
+adenosine 5'-diphosphate (ADP) + dGTP <=> ATP + 2'-deoxyguanosine 5'-diphosphate (dGDP)
+adenosine 5'-diphosphate (ADP) + dGTP <=> ATP + 2'-deoxyguanosine 5'-diphosphate (dGDP)
+adenosine 5'-diphosphate (ADP) + dUTP <=> ATP + 2'-deoxyuridine 5'-diphosphate (dUDP)
+adenosine 5'-diphosphate (ADP) + dUTP <=> ATP + 2'-deoxyuridine 5'-diphosphate (dUDP)
+adenosine 5'-diphosphate (ADP) + dUTP <=> ATP + 2'-deoxyuridine 5'-diphosphate (dUDP)
+adenosine 5'-diphosphate (ADP) + dUTP <=> ATP + 2'-deoxyuridine 5'-diphosphate (dUDP)
+adenosine 5'-diphosphate (cytosolic) <=> adenosine 5'-diphosphate (nuclear)
+adenosine 5'-diphosphate + glutaredoxin (reduced) => 2'-deoxyadenosine 5'-diphosphate + glutaredoxin (oxidized) + H2O
+adenosine 5'-diphosphate + thioredoxin (reduced) => 2'-deoxyadenosine 5'-diphosphate + thioredoxin (oxidized) + H2O
+adenosine 5'-diphosphate + thioredoxin (reduced) => 2'-deoxyadenosine 5'-diphosphate + thioredoxin (oxidized) + H2O
+adenosine 5'-monophosphate (AMP) + ATP <=> adenosine 5'-diphosphate (ADP) + ADP
+adenosine 5'-monophosphate (AMP) + ATP <=> adenosine 5'-diphosphate (ADP) + ADP
+adenosine 5'-monophosphate (AMP) + ATP <=> adenosine 5'-diphosphate (ADP) + ADP
+adenosine 5'-monophosphate (AMP) + H2O => adenosine + orthophosphate
+adenosine 5'-monophosphate (AMP) + H2O => adenosine + orthophosphate
+adenosine 5'-monophosphate (AMP) + H2O => adenosine + orthophosphate
+adenosine 5'-monophosphate (AMP) + H2O => inosine 5'-monophosphate (IMP) + NH4+ (E isoform)
+adenosine 5'-monophosphate (AMP) + H2O => inosine 5'-monophosphate (IMP) + NH4+ (L isoform)
+adenosine 5'-monophosphate (AMP) + H2O => inosine 5'-monophosphate (IMP) + NH4+ (M isoform)
+adenosine [cytosol] <=> adenosine [extracellular]
+adenosine [cytosol] <=> adenosine [extracellular]
+adenosine [extracellular] + 2 Na+ [extracellular] => adenosine [cytosol] + 2 Na+ [cytosol]
+adenosine [extracellular] + Na+ [extracellular] => adenosine [cytosol] + Na+ [cytosol]
+adenosine [extracellular] + Na+ [extracellular] => adenosine [cytosol] + Na+ [cytosol]
+adenosine [extracellular] <=> adenosine [cytosol]
+adenosine [extracellular] <=> adenosine [cytosol]
+adenylosuccinate => adenosine 5'-monophosphate + fumarate
+alanine + alpha-ketoglutarate <=> pyruvate + glutamate
+alpha-2-antiplasmin + plasmin -> alpha-2-antiplasmin:plasmin
+alpha-D-Glucose 6-phosphate + H2O => alpha-D-Glucose + Orthophosphate
+alpha-D-Glucose 6-phosphate <=> D-Glucose 1-phosphate
+alpha-D-glucose (extracellular) <=> alpha-D-glucose (cytosol) [GLUT1]
+alpha-D-glucose (extracellular) <=> alpha-D-glucose (cytosol) [GLUT2]
+alpha-D-glucose (extracellular) <=> alpha-D-glucose (cytosol) [GLUT3]
+alpha-D-glucose (extracellular) <=> alpha-D-glucose (cytosol) [GLUT4]
+alpha-D-glucose 6-phosphate + NADP+ => D-glucono-1,5-lactone 6-phosphate + NADPH + H+ [G6PD dimer]
+alpha-D-glucose 6-phosphate + NADP+ => D-glucono-1,5-lactone 6-phosphate + NADPH + H+ [G6PD tetramer]
+alpha-D-glucose 6-phosphate <=> D-fructose 6-phosphate
+alpha-aminoadipate + alpha-ketoglutarate => alpha-ketoadipate + glutamate
+alpha-aminoadipic semialdehyde + NAD+ => alpha-aminoadipate + NADH + H+
+alpha-keto-beta-methylvalerate + TPP => 2-methyl-1-hydroxybutyl-TPP + CO2
+alpha-ketoadipate + TPP => 4-carboxy-1-hydroxybutyl-TPP + CO2
+alpha-ketoglutarate + NH4+ + NADPH + H+ => glutamate + NADP+
+alpha-ketoglutarate + TPP => 3-carboxy-1-hydroxypropyl-TPP + CO2
+alpha-ketoisocaproate + TPP => 3-methyl-1-hydroxybutyl-TPP + CO2
+alpha-ketoisovalerate + TPP => 2-methyl-1-hydroxypropyl-TPP + CO2
+alpha-methyl-acetoacetyl-CoA + CoA <=> propionyl-CoA + acetyl-CoA
+alpha-methyl-beta-hydroxybutyryl-CoA + NAD+ <=> alpha-methylacetoacetyl-CoA + NADH + H+
+alpha-methylbutyryl-CoA + FAD => tiglyl-CoA + FADH2
+antithrombin III + heparin -> antithrombin III:heparin
+arginine + glycine => ornithine + guanidoacetate
+arginine => ornithine + urea
+argininosuccinate <=> fumarate + arginine
+aspartate + alpha-ketoglutarate <=> oxaloacetate + glutamate [cytosolic]
+aspartate + alpha-ketoglutarate <=> oxaloacetate + glutamate [mitochondrial]
+aspartate + glutamine + ATP <=> asparagine + glutamate + AMP + pyrophosphate
+beta-Ketoacyl-CoA <=> Acyl-CoA
+beta-hydroxy-trimethyllysine => gamma-butyrobetaine aldehyde + glycine
+beta-hydroxyisobutyrate + NAD+ <=> methylmalonyl semialdehyde + NADH + H+
+beta-hydroxyisobutyryl-CoA + H2O => beta-hydroxyisobutyrate + CoA
+beta-methylcrotonyl-CoA + ATP + CO2 <=> beta-methylglutaconyl-CoA + ADP + orthophosphate + H2O
+beta-methylglutaconyl-CoA + H2O <=> beta-hydroxy-beta-methylglutaryl-CoA
+beta-ureidoisobutyrate + H2O => beta-aminoisobutyrate + NH4+ + CO2
+beta-ureidopropionate + H2O => beta-alanine + NH4+ + CO2
+cAMP hydrolysis by Cam-PDE 1
+cAMP hydrolysis by PDE 4
+cAMP induces dissociation of inactive PKA tetramers
+cGMP dissociation and channel closing
+cGMP dissociation and channel closing
+cGMP hydrolysis
+cGMP hydrolysis
+cGMP synthesis by guanylyl cyclase
+cGMP synthesis by guanylyl cyclase
+cGMP-gated ion channel opening
+cGMP-gated ion channel opening
+carbamoyl phosphate + L-aspartate <=> N-carbamoyl L-aspartate + orthophosphate
+carbamoyl phosphate + ornithine => citrulline + orthophosphate
+carnitine [cytosol] -> carnitine [extracellular]
+carnitine [cytosol] -> carnitine [extracellular]
+carnitine [extracellular] + Na+ [extracellular] -> carnitine [cytosol] + Na+ [cytosol]
+cholesterol ester + H2O -> cholesterol + fatty acid
+cholesterol ester + H2O -> cholesterol + fatty acid
+cis-Aconitate + H2O <=> Citrate
+cis-Aconitate + H2O <=> Isocitrate
+completion of plus strand synthesis
+coumarin + O<sub>2</sub> + NADPH + H<sup>+</sup> -> hydroxycoumarin + H<sub>2</sub>O + NADP<sup>+</sup>
+creatine + H2O => creatinine
+crosslinked fibrin multimer + tissue plasminogen activator (one-chain) -> crosslinked fibrin multimer:tissue plasminogen activator (one-chain)
+crosslinked fibrin multimer:tissue plasminogen activator (one-chain) + plasminogen -> crosslinked fibrin multimer:tissue plasminogen activator (one-chain):plasminogen
+crosslinked fibrin multimer:tissue plasminogen activator (one-chain) -> crosslinked fibrin multimer:tissue plasminogen activator (two-chain)
+crosslinked fibrin multimer:tissue plasminogen activator (one-chain):plasminogen -> crosslinked fibrin multimer:tissue plasminogen activator (one-chain) + plasmin
+crosslinked fibrin multimer:tissue plasminogen activator (two-chain) + plasminogen -> crosslinked fibrin multimer:tissue plasminogen activator (two-chain):plasminogen
+crosslinked fibrin multimer:tissue plasminogen activator (two-chain):plasminogen -> crosslinked fibrin multimer:tissue plasminogen activator (two-chain) + plasmin
+cytidine + ATP => cytidine 5'-monophosphate (CMP) + ADP
+cytidine + ATP => cytidine 5'-monophosphate + ADP
+cytidine + ATP => cytidine 5'-monophosphate + ADP
+cytidine + H2O => uridine + NH4+
+cytidine 5'-diphosphate (CDP) + ADP <=> cytidine 5'-monophosphate (CMP) + ATP
+cytidine 5'-diphosphate (CDP) + ADP <=> cytidine 5'-monophosphate (CMP) + ATP
+cytidine 5'-diphosphate (CDP) + ATP <=> CTP + adenosine 5'-diphosphate (ADP)
+cytidine 5'-diphosphate (CDP) + ATP <=> CTP + adenosine 5'-diphosphate (ADP)
+cytidine 5'-diphosphate (CDP) + ATP <=> CTP + adenosine 5'-diphosphate (ADP)
+cytidine 5'-diphosphate (CDP) + ATP <=> CTP + adenosine 5'-diphosphate (ADP)
+cytidine 5'-diphosphate (cytosolic) <=> cytidine 5'-diphosphate (nuclear)
+cytidine 5'-diphosphate + ATP <=> cytidine 5'-triphosphate + ADP
+cytidine 5'-diphosphate + glutaredoxin (reduced) => 2'-deoxycytidine 5'-diphosphate + glutaredoxin (oxidized) + H2O
+cytidine 5'-diphosphate + thioredoxin (reduced) => 2'-deoxycytidine 5'-diphosphate + thioredoxin (oxidized) + H2O
+cytidine 5'-diphosphate + thioredoxin (reduced) => 2'-deoxycytidine 5'-diphosphate + thioredoxin (oxidized) + H2O
+cytidine 5'-monophosphate (CMP) + ATP <=> cytidine 5'-diphosphate (CDP) + ADP
+cytidine 5'-monophosphate (CMP) + ATP <=> cytidine 5'-diphosphate (CDP) + ADP
+cytidine 5'-monophosphate (CMP) + H2O => cytidine + orthophosphate
+cytidine 5'-monophosphate (CMP) + H2O => cytidine + orthophosphate
+cytidine 5'-monophosphate (CMP) + H2O => cytidine + orthophosphate
+cytidine 5'-monophosphate (CMP) + H2O => cytidine + orthophosphate
+cytidine 5'-monophosphate + H2O => cytidine + orthophosphate
+cytidine [cytosol] <=> cytidine [extracellular]
+cytidine [cytosol] <=> cytidine [extracellular]
+cytidine [extracellular] + 2 Na+ [extracellular] => cytidine [cytosol] + 2 Na+ [cytosol]
+cytidine [extracellular] + Na+ [extracellular] => thymidine [cytosol] + Na+ [cytosol]
+cytidine [extracellular] <=> cytidine [cytosol]
+cytidine [extracellular] <=> cytidine [cytosol]
+cytosine [cytosol] <=> cytosine [extracellular]
+cytosine [extracellular] <=> cytosine [cytosol]
+dAMP + ATP <=> dADP + ADP
+deamination of cytosine to uracil
+deamination of dCTP to dUTP
+dehydrogenation of 4-cis-decenoyl-CoA to form 2-trans-4-cis-decadienoyl-CoA
+diacylglycerol + H2O -> 2-acylglycerol + fatty acid
+diacylglycerol + H2O -> 2-acylglycerol + fatty acid
+dihydrolipoamide + FAD => lipoamide + FADH2 [alpha-ketoglutarate dehydrogenase]
+dihydrolipoamide + FAD => lipoamide + FADH2 [branched-chain ketoacid dehydrogenase]
+dihydrolipoamide + FAD => lipoamide + FADH2 [pyruvate dehydrogenase]
+dihydroxyacetone phosphate + D-glyceraldehyde 3-phosphate <=> D-Fructose 1,6-bisphosphate [aldolase B]
+dihydroxyacetone phosphate + D-glyceraldehyde 3-phosphate <=> D-fructose 1,6-bisphosphate [aldolase A]
+dihydroxyacetone phosphate + D-glyceraldehyde 3-phosphate <=> D-fructose 1,6-bisphosphate [aldolase C]
+dihydroxyacetone phosphate <=> D-glyceraldehyde 3-phosphate
+dodecanoic acid + O<sub>2</sub> + NADPH + H<sup>+</sup> -> 12-hydroxydodecanoic acid + H<sub>2</sub>O + NADP<sup>+</sup>
+dolichol phosphate + GDP-alpha-D-mannose -> dolichyl phosphate D-mannose
+eEF1A complexes with GTP
+eEF1A:GTP:aminoacyl tRNA ternary complex formation.
+eIF2 activation
+eIF2:GTP is hydrolyzed, eIFs are released 
+eIF3 and eIF1A bind to the 40S subunit
+eIF4F binds to mRNP
+eIF5B:GTP is hydrolyzed and released
+factor IX -> factor IXa + factor IX activation peptide (TF:F7a catalyst)
+factor IX -> factor IXa + factor IX activation peptide (factor XIa catalyst)
+factor V -> factor Va + factor V activation peptide
+factor VII -> factor VIIa
+factor VIII + von Willebrand factor multimer -> factor VIII:von Willibrand factor multimer
+factor VIII:von Willibrand factor multimer -> factor VIIIa + factor VIIIa B A3 acidic polypeptide + von Willibrand factor multimer
+factor VIIIa + factor IXa -> factor VIIIa:factor IXa
+factor Va + factor Xa -> Va:Xa complex (prothrombinase)
+factor Va -> factor Vi
+factor X -> factor Xa + factor X activation peptide (TF:F7 catalyst)
+factor X -> factor Xa + factor X activation peptide (TF:F7a catalyst)
+factor X -> factor Xa + factor X activation peptide (VIIIa:IXa catalyst)
+factor XI + platelet glycoprotein (GP) Ib:IX:V complex -> factor XI:platelet glycoprotein (GP) Ib:IX:V complex (kininogen-facilitated)
+factor XI + platelet glycoprotein (GP) Ib:IX:V complex -> factor XI:platelet glycoprotein (GP) Ib:IX:V complex (prothrombin-facilitated)
+factor XI:platelet glycoprotein (GP) Ib:IX:V complex -> factor XIa:platelet glycoprotein (GP) Ib:IX:V complex (XIIa catalyst)
+factor XI:platelet glycoprotein (GP) Ib:IX:V complex -> factor XIa:platelet glycoprotein (GP) Ib:IX:V complex (thrombin catalyst)
+factor XII -> factor XIIa
+factor XIII -> factor XIII cleaved tetramer + 2 factor XIII A activation peptides
+factor XIII cleaved tetramer + 2 Ca++ -> factor XIIIa + 2 factor XIII B chain
+factor XIIa + C1Inh -> factor XIIa:C1Inh
+fibrin multimer -> fibrin multimer, crosslinked + NH4+
+fibrin multimer, crosslinked -> fibrin digestion products (plasmin)
+fibrin multimer, crosslinked:tissue plasminogen activator (one-chain) + plasminogen activator inhibitor 1 -> fibrin multimer, crosslinked:tissue plasminogen activator (one-chain):plasminogen activator inhibitor 1
+fibrin multimer, crosslinked:tissue plasminogen activator (two-chain) + plasminogen activator inhibitor 1 -> fibrin multimer, crosslinked:tissue plasminogen activator (two-chain):plasminogen activator inhibitor 1
+fibrinogen -> fibrin monomer + 2 fibrinopeptide A + 2 fibrinopeptide B
+fumarylacetoacetate => fumarate + acetoacetate
+gamma-butyrobetaine + alpha-ketoglutarate + O2 => carnitine + succinate + CO2
+gamma-butyrobetaine semialdehyde + NAD+ => gamma-butyrobetaine + NADH + H+
+glucosaminyl-PI + fatty acyl-CoA -> glucosaminyl-acyl-PI + CoA-SH
+glucosaminyl-acyl-PI + dolichol phosphate D-mannose -> mannose(al1-4)glucosaminyl-acyl-PI + dolichol phosphate
+glutamate + L-glutamate gamma-semialdehyde <=> ornithine + alpha-ketoglutarate
+glutamate + NAD+ => alpha-ketoglutarate + NH4+ + NADH + H+
+glutamate + NH4+ + ATP => glutamine + ADP + orthophosphate
+glutamate + acetyl CoA => N-acetyl glutamate + CoA
+glutamine + H2O => glutamate + NH4+ [kidney]
+glutamine + H2O => glutamate + NH4+ [liver]
+glutaredoxin (oxidized) + glutathione (reduced) => glutaredoxin (reduced) + glutathione (oxidized)
+glutaryl-CoA + FAD => crotonyl-CoA + FADH2 + CO2
+glutathione (oxidized) + NADPH + H+ => 2 glutathione (reduced) + NADP+
+glycogen phosphorylase, liver form, tetramer b + ATP => glycogen phosphorylase, liver form, tetramer a + ADP
+glycogen phosphorylase, muscle form, tetramer b + ATP => glycogen phosphorylase, muscle form, tetramer a + ADP
+glycogen-glycogenin-1 + n orthophosphate => limit dextrin-glycogenin-1 + n D-glucose 1-phosphate [muscle a form]
+glycogen-glycogenin-1 + n orthophosphate => limit dextrin-glycogenin-1 + n D-glucose 1-phosphate [muscle b form]
+glycogen-glycogenin-2 + n orthophosphate => limit dextrin-glycogenin-2 + n D-glucose 1-phosphate [liver a form]
+glycogen-glycogenin-2 + n orthophosphate => limit dextrin-glycogenin-2 + n D-glucose 1-phosphate [liver b form]
+gp120/gp41:CD4 binds co-receptor (CCR5 and CXCR4 ) via gp120
+guanidinoacetate + S-adenosylmethionine => creatine + S-adenosylhomocysteine
+guanine + 2-deoxy-D-ribose 1-phosphate <=> 2'-deoxyguanosine + orthophosphate
+guanine + D-ribose 1-phosphate <=> guanosine + orthophosphate
+guanine [cytosol] <=> guanine [extracellular]
+guanine [extracellular] <=> guanine [cytosol]
+guanosine + orthophosphate <=> guanine + D-ribose 1-phosphate
+guanosine 5'-diphosphate (GDP) + ADP <=> guanosine 5'-monophosphate (GMP) + ATP
+guanosine 5'-diphosphate (GDP) + ATP <=> GTP + adenosine 5'-diphosphate (ADP)
+guanosine 5'-diphosphate (GDP) + ATP <=> GTP + adenosine 5'-diphosphate (ADP)
+guanosine 5'-diphosphate (GDP) + ATP <=> GTP + adenosine 5'-diphosphate (ADP)
+guanosine 5'-diphosphate (GDP) + ATP <=> GTP + adenosine 5'-diphosphate (ADP)
+guanosine 5'-diphosphate (GDP) + ATP <=> GTP + adenosine 5'-diphosphate (ADP)
+guanosine 5'-diphosphate (cytosolic) <=> guanosine 5'-diphosphate (nuclear)
+guanosine 5'-diphosphate + glutaredoxin (reduced) => 2'-deoxyguanosine 5'-diphosphate + glutaredoxin (oxidized) + H2O
+guanosine 5'-diphosphate + thioredoxin (reduced) => 2'-deoxyguanosine 5'-diphosphate + thioredoxin (oxidized) + H2O
+guanosine 5'-diphosphate + thioredoxin (reduced) => 2'-deoxyguanosine 5'-diphosphate + thioredoxin (oxidized) + H2O
+guanosine 5'-monophosphate (GMP) + ATP <=> guanosine 5'-diphosphate (GDP) + ADP
+guanosine 5'-monophosphate (GMP) + H2O => guanosine + orthophosphate
+guanosine 5'-monophosphate (GMP) + H2O => guanosine + orthophosphate
+guanosine 5'-monophosphate (GMP) + H2O => guanosine + orthophosphate
+guanosine 5'-monophosphate (GMP) + H2O => guanosine + orthophosphate
+guanosine 5'-monophosphate (GMP) + H2O => guanosine + orthophosphate
+guanosine [cytosol] <=> guanosine [extracellular]
+guanosine [cytosol] <=> guanosine [extracellular]
+guanosine [extracellular] + 2 Na+ [extracellular] => guanosine [cytosol] + 2 Na+ [cytosol]
+guanosine [extracellular] + Na+ [extracellular] => guanosine [cytosol] + Na+ [cytosol]
+guanosine [extracellular] <=> guanosine [cytosol]
+guanosine [extracellular] <=> guanosine [cytosol]
+hNTH1 glycosylase mediated recognition and binding of cytosine glycol
+hNTH1 glycosylase mediated recognition and binding of dihydrouracil 
+hNTH1 glycosylase mediated recognition and binding of formamidopyrimidine
+hNTH1 glycosylase mediated recognition and binding of thymine glycol
+hOGG1 glycosylase mediated recognition and binding of a formamidopyrimidine
+hOGG1 glycosylase mediated recognition and binding of an 8-oxo guanine opposite to a cytosine
+hSMUG1 glycosylase mediated recognition and binding of uracil within single-stranded DNA
+histidine => urocanate + NH4+
+histidine-rich glycoprotein + plasminogen <-> histidine-rich glycoprotein:plasminogen
+histidine-rich glycoprotein:plasminogen <-> histidine-rich glycoprotein + plasminogen
+homogentisate + O2 => maleylacetoacetate
+hormone-sensitive lipase (HSL) + 2 ATP -> phosphorylated HSL + 2 ADP
+hormone-sensitive lipase (HSL) + 2 ATP -> phosphorylated HSL + 2 ADP
+hydrolysis of  2'-deoxyuridine 5'-triphosphate to form  2'-deoxyuridine 5'-phosphate
+hydrolysis of 2'-Deoxythymidine 5'-phosphate to form 2'-deoxythymidine
+hydrolysis of UDP to UMP
+hydrolysis of barbiturate to form malonate and urea
+hypoxanthine + 2-deoxy-D-ribose 1-phosphate <=> 2'-deoxyinosine + orthophosphate
+hypoxanthine + D-ribose 1-phosphate <=> inosine + orthophosphate
+hypoxanthine [cytosol] <=> hypoxanthine [extracellular]
+hypoxanthine [extracellular] <=> hypoxanthine [cytosol]
+inosine + orthophosphate <=> hypoxanthine + D-ribose 1-phosphate
+inosine 5'-monophosphate (IMP) + H2O => inosine + orthophosphate
+inosine 5'-monophosphate (IMP) + H2O => inosine + orthophosphate
+inosine 5'-monophosphate (IMP) + H2O => inosine + orthophosphate
+inosine 5'-monophosphate (IMP) + H2O => inosine + orthophosphate
+inosine 5'-monophosphate (IMP) + H2O => inosine + orthophosphate
+inosine 5'-monophosphate (IMP) + NAD+ + H2O => xanthosine 5'-monophosphate (XMP) + NADH + H+
+inosine 5'-monophosphate (IMP) + NAD+ + H2O => xanthosine 5'-monophosphate (XMP) + NADH + H+
+inosine 5'-monophosphate + L-aspartate + GTP => adenylosuccinate + guanosine  5'-diphosphate + orthophosphate
+inosine 5'-monophosphate + L-aspartate + GTP => adenylosuccinate + guanosine  5'-diphosphate + orthophosphate
+inosine 5'-monophosphate + L-aspartate + GTP => adenylosuccinate + guanosine  5'-diphosphate + orthophosphate
+inosine 5'-monophosphate + L-aspartate + GTP => adenylosuccinate + guanosine  5'-diphosphate + orthophosphate
+inosine [cytosol] <=> inosine [extracellular]
+inosine [cytosol] <=> inosine [extracellular]
+inosine [extracellular] + 2 Na+ [extracellular] => inosine [cytosol] + 2 Na+ [cytosol]
+inosine [extracellular] + Na+ [extracellular] => inosine [cytosol] + Na+ [cytosol]
+inosine [extracellular] <=> inosine [cytosol]
+inosine [extracellular] <=> inosine [cytosol]
+isobutyryl-CoA + FAD => methacrylyl-CoA + FADH2
+isoleucine + alpha-ketoglutarate <=> alpha-keto-beta-methylvalerate + glutamate [cytosolic]
+isoleucine + alpha-ketoglutarate <=> alpha-keto-beta-methylvalerate + glutamate [mitochondrial]
+isovaleryl-CoA + FAD => beta-methylcrotonyl-CoA + FADH2
+kallekrein + C1Inh -> kallekrein:C1Inh
+kallekrein + alpha2-macroglobulin -> kallekrein:alpha2-macrogloulin
+kallekrein:kininogen:C1q binding protein tetramer -> kallekrein + activated kininogen:C1q binding protein tetramer + bradykinin
+kininogen + C1q binding protein tetramer -> kininogen:C1q binding protein tetramer
+kynurenine + O2 + NADPH + H+ => 3-hydroxykynurenine + NADP+ + H2O
+lauroyl-CoA+FAD<=>2-trans-Dodecenoyl-CoA+FADH2
+leucine + alpha-ketoglutarate <=> alpha-ketoisocaproate + glutamate [cytosolic]
+leucine + alpha-ketoglutarate <=> alpha-ketoisocaproate + glutamate [mitochondrial]
+limit dextrin-glycogenin-1 => {(1,6)-alpha-glucosyl}poly{(1,4)-alpha-glucosyl} glycogenin-1
+limit dextrin-glycogenin-2 => {(1,6)-alpha-glucosyl}poly{(1,4)-alpha-glucosyl} glycogenin-2
+long-chain fatty acid + CoA + ATP -> long-chain fatty acyl-CoA + AMP + PPi
+long-chain fatty acid + CoA + ATP -> long-chain fatty acyl-CoA + AMP + PPi
+lysine + alpha-ketoglutarate +NADPH + H+ => saccharopine + NADP+ + H2O
+lysophosphatic acid + fatty acyl CoA  => phosphatidic acid + CoA (1) 
+lysophosphatidic acid + fatty acyl CoA  => phosphatidic acid + CoA (2)
+lysophosphatidic acid + fatty acyl CoA  => phosphatidic acid + CoA (3)
+lysophosphatidic acid + fatty acyl CoA  => phosphatidic acid + CoA (4)
+lysophosphatidic acid + fatty acyl CoA  => phosphatidic acid + CoA (5)
+m UDP-glucose + {(1,4)-alpha-D-glucosyl}n glycogenin-1 => m UDP + {(1,4)-alpha-D-glucosyl}m+n glycogenin-1 [muscle, D form]
+m UDP-glucose + {(1,4)-alpha-D-glucosyl}n glycogenin-1 => m UDP + {(1,4)-alpha-D-glucosyl}m+n glycogenin-1 [muscle, I form]
+m UDP-glucose + {(1,4)-alpha-D-glucosyl}n glycogenin-2 => m UDP + {(1,4)-alpha-D-glucosyl}m+n glycogenin-2 [liver, D form]
+m UDP-glucose + {(1,4)-alpha-D-glucosyl}n glycogenin-2 => m UDP + {(1,4)-alpha-D-glucosyl}m+n glycogenin-2 [liver, I form]
+mRNA polyadenylation
+maleylacetoacetate => fumarylacetoacetate
+mannose (a1-2) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI + phosphatidylethanolamine -> (ethanolamineP) mannose (a1-2) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI (acyl-GPI) + diacylglycerol
+mannose (a1-2) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI + phosphatidylethanolamine -> (ethanolamineP) mannose (a1-2) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI (acyl-GPI) + diacylglycerol
+mannose (a1-2) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI -> mannose (a1) mannose (a1-2) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI
+mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI + dolichol phosphate D-mannose -> mannose (a1-2) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI + dolichol phosphate
+mannose(a1-4)glucosaminyl-acyl-PI + phosphatidylethanolamine -> (ethanolamineP) mannose(al1-4)glucosaminyl-acyl-PI + diacylglycerol
+methacrylyl-CoA + H2O <=> beta-hydroxyisobutyryl-CoA
+methylmalonate semialdehyde + NAD+ + CoA => propionyl-CoA + CO2 + NADH + H+
+minus strand DNA synthesis resumes
+myristoyl-CoA+FAD<=>trans-Tetradec-2-enoyl-CoA+FADH2
+n UDP-glucose + glycogenin-1 => n UDP + {(1,4)-alpha-D-glucosyl}n glycogenin-1
+n UDP-glucose + glycogenin-2 => n UDP + {(1,4)-alpha-D-glucosyl}n glycogenin-2
+n fibrin monomers -> fibrin multimer
+ornithine (cytosolic) + citrulline (mitochondrial) => ornithine (mitochondrial) + citrulline (cytosolic)
+ornithine + alpha-ketoglutarate <=> glutamate + L-glutamate gamma-semialdehyde
+ornithine => putrescine + CO2
+orotate + 5-phospho-alpha-D-ribose 1-diphosphate (PRPP) <=> orotidine 5'-monophosphate (OMP) + pyrophosphate
+orotidine 5'-monophosphate => uridine 5'-monophosphate + CO2
+oxaloacetate + glutamate <=> aspartate + alpha-ketoglutarate [cytosolic]
+oxaloacetate + glutamate <=> aspartate + alpha-ketoglutarate [mitochondrial]
+p-hydroxyphenylpyruvate + O2 => homogentisate + CO2
+palmitoyl-CoA+FAD<=>trans-Hexadec-2-enoyl-CoA+FADH2
+perilipin + 2 ATP -> phosphorylated perilipin + 2 ADP
+perilipin + 3 ATP -> phosphorylated perilipin + 3 ADP
+perilipin + 3 ATP -> phosphorylated perilipin + 3 ADP
+perilipin:CGI-58 complex -> perilipin + CGI-58
+perilipin:CGI-58 complex -> perilipin + CGI-58
+phenylalanine + tetrahydrobiopterin + O2 => tyrosine + 4a-hydroxytetrahydrobiopterin + H2O
+phosphatidylinositol + UDP-N-acetyl-D-glucosamine -> N-acetylglucosaminyl-PI + UDP
+phospho-AKT-1 mediated DAF-16 phosphorylation
+phospho-AKT-2 mediated DAF-16 phosphorylation
+phospho-ATM (Serine 1981) associates with DNA at the site of double-strand breaks
+phospho-FRS2 binds to CRK protein
+phospho-FRS2 binds to SH-PTP2 protein
+phospho-FRS2 binds to SHC protein
+phospho-FRS2 binds to TrkA protein
+phospho-RAF binds 14-3-3
+phosphorylated HSL + H2O -> HSL + orthophosphate
+phosphorylated HSL + H2O -> HSL + orthophosphate
+phosphorylated HSL dimer + FABP4 -> phosphorylated HSL dimer:FABP4 complex
+phosphorylated HSL dimer + FABPA -> phosphorylated HSL dimer:FABPA complex
+phosphorylated perilipin + H2O -> perilipin + orthophosphate
+phosphorylated perilipin + H2O -> perilipin + orthophosphate
+plasminogen + histidine-rich glycoprotein -> plasminogen:histidine-rich glycoprotein
+plasminogen:histidine-rich glycoprotein -> plasmin + histidine-rich glycoprotein (uPA [one-chain] catalyst)
+plasminogen:histidine-rich glycoprotein -> plasmin + histidine-rich glycoprotein (uPA [two-chain] catalyst)
+plus-strand DNA synthesis primed by a genomic RNA segment derived from the PPT region
+poly{(1,4)-alpha-D-glucosyl} glycogenin-1 => glycogen-glycogenin-1
+poly{(1,4)-alpha-D-glucosyl} glycogenin-2 => glycogen-glycogenin-2
+poly{(1,4)-alpha-glucosyl} glycogenin-1 + n orthophosphate => glycogenin-1 + n D-glucose 1-phosphate [muscle a form]
+poly{(1,4)-alpha-glucosyl} glycogenin-1 + n orthophosphate => glycogenin-1 + n D-glucose 1-phosphate [muscle b form]
+poly{(1,4)-alpha-glucosyl} glycogenin-2 + n orthophosphate => glycogenin-2 + n D-glucose 1-phosphate [liver a form]
+poly{(1,4)-alpha-glucosyl} glycogenin-2 + n orthophosphate => glycogenin-2 + n D-glucose 1-phosphate [liver b form]
+prekallekrein + kininogen:C1q binding protein tetramer -> prekallekrein:kininogen:C1q binding protein tetramer
+prekallekrein:kininogen:C1q binding protein tetramer -> kallekrein:kininogen:C1q binding protein tetramer
+pro-GAS6 -> GAS6 + GAS6 propeptide
+pro-GAS6, uncarboxylated + 11 CO2 + 11 O2 + 11 vitamin K hydroquinone -> pro-GAS6 + 11 H2O + 11 vitamin K epoxide
+pro-factor IX -> factor IX + factor IX propeptide
+pro-factor IX, uncarboxylated + 12 CO2 + 12 O2 + 12 vitamin K hydroquinone -> pro-factor IX + 12 H2O + 12 vitamin K epoxide
+pro-factor VII -> factor VII + factor VII propeptide
+pro-factor VII, uncarboxylated + 10 CO2 + 10 O2 + 10 vitamin K hydroquinone -> pro-factor VII + 10 H2O + 10 vitamin K epoxide
+pro-factor X -> factor X + factor X propeptide
+pro-factor X, uncarboxylated + 11 CO2 + 11 O2 + 11 vitamin K hydroquinone -> pro-factor X + 11 H2O + 11 vitamin K epoxide
+pro-protein C -> protein C + protein C propeptide
+pro-protein C, uncarboxylated + 8 CO2 + 8 O2 + 8 vitamin K hydroquinone -> pro-protein C + 8 H2O + 8 vitamin K epoxide
+pro-protein S -> protein S + protein S propeptide
+pro-protein S, uncarboxylated + 11 CO2 + 11 O2 + 11 vitamin K hydroquinone -> pro-protein S + 11 H2O + 11 vitamin K epoxide
+pro-protein Z -> protein Z + protein Z propeptide
+pro-protein Z, uncarboxylated + 13 CO2 + 13 O2 + 13 vitamin K hydroquinone -> pro-protein Z + 13 H2O + 13 vitamin K epoxide
+pro-prothrombin -> prothrombin + prothrombin propeptide
+pro-prothrombin, uncarboxylated + 10 CO2 + 10 O2 + 10 vitamin K hydroquinone -> pro-prothrombin + 10 H2O + 10 vitamin K epoxide
+proline => L-1-pyrroline-5-carboxylate
+propionyl-CoA + CO2 + ATP <=> D-methylmalonyl-CoA + ADP + orthophosphate
+protein C -> activated protein C + protein C heavy chain activation peptide
+prothrombin -> activated thrombin (factor IIa) + thrombin activation peptide (Xa catalyst)
+prothrombin -> activated thrombin (factor IIa) + thrombin activation peptide (prothrombinase catalyst)
+pyrophosphate + H2O => 2 orthophosphate
+pyruvate + TPP => 2-(alpha-hydroxyethyl)-TPP + CO2
+pyruvate + glutamate <=> alanine + alpha-ketoglutarate
+q-dihydrobiopterin + NADH + H+ => tetrahydrobiopterin + NAD+
+rLkb-1 (Stk-11) activates AMPK by phosphorylation
+reEF1A complexes with GTP
+reEF1A:GTP:Aminoacyl-tRNA ternary complex formation
+ribose 5-phosphate + xylulose 5-phosphate <=> sedoheptulose 7-phosphate + D-glyceraldehyde 3-phosphate
+saccharopine + NAD+ + H2O => alpha-aminoadipic semialdehyde + glutamate + NADH + H+
+sedoheptulose 7-phosphate + D-glyceraldehyde 3-phosphate <=> D-erythrose 4-phosphate + D-fructose 6-phosphate
+sequestered tissue factor -> tissue factor
+tBID activates BAK protein
+tBID activates BAX protein
+thioredoxin, oxidized (nucleus) <=> thioredoxin, oxidized (cytosol)
+thioredoxin, oxidized + NADPH + H+ => thioredoxin, reduced + NADP+
+thioredoxin, reduced (cytosol) <=> thioredoxin, reduced (nucleus)
+thrombin:antithrombin III:heparin -> thrombin:cleaved antithrombin III:heparin
+thrombin:cleaved antithrombin III:heparin -> thrombin:cleaved antithrombin III + heparin
+thymidine + ATP => thymidine 5'-monophosphate (dTMP) + ADP
+thymidine + ATP => thymidine 5'-monophosphate + ADP
+thymidine + orthophosphate <=> thymine + 2-deoxy-D-ribose 1-phosphate
+thymidine 5'-diphosphate (TDP) + ADP <=> thymidine 5'-monophosphate (TMP) + ATP
+thymidine 5'-diphosphate (TDP) + ATP <=> TTP + adenosine 5'-diphosphate (ADP)
+thymidine 5'-diphosphate (TDP) + ATP <=> TTP + adenosine 5'-diphosphate (ADP)
+thymidine 5'-diphosphate (TDP) + ATP <=> TTP + adenosine 5'-diphosphate (ADP)
+thymidine 5'-diphosphate (TDP) + ATP <=> TTP + adenosine 5'-diphosphate (ADP)
+thymidine 5'-diphosphate (TDP) + ATP <=> thymidine 5'-triphosphate (TTP) + ADP
+thymidine 5'-monophosphate (TMP) + ATP <=> thymidine 5'-diphosphate (TDP) + ADP
+thymidine 5'-monophosphate (TMP) + H2O => thymidine + orthophosphate
+thymidine 5'-monophosphate (TMP) + H2O => thymidine + orthophosphate
+thymidine 5'-monophosphate (TMP) + H2O => thymidine + orthophosphate
+thymidine 5'-monophosphate (TMP) + H2O => thymidine + orthophosphate
+thymidine 5'-monophosphate (TMP) + H2O => thymidine + orthophosphate
+thymidine 5'-monophosphate (TMP) + H2O => thymidine + orthophosphate
+thymidine 5'-monophosphate + H2O => thymidine + orthophosphate
+thymidine [cytosol] <=> thymidine [extracellular]
+thymidine [cytosol] <=> thymidine [extracellular]
+thymidine [extracellular] + 2 Na+ [extracellular] => thymidine [cytosol] + 2 Na+ [cytosol]
+thymidine [extracellular] + Na+ [extracellular] => thymidine [cytosol] + Na+ [cytosol]
+thymidine [extracellular] <=> thymidine [cytosol]
+thymidine [extracellular] <=> thymidine [cytosol]
+thymine + 2-deoxy-D-ribose 1-phosphate <=> thymidine + orthophosphate
+thymine + NADPH + H+ => 5,6-dihydrothymine + NADP+
+thymine [cytosol] <=> thymine [extracellular]
+thymine [extracellular] <=> thymine [cytosol]
+tiglyl-CoA + H2O <=> alpha-methyl-beta-hydroxybutyryl-CoA
+tissue factor (TF) + activated factor VII (F7a) -> TF:F7a complex
+tissue factor (TF) + factor VII (F7) -> TF:F7 complex
+trans-2-Enoyl-CoA <=> L-3-Hydroxyacyl-CoA
+trans-Dec-2-enoyl-CoA+H2O<=>(S)-Hydroxydecanoyl-CoA
+trans-Hex-2-enoyl-CoA+H2O<=>(S)-Hydroxyhexanoyl-CoA
+trans-Hexadec-2-enoyl-CoA+H2O<=>(S)-3-Hydroxyhexadecanoyl-CoA
+trans-Oct-2-enoyl-CoA+H2O<=>(S)-Hydroxyoctanoyl-CoA
+trans-Tetradec-2-enoyl-CoA+H2O<=>(S)-3-Hydroxytetradecanoyl-CoA
+triacylglycerol + H2O -> diacylglycerol + fatty acid
+triacylglycerol + H2O -> diacylglycerol + fatty acid
+trimethyllysine + alpha-ketoglutarate + O2 => beta-hydroxy-trimethyllysine + succinate + CO2
+tryptophan + O2 => N-formylkynurenine
+tyrosine + alpha-ketoglutarate => p-hydroxyphenylpyruvate + glutamate
+uPAR precursor + acyl-GPI -> uPAR-acyl-GPI + uPAR propeptide
+uPAR-acyl-GPI + H2O -> uPAR + long-chain fatty acid
+uracil + 2-deoxy-D-ribose 1-phosphate <=> 2'-deoxyuridine + orthophosphate
+uracil + 2-deoxy-D-ribose 1-phosphate <=> 2'-deoxyuridine + orthophosphate
+uracil + 5-phospho-alpha-D-ribose 1-diphosphate (PRPP) <=> uridine 5'-monophosphate (UMP) + pyrophosphate
+uracil + D-ribose 1-phosphate <=> uridine + orthophosphate
+uracil + NADPH + H+ => 5,6-dihydrouracil + NADP+
+uracil [cytosol] <=> uracil [extracellular]
+uracil [extracellular] <=> uracil [cytosol]
+uridine + ATP => uridine 5'-monophosphate (UMP) + ADP
+uridine + ATP => uridine 5'-monophosphate + ADP
+uridine + orthophosphate <=> uracil + D-ribose 1-phosphate
+uridine 2'-monophosphate + H2O => uridine + orthophosphate
+uridine 2'-monophosphate + H2O => uridine + orthophosphate 
+uridine 3'-monophosphate + H2O => uridine + orthophosphate
+uridine 3'-monophosphate + H2O => uridine + orthophosphate
+uridine 5'-diphosphate (UDP) + ADP <=> uridine 5'-monophosphate (UMP) + ATP
+uridine 5'-diphosphate (UDP) + ATP <=> UTP + adenosine 5'-diphosphate (ADP)
+uridine 5'-diphosphate (UDP) + ATP <=> UTP + adenosine 5'-diphosphate (ADP)
+uridine 5'-diphosphate (UDP) + ATP <=> UTP + adenosine 5'-diphosphate (ADP)
+uridine 5'-diphosphate (UDP) + ATP <=> UTP + adenosine 5'-diphosphate (ADP)
+uridine 5'-diphosphate (UDP) + ATP <=> uridine 5'-triphosphate (UTP) + ADP
+uridine 5'-diphosphate (cytosolic) <=> uridine 5'-diphosphate (nuclear)
+uridine 5'-diphosphate + glutaredoxin (reduced) => 2'-deoxyuridine 5'-diphosphate + glutaredoxin (oxidized) + H2O
+uridine 5'-diphosphate + thioredoxin (reduced) => 2'-deoxyuridine 5'-diphosphate + thioredoxin (oxidized) + H2O
+uridine 5'-diphosphate + thioredoxin (reduced) => 2'-deoxyuridine 5'-diphosphate + thioredoxin (oxidized) + H2O
+uridine 5'-monophosphate (UMP) + ATP <=> uridine 5'-diphosphate (UDP) + ADP
+uridine 5'-monophosphate (UMP) + H2O => uridine + orthophosphate
+uridine 5'-monophosphate (UMP) + H2O => uridine + orthophosphate
+uridine 5'-monophosphate (UMP) + H2O => uridine + orthophosphate
+uridine 5'-monophosphate (UMP) + H2O => uridine + orthophosphate
+uridine 5'-monophosphate (UMP) + H2O => uridine + orthophosphate
+uridine 5'-monophosphate (UMP) + H2O => uridine + orthophosphate
+uridine 5'-monophosphate + H2O => uridine + orthophosphate
+uridine 5'-triphosphate + glutamine + ATP + H2O => cytidine 5'-triphosphate + glutamate + ADP + orthophosphate
+uridine [cytosol] <=> uridine [extracellular]
+uridine [cytosol] <=> uridine [extracellular]
+uridine [extracellular] + 2 Na+ [extracellular] => uridine [cytosol] + 2 Na+ [cytosol]
+uridine [extracellular] + Na+ [extracellular] => uridine [cytosol] + Na+ [cytosol]
+uridine [extracellular] + Na+ [extracellular] => uridine [cytosol] + Na+ [cytosol]
+uridine [extracellular] <=> uridine [cytosol]
+uridine [extracellular] <=> uridine [cytosol]
+urocanate + H2O => 4-imidazolone-5-propionate
+urokinase plasminogen activator (one-chain):uPAR -> urokinase plasminogen activator (two-chain):uPAR
+urokinase plasminogen activator (two-chain):uPAR + plasminogen activator inhibitor 1 (PAI-1) -> PAI-1:urokinase plasminogen activator (two-chain):uPAR
+urokinase plasminogen activator (two-chain):uPAR + plasminogen activator inhibitor 2 (PAI-2) -> PAI-2:urokinase plasminogen activator (two-chain):uPAR
+urokinase plasminogen activator + urokinase plasminogen activator receptor (uPAR) -> urokinase plasminogen activator:uPAR
+vWF binds to collagen
+valine + alpha-ketoglutarate <=> alpha-ketoisovalerate + glutamate [cytosolic]
+valine + alpha-ketoglutarate <=> alpha-ketoisovalerate + glutamate [mitochondrial]
+vitamin K epoxide -> vitamin K hydroquinone
+xanthosine 5'-monophosphate (XMP) + L-glutamine + ATP + H2O => guanosine 5'-monophosphate (GMP) + L-glutamate + adenosine 5'-monophosphate (AMP) + pyrophosphate
+xylulose 5-phosphate + D-erythrose 4-phosphate <=> D-glyceraldehyde 3-phosphate + D-fructose 6-phosphate
+{(1,6)-alpha-glucosyl}poly{(1,4)-alpha-glucosyl}glycogenin-1 => poly{(1,4)-alpha-glucosyl} glycogenin-1 + alpha-D-glucose
+{(1,6)-alpha-glucosyl}poly{(1,4)-alpha-glucosyl}glycogenin-2 => poly{(1,4)-alpha-glucosyl} glycogenin-2 + alpha-D-glucose

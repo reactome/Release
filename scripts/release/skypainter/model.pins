@@ -1,0 +1,85 @@
+; Wed May 16 14:22:43 EEST 2007
+; 
+;+ (version "2.0.1")
+;+ (build "Build 168")
+
+([_databaseColumnSpecification] of %3ASTANDARD-FACET
+	(%3AASSOCIATED-SLOT [databaseColumnSpecification]))
+
+([_displayName] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [DatabaseObject]))
+
+([compoundCount] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([DB_ID] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [DatabaseObject]))
+
+([db_id_in_main_db] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Participant]))
+
+([geneCount] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([hasDirectComponent] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Pathway]))
+
+([hasEveryComponent] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Pathway]))
+
+([hasLeafComponent] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Pathway]))
+
+([identifier] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Participant]))
+
+([indirectIdentifier] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([maxX] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Pathway]))
+
+([maxY] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Pathway]))
+
+([minX] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Pathway]))
+
+([minY] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Pathway]))
+
+([participant] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Event]))
+
+([pValues] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [BackgroundPvalueDistribution]))
+
+([queryLength] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [BackgroundPvalueDistribution]))
+
+([sourceX] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([sourceY] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([species] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN
+		[Event]
+		[Gene]
+		[BackgroundPvalueDistribution]))
+
+([stableIdentifier] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [DatabaseObject]))
+
+([stableIdentifierDotVersion] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [DatabaseObject]))
+
+([targetX] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([targetY] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([taxonomyID] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Species]))

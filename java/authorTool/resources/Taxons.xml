@@ -1,0 +1,18 @@
+<Taxons>
+<Taxon name="Homo sapiens" />
+<Taxon name="Anopheles gambiae" />
+<Taxon name="Bos taurus" />
+<Taxon name="Caenorhabditis briggsae" />
+<Taxon name="Caenorhabditis elegans" />
+<Taxon name="Danio rerio" />
+<Taxon name="Drosophila melanogaster" />
+<Taxon name="Fugu rubripes" />
+<Taxon name="Gallus gallus" />
+<Taxon name="Mus musculus" />
+<Taxon name="Rattus norvegicus" />
+<Taxon name="Saccharomyces cerevisiae" />
+<Taxon name="Saccharomyces pombe" />
+<Taxon name="Schizosaccharomyces pombe" />
+<Taxon name="Simian Virus 40" />
+<Taxon name="Xenopus laevis" />
+</Taxons>

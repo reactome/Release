@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="VisualizationTool" default="copy" basedir="..">
+    <description>
+    	Copy all files needed to build the Reactome visualization tool by InstallAnywhere.
+    </description>
+	
+	<!-- Defining a list of directory names to be used -->
+	<property name="targetDir" value="${basedir}/../ReactomeBuild/VisualizationToolBuildFiles" />
+	<property name="classDir" value="${basedir}/classes" />
+	<property name="orgDir" value="${classDir}/org" />
+	<property name="resourcesDir" value="${basedir}/resources" />
+	<property name="imagesDir" value="${basedir}/images" />
+	<property name="libDir" value="${basedir}/lib" />
+	
+	<!-- Empty the direcotry. If nothing there, it should do nothing -->
+	<target name="delete">
+		<delete dir="${targetDir}" />
+	</target>
+	
+	<!-- make a directory first. If it is there, it should do nothing -->
+	<target name="mkdir" depends="delete">
+		<mkdir dir="${targetDir}" /> 
+	</target>
+	
+	<!-- copy all files to the target directory -->
+	<target name="copy" depends="mkdir">
+		<copy todir="${targetDir}/org">
+			<fileset dir="${orgDir}">
+				<exclude name="reactome/**" />
+			</fileset>
+		</copy>
+		<copy todir="${targetDir}/resources">
+			<fileset dir="${resourcesDir}" >
+				<include name="geneXImporter.prop" />
+				<!-- include name="curator.prop" / -->
+				<include name="releasedPathways.txt" />
+			</fileset>
+		</copy>
+		<copy todir="${targetDir}/images">
+			<fileset dir="${imagesDir}" />
+		</copy>
+		<copy todir="${targetDir}/lib">
+			<fileset dir="${libDir}">
+				<exclude name="skin/themepack.zip" />
+			</fileset>
+		</copy>
+	</target>
+	<!-- A Test Run -->
+	<target name="runOnly">
+		<java dir="${targetDir}" classpath="${targetDir}" classname="org.gk.pathView.GKVisualizationPane" fork="true">
+			<classpath>
+			      <fileset dir="lib">
+			        <include name="**/*.jar"/>
+			      </fileset>
+			</classpath>
+		</java>
+	</target>
+	
+	<!-- These targets are used for deploy author tool as a Java Web Start application -->
+	<property name="jwsTargetDir" value="../AuthorToolWebApp/WebContent/applet/" />
+	<property name="jwsTemp" value="jwsTemp" />
+	<target name="deployAsJWS">
+		<copy file="lib/mysql-connector-java-3.0.11-stable-bin.jar" tofile="${jwsTargetDir}/mysql.jar" />
+		<copy file="lib/osxAdapter.jar" tofile="${jwsTargetDir}/osxAdapter.jar" />
+		<copy file="lib/jdom/jdom.jar" tofile="${jwsTargetDir}/jdom.jar" />
+		<mkdir dir="${jwsTemp}" />
+		<copy todir="${jwsTemp}/org">
+			<fileset dir="${orgDir}">
+				<exclude name="reactome/**" />
+				<exclude name="gk/gkCurator/**" />
+			</fileset>
+		</copy>
+		<copy todir="${jwsTemp}/org/gk/util/images">
+			<fileset dir="${imagesDir}" />
+		</copy>
+		<copy todir="${jwsTargetDir}">
+			<fileset dir="${basedir}/webstart">
+				<include name="authorTool*" />
+				<include name="download.html" />
+			</fileset>
+			<fileset dir="${imagesDir}">
+				<include name="R-big.gif" />
+			</fileset>
+			<fileset dir="lib/batik">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<jar destfile="${jwsTargetDir}/visualizationTool.jar">
+			<fileset dir="${jwsTemp}" />
+		</jar>
+		<!-- delete dir="${jwsTemp}"></delete -->
+		<!-- Need to sign jar files -->
+		<signjar alias="jnlp-cert" keystore="${basedir}/webstart/jnlp.key" storepass="cshlreactome">
+			<fileset dir="${jwsTargetDir}">
+				<!-- include name="*.jar" / -->
+				<include name="visualizationTool.jar" />
+			</fileset>
+		</signjar>
+	</target>
+</project>

@@ -1,0 +1,301 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: add-to-any\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-01-18 12:47-0800\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Pat <pat@example.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: add-to-any-wp-widget.php:55
+msgid "Title:"
+msgstr ""
+
+#: add-to-any-wp-widget.php:59
+#: add-to-any.php:926
+#: add-to-any.php:1385
+#: add-to-any.php:1421
+msgid "Settings"
+msgstr ""
+
+#: add-to-any.php:387
+msgid "Share"
+msgstr ""
+
+#: add-to-any.php:388
+msgid "Save"
+msgstr ""
+
+#: add-to-any.php:389
+msgid "Subscribe"
+msgstr ""
+
+#: add-to-any.php:390
+msgid "E-mail"
+msgstr ""
+
+#: add-to-any.php:391
+msgid "Bookmark"
+msgstr ""
+
+#: add-to-any.php:392
+msgid "Show all"
+msgstr ""
+
+#: add-to-any.php:393
+msgid "Show less"
+msgstr ""
+
+#: add-to-any.php:394
+msgid "Find service(s)"
+msgstr ""
+
+#: add-to-any.php:395
+msgid "Instantly find any service to add to"
+msgstr ""
+
+#: add-to-any.php:396
+msgid "Powered by"
+msgstr ""
+
+#: add-to-any.php:397
+msgid "Share via e-mail"
+msgstr ""
+
+#: add-to-any.php:398
+msgid "Subscribe via e-mail"
+msgstr ""
+
+#: add-to-any.php:399
+msgid "Bookmark in your browser"
+msgstr ""
+
+#: add-to-any.php:400
+msgid "Press Ctrl+D or \\u2318+D to bookmark this page"
+msgstr ""
+
+#: add-to-any.php:401
+msgid "Add to your favorites"
+msgstr ""
+
+#: add-to-any.php:402
+msgid "Send from any e-mail address or e-mail program"
+msgstr ""
+
+#: add-to-any.php:403
+msgid "E-mail program"
+msgstr ""
+
+#: add-to-any.php:517
+msgid "Your theme needs to be fixed. To fix your theme, use the <a href=\"theme-editor.php\">Theme Editor</a> to insert <code>&lt;?php wp_footer(); ?&gt;</code> just before the <code>&lt;/body&gt;</code> line of your theme's <code>footer.php</code> file."
+msgstr ""
+
+#: add-to-any.php:534
+msgid "Your theme needs to be fixed. To fix your theme, use the <a href=\"theme-editor.php\">Theme Editor</a> to insert <code>&lt;?php wp_head(); ?&gt;</code> just before the <code>&lt;/head&gt;</code> line of your theme's <code>header.php</code> file."
+msgstr ""
+
+#: add-to-any.php:707
+#, php-format
+msgid "Unable to create directory %s. Is its parent directory writable by the server?"
+msgstr ""
+
+#: add-to-any.php:842
+#: add-to-any.php:978
+#: add-to-any.php:982
+#: add-to-any.php:986
+#: add-to-any.php:990
+#: add-to-any.php:1022
+msgid "Share/Bookmark"
+msgstr ""
+
+#: add-to-any.php:866
+msgid "Settings saved."
+msgstr ""
+
+#: add-to-any.php:887
+msgid "bottom"
+msgstr ""
+
+#: add-to-any.php:891
+msgid "top"
+msgstr ""
+
+#: add-to-any.php:895
+msgid "top &amp; bottom"
+msgstr ""
+
+#: add-to-any.php:926
+msgid "AddToAny: Share/Save "
+msgstr ""
+
+#: add-to-any.php:934
+msgid "Standalone Services"
+msgstr ""
+
+#: add-to-any.php:939
+msgid "Choose the services you want below. &nbsp;Click a chosen service again to remove. &nbsp;Reorder services by dragging and dropping as they appear above."
+msgstr ""
+
+#: add-to-any.php:973
+msgid "Button"
+msgstr ""
+
+#: add-to-any.php:1012
+msgid "Image URL"
+msgstr ""
+
+#: add-to-any.php:1019
+msgid "Text only"
+msgstr ""
+
+#: add-to-any.php:1027
+msgid "Placement"
+msgstr ""
+
+#: add-to-any.php:1032
+#, php-format
+msgid "Display at the %s of posts"
+msgstr ""
+
+#: add-to-any.php:1039
+#, php-format
+msgid "Display at the %s of post excerpts"
+msgstr ""
+
+#: add-to-any.php:1046
+#, php-format
+msgid "Display at the %s of posts on the front page"
+msgstr ""
+
+#: add-to-any.php:1054
+#, php-format
+msgid "Display at the %s of posts in the feed"
+msgstr ""
+
+#: add-to-any.php:1058
+#, php-format
+msgid "Display at the %s of pages"
+msgstr ""
+
+#: add-to-any.php:1062
+msgid "If unchecked, be sure to place the following code in <a href=\"theme-editor.php\">your template pages</a> (within <code>index.php</code>, <code>single.php</code>, and/or <code>page.php</code>)"
+msgstr ""
+
+#: add-to-any.php:1071
+msgid "Menu Style"
+msgstr ""
+
+#: add-to-any.php:1073
+msgid "Using AddToAny's Menu Styler, you can customize the colors of your Share/Save menu! When you're done, be sure to paste the generated code in the <a href=\"#\" onclick=\"document.getElementById('A2A_SHARE_SAVE_additional_js_variables').focus();return false\">Additional Options</a> box below."
+msgstr ""
+
+#: add-to-any.php:1075
+msgid "Open the AddToAny Menu Styler in a new window"
+msgstr ""
+
+#: add-to-any.php:1077
+msgid "Open Menu Styler"
+msgstr ""
+
+#: add-to-any.php:1082
+msgid "Menu Options"
+msgstr ""
+
+#: add-to-any.php:1087
+msgid "Only show the menu when the user clicks the Share/Save button"
+msgstr ""
+
+#: add-to-any.php:1092
+msgid "Show the title of the post (or page) within the menu"
+msgstr ""
+
+#: add-to-any.php:1097
+msgid "Additional Options"
+msgstr ""
+
+#: add-to-any.php:1101
+msgid "Paste the code from AddToAny's Menu Styler in the box below!"
+msgstr ""
+
+#: add-to-any.php:1105
+msgid "Below you can set special JavaScript variables to apply to each Share/Save menu."
+msgstr ""
+
+#: add-to-any.php:1106
+msgid "Advanced users might want to explore AddToAny's <a href=\"http://www.addtoany.com/buttons/customize/\" target=\"_blank\">additional options</a>."
+msgstr ""
+
+#: add-to-any.php:1112
+msgid "<strong>Note</strong>: If you're adding new code, be careful not to accidentally overwrite any previous code.</label>"
+msgstr ""
+
+#: add-to-any.php:1117
+msgid "Advanced Options"
+msgstr ""
+
+#: add-to-any.php:1122
+msgid "Use CSS stylesheet"
+msgstr ""
+
+#: add-to-any.php:1127
+msgid "Cache AddToAny locally with daily cache updates"
+msgstr ""
+
+#: add-to-any.php:1131
+msgid "Only consider for sites with frequently returning visitors. Since many visitors will have AddToAny cached in their browser already, serving AddToAny locally from your site will be slower for those visitors.  Be sure to set far future cache/expires headers for image files in your <code>uploads/addtoany</code> directory."
+msgstr ""
+
+#: add-to-any.php:1138
+msgid "Save Changes"
+msgstr ""
+
+#: add-to-any.php:1139
+msgid "Are you sure you want to delete all AddToAny options?"
+msgstr ""
+
+#: add-to-any.php:1139
+msgid "Reset"
+msgstr ""
+
+#: add-to-any.php:1144
+msgid "Like this plugin?"
+msgstr ""
+
+#: add-to-any.php:1145
+msgid "<a href=\"http://wordpress.org/extend/plugins/add-to-any/\">Give it a good rating</a> on WordPress.org."
+msgstr ""
+
+#: add-to-any.php:1146
+msgid "<a href=\"http://www.addtoany.com/share_save?linkname=WordPress%20Share%20%2F%20Bookmark%20Plugin%20by%20AddToAny.com&amp;linkurl=http%3A%2F%2Fwordpress.org%2Fextend%2Fplugins%2Fadd-to-any%2F\">Share it</a> with your friends."
+msgstr ""
+
+#: add-to-any.php:1148
+msgid "Need support?"
+msgstr ""
+
+#: add-to-any.php:1149
+msgid "See the <a href=\"http://wordpress.org/extend/plugins/add-to-any/faq/\">FAQs</a>."
+msgstr ""
+
+#: add-to-any.php:1150
+msgid "Search the <a href=\"http://wordpress.org/tags/add-to-any\">support forums</a>."
+msgstr ""
+
+#: add-to-any.php:1324
+msgid "Add/Remove Services"
+msgstr ""
+
+#: add-to-any.php:1385
+msgid "Share/Save"
+msgstr ""
+
+#: add-to-any.php:1386
+msgid "AddToAny"
+msgstr ""
+

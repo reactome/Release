@@ -1,0 +1,145 @@
+#!/usr/local/bin/perl
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+#use lib "/tmp/libs/bioperl-1.0";
+#use lib "/tmp/libs/GKB/modules";
+#use lib "/tmp/libs/my_perl_stuff";
+
+use strict;
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+use GKB::FrontPage3;
+
+my $header = undef;
+my $footer = undef;
+my $enclosing_div_start = undef;
+my $enclosing_div_end = undef;
+my $reactome_version_num = "2";
+if (defined $REACTOME_VERSION && !($REACTOME_VERSION eq '')) {
+    $REACTOME_VERSION =~ /^([0-9]+).*$/;
+    $reactome_version_num = $1;
+}
+if ($reactome_version_num eq "3") {
+    my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (instancebrowser)", "/stylesheet.css");
+    $header = $front_page->get_header();
+    $footer = $front_page->get_footer();
+    $enclosing_div_start = $front_page->get_enclosing_div_start();
+    $enclosing_div_end = $front_page->get_enclosing_div_end();
+}
+
+my $DBA;
+
+my $CGI = CGI->new();
+
+my $DB = $CGI->param('DB') || $GK_DB_NAME;
+$CGI->param('DB', $DB);
+
+print $CGI->header(-charset => 'UTF-8');
+if (defined $header) {
+    print $header;
+} else {
+    print $CGI->start_html(
+    # \-dtd => "-//IETF//DTD HTML//EN",
+    -style => {-src => '/stylesheet.css'},
+    -title => "$PROJECT_NAME (instancebrowser)",
+    );
+}
+
+if (defined $enclosing_div_start) {
+    print $enclosing_div_start;
+}
+
+eval {
+
+$DBA = GKB::DBAdaptor->new
+    (
+     -dbname => $DB,
+     -user   => $GK_DB_USER,
+     -host   => $GK_DB_HOST,
+     -pass   => $GK_DB_PASS,
+     -port   => $GK_DB_PORT,
+     -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef 
+     );
+
+my $wu = GKB::WebUtils->new(-DBA => $DBA,
+			    -CGI => $CGI,
+			    -DEBUG => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+			    );
+
+if (!(defined $header)) {
+    print $wu->top_navigation_box;
+    $wu->print_query_form;
+}
+
+$wu->urlmaker->script_name('/cgi-bin/instancebrowser');
+$wu->omit_view_switch_link(1);
+
+my $instances;
+if ($CGI->param('CLASS')) {
+    # Link from classbrowser
+    $CGI->param('FORMAT') || $CGI->param('FORMAT','list');
+    $instances = $DBA->fetch_all_class_instances_as_shells($CGI->param('CLASS'));
+    $wu->print_view($instances,0);
+} elsif ($CGI->param('ID')) {
+    $instances = $wu->handle_query_form;
+    if (@{$instances} == 1) {
+	if (! $CGI->param('FORMAT')) {
+	    $CGI->param('FORMAT','instancebrowser');
+	}
+    } else {
+	if (! $CGI->param('FORMAT')) {
+	    $CGI->param('FORMAT','list');
+	}
+    }
+    $wu->print_view($instances);
+} elsif ($CGI->param('SUBMIT')) {
+    $instances = $wu->handle_query_form;
+    if (! $CGI->param('FORMAT') && (@{$instances} == 1)) {
+	$CGI->param('FORMAT','instancebrowser');
+    }
+    $wu->print_view($instances);
+}
+
+if (defined $enclosing_div_end) {
+    print $enclosing_div_end;
+}
+
+if (!(defined $footer)) {
+    print qq(<BR />\n), $wu->make_footer;
+}
+
+}; $@ && handle_error($@);
+
+if (defined $footer) {
+    print $footer;
+} else {
+    print $CGI->end_html;
+}
+
+$DBA && $DBA->db_handle->disconnect;
+
+sub handle_error {
+    print qq(<PRE>@_</PRE>);
+    print qq(</TD></TR>\n</TABLE>\n);
+}
+
+

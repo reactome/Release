@@ -1,0 +1,20 @@
+/*
+###############################################################################
+#                                                                             #
+# Stuff for Maulik's pathway summary view                                     #
+#                                                                             #
+###############################################################################
+*/
+
+.mainInterface {
+	text-align: center;
+}
+
+.mainCanvas{
+  width: 90%;
+}
+
+.expanding_panel {
+	min-width: 100%;
+}
+

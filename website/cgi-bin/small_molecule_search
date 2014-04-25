@@ -1,0 +1,121 @@
+#!/usr/local/bin/perl
+
+# Use the ChEBI molecule search functionality to search Reactome small molecules.
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+use lib "/tmp/libs/bioperl-1.0";
+use lib "/tmp/libs/my_perl_stuff";
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+use GKB::FrontPage3;
+use strict;
+
+
+my ($DBA,$WU,$INSTANCES,$IN_HTML,$DB);
+my $CGI = CGI->new();
+
+my $front_page = GKB::FrontPage3->new("bla", "/stylesheet.css");
+
+eval {
+
+print STDERR "small_molecule_search: starting up\n"; # Larf!
+
+$WU = GKB::WebUtils->new_from_cgi(
+    -CGI => $CGI,
+    -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+    );
+$DBA = $WU->dba;
+$DB = $CGI->param('DB');
+
+$WU->urlmaker->script_name('/cgi-bin/eventbrowser');
+
+print STDERR "small_molecule_search: print_page_start\n"; # Larf!
+
+print_page_start();
+
+print "<H1 CLASS=\"frontpage\">Small Molecule Search</H1>\n";
+print "Use this form to launch a search in the ChEBI database of small molecules. For each small molecule that matches your query, the search will return links to the ChEBI web page that describes the molecule and to a list of pathways in Reactome that involve the molecule.\n";
+print "See the <A HREF=\"http://www.ebi.ac.uk/chebi/userManualForward.do#Advanced%20Search\">user manual</A>.\n";
+
+print STDERR "small_molecule_search: getting url\n"; # Larf!
+
+my $url = $CGI->url(-base=>'1');
+#my $callback_url = "$url/cgi-bin/link%3FID%3D*";
+my $callback_url = "$url/cgi-bin/link%3F";
+#my $callback_url = "$url/cgi-bin/link?";
+if (defined $DB && !($DB eq '')) {
+#	$callback_url .= "DB=$DB&";
+	$callback_url .= "DB=$DB%26";
+}
+$callback_url .= "ID=*";
+
+my $query_url = qq(http://www.ebi.ac.uk/chebi/advancedSearchForward.do?printerFriendlyView=true&datasourceQuery[0].value=Reactome&callbackUrl=$callback_url&specialDataset=reactome);
+my $query_url_view = $query_url;
+$query_url_view =~ s/\[/%5B/g;
+$query_url_view =~ s/\]/%5D/g;
+
+my $html = qq(<iframe src="$query_url" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto" width="100%" height="1150"></iframe>);
+
+print STDERR "small_molecule_search: html=$html\n"; # Larf!
+
+print $html;
+
+print_page_end();
+
+}; $@ && handle_error("$@");
+
+sub handle_error {
+    ($IN_HTML) ? print qq(<PRE>@_</PRE>) : print @_;
+    print_page_end();
+    exit;   
+}
+
+sub print_page_start {
+    $IN_HTML = 1;
+    print $CGI->header(-charset => 'UTF-8');
+    print $CGI->start_html(
+	# \-dtd => "-//IETF//DTD HTML//EN",
+	-style => {-src => '/stylesheet.css'},
+	-title => "$PROJECT_NAME (small_molecule_search)",
+	);
+    if (is_decorated()) {
+        #print $WU->top_navigation_box;
+	print $front_page->get_header();
+    }
+}
+
+sub print_page_end {
+    if (is_decorated()) {
+        #($WU && $IN_HTML) &&  print $WU->make_footer;
+	print $front_page->get_footer();
+    }
+    ($IN_HTML) && print $CGI->end_html;
+    ($DBA) && $DBA->db_handle->disconnect;
+}
+
+sub is_decorated {
+    my $undecorated = $CGI->param('UNDECORATED');
+    if (defined $undecorated && $undecorated == 1) {
+        return 0;
+    }
+    return 1;
+}

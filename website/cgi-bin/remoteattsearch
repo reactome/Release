@@ -1,0 +1,96 @@
+#!/usr/local/bin/perl -w -T
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+
+use strict;
+
+$NO_SCHEMA_VALIDITY_CHECK = 1;
+
+
+my $wu;
+eval {
+    $wu = GKB::WebUtils->new_from_cgi();
+    $wu->urlmaker->script_name('/cgi-bin/eventbrowser');
+};
+if ($@) {
+    print qq($@\n);
+    if ($wu && $wu->dba) {
+	$wu->dba->db_handle->disconnect;
+    }
+    exit;
+}
+
+my $cgi = $wu->cgi;
+if ($cgi->param('SUBMIT') && $cgi->param('OUTPUTINSTRUCTIONS')) {
+    print_txt_page_start($wu);
+    eval {
+	my $instances = $wu->handle_remote_attribute_query_form;
+	$wu->print_userdefined_view($instances);
+    };
+    if ($@) {
+	print qq($@\n);
+    }
+} else {
+    print_html_page_start($wu);
+    eval {
+	if ($cgi->param('SUBMIT')) {
+	    my $qcls = $cgi->param('QUERY_CLASS');
+	    my $instances = $wu->handle_remote_attribute_query_form;
+	    if ((@{$instances} == 1) && (! $cgi->param('FORMAT'))) {
+		$cgi->param('FORMAT',$GKB::Config::DEFAULT_VIEW_FORMAT);
+	    } elsif (! $qcls) {
+		
+	    } elsif ($qcls ne $wu->dba->ontology->root_class) {
+		$cgi->param('FORMAT','list');
+	    }
+	    $wu->print_view($instances,1);
+	} else {
+	    $wu->print_remote_attribute_query_form;
+	}
+    };
+    if ($@) {
+	print qq(<PRE>$@</PRE>\n);
+    }
+    print_html_page_end($wu);
+}
+$wu->dba->db_handle->disconnect;
+
+sub print_html_page_start {
+    my $wu = shift;
+    print $wu->cgi->header(-charset => 'UTF-8');
+    print $wu->cgi->start_html(
+	-style => {-src => '/stylesheet.css'},
+	-title => "search tool for experts in $PROJECT_NAME data model",
+	);
+    print $wu->top_navigation_box;
+}
+
+sub print_html_page_end {
+    my $wu = shift;
+    print $wu->make_footer;
+    print $wu->cgi->end_html;  
+}
+
+sub print_txt_page_start {
+    my $wu = shift;
+    print $wu->cgi->header('text/plain');
+}

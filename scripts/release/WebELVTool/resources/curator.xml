@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This xml specify some system-wide properties for the curator tool. This is not the user preference, and cannot be modified from the application.  -->
+<curator>
+	<uneditableAttributes>
+		<attribute name="DB_ID" />
+		<attribute name="_Protege_id" />
+		<attribute name="_displayName" />
+		<attribute name="modified" />
+		<attribute name="created" />
+		<attribute name="__is_ghost" />
+        <attribute name="stableIdentifier" />
+	</uneditableAttributes>
+	<hiddenAttributes>
+		<attribute name="_Protege_id" />
+		<attribute name="__is_ghost" />
+		<attribute name="_applyToAllEditedInstances" />
+        <!-- Text in this SBML is too long to be displayed in the attribute table. Also
+        this text should not be edited by the curator. -->
+        <attribute name="storedATXML" />
+	</hiddenAttributes>
+	<QACheckers>
+		<QAChecker name="Imbalance Check" class="org.gk.qualityCheck.ImbalanceChecker" />
+        <QAChecker name="Mandatory Attribute Check" class="org.gk.qualityCheck.MandatoryAttributesCheck" />
+		<QAChecker name="Required Attributes Check" class="org.gk.qualityCheck.RequiredAttributesCheck" />
+		<Group name="Compartment Check for">
+            <QAChecker name="EntitySet"
+                class="org.gk.qualityCheck.EntitySetCompartmentCheck" />        
+		    <QAChecker name="Complex"
+		        class="org.gk.qualityCheck.ComplexCompartmentCheck">
+		    </QAChecker>
+            <QAChecker name="Reaction"
+                class="org.gk.qualityCheck.ReactionCompartmentCheck" />
+		</Group>
+        <Group name="Species Check for">
+            <QAChecker name="EntitySet" class="org.gk.qualityCheck.EntitySetSpeciesCheck"></QAChecker>
+            <QAChecker name="Complex" class="org.gk.qualityCheck.ComplexSpeciesCheck"></QAChecker>
+            <QAChecker name="Reaction" class="org.gk.qualityCheck.ReactionSpeciesCheck"></QAChecker>
+            <QAChecker name="Pathway" class="org.gk.qualityCheck.PathwaySpeciesCheck"></QAChecker>
+        </Group>
+        <QAChecker name="Pathway Diagram Check" class="org.gk.qualityCheck.PathwayDiagramCheck" dbOnly="true"></QAChecker>
+	</QACheckers>
+	<autoPropagateAtts>
+		<schemaClass name="Event">
+             <attribute name="_doNotRelease" />
+             <attribute name="_doRelease" />
+             <attribute name="authored" />
+             <attribute name="reviewed" />
+			<attribute name="species" />
+		</schemaClass>
+		<schemaClass name="Reaction">
+			<attribute name="compartment" />
+		</schemaClass>
+		<schemaClass name="Complex">
+			<attribute name="species" />
+			<attribute name="compartment" />
+		</schemaClass>
+	</autoPropagateAtts>
+	<attributeAutoFillers>
+		<autoFiller target="LiteratureReference.pubMedIdentifier" class="org.gk.database.util.LiteratureReferenceAttributeAutoFiller" />
+		<autoFiller target="ReferencePeptideSequence.identifier" class="org.gk.database.util.ReferencePeptideSequenceAutoFiller" />
+        <autoFiller target="ReferenceGeneProduct.identifier" class="org.gk.database.util.ReferencePeptideSequenceAutoFiller" />
+	    <autoFiller target="PsiMod.identifier" class="org.gk.database.util.PsiModAttributeAutoFiller" />
+        <autoFiller target="ReferenceMolecule.identifier" class="org.gk.database.util.ChEBIAttributeAutoFiller"></autoFiller>
+    </attributeAutoFillers>
+	<deletedInstances>
+		<controlledVocabulary instanceClass="DeletedControlledVocabulary" />
+	</deletedInstances>
+    <importedPathwayDb>
+        <dataSource dbId="210689" name="Panther Pathways" />
+        <dataSource dbId="424025" name="NCI-Nature PID" />
+        <dataSource dbId="229095" name="Cancer Cell Map" />
+        <dbHost>brie8.cshl.edu</dbHost>
+        <dbName>test_reactome_plus_i_v2</dbName>
+    </importedPathwayDb>
+    <!-- These URLs for UniProt since they are not stable so an external config is used -->
+    <uniprot>
+        <UNIPROT_DOWNLOAD_URL>http://www.uniprot.org/uniprot/</UNIPROT_DOWNLOAD_URL>
+        <UNIPROT_XML_FORMAT>.xml</UNIPROT_XML_FORMAT>
+        <UNIPROT_FLAT_FORMAT>.txt</UNIPROT_FLAT_FORMAT>
+    </uniprot>
+    <!-- A key to write local instances that have unexpected InstanceEdits to the central database
+         Only a person who handles a MOD Reactome should be allowed to commit such an instance. Otherwise,
+         these instances are generated from some software bugs, and should never be committed to the central
+         database. -->
+    <enableCommitLocalHasMoreInstance>false</enableCommitLocalHasMoreInstance>
+    <central_db dbName="gk_central" dbHost="reactomedev.oicr.on.ca" />
+    <!-- The following values are used for modification mapping in the entity-level view -->
+    <modifiedResidues>
+        <residue name="Serine [ChEBI:9116]" shortName="Ser" />
+        <residue name="L-Glutamate [ChEBI:16015]" shortName="Glu" />
+        <residue name="Glycine [ChEBI:15428]" shortName="Gly" />
+        <residue name="L-Lysine [ChEBI:18019]" shortName="Lys" />
+        <residue name="L-Aspartate [ChEBI:17053]" shortName="Asp" />
+        <residue name="L-Arginine [ChEBI:16467]" shortName="Arg" />
+        <residue name="L-Serine [ChEBI:6301]" shortName="Ser" />
+        <residue name="L-Tyrosine [ChEBI:17895]" shortName="Tyr" />
+        <residue name="L-Cysteine [ChEBI:17561]" shortName="Cyc" />
+        <residue name="L-Asparagine [ChEBI:17196]" shortName="Asn" />
+        <residue name="L-Threonine [ChEBI:6308]" shortName="Thr" />
+    </modifiedResidues>
+    <modifications>
+        <modification name="acetyl group" shortName="AC" />
+        <modification name="carboxyl group" shortName="CA" />
+        <modification name="cysteinyl group" shortName="CY" />
+        <modification name="half-cystyl group" shortName="HC" />
+        <modification name="hydroxyl group" shortName="HO" />
+        <modification name="methyl group" shortName="M" />
+        <modification name="myristoyl group" shortName="AY" />
+        <modification name="palmitoyl group" shortName="PM" />
+        <modification name="phosphate group" shortName="P" />
+        <modification name="acyl-GPI group" shortName="GPI" />
+        <modification name="glycogen group" shortName="G" />
+        <modification name="(1,4-alpha-D-glucosyl)n group" shortName="Glc" />
+        <modification name="oligo (1,4-alpha-D-glucosyl) group" shortName="Glc" />
+        <modification name="GPI anchor group" shortName="GPI" />
+        <modification name="limit dextrin group" shortName="DE" />
+        <modification name="(1,6)-alpha-glucosyl-(1,4-alpha-D-glucosyl)n group" shortName="Glc" />
+        <modification name="geranylgeranyl group" shortName="GE" />
+        <modification name="farnesyl group" shortName="FA" />
+        <modification name="L-selenocysteinyl group" shortName="SE" />
+        <modification name="hypusinyl group" shortName="HP" />
+        <modification name="deoxyhypusinyl group" shortName="DO" />
+        <modification name="pantetheine 4'-phosphate group" shortName="PN" />
+        <modification name="L-cystinyl group" shortName="CY" />
+        <modification name="Monoiodotyrosine [extracellular region]" shortName="ID" />
+        <modification name="amide" shortName="A" />
+    </modifications>
+    <ensureMultipleCopies>
+        <entity name="ATP" type="SimpleEntity" />
+        <entity name="ADP" type="SimpleEntity" />
+        <entity name="H2O" type="SimpleEntity" />
+        <entity name="Orthophosphate" type="SimpleEntity" />
+    </ensureMultipleCopies>
+<!--    <pdURL value="http://localhost:8080/ELVWebApp/ElvService" />-->
+    <!-- pdURL value="http://brie8.cshl.edu:8080/ELVWebApp/ElvService" / -->
+    <pdURL value="http://reactomedev.oicr.on.ca:8080/ELVWebApp/ElvService" />
+    <devWebELV value="http://reactomedev.oicr.on.ca/entitylevelview/PathwayBrowser.html" />
+</curator>

@@ -1,0 +1,296 @@
+#!/usr/local/bin/perl -w -T
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+
+use strict;
+
+my ($CGI,$WU,$DBA);
+
+$CGI = CGI->new();
+
+eval {
+
+    $WU = GKB::WebUtils->new_from_cgi(
+	-CGI => $CGI,
+	-debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+	);
+    $DBA = $WU->dba;
+
+    my @dbname = $CGI->param('SOURCE');
+    my @spname = $CGI->param('SPECIES');
+    $spname[0] eq '' and @spname = ();
+    @dbname || print_search_form_page_w_message();
+
+    my $ar = [];
+#    print $CGI->header('text/plain');
+#    print qq(<PRE>\n);$DBA->debug(1);
+    if (uc($dbname[0]) eq 'EC') {
+	$ar =  fetch_EC_identifiers(\@dbname,\@spname);
+    } elsif (uc($dbname[0]) eq 'GO' or
+	     uc($dbname[0]) eq 'GENE ONTOLOGY'
+	) {
+	$ar = fetch_GO_identifiers(\@dbname,\@spname);
+    } elsif (uc($dbname[0]) eq 'CHEBI' or 
+	     uc($dbname[0]) eq 'COMPOUND'
+	) {
+	$ar = fetch_chemical_identifiers(\@dbname,\@spname);
+    } else {
+	$ar = fetch_sequence_identifiers(\@dbname,\@spname);
+    }
+#    print qq(</PRE>\n);$DBA->debug(undef);
+    if (@{$ar}) {
+	report_identifiers($ar);
+    } else {
+	print_search_form_page_w_message("No identifiers from " . join(' or ', @dbname) . (@spname ? " for " . join(' or ', @spname) : '.'));
+    }
+
+}; $@ && handle_error("$@");
+
+clean_up();
+exit;
+
+sub report_identifiers {
+    my $ar = shift;
+    print $CGI->header('text/plain');
+    printf "#%i identifiers\n", scalar(@{$ar});
+    foreach (@{$ar}) {
+	print $_->[0], "\n";
+    }
+}
+
+sub fetch_sequence_identifiers {
+    my ($dbname,$spname) = @_;
+    my @query = (['referenceDatabase.name','=',$dbname]);
+    if (@{$spname}) {
+	push @query, ['species.name','=',$spname];
+    }
+    my $ar = $DBA->fetch_instance_by_remote_attribute('ReferenceSequence',\@query);
+
+    @query = (['referenceDatabase.name','=',$dbname]);
+    if (@{$spname}) {
+	push @query, ['crossReference:ReferenceSequence.species.name','=',$spname];
+    }
+    push @{$ar}, @{$DBA->fetch_instance_by_remote_attribute('DatabaseIdentifier',\@query)};
+
+    $DBA->load_class_attribute_values_of_multiple_instances('ReferenceSequence','identifier',$ar);
+    $DBA->load_class_attribute_values_of_multiple_instances('DatabaseIdentifier','identifier',$ar);
+    my (@out,%seen);
+    foreach my $i (@{$ar}) {
+	my $ii = $i->Identifier->[0];
+	next if ($seen{$ii}++);
+	push @out, [$ii];
+    }
+    return \@out;
+}
+
+sub fetch_chemical_identifiers {
+    my ($dbname,$spname) = @_;
+    my @tmp1 = (['referenceDatabase.name','=',$dbname],['crossReference.referenceDatabase.name','=',$dbname]);
+    my @tmp2;
+    if (@{$spname}) {
+	push @tmp2, ['input:Event.species.name','=',$spname];
+	push @tmp2, ['output:Event.species.name','=',$spname];
+	push @tmp2, ['hasComponent:Complex.species.name','=',$spname];
+	push @tmp2, ['hasMember:Set.input:Event.species.name','=',$spname];
+	push @tmp2, ['hasMember:Set.output:Event.species.name','=',$spname];
+	push @tmp2, ['hasMember:Set.hasComponent:Complex.species.name','=',$spname];
+    }
+    my @queries;
+    foreach my $sq1 (@tmp1) {
+	if (@tmp2) {
+	    foreach my $sq2 (@tmp2) {
+		push @queries, [$sq1,$sq2];
+	    }
+	} else {
+	    push @queries, [$sq1];
+	}
+    }
+    my (@tmp3,%seen);
+    foreach my $q (@queries) {
+	my $ar = $DBA->fetch_instance_by_remote_attribute('ReferenceEntity',$q);
+	push @tmp3, grep {! $seen{$_->db_id}++} @{$ar};
+    }
+    $DBA->load_class_attribute_values_of_multiple_instances('ReferenceEntity','identifier',\@tmp3);
+    $DBA->load_class_attribute_values_of_multiple_instances('DatabaseIdentifier','identifier',\@tmp3);
+    my @out;
+    foreach my $i (@tmp3) {
+	push @out, [$i->Identifier->[0]];
+    }
+    return \@out;    
+}
+
+sub fetch_EC_identifiers {
+    my $ar = fetch_GO_MolecularFunction_instances(@_);
+    $DBA->load_class_attribute_values_of_multiple_instances('GO_MolecularFunction','ecNumber',$ar);
+    my (@out,%seen);
+    foreach my $i (@{$ar}) {
+	my $ec = $i->EcNumber->[0] || next;
+	next if ($seen{$ec}++);
+	push @out, [$ec];
+    }
+    return \@out;    
+}
+
+sub fetch_GO_identifiers {
+    my $out = fetch_GO_MF_identifiers(@_);
+    push @{$out}, @{fetch_GO_BP_identifiers(@_)};
+    push @{$out}, @{fetch_GO_CC_identifiers(@_)};
+    return $out;
+}
+
+sub fetch_GO_MF_identifiers {
+    my $ar = fetch_GO_MolecularFunction_instances(@_);
+    $DBA->load_class_attribute_values_of_multiple_instances('GO_MolecularFunction','accession',$ar);
+    my @out;
+    foreach my $i (@{$ar}) {
+	push @out, [$i->Accession->[0]];
+    }
+    return \@out;
+}
+
+sub fetch_GO_MolecularFunction_instances {
+    my ($dbname,$spname) = @_;
+    my @query = (['activity:CatalystActivity','IS NOT NULL',[]]);
+    if (@{$spname}) {
+	push @query, ['activity:CatalystActivity.physicalEntity.species.name','=',$spname];
+    }
+    my $ar = $DBA->fetch_instance_by_remote_attribute('GO_MolecularFunction',\@query);
+    return $ar;
+}
+
+sub fetch_GO_BP_identifiers {
+    my ($dbname,$spname) = @_;
+    my @query = (['goBiologicalProcess:Event','IS NOT NULL',[]]);
+    if (@{$spname}) {
+	push @query, ['goBiologicalProcess:Event.species.name','=',$spname];
+    }
+    my $ar = $DBA->fetch_instance_by_remote_attribute('GO_BiologicalProcess',\@query);
+    $DBA->load_class_attribute_values_of_multiple_instances('GO_BiologicalProcess','accession',$ar);
+    my @out;
+    foreach my $i (@{$ar}) {
+	push @out, [$i->Accession->[0]];
+    }
+    return \@out;
+}
+
+sub fetch_GO_CC_identifiers {
+    my ($dbname,$spname) = @_;
+    my @query = (['goCellularComponent:PhysicalEntity','IS NOT NULL',[]]);
+    if (@{$spname}) {
+	push @query, ['goCellularComponent:PhysicalEntity.species.name','=',$spname];
+    }
+    my $ar = $DBA->fetch_instance_by_remote_attribute('GO_CellularComponent',\@query);
+
+    @query = (['compartment:PhysicalEntity','IS NOT NULL',[]]);
+    if (@{$spname}) {
+	push @query, ['compartment:PhysicalEntity.species.name','=',$spname];
+    }
+    push @{$ar}, @{$DBA->fetch_instance_by_remote_attribute('EntityCompartment',\@query)};
+
+    @query = (['compartment:Event','IS NOT NULL',[]]);
+    if (@{$spname}) {
+	push @query, ['compartment:Event.species.name','=',$spname];
+    }
+    push @{$ar}, @{$DBA->fetch_instance_by_remote_attribute('Compartment',\@query)};
+    
+    my %seen;
+    @{$ar} = grep {! $seen{$_->db_id}++} @{$ar};
+
+    $DBA->load_class_attribute_values_of_multiple_instances('GO_CellularComponent','accession',$ar);
+    my @out;
+    foreach my $i (@{$ar}) {
+	push @out, [$i->Accession->[0]];
+    }
+    return \@out;
+}
+
+sub clean_up {
+    $DBA && $DBA->db_handle->disconnect;
+}
+
+sub handle_error {
+    unless ($WU && $WU->in_html) {
+	print $CGI->header('text/plain');
+    }
+    print "@_";
+}
+
+sub print_search_form_page_w_message {
+    my $msg = shift;
+    $WU || die($msg);
+    print $CGI->header(-charset => 'UTF-8');
+    print $CGI->start_html(
+	-style => {-src => '/stylesheet.css'},
+	-title => "$PROJECT_NAME (listidentifiers)",
+	);
+    $WU->in_html(1);
+    print $WU->navigation_bar;
+    
+    my $ar = $DBA->fetch_instance(-CLASS => 'ReferenceDatabase');
+    my (%database_names,%database_urls);
+    map {$database_names{$_} = $_} grep {! /(taxonomy|glycan|orthomcl)/i} map {$_->displayName} @{$ar};
+    my @database_names = sort {$a cmp $b} keys %database_names;
+    $DBA->load_class_attribute_values_of_multiple_instances('ReferenceDatabase','url',$ar);
+    map {$database_urls{$_->displayName} = $_->Url->[0]} grep {$database_names{$_->displayName}} @{$ar};
+    $database_urls{'ENSEMBL'} = 'http://www.ensembl.org';
+
+    $ar = $DBA->fetch_instance(-CLASS => 'Species');
+    my %species_names;
+    map {$species_names{$_} = $_} map {$_->displayName} @{$ar};
+    $species_names{''} = ' All species';
+
+    print 
+	qq(<DIV CLASS="section">\n<TABLE WIDTH="$HTML_PAGE_WIDTH" CLASS="search2" CELLSPACING="0" BORDER="0">) .
+	qq(<TR><TD COLSPAN="3" style="background:white;"><P>Please choose the database the identifiers of which you want listed. Specifying a species will restrict the identifiers to the ones found in this species only. Please be aware that some databases contain records for single species only.</P></TD></TR>) .
+	$CGI->start_form(-method =>'GET') .
+	$CGI->hidden(-name => 'DB',-value => $CGI->param('DB')) .
+	qq(<TR><TD>Database ) .
+	$CGI->popup_menu
+	(
+#	 -id => 'popup_1',
+	 -name => 'SOURCE',
+	 -values => \@database_names,
+	) .
+	qq(</TD><TD>) .
+	qq(species ) . 
+	$CGI->popup_menu
+	(
+#	 -id => 'popup_2',
+	 -name => 'SPECIES',
+	 -values => [sort{$a cmp $b} keys %species_names],
+	 -labels => \%species_names,
+	 -default => ''
+	) .
+	qq(</TD><TD>) .
+	$CGI->submit(-name => 'SUBMIT', -value => 'List!') .
+	$CGI->endform .
+	qq(</TD></TR>\n<TR><TD COLSPAN="3" STYLE="background:white;"><P />) . join('<BR />', '<B>List of databases:</B>', map {$database_urls{$_} ? sprintf qq(<A HREF="%s">%s</A>), $database_urls{$_}, $_ : $_} @database_names) . 
+	qq(</TD></TR></TABLE></DIV>);
+
+    $msg && print qq(<DIV CLASS="nothingfound">$msg</DIV>);
+    $WU->print_simple_search_page_bottom;
+    clean_up();
+    exit;
+}

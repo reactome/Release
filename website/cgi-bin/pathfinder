@@ -1,0 +1,101 @@
+#!/usr/local/bin/perl
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+use lib "/tmp/libs/bioperl-1.0";
+use lib "/tmp/libs/my_perl_stuff";
+
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+
+use strict;
+
+my $CGI = CGI->new();
+
+my $DB = $CGI->param('DB') || $GK_DB_NAME;
+$CGI->param('DB', $DB);
+
+print $CGI->header;
+print $CGI->start_html(
+    # \-dtd => "-//IETF//DTD HTML//EN",
+    -style => {-src => '/stylesheet.css'},
+    -title => "$PROJECT_NAME pathfinder",
+    );
+
+#GKB::WebUtils::print_cgi_params($CGI);
+
+my $DBA;
+eval {
+    # Get a handle to db
+    $DBA = GKB::DBAdaptor->new
+	(
+	 -dbname => $DB,
+	 -user   => $GK_DB_USER,
+	 -host   => $GK_DB_HOST,
+	 -pass   => $GK_DB_PASS,
+	 -port   => $GK_DB_PORT,
+	 -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef 
+	 );
+}; $@ && handle_error($@);
+
+my $WU;
+eval {
+    # Create WebUtils object
+    $WU = GKB::WebUtils->new(-DBA => $DBA,
+			     -CGI => $CGI,
+			     -DEBUG => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+			     ); 
+    $WU->urlmaker->script_name('/cgi-bin/eventbrowser');
+}; $@ && handle_error($@);
+
+eval {
+    # Top navigation box
+    if (is_decorated()) {
+        print $WU->top_navigation_box(5), "\n";
+    }
+}; $@ && handle_error($@);
+
+eval {
+    $WU->print_pathfinder_form;
+}; $@ && handle_error($@);
+    
+eval {
+    if (is_decorated()) {
+        print $WU->make_footer;
+    }
+}; $@ && handle_error($@);
+
+
+print $CGI->end_html;  
+$DBA && $DBA->db_handle->disconnect;
+exit;
+
+sub handle_error {
+    print qq(<PRE CLASS="error">\n$@\n</PRE>\n);
+}
+
+sub is_decorated {
+    my $undecorated = $CGI->param('UNDECORATED');
+    if (defined $undecorated && $undecorated == 1) {
+        return 0;
+    }
+    return 1;
+}

@@ -1,0 +1,1822 @@
+; Wed Sep 01 16:49:20 BST 2004
+; 
+;+ (version "2.0.1")
+;+ (build "Build 168")
+
+
+(defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS
+	(is-a USER)
+	(role concrete)
+	(multislot author
+		(type INSTANCE)
+;+		(allowed-classes Person)
+		(create-accessor read-write))
+	(single-slot evidenceType
+		(type INSTANCE)
+;+		(allowed-classes EvidenceType)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot _1stAuthorSurname
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot activeUnit
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity Domain)
+		(create-accessor read-write))
+	(multislot summation
+		(type INSTANCE)
+;+		(allowed-classes Summation)
+		(create-accessor read-write))
+	(single-slot targetX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot hasDomain
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
+	(multislot creatingActivity
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
+	(single-slot _displayName
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot precedingEvent
+		(type INSTANCE)
+;+		(allowed-classes Event)
+		(create-accessor read-write))
+	(multislot attributeValuesBeforeChange
+		(type INSTANCE)
+;+		(allowed-classes _AttributeValueBeforeChange)
+		(create-accessor read-write))
+	(multislot instanceOf
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
+	(single-slot journal
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot reviewer
+		(type INSTANCE)
+;+		(allowed-classes Person)
+		(create-accessor read-write))
+	(single-slot physicalEntity
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot firstname
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot slotDisplayName
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(associated-facet _slotDisplayName)
+		(create-accessor read-write))
+	(single-slot minCount
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot startCoordinate
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot catalystActivity
+;+		(comment "roughly the same as EcoCyc's EnzymaticReaction")
+		(type INSTANCE)
+;+		(allowed-classes CatalystActivity)
+		(create-accessor read-write))
+	(single-slot referenceDatabase
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDatabase)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot input
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(create-accessor read-write))
+	(single-slot goBiologicalProcess
+;+		(comment "Fill it with GO biological process which is roughly equal to this GK Event. I.e. For \"Human S-phase\" it should be \"S-phase\" and not, say, \"Mitotic cell cycle\".")
+		(type INSTANCE)
+;+		(allowed-classes GO_BiologicalProcess)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot previousValue
+		(type STRING)
+		(create-accessor read-write))
+	(multislot hasInstance
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
+	(multislot concurrentEvents
+		(type INSTANCE)
+;+		(allowed-classes Event)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot comment
+;+		(comment "CC lines from sequence record.")
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot _applyToAllEditedInstances
+;+		(comment "Set this attribute vaue to TRUE (by checking it) if you want to attch this InstenceEdit to all edited instances in your project.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot secondaryIdentifier
+;+		(comment "This is for secondary/other identifiers WITHIN THE SAME DATABASE, e.g. secondary SPTREMBL accessions and SwissProt id. Use crossReference if the the identifier is from another db, e.g. for adding a RefSeq identifier to SPTREMBL SequenceDatabaseIdentifier.")
+		(type STRING)
+		(create-accessor read-write))
+	(multislot output
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(create-accessor read-write))
+	(multislot focusEntity
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot referenceGroupCount
+		(type INSTANCE)
+;+		(allowed-classes ReferenceGroupCount)
+		(create-accessor read-write))
+	(single-slot regulator
+		(type INSTANCE)
+;+		(allowed-classes)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot locationContext
+		(type INSTANCE)
+;+		(allowed-classes Pathway)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot description
+;+		(comment "DE lines from sequence record")
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot sourceX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot activity
+		(type INSTANCE)
+;+		(allowed-classes GO_MolecularFunction)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot hasComponent
+		(type INSTANCE)
+;+		(allowed-classes %3ATHING)
+		(create-accessor read-write))
+	(single-slot dateAccepted
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot text
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot residue
+;+		(comment "This is to hold the residue (like serine or tyrosine) which is modified. The value is instance of class CocnreteSimpleEntityk, i.e. an instance representig serine. I know, this not exactly correct since free amino acid (nucleotide) is different from the one in the chain but it's still pretty good I think.")
+		(type INSTANCE)
+;+		(allowed-classes ConcreteSimpleEntity ReferenceGroup ReferenceMolecule)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot databaseIdentifier
+		(type INSTANCE)
+;+		(allowed-classes DatabaseIdentifier)
+		(create-accessor read-write))
+	(multislot orthologousEvent
+;+		(comment "Holds 'equivalent' Events in other organisms.")
+		(type INSTANCE)
+;+		(allowed-classes Event)
+;+		(inverse-slot orthologousEvent)
+		(create-accessor read-write))
+	(single-slot classDisplayName
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot species
+		(type INSTANCE)
+;+		(allowed-classes Species)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot figure
+		(type INSTANCE)
+;+		(allowed-classes Figure)
+		(create-accessor read-write))
+	(single-slot targetY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot changedAttribute
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot referenceSequence
+		(type INSTANCE)
+;+		(allowed-classes ReferenceSequence)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot pages
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot referenceGene
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDNASequence)
+		(create-accessor read-write))
+	(single-slot note
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot crossReference
+;+		(comment "This slot is for holding references to the EQUIVALENT things in other databases. If the instance this slot is attached to represents an event the DatabaseIdentifier put into this slot must also point to some sort of event/processs/reaction/happening in some other db.")
+		(type INSTANCE)
+;+		(allowed-classes DatabaseIdentifier)
+		(create-accessor read-write))
+	(single-slot eMailAddress
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot reverseReaction
+		(type INSTANCE)
+;+		(allowed-classes Reaction)
+;+		(cardinality 0 1)
+;+		(inverse-slot reverseReaction)
+		(create-accessor read-write))
+	(single-slot maxCount
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot literatureReference
+		(type INSTANCE)
+;+		(allowed-classes LiteratureReference)
+		(create-accessor read-write))
+	(single-slot eventLocationContext
+		(type INSTANCE)
+;+		(allowed-classes Pathway)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot accession
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot _Protege_id
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot frontPageItem
+		(type INSTANCE)
+;+		(allowed-classes Event)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(single-slot superTaxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot created
+		(type INSTANCE)
+;+		(allowed-classes InstanceEdit)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot referenceEntity
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
+	(single-slot changedInstanceDB_ID
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot endCoordinate
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot pubMedIdentifier
+;+		(comment "PubMed ID")
+		(type INTEGER)
+		(create-accessor read-write))
+	(single-slot identityDefinedBy
+		(type SYMBOL)
+		(allowed-values ALL ANY none)
+;+		(cardinality 0 1)
+;+		(associated-facet _identityDefinedBy)
+		(create-accessor read-write))
+	(single-slot surname
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot dateTime
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot dateRevised
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot identifier
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot componentOf
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
+	(single-slot dateSubmitted
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot year
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot requiredInputComponent
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(create-accessor read-write))
+	(single-slot ecNumber
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot hasModifiedResidue
+		(type INSTANCE)
+;+		(allowed-classes ModifiedResidue)
+		(create-accessor read-write))
+	(single-slot definition
+;+		(comment "This is for holding GO definition field.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot keyword
+;+		(comment "KW lines from SPTREMBL records")
+		(type STRING)
+		(create-accessor read-write))
+	(multislot referenceTranscript
+		(type INSTANCE)
+;+		(allowed-classes ReferenceRNASequence)
+		(create-accessor read-write))
+	(single-slot atomicConnectivity
+;+		(comment "Contents of the mol file.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot __is_ghost
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot DB_ID
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot goCellularComponent
+		(type INSTANCE)
+;+		(allowed-classes GO_CellularComponent)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot formula
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot removingActivity
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
+	(single-slot regulationType
+		(type INSTANCE)
+;+		(allowed-classes RegulationType)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot inferredFrom
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
+	(single-slot url
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot changedInstance
+		(type INSTANCE)
+;+		(allowed-classes EvidenceType RegulationType Regulation DatabaseIdentifier GO_BiologicalProcess FrontPage CatalystActivity Taxon ModifiedResidue PhysicalEntity InstanceEdit Figure Person Summation LiteratureReference Affiliation ConcurrentEventSet Event ReferenceDatabase)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot geneName
+;+		(comment "GN lines from sequence record.")
+		(type STRING)
+		(create-accessor read-write))
+	(multislot modified
+		(type INSTANCE)
+;+		(allowed-classes InstanceEdit)
+		(create-accessor read-write))
+	(single-slot instanceEdit
+		(type INSTANCE)
+;+		(allowed-classes InstanceEdit)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot sourceY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot volume
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot referenceGroup
+		(type INSTANCE)
+;+		(allowed-classes ReferenceGroup)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot compartment
+		(type INSTANCE)
+;+		(allowed-classes Compartment)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot modification
+		(type INSTANCE)
+;+		(allowed-classes SimpleEntity ReferenceGroup ReferenceMolecule)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot fingerPrintString
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot regulatedEntity
+		(type INSTANCE)
+;+		(allowed-classes Event CatalystActivity)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot requiredCatalystComponent
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(create-accessor read-write))
+	(single-slot _doNotRelease
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot accessUrl
+;+		(comment "Url for retrieving a record")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot locatedEvent
+		(type INSTANCE)
+;+		(allowed-classes Event)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot affiliation
+		(type INSTANCE)
+;+		(allowed-classes Affiliation)
+		(create-accessor read-write))
+	(single-slot databaseColumnSpecification
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(associated-facet _databaseColumnSpecification)
+		(create-accessor read-write))
+	(single-slot coordinate
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot address
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot editor
+		(type INSTANCE)
+;+		(allowed-classes Person)
+		(create-accessor read-write))
+	(single-slot initial
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
+
+(defclass %3AEXTENDED-CLASS
+	(is-a %3ASTANDARD-CLASS)
+	(role concrete)
+	(single-slot classDisplayName
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass %3AEXTENDED-SLOT
+	(is-a %3ASTANDARD-SLOT)
+	(role concrete)
+	(single-slot databaseColumnSpecification
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot identityDefinedBy
+		(type SYMBOL)
+		(allowed-values ALL ANY none)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot slotDisplayName
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass DatabaseObject
+	(is-a USER)
+	(role concrete)
+	(single-slot created
+		(type INSTANCE)
+;+		(allowed-classes InstanceEdit)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot _displayName
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot DB_ID
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot __is_ghost
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+;+		(user-facet _databaseColumnSpecification "ENUM('TRUE')")
+		(create-accessor read-write))
+	(multislot modified
+		(type INSTANCE)
+;+		(allowed-classes InstanceEdit)
+		(create-accessor read-write))
+	(single-slot _Protege_id
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _databaseColumnSpecification "VARCHAR(255)")
+		(create-accessor read-write)))
+
+(defclass Event "Presents some sort of event, be it chemical reaction or some complex multistep process.\nThe identity of direct instances of this class is defined by the values of name and txon attributes.\nUse this class to create a placeholder for a Reaction or Pathway to be fully defined later."
+	(is-a DatabaseObject)
+	(role abstract)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+;+		(user-facet _identityDefinedBy ANY)
+		(create-accessor read-write))
+	(multislot catalystActivity
+;+		(comment "roughly the same as EcoCyc's EnzymaticReaction")
+		(type INSTANCE)
+;+		(allowed-classes CatalystActivity)
+		(create-accessor read-write))
+	(multislot crossReference
+;+		(comment "This slot is for holding references to the EQUIVALENT things in other databases. If the instance this slot is attached to represents an event the DatabaseIdentifier put into this slot must also point to some sort of event/processs/reaction/happening in some other db.")
+		(type INSTANCE)
+;+		(allowed-classes DatabaseIdentifier)
+		(create-accessor read-write))
+	(multislot literatureReference
+		(type INSTANCE)
+;+		(allowed-classes LiteratureReference)
+		(create-accessor read-write))
+	(multislot input
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(create-accessor read-write))
+	(single-slot goBiologicalProcess
+;+		(comment "Fill it with GO biological process which is roughly equal to this GK Event. I.e. For \"Human S-phase\" it should be \"S-phase\" and not, say, \"Mitotic cell cycle\".")
+		(type INSTANCE)
+;+		(allowed-classes GO_BiologicalProcess)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot evidenceType
+		(type INSTANCE)
+;+		(allowed-classes EvidenceType)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot compartment
+		(type INSTANCE)
+;+		(allowed-classes Compartment)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot inferredFrom
+		(type INSTANCE)
+;+		(allowed-classes Event)
+		(create-accessor read-write))
+	(multislot summation
+		(type INSTANCE)
+;+		(allowed-classes Summation)
+		(create-accessor read-write))
+	(multislot figure
+		(type INSTANCE)
+;+		(allowed-classes Figure)
+		(create-accessor read-write))
+	(multislot requiredInputComponent
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(create-accessor read-write))
+	(multislot requiredCatalystComponent
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(create-accessor read-write))
+	(multislot precedingEvent
+		(type INSTANCE)
+;+		(allowed-classes Event)
+		(create-accessor read-write))
+	(multislot orthologousEvent
+;+		(comment "Holds 'equivalent' Events in other organisms.")
+		(type INSTANCE)
+;+		(allowed-classes Event)
+		(create-accessor read-write))
+	(multislot output
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(create-accessor read-write))
+	(single-slot definition
+;+		(comment "This is for holding GO definition field.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass GenericEvent "An Event which has 1 or more AbstractEntities as input,output or catalyst. In essence, AbstractEvent is a generalisation of multiple ConcreteEvents.\nUse this class to create a placeholder for a Abstract Reaction or Pathway to be fully defined later.\nThe identity of direct instances of this class is defined by name and taxon.\n"
+	(is-a Event)
+	(role abstract)
+	(multislot hasInstance
+		(type INSTANCE)
+;+		(allowed-classes Event)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass ConcreteEvent "Event which has only ConcreteEntities as input, output and catalyst.\nUse this class to create a placeholder for a Concrete Reaction or Pathway to be fully defined later.\nThe identity of direct instances of this class is defined by name and taxon."
+	(is-a Event)
+	(role abstract)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+;+		(user-facet _identityDefinedBy ANY)
+		(create-accessor read-write))
+	(multislot input
+		(type INSTANCE)
+;+		(allowed-classes ConcreteEntity)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Species)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(multislot requiredInputComponent
+		(type INSTANCE)
+;+		(allowed-classes ConcreteEntity)
+		(create-accessor read-write))
+	(multislot requiredCatalystComponent
+		(type INSTANCE)
+;+		(allowed-classes ConcreteEntity)
+		(create-accessor read-write))
+	(multislot output
+		(type INSTANCE)
+;+		(allowed-classes ConcreteEntity)
+		(create-accessor read-write)))
+
+(defclass Pathway "Multi-step Event. Pathway is recursive, i.e. can contain other Pathways and hence should be handled with care to prevent cycles.\nUse sub-classes for creating appropriate instances.\n(The identity of a Pathway is defined by the component Events.)"
+	(is-a Event)
+	(role abstract)
+	(multislot hasComponent
+		(type INSTANCE)
+;+		(allowed-classes Event)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(single-slot _doNotRelease
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+;+		(user-facet _databaseColumnSpecification "ENUM('TRUE')")
+		(create-accessor read-write)))
+
+(defclass ConcretePathway
+	(is-a ConcreteEvent Pathway)
+	(role concrete)
+	(multislot hasComponent
+		(type INSTANCE)
+;+		(allowed-classes ConcreteEvent)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Species)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write)))
+
+(defclass GenericPathway
+	(is-a GenericEvent Pathway)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(multislot hasInstance
+		(type INSTANCE)
+;+		(allowed-classes Pathway)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write)))
+
+(defclass Reaction "Single-step Event.\nUse sub-classes for creating appropriate instances.\n(Identity of a Reaction is defined by its input, output and catalystActivity.)"
+	(is-a Event)
+	(role abstract)
+	(single-slot reverseReaction
+		(type INSTANCE)
+;+		(allowed-classes Reaction)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(multislot catalystActivity
+;+		(comment "roughly the same as EcoCyc's EnzymaticReaction")
+		(type INSTANCE)
+;+		(allowed-classes CatalystActivity)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write)))
+
+(defclass GenericReaction "Identity of a Reaction is defined by its input, output and catalystActivity."
+	(is-a GenericEvent Reaction)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(multislot input
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot hasInstance
+		(type INSTANCE)
+;+		(allowed-classes Reaction)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(multislot output
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write)))
+
+(defclass ConcreteReaction "Identity of a Reaction is defined by its input, output and catalystActivity."
+	(is-a ConcreteEvent Reaction)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(multislot input
+		(type INSTANCE)
+;+		(allowed-classes ConcreteEntity)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Species)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(multislot output
+		(type INSTANCE)
+;+		(allowed-classes ConcreteEntity)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write)))
+
+(defclass PhysicalEntity "Thing which participates in Events as input, output or catalyst. Can be recursive,i.e. contain other PhysicalEntities. This allows easier creation of cascading complexes."
+	(is-a DatabaseObject)
+	(role abstract)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot crossReference
+;+		(comment "This slot is for holding references to the EQUIVALENT things in other databases. If the instance this slot is attached to represents an event the DatabaseIdentifier put into this slot must also point to some sort of event/processs/reaction/happening in some other db.")
+		(type INSTANCE)
+;+		(allowed-classes DatabaseIdentifier)
+		(create-accessor read-write))
+	(multislot literatureReference
+		(type INSTANCE)
+;+		(allowed-classes LiteratureReference)
+		(create-accessor read-write))
+	(single-slot goCellularComponent
+		(type INSTANCE)
+;+		(allowed-classes GO_CellularComponent)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot compartment
+		(type INSTANCE)
+;+		(allowed-classes EntityCompartment)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(multislot summation
+		(type INSTANCE)
+;+		(allowed-classes Summation)
+		(create-accessor read-write))
+	(multislot figure
+		(type INSTANCE)
+;+		(allowed-classes Figure)
+		(create-accessor read-write))
+	(multislot hasDomain
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
+	(single-slot definition
+;+		(comment "This is for holding GO definition field.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass ConcreteEntity "PhysicalEntities which are or are composed of single chemical substance (as opposed to a class of chemical sunstances). E.g. 'ethanol' is a ConcreteEntity, while 'alcochol' is actually a class of molecules and is an GenericEntity."
+	(is-a PhysicalEntity)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy ANY)
+		(create-accessor read-write)))
+
+(defclass GenericEntity "A generalisation of multiple ConcreteEntities. E.g. 'mRNA' is a general term for all specific mRNAs, i.e. 'Orc1 mRNA', 'Orc2mRNA' etc. 'Alcohol' a general term for 'methanol','ethanol','propanol' etc."
+	(is-a PhysicalEntity)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy ANY)
+		(create-accessor read-write))
+	(multislot hasInstance
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass SimpleEntity "Indivisible entities, i.e. entities which do not have sub-units. Opposite to Complex"
+	(is-a PhysicalEntity)
+	(role concrete)
+	(multislot referenceEntity
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write)))
+
+(defclass ConcreteSimpleEntity "Single chemical substances which are (hopefully uniquely) identified by name. They can have database identifier but it's the name which is used for checking if something like that has been seen already before."
+	(is-a ConcreteEntity SimpleEntity)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy ANY)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot referenceEntity
+		(type INSTANCE)
+;+		(allowed-classes ReferenceMolecule)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass SequenceEntity "This is for things which are uniquely identified by accession number or id via CanonicalMolecule"
+	(is-a ConcreteEntity SimpleEntity)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Species)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot referenceEntity
+		(type INSTANCE)
+;+		(allowed-classes ReferenceSequence)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(multislot hasDomain
+		(type INSTANCE)
+;+		(allowed-classes ComplexDomain SequenceDomain)
+		(create-accessor read-write))
+	(multislot hasModifiedResidue
+		(type INSTANCE)
+;+		(allowed-classes ModifiedResidue)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass SequenceEntityFragment
+	(is-a SequenceEntity)
+	(role concrete)
+	(single-slot startCoordinate
+		(type INTEGER)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot endCoordinate
+		(type INTEGER)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass GenericSimpleEntity "Generalisation of a class of ConcreteSimpleEntities, e.g. alcohol, fatty acid, NTP"
+	(is-a GenericEntity SimpleEntity)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy ANY)
+		(create-accessor read-write))
+	(multislot hasInstance
+		(type INSTANCE)
+;+		(allowed-classes SimpleEntity)
+		(create-accessor read-write))
+	(multislot referenceEntity
+		(type INSTANCE)
+;+		(allowed-classes ReferenceGroup)
+		(create-accessor read-write))
+	(multislot hasDomain
+		(type INSTANCE)
+;+		(allowed-classes GenericDomain)
+		(create-accessor read-write)))
+
+(defclass Complex "Entities consisting of multiple independant subunits."
+	(is-a PhysicalEntity)
+	(role concrete)
+	(multislot inferredFrom
+		(type INSTANCE)
+;+		(allowed-classes Complex)
+		(create-accessor read-write))
+	(multislot hasDomain
+		(type INSTANCE)
+;+		(allowed-classes)
+		(create-accessor read-write))
+	(multislot hasComponent
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(cardinality 2 ?VARIABLE)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass ConcreteComplex "Complex consiting of ConcreteEntities"
+	(is-a ConcreteEntity Complex)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(single-slot taxon
+		(type INSTANCE)
+;+		(allowed-classes Species)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot hasDomain
+		(type INSTANCE)
+;+		(allowed-classes ComplexDomain SequenceDomain)
+		(create-accessor read-write))
+	(multislot hasComponent
+		(type INSTANCE)
+;+		(allowed-classes ConcreteEntity)
+		(cardinality 2 ?VARIABLE)
+		(create-accessor read-write)))
+
+(defclass GenericComplex "Complex consistings of one or more AbstractEntities and 0 or more ConcreteEntities. In essence an AbstractComplex represents a class of (Concrete)Complexes."
+	(is-a GenericEntity Complex)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy none)
+		(create-accessor read-write))
+	(multislot hasInstance
+		(type INSTANCE)
+;+		(allowed-classes Complex)
+		(create-accessor read-write))
+	(multislot hasDomain
+		(type INSTANCE)
+;+		(allowed-classes Domain)
+		(create-accessor read-write)))
+
+(defclass Regulation
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(create-accessor read-write))
+	(multislot literatureReference
+		(type INSTANCE)
+;+		(allowed-classes LiteratureReference)
+		(create-accessor read-write))
+	(single-slot regulator
+		(type INSTANCE)
+;+		(allowed-classes Event PhysicalEntity CatalystActivity)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot regulationType
+		(type INSTANCE)
+;+		(allowed-classes RegulationType)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot summation
+		(type INSTANCE)
+;+		(allowed-classes Summation)
+		(create-accessor read-write))
+	(multislot figure
+		(type INSTANCE)
+;+		(allowed-classes Figure)
+		(create-accessor read-write))
+	(single-slot regulatedEntity
+		(type INSTANCE)
+;+		(allowed-classes Event CatalystActivity)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass PositiveRegulation
+	(is-a Regulation)
+	(role concrete))
+
+(defclass Requirement "Extreme positive regulation, i.e. regulated entity absolutely requires regulator."
+	(is-a PositiveRegulation)
+	(role concrete))
+
+(defclass NegativeRegulation
+	(is-a Regulation)
+	(role concrete))
+
+(defclass DatabaseIdentifier "Placeholder for database identifiers. Name is something human readable, e.g. a GO term itself while identifier is the numeric id. (In the instances created I've added the \"GO:\" prefix just for convenience really. When finally sticking the things in db these should be removed."
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot crossReference
+;+		(comment "This slot is for holding references to the EQUIVALENT things in other databases. If the instance this slot is attached to represents an event the DatabaseIdentifier put into this slot must also point to some sort of event/processs/reaction/happening in some other db.")
+		(type INSTANCE)
+;+		(allowed-classes DatabaseIdentifier)
+		(create-accessor read-write))
+	(single-slot referenceDatabase
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDatabase)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot identifier
+		(type STRING)
+;+		(cardinality 1 1)
+;+		(user-facet _databaseColumnSpecification "varchar(20)")
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass Taxon "Placeholder for organisms. All names go to aliases (easier to retrieve if we just need to \"scan\" one column rather than both 'name' and 'alias'). DatabaseIdentifier allows to stick on, say, NCBI taxonomy ID."
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _databaseColumnSpecification "varchar(255)")
+;+		(user-facet _identityDefinedBy ANY)
+		(create-accessor read-write))
+	(multislot crossReference
+;+		(comment "This slot is for holding references to the EQUIVALENT things in other databases. If the instance this slot is attached to represents an event the DatabaseIdentifier put into this slot must also point to some sort of event/processs/reaction/happening in some other db.")
+		(type INSTANCE)
+;+		(allowed-classes DatabaseIdentifier)
+		(create-accessor read-write))
+	(single-slot superTaxon
+		(type INSTANCE)
+;+		(allowed-classes Taxon)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Species
+	(is-a Taxon)
+	(role concrete)
+	(multislot figure
+		(type INSTANCE)
+;+		(allowed-classes Figure)
+		(create-accessor read-write)))
+
+(defclass InstanceEdit
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot author
+		(type INSTANCE)
+;+		(allowed-classes Person)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(single-slot dateTime
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _databaseColumnSpecification "TIMESTAMP")
+		(create-accessor read-write))
+	(single-slot _applyToAllEditedInstances
+;+		(comment "Set this attribute vaue to TRUE (by checking it) if you want to attch this InstenceEdit to all edited instances in your project.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot note
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass CatalystActivity "Allows to denote one activity (out of many possible) of a part of molecule, molecule and complex. Should be read either as \"Entity has ACTIVITY activity\" or \"ACTIVITY activity of entity\". The latter is the case if used in a dependency statement."
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot activity
+		(type INSTANCE)
+;+		(allowed-classes GO_MolecularFunction)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(multislot literatureReference
+		(type INSTANCE)
+;+		(allowed-classes LiteratureReference)
+		(create-accessor read-write))
+	(multislot activeUnit
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity Domain)
+		(create-accessor read-write))
+	(single-slot physicalEntity
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass ReferenceDatabase "Place to keep info about databases used so that the general stuff shouldn't be writen out again and again with each database identifier."
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy ANY)
+		(create-accessor read-write))
+	(single-slot accessUrl
+;+		(comment "Url for retrieving a record")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot url
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass GO_MolecularFunction "Basically GO functions"
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(single-slot referenceDatabase
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDatabase)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot accession
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot componentOf
+		(type INSTANCE)
+;+		(allowed-classes GO_MolecularFunction)
+		(create-accessor read-write))
+	(single-slot ecNumber
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot instanceOf
+		(type INSTANCE)
+;+		(allowed-classes GO_MolecularFunction)
+		(create-accessor read-write))
+	(single-slot definition
+;+		(comment "This is for holding GO definition field.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass ModifiedResidue "Placeholder for modified residues. Referenced by PhysicalEntity. Coordinate is the position of the modified residue in the VirtualMolecule. Virtual molecule is referenced in order to prevent situations where, say, residue 5 is phosphorylated in 2 diferent molecules. It woudl be logically wrong for these 2 real molecules to reference the same modified residue. Maybe an overkill (?)."
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot referenceSequence
+		(type INSTANCE)
+;+		(allowed-classes ReferenceSequence)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot residue
+;+		(comment "This is to hold the residue (like serine or tyrosine) which is modified. The value is instance of class CocnreteSimpleEntityk, i.e. an instance representig serine. I know, this not exactly correct since free amino acid (nucleotide) is different from the one in the chain but it's still pretty good I think.")
+		(type INSTANCE)
+;+		(allowed-classes ConcreteSimpleEntity ReferenceGroup ReferenceMolecule)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot coordinate
+		(type INTEGER)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot modification
+		(type INSTANCE)
+;+		(allowed-classes SimpleEntity ReferenceGroup ReferenceMolecule)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass ReplacedResidue
+	(is-a ModifiedResidue)
+	(role concrete))
+
+(defclass Person
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot eMailAddress
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _databaseColumnSpecification "varchar(255)")
+		(create-accessor read-write))
+	(multislot affiliation
+		(type INSTANCE)
+;+		(allowed-classes Affiliation)
+		(create-accessor read-write))
+	(multislot figure
+		(type INSTANCE)
+;+		(allowed-classes Figure)
+		(create-accessor read-write))
+	(single-slot surname
+		(type STRING)
+;+		(cardinality 1 1)
+;+		(user-facet _databaseColumnSpecification "varchar(255)")
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot firstname
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot initial
+		(type STRING)
+;+		(cardinality 1 1)
+;+		(user-facet _databaseColumnSpecification "varchar(10)")
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass Affiliation
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot address
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass LiteratureReference
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot author
+		(type INSTANCE)
+;+		(allowed-classes Person)
+		(create-accessor read-write))
+	(single-slot volume
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot _1stAuthorSurname
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot year
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot pubMedIdentifier
+;+		(comment "PubMed ID")
+		(type INTEGER)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot pages
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _databaseColumnSpecification "varchar(20)")
+		(create-accessor read-write))
+	(single-slot journal
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _databaseColumnSpecification "varchar(255)")
+		(create-accessor read-write)))
+
+(defclass Figure
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot url
+		(type STRING)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass RegulationType
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+;+		(user-facet _databaseColumnSpecification "VARCHAR(255)")
+;+		(user-facet _identityDefinedBy ANY)
+		(create-accessor read-write))
+	(multislot instanceOf
+		(type INSTANCE)
+;+		(allowed-classes RegulationType)
+		(create-accessor read-write)))
+
+(defclass FrontPage
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot frontPageItem
+		(type INSTANCE)
+;+		(allowed-classes Event)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write)))
+
+(defclass Summation
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot dateRevised
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _databaseColumnSpecification "date")
+		(create-accessor read-write))
+	(multislot literatureReference
+		(type INSTANCE)
+;+		(allowed-classes LiteratureReference)
+		(create-accessor read-write))
+	(single-slot dateSubmitted
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _databaseColumnSpecification "date")
+		(create-accessor read-write))
+	(single-slot dateAccepted
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _databaseColumnSpecification "date")
+		(create-accessor read-write))
+	(single-slot text
+		(type STRING)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(multislot reviewer
+		(type INSTANCE)
+;+		(allowed-classes Person)
+		(create-accessor read-write))
+	(multislot editor
+		(type INSTANCE)
+;+		(allowed-classes Person)
+		(create-accessor read-write)))
+
+(defclass EvidenceType "Instances of this class represent different evidence types"
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy ANY)
+		(create-accessor read-write))
+	(multislot instanceOf
+		(type INSTANCE)
+;+		(allowed-classes EvidenceType)
+		(create-accessor read-write))
+	(single-slot definition
+;+		(comment "This is for holding GO definition field.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass ConcurrentEventSet
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot focusEntity
+		(type INSTANCE)
+;+		(allowed-classes PhysicalEntity)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot concurrentEvents
+		(type INSTANCE)
+;+		(allowed-classes Event)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write)))
+
+(defclass GO_BiologicalProcess
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot referenceDatabase
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDatabase)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot instanceOf
+		(type INSTANCE)
+;+		(allowed-classes GO_BiologicalProcess)
+		(create-accessor read-write))
+	(single-slot accession
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot componentOf
+		(type INSTANCE)
+;+		(allowed-classes GO_BiologicalProcess)
+		(create-accessor read-write))
+	(single-slot definition
+;+		(comment "This is for holding GO definition field.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass _AttributeValueBeforeChange
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot changedAttribute
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot previousValue
+		(type STRING)
+		(create-accessor read-write)))
+
+(defclass _InstanceBeforeChange
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot changedInstanceDB_ID
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot attributeValuesBeforeChange
+		(type INSTANCE)
+;+		(allowed-classes _AttributeValueBeforeChange)
+		(create-accessor read-write))
+	(single-slot instanceEdit
+		(type INSTANCE)
+;+		(allowed-classes InstanceEdit)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass ReactionCoordinates
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot sourceX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot sourceY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot targetX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot targetY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot locatedEvent
+		(type INSTANCE)
+;+		(allowed-classes Event)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot locationContext
+		(type INSTANCE)
+;+		(allowed-classes Pathway)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass GO_CellularComponent
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot referenceDatabase
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDatabase)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot instanceOf
+		(type INSTANCE)
+;+		(allowed-classes GO_CellularComponent)
+		(create-accessor read-write))
+	(single-slot accession
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot componentOf
+		(type INSTANCE)
+;+		(allowed-classes GO_CellularComponent)
+		(create-accessor read-write))
+	(single-slot definition
+;+		(comment "This is for holding GO definition field.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Compartment
+	(is-a GO_CellularComponent)
+	(role concrete))
+
+(defclass EntityCompartment
+	(is-a Compartment)
+	(role concrete))
+
+(defclass Domain
+	(is-a DatabaseObject)
+	(role abstract)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(create-accessor read-write)))
+
+(defclass SequenceDomain
+	(is-a Domain)
+	(role concrete)
+	(single-slot startCoordinate
+		(type INTEGER)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot referenceEntity
+		(type INSTANCE)
+;+		(allowed-classes ReferenceSequence)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot endCoordinate
+		(type INTEGER)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass ComplexDomain
+	(is-a Domain)
+	(role concrete)
+	(multislot hasComponent
+		(type INSTANCE)
+;+		(allowed-classes Domain PhysicalEntity)
+		(cardinality 1 ?VARIABLE)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass GenericDomain "For generalising multiple domains in different entities so that GenericEntities can also have domains."
+	(is-a Domain)
+	(role concrete)
+	(multislot hasInstance
+		(type INSTANCE)
+;+		(allowed-classes ComplexDomain SequenceDomain)
+		(create-accessor read-write)))
+
+(defclass ReferenceEntity
+	(is-a DatabaseObject)
+	(role abstract)
+	(multislot name_
+;+		(comment "This is the name of the entity whatever that entity is. Shoudl be unique. Usually this is going to be the browser name.")
+		(type STRING)
+		(create-accessor read-write))
+	(multislot crossReference
+;+		(comment "This slot is for holding references to the EQUIVALENT things in other databases. If the instance this slot is attached to represents an event the DatabaseIdentifier put into this slot must also point to some sort of event/processs/reaction/happening in some other db.")
+		(type INSTANCE)
+;+		(allowed-classes DatabaseIdentifier)
+		(create-accessor read-write))
+	(single-slot referenceDatabase
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDatabase)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot referenceGroupCount
+		(type INSTANCE)
+;+		(allowed-classes ReferenceGroupCount)
+		(create-accessor read-write))
+	(single-slot identifier
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot atomicConnectivity
+;+		(comment "Contents of the mol file.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot formula
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot fingerPrintString
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass ReferenceMolecule
+	(is-a ReferenceEntity)
+	(role concrete)
+	(single-slot referenceDatabase
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDatabase)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot identifier
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass ReferenceGroup
+	(is-a ReferenceEntity)
+	(role concrete)
+	(single-slot referenceDatabase
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDatabase)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot identifier
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write)))
+
+(defclass ReferenceSequence
+	(is-a ReferenceEntity)
+	(role concrete)
+	(multislot keyword
+;+		(comment "KW lines from SPTREMBL records")
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot referenceDatabase
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDatabase)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot identifier
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(single-slot species
+		(type INSTANCE)
+;+		(allowed-classes Species)
+;+		(cardinality 1 1)
+;+		(user-facet _identityDefinedBy ALL)
+		(create-accessor read-write))
+	(multislot description
+;+		(comment "DE lines from sequence record")
+		(type STRING)
+		(create-accessor read-write))
+	(multislot comment
+;+		(comment "CC lines from sequence record.")
+		(type STRING)
+		(create-accessor read-write))
+	(multislot secondaryIdentifier
+;+		(comment "This is for secondary/other identifiers WITHIN THE SAME DATABASE, e.g. secondary SPTREMBL accessions and SwissProt id. Use crossReference if the the identifier is from another db, e.g. for adding a RefSeq identifier to SPTREMBL SequenceDatabaseIdentifier.")
+		(type STRING)
+		(create-accessor read-write))
+	(multislot geneName
+;+		(comment "GN lines from sequence record.")
+		(type STRING)
+		(create-accessor read-write)))
+
+(defclass ReferencePeptideSequence
+	(is-a ReferenceSequence)
+	(role concrete)
+	(multislot referenceTranscript
+		(type INSTANCE)
+;+		(allowed-classes ReferenceRNASequence)
+		(create-accessor read-write))
+	(multislot referenceGene
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDNASequence)
+		(create-accessor read-write)))
+
+(defclass ReferenceRNASequence
+	(is-a ReferenceSequence)
+	(role concrete)
+	(multislot referenceGene
+		(type INSTANCE)
+;+		(allowed-classes ReferenceDNASequence)
+		(create-accessor read-write)))
+
+(defclass ReferenceDNASequence
+	(is-a ReferenceSequence)
+	(role concrete))
+
+(defclass ReferenceGroupCount "Allows to indicate the range of a given group count. I.e. when put into ReferenceEntity's referenceGroupCount slot it indicats that the RefEnt in question contains this group in the specified number of copies. Set minCount and maxCount to 0 to indicate that this group should not be present in a given RefEnt. Leave maxCount empty to indicate that the group can occur at least in minCount copies."
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot maxCount
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot referenceGroup
+		(type INSTANCE)
+;+		(allowed-classes ReferenceGroup)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot minCount
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
