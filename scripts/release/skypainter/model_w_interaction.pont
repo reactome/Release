@@ -1,0 +1,255 @@
+; Tue Oct 24 06:45:30 EEST 2006
+; 
+;+ (version "2.0.1")
+;+ (build "Build 168")
+
+
+(defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS
+	(is-a USER)
+	(role concrete)
+	(multislot db_id_in_main_db
+		(type INTEGER)
+		(create-accessor read-write))
+	(single-slot targetX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot hasEveryComponent
+;+		(comment "All components events regardless of their leafness or nodeness")
+		(type INSTANCE)
+;+		(allowed-classes Pathway Reaction)
+		(create-accessor read-write))
+	(single-slot compoundCount
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot taxonomyID
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot maxY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot minY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot participant
+		(type INSTANCE)
+;+		(allowed-classes Participant)
+		(create-accessor read-write))
+	(single-slot _displayName
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot stableIdentifierDotVersion
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot indirectIdentifier
+		(type STRING)
+		(create-accessor read-write))
+	(single-slot sourceY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot geneCount
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot minX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot targetY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot stableIdentifier
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot DB_ID
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot maxX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot species
+		(type INSTANCE)
+;+		(allowed-classes Species)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(single-slot sourceX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot identifier
+		(type STRING)
+		(create-accessor read-write))
+	(multislot hasDirectComponent
+;+		(comment "Direct components in the event hierarchy, i.e. this is equivalen to Pathway.hasComponent in the normalised data model.")
+		(type INSTANCE)
+;+		(allowed-classes Pathway Reaction)
+		(create-accessor read-write))
+	(single-slot databaseColumnSpecification
+		(type STRING)
+;+		(cardinality 0 1)
+;+		(associated-facet _databaseColumnSpecification)
+		(create-accessor read-write))
+	(multislot hasLeafComponent
+;+		(comment "Leaf components, i.e. components w/o further components.")
+		(type INSTANCE)
+;+		(allowed-classes Pathway Reaction)
+		(create-accessor read-write)))
+
+(defclass %3AEXTENDED-SLOT
+	(is-a %3ASTANDARD-SLOT)
+	(role concrete)
+	(single-slot databaseColumnSpecification
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass DatabaseObject
+	(is-a USER)
+	(role abstract)
+	(single-slot stableIdentifier
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot DB_ID
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot _displayName
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot stableIdentifierDotVersion
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Event
+	(is-a DatabaseObject)
+	(role abstract)
+	(multislot indirectIdentifier
+		(type STRING)
+;+		(user-facet _databaseColumnSpecification "VARCHAR(40)")
+		(create-accessor read-write))
+	(single-slot geneCount
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot compoundCount
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot species
+		(type INSTANCE)
+;+		(allowed-classes Species)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write))
+	(multislot participant
+		(type INSTANCE)
+;+		(allowed-classes Participant)
+		(create-accessor read-write)))
+
+(defclass Pathway
+	(is-a Event)
+	(role concrete)
+	(multislot hasEveryComponent
+;+		(comment "All components events regardless of their leafness or nodeness")
+		(type INSTANCE)
+;+		(allowed-classes Pathway Reaction)
+		(create-accessor read-write))
+	(single-slot maxY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot minY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot minX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot maxX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot hasDirectComponent
+;+		(comment "Direct components in the event hierarchy, i.e. this is equivalen to Pathway.hasComponent in the normalised data model.")
+		(type INSTANCE)
+;+		(allowed-classes Pathway Reaction)
+		(create-accessor read-write))
+	(multislot hasLeafComponent
+;+		(comment "Leaf components, i.e. components w/o further components.")
+		(type INSTANCE)
+;+		(allowed-classes Pathway Reaction)
+		(create-accessor read-write)))
+
+(defclass Reaction
+	(is-a Event)
+	(role concrete)
+	(single-slot targetX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot indirectIdentifier
+		(type STRING)
+;+		(user-facet _databaseColumnSpecification "VARCHAR(40)")
+		(create-accessor read-write))
+	(single-slot sourceY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot targetY
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot sourceX
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Interaction
+	(is-a Event)
+	(role concrete))
+
+(defclass Participant
+	(is-a DatabaseObject)
+	(role concrete)
+	(multislot db_id_in_main_db
+		(type INTEGER)
+		(create-accessor read-write))
+	(multislot identifier
+		(type STRING)
+;+		(user-facet _databaseColumnSpecification "VARCHAR(40)")
+		(create-accessor read-write)))
+
+(defclass Gene
+	(is-a Participant)
+	(role concrete)
+	(multislot species
+		(type INSTANCE)
+;+		(allowed-classes Species)
+		(cardinality 1 ?VARIABLE)
+		(create-accessor read-write)))
+
+(defclass Compound
+	(is-a Participant)
+	(role concrete))
+
+(defclass Species
+	(is-a DatabaseObject)
+	(role concrete)
+	(single-slot taxonomyID
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))

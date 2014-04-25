@@ -1,0 +1,34 @@
+; Thu Jan 12 15:16:39 GMT 2006
+; 
+;+ (version "2.0.1")
+;+ (build "Build 168")
+
+([_databaseColumnSpecification] of %3ASTANDARD-FACET
+	(%3AASSOCIATED-SLOT [databaseColumnSpecification]))
+
+([_displayName] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([DB_ID] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([indirectIdentifier] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([sourceX] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([sourceY] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([species_DB_ID] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([species_id] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([targetX] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))
+
+([targetY] of %3AEXTENDED-SLOT
+	(%3ADIRECT-DOMAIN [Reaction]))

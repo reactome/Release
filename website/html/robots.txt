@@ -1,0 +1,17 @@
+User-agent: *
+Disallow: /cgi-bin/search2
+Disallow: /img-tmp
+Disallow: /cgi-bin/biopaxexporter
+Disallow: /cgi-bin/pdfexporter
+Disallow: /cgi-bin/rtfexporter
+Disallow: /cgi-bin/sbml_export
+Disallow: /cgi-bin/svgexporter
+Disallow: /cgi-bin/taboutputter
+Disallow: /cgi-bin/launchcytoscape
+Disallow: /cgi-bin/protegeexporter
+Disallow: /cgi-bin/categorycount
+Disallow: /cgi-bin/reactionmap_pdfexporter
+Disallow: /cgi-bin/instancebrowser
+Disallow: /entitylevelview/pathway_diagram_statics
+Disallow: /javascript
+
