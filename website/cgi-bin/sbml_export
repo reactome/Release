@@ -1,0 +1,725 @@
+#!/usr/local/bin/perl -w -T
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+use lib "/tmp/libs/bioperl-1.0";
+use lib "/tmp/libs/my_perl_stuff"; 
+
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::SkyPainter;
+use GKB::Config;
+use GKB::ReactionMap;
+use Data::Dumper;
+
+use strict;
+
+my $CGI = CGI->new();
+
+my $DB = $CGI->param('DB') || $GK_DB_NAME;
+$CGI->param('DB', $DB);
+
+my $db_id = $CGI->param('ID');
+
+print $CGI->header('text/xml');
+
+my $dba;
+eval {
+    # Get a handle to db
+    $dba = GKB::DBAdaptor->new
+        (
+         -dbname => $DB,
+         -user   => $GK_DB_USER,
+         -host   => $GK_DB_HOST,
+         -pass   => $GK_DB_PASS,
+         -port   => $GK_DB_PORT,
+#        -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+         );
+}; $@ && handle_error($@);
+ 
+#SBML
+
+my $endtag='/>';
+
+my $cmp_s='<listOfCompartments>';
+my $cmp_e='</listOfCompartments>';
+my $cname='<compartment name=';
+
+my $spec_s='<listOfSpecies>';
+my $spec_e='</listOfSpecies>';
+my $sname='<species name=';
+my $sp_e = '</species>';
+
+my $rnlist_s='<listOfReactions>';
+my $rnlist_e='</listOfReactions>';
+
+my $react_s='<reaction name=';
+my $react_e='</reaction>';
+
+my $sref='<speciesReference species=';
+my $mref='<modifierSpeciesReference species=';
+
+my $rtlist_s='<listOfReactants>';
+my $rtlist_e='</listOfReactants>';
+
+my $pdlist_s='<listOfProducts>';
+my $pdlist_e='</listOfProducts>';
+
+my $mlist_s='<listOfModifiers>';
+my $mlist_e='</listOfModifiers>';
+
+my $pec_s='<RCT:physicalEntityClass>';
+my $pec_e='</RCT:physicalEntityClass>';
+
+my $annot_s='<annotation>';
+my $annot_e='</annotation>';
+
+my $cont_s='<RCT:content>';
+my $cont_e='</RCT:content>';
+
+my $xrf_s='<RCT:primaryXRef>';
+my $xrf_e='</RCT:primaryXRef>';
+
+my $sxrf_s='<RCT:secondaryXRef>';
+my $sxrf_e='</RCT:secondaryXRef>';
+
+my $mod_s = '<RCT:modifications>';
+my $mod_e = '</RCT:modifications>';
+
+my $modcrd_s='<RCT:modificationCoord>';
+my $modcrd_e='</RCT:modificationCoord>';
+
+my $modname_s='<RCT:modificationName>';
+my $modname_e='</RCT:modificationName>';
+
+my $pubmed_s='<RCT:PubmedID>';
+my $pubmed_e='</RCT:PubmedID>';
+
+my $seqstcrd_s = '<RCT:sequenceStart>';
+my $seqstcrd_e = '</RCT:sequenceStart>';
+my $seqendcrd_s = '<RCT:sequenceEnd>';
+my $seqendcrd_e = '</RCT:sequenceEnd>';
+
+my $spid_s='<RCT:speciesID>';
+my $spid_e='</RCT:speciesID>';
+
+my %compartments;
+$compartments{0}{name}='UNKNOWN COMPARTMENT';
+my %species; #{sp dbid} {name} {compartment}
+my %reactions; #{rct dbid} {name} {Input}{sp db_id} {Output}{sp db_id} {Modifier}{sp db_id};
+my %ENTITY_DISSECTION; # This hash contains the structure and topology of complexes and sets, as well as dimensions
+
+my $PE = 's';
+my $ID = '';
+my $EV = 'r';
+my $CMP= 'c';
+
+#####
+
+my $event;
+my $instance;
+my $entity;
+my $activity;
+my $rctent;
+my $reactions;
+my $nospacename = '';
+
+#print "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<sbml xmlns=\"http://www.sbml.org/sbml/level2\" level=\"2\" version=\"1\" xmlns:html=\"http://www.w3.org/1999/xhtml\">\n<model name=\"R\_$db_id\">\n";
+
+print "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<sbml xmlns=\"http://www.sbml.org/sbml/level2\" level=\"2\" version=\"1\" xmlns:html=\"http://www.w3.org/1999/xhtml\" xmlns:RCT=\"http://www.reactome.org/reactomesbml\">\n<model name=\"R\_$db_id\">\n";
+
+##############################
+
+$event = $dba->fetch_instance_by_db_id($db_id);
+$instance = $event->[0];
+$reactions = $instance->follow_class_attributes
+    (-INSTRUCTIONS =>
+     {'Pathway' => {'attributes' => [qw(hasEvent)]},
+      'Reaction' => {'attributes' => [qw(reverseReaction)]},
+      'ReactionlikeEvent' => {'attributes' => [qw(hasMember)]},
+      'BlackBoxEvent' => {'attributes' => [qw(hasEvent templateEvent)]}},
+     -OUT_CLASSES => ['ReactionlikeEvent']
+     );
+map {if(!((@{$_->input}==0) && (@{$_->output}==0))){
+    &dissect_event($_->db_id)
+    }} @{$reactions};
+
+##############################
+
+print "$cmp_s\n";
+foreach $entity (sort(keys(%compartments))){
+    print "$cname\"$compartments{$entity}{name}\" id=\"$CMP$entity\"$endtag\n";
+}#foreach
+print "$cmp_e\n";
+
+print "$spec_s\n";
+foreach $entity (sort(keys(%species))){
+    if($species{$entity}{type}>=3){
+	if($species{$entity}{type}==3){
+	    print "$sname\"".$species{$entity}{"name"}."\" compartment=\"$CMP".$species{$entity}{compartment}."\" id=\"$PE".$species{$entity}{"db_id"}."\">\n$annot_s\n$pec_s"."COMPOSITE COMPLEX$pec_e\n";
+	    &draw_Entity(\%{$ENTITY_DISSECTION{$entity}{vertical}},\@{$ENTITY_DISSECTION{$entity}{dimensions}},'v');
+	}else{
+	    print "$sname\"".$species{$entity}{"name"}."\" compartment=\"$CMP".$species{$entity}{compartment}."\" id=\"$PE".$species{$entity}{"db_id"}."\">\n$annot_s\n$pec_s"."COMPOSITE SET$pec_e\n";
+	    &draw_Entity(\%{$ENTITY_DISSECTION{$entity}{horizontal}},\@{$ENTITY_DISSECTION{$entity}{dimensions}},'h');
+	}
+	if (keys %{$species{$entity}{"Pubmed"}}){
+	    foreach my $REF (keys %{$species{$entity}{"Pubmed"}}){
+		print "$pubmed_s$REF$pubmed_e\n";
+	    }
+	}
+	print "$annot_e\n$sp_e\n";
+    }else{
+	print "$sname\"".$species{$entity}{"name"}."\" compartment=\"$CMP".$species{$entity}{compartment}."\" id=\"$PE".$species{$entity}{"db_id"}."\">\n$annot_s\n$pec_s";
+	if($species{$entity}{type}==1){print "SEQUENCE";}elsif($species{$entity}{type}==2){print "SMALL MOLECULE";}else{print "NOT SPECIFIED";}
+	print "$pec_e\n";
+	if($species{$entity}{type}>0 && (defined($species{$entity}{xref}) || defined($species{$entity}{startCoordinate}) || defined($species{$entity}{endCoordinate}) || defined($species{$entity}{modifications}))){
+	    &show_content($entity);
+	}
+	if (keys %{$species{$entity}{"Pubmed"}}){
+            foreach my $REF (keys %{$species{$entity}{"Pubmed"}}){
+                print "$pubmed_s$REF$pubmed_e\n";
+            }
+        }
+	print "$annot_e\n$sp_e\n";
+    }
+}#foreach
+print "$spec_e\n";
+
+print "$rnlist_s\n";
+foreach $entity (sort(keys(%reactions))){
+
+    $reactions{$entity}{"name"}=~s/[^a-zA-Z0-9]/\_/g;
+    $reactions{$entity}{"name"}=~s/\_+/\_/g;
+    print "$react_s\"".$reactions{$entity}{"name"}."\" id=\"$ID".$EV.$entity."\" reversible=\"false\">\n";
+
+    if (keys %{$reactions{$entity}{"Pubmed"}}){
+	print "$annot_s\n";
+	foreach my $REF (keys %{$reactions{$entity}{"Pubmed"}}){
+	    print "$pubmed_s$REF$pubmed_e\n";
+	}
+	print "$annot_e\n";
+    }
+    
+    if(keys(%{$reactions{$entity}{"Input"}})){
+	print "$rtlist_s\n";
+	foreach $rctent (sort(keys(%{$reactions{$entity}{"Input"}}))){
+	    #$reactions{$entity}{"Input"}{$rctent}=~s/[^a-zA-Z0-9]/\_/g;
+	    #print $sref."\"$ID".$reactions{$entity}{"Input"}{$rctent}."\" $endtag\n";
+	    print $sref."\"$PE$rctent\" stoichiometry=\"$reactions{$entity}{Input}{$rctent}\"$endtag\n";
+	}#foreach
+	    print "$rtlist_e\n";
+    }#if
+	
+	if(keys(%{$reactions{$entity}{"Output"}})){
+	    print "$pdlist_s\n";
+	    foreach $rctent (sort(keys(%{$reactions{$entity}{"Output"}}))){
+		#$reactions{$entity}{"Output"}{$rctent}=~s/[^a-zA-Z0-9]/\_/g;
+		#print $sref."\"$ID".$reactions{$entity}{"Output"}{$rctent}."\" $endtag\n";
+		print $sref."\"$PE$rctent\" stoichiometry=\"$reactions{$entity}{Output}{$rctent}\"$endtag\n";
+	    }#foreach
+		print "$pdlist_e\n";
+	}#if
+
+	    if(keys(%{$reactions{$entity}{"Modifier"}})){
+		print "$mlist_s\n";
+		foreach $rctent (sort(keys(%{$reactions{$entity}{"Modifier"}}))){
+		    #$reactions{$entity}{"Modifier"}{$rctent}=~s/[^a-zA-Z0-9]/\_/g;
+		    #print $mref."\"$ID".$reactions{$entity}{"Modifier"}{$rctent}."\" $endtag\n";
+		    print $mref."\"$PE$rctent\"$endtag\n";
+		}#foreach
+		    print "$mlist_e\n";
+	    }#if
+
+		print "$react_e\n"
+}#foreach
+print "$rnlist_e\n";
+
+print "</model>\n</sbml>";
+
+$dba->db_handle->disconnect;
+
+#################################
+
+sub dissect_event{
+
+    my $reaction_id = $_[0];
+    my $event;
+    my $instance;
+    my $tmp_name = '';
+
+    $event = $dba->fetch_instance_by_db_id($reaction_id);
+    $instance = $event->[0];
+
+    my $r_id = ID($instance);
+    my $s_id;
+
+    $reactions{$r_id}{"name"}=$instance->attribute_value('name')->[0];
+
+ 
+    foreach $entity (@{$instance->input}){
+	$s_id=ID($entity);
+	if(defined($reactions{$r_id}{"Input"}{$s_id})){
+	    $reactions{$r_id}{"Input"}{$s_id}++;
+	}else{
+	    $reactions{$r_id}{"Input"}{$s_id}=1;
+	    if(!defined($species{$entity})){&add_Entity($entity);}
+	}
+    }#foreach
+	
+	foreach $entity (@{$instance->output}){
+	    $s_id=ID($entity);
+	    if(defined($reactions{$r_id}{"Output"}{$s_id})){
+		$reactions{$r_id}{"Output"}{$s_id}++;
+	    }else{
+		$reactions{$r_id}{"Output"}{$s_id}=1;
+		if(!defined($species{$entity})){&add_Entity($entity);}
+	    }
+	}#foreach
+  
+	    foreach $activity (@{$instance->attribute_value('catalystActivity')}){
+		if(defined($activity->attribute_value('physicalEntity')->[0])){
+		    $entity=$activity->attribute_value('physicalEntity')->[0];
+		    $s_id=ID($entity);
+		    $reactions{$r_id}{"Modifier"}{$s_id}=1;
+		    if(!defined($species{$entity})){&add_Entity($entity);}
+		}#if
+		}#foreach
+		
+		foreach my $PUBMED (@{$instance->attribute_value('literatureReference')}){
+		    foreach my $REFERENCE (@{$PUBMED->attribute_value('pubMedIdentifier')}){
+			$reactions{$r_id}{"Pubmed"}{$REFERENCE}=1;
+		    }
+		}
+}
+
+sub handle_error {
+    print qq(@_);
+    $dba->db_handle->disconnect;
+    exit;
+}
+
+
+sub ID{
+
+    my $i = $_[0]; 
+    my $id;
+
+    #if ($i->is_valid_attribute('stableIdentifier') && $i->StableIdentifier->[0]) {
+	#use stable identifier
+	#$id = $i->StableIdentifier->[0]->displayName;
+    #} else {
+	#useDB_ID
+	$id = $i->db_id;
+	
+    #}
+    $id =~ s/\./\_/g;
+    return $id
+}#sub ID{
+
+sub add_Entity {
+    #Adds entity nodes to graphviz, after having calculated the size of the node - this is particularly useful in case of complexes and sets.
+    my $entity = $_[0];
+    my $entity_name = $entity->Name->[0];
+    $entity_name=~s/\'|\"/\_/g;
+    $entity_name=~s/\_+/\_/g;
+    my $entity_db_id = $entity->db_id;
+    $species{$entity_db_id}{"db_id"}=$entity_db_id;
+    my $entity_type;
+
+    $species{$entity_db_id}{name}=$entity_name;
+    
+    foreach my $PUBMED (@{$entity->attribute_value('literatureReference')}){
+	foreach my $REFERENCE (@{$PUBMED->attribute_value('pubMedIdentifier')}){
+	   $species{$entity_db_id}{"Pubmed"}{$REFERENCE}=1;
+	}
+    }
+
+	#Having copartment information is useful if one plans to cluster nodes by compartment.
+	if(defined($entity->attribute_value('compartment')->[0])){
+	    my $c_dbid = $entity->attribute_value('compartment')->[0]->db_id;
+	    $compartments{$c_dbid}{name}=$entity->attribute_value('compartment')->[0]->attribute_value('name')->[0];
+	    $compartments{$c_dbid}{name}=~s/\s+/\_/g;
+	    $species{$entity_db_id}{"compartment"}=$c_dbid;
+	}else{
+	    $species{$entity_db_id}{"compartment"}=0;
+	}#if(defined($entity->attribute_value('compartment')->[0])){
+
+	#The 'typeset' function sets off the entity dissection and size assessment
+	if(!(defined($species{$entity_db_id}{type}))){
+	    &typeset($entity);
+	}
+
+}#sub add_Entity {
+
+sub typeset {
+  # Specifies whether an entity is a complex (3), a set (4 or 5), small molecule (2), sequence (1) or none of the latter (0).
+    my $entity = $_[0];
+    my $entity_db_id = $entity->db_id;
+    my @labels;
+
+    if(!(defined($species{$entity_db_id}{"type"}))){
+
+	$species{$entity_db_id}{"entity"}=$entity;
+	#$species{$entity_db_id}{"db_id"}=$entity_db_id;
+	#$species{$entity_db_id}{"name"}=$entity->displayName;
+	$species{$entity_db_id}{"name"}=~s/\"|\'/`/g;
+        $species{$entity_db_id}{"name"}=~s/\"|\'/`/g;
+    
+      #Non-trivial entities (i.e. complexes or sets) are tested for content before their type is assigned, and are sent on for further dissection
+	if($entity->is_a('Complex') && (defined($entity->attribute_value('hasComponent'))) && (defined($entity->attribute_value('hasComponent')->[0]))){
+	    $species{$entity_db_id}{"type"}=3;
+	      #The method dissect_Entity returns the width and height of a non-trivial entity in terms of the number of entities found in stack or across it. This function also writes the topology of the non-trivial entity in the hash %ENTITY_DISSECTION.
+
+	    @{$ENTITY_DISSECTION{$entity_db_id}{dimensions}}=dissect_Entity(\%{$ENTITY_DISSECTION{$entity_db_id}{vertical}},$entity,$species{$entity_db_id}{"type"});
+	    $ENTITY_DISSECTION{$entity_db_id}{dimensions}[0]++; #Space for label
+
+	}elsif($entity->is_a('CandidateSet') && ((defined($entity->attribute_value('hasMember')) && defined($entity->attribute_value('hasMember')->[0])) || (defined($entity->attribute_value('hasCandidate')) && defined($entity->attribute_value('hasCandidate')->[0])))){
+	    $species{$entity_db_id}{"type"}=4;
+
+		@{$ENTITY_DISSECTION{$entity_db_id}{dimensions}}=dissect_Entity(\%{$ENTITY_DISSECTION{$entity_db_id}{horizontal}},$entity,$species{$entity_db_id}{"type"});
+		$ENTITY_DISSECTION{$entity_db_id}{dimensions}[1]++; #Space for label
+
+	}elsif($entity->is_a('DefinedSet') && (defined($entity->attribute_value('hasMember'))) && (defined($entity->attribute_value('hasMember')->[0]))){
+	    $species{$entity_db_id}{"type"}=5;
+
+		@{$ENTITY_DISSECTION{$entity_db_id}{dimensions}}=dissect_Entity(\%{$ENTITY_DISSECTION{$entity_db_id}{horizontal}},$entity,$species{$entity_db_id}{"type"});
+		$ENTITY_DISSECTION{$entity_db_id}{dimensions}[1]++; #Space for label
+
+	}elsif($entity->is_a('EntityWithAccessionedSequence')){
+	    $species{$entity_db_id}{"type"}=1; #sequence
+
+	    if(defined($entity->attribute_value('referenceEntity')->[0]) && $entity->attribute_value('referenceEntity')->[0]->is_a('ReferencePeptideSequence')){
+		$species{$entity_db_id}{xref}=$entity->attribute_value('referenceEntity')->[0]->attribute_value('identifier')->[0];
+
+		if(defined($entity->attribute_value('referenceEntity')->[0]->attribute_value('otherIdentifier'))){
+		    foreach my $sxr (@{$entity->attribute_value('referenceEntity')->[0]->attribute_value('otherIdentifier')}){
+			push(@{$species{$entity_db_id}{sxref}},$sxr);
+		    }
+		}
+	    }
+
+	    if(defined($entity->attribute_value('startCoordinate')->[0])){
+		$species{$entity_db_id}{startCoordinate}=$entity->attribute_value('startCoordinate')->[0];
+	    }
+
+	    if(defined($entity->attribute_value('endCoordinate')->[0])){
+		$species{$entity_db_id}{endCoordinate}=$entity->attribute_value('endCoordinate')->[0];
+	    }
+
+	    if(defined($entity->attribute_value('hasModifiedResidue')->[0])){
+			foreach my $mr (@{$entity->attribute_value('hasModifiedResidue')}){
+				# In the new data model, coordinate and modification are stored one
+				# level deeper, under the psiMod attribute.  If we detect the new
+				# data model, use the PsiMod instance to get coordinate and
+				# modification values, instead of trying to get them from the
+				# ModifiedResidue instance, which is the old way of doing things.
+				if ($mr->is_valid_attribute("psiMod") && scalar(@{$mr->psiMod})>0) {
+					$mr = $mr->psiMod->[0];
+				}
+				
+			    if($mr->is_valid_attribute("coordinate") && defined($mr->attribute_value('coordinate')->[0])){
+					$species{$entity_db_id}{modifications}{$mr->db_id}{coord}=$mr->attribute_value('coordinate')->[0];
+			    }else{
+					$species{$entity_db_id}{modifications}{$mr->db_id}{coord}='UNKNOWN';
+			    }
+			    
+			    if(defined($mr->is_valid_attribute("modification") && $mr->attribute_value('modification')->[0]) && defined($mr->attribute_value('modification')->[0]->attribute_value('name')->[0])){
+					$species{$entity_db_id}{modifications}{$mr->db_id}{modification}=$mr->attribute_value('modification')->[0]->attribute_value('name')->[0];
+			    }else{
+					$species{$entity_db_id}{modifications}{$mr->db_id}{modification}='UNKNOWN';
+			    }
+			    
+			}#foreach
+	    }#if
+
+	}elsif(($entity->is_valid_attribute('referenceEntity')) && defined($entity->ReferenceEntity->[0])){
+	    if(($entity->ReferenceEntity->[0]->is_a('ReferenceMolecule'))||($entity->ReferenceEntity->[0]->is_a('ReferenceGroup'))){
+		$species{$entity_db_id}{"type"}=2; #small molecule
+		if(defined($entity->attribute_value('referenceEntity')->[0]) && $entity->attribute_value('referenceEntity')->[0]->is_a('ReferenceMolecule')){
+		    $species{$entity_db_id}{xref}=$entity->attribute_value('referenceEntity')->[0]->attribute_value('identifier')->[0];
+		}
+	    }elsif($entity->ReferenceEntity->[0]->is_a('ReferenceSequence')){
+		$species{$entity_db_id}{"type"}=1; #sequence
+	    }
+	}else{
+	    $species{$entity_db_id}{"type"}=0;
+	}
+    }# if(!(defined($species{$entity_db_id}{"type"}))){
+
+}#sub typeset {
+
+sub dissect_Entity {
+    #Recursive function that dissects non-trivial (i.e. complexes and sets) entities into trivial ones, keeping track of the structural topology and dimensions of smaler non-trivial entties as it goes along.
+    my $ref_higher_structure = $_[0];#This is the parent node in the %ENTITY_DISSECTION tree to append to. 
+	my $entity = $_[1];
+    my $entity_type = $_[2];#This tells the function whether node growth is horizontal or vertical.
+	my $local_width = 0;
+    my $local_height = 0;
+    my @returned_dimensions;
+    my $dissection_results;
+    my %component_counter = ();
+
+    if($entity_type==3){
+	#COMPLEX
+	#Extract all trivial structures from this complex and any of its component subcomplexes. 
+	$dissection_results = $entity->follow_class_attributes3
+         (-INSTRUCTIONS =>
+          {'Complex' => {'attributes' => [qw(hasComponent)]}},
+          -OUT_CLASSES => [qw(EntityWithAccessionedSequence OtherEntity Polymer SimpleEntity OpenSet)]
+          );
+
+	%component_counter = ();
+
+	#Keep count of the stoichiometry of the trivial entities.
+	map{
+	    if(defined($component_counter{$_->db_id}{count})){
+		$component_counter{$_->db_id}{count}++;
+	    }else{
+		$component_counter{$_->db_id}{count}=1;
+	    }
+	        #Function simple_Type returns 1 for sequence, 2 for small molecule, and 0 if not. 
+	    $component_counter{$_->db_id}{type}=simple_Type($_);
+	    $component_counter{$_->db_id}{entity}=$_;
+	    if(!defined($species{$_->db_id})){&add_Entity($_);}
+	}@{$dissection_results};
+
+	#Stored the info required for final labelling - an array containing [0] stoichiometry and [1] type of trivial entity (for colour coding). 
+	map{
+	    $local_height++; #With each new component in the stack, unit height is incremented.
+	    @{$ref_higher_structure->{$_}{label}}=(&provide_Label_Name($component_counter{$_}{entity},$component_counter{$_}{type}),$component_counter{$_}{type});
+	    if($component_counter{$_}{count}>1){
+		$ref_higher_structure->{$_}{label}[0]=$component_counter{$_}{count}.'x'.$ref_higher_structure->{$_}{label}[0];
+	    }
+	}keys %component_counter;
+
+	#Now extract any set that is a component of this complex or any of its component subcomplexes.
+	$dissection_results = $entity->follow_class_attributes3
+         (-INSTRUCTIONS =>
+          {'Complex' => {'attributes' => [qw(hasComponent)]}},
+          -OUT_CLASSES => [qw(DefinedSet CandidateSet)]
+          );
+
+	%component_counter = ();
+
+        #Keep count of the stoichiometry of the set entities.
+        map{
+            if(defined($component_counter{$_->db_id}{count})){
+                $component_counter{$_->db_id}{count}++;
+            }else{
+                $component_counter{$_->db_id}{count}=1;
+		$component_counter{$_->db_id}{entity}=$_;
+            }
+        }@{$dissection_results};
+	
+	map{
+	    $local_height++;#Making more space for sets
+		if($component_counter{$_}{count}>1){
+		    $ref_higher_structure->{$_}{count}=$component_counter{$_}{count};
+		}
+	    if($component_counter{$_}{entity}->is_a('CandidateSet') && ((defined($component_counter{$_}{entity}->attribute_value('hasMember')) && defined($component_counter{$_}{entity}->attribute_value('hasMember')->[0])) || (defined($component_counter{$_}{entity}->attribute_value('hasCandidate')) && defined($component_counter{$_}{entity}->attribute_value('hasCandidate')->[0])))){
+		@{$ref_higher_structure->{$_}{dimensions}}=dissect_Entity(\%{$ref_higher_structure->{$_}{horizontal}},$component_counter{$_}{entity},4);#Dissecting the Candidate set, and making note of its dimensions, which....
+		    @returned_dimensions=@{$ref_higher_structure->{$_}{dimensions}};
+		#....may have to adjust those of the complex housing this set. Width: $returned_dimensions[0], and Height: $returned_dimensions[1].
+		if($local_width<$returned_dimensions[0]){$local_width=$returned_dimensions[0];}
+		$local_height=$local_height+$returned_dimensions[1]-1;
+	    }elsif ($component_counter{$_}{entity}->is_a('DefinedSet') && (defined($component_counter{$_}{entity}->attribute_value('hasMember'))) && (defined($component_counter{$_}{entity}->attribute_value('hasMember')->[0]))){
+		#Same treatment for DefinedSet - code is kept separate in case CandidateSets are to receive different representation settings in future.
+		@{$ref_higher_structure->{$_}{dimensions}}=dissect_Entity(\%{$ref_higher_structure->{$_}{horizontal}},$component_counter{$_}{entity},5);
+		@returned_dimensions=@{$ref_higher_structure->{$_}{dimensions}};
+		if($local_width<$returned_dimensions[0]){$local_width=$returned_dimensions[0];}
+		$local_height=$local_height+$returned_dimensions[1]-1;
+	    }else{
+		#In case set is empty # this is an uncertain portion of logic and may have to be revised
+		$ref_higher_structure->{$_}{label}[2]=simple_Type($component_counter{$_}{entity});
+		$ref_higher_structure->{$_}{label}[0]=$ENTITY_DISSECTION{$_}{genmapp}{name};
+		$ref_higher_structure->{$_}{label}[1]=$ENTITY_DISSECTION{$_}{genmapp}{accession};
+	    }
+	}keys %component_counter;
+
+	#Catch-all if complex is completely made of trivial components.
+	if($local_width==0){$local_width=1;}
+	if($local_height==0){$local_height=1;}
+	#END OF 'COMPLEX'
+    }elsif($entity_type==4 || $entity_type==5){
+	#SET
+	#Extract all trivial entities and complexes, eliminating redundancies
+	$dissection_results = $entity->follow_class_attributes
+         (-INSTRUCTIONS =>
+          {'DefinedSet' => {'attributes' => [qw(hasMember)]},
+	   'CandidateSet' => {'attributes' => [qw(hasMember hasCandidate)]}},
+          -OUT_CLASSES => [qw(EntityWithAccessionedSequence OtherEntity Polymer SimpleEntity OpenSet Complex)]
+          );
+
+	%component_counter = ();
+
+	map{
+	    $component_counter{$_->db_id}{entity}=$_;
+	    $component_counter{$_->db_id}{type}=simple_Type($_);
+	    if(!defined($species{$_->db_id}) && $component_counter{$_->db_id}{type}>=1 && $component_counter{$_->db_id}{type}<=3){&add_Entity($_);}
+	    }@{$dissection_results};
+
+	map{
+	    $local_width++;#Increase width with each member/candidate
+		if($component_counter{$_}{entity}->is_a('Complex') && (defined($component_counter{$_}{entity}->attribute_value('hasComponent'))) && (defined($component_counter{$_}{entity}->attribute_value('hasComponent')->[0]))){
+		      #If a complex entity is encountered, dissect it further and make not of its dimensions....
+		    @{$ref_higher_structure->{$_}{dimensions}}=dissect_Entity(\%{$ref_higher_structure->{$_}{vertical}},$component_counter{$_}{entity},3);
+		      #...in order to adjust accordingly.
+		    @returned_dimensions=@{$ref_higher_structure->{$_}{dimensions}};
+		    if($local_height<$returned_dimensions[1]){$local_height=$returned_dimensions[1];}
+		    $local_width=$local_width+$returned_dimensions[0]-1;
+		}else{
+		    @{$ref_higher_structure->{$_}{label}}=&provide_Label_Name($component_counter{$_}{entity},$component_counter{$_}{type});
+		    $ref_higher_structure->{$_}{label}[2]=$component_counter{$_}{type};
+		}
+	}keys %component_counter;
+
+	if($local_height==0){$local_height=1;}
+	if($local_width==0){$local_width=1;}
+	#END OF 'SET'
+    }
+
+    return ($local_width,$local_height);
+
+}# sub dissect_Entity {
+
+sub provide_Label_Name {
+    
+    my $entity = $_[0];
+    my $type = $_[1];
+    my $name = '';
+    my $temp = '';
+    my $sub_string = 6;
+    my $accession = '';
+
+    if($type==1){
+	if(defined($entity->attribute_value('referenceEntity')->[0])){
+	    foreach $temp (@{$entity->attribute_value('referenceEntity')->[0]->attribute_value('geneName')}){
+		if($name eq '' || length($temp)<length($name)){$name=$temp;}
+	    }#foreach
+		$accession ="UNIPROT\:".$entity->attribute_value('referenceEntity')->[0]->attribute_value('identifier')->[0].' in '.$entity->displayName;
+	}
+    }elsif($type==2){
+	if(defined($entity->attribute_value('referenceEntity')->[0])){
+	    foreach $temp (@{$entity->attribute_value('referenceEntity')->[0]->attribute_value('name')}){
+		if($name eq '' || length($temp)<length($name)){$name=$temp;}
+	    }#foreach
+		$accession ="CHEBI\:".$entity->attribute_value('referenceEntity')->[0]->attribute_value('identifier')->[0].' in '.$entity->displayName;
+	}
+    }
+
+    if($name eq ''){
+	$name = $entity->displayName;
+	$name =~s/\[.*//g;
+    }
+    $name = substr($name,0,$sub_string);
+    if($accession eq ''){
+	$accession = $entity->displayName;
+    }
+
+    $name=~s/\"|\'/`/g;
+    $accession=~s/\"|\'/`/g;
+
+    return ($name,$accession);
+}#sub provide_Label_Name {
+
+sub simple_Type {
+
+    my $entity = $_[0];
+    my $type = 0;
+
+    if($entity->is_a('EntityWithAccessionedSequence')){
+	$type = 1;
+    }elsif(($entity->is_valid_attribute('referenceEntity')) && defined($entity->ReferenceEntity->[0])){
+	if(($entity->ReferenceEntity->[0]->is_a('ReferenceMolecule'))||($entity->ReferenceEntity->[0]->is_a('ReferenceGroup'))){
+	    $type = 2;
+	}elsif($entity->ReferenceEntity->[0]->is_a('ReferenceSequence')){
+	    $type = 1;
+	}
+    }elsif($entity->is_a('OtherEntity')){
+	$type = 3;
+    }
+
+    $ENTITY_DISSECTION{$entity->db_id}{genmapp}{type}=$type;
+
+    if(!(defined($ENTITY_DISSECTION{$entity->db_id}{dimensions}[0]))){
+	$ENTITY_DISSECTION{$entity->db_id}{dimensions}[0]=1;
+	$ENTITY_DISSECTION{$entity->db_id}{dimensions}[1]=1;
+	($ENTITY_DISSECTION{$entity->db_id}{genmapp}{name},$ENTITY_DISSECTION{$entity->db_id}{genmapp}{accession})=&provide_Label_Name($entity,$type);
+    }
+    return $type;
+}# sub simple_Type {
+
+sub draw_Entity {
+
+    my $ref_hash_higher_structure = $_[0];
+    my $ref_array_dimensions = $_[1];
+    my $dir = $_[2];
+    my $adjust_width=0;
+    my $step = 0;
+  
+    if ($dir eq 'v'){
+	foreach my $key (keys %{$ref_hash_higher_structure}){
+	    map {
+		$adjust_width=0;
+		if($_ eq 'label'){
+		    print"$cont_s\n$spid_s$PE$key$spid_e\n$cont_e\n";
+		}elsif($_ eq 'vertical'){
+		    $step+=$ref_hash_higher_structure->{$key}{dimensions}[1];
+		    &draw_Entity(\%{$ref_hash_higher_structure->{$key}{$_}},\@{$ref_hash_higher_structure->{$key}{dimensions}},'v');
+		}elsif($_ eq 'horizontal'){
+		    &draw_Entity(\%{$ref_hash_higher_structure->{$key}{$_}},\@{$ref_hash_higher_structure->{$key}{dimensions}},'h');
+		}
+	    }keys %{$ref_hash_higher_structure->{$key}};
+	}#foreach my $key (keys %{$ref_hash_higher_structure}){
+    }elsif($dir eq 'h'){
+	foreach my $key (keys %{$ref_hash_higher_structure}){
+	    map {
+                if($_ eq 'label'){
+		    print"$cont_s\n$spid_s$PE$key$spid_e\n$cont_e\n";
+                }elsif($_ eq 'vertical'){
+		    &draw_Entity(\%{$ref_hash_higher_structure->{$key}{$_}},\@{$ref_hash_higher_structure->{$key}{dimensions}},'v');
+                }elsif($_ eq 'horizontal'){
+		    &draw_Entity(\%{$ref_hash_higher_structure->{$key}{$_}},\@{$ref_hash_higher_structure->{$key}{dimensions}},'h');
+                }
+	    }keys %{$ref_hash_higher_structure->{$key}};
+        }#foreach my $key (keys %{$ref_hash_higher_structure}){
+    }
+
+}# sub draw_Entity {
+
+sub show_content {
+
+    my $entity = $_[0];
+    print "$cont_s\n";
+    print "$spid_s$PE$entity$spid_e\n";
+    if(defined($species{$entity}{xref})){print "$xrf_s$species{$entity}{xref}$xrf_e\n";}
+    if(defined($species{$entity}{startCoordinate})){print "$seqstcrd_s$species{$entity}{startCoordinate}$seqstcrd_e\n";}
+    if(defined($species{$entity}{endCoordinate})){print "$seqendcrd_s$species{$entity}{endCoordinate}$seqendcrd_e\n";}
+    if(defined($species{$entity}{modifications})){
+	foreach my $mod (keys %{$species{$entity}{modifications}}){
+	    print "$mod_s\n$modcrd_s$species{$entity}{modifications}{$mod}{coord}$modcrd_e\n$modname_s$species{$entity}{modifications}{$mod}{modification}$modname_e\n$mod_e\n";
+	}
+    }
+    if(defined($species{$entity}{sxref})){
+	foreach my $sxr (@{$species{$entity}{sxref}}){
+	    print "$sxrf_s$sxr$sxrf_e\n";
+	}
+    }
+
+    print "$cont_e\n";
+}

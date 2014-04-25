@@ -1,0 +1,347 @@
+Instance with DB_ID "1385639" is used but not in table DatabaseObject!
+Instance with DB_ID "1385635" is used but not in table DatabaseObject!
+Instance with DB_ID "1427432" is used but not in table DatabaseObject!
+Instance with DB_ID "1427427" is used but not in table DatabaseObject!
+Instance with DB_ID "1427426" is used but not in table DatabaseObject!
+Instance with DB_ID "1427430" is used but not in table DatabaseObject!
+Instance with DB_ID "1427429" is used but not in table DatabaseObject!
+Instance with DB_ID "1427428" is used but not in table DatabaseObject!
+Instance with DB_ID "1427280" is used but not in table DatabaseObject!
+Instance with DB_ID "1427275" is used but not in table DatabaseObject!
+Instance with DB_ID "1427276" is used but not in table DatabaseObject!
+Instance with DB_ID "1427277" is used but not in table DatabaseObject!
+Instance with DB_ID "1424741" is used but not in table DatabaseObject!
+"[Reaction:573381] Tip5 Binds Intergenic Spacer RNA" in "precedingEvent" for "[Reaction:573369] Ttf-I Binds the T0 Region (Sal Box) of rDNA" is not in the slice and removed from the attribute list!
+"[Reaction:2559639] Collagen type IV sulfilimine cross-linking by peroxidasin" in "hasEvent" for "[Pathway:2243919] Crosslinking of collagen fibrils" is not in the slice and removed from the attribute list!
+"[Pathway:5210891] Uptake and function of anthrax toxins" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
+"[Pathway:2872314] FBXW7 in Cancer" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
+"[Pathway:3229121] Glycogen storage diseases" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
+"[Pathway:3701007] Transcriptional Regulation by TP53 R175H" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
+"[Pathway:3781865] Diseases of glycosylation" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
+"[Pathway:4791275] Signaling by WNT in cancer" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
+"[Pathway:997416] Isoprenoid metabolism" in "hasEvent" for "[Pathway:556833] Metabolism of lipids and lipoproteins" is not in the slice and removed from the attribute list!
+"[Pathway:2262748] Cellular response to oxidative stress" in "hasEvent" for "[Pathway:2262752] Cellular responses to stress" is not in the slice and removed from the attribute list!
+"[Pathway:3371556] Cellular response to heat stress" in "hasEvent" for "[Pathway:2262752] Cellular responses to stress" is not in the slice and removed from the attribute list!
+"[Pathway:2025928] Activation of NFAT by Calcineurin" in "hasEvent" for "[Pathway:1168372] Downstream Signaling Events Of B Cell Receptor (BCR)" is not in the slice and removed from the attribute list!
+"[Reaction:3257122] Cytosolic glucose 6-phosphate is exchanged for orthophosphate from the endoplasmic reticulum lumen by SLC37A1 or SLC37A2" in "hasEvent" for "[Pathway:70153] Glucose transport" is not in the slice and removed from the attribute list!
+"[Reaction:163154] Phospho:Mnk-1 activates eIF4E by phosphorylation" in "precedingEvent" for "[Pathway:72662] Activation of the mRNA upon binding of the cap-binding complex and eIFs, and subsequent binding to 43S" is not in the slice and removed from the attribute list!
+"[Pathway:2972871] Translation" in "orthologousEvent" for "[Pathway:72766] Translation" is not in the slice and removed from the attribute list!
+"[Reaction:1614571] Sqr oxidizes sulfide to bound persulfide" in "orthologousEvent" for "[Reaction:1614665] SQR oxidizes sulfide to bound persulfide" is not in the slice and removed from the attribute list!
+"[Reaction:1614611] Persulfide sulfur is transferred onto sulfite" in "orthologousEvent" for "[Reaction:1614618] Persulfide sulfur is transferred onto sulfite" is not in the slice and removed from the attribute list!
+"[Pathway:264460] MDM2-mediated degradation of Mdmx" in "hasEvent" for "[Pathway:69541] Stabilization of p53" is not in the slice and removed from the attribute list!
+"[Reaction:201510] PI3K synthesizes PIP3" in "precedingEvent" for "[Reaction:2316429] PIP3 recruits PDPK1 to the membrane" is not in the slice and removed from the attribute list!
+"[Reaction:443034] PDK1 and AKT associate in the cytoplasm" in "precedingEvent" for "[Reaction:2316429] PIP3 recruits PDPK1 to the membrane" is not in the slice and removed from the attribute list!
+"[Reaction:443034] PDK1 and AKT associate in the cytoplasm" in "precedingEvent" for "[Reaction:2316429] PIP3 recruits PDPK1 to the membrane" is not in the slice and removed from the attribute list!
+"[Reaction:201510] PI3K synthesizes PIP3" in "precedingEvent" for "[Reaction:2317332] PIP3 recruits AKT to the membrane" is not in the slice and removed from the attribute list!
+"[Reaction:443034] PDK1 and AKT associate in the cytoplasm" in "precedingEvent" for "[Reaction:2317332] PIP3 recruits AKT to the membrane" is not in the slice and removed from the attribute list!
+"[Reaction:443034] PDK1 and AKT associate in the cytoplasm" in "precedingEvent" for "[Reaction:2317332] PIP3 recruits AKT to the membrane" is not in the slice and removed from the attribute list!
+"[Reaction:5211235] Kat2b (Pcaf) Acetylates Taf1b in SL1 Complex" in "inferredFrom" for "[Reaction:73736] Acetylation of SL1" is not in the slice and removed from the attribute list!
+"[Reaction:83530] Release of RNA Polymerase II from the cleaved transcript" in "hasEvent" for "[Pathway:73856] RNA Polymerase II Transcription Termination" is not in the slice and removed from the attribute list!
+"[Reaction:110314] Recognition of DNA damage by error-prone polymerases" in "hasEvent" for "[Pathway:73893] DNA Damage Bypass" is not in the slice and removed from the attribute list!
+"[Reaction:74450] Calcium and calmodulin dissociate from ion channel" in "precedingEvent" for "[Reaction:74031] cGMP binds CNG channel to form cGMP:CNG channel" is not in the slice and removed from the attribute list!
+"[Pathway:212165] Epigenetic regulation of gene expression" in "hasEvent" for "[Pathway:74160] Gene Expression" is not in the slice and removed from the attribute list!
+"[Reaction:111892] Ca(4)CaM => Calmodulin + 4 Ca2+" in "reverseReaction" for "[Reaction:74448] Calcium binds calmodulin" is not in the slice and removed from the attribute list!
+"[Reaction:74032] cGMP-gated ion channel opening" in "precedingEvent" for "[Reaction:74447] Calcium binds calmodulin" is not in the slice and removed from the attribute list!
+"[Reaction:2454264] 11cROL binds to RLBP1 to form RLBP1:11cROL" in "precedingEvent" for "[Reaction:74872] RDHs oxidise 11cROL to 11cRAL" is not in the slice and removed from the attribute list!
+"[Pathway:419233] Cytoskeletal regulation" in "hasEvent" for "[Pathway:76002] Platelet activation, signaling and aggregation" is not in the slice and removed from the attribute list!
+"[Reaction:114504] No longer considered relevant - Platelet Glycoprotein IV adhesion to Collagen I" in "hasEvent" for "[Pathway:75892] Platelet Adhesion to exposed collagen" is not in the slice and removed from the attribute list!
+"[Reaction:913931] GPVI is associated with Tetraspanin-9" in "hasEvent" for "[Pathway:75892] Platelet Adhesion to exposed collagen" is not in the slice and removed from the attribute list!
+"[Reaction:977311] malonyl-CoA is decarboxylated to acetyl-CoA in mitochondria" in "hasEvent" for "[Pathway:77289] Mitochondrial Fatty Acid Beta-Oxidation" is not in the slice and removed from the attribute list!
+"[Pathway:5173105] O-linked glycosylation" in "hasEvent" for "[Pathway:597592] Post-translational protein modification" is not in the slice and removed from the attribute list!
+"[Pathway:1183136] Post-translational modification - Bijay's additions" in "hasEvent" for "[Pathway:597592] Post-translational protein modification" is not in the slice and removed from the attribute list!
+"[Reaction:114426] Caspase mediated cleavage of Ataxin-7" in "hasEvent" for "[Pathway:111465] Apoptotic cleavage of cellular proteins" is not in the slice and removed from the attribute list!
+"[Reaction:83581] Caspase mediated cleavage of BAT3" in "hasEvent" for "[Pathway:111465] Apoptotic cleavage of cellular proteins" is not in the slice and removed from the attribute list!
+"[Reaction:114415] Caspase- mediated cleavage of Tensin-4" in "hasEvent" for "[Pathway:111465] Apoptotic cleavage of cellular proteins" is not in the slice and removed from the attribute list!
+"[Reaction:430291] Caspase-mediated cleavage of Huntingtin" in "hasEvent" for "[Pathway:111465] Apoptotic cleavage of cellular proteins" is not in the slice and removed from the attribute list!
+"[Reaction:114416] Caspase-mediated cleavage of MITF" in "hasEvent" for "[Pathway:111465] Apoptotic cleavage of cellular proteins" is not in the slice and removed from the attribute list!
+"[Reaction:112003] Activation of PKC (alpha, gamma, delta)" in "precedingEvent" for "[Reaction:111970] PKC phosphorylates GRK2" is not in the slice and removed from the attribute list!
+"[Pathway:181413] Action Potential Invades the Presynaptic Terminal" in "hasEvent" for "[Pathway:112315] Transmission across Chemical Synapses" is not in the slice and removed from the attribute list!
+"[Pathway:181413] Action Potential Invades the Presynaptic Terminal" in "precedingEvent" for "[Pathway:112308] Depolarization of the Presynaptic Terminal Triggers the Opening of Calcium Channels" is not in the slice and removed from the attribute list!
+"[Pathway:112302] Generation of Action Potential in the Presynaptic Cell" in "hasEvent" for "[Pathway:112307] Transmission across Electrical Synapses " is not in the slice and removed from the attribute list!
+"[Pathway:112306] Generation of Action Potential in the Postsynaptic Cell" in "hasEvent" for "[Pathway:112307] Transmission across Electrical Synapses " is not in the slice and removed from the attribute list!
+"[Reaction:83530] Release of RNA Polymerase II from the cleaved transcript" in "hasEvent" for "[Pathway:112297] Post-Elongation Processing of Intronless pre-mRNA" is not in the slice and removed from the attribute list!
+"[Reaction:83530] Release of RNA Polymerase II from the cleaved transcript" in "hasEvent" for "[Pathway:112296] Post-Elongation Processing of Intron-Containing pre-mRNA" is not in the slice and removed from the attribute list!
+"[Reaction:109825] (Controversial - not included in public release.) SOS mediated nucleotide exchange of RAS (IRS, Crk)" in "precedingEvent" for "[Reaction:109827] SOS phosphorylation and dissociation (IRS, Crk)" is not in the slice and removed from the attribute list!
+"[Reaction:109825] (Controversial - not included in public release.) SOS mediated nucleotide exchange of RAS (IRS, Crk)" in "precedingEvent" for "[Reaction:109803] Transient dissociation of 14-3-3 upon Ras binding" is not in the slice and removed from the attribute list!
+"[Pathway:211676] Induction of cytostasis through the targeting of Pak2 (gamma-PAK) to the endoplasmic reticulum" in "hasEvent" for "[Pathway:109581] Apoptosis" is not in the slice and removed from the attribute list!
+"[Reaction:2672196] Viral serpin blocks caspase-8 activity" in "hasEvent" for "[Pathway:109607] Extrinsic Pathway for Apoptosis" is not in the slice and removed from the attribute list!
+"[Reaction:165179] Formation of TSC1:TSC2 complex" in "orthologousEvent" for "[Reaction:110485] DTSC1 AND DTSC2 form a complex" is not in the slice and removed from the attribute list!
+"[Reaction:110314] Recognition of DNA damage by error-prone polymerases" in "precedingEvent" for "[Reaction:110316] Binding of Pol eta to lesioned DNA template" is not in the slice and removed from the attribute list!
+"[Reaction:110314] Recognition of DNA damage by error-prone polymerases" in "precedingEvent" for "[Reaction:110307] Binding of REV1 to lesioned DNA template" is not in the slice and removed from the attribute list!
+"[Reaction:110314] Recognition of DNA damage by error-prone polymerases" in "precedingEvent" for "[Reaction:110321] Binding of Pol zeta to lesioned DNA template" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:3781943] WLS:WNT complex is internalized for maturation into exosomes" in "hasEvent" for "[Pathway:3238698] WNT ligand biogenesis and trafficking" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:3781941] WNTs are secreted in exosomes" in "hasEvent" for "[Pathway:3238698] WNT ligand biogenesis and trafficking" is not in the slice and removed from the attribute list!
+"[Reaction:3301943] 2xGSTK1 conjugates GSH with CDNB" in "hasEvent" for "[Pathway:156590] Glutathione conjugation" is not in the slice and removed from the attribute list!
+"[Reaction:3160769] MTR transfers CH3 group from MTHFPG to B12s" in "hasEvent" for "[Pathway:156581] Methylation" is not in the slice and removed from the attribute list!
+"[Reaction:157076] Notch 4 heterodimer traffics to the plasma membrane" in "precedingEvent" for "[Reaction:157633] Notch 4 heterodimer binds with a Notch ligand in the extracellular space" is not in the slice and removed from the attribute list!
+"[Reaction:157000] Notch 3 heterodimer traffics to the plasma membrane" in "precedingEvent" for "[Reaction:157644] Notch 3 heterodimer binds with a Notch ligand in the extracellular space" is not in the slice and removed from the attribute list!
+"[Pathway:158589] Hematopoiesis" in "hasEvent" for "[Pathway:1266738] Developmental Biology" is not in the slice and removed from the attribute list!
+"[Pathway:452723] Transcriptional Regulation of Pluripotent Stem Cells" in "hasEvent" for "[Pathway:1266738] Developmental Biology" is not in the slice and removed from the attribute list!
+"[Pathway:157083] Notch receptor binds with a ligand" in "precedingEvent" for "[Pathway:156988] Receptor-ligand binding initiates the second proteolytic cleavage of Notch receptor" is not in the slice and removed from the attribute list!
+"[Pathway:163153] NMDA-mediated neuronal signaling" in "hasEvent" for "[Pathway:162582] Signal Transduction" is not in the slice and removed from the attribute list!
+"[Pathway:162641] Rho GTPases in actin and microtubule dynamics" in "hasEvent" for "[Pathway:162582] Signal Transduction" is not in the slice and removed from the attribute list!
+"[Pathway:176036] Host immune responses to HIV infection" in "hasEvent" for "[Pathway:162906] HIV Infection" is not in the slice and removed from the attribute list!
+"[Pathway:173108] Role of CypA protein in HIV-1 infection" in "hasEvent" for "[Pathway:162909] Host Interactions of HIV factors" is not in the slice and removed from the attribute list!
+"[Reaction:156526] Aflatoxin B1 oxidized to Aflatoxin-8,9-oxide" in "precedingEvent" for "[Reaction:176059] MGST trimers conjugate GSH with luminal substrates" is not in the slice and removed from the attribute list!
+"[Reaction:174488] Synthesis of  GAGPOL polyprotein by ribosomal frameshifting" in "hasEvent" for "[Pathway:174495] Synthesis And Processing Of GAG, GAGPOL Polyproteins" is not in the slice and removed from the attribute list!
+"[Reaction:189305] Transport of GAGPOL precursor to plasma membrane" in "hasEvent" for "[Pathway:174495] Synthesis And Processing Of GAG, GAGPOL Polyproteins" is not in the slice and removed from the attribute list!
+"[Reaction:3160769] MTR transfers CH3 group from MTHFPG to B12s" in "precedingEvent" for "[Reaction:174374] MTR transfers CH3 group from MeCbl to HCYS" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480621] Expression of BAMBI" in "precedingEvent" for "[Reaction:173483] BAMBI interferes with the interaction of type I receptor with type II receptor" is not in the slice and removed from the attribute list!
+"[Reaction:177508] Pincher-mediated pynocytosis" in "precedingEvent" for "[Reaction:177479] Axonal transport of NGF:Trk complexes" is not in the slice and removed from the attribute list!
+"[Reaction:177508] Pincher-mediated pynocytosis" in "hasEvent" for "[Pathway:177504] Retrograde neurotrophin signalling" is not in the slice and removed from the attribute list!
+"[Pathway:179419] APC:Cdc20 mediated degradation of cell cycle proteins prior to satisfation of the cell cycle checkpoint" in "hasEvent" for "[Pathway:176409] APC/C:Cdc20 mediated degradation of mitotic proteins" is not in the slice and removed from the attribute list!
+"[Pathway:167164] HIV-1 Transcription Pre-Initiation" in "hasEvent" for "[Pathway:167172] Transcription of the HIV genome" is not in the slice and removed from the attribute list!
+"[Reaction:167239] Association of Tat:P-TEFb(Cyclin T1:Cdk9) with the TAR sequence" in "precedingEvent" for "[Reaction:167191] Hyperphosphorylation (Ser2) of RNA Pol II CTD by the P-TEFb(Cyclin T1:Cdk9) complex" is not in the slice and removed from the attribute list!
+"[Reaction:167135] Formation of the HIV-1 closed pre-initiation complex" in "precedingEvent" for "[Reaction:167097] HIV Promoter Opening: First Transition" is not in the slice and removed from the attribute list!
+"[Reaction:167683] TrkA phosphorylates PLCG1" in "hasEvent" for "[Pathway:167021] PLC-gamma1 signalling" is not in the slice and removed from the attribute list!
+"[Reaction:167683] TrkA phosphorylates PLCG1" in "precedingEvent" for "[Reaction:167684] Active PLCG1 dissociates from TrkA receptor" is not in the slice and removed from the attribute list!
+"[Reaction:4420202] PLCG1 disassociates from VEGFR2 and translocate to PM" in "precedingEvent" for "[Reaction:167686] Active PLCG1 hydrolyses PIP2" is not in the slice and removed from the attribute list!
+"[Pathway:4416604] Diseases associated with complement dysregulation" in "hasEvent" for "[Pathway:166658] Complement cascade" is not in the slice and removed from the attribute list!
+"[Pathway:162561] NGF signaling: related events" in "hasEvent" for "[Pathway:166520] Signalling by NGF" is not in the slice and removed from the attribute list!
+"[Reaction:180086] 1-LTR circle synthesis from reverse transcription intermediate" in "hasEvent" for "[Pathway:164525] Plus-strand DNA synthesis" is not in the slice and removed from the attribute list!
+"[Reaction:177694] TRAF6 is Recruited to the Viral dsRNA:TLR3:TRIF Complex" in "hasEvent" for "[Pathway:168180] TRAF6 Mediated Induction of proinflammatory cytokines" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:450259] Auto ubiqitination of human TRAF6 bound to the complex viral dsRNS:TLR3:TRIF " in "hasEvent" for "[Pathway:168180] TRAF6 Mediated Induction of proinflammatory cytokines" is not in the slice and removed from the attribute list!
+"[Reaction:177690] Activated TRAF6 recruits TAK1complex by binding to ubiquitin receptors of TAB2/TAB3" in "hasEvent" for "[Pathway:168180] TRAF6 Mediated Induction of proinflammatory cytokines" is not in the slice and removed from the attribute list!
+"[Reaction:177692] Activation of recruited TAK1 within the complex viral dsRNA:TLR3:TRIF:pUb-TRAF6:TAB1:Ub-TAB2:Ub-TAB3: TAK1" in "hasEvent" for "[Pathway:168180] TRAF6 Mediated Induction of proinflammatory cytokines" is not in the slice and removed from the attribute list!
+"[Reaction:847070] activated TAK1 complex dissociates from the TLR3 receptor complex" in "hasEvent" for "[Pathway:168180] TRAF6 Mediated Induction of proinflammatory cytokines" is not in the slice and removed from the attribute list!
+"[Reaction:847070] activated TAK1 complex dissociates from the TLR3 receptor complex" in "precedingEvent" for "[Reaction:168184] Activated TAK1 mediates phosphorylation of the IKK Complex" is not in the slice and removed from the attribute list!
+"[Reaction:168287] Caveolae Endocytosis" in "hasEvent" for "[Pathway:168275] Entry of Influenza Virion into Host Cell via Endocytosis" is not in the slice and removed from the attribute list!
+"[Reaction:168292] Non-Clathrin, Non-Caveolae Endocytosis Pathways" in "hasEvent" for "[Pathway:168275] Entry of Influenza Virion into Host Cell via Endocytosis" is not in the slice and removed from the attribute list!
+"[Reaction:168286] Macropinocytosis" in "hasEvent" for "[Pathway:168275] Entry of Influenza Virion into Host Cell via Endocytosis" is not in the slice and removed from the attribute list!
+"[Reaction:5099886] WNT5A binding to FZD promotes PRICKLE1 degradation" in "precedingEvent" for "[Reaction:4608825] DVL2 is phosphorylated after WNT5A binding to FZD" is not in the slice and removed from the attribute list!
+"[Reaction:5099886] WNT5A binding to FZD promotes PRICKLE1 degradation" in "hasEvent" for "[Pathway:4608870] Asymmetric localization of PCP proteins" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5228943] Transcytosis and dissociation of BoNT/A:NTNHA:HA complex" in "hasEvent" for "[Pathway:168799] Neurotoxicity of clostridium toxins" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5228940] Transcytosis and dissociation of BoNT/B:NTNHA:HA complex" in "hasEvent" for "[Pathway:168799] Neurotoxicity of clostridium toxins" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5228941] Transcytosis and dissociation of BoNT/E:NTNHA complex" in "hasEvent" for "[Pathway:168799] Neurotoxicity of clostridium toxins" is not in the slice and removed from the attribute list!
+"[Reaction:5228407] TeNT HC:LC binds cell-surface gangliosides" in "hasEvent" for "[Pathway:168799] Neurotoxicity of clostridium toxins" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5228411] Clathrin-mediated endocytosis of TeNT HC:LC:gangliosides" in "hasEvent" for "[Pathway:168799] Neurotoxicity of clostridium toxins" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5228408] Retrograde transport of internalized TeNT HC:LC:gangliosides" in "hasEvent" for "[Pathway:168799] Neurotoxicity of clostridium toxins" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5228406] TeNT HC transports TeNT LC from target cell endosome membrane into cytosol" in "hasEvent" for "[Pathway:168799] Neurotoxicity of clostridium toxins" is not in the slice and removed from the attribute list!
+"[Reaction:5228578] TeNT LC cleaves target cell VAMP2" in "hasEvent" for "[Pathway:168799] Neurotoxicity of clostridium toxins" is not in the slice and removed from the attribute list!
+"[Reaction:168903] Phosphorylation and Release of IRF3 or IRF7" in "precedingEvent" for "[Reaction:168933] Dimerization of phosphorylated IRF3/IRF7" is not in the slice and removed from the attribute list!
+"[Reaction:168930] Viral dsRNA:TLR3:TRIF Complex recruits and activates RIP1" in "precedingEvent" for "[Reaction:168910] RIP1 facilitates IKK complex phosphorylation" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480515] Expression of FGF2" in "precedingEvent" for "[Reaction:190256] FGFR1c binds to FGF" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480515] Expression of FGF2" in "precedingEvent" for "[Reaction:190261] FGFR3c binds to FGF" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480515] Expression of FGF2" in "precedingEvent" for "[Reaction:190265] FGFR4 binds to FGF" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480515] Expression of FGF2" in "precedingEvent" for "[Reaction:190245] FGFR1b binds to FGF" is not in the slice and removed from the attribute list!
+"[Pathway:4641265] repression of WNT target genes" in "hasEvent" for "[Pathway:195253] Degradation of beta-catenin by the destruction complex" is not in the slice and removed from the attribute list!
+"[Pathway:201681] TCF dependent signaling in response to WNT" in "hasEvent" for "[Pathway:195721] Signaling by Wnt" is not in the slice and removed from the attribute list!
+"[Reaction:1449663] Sex hormones bind to 2xSHBG in blood" in "hasEvent" for "[Pathway:193048] Androgen biosynthesis" is not in the slice and removed from the attribute list!
+"[Reaction:1013013] Association of GABA B receptor with G protein beta-gamma subunits" in "hasEvent" for "[Pathway:1296041] Activation of G protein gated Potassium channels" is not in the slice and removed from the attribute list!
+"[Reaction:1013012] Binding of Gbeta/gamma to GIRK/Kir3 channels" in "hasEvent" for "[Pathway:1296041] Activation of G protein gated Potassium channels" is not in the slice and removed from the attribute list!
+"[Reaction:215142] Placeholder for VEGF complexes" in "hasEvent" for "[Pathway:194138] Signaling by VEGF" is not in the slice and removed from the attribute list!
+"[Pathway:4420097] VEGFA-VEGFR2 Pathway" in "hasEvent" for "[Pathway:194138] Signaling by VEGF" is not in the slice and removed from the attribute list!
+"[Pathway:195259] Rho GTPases in Actin dynamics" in "hasEvent" for "[Pathway:194315] Signaling by Rho GTPases" is not in the slice and removed from the attribute list!
+"[Pathway:195260] Rho GTPases in microtubule dynamics" in "hasEvent" for "[Pathway:194315] Signaling by Rho GTPases" is not in the slice and removed from the attribute list!
+"[Pathway:195258] Regulation of enzymes by Rho GTPases" in "hasEvent" for "[Pathway:194315] Signaling by Rho GTPases" is not in the slice and removed from the attribute list!
+"[Reaction:1449687] Corticosteroids bind to CBG in blood" in "hasEvent" for "[Pathway:194002] Glucocorticoid biosynthesis" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:877173] Syk couples sensing of fungal pathogens to NLRP3 inflammasome" in "precedingEvent" for "[BlackBoxEvent:1306876] NLRP3 activation by small molecules" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:877173] Syk couples sensing of fungal pathogens to NLRP3 inflammasome" in "precedingEvent" for "[BlackBoxEvent:1306876] NLRP3 activation by small molecules" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:452338] Expression of TDGF1 (CRIPTO)" in "precedingEvent" for "[Reaction:1181155] The NODAL Receptor Binds NODAL Ligands" is not in the slice and removed from the attribute list!
+"[Pathway:209783] Small peptide hormones" in "hasEvent" for "[Pathway:209952] Peptide hormone biosynthesis" is not in the slice and removed from the attribute list!
+"[Pathway:209788] Protein hormones" in "hasEvent" for "[Pathway:209952] Peptide hormone biosynthesis" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:379324] Re-acidification of clathrin sculpted glutamate transport vesicle" in "precedingEvent" for "[Reaction:210444] L-Glutamate loading of synaptic vesicle" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:379324] Re-acidification of clathrin sculpted glutamate transport vesicle" in "hasEvent" for "[Pathway:210500] Glutamate Neurotransmitter Release Cycle" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:452384] Expression of TGF beta 4 (LEFTY2)" in "precedingEvent" for "[Reaction:1181351] LEFTY Binds the EGF-CFC Coreceptor in the NODAL Receptor" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:452384] Expression of TGF beta 4 (LEFTY2)" in "precedingEvent" for "[Reaction:1181352] LEFTY Binds NODAL" is not in the slice and removed from the attribute list!
+"[Reaction:209323] Notch ligand (DL/SER) in the plasma membrane of an adjacent cell binds to N" in "precedingEvent" for "[Reaction:209226] DL/SER is ubiquitinated by E3 ubiquitination ligases (NEUR/MIB1)" is not in the slice and removed from the attribute list!
+"[Reaction:193644] p75NTR reduces RHO-GDI activity" in "hasEvent" for "[Pathway:209563] Axonal growth stimulation" is not in the slice and removed from the attribute list!
+"[Reaction:196004] Nucleotide exchange on RHOA" in "hasEvent" for "[Pathway:209563] Axonal growth stimulation" is not in the slice and removed from the attribute list!
+"[Reaction:212399] Formation of CRSP coactivator complex" in "hasEvent" for "[Pathway:212436] Generic Transcription Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:212329] Formation of CSL Hairless corepressor complex" in "hasEvent" for "[Pathway:212436] Generic Transcription Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:212360] Formation of PC2 coactivator complex" in "hasEvent" for "[Pathway:212436] Generic Transcription Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:215526] CYP4F3 omega-hydroxylates leukotriene B4, thus inactivating it" in "hasEvent" for "[Pathway:211979] Eicosanoids" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:432089] LDL activates PECAM-1" in "hasEvent" for "[Pathway:210990] PECAM1 interactions" is not in the slice and removed from the attribute list!
+"[Reaction:211953] Orphan CYP2A7" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
+"[Reaction:211933] Orphan CYP4A22" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
+"[Reaction:211902] Orphan CYP4F22" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
+"[Reaction:211912] Orphan CYP4V2" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
+"[Reaction:211956] Orphan CYP4X1" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
+"[Reaction:212000] Orphan CYP4Z1" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
+"[Reaction:211986] Orphan CYP20A1" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
+"[Reaction:211949] Orphan CYP27C1" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
+"[Pathway:211680] Down-regulation of translation initiation in apoptosis by Pak-2-mediated phosphorylation of Mnk1" in "hasEvent" for "[Pathway:211736] Stimulation of the cell death response by PAK-2p34" is not in the slice and removed from the attribute list!
+"[Pathway:211296] CECAM1 interactions" in "hasEvent" for "[Pathway:202733] Cell surface interactions at the vascular wall" is not in the slice and removed from the attribute list!
+"[Pathway:203711] iNOS NO production" in "hasEvent" for "[Pathway:202131] Metabolism of nitric oxide" is not in the slice and removed from the attribute list!
+"[Pathway:203761] nNOS NO production" in "hasEvent" for "[Pathway:202131] Metabolism of nitric oxide" is not in the slice and removed from the attribute list!
+"[Pathway:1474115] Nitric oxide biology" in "hasEvent" for "[Pathway:202131] Metabolism of nitric oxide" is not in the slice and removed from the attribute list!
+"[Reaction:443034] PDK1 and AKT associate in the cytoplasm" in "hasEvent" for "[Pathway:198203] PI3K/AKT activation" is not in the slice and removed from the attribute list!
+"[Reaction:443390] PKCalpha/betaII phosphorylate AKT at S473" in "hasEvent" for "[Pathway:198203] PI3K/AKT activation" is not in the slice and removed from the attribute list!
+"[Reaction:443390] PKCalpha/betaII phosphorylate AKT at S473" in "precedingEvent" for "[Reaction:198298] AKT translocates to the nucleus" is not in the slice and removed from the attribute list!
+"[Reaction:201510] PI3K synthesizes PIP3" in "precedingEvent" for "[Reaction:198284] PIP3 recruits PDK1 and AKT to the membrane" is not in the slice and removed from the attribute list!
+"[Reaction:443034] PDK1 and AKT associate in the cytoplasm" in "precedingEvent" for "[Reaction:198284] PIP3 recruits PDK1 and AKT to the membrane" is not in the slice and removed from the attribute list!
+"[Reaction:443034] PDK1 and AKT associate in the cytoplasm" in "precedingEvent" for "[Reaction:198284] PIP3 recruits PDK1 and AKT to the membrane" is not in the slice and removed from the attribute list!
+"[Reaction:443390] PKCalpha/betaII phosphorylate AKT at S473" in "precedingEvent" for "[Pathway:198323] AKT phosphorylates targets in the cytosol" is not in the slice and removed from the attribute list!
+"[Reaction:376851] Exchange of alpha-ketoglutarate (2-oxoglutarate) and malate across the inner mitochondrial membrane" in "reverseReaction" for "[Reaction:198440] malate [mitochondrial matrix] + alpha-ketoglutarate [cytosol] <=> malate [cytosol] + alpha-ketoglutarate [mitochondrial matrix]" is not in the slice and removed from the attribute list!
+"[Reaction:197490] ERK phosphorylates MEK, producing a negative feedback" in "hasEvent" for "[Pathway:197529] Feedback control in the MAPK signaling module" is not in the slice and removed from the attribute list!
+"[Reaction:197483] A RAF/RKIP complex exists" in "hasEvent" for "[Pathway:197529] Feedback control in the MAPK signaling module" is not in the slice and removed from the attribute list!
+"[Reaction:197512] PKC interacts with and phosphorylates RKIP" in "hasEvent" for "[Pathway:197529] Feedback control in the MAPK signaling module" is not in the slice and removed from the attribute list!
+"[Reaction:197482] Phospho-RKIP is released from RAF, contributing to a positive feedback" in "hasEvent" for "[Pathway:197529] Feedback control in the MAPK signaling module" is not in the slice and removed from the attribute list!
+"[Reaction:197502] ERK directly phosphorylates RAF, providing positive feedback" in "hasEvent" for "[Pathway:197529] Feedback control in the MAPK signaling module" is not in the slice and removed from the attribute list!
+"[Reaction:2465971] RLBP1 binds atROL to form RLBP1:atROL" in "hasEvent" for "[Pathway:2187335] The retinoid cycle in cones (daylight vision)" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:2465919] An ARAT esterifies 11cROL to 11c-RE" in "hasEvent" for "[Pathway:2187335] The retinoid cycle in cones (daylight vision)" is not in the slice and removed from the attribute list!
+"[Reaction:203787] p38MAPK is inactivated by DUSP1 or DUSP10" in "hasEvent" for "[Pathway:198753] ERK/MAPK targets" is not in the slice and removed from the attribute list!
+"[Pathway:210992] ALCAM interactions" in "hasEvent" for "[Pathway:198933] Immunoregulatory interactions between a Lymphoid and a non-Lymphoid cell" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:216806] Processing of Proinsulin to Insulin" in "precedingEvent" for "[BlackBoxEvent:216852] Translocation of Insulin Secretory Granules to Cell Cortex" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:216825] Docking of Insulin Secretory Granules at the Plasma Membrane" in "precedingEvent" for "[BlackBoxEvent:216883] Exocytosis of Insulin" is not in the slice and removed from the attribute list!
+"[Reaction:264563] Calcium Influx through Voltage-gated Calcium Channels" in "precedingEvent" for "[BlackBoxEvent:216883] Exocytosis of Insulin" is not in the slice and removed from the attribute list!
+"[Reaction:4086185] Thrombospondin 1 and 2 bind integrin alpha6beta1" in "hasEvent" for "[Pathway:216083] Integrin cell surface interactions" is not in the slice and removed from the attribute list!
+"[Pathway:4088286] Integrin-ADAM interactions" in "hasEvent" for "[Pathway:216083] Integrin cell surface interactions" is not in the slice and removed from the attribute list!
+"[Reaction:1222667] Iron is reduced and separates from enterobactin" in "orthologousEvent" for "[Reaction:1222399] Iron is reduced and separates from mycobactin" is not in the slice and removed from the attribute list!
+"[Pathway:1500751] DNA repair" in "hasEvent" for "[Pathway:1222499] Response of Mtb to phagocytosis" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480301] Expression of EPAS1 (HIF2A)" in "precedingEvent" for "[Reaction:1234179] Cytosolic Hydroxylation of Proline Residues on EPAS1 (HIF2A)" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480301] Expression of EPAS1 (HIF2A)" in "precedingEvent" for "[BlackBoxEvent:1234161] Translocation of HIF-alpha from Cytosol to Nucleus" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480301] Expression of EPAS1 (HIF2A)" in "precedingEvent" for "[Reaction:1234166] Nuclear Hydroxylation of Proline Residues on EPAS1 (HIF2A)" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480301] Expression of EPAS1 (HIF2A)" in "precedingEvent" for "[Reaction:1234164] Cytosolic Hydroxylation of Asparagine Residue in HIF alpha" is not in the slice and removed from the attribute list!
+"[Reaction:1237121] Dehydration of methylthio-ribulose-P" in "orthologousEvent" for "[Reaction:1237140] Dehydration of methylthio-ribulose-P" is not in the slice and removed from the attribute list!
+"[Reaction:1237106] Transamination of MOB to methionine" in "orthologousEvent" for "[Reaction:1237102] Transamination of MOB to methionine" is not in the slice and removed from the attribute list!
+"[Reaction:420233] VIP receptors bind VIP" in "precedingEvent" for "[Reaction:744887] Liganded Gs-activating GPCRs bind inactive heterotrimeric Gs" is not in the slice and removed from the attribute list!
+"[ReferenceDatabase:1385635] null" in "referenceDatabase" for "[DatabaseIdentifier:1401653] LIGAND-compound:C00166" is not in the slice and removed from the attribute list!
+"[ReferenceDatabase:1385639] null" in "referenceDatabase" for "[DatabaseIdentifier:1401652] KNApSAcK:C00000751" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:877173] Syk couples sensing of fungal pathogens to NLRP3 inflammasome" in "hasEvent" for "[Pathway:844456] The NLRP3 inflammasome" is not in the slice and removed from the attribute list!
+"[Reaction:844608] NLRP1 binds procaspase-1" in "hasEvent" for "[Pathway:844455] The NLRP1 inflammasome" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:877173] Syk couples sensing of fungal pathogens to NLRP3 inflammasome" in "precedingEvent" for "[BlackBoxEvent:844440] NLRP3 activation by elicitor proteins" is not in the slice and removed from the attribute list!
+"[Reaction:201612] Caspase-mediated cleavage of cytokeratin 18" in "hasEvent" for "[Pathway:264870] Caspase-mediated cleavage of cytoskeletal proteins" is not in the slice and removed from the attribute list!
+"[Person:1427275] null" in "author" for "[LiteratureReference:1418849] Intracellular localization of 8-oxo-dGTPase in human cells, with special reference to the role of the enzyme in mitochondria" is not in the slice and removed from the attribute list!
+"[Person:1427276] null" in "author" for "[LiteratureReference:1418849] Intracellular localization of 8-oxo-dGTPase in human cells, with special reference to the role of the enzyme in mitochondria" is not in the slice and removed from the attribute list!
+"[Person:1427277] null" in "author" for "[LiteratureReference:1418849] Intracellular localization of 8-oxo-dGTPase in human cells, with special reference to the role of the enzyme in mitochondria" is not in the slice and removed from the attribute list!
+"[Person:1424741] null" in "author" for "[LiteratureReference:1418849] Intracellular localization of 8-oxo-dGTPase in human cells, with special reference to the role of the enzyme in mitochondria" is not in the slice and removed from the attribute list!
+"[Person:1427280] null" in "author" for "[LiteratureReference:1418849] Intracellular localization of 8-oxo-dGTPase in human cells, with special reference to the role of the enzyme in mitochondria" is not in the slice and removed from the attribute list!
+"[Person:1427426] null" in "author" for "[LiteratureReference:1418928] Closing the gap: identification of human 3-ketosteroid reductase, the last unknown enzyme of mammalian cholesterol biosynthesis" is not in the slice and removed from the attribute list!
+"[Person:1427427] null" in "author" for "[LiteratureReference:1418928] Closing the gap: identification of human 3-ketosteroid reductase, the last unknown enzyme of mammalian cholesterol biosynthesis" is not in the slice and removed from the attribute list!
+"[Person:1427428] null" in "author" for "[LiteratureReference:1418928] Closing the gap: identification of human 3-ketosteroid reductase, the last unknown enzyme of mammalian cholesterol biosynthesis" is not in the slice and removed from the attribute list!
+"[Person:1427429] null" in "author" for "[LiteratureReference:1418928] Closing the gap: identification of human 3-ketosteroid reductase, the last unknown enzyme of mammalian cholesterol biosynthesis" is not in the slice and removed from the attribute list!
+"[Person:1427430] null" in "author" for "[LiteratureReference:1418928] Closing the gap: identification of human 3-ketosteroid reductase, the last unknown enzyme of mammalian cholesterol biosynthesis" is not in the slice and removed from the attribute list!
+"[Person:1427432] null" in "author" for "[LiteratureReference:1418928] Closing the gap: identification of human 3-ketosteroid reductase, the last unknown enzyme of mammalian cholesterol biosynthesis" is not in the slice and removed from the attribute list!
+"[Reaction:4549503] SLC7A4 (CAT-4)-mediated uptake of cationic amino acids" in "hasEvent" for "[Pathway:352230] Amino acid transport across the plasma membrane" is not in the slice and removed from the attribute list!
+"[Reaction:350058] Formation of CSL NCOR corepressor complex" in "hasEvent" for "[Pathway:350054] Notch-HLH transcription pathway" is not in the slice and removed from the attribute list!
+"[Reaction:913408] Vav constitutively associates with Grb2" in "hasEvent" for "[Pathway:912526] Interleukin receptor SHC signaling" is not in the slice and removed from the attribute list!
+"[Reaction:913968] Tetraspanin-32 and CD151 regulate alphaIIbbeta3 outside-in signaling" in "hasEvent" for "[Pathway:354192] Integrin alphaIIb beta3 signaling" is not in the slice and removed from the attribute list!
+"[Reaction:913969] CD63 and CD9 form a complex with Integrin AlphaIIbBeta3" in "hasEvent" for "[Pathway:354192] Integrin alphaIIb beta3 signaling" is not in the slice and removed from the attribute list!
+"[Pathway:3244612] Regulation by pathogen's factors" in "hasEvent" for "[Pathway:3134975] Regulation of innate immune responses to cytosolic DNA" is not in the slice and removed from the attribute list!
+"[Reaction:1022127] Glycoproteins with major folding defects are sent to degradation by OS9" in "hasEvent" for "[Pathway:901032] ER Quality Control Compartment (ERQC)" is not in the slice and removed from the attribute list!
+"[Pathway:5223345] Misc transporters - to be sorted into existing projects - BJ" in "hasEvent" for "[Pathway:382551] Transmembrane transport of small molecules" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:2026091] FABP4 Transports Lipds Into the Nucleus" in "hasEvent" for "[Pathway:381340] Transcriptional Regulation of White Adipocyte Differentiation" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:2026095] Expression of FABP2" in "hasEvent" for "[Pathway:381340] Transcriptional Regulation of White Adipocyte Differentiation" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:2026091] FABP4 Transports Lipds Into the Nucleus" in "precedingEvent" for "[Reaction:381309] PPARG:RXRA Heterodimer Binds to Fatty Acid-like Ligands" is not in the slice and removed from the attribute list!
+"[Reaction:382096] Formation of NR-NCOR Corepressor Complex" in "hasEvent" for "[Pathway:383280] Nuclear Receptor transcription pathway" is not in the slice and removed from the attribute list!
+"[Pathway:390494] Cooperation of the Hsp70 and TRiC/CCT chaperone systems assembly of the VBC tumor suppressor complex" in "hasEvent" for "[Pathway:390466] Chaperonin-mediated protein folding" is not in the slice and removed from the attribute list!
+"[Reaction:392021] Dissociation of the alpha-2 adrenergic receptor:Gz complex" in "precedingEvent" for "[Reaction:392295] Gbeta:gamma recruits PI3K gamma" is not in the slice and removed from the attribute list!
+"[Pathway:419989] Actin assembly" in "hasEvent" for "[Pathway:392499] Metabolism of proteins" is not in the slice and removed from the attribute list!
+"[Reaction:392018] Activated alpha-2 adrenoceptor binds G-protein Gz" in "hasEvent" for "[Pathway:392023] Adrenaline signalling through Alpha-2 adrenergic receptor" is not in the slice and removed from the attribute list!
+"[Reaction:392019] Gz activation by alpha 2 adrenoceptor" in "hasEvent" for "[Pathway:392023] Adrenaline signalling through Alpha-2 adrenergic receptor" is not in the slice and removed from the attribute list!
+"[Reaction:392021] Dissociation of the alpha-2 adrenergic receptor:Gz complex" in "hasEvent" for "[Pathway:392023] Adrenaline signalling through Alpha-2 adrenergic receptor" is not in the slice and removed from the attribute list!
+"[Reaction:392021] Dissociation of the alpha-2 adrenergic receptor:Gz complex" in "precedingEvent" for "[Reaction:392064] G alpha (z) inhibits adenylate cyclase" is not in the slice and removed from the attribute list!
+"[Reaction:392021] Dissociation of the alpha-2 adrenergic receptor:Gz complex" in "precedingEvent" for "[Reaction:392133] G alpha (z) auto-inactivates by hydrolysing GTP to GDP" is not in the slice and removed from the attribute list!
+"[Pathway:921118] Regulation by RGS proteins" in "hasEvent" for "[Pathway:372790] Signaling by GPCR" is not in the slice and removed from the attribute list!
+"[Reaction:420542] BAI receptors are orphans" in "hasEvent" for "[Pathway:373080] Class B/2 (Secretin family receptors)" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:420714] Retinoic acid induces expression of RAIG receptors" in "hasEvent" for "[Pathway:420499] Class C/3 (Metabotropic glutamate/pheromone receptors)" is not in the slice and removed from the attribute list!
+"[Reaction:420233] VIP receptors bind VIP" in "hasEvent" for "[Pathway:420092] Glucagon-type ligand receptors" is not in the slice and removed from the attribute list!
+"[Pathway:418551] cAMP effects" in "hasEvent" for "[Pathway:418555] G alpha (s) signalling events" is not in the slice and removed from the attribute list!
+"[Reaction:913546] EctoADPase CD39 removes extracellular ADP" in "hasEvent" for "[Pathway:418346] Platelet homeostasis" is not in the slice and removed from the attribute list!
+"[Reaction:417895] P2Y8 receptor is an orphan receptor" in "hasEvent" for "[Pathway:417957] P2Y receptors" is not in the slice and removed from the attribute list!
+"[Pathway:428814] Sugar-phosphate/phosphate exchangers" in "hasEvent" for "[Pathway:425366] Transport of glucose and other sugars, bile salts and organic acids, metal ions and amine compounds" is not in the slice and removed from the attribute list!
+"[Pathway:428786] Sugar/H+ symporters" in "hasEvent" for "[Pathway:425366] Transport of glucose and other sugars, bile salts and organic acids, metal ions and amine compounds" is not in the slice and removed from the attribute list!
+"[Pathway:2682334] EPH-Ephrin signaling" in "hasEvent" for "[Pathway:422475] Axon guidance" is not in the slice and removed from the attribute list!
+"[Reaction:3288353] SEMA3B binds to NRP2:NrCAM" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:3288401] Proteolytic clevage of PLXNA1 by calpain1" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:3288365] SEMA3C binds to NRP:Plexin complex" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:3288264] SEMA3D binds to NRP1 and NRP2" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:3288377] SEMA3F binds to NRP:PLXNA complex" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:3288391] SEMA3G binds to NRP2" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:3288273] SEMA4B binds to PLXNB1" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:3288328] SEMA4B binds to CLCP1" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:3288424] SEMA4C and SEMA4G binds PLXNB2" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:3288410] SEMA5B binds to PLXNA1 and PLXNA3" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:3288293] SEMA6B binds to PLNXA4" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:3288395] SEMA6C binds to PLXNA1" in "hasEvent" for "[Pathway:416700] Other semaphorin interactions" is not in the slice and removed from the attribute list!
+"[Reaction:376125] Interaction between Trio and Rac1" in "hasEvent" for "[Pathway:416476] G alpha (q) signalling events" is not in the slice and removed from the attribute list!
+"[Reaction:376148] Trio family RhoGEFs activate RhoA" in "hasEvent" for "[Pathway:416476] G alpha (q) signalling events" is not in the slice and removed from the attribute list!
+"[Reaction:2022382] Renin Binds the Renin Receptor" in "precedingEvent" for "[Reaction:2065357] Prorenin:Prorenin Receptor Hydrolyzes Angiotensinogen to Yield Angiotensin-(1-10)" is not in the slice and removed from the attribute list!
+"[Pathway:434313] Regulation of Insulin Secretion by Intracellular Metabolism of Fatty Acids" in "hasEvent" for "[Pathway:400451] Regulation of Insulin Secretion by Free Fatty Acids" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:2026996] FABP1 Transports Fatty Acids into the Nucleus" in "precedingEvent" for "[Reaction:400204] Formation of PPARA:RXRA Heterodimer at Promoters of Target Genes" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:2026996] FABP1 Transports Fatty Acids into the Nucleus" in "hasEvent" for "[Pathway:400206] Regulation of Lipid Metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)" is not in the slice and removed from the attribute list!
+"[Reaction:392021] Dissociation of the alpha-2 adrenergic receptor:Gz complex" in "precedingEvent" for "[Reaction:398040] Gbeta:gamma activation of PLC beta" is not in the slice and removed from the attribute list!
+"[Pathway:451491] ERK1 activation" in "hasEvent" for "[Pathway:451478] ERK activation" is not in the slice and removed from the attribute list!
+"[Reaction:446241] Downregulation of MAP kinases by MAPK phosphatases" in "hasEvent" for "[Pathway:451524] MAPK activation in TLR cascade" is not in the slice and removed from the attribute list!
+"[Reaction:539047] DO NOT RELEASE - IL2R beta binds LCK" in "hasEvent" for "[Pathway:451927] Interleukin-2 signaling" is not in the slice and removed from the attribute list!
+"[Reaction:452099] DO NOT RELEASE - LCK phosphorylates multiple tyrosines of IL2RB" in "hasEvent" for "[Pathway:451927] Interleukin-2 signaling" is not in the slice and removed from the attribute list!
+"[Reaction:539002] DO NOT RELEASE - STAT3 is phosphorylated" in "hasEvent" for "[Pathway:451927] Interleukin-2 signaling" is not in the slice and removed from the attribute list!
+"[Reaction:209087] IKBA is phosphorylated by Phospho IKKB kinase" in "hasEvent" for "[Pathway:446652] Interleukin-1 signaling" is not in the slice and removed from the attribute list!
+"[Reaction:209125] SCF Beta-TrCP complex binds to NFKB p50:p65: phospho IKBA complex" in "hasEvent" for "[Pathway:446652] Interleukin-1 signaling" is not in the slice and removed from the attribute list!
+"[Reaction:209063] Beta-TrCP ubiquitinates and then dissociates from NFKB p50:p65:phospho IKBA complex" in "hasEvent" for "[Pathway:446652] Interleukin-1 signaling" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:209061] Ubiquitinated and phosphorylated IKBA binds to and is degraded by the proteasome complex" in "hasEvent" for "[Pathway:446652] Interleukin-1 signaling" is not in the slice and removed from the attribute list!
+"[Reaction:844608] NLRP1 binds procaspase-1" in "precedingEvent" for "[Reaction:448678] Caspase-1 precursor is cleaved releasing p10 and p20 subunits" is not in the slice and removed from the attribute list!
+"[Reaction:449855] Interleukin-10 dimerization" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449803] Interleukin-10 receptor alpha binds interleukin-10" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449811] Interleukin-10 receptor alpha chain:Interleukin-10 binds Interleukin 10 receptor beta chain" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449829] Interleukin-11 receptor alpha chain binds Interleukin-11" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449976] Interleukin-11 receptor alpha:Interleukin-11 binds Interleukin-6 receptor beta" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Pathway:447115] Interleukin-12 signaling" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449818] Interleukin-13 binding protein binds Interleukin-13" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449669] Interleukin-4 receptor type II (Interleukin-13 receptor) is a heterodimer of Interleukin-4 receptor alpha chain and Interleukin-13 receptor alpha 1" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449117] Alpha-taxilin (IL-14) binds syntaxin" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449115] Interleukin-15 receptor bind interleukin-15" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449073] Pro-interleukin-16 is cleaved by caspase-3 to release interleukin-16" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:449077] Interleukin-16 is secreted" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449087] CD4 binds Interleukin-16" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Pathway:448424] Interleukin-17 signaling" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448744] Interleukin-20 receptor is a dimer of IL20RA and IL20RB" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448728] Interleukin-20 receptor binds IL-20, IL-19 and IL-24" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448708] IL22RA/IL20RB is a receptor for IL-20, IL-24" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448480] Interleukin-22 receptor binds interleukin-22" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448741] Interleukin-22 binding protein binds Interleukin-22" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:447130] Interleukin-23 receptor binds interleukin-23" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448421] Interleukin-27 is a dimer of IL-27A and IL-27B" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448427] Interleukin-27 receptor binds interleukin-27" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448661] Interleukin 28 receptor binds Interleukin-28/29" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448660] Interleukin-31 receptor binds interleukin-31" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448591] Interleukin-32 binds proteinase-3" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448629] Interleukin-33 receptor is a heterodimer of IL-1RAcP and IL1RL1" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448603] Interleukin-33 receptor binds IL-33" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448632] Interleukin-34 is a homodimer" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:448627] Interleukin-35 is a heterodimer of IL-12RB and IL-12RB1" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449836] Interleukin-9 receptor binds Interleukin-9" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:449830] interleukin receptor-9:Interleukin-9 binds Interleukin-2 receptor gamma chain" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
+"[Reaction:847070] activated TAK1 complex dissociates from the TLR3 receptor complex" in "precedingEvent" for "[Reaction:450337] Activated TAK1 phosphorylates MKK4/MKK7" is not in the slice and removed from the attribute list!
+"[Reaction:847070] activated TAK1 complex dissociates from the TLR3 receptor complex" in "precedingEvent" for "[Reaction:450346] activated human TAK1 phosphorylates MKK3/MKK6" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:450259] Auto ubiqitination of human TRAF6 bound to the complex viral dsRNS:TLR3:TRIF " in "precedingEvent" for "[Polymerisation:450358] Activated TRAF6 synthesizes unanchored polyubiquitin chains upon TLR stimulation " is not in the slice and removed from the attribute list!
+"[Reaction:5218819] VEGFA dimer:p-6Y-VEGFR2 dimer:PI3K phosphorylates PIP2 to PIP3" in "precedingEvent" for "[Reaction:434637] PIP3 stimulates Vav" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480808] Expression of EXOSC9 (Exonuclease RRP45)" in "precedingEvent" for "[Reaction:430028] 3' to 5' Exoribonuclease Digestion of mRNA by the Exosome Complex" is not in the slice and removed from the attribute list!
+"[Reaction:435238] PP2A inhibits p38 MAPK" in "precedingEvent" for "[Reaction:428961] Phosphorylation of cPLA2 by MAPK p38 alpha" is not in the slice and removed from the attribute list!
+"[Reaction:432146] SHP-1/2 inhibit p38 MAPK" in "precedingEvent" for "[Reaction:428961] Phosphorylation of cPLA2 by MAPK p38 alpha" is not in the slice and removed from the attribute list!
+"[Reaction:913591] GPIb-IX-V binds thrombin" in "hasEvent" for "[Pathway:430116] GP1b-IX-V activation signalling" is not in the slice and removed from the attribute list!
+"[Reaction:913590] Cleavage of GpIb alpha and GPV ectodomains by ADAM17" in "hasEvent" for "[Pathway:430116] GP1b-IX-V activation signalling" is not in the slice and removed from the attribute list!
+"[Reaction:434089] IRAK2 possibly binds to Pellino proteins" in "hasEvent" for "[Pathway:433822] NFkB  and MAPK activation mediated by TRAF6" is not in the slice and removed from the attribute list!
+"[Reaction:435238] PP2A inhibits p38 MAPK" in "hasEvent" for "[Pathway:432142] Platelet sensitization by LDL" is not in the slice and removed from the attribute list!
+"[Reaction:432146] SHP-1/2 inhibit p38 MAPK" in "hasEvent" for "[Pathway:432142] Platelet sensitization by LDL" is not in the slice and removed from the attribute list!
+"[Reaction:2588520] Collagen III cross-links with collagen type II" in "hasEvent" for "[Pathway:2022090] Assembly of collagen fibrils and other multimeric structures" is not in the slice and removed from the attribute list!
+"[Reaction:2197813] Glycation of collagen" in "hasEvent" for "[Pathway:2022090] Assembly of collagen fibrils and other multimeric structures" is not in the slice and removed from the attribute list!
+"[Reaction:2022382] Renin Binds the Renin Receptor" in "precedingEvent" for "[Reaction:2022403] Renin:Prorenin Receptor Hydrolyzes Angiotensinogen to Yield Angiotensin-(1-10)" is not in the slice and removed from the attribute list!
+"[Pathway:3108232] SUMO E3 Ligases SUMOylate Target Proteins" in "hasEvent" for "[Pathway:2990846] SUMOylation" is not in the slice and removed from the attribute list!
+"[Pathway:3215000] SUMO Isopeptidases DeSUMOylate Target Proteins" in "hasEvent" for "[Pathway:2990846] SUMOylation" is not in the slice and removed from the attribute list!
+"[Reaction:5218839] DOCK180:ELMO exchanges GTP for GDP, activating RAC1" in "precedingEvent" for "[Reaction:2029465] WAVE Regulatory Complex (WRC) interacts with RAC1 and PIP3 and gets activated" is not in the slice and removed from the attribute list!
+"[Reaction:5218850] VAV exchanges GTP for GDP on RAC1, activating it" in "precedingEvent" for "[Reaction:2029465] WAVE Regulatory Complex (WRC) interacts with RAC1 and PIP3 and gets activated" is not in the slice and removed from the attribute list!
+"[Reaction:1454801] Defensin activation by MMP7" in "hasEvent" for "[Pathway:1474228] Degradation of the extracellular matrix" is not in the slice and removed from the attribute list!
+"[Reaction:1454759] Immunoglobin G cleavage by MMP3, MMP7" in "hasEvent" for "[Pathway:1474228] Degradation of the extracellular matrix" is not in the slice and removed from the attribute list!
+"[Reaction:1454778] MMPs bind Syndecans" in "hasEvent" for "[Pathway:1474228] Degradation of the extracellular matrix" is not in the slice and removed from the attribute list!
+"[Reaction:1454810] MTMMPs are targetted to specific cell membrane domains" in "hasEvent" for "[Pathway:1474228] Degradation of the extracellular matrix" is not in the slice and removed from the attribute list!
+"[Reaction:3788022] Syndecan-4 binds CXCL12" in "hasEvent" for "[Pathway:3000170] Syndecan interactions" is not in the slice and removed from the attribute list!
+"[Reaction:2454264] 11cROL binds to RLBP1 to form RLBP1:11cROL" in "precedingEvent" for "[Reaction:2454081] RDH5 oxidises 11cROL to 11cRAL" is not in the slice and removed from the attribute list!
+"[Reaction:2454264] 11cROL binds to RLBP1 to form RLBP1:11cROL" in "hasEvent" for "[Pathway:2453902] The canonical retinoid cycle in rods (twilight vision)" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:2528996] Defective RHO does not catalyse GDP/GTP exchange on Gt" in "hasEvent" for "[Pathway:2453864] Retinoid cycle disease events" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:2514900] Defective GNAT1 does not activate PDE6" in "hasEvent" for "[Pathway:2453864] Retinoid cycle disease events" is not in the slice and removed from the attribute list!
+"[Reaction:1013012] Binding of Gbeta/gamma to GIRK/Kir3 channels" in "precedingEvent" for "[Reaction:1013020] Activation of GIRK/Kir3 Channels" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:879923] SRC is activated" in "hasEvent" for "[Pathway:512988] Interleukin-3, 5 and GM-CSF signaling" is not in the slice and removed from the attribute list!
+"[Reaction:879941] SRC binds STAT3" in "hasEvent" for "[Pathway:512988] Interleukin-3, 5 and GM-CSF signaling" is not in the slice and removed from the attribute list!
+"[Reaction:879902] SRC phosphorylates STAT3" in "hasEvent" for "[Pathway:512988] Interleukin-3, 5 and GM-CSF signaling" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:2465919] An ARAT esterifies 11cROL to 11c-RE" in "precedingEvent" for "[BlackBoxEvent:2465941] A REH hydrolyses 11cRE to 11cROL" is not in the slice and removed from the attribute list!
+"[Reaction:2465971] RLBP1 binds atROL to form RLBP1:atROL" in "precedingEvent" for "[BlackBoxEvent:2465926] An atROL isomerase isomerises atROL to 11cROL" is not in the slice and removed from the attribute list!
+"[Pathway:379046] Receptor-ligand complexes bind G proteins" in "hasEvent" for "[Pathway:500792] GPCR ligand binding" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:480826] Expression of REST" in "precedingEvent" for "[Reaction:996727] REST recruits the BHC complex" is not in the slice and removed from the attribute list!
+"[Reaction:1013013] Association of GABA B receptor with G protein beta-gamma subunits" in "hasEvent" for "[Pathway:997272] Inhibition  of voltage gated Ca2+ channels via Gbeta/gamma subunits" is not in the slice and removed from the attribute list!
+"[Reaction:1013012] Binding of Gbeta/gamma to GIRK/Kir3 channels" in "hasEvent" for "[Pathway:997272] Inhibition  of voltage gated Ca2+ channels via Gbeta/gamma subunits" is not in the slice and removed from the attribute list!
+"[Pathway:1483254] Phospholipid Pathways - Inferred Events" in "hasEvent" for "[Pathway:1483257] Phospholipid metabolism" is not in the slice and removed from the attribute list!
+"[Reaction:2168987] DLL4 binds NOTCH4" in "hasEvent" for "[Pathway:1980150] Signaling by NOTCH4" is not in the slice and removed from the attribute list!
+"[Pathway:975458] Voltage-gated ion channel transport" in "hasEvent" for "[Pathway:983712] Ion channel transport" is not in the slice and removed from the attribute list!
+"[Pathway:4419969] Depolymerization of the Nuclear Lamina" in "hasEvent" for "[Pathway:2980766] Nuclear Envelope Breakdown" is not in the slice and removed from the attribute list!

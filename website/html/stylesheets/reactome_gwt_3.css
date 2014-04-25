@@ -1,0 +1,271 @@
+/* Reactome GWT for website 3.x */
+
+/* Generic text box */
+.textbox {
+	text-align: justify;
+	vertical-align: top;
+	background-color: white;
+
+	/* Overwrite padding from other CSS */
+	padding: 2px 2px 2px 2px;
+	margin-bottom: 0px;
+	border-spacing: 0px;
+	border-color: white;
+}
+
+.inner_textbox {
+	text-align: justify;
+	vertical-align: top;
+}
+
+.centred_textbox {
+	text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+	vertical-align: top;
+	background-color: white;
+
+	/* Overwrite padding from other CSS */
+	padding: 2px 2px 2px 2px;
+	margin-bottom: 0px;
+	border-spacing: 0px;
+	border-color: white;
+}
+
+.textbox_disabled {
+	text-align: justify;
+	vertical-align: top;
+	background-color: #B0B0B0 !important; /* Mid gray */
+	color: #909090; /* gray */
+	
+	/* Overwrite padding from other CSS */
+	padding: 2px 2px 2px 2px;
+	margin-bottom: 0px;
+	border-spacing: 0px;
+	border-color: white;
+}
+
+.form_textbox {
+	width: 100%;
+	text-align: justify;
+	vertical-align: top;
+
+	/* from Cheryl's CSS */
+	background-color: #eee !important;
+	border: solid 1px #979797;
+	font-size: 12px;
+	
+	/* Overwrite padding from other CSS */
+	padding: 2px 2px 2px 2px;
+	margin-bottom: 0px;
+}
+
+.undecorated_form_textbox {
+	width: 100%;
+	text-align: justify;
+	vertical-align: top;
+	
+	/* from Cheryl's CSS */
+	font-size: 12px;
+	
+	/* Overwrite padding from other CSS */
+	padding: 2px 2px 2px 2px;
+	margin-bottom: 0px;
+}
+
+table {
+	/* Overwrite padding from other CSS */
+	/* TODO: possible dangerous to do this for all table elements! */
+	margin-bottom: 0px;
+}
+
+.site_map {
+	color:white;
+	text-align: justify;
+	vertical-align: top;
+}
+
+A.site_map_item {
+	color:white;
+}
+
+.site_map_item_header {
+	font-style: italic;
+}
+
+A.site_map_item_header {
+	color:white;
+}
+
+.front_page_button {
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.menu_bar {
+	background-color:#EEEEEE;
+}
+
+.horizontal_inner_panel {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.vertical_inner_panel {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.lightly_padded_box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.text_paste_panel {
+    margin: 5px;
+    min-width: 98%;
+    min-height: 200px;
+}
+
+.section_heading {
+	text-align: center;
+	background-color:navy;
+	color:white;
+}
+
+/* Sortable results table */
+.clickable_cell {
+  cursor: pointer;
+}
+
+.clickable_cell:hover {
+  background-color:gray;
+}
+
+.sortable_table_cell {
+	background-color: white;
+	border-bottom: thin solid #B0C4DE; /* pale blue */
+  border-top: none;
+  border-left: thin solid #B0C4DE; /* pale blue */
+  border-right: thin solid #B0C4DE; /* pale blue */
+}
+
+.sortable_table_first_col {
+	background-color: #eee; /* Cheryl's inner text box background */
+  border-bottom: thin solid white;
+  border-top: none;
+  border-left: thin solid #B0C4DE; /* pale blue */
+  border-right: none;
+}
+
+.sortable_table_header {
+  text-align: center;
+  background-color:navy;
+  border: thin solid #B0C4DE; /* pale blue */
+  color:white;
+}
+
+.sortable_table {
+  border: none;
+}
+
+.sortable_table_panel {
+  min-width: 100%;
+}
+
+/* Regular progress bar */
+.gwt-ProgressBar-shell {
+  border: 2px solid navy;
+  background-color: #AAAAAA;
+  height: 14pt;
+}
+.gwt-ProgressBar-shell .gwt-ProgressBar-bar {
+  background-color: navy;
+}
+.gwt-ProgressBar-shell .gwt-ProgressBar-text {
+  padding: 0px;
+  margin: 0px;
+  color: white;
+}
+
+/* Progress bar used to show species comparison, etc.*/
+.comparison-ProgressBar-shell {
+  border: 2px solid #B0C4DE; /* pale blue */
+  background-color: white;
+  height: 10pt;
+  
+  width: 98%;
+/*  min-width: 100%;*/
+
+	/* Overwrite padding from other CSS */
+	padding: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+	border-spacing: 0px;
+}
+
+.comparison-ProgressBar-shell .gwt-ProgressBar-bar {
+  background-color: #B0C4DE; /* pale blue */
+}
+
+.comparison-ProgressBar-shell .gwt-ProgressBar-text {
+  padding: 0px;
+  margin: 0px;
+  color: black;
+}
+
+.gwt-TabBar {
+background: #ccc;
+padding-top: 6px;
+}
+.gwt-TabBarFirst {
+	
+}
+
+.gwt-TabPanelBottom {
+border-color: white !important;
+border-style: none !important;
+border-width: 0px !important;
+padding: 0px !important;
+}
+
+.popup {
+  margin: 5px;
+  padding: 20px;
+  background-color:white;
+  border: 2px solid #4169E1;
+}
+
+.tooltip {
+  margin: 5px;
+  padding: 2px 3px 3px 3px;
+  background-color:white;
+  border: 2px solid #4169E1;
+/*  color:navy;*/
+}
+
+/* Antonio's spinning wheel */
+.app-Loader{
+    border-radius: 5px;
+    border: 2px solid grey;
+    box-shadow: 4px 4px 2px #888;
+    height: 150px;
+    width: 200px;
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -70px;
+    margin-left:-300px;
+    padding: 50px;
+    text-align: center;
+    
+    background-color: white;
+}
+
+body {
+	background-color: #eee;
+	margin: 0px !important;
+}
+

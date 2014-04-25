@@ -1,0 +1,24 @@
+<?xml version = '1.0' encoding = 'utf-8'?>
+<jnlp spec="1.0+" codebase="http://brie8.cshl.edu:8080/ReactomeTools/AuthorTool" href="authorTool.jnlp">
+   <information>
+      <title>Reactome Author Tool</title>
+      <vendor>The Reactome Project</vendor>
+      <homepage href="http://www.reactome.org"/>
+      <description>The Java tool for annotation in the Reactome project</description>
+      <icon href="R-big.gif" />
+      <offline-allowed />
+   </information>
+   <security>
+      <all-permissions/>
+   </security>
+   <resources>
+      <j2se version="1.5+" max-heap-size="256m" />
+      <jar href="authortool.jar" main="true" />
+      <jar href="mysql.jar" />
+      <jar href="osxAdapter.jar" />
+      <jar href="jdom.jar" />
+      <property name="file.encoding" value="UTF-8"/>
+      <property name="apple.laf.useScreenMenuBar" value="true" />
+   </resources>
+   <application-desc main-class="org.gk.gkEditor.GKEditorFrame"/>
+</jnlp>

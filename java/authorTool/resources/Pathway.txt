@@ -1,0 +1,592 @@
+1-LTR circle formation
+11-cis retinal delivery to rods
+11-cis retinal delivery to rods
+2-LTR circle formation
+AIF mediated cleavage of genomic DNA
+AIF-mediated response
+AKT-1/AKT-2 mediated events
+AMP inhibits the activation of fatty acid metabolism genes
+ATM mediated phosphorylation of repair proteins
+ATM mediated response to DNA double-strand break
+ATP formation
+Activation
+Activation
+Activation and oligomerization of BAK protein
+Activation of  Effector Caspases
+Activation of Adenylate cyclase
+Activation of BAD and translocation to mitochondria 
+Activation of BIM and translocation to mitochondria 
+Activation of BMF and translocation to mitochondria
+Activation of NMDA receptors
+Activation of NOXA and translocation to mitochondria
+Activation of PKB
+Activation of PUMA and translocation to mitochondria
+Activation of Pro-Caspase 8
+Activation of Rho GTPases
+Activation of caspases through apoptosome-mediated cleavage
+Activation of the mRNA upon binding of the cap-binding complex and eIFs, and subsequent binding to 43S
+Activation of the pre-replicative complex
+Activation, myristolyation of BID and translocation to mitochondria
+Activation, translocation and oligomerization of BAX
+Active protein Kinase C Increases cytosolic Ca In platelets 
+Alanine metabolism
+Amplification  of signal from unattached  kinetochores via a MAD2  inhibitory signal
+Amplification of signal from the kinetochores
+Amplification of signal from unattached kinetochore via a checkpoint kinase cascade
+Apoptosis
+Apoptosis induced DNA fragmentation
+Apoptotic execution  phase
+Apoptotic factor-mediated response
+Aspartate, asparagine, glutamate, and glutamine metabolism
+Assembly of HIV virion
+Assembly of the ORC complex at the origin of replication
+Assembly of the RAD50-MRE11-NBS1 complex at DNA double-strand breaks
+Assembly of the RAD51-ssDNA nucleoprotein complex 
+Assembly of the pre-replicative complex
+Association of licensing factors with the pre-replicative complex
+Attachment of GPI anchor to uPAR
+Autointegration
+Autophosphorylation of DINR
+Autophosphorylation of PAK
+B-lymphopoiesis
+BH3-only proteins associate with and inactivate anti-apoptotic BCL-2 members
+Base Excision Repair
+Base-free sugar-phosphate removal via the single-nucleotide replacement pathway
+Beta oxidation of of butanoyl-CoA to acetyl-CoA
+Beta oxidation of of decanoyl-CoA to octanoyl-CoA-CoA
+Beta oxidation of of hexanoyl-CoA to butanoyl-CoA
+Beta oxidation of of lauroyl-CoA to decanoyl-CoA-CoA
+Beta oxidation of of myristoyl-CoA to lauroyl-CoA
+Beta oxidation of of octanoyl-CoA to hexanoyl-CoA
+Beta oxidation of of palmitoyl-CoA to myristoyl-CoA
+Binding of HIV Virion to Host Cell
+Binding of activated Rho GTPases to PAK
+Breakdown of hydrogen peroxide to water and molecular oxygen
+Butyryl-ACP Biosynthesis
+C. elegans insulin receptor signaling pathway
+CDK-mediated phosphorylation and removal of Cdc6
+CaM pathway
+CaMK IV-mediated phosphorylation of CREB
+Calcium flow
+Calcium flow
+Cam-PDE 1 activation
+Cap binding complex (CBC) formation
+Cap-dependent Translation Initiation
+Cap-independent Translation Initiation
+Carnitine synthesis
+Caspase-8 is formed from procaspase-8
+Cdc6 association with the ORC:origin complex
+Cdt1 association with the Cdc6:ORC:origin complex
+Cell Cycle Checkpoints
+Cell Cycle, Mitotic
+ChREBP activates metabolic gene expression
+Chk1/Chk2(Cds1) mediated inactivation of Cyclin B:Cdk1 complex
+Chromosome Maintenance
+Citric acid cycle (TCA cycle)
+Cleavage of Growing Transcript in the Termination Region 
+Cleavage of Holliday junctions
+Cleavage of cellular proteins by active caspases
+Cleavage of the damaged purine
+Clustering of intercellular channels to form Gap Junctions
+Collagen & first Thrombin Activate  Phospholipase C
+Collagen adhesion via Gp IV
+Collagen adhesion via alpha 2 beta 1 glycoprotein
+Collagen-mediated activation cascade
+Common Pathway
+Container Pathway connecting Insulin Cascade to Lipid Metablism
+Conversion of Butyryl-ACP to Palmitoyl-ACP
+Conversion of Fatty Acyl-CoA to Phosphatidic Acid
+Conversion of Phosphatidic Acid to Diacylglycerol
+Conversion of retinyl ester to 11-cis retinol
+Conversion of retinyl ester to 11-cis retinol
+Cori Cycle (interconversion of glucose and lactate)
+Creatine metabolism
+Cyclin A/B1 associated events during G2/M transition
+Cyclin B2 mediated events
+Cyclin D associated events in G1
+Cyclin E associated events during G1/S transition 
+Cytochrome P450
+Cytochrome c-mediated apoptotic response
+DAF-2 -mediated activation
+DAF-2 mediated activation
+DILP binding
+DINR activation and recycling
+DINR cycling back to the plasma membrane
+DNA Damage Bypass
+DNA Damage Recognition in GG-NER
+DNA Repair
+DNA Replication
+DNA Replication Pre-Initiation
+DNA replication initiation
+DNA strand elongation
+DNR AIF events
+DNR ENDOG events
+DNR OMI events
+DNR SMAC binds to IAP reactions
+DNR SMAC/Diablo mediated dissociation of IAP:caspase complexes 
+DNR events for Intrinsic pathway
+DNR reactions
+De novo synthesis of IMP
+De novo synthesis of the pyrimidine ring and conversion to UMP
+Deamination and phosphorylation of deoxycytidine
+Death Receptor  Signalling
+Dehalogenations
+Dehydrogenations
+Deoxyribonucleotide salvage
+Dephosphorylation of Cyclin A/B:Cdc2 complex by Cdc25A
+Dephosphorylation of Cyclin A/B:Cdc2 complex by Cdc25B
+Dephosphorylation of Cyclin A/B:Cdc2 complex by Cdc25C
+Depurination
+Depyrimidination
+Detection of  insufficient microtubule occupancy at kinetochore
+Detection of DNA Damage
+Detection of insufficient tension at kinetochore
+Detection of kinetochores lacking bipolar connections to spindle microtubules
+Diffusion of Neurotransmitter Across the Synaptic Cleft
+Discharge of a Presynaptic Action Potential 
+Disinhibition of SNARE formation
+Displacement of RPA from ssDNA
+Dissolution of Fibrin Clot
+Drosophila Insulin receptor signaling pathway
+Dual incision reaction in GG-NER
+Dual incision reaction in TC-NER
+E2A dependent activity leading to pro-B specification
+E2A/EBF dependent Pax-5 activation of B cell specific gene expression
+E2F mediated regulation of DNA replication
+E2F transcriptional targets at G1/S
+E2F-enabled inhibition of pre-replication complex formation
+ENDO G mediated cleavage of genomic DNA
+ENDO G-mediated response
+ERK-signaling cascade
+ERK1 activation
+ERK2 activation
+Early Expression of HIV genes
+Early Phase of HIV Life Cycle
+Effects on Ca++ levels
+Electric Transmission Across Gap Junctions
+Electron Transport Chain
+Elongation and Processing of Capped Transcripts
+Elongation arrest and recovery
+Elongation of Intron-Containing Transcripts and co-transcriptional mRNA splicing
+Elongation of Intronless Transcripts
+Epoxidations
+Erythropoiesis
+Ester hydrolysis
+Ethanol catabolism
+Eukaryotic Translation Elongation
+Eukaryotic Translation Initiation
+Eukaryotic Translation Termination
+Eukaryotic Translation Termination
+Expression of HIV Nef  gene
+Extrinsic Pathway
+Extrinsic Pathway for Apoptosis
+FMO reactions
+FRS2 mediated signaling
+FasL/ CD95L signaling
+Fatty Acyl-CoA Biosynthesis
+Formation and Maturation of mRNA Transcript
+Formation of ATP by chemiosmotic coupling
+Formation of Acetoacetic Acid
+Formation of Acetyl-FAS
+Formation of Connexon Hemichannels
+Formation of Cytosolic Glycerol-3-phosphate
+Formation of Fibrin Clot (Clotting Cascade)
+Formation of Gap Junction Intercellular Channels 
+Formation of Gap Junctions
+Formation of Malonyl-ACP
+Formation of Platelet plug
+Formation of RAD52 heptameric ring structure complexes on ssDNA
+Formation of RNA Pol II elongation complex 
+Formation of Uridine
+Formation of a pool of free 40S subunits
+Formation of apoptosome
+Formation of dUMP
+Formation of incision complex in GG-NER
+Formation of the Early Elongation Complex
+Formation of the Editosome
+Formation of the ternary complex, and subsequently, the 43S complex
+Formation of transcription-coupled NER (TC-NER) repair complex
+Fructose catabolism
+Fusion and Uncoating of the HIV Virion
+G alpha 12 cascade
+G alpha Q cascade
+G(s)-alpha mediated events in glucagon signalling
+G1 Phase
+G1-Specific Transcription
+G1/S DNA Damage Checkpoints
+G1/S Transition
+G1/S-Specific Transcription
+G2 Phase
+G2 arrest due to inactivation of Cyclin A/B:Cdk1 complexes
+G2 arrest due to inactivation of Cyclin A1:Cdk1 complexes
+G2 arrest due to inactivation of Cyclin A2:Cdk1 complexes
+G2 arrest due to inactivation of Cyclin B1:Cdk1 complexes
+G2 arrest due to inactivation of Cyclin B2:Cdk1 complexes
+G2-specific transcription in mitotic cell cycle
+G2/M Checkpoints
+G2/M DNA damage checkpoint
+G2/M DNA replication checkpoint
+G2/M Transition
+G2/M-specific transcription in mitotic cell cycle
+GTP hydrolysis and joining of the 60S ribosomal subunit
+Galactose catabolism
+Gamma-carboxylation, transport, and amino-terminal cleavage of proteins
+Gap-filling DNA repair synthesis and ligation in GG-NER
+Gap-filling DNA repair synthesis and ligation in TC-NER
+Gene Expression
+Generation of Action Potential in the Postsynaptic Cell
+Generation of Action Potential in the Presynaptic Cell
+Global Genomic NER (GG-NER)
+Glucagon signalling in metabolic regulation
+Gluconeogenesis
+Glucose metabolism
+Glucose uptake
+Glycogen breakdown (glycogenolysis)
+Glycogen synthesis
+Glycolysis
+Golgi Cisternae Pericentriolar Stack Reorganization
+Gt-alpha-PDE* inactivation
+Gt-alpha-PDE* inactivation
+Guanine formation
+HIV Infection
+HIV Life Cycle
+Hematopoiesis
+Hemostasis
+Heteroatom dealkylations
+Heteroatom oxygenations
+Heteroduplex formation
+Histidine catabolism
+Homologous DNA pairing and strand exchange
+Homologous Recombination Repair
+Homologous recombination repair of replication-dependent double-strand breaks
+Homologous recombination repair of replication-independent double-strand breaks
+Hormone-sensitive lipase (HSL)-mediated triacylglycerol hydrolysis
+Host Interactions of HIV factors
+Hydrolysis and deamination of CMP
+Hydrolyzed  phospholipids Activate  protein kinase C 
+Hydroxylations
+Hypoxanthine formation
+IRS activation
+IRS-related events
+Inactivation of  APC via  direct inhibition of the APC complex
+Inactivation of Cyclin A1:Cdc2 complex by ubiquitin-dependent degradation of Cyclin A1
+Inactivation of Cyclin A2:Cdc2 complex by ubiquitin-dependent degradation of Cyclin A2
+Inactivation of Cyclin B1:Cdc2 complex by ubiquitin-dependent degradation of Cyclin B1
+Inactivation of Cyclin B2:Cdc2 complex by ubiquitin-dependent degradation of Cyclin B2
+Inhibition of Cyclin E-Cdk2 by CKIs
+Inhibition of HSL
+Inhibition of replication initiation of damaged DNA by Rb/E2F1
+Initiation of checkpoint signal from defective kinetochores
+Inosine formation
+Insulin effects increased synthesis of Xylulose-5-Phosphate
+Insulin receptor mediated signalling
+Insulin receptor recycling
+Insulin signaling pathway
+Integration of HIV dsDNA into Host Chromosomal DNA
+Integration of pathways involved in energy metabolism
+Interferon (IFN)-gamma mediated induction of ceruloplasmin expression
+Internalization of DINR
+Intrinsic Pathway
+Intrinsic Pathway for Apoptosis
+Isoleucine catabolism
+Ketone Body Metabolism
+L13a-mediated translational silencing of Ceruloplasmin expression
+Lagging Strand Synthesis
+Late Phase of HIV Life Cycle
+Late Transcription of HIV Genome
+Leading Strand Synthesis
+Leucine catabolism
+Lipid metabolism
+Localization of phospho-ATM at sites of double strand breaks 
+Lysine catabolism
+M Phase
+M/G1 Transition
+MAP kinase cascade
+MEK activation
+MRN complex relocalizes to nuclear foci
+Maintenance of Cyclin B:phospho-Cdk1 in the phosphorylated state
+Maintenance of Telomeres
+Maintenance of Trinucleotide Repeat Sequences
+Mal Cascade
+Maturation of HIV Virion
+Metabolism of amino acids and related nitrogen-containing molecules
+Metabolism of glucose, other sugars, and ethanol
+Metabolism of small molecules
+Mitochondrial Fatty Acid Beta-Oxidation
+Mitochondrial Uncoupling Proteins
+Mitochondrial transcription initiation
+Mitochondrial transcription termination
+Mitochondrial transport of long-chain fatty acids
+Mitotic Anaphase
+Mitotic Metaphase
+Mitotic Metaphase/Anaphase Transition
+Mitotic Prometaphase
+Mitotic Prophase
+Mitotic Spindle Checkpoint
+Mitotic Telophase /Cytokinesis
+MyD88 cascade
+NGF signaling
+NMDA-mediated neuronal signaling
+Nef Functions
+Nef mediated downregulation of CD28 cell surface expression
+Nef mediated downregulation of CD4 cell surface expression
+Nef mediated downregulation of MHC class I complex cell surface expression
+Nef-mediated  stimulation of post infection produced virion infectivity
+Nef-mediated T cell activation
+Nef-mediated alteration of normal cell surface proteins intracellular trafficking
+Nonhomologous End-joining (NHEJ)
+Notch Signaling Pathway
+Nuclear Translocation of APOBEC-1 and ACF
+Nucleotide Excision Repair
+Nucleotide metabolism
+OMI cleaves IAPs
+OMI/HTRA mediated-dissociation of IAP:caspase complexes
+OMI/HTRA2 binds to IAPs
+OMI/HTRA2-mediated apoptotic response
+Opioid Signalling
+Orc1 removal from chromatin
+Ornithine and proline metabolism
+Ornithine metabolism
+Oxidative decarboxylation of alpha-keto-beta-methylvalerate to alpha-methylbutyryl-CoA by branched-chain alpha-ketoacid dehydrogenase
+Oxidative decarboxylation of alpha-ketoadipate to glutaryl CoA by alpha-ketoglutarate dehydrogenase
+Oxidative decarboxylation of alpha-ketoglutarate to succinyl CoA by alpha-ketoglutarate dehydrogenase
+Oxidative decarboxylation of alpha-ketoisocaproate to isovaleryl-CoA by branched-chain alpha-ketoacid dehydrogenase
+Oxidative decarboxylation of alpha-ketoisovalerate to isobutyryl-CoA by branched-chain alpha-ketoacid dehydrogenase
+Oxidative decarboxylation of pyruvate and TCA cycle
+Oxidative decarboxylation of pyruvate to acetyl CoA by pyruvate dehydrogenase
+P450 catalytic cycle
+PDE activation
+PDE activation
+PDE3B signalling
+PI3K Cascade
+PI3K cascade
+PKA activation
+PKA activation in glucagon signalling
+PKA-mediated activation of ERK2
+PKA-mediated phosphorylation of CREB
+PKA-mediated phosphorylation of key metabolic factors
+PKB-mediated events
+PKC pathway
+PLA2 pathway
+PLC beta mediated events
+POLRMT chain elongation
+PP2A-mediated dephosphorylation of key metabolic factors
+PU.1 dependent lymphoid specification of progenitor cells
+Palmitate synthesis
+Pausing and recovery of elongation
+Pentose phosphate pathway (hexose monophosphate shunt)
+Peptide chain elongation
+Permeabilization of mitochondria
+Phase I functionalization
+Phenylalanine and tyrosine catabolism
+Phospholipase C Hydrolyzes Inositol  phospholipids
+Phospholipase-mediated signalling
+Phosphorylation of LIM domain kinases by activated PAK
+Placeholder pathway linking Insulin cascade with Triacylglyceridel metabolism
+Platelet Activation
+Platelet Receptor  Assembly &  Platelet aggregation
+Platelet degranulation 
+Plug Formation
+Plus-strand DNA synthesis
+Polo-like kinases
+Polymerase switching
+Post-Elongation Processing of Intron-Containing pre-mRNA
+Post-Elongation Processing of Intronless pre-mRNA
+Presynaptic Exocytosis
+Presynaptic phase of homologous DNA pairing and strand exchange
+Processing of Capped Intron-Containing Pre-mRNA
+Processing of Capped Intronless Pre-mRNA
+Processing of Capped pre-mRNA
+Processing of DNA double-strand break ends
+Processing of DNA ends prior to end rejoining
+Processing of Intronless Pre-mRNAs
+Processive synthesis on the lagging strand
+Proline catabolism
+Proline synthesis
+Propionyl-CoA catabolism
+Prostaglandin isomerizations
+Proteasome mediated degradation of Cyclin D1
+Purine biosynthesis
+Purine catabolism
+Purine metabolism
+Purine salvage reactions
+Pyrimidine biosynthesis (interconversion)
+Pyrimidine catabolism
+Pyrimidine metabolism
+Pyrimidine salvage reactions
+Pyrophosphate hydrolysis
+RAF activation
+RNA Pol II CTD phosphorylation and interaction with CE
+RNA Polymerase I Chain Elongation
+RNA Polymerase I Promoter Clearance
+RNA Polymerase I Promoter Escape
+RNA Polymerase I Promoter Opening
+RNA Polymerase I Transcription
+RNA Polymerase I Transcription Initiation
+RNA Polymerase I Transcription Termination
+RNA Polymerase II Chain Elongation
+RNA Polymerase II Promoter Clearance
+RNA Polymerase II Promoter Escape
+RNA Polymerase II Transcription
+RNA Polymerase II Transcription Elongation
+RNA Polymerase II Transcription Initiation
+RNA Polymerase II Transcription Initiation And Promoter Clearance
+RNA Polymerase II Transcription Pre-Initiation
+RNA Polymerase II Transcription Termination
+RNA Polymerase III Chain Elongation
+RNA Polymerase III Transcription
+RNA Polymerase III Transcription Initiation
+RNA Polymerase III Transcription Initiation From Type 1 Promoter
+RNA Polymerase III Transcription Initiation From Type 2 Promoter
+RNA Polymerase III Transcription Initiation From Type 3 Promoter
+RNA Polymerase III Transcription Termination
+Receptor Activation in the Postsynaptic Cell
+Recognition and association of DNA glycosylase with site containing an affected purine
+Recognition of Double-Strand Breaks by ATM
+Recovery
+Recovery
+Recruitment of RNA Polymerase III to Type 1 Promoter
+Recruitment of RNA Polymerase III to Type 2 Promoter
+Recruitment of RNA Polymerase III to Type 3 Promoter
+Recruitment of repair and signaling proteins to double-strand breaks
+Recycling of eIF2:GDP
+Reduction of cytosolic ribonucleoside 5'-diphosphates to deoxyribonucleoside 5'-diphosphates by ribonucleotide reductase and glutaredoxin
+Reduction of cytosolic ribonucleoside 5'-diphosphates to deoxyribonucleoside 5'-diphosphates by ribonucleotide reductase and thioredoxin
+Reduction of nuclear ribonucleoside 5'-diphosphates to deoxyribonucleoside 5'-diphosphates by ribonucleotide reductase and thioredoxin
+Regeneration
+Regeneration
+Regulation of DNA replication
+Regulation of calcium influx channel activity
+Regulation of calcium influx channel activity
+Regulation of rhodopsin kinase activity
+Regulation of rhodopsin kinase activity
+Release of apoptotic factors from the mitochondria
+Release of eIF4E
+Removal of DNA patch containing abasic residue
+Removal of licensing factors from origins
+Removal of repair proteins and ligation of the processed ends of the DNA double-strand break
+Removal of the Flap Intermediate
+Repair of double strand break through synthesis dependent strand annealing (SDSA)
+Resection of 5Õends of DNA double strand break (DSB)
+Resection of double-strand break ends
+Resolution of AP sites via the multiple-nucleotide patch replacement pathway
+Resolution of AP sites via the single-nucleotide replacement pathway
+Resolution of Abasic Sites (AP sites)
+Resolution of D-loop structures
+Resolution of D-loop structures through Holliday junction intermediates
+Resolution of D-loop structures through synthesis-dependent strand-annealing
+Response to DNA double strand breaks occuring outside of  DNA replication 
+Response to DNA double strand breaks outside S phase
+Response to elevated platelet cytosolic Ca++
+Retention of phospho-Cdc25C:14-3-3 complexes within the cytoplasm
+Retinal regeneration
+Retinal regeneration
+Retinol migration to RPE
+Retinol migration to RPE
+Reverse Transcription of HIV RNA
+Rho GTPases
+Rhodopsin inactivation
+Rhodopsin inactivation
+Rhodopsin regeneration
+Rhodopsin regeneration
+Ribonucleotide salvage
+Ribosomal scanning and start codon recognition
+S Phase
+S-specific transcription in mitotic cell cycle
+S6K1 signalling
+S6K1-mediated signalling
+SHC activation
+SHC-mediated signalling
+SHC-related events
+SLBP Dependent Processing of Replication-Dependent Histone Pre-mRNAs
+SLBP independent Processing of Histone Pre-mRNAs
+SMAC binds to IAPs 
+SMAC-mediated apoptotic response
+SMAC-mediated dissociation of IAP:caspase complexes 
+SOS-mediated signalling
+Signaling Pathways
+Stabilization of p53
+Strand invasion
+Switching of origins to a post-replicative state
+Synaptic Transmission
+Synaptic stable pairing/D-loop structure formation between recombining DNA molecules
+Synthesis of DNA
+Synthesis of GPI-anchored proteins
+Synthesis of Ketone Bodies
+Synthesis of dolichol-phosphate mannose
+Synthesis of glycosylphosphatidylinositol (GPI)
+Synthesis of lysophosphatidic acid from dihydroxyacetone phosphate
+Synthesis of lysophosphatidic acid from glycerol-3-phosphate
+Synthesis of phosphatidic acid from lysophosphatidic acid
+TNF signaling
+TOR signaling pathway
+TRAIL  signaling
+TRAM Cascade
+Targeting of proteolytic activation required for entry into anaphase
+Thrombin-activated activation cascade
+Toll-like Receptor 4 cascade in response to bacterial LPS
+Transcription Complex Assembly at Type 1 Promoters
+Transcription Complex Assembly at Type 2 Promoters
+Transcription Complex Assembly at Type 3 Promoters
+Transcription from mitochondrial promoters
+Transcription-coupled NER (TC-NER)
+Transcriptional  activation of  cell cycle inhibitor p21 
+Transducin activation
+Transducin activation
+Transition of gp41 to its fusogenic conformation
+Translation
+Translation initiation complex formation
+Translesion synthesis by DNA polymerases bypassing lesion on DNA template 
+Translesion synthesis by HREV1
+Translesion synthesis by Pol eta  
+Translesion synthesis by Pol zeta
+Transmission across Chemical Synapses
+Transmission across Electrical Synapses 
+Transport of Mature mRNA Derived from an Intronless Transcript
+Transport of Mature mRNA derived from an Intron-Containing Transcript
+Transport of Mature mRNAs Derived from Intronless Transcripts
+Transport of PIC to the Host Nucleus
+Transport of the SLBP Dependant Mature mRNA
+Transport of the SLBP independent Mature mRNA
+Triacylglyceride Biosynthesis
+Triacylglyceride Catabolism
+Tryptophan catabolism
+Ubiquitin Mediated Degradation of Phosphorylated Cdc25A
+Ubiquitin-Dependent Degradation of Cyclin E1
+Ubiquitin-Dependent Degradation of Cyclin E2
+Ubiquitin-dependent degradation of Cyclin D1
+Urea synthesis
+Utilization of Ketone Bodies
+Valine catabolism
+Vesicles Fuse with the Presynaptic Membrane
+Viral Budding and Exit
+Visual phototransduction in rods
+Visual phototransduction in rods
+Xanthine formation
+Xenobiotic metabolism
+dATP formation
+dGTP formation
+mRNA 3'-end processing
+mRNA Capping
+mRNA Editing
+mRNA Editing: A to I Conversion
+mRNA Editing: C to U Conversion
+mRNA Processing
+mRNA Splicing
+mRNA Splicing - Major Pathway
+mRNA Splicing - Minor Pathway
+mTOR signalling
+minus-strand DNA synthesis
+mitochondrial fatty acid beta-oxidation of saturated fatty acids
+mitochondrial fatty acid beta-oxidation of unsaturated fatty acids
+nuclear RNA export
+p53-Dependent G1 DNA Damage Response
+p53-Dependent G1/S DNA damage checkpoint
+p53-Independent DNA Damage Response
+p53-Independent G1/S DNA damage checkpoint
+phospho-FRS2  binds to SH2/SH3 domain proteins
+phospho-PLA2 pathway
+rRNA processing
+tRNA processing
+transcription regulation, from Pol II promoter
+vWF interaction with collagen

@@ -1,0 +1,9 @@
+69620	Cell Cycle Checkpoints
+69278	Cell Cycle, Mitotic
+69306	DNA Replication
+163685	Integration of pathways involved in energy metabolism
+73923	Lipid metabolism
+71291	Metabolism of amino acids and related nitrogen-containg molecules
+71387	Metabolism of glucose, other sugars, and ethanol
+15869	Nucleotide metabolism
+71406	Oxidative decarboxylation of pyruvate and TCA cycle

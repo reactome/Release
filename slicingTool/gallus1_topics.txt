@@ -1,0 +1,8 @@
+372568 | Amino acid metabolism
+353098 | Carbohydrate metabolism
+353377 | DNA repair
+372442 | Lipid metabolism
+373920 | Pyruvate metabolism
+418124 | Telomere maintenance
+372987 | The tricarboxylic acid cycle
+437987 | Innate immune response mediated by toll like receptors
