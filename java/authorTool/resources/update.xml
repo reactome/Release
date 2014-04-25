@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources uri="http://reactomedev.oicr.on.ca/download/tools/curatorTool/update">
+<resource name="org.jar" timestamp="1368660038000" deleteDir="true" />
+<resource name="docs.jar" timestamp="1368660039000" deleteDir="true" />
+<resource name="resources.jar" timestamp="1368660038000" deleteDir="false" />
+<resource name="lib.jar" timestamp="1368660040000" deleteDir="false" />
+<resource name="images.jar" timestamp="1368660038000" deleteDir="true" />
+</resources>

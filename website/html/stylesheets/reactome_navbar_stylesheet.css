@@ -1,0 +1,88 @@
+/*
+###############################################################################
+#              								      #
+# PULLDOWN NAVIGATION BAR           					      #
+#              								      #
+###############################################################################
+*/
+
+@import "/stylesheets/reset-fonts-grids.css";
+@import "/stylesheets/menu.css";
+
+/* Undo the evil wrought by reset-fonts-grids.css */
+body {
+	text-align:left;
+}
+
+.bd ul li a {
+	border: thin solid #B0C4DE !important;
+	border-width:1px 0px 1px 0px !important;
+        color: #4169E1 !important;
+}
+
+.bd ul li a:hover,.bd ul li a:focus {
+        color: black !important;
+}
+
+.yuimenubar .bd ul {
+        background-color:  #DCDCDC;
+	border: thin solid #B0C4DE;
+	border-width:1px 1px 1px 1px;
+}
+
+.yuimenubar .bd ul a, .yuimenubar .bd ul a:visited {
+        font-size:1em; /* font size in IE is a bit tiny without this */
+        font-weight:bold;
+/*	line-height:3em;
+	height:3em;*/
+	line-height:2.1em;
+	height:2.1em;
+	text-decoration:none;
+}
+
+.yuimenuitem {
+	padding-left: 0px;
+}
+
+/* Reactome gray background for everything */
+.bd ul a {
+        background:  #DCDCDC !important;
+        background-color:  #DCDCDC !important;
+}
+
+/* Reactome blue background when cursor is over a cell */
+.bd ul a:hover, .bd ul a:focus {
+        background:  #B0C4DE !important;
+        background-color:  #B0C4DE !important;
+}
+
+/* Get rid of black border around menu bar and menus */
+.yui-skin-sam .yuimenubar, .yui-skin-sam .yuimenu .bd {
+	border: thin solid #B0C4DE;
+	border-width:0px 1px 0px 0px;
+}
+
+/* IE needs this to stop menu items stretching across page */
+.yuimenu div ul {
+	width:14em;
+}
+
+/* Get rid of excess padding around menus */
+.yuimenu .bd ul {
+        padding:0 0 0 0;
+	margin:0 0 0 0;
+}
+
+.yuimenubaritem {
+	border: thin solid #B0C4DE;
+	border-width:0px 1px 0px 0px;
+        background-color:  #DCDCDC;
+}
+
+/* Sets zero left padding for home button, because of the
+   Reactome icon */
+.bd ul li a.home {
+        padding-left:0px;
+}
+
+.yuimenu { z-index: 9051; }

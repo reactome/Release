@@ -1,0 +1,4 @@
+Total SimpleEntity instances: 6014
+Total SimpleEntity instances from AraCyc: 1778
+AraCyc_Instance	Duplicate	Duplicated Instance	Is_Rice_Cyc
+Total duplicated SimpleEntity instances: 0

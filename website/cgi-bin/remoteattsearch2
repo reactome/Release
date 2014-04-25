@@ -1,0 +1,607 @@
+#!/usr/local/bin/perl -w -T
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+#use lib "/tmp/libs/bioperl-1.0";
+#use lib "/tmp/libs/my_perl_stuff";
+use CGI qw(:standard);
+use GKB::Config;
+use GKB::WebUtils;
+
+use strict;
+
+my ($DBA,$WU,$INSTANCES,$IN_HTML,$DB);
+my $CGI = CGI->new();
+
+eval {
+
+$WU = GKB::WebUtils->new_from_cgi(
+    -CGI => $CGI,
+    -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+    );
+
+print_page_start();
+my $o = $WU->dba->ontology;
+print_javascript($o, $CGI->param('DB'));
+print_page_end();
+
+}; $@ && handle_error("$@");
+
+sub handle_error {
+    ($IN_HTML) ? print qq(<PRE>@_</PRE>) : print @_;
+    print_page_end();
+    exit;   
+}
+
+sub print_page_start {
+    $IN_HTML = 1;
+    print $CGI->header(-charset => 'UTF-8');
+    print $CGI->start_html(
+	-style => {-src => '/stylesheet.css'},
+	-title => "search tool for experts in $PROJECT_NAME data model",
+	);
+    print $WU->top_navigation_box;
+}
+
+sub print_page_end {
+    ($WU && $IN_HTML) &&  print $WU->make_footer;
+    ($IN_HTML) && print $CGI->end_html;
+    ($DBA) && $DBA->db_handle->disconnect;
+}
+
+sub print_javascript {
+    my ($o,$db_name) = @_;
+    print qq(<div id="contentdiv"></div>\n);
+    print qq(<script language="JavaScript">\n);
+    print get_javascript();
+    print get_datamodel_in_javascript($o);
+    print <<__HERE__;
+dbName = '$db_name';
+var textAreaRowFixer = ((BrowserDetect.browser == "Mozilla") || (BrowserDetect.browser == "Firefox")) ? -1 : 0;
+createEmptyDivs();
+document.getElementById('div_class_menu').innerHTML = "Restrict search to a class " + createClassMenu(schema) + '<p />' + 'Fields';
+addRow();
+document.getElementById('results').innerHTML = '<PRE>' + log + '</PRE>';
+__HERE__
+    print qq(</script>\n);
+}
+
+sub get_datamodel_in_javascript {
+    my ($o) = @_;
+    my $out = "var schema = new Schema();\n";
+    foreach my $class ($o->list_classes) {
+	my @parents = $o->parents($class);
+	my @children = $o->children($class);
+	my @tmp;
+	foreach my $att (grep {! /^(_Protege_id|__is_ghost)$/} $o->list_class_attributes($class)) {
+	    my @allowed_classes = $o->list_allowed_classes($class,$att);
+	    push @tmp,  "'$att':[" . join(',', map {"'$_'"} @allowed_classes) . ']';
+	}
+	$out .= "schema.addClass(['$class',[" . 
+	    join(',', map {"'$_'"} @parents) . '],[' . 
+	    join(',', map {"'$_'"} @children) . '],{' . 
+	    join(',', @tmp) . "}]);\n";
+    }
+    $out .= "schema.init()\n";
+    return $out;
+}
+
+sub get_javascript {
+    return <<__END__;
+var menuCount = 0;
+var rows = new Array();
+var id2coords = new Object();
+var dbName;
+var log = '';
+
+function createPopupMenu(name,value2Label,selected,onchange) {
+    var out = '<select id="' + name + '" onchange="' + onchange + '">';
+    var tmp = new Array();
+    var tmp2 = new Array();
+    for (value in value2Label) {
+        (value.match(':')) ? tmp2.push(value) : tmp.push(value);
+    }
+    tmp = tmp.sort();
+    tmp2 = tmp2.sort();
+    tmp = tmp.concat(tmp2);
+    for (var i = 0; i < tmp.length; i++) {
+	var value = tmp[i];
+        var str = (value == selected) ? ' selected="selected"' : ''; 
+        out += '<option' + str + ' value="' + value + '">' + value2Label[value] + '</option>';
+    }
+    out += '</select>';
+    return out;
+}
+
+function createClassMenu(schema) {
+    var value2Label = new Object();
+    var classes = schema.getSchemaClasses();
+    for (var i = 0; i < classes.length; i++) {
+        var cls = classes[i];
+        value2Label[cls.name] = cls.name;
+    }
+    return createPopupMenu('class_menu',value2Label,null,"handleClassMenuChange(this)");
+}
+
+function handleAttributeMenuChange1(elem) {
+    var attName = elem.value;
+    var row = id2coords[elem.id][0];
+    var col = id2coords[elem.id][1];
+    var schemaClasses = rows[row][col];
+    var schemaClasses2 = new Array();
+    for (var i = 0; i < schemaClasses.length; i++) {
+        var cls = schemaClasses[i];
+        var att = cls["attributes"][attName];
+        if ((att != undefined) && (att.validClasses != undefined)) {
+            var clsMap = att.validClasses;
+            for (var clsName in clsMap) {
+                schemaClasses2.push(clsMap[clsName]);
+            }
+        }
+    }
+    if (schemaClasses2.length > 0) {
+        setAttributeMenuAtPos(row, col + 1, schemaClasses2, schemaClasses2);
+    } else {
+        removeAttributeMenuAtPos(row, col + 1);
+    }
+}
+
+function handleAttributeMenuChange(elem) {
+    var row = id2coords[elem.id][0];
+    var col = id2coords[elem.id][1];
+    var schemaClasses = rows[row][col];
+    var schemaClasses2;
+    var value = elem.value;
+    var idx = value.indexOf(':');
+    var attName;
+    if (idx < 0) {
+	attName = value;
+	schemaClasses2 = new Array();
+	for (var i = 0; i < schemaClasses.length; i++) {
+	    var cls = schemaClasses[i];
+	    var att = cls["attributes"][attName];
+	    if ((att != undefined) && (att.validClasses != undefined)) {
+		var clsMap = att.validClasses;
+		for (var clsName in clsMap) {
+		    schemaClasses2.push(clsMap[clsName]);
+		}
+	    }
+	}
+    } else {
+	var clsName = value.slice(idx + 1);
+	schemaClasses2 = schema.getSchemaClassesAndDescendants([clsName]);
+    }
+    if (schemaClasses2.length > 0) {
+        setAttributeMenuAtPos(row, col + 1, schemaClasses2, schemaClasses2);
+    } else {
+        removeAttributeMenuAtPos(row, col + 1);
+    }
+}
+
+function handleClassMenuChange(elem) {
+    var clsName = elem.value;
+    var schemaClassesForRevAtts = schema.getSchemaClasses([clsName]);
+    var schemaClasses = schema.getSchemaClassesAndDescendants([clsName]);
+    for (var i = 0; i < rows.length; i++) {
+        if (rows[i] == undefined) { continue; }
+	setAttributeMenuAtPos(i, 0, schemaClasses, schemaClassesForRevAtts);
+    }
+}
+
+function setAttributeMenuAtPos(row, col, schemaClasses, schemaClassesForRevAtts) {
+    var div = document.getElementById('div_' + row + '_' + col);
+    if (div == null) {
+        div = document.createElement('div');
+        div.id = 'div_' + row + '_' + col;
+        div.style.display = "inline";
+        var rowDiv = document.getElementById('div_' + row);
+        rowDiv.childNodes[1].appendChild(div);
+    }
+    var id = 'menu_' + row + '_' + col;
+    var existingMenu = document.getElementById(id);
+    var selected;
+    if (existingMenu != null) {
+	selected = existingMenu.value;
+    }
+    id2coords[id] = [row, col];
+    rows[row][col] = schemaClasses;
+    div.innerHTML = createAttributeMenu(id,schemaClasses,schemaClassesForRevAtts,selected);
+    if (existingMenu != undefined) {
+        handleAttributeMenuChange(existingMenu);
+    }
+}
+
+function removeAttributeMenuAtPos(row, col) {
+    var div = document.getElementById('div_' + row + '_' + col);
+    if (div == null) {
+	return;
+    }
+    var id = 'menu_' + row + '_' + col;
+    var existingMenu = document.getElementById(id);
+    if (existingMenu != undefined) {
+        removeAttributeMenuAtPos(row, col + 1);
+        delete id2coords[id];
+	rows[row].length = col;
+        div.innerHTML = '';
+    }
+    div.parentNode.removeChild(div);
+}
+
+function createAttributeMenu(id,schemaClasses,schemaClassesForRevAtts,selected) {
+    //var value2Label = new Object();
+    var value2Label = {' ' : ' '};
+    for (var i = 0; i < schemaClasses.length; i++) {
+	var cls = schemaClasses[i];
+        var attMap = cls.attributes;
+        for (var attName in attMap) {
+            value2Label[attName] = attName;
+        }
+    }
+    for (var i = 0; i < schemaClassesForRevAtts.length; i++) {
+	var cls = schemaClassesForRevAtts[i];
+	attAr = cls.reverseAttributes;
+        for (var j in attAr) {
+	    var att = attAr[j];
+	    var str = att.name + ':' + att.owner.name;
+            value2Label[str] = str;
+        }
+    }
+    if ((selected == undefined) || (value2Label[selected] == undefined)) {
+        selected = ' ';
+    }
+    return createPopupMenu(id, value2Label, selected, 'handleAttributeMenuChange(this)');
+}
+
+function addRow() {
+    addRowDiv();
+    var row = rows.push(new Array()) - 1;
+    var clsName = document.getElementById('class_menu').value;
+    var schemaClassesForRevAtts = schema.getSchemaClasses([clsName]);
+    var schemaClasses = schema.getSchemaClassesAndDescendants([clsName]);
+    setAttributeMenuAtPos(row, 0, schemaClasses, schemaClassesForRevAtts);
+    operatorMenuAndValueBoxForRow(row);
+}
+
+function addRowDiv() {
+    var i = rows.length;
+    var rowContainer = document.getElementById('rowdivs');
+    var rowDiv = document.createElement('div');
+    rowDiv.id = 'div_' + i;
+    rowDiv.className = "rowdiv";
+    var str = "<div style=\\"display:inline;\\"><div style=\\"display:inline;\\"><img src=\\"/icons/minus-box.gif\\" onclick=\\"removeRow(" + i + ")\\" onmouseover=\\"ddrivetip2('Remove field','#DCDCDC')\\" onmouseout=\\"hideddrivetip2()\\"/></div></div>";
+    str += '<div style="display:inline;padding-left:2px;"><div style="display:inline;" id="div_' + i + '_0"></div></div>';
+    str += '<div style="display:inline;padding-left:2px;"><div style="display:inline;" id="div_' + i + '_operator"></div></div>';
+    str += '<div style="display:inline;padding-left:2px;"><div style="display:inline;" id="div_' + i + '_value"></div></div>';
+    rowDiv.innerHTML = str;
+    rowContainer.appendChild(rowDiv);
+}
+
+function removeRow(r) {
+    if (r == null) {
+	var menus = rows.pop();
+	r = rows.length;
+    } else {
+        delete rows[r];
+	//Should not use splice here since row number is used in the div id
+	//rows = rows.splice(r,1);
+    }
+    var rowContainer = document.getElementById('rowdivs');
+    var rowDiv = document.getElementById('div_' + r);
+    rowContainer.removeChild(rowDiv);
+    return;
+}
+
+function createEmptyDivs() {
+    var str = '<div class="section"><div class="search">';
+    str += '<div id="div_class_menu"></div>';
+    str += '<div id="rowdivs"></div>';
+//    str += '</div>';
+    str += "<img src=\\"/icons/plus-box.gif\\" onclick=\\"addRow()\\" onmouseover=\\"ddrivetip2('Add field','#DCDCDC')\\" onmouseout=\\"hideddrivetip2()\\" />";
+    str += '<div style="padding-top:2px;text-align:center;"><input type="submit" name="SUBMIT" value="Search" onclick="javascript:submitForm();" style="font-weight:bold;" /></div>';
+    str += '<div id="tempformdiv"></div>';
+    str += '<div id="results"></div>';
+    str += '</div></div>';
+// Should not append anything to document.body.innerHTML as this somehow makes the tooltip stuff silently not to work.
+//    document.body.innerHTML += str;
+    document.getElementById('contentdiv').innerHTML += str;
+}
+
+function operatorMenuAndValueBoxForRow(row) {
+    var div = document.getElementById('div_' + row + '_value');
+    div.innerHTML = '<textarea id="textarea_' + row + '" rows="' + (2 + textAreaRowFixer) + '" cols="20"></textarea>';
+    div = document.getElementById('div_' + row + '_operator');
+    div.innerHTML = '<select id="' + 'operator_' + row + '">' +
+	'<option selected="selected" value="EXACT">with the EXACT PHRASE ONLY</option>' +
+	'<option value="REGEXP">matching REGULAR EXPRESSION</option>' +
+	'<option value="ALL">with ALL of the words</option>' +
+	'<option value="ANY">with ANY of the words</option>' +
+	'<option value="PHRASE">with the EXACT PHRASE</option>' +
+	'<option value="!=">!=</option>' +
+	'<option value="IS NULL">with no value</option>' +
+	'<option value="IS NOT NULL">with any value</option>' +
+	'</select>';
+}
+
+function submitForm() {
+    var form = '<form method="POST" action="/cgi-bin/remoteattsearch" enctype="application/x-www-form-urlencoded" name="tempform">'
+	+ '<input type="hidden" name="QUERY_CLASS" value="' + document.getElementById('class_menu').value + '" />';
+    if (dbName) {
+	form += '<input type="hidden" name="DB" value="' + dbName + '" />';
+    }
+    for (var r = 0; r < rows.length; r++) {
+	var cols = rows[r];
+        if (cols == undefined) {
+	    continue;
+	}
+	var menuVal = document.getElementById('menu_' + r + '_0').value;
+	if (menuVal == ' ') {
+	    // Skip rows where attribute is not specified
+	    continue;
+	}
+        var attStr = menuVal;
+        for (var c = 1; c < cols.length; c++) {
+            menuVal = document.getElementById('menu_' + r + '_' + c).value;
+	    if (menuVal != ' ') {
+		attStr += '.' + menuVal;
+	    }
+	    //attStr += '.' + document.getElementById('menu_' + r + '_' + c).value;
+        }
+        form += '<input type="hidden" name="ATTRIBUTE#' + r + '" value="' + attStr + '"  />'
+        + '<input type="hidden" name="OPERATOR#' + r + '" value="' + document.getElementById('operator_' + r).value + '"  />'
+        + '<input type="hidden" name="VALUE#' + r + '" value="' + document.getElementById('textarea_' + r).value + '"  />';
+    }
+    form += '<input type="hidden" name="SUBMIT" value="Search"  /></form>';
+    var div = document.getElementById('tempformdiv');
+    div.innerHTML = form;
+    document.tempform.submit();
+}
+
+function SchemaClass(name,parents,children,attributes) {
+    this.name = name;
+    this.set("parents",parents);
+    this.set("children",children);
+    this.set("attributes",attributes);
+    this.reverseAttributes = new Array();
+};
+
+SchemaClass.prototype.set = function(key,arr) {
+    if (arr != undefined) {
+        this[key] = new Object();
+	for (var i = 0; i < arr.length; i++) {
+            var val = arr[i];
+	    this[key][val.name] = val;
+	}
+    }
+};
+
+SchemaClass.prototype.add = function(key,val) {
+    if (val != null) {
+        if (this[key] == null) {
+            this[key] = new Object();
+        }
+	this[key][val.name] = val;
+    }
+};
+
+SchemaClass.prototype.getDescendants = function() {
+    if (this.descendants == undefined) {
+        var seen = new Object();
+        if (this.children != undefined) {
+	    for (var chldName in this.children) {
+		var chld = this.children[chldName];
+		seen[chld.name] = chld;
+		var cds = chld.getDescendants();
+		for (var descName in cds) {
+		    seen[descName] = cds[descName];
+		}
+	    }
+	}
+	this.descendants = seen;
+    }
+    return this.descendants;
+};
+
+SchemaClass.prototype.getDescendantsAsArray = function() {
+    var clsMap = this.getDescendants();
+    var out = new Array();
+    for (clsName in clsMap) {
+	out.push(clsMap[clsName]);
+    }
+    return out;
+};
+
+SchemaClass.prototype.getDescendantAttributes = function() {
+    if (this.descendantAttributes == undefined) {
+        var seen = new Object();
+        for (var i in this.getDescendants()) {
+	    var cls = tmp[i];
+            for (var j in cls.attributes) {
+		seen[cls.attributes[j].name] = cls.attributes[j];
+            }
+        }
+	this.descendantAttributes = seen;
+    }
+    return this.descendantAttributes;
+};
+
+SchemaClass.prototype.init = function() {
+    for (var attName in this.attributes) {
+	this.attributes[attName].init();
+    }
+};
+
+SchemaClass.prototype.collapseReverseAttributes = function() {
+    var tmp = new Object();
+    //log += this.name + ' ' + this.reverseAttributes.length;
+    for (var i in this.reverseAttributes) {
+	var att = this.reverseAttributes[i];
+	if (! tmp[att.name]) {
+	    tmp[att.name] = new Object();
+	}
+	tmp[att.name][att.owner.name] = att;
+    }
+    for (var attName in tmp) {
+	var h = tmp[attName];
+	for (var clsName in h) {
+	    //log += this.name + '.' + attName + ": " + clsName + "\\t" + h[clsName] + "\\n";
+	    // In Mozilla 1.3 it seems that deleting from a hash over which we loop does not
+	    // result from the loop become aware of the deletions
+	    if (h[clsName]) {
+		var descendants = h[clsName].owner.getDescendants();
+		for (var descClsName in descendants) {
+		    delete tmp[attName][descClsName];
+		}
+	    }
+	}
+    }
+    this.reverseAttributes = new Array();
+    for (var attName in tmp) {
+	var h = tmp[attName];
+	for (var k in h) {
+	    this.reverseAttributes.push(h[k]);
+	}
+    }
+    //log +=  ' ' + this.reverseAttributes.length + "\\n";
+};
+
+function SchemaClassAttribute(name,owner,validClasses) {
+    this.name = name;
+    this.owner = owner;
+    if (validClasses != undefined) {
+	this.validClasses = new Object();
+        for (var i = 0; i < validClasses.length; i++) {
+            var cls = validClasses[i];
+            this.validClasses[cls.name] = cls;
+        }
+    }
+};
+
+SchemaClassAttribute.prototype.init = function() {
+    if (this.validClasses != undefined) {
+	//log += this.name + "\\t";
+        var validClasses = this.validClasses;
+        for (var clsName in validClasses) {
+	    //log += clsName + "(";
+            var cls = validClasses[clsName];
+            var cds = cls.getDescendants();
+	    for (clsName2 in cds) {
+		//log += clsName + " ";
+		this.validClasses[clsName2] = cds[clsName2];
+	    }
+            //log += ")";
+	}
+	//log += ' reverse attribute for:'
+	for (var clsName in this.validClasses) {
+	    var cls = this.validClasses[clsName];
+	    //log += ' ' + cls.name;
+	    cls.reverseAttributes.push(this);
+	}
+	//log += "\\n";
+    }
+};
+
+SchemaClassAttribute.prototype.getReverseAttributes = function() {
+    if (this.reverseAttributes != undefined) {
+    }
+    return this.reverseAttributes;
+};
+
+function Schema() {
+    this.classes = new Object();
+};
+
+Schema.prototype.addClass = function(obj) {
+    var cls = this.getSchemaClass(obj[0]);
+    if (obj[1].length > 0) cls.set("parents", this.getSchemaClasses(obj[1]));
+    if (obj[2].length > 0) cls.set("children", this.getSchemaClasses(obj[2]));
+    var attHash = obj[3];
+    for (var attName in attHash) {
+        var arr = attHash[attName];
+        if (arr.length == 0) {
+	    cls.add("attributes", new SchemaClassAttribute(attName, cls, null));
+        } else {
+            cls.add("attributes", new SchemaClassAttribute(attName, cls, this.getSchemaClasses(arr)));
+        }
+    }
+};
+
+Schema.prototype.getSchemaClass = function(name) {
+    var cls = this.classes[name];
+    if (cls == undefined) {
+	cls = new SchemaClass(name);
+        this.classes[name] = cls;
+    }
+    return cls;
+};
+
+Schema.prototype.getSchemaClasses = function(names) {
+    if ((names == undefined) || (names.length == 0)) {
+        names = new Array();
+        for (var name in this.classes) {
+            names.push(name);
+        }
+    }
+    var out = new Array();
+    for (var i = 0; i < names.length; i++) {
+        out.push(this.getSchemaClass(names[i]));
+    }
+    return out;
+};
+
+Schema.prototype.getSchemaClassesAndDescendants = function(names) {
+    if ((names == undefined) || (names.length == 0)) {
+        names = new Array();
+        for (var name in this.classes) {
+            names.push(name);
+        }
+    }
+    var tmp = new Object();
+    for (var i = 0; i < names.length; i++) {
+	var cls = this.getSchemaClass(names[i]);
+	tmp[cls.name] = cls;
+	var ds = cls.getDescendants();
+        for (var clsName in ds) {
+	    var d = ds[clsName];
+	    tmp[d.name] = d;
+	}
+    }
+    var out = new Array();
+    for (var clsName in tmp) {
+	out.push(tmp[clsName]);
+    }
+    return out;
+};
+
+Schema.prototype.init = function() {
+    for (var clsName in this.classes) {
+	var cls = this.classes[clsName];
+        cls.init();
+    }
+    for (var clsName in this.classes) {
+	var cls = this.classes[clsName];
+	cls.collapseReverseAttributes();
+/*	try {
+	    cls.collapseReverseAttributes();
+	} catch(err) {
+	    log += err + "\\n";
+	}*/
+    }
+};
+
+__END__
+
+}

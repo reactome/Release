@@ -1,0 +1,806 @@
+Build 73 notes (February 20, 2012):
+
+Changes:
+
+1). A new way to generate _displayName for EntityFunctionalStatus.  For example, for EntityFunctionlStatus 2900744, the display name will be "gain_of_function of NOTCH1HD+PEST Domain Mutants". So a simple functional status will be fetched from three listed functionalStatus values as the first part, the name of PE without compartment will be used as the second part, and these two parts will be linked together with "of".
+
+2). Merging two instances will create a new _Deleted instance for the merged away instance with necessary attribute values. Also a new dialog will be popped out to show merging has been completed, and remind the curator to commit the _Deleted instance into the database.
+
+3). Reaction imbalance check now considers polymer modification (e.g. Ubiquitination reaction: http://reactomecurator.oicr.on.ca/cgi-bin/eventbrowser?DB=gk_central&ID=174144). 
+
+Bug fixes:
+
+1). For old PMID entries, year cannot be fetched. This has been fixed. Thanks to Phani for pointing this bug out.
+
+2). Disable "Add/Set" when an un-editable attribute name is selected in the attribute table. Thanks to Bruce for pointing this bug out.
+
+3). Bug fix: Species checking for EntitySet. If an EntitySet has Polymer instances used as its members, the curator tool incorrectly flags it. This has been fixed now. Thanks to Lisa for pointing this bug out.
+
+Build 72 notes (September 17, 2012):
+
+New features:
+
+1). Per request from Mike, added an export action for a list of selected attribute values in the attribute editing table for the local project. This list of attributes can be exported into a tab-delimited text file.
+
+2). QA features:
+
+	a. Show is_in_disease flag for output from QA check, “Reactions in All Diagrams”, as suggested by Lisa.	b. Add a filter to filter showed results in QA checks for Reactions in Diagrams and Pathways in Diagrams. The filter format as as following		i.Check the whole row contains a text: “text” (e.g. homo sapiens)		ii.Check a specific column for a row: col_header:"text" (e.g. Species:homo sapiens)		iii. Check multiple columns for a row: col_header:text; col_header:text (e.g. _doRelease:true; Species:homo)		iv.Notes: column header is case sensitive; only displayed filtered rows will be dumped into an external file.
+
+3). Support auto-fetching attributes for all subclasses to the new ExternalOntology class.
+
+
+Build 71 notes (August 23, 2012):
+
+Bug fix: the hasMember attribute has been removed in the data model, but still hard-coded and used in a QA check for missing reactions in PathwayDiagram. This has been fixed now.
+
+Build 70 notes (July 26, 2012):
+
+New features and update:
+
+1). Added format options for entities in the ELV view: the curator can specify border thickness and if a dash border is needed. This can be used for loss of function entities.
+
+2). The selection of "Show/Hide Reaction at the top level" in both the event view and the elv view has been persisted now.
+
+3). Updated for the new FunctionalStatusType class.
+
+Build 69 notes (July 17, 2012):
+
+Bug fixes:
+
+1). Inserting an EntitySet instances into the Pathway ELV will create a self EntitySet to EntitySet link. This bug has been fixed. Effected 11 PD instances have been fixed in the gk_central database too.
+
+2). Auto-update has been disabled completely: the install web page will be displayed.
+
+New feature:
+
+1). Auto-fetch the name attribute for the SequenceOntology class.
+
+Build 68 notes (May 11, 2012):
+
+New features:
+
+1). Supported the new FunctionalStatus class, which has an attribute called "fucntionalStatusType". FunctionStatusType currently has five types only. The new build supports edit by selecting from this list.
+
+2). Blocked using [] in the name attribute. [] is used to the tool for removing compartment in ELV.
+
+3). Added a new QA to check class types used in EntitySet's hasMember and CandidateSet's hasCandidate attributes. Invoke it using menu: Tools/QA Check/EntitySet Type Check
+
+4). During auto-filling attributes for a new instance (e.g. a new ReferenceMolecule from ChEBI), the database will be checked first to avoid duplication.
+
+5). Updated pubmed auto-filling: first name can be fetched from pubmed right now. However, a side-effect is the first name may be just initial with space, for example, authors for pubmed: 8889590 (DB_ID: 2160457). This may effect entries before 2002.
+
+Bug fixes:
+
+1). _displayName cannot be displayed correctly in the event view after type switch. This has been fixed. Thanks for Steve for pointing this out.
+
+2). Deleting a Regulation instance cannot update regulator displayed in pathway ELV. This has been fixed now.
+
+Build 67 notes (April 11, 2012):
+
+1). Added support to add links between two EntitySet instances sharing common members or candidates in a pathway ELV. Links are displayed as light gray with long dashes.
+
+2). Added support to add links between a CandidateSet instance and its candidates in a pathway ELV. Links are displayed the same as ones for EntitySet and its members.
+
+Build 66 notes (January 24, 2012):
+
+New feature:
+
+As requested by both Bijay and Phani, the "DefinedSet Modifcation Utility" implemented in Build 65 has been changed to "Clone DefinedSet Deeply". In this expanded feature, the curator can clone a DefinedSet having EWAS instances as its members, clone its members, add modification to each cloned member, set modification coordinates, set compartment in cloned members and cloned DefinedSet, reset names in cloned members using pattern search/replace, prefixing, or setting one by one, and create a reaction to link original DefinedSet and cloned DefinedSet together.
+
+Build 65 notes (January 11, 2012):
+
+Bug fix: 
+
+1). a local instance cannot be updated using the popup menu in the central instance list in the local schema view if its class has been changed in the DB. This has been fixed now.
+
+New Features:
+
+1). Add hasModifiedResidue: when the curator selects an EWAS in the central instance list in the local schema view, a new popup menu called "Add hasModifiedResidue" has been added. Select this popup menu, a dialog is displayed. The curator can specify a list of coordinates in the dialog. The tool will generate a list of modification instances based on values in the modification template, and in the coordinate text field, attach them to the selected EWAS as "hasModifiedResidue" values. This feature is requested by Marija.
+
+2). Create Member Modification: when the curator selects a DefinedSet in the central instance list in the local schema view, a new popup menu called "Create Member Modification" has been added. This new feature is requested by Bijay to do a batch creation of modified EWAS for a DefinedSet and more. Select this popup menu, a dialog is display. In this dialog, the curator can specify if names should be changed in cloned members for a new EntitySet, a new reaction should be created (default is yes). The curator should specify any shared values in the modification instance template. If shell instances have been used in the selected DefinedSet's hasmember slot, the curator will be asked if auto-download should be done. Please note: the name of the new DefinedSet is: Clone of {original DefineSet name}; the name of the new reaction is: (auto generated) {original DefinedSet name} Modification; if no find/replace used, names of cloned members will be "Clone of …". Otherwise, new names will be generated.
+
+3). Added a new menu for launching disease ontology as suggested by Marc.
+
+Note: Features 1 and 2 work for a non-shell selected instance only in a local project. If a selected instance is a shell instance, the popup menu will not be shown.
+
+Build 64 notes (November 3, 2011):
+
+Bug fix: Drag and drop a pathway node into a ELV panel will create links between this pathway and all existing pathway nodes.
+
+Build 63 notes (October 18, 2011):
+
+Added new features to support links between EntitySet instances and their members in pathway diagrams:
+
+1). When an EntitySet instance and its members are dragged into a pathway diagram, links will be automatically created between them.
+
+2). These links will be updated according to value editing in the hasMember attribute in an EntitySet.
+
+3). The curator can delete such a link after selecting it. Multiple selection and deletion are supported.
+
+4). The curator is also able to add a link back to diagram if it is deleted by choosing both EntitySet and its member, and using a popup menu called "Add EntitySet and Member Link".
+
+Build 62 notes (October 11, 2011);
+
+Bug fix: a new PathwayDiagram automatically created from the ELV in the curator tool cannot be opened after committed into the gk_central database. Thanks to Lisa for pointing this out.
+
+Build 61 notes (October 10, 2011):
+
+Bug fix: a new PathwayDiagram instance is created for unknown reason. Thanks to Bijay and Lisa for pointing this out.
+
+Build 60 (Version 3.1) notes (October 7, 2011):
+
+New features:
+
+1. The new schema support: one pathway diagram, encoded in a PathwayDiagram instance, can be shared by more than one Pathway instance. This feature is used to support disease pathway diagrams, and diagram sharing for sibling pathways (see Bijay's example).
+
+2. Cut, copy, and paste in the instance table editing: this feature should be handy for re-organization. But it works only in the attribute table currently.
+
+3. Remove in attribute edit: remove in attribute editing can work for multiple selection.
+
+4. Hide reactions in the top level event tree: the curator is able to hide reactions in the top-level in both event central and entity level views. This feature can be used to hide orphan reactions in both local and database view so that the curator can see top-level pathways easily. To use this feature, choose a popup menu in the pathway hierarchy panel.
+
+Build 59 notes (August 31, 2011):
+
+New feature:
+
+1. As requested by Karen, add a new "Display Referrer" for the referrer dialog
+
+Bug fix:
+
+1. Fix a bug in Imbalance check. The original implementation may make stoichiometry not correct.
+
+Build 58 notes (June 2, 2011):
+
+New features:
+
+1. Compartment resizing: inner and outer rectangle can be resized separately now. Originally, only the outer rectangle can be resized. The curator can use this new feature to adjust the size of membrane to accommodate more entities.
+
+2. Multiple selection of events in building project: during "Build Project", the user can select multiple events in the database event browser, and all selected events will be built into one local project.
+
+3. Wrapping text into node in the ELV: select a node, right click to get this new feature. Text outside the node rectangle will be wrapped into the rectangle automatically.
+
+4. Enforcing the format for the accession attribute in all GO related instances: only 7 digits can be used for this accession attribute. If the user assigns a wrongly formatted accession number (e.g. GO:1234567), a dialog will appear to show an error message and block such an action.
+
+Bug fix:
+
+1. A CandidateSet can be added as its own candidate in the hasCandidate attribute: this has been fixed.
+
+Build 57 notes:
+
+1. Performance tuning for checking out events from the DB event view: the speed should be increased around 20 times. Here are some benchmarks:
+
+Contractility and cell mobility: 139 seconds
+ascorbate biosynthesis: 50 seconds
+RAF activation: 145 seconds
+MAP Kinase cascade: 77 seconds
+
+Build 56 notes (April 4, 2011):
+
+New Features:
+
+1. Disease class: automatically fetch information for a new Disease instance from the EBI ontology service based on a Disease identifier. Please use this URL to search for disease terms: http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=DOID.
+
+2. QA checks related to pathway diagrams: a new check to see if all released reactions have been included in a pathway diagram has been implemented (Menu: QA Check/Pathway Diagram Check/Missing Reactions in Diagram. Note: diagram check can be done for database schema browser only). Two diagram related QAs originally in a web page have been consolidated in the curator tool now: QA check/Pathway Diagram Check/Reactions (Pathways) in All Diagrams
+
+3. Display name setting for two FragmentModication classes: suggested by Marija. For FragmentInsertionModication, display name will be like "Deletion of residues from _start to _end". For FragmentDeletionModication, display name will be like "Insertion of residues from _start to _end".
+
+4. New schema as has been posted before.
+
+Bug fixes:
+
+1. Deletion record is not cleared after updating from db for a local deleted instance. Thanks to Karen for finding this bug.
+
+2. Change in search, including search more: for instance type attribute, the search will be based on _displayName only (originally based on both _displayName and name if name is a valid attribute). Because of a bug in our API, using name for operator “!=”, will show return wrong results. For example, to search RectionlikeEevnt instances for species != Oryza sativa, reactions in Oryza sativa actually are returned too because of another name "rice" listed in the species name slot. Thanks to Peter for pointing this bug out.
+
+And some minor changes.
+
+Build 55 notes:
+
+New Feature:
+
+1. Instances can be escaped by providing a file containing a list of DB_IDs, which is generated from "Dump File" feature in the QA dialog.
+
+Build 54 notes:
+
+New features:
+
+1. A new QA check for pathway DB: Pathway Diagram Check. This QA can be applied to the DB schema view only. It checks if objects displayed in a pathway diagram have been deleted in the database. Any offended diagrams will be listed. However, to fix the diagram, the user has to check out the whole project using either "Check Out" from the DB event browser or a new feature called "Build Project" (see below).
+
+2. Deleted objects highlight in pathway diagrams: when a diagram is dispayed from the DB schema browser via “Show Diagram” popup menu, if there are some objects displayed in the diagram have been deleted in the database, a warning messages will be displayed. The deleted objects will be hilighted in blue. 
+
+3. Build project from the DB event view: this new feature is used to build a project from a selected pathway (or reaction if needed) from the DB event view. This feature is similar to "Check out" in the DB event browser. However, this new "Build Project" feature uses a server-side application to speed up the process. Now the time to build a project has decreased from several minutes to several seconds. To use this new feature, you need the following connecting information:
+
+User: ELV Check
+Key: JustASimpleText
+
+Please note: A new project will be created and displayed in the curator tool. If you have a project opened, the tool will ask you to save if there is any change.
+
+4. Encapsulate Diagram: this new feature is used to refactor a section of a diagram for a sub-pathway contained by a displayed pathway diagram into a new diagram in the Entity Level View. It works like the following using diagram for "Metabolism of steroid hormones and vitamins A and D" created by Peter and Bijay as an example:
+
+	1). Use "Build Project" or "Check Out" to create a local copy of project for Event 196071 (Pathway: Metabolism of steroid hormones and vitamins A and D)
+	2). In the Entity Level View, "Open Diagram" to open the diagram for the top-level pathway (Metabolism of steroid hormones and vitamins A and D).
+	3). Select "Vitamin D (calciferol) metabolism" in the "Event Hierarchy" at the left panel. Right click it to get a popup menu called "Encapsulate Diagram". 
+	4). Select this action to create a diagram for this selected sub-pathway. A new pathway node for this sub-pathway will be added to the displayed diagram for pathway "Metabolism of steroid hormones and vitamins A and D". All reactions, compartments and reactions used by this sub-pathway only will be deleted from this displayed diagram.
+	5). To view the diagram for sub-pathway "Vitamin D (calciferol) metabolism", use "Open Diagram" after selecting this sub-pathway.
+	5). The user may need some fine adjustments: e.g. resize compartments in both old and new diagrams, add links to the new pathway node.
+
+Change:
+
+1. The font used for drawing pathway diagram has been changed from original "Diagram plain 12" to "Lucida Sans, Plain, 12" so that all three platforms (Windows, Mac OS and Linux) can get a consistent font and font size to get a similar view for pathway diagrams (hopefully)
+
+Bug fix:
+
+1. "Search More" cannot work for instance list panel used during attribute editing. This has been fixed. Thanks to Phani for pointing this out.
+
+
+Build 53 notes:
+
+New features:
+
+1. Search instances in the local project and the database browser based on multiple attributes. This search can be invoked from the "Search More..." button in the search panel. For a local project, you can also use "Search Instances" button in the main tool bar (the icon like an earth globe with a pair of glasses), or "Search Instances" menu under Edit.
+
+2. Added a new operator for search: "!=". 
+
+3. Export diagrams into the PDF format is supported now. You can export a pathway diagram from the pathway editor pane in the local ELV or the "Show Diagram" diagram for the database browser.
+
+4. The diagram deployment function has pointed to the deployment web application at reactomedev.oicr.on.ca now.
+
+Known issue:
+
+1. If an attribute has multiple values, it may return for "!=". For example,  pathway "Stablization of mRNA by huR" has two values in its compartment attribute, "cytosol" and "nucleoplasm". If you search pathway for "compartment != cytosol", this pathway will be returned. This issue will be addressed in a future build.
+
+Minor bug fixes:
+
+1. Select and drag in the graphical editor pane: reactions cannot be moved originally.
+
+2. Inhibitor or activator branches cannot be highlighted: fixed.
+
+Build 52 notes:
+
+New features:
+
+1. Pathway-based QAs in the DB event hierarchical view: the user can select a pathway in the DB event browser to do QAs for events and other types of instances contained by the selected pathway.
+
+2. Search in the Entity Level View: search function has been added in the ELV for the local project.
+
+Bug fixes:
+
+1. Members of Reactions cannot be DnD to the ELV: fixed
+
+2. _displayName for ModifiedResidue, ReplacedResidue, and GroupModifiedResidues cannot be updated correctly: fixed
+
+3. Changing the type of a reaction cannot enable save action: fixed
+
+4. The dialog of adding _Delete instance cannot be launched if delete in the event hierarchical view: fixed
+
+
+Build 51 notes:
+
+Bug fix only:
+
+1. Jumpiness if an object is dragged in a zooming level with scrollbars appeared. 
+
+Build 50 (March 1, 2010) notes:
+
+Changes:
+
+1. Added a new view to hide events that have _doRelease false: Hide DoNotRelease Events in the popup menu. Please note: in the final deployed diagram in the public server, events with _doRelease false will not be shown.
+
+2. All pathway diagrams, no matter if it is a front page item, can be deployed using the deployment feature. A confirmation dialog is used to make sure no essential diagram should be deployed.
+
+Bug fixes:
+
+1. Null exception in "Expand Diagram". Thanks to Bijay to point this out.
+
+2. Save for links created between an entity and a pathway node. Previously the save button is not enabled.
+
+Build 49 (February 1, 2010) notes:
+
+This is a maintenance build with minor changes:
+
+1. Add a new private note option: choose Format Display after selecting a text note from the popup menu. Check "Is Private" check box to make the selected note as a private note. A private note will not be deployed in the final web ELV.
+
+2. Add a flow arrow between an Entity and a Pathway node: select an entity and a pathway node that should be linked together. Use "Create Link" from the popup menu after these two objects are selected. The type of link can be changed after it is created. The direction of arrow is based on the order of selection of the Entity and the Pathway.
+
+3. Flow arrow can be created based on preceding/following relationships between two pathway nodes in the diagram
+
+4. Expand diagram: all original Entity aliases will be kept now so that the original layout should be kept most of time.
+
+Build 48 (January 20, 2010) notes:
+
+1). Added a new drawing mode for the ELV. In this mode, the changes made in the drawing will not be popped up to instance attributes. All instance-edit related features have been disabled, or hidden in this drawing mode. This mode is selected as default. You can make a change in the preference or option dialog to switch to the original editing mode.
+
+2). New features in ELV:
+	a). select a reaction, right click to get a new popup menu "Selected Connected Nodes" for the selected reaction.
+	b). Connected entities for a selected reaction are hilited
+	c). Connected reactions for a selected entity are hilited
+
+3). Changes in ELV:
+	a). The amnio acid locations (e.g. Ser) are not displayed any more to avoid clutter of name display for entities.
+	b). The icons for pathways in diagrams have been changed: double rectangles are used now.
+
+4). Bug fixes:
+	a). Hide/Show compartment names during DnD, open diagrams
+	b). Select new objects from DnD
+	c). And many others.
+
+5). Not done yet or known issues:
+	a). Auto-layout a DnD reaction as requested by Bijay
+	b). Multiple copies of ATP/ADP/H2O cannot be generated for auto-laid pathway diagrams generated from "Open Diagram".
+
+Build 47 (September 18, 2009) notes:
+
+Added a new feature to support PSI-MOD in order to support the new data model.
+
+Fix a bug in the auto-fetch feature for ReferenfeGeneProduct: the variantIdentifier for a ReferenceIsoform should be consistent to its identifier. Use example P24161 to test this fix.
+
+Build 46 (August 19, 2009) notes:
+
+Added QA check for species for four classes: EntitySet, Complex, Reaction and Pathway.
+
+Build 44 (March 23, 2009) notes:
+
+The new entity level view has been in this build. However, the quality of ELV should be regarded as beta quality. More feedbacks are needed.
+
+The major reason for this new build is used to accommodate the upcoming data model changes in the ReferencePeptideSequence class.
+
+A new feature has been added in this build: a project built using an out-dated schema can be imported to the tool loaded with the new schema (File/Rebuild Project)
+
+Build 42 (May 7, 2008) notes:
+
+This build is basically for QA purpose. Some new features have been added regarding QA checking, especial for database browser.
+
+Note: The target of JVM has been changed to JVM 5.0 though new features in JDK 1.5 have not actually been used in this build.
+
+New features:
+
+1. A new menu has been added under File to show some project-based properties: the user can change/view default person for the working project and some description to the project.
+2. New QA checking: compartment checking for EntitySet, Complex and Reaction
+3. Changes have been made to the reaction imbalance checking. The results from this checking should be the same as from Esther's Perl script
+4. A popup menu has been added to the database event-centric view so that reactions contained by the selected pathway can be checked for imbalance.
+5. Progress bar is used to indicate the progress of QA checking
+6. Checking out behavior from the event centric view has been changed: only the selected event and its contained events will be checked out.
+
+Bug fix:
+
+1. Because of a URL change in the UniProt web site, the feature of adding coordinates to EWAS when it is created from RefPepSeq is broken. This has been fixed now. Thanks to Bijay for pointing this out.
+
+
+Build 41 (Feb 12, 2008) notes:
+
+This is a maintenance build:
+
+1. The original dialog for adding _Deleted instances was removed by accidently some time ago. It has been added back in this build.
+
+2. Several bugs have been fixed related to GKInstance class, which effect deletion operation.
+
+
+Build 40 (Jan 9, 2008) notes:
+
+This is a maintenance build: The URL used to fetch detailed information for a pubmedid is not supported in the pubmed web site. Another URL using XML is used to fetch pubmed information. Several tunings have been done to improve the performance on communication between the tool and the database. The user should expect a big performance improvement.
+
+Build 39 (Dec 39, 2007) notes:
+
+New features have been added in this build:
+
+1. Create a new project from a MOD reactome using: Import From.../MOD Reactome. It takes some time to create a new project.
+
+2. Project based default Person setting: the curator will be asked to set the default person when she creates a new project. If she skips this step, she will be asked when she commits anything into the database for this default Person.
+
+3. A new setting is added to display species name before or after instance display names in the central instance list in the schema view. The user needs to click "Show Settings" at the top of the list to enable this view.
+
+4. To workaround the original constraint, the local instance has the same or less InstanceEdit instances in its modified slot, a new tab is added in the synchronization dialog. The user should do necessary work to make instances in this tab legal for committing. But to do this, she needs to make necessary change in the config file for the curator tool.
+
+5. Auto-save in background is implemented in this build as requested by Mike. 
+
+Build 37 (April 16, 2007) notes:
+
+Bug fixes: editing functions involved with reactions in the event central view cannot work properly. These bugs have been fixed in this build.
+
+Build 36 (April 6, 2007) notes:
+
+Add a new function for importing author tool files created by the author tool prior to verion 3.0.
+
+Build 35 (March 27, 2007) notes:
+
+This mainly is a maintenance build. Some new changes are added to the data model, and some bugs are fixed after the last build (build 34). A new feature is importing pathways from external database. The tool can be configured to import pathways from more than one sources. Currently it is configured to import pathways from Panther, PID, and CellMap. 
+
+Build 34 (March 13, 2007) notes:
+
+Changes in this build:
+
+1). A new schema that has a change of DNR (_doNotRelease) -> DR (_doRelease) is used in this build. All features related to DNR has been changed to DR.
+2). Per request from Bernard, when a EWAS is create from RefPepSeq, the user will be asked if he or she wants to feature startCoordinate and endCoordinate from the UniProt web site. If yes, these two values will be fetched from that web site if any.
+3). The supported author tool version has been changed to 3.0 (the new author tool). 
+
+Build 33 (Dec 5, 2006) notes:
+
+One new feature is added for this build: Converted Panther pathways, which are in a separated Reactome database, can be imported into the curator tool. All instances converted from Panther will have negative DB_IDs, and all Panther instances for the selected pathways will be in the checked out project. These instances include regulation instances, which is different from the current check-out procedure from gk_central.
+
+The Look and Feel from Skin is disabled in this build. The users will be encouraged to use Java 5 if being asked.
+
+Build 32 (Oct 12, 2006) notes:
+
+This build is used to add the feature for adding deletion information for the stable identifiers. When one or more instances are deleted, a new dialog will popup to ask the user to enter necessary information for deletion.
+
+Build 31 (Sept 29, 2006) notes:
+
+This build is targeted to make the roundtrip between the curator tool and the author tool easy (see notes for build 25 in the author tool too). There are several changes for this purpose:
+
+1. One or more than one pathway can be opened in, or exported to the author  tool directly from the database event centric view (invoked from the menu Database/Browser/Event View).
+
+2. An author tool project file can imported DIRECTLY into the curator tool by using File/Import/Author Tool Project. No user intervening is needed. To make it happen smoothly, a database connection is required before importing, and an empty project is needed. In other words, gk_central will be consulted when importing an author tool file, and the imported author tool project will be treated as a kind of curator tool project. Please keep in mind that you may need to check the types before committing the converted author tool project into gk_central.
+
+Build 30 (July 19, 2006) notes:
+
+This is a bug fix build to address the bug reported by Gopal: Changes in the local instances can be overwritten when a project is checked out from the event central view. In this fix, any local, changed instances will NOT be updated. The user will get the list of these instances.
+
+Build 29 (July 18, 2006) notes:
+
+New features:
+
+1. Icons are used to indicate the categories of attributes in the attribute table: M for mandatory, R for required, O for optional and N for no manual edit.
+
+2. Two new buttons are added to sort the attributes in the attribute pane: Sort by names and Group properties by categories. Sorting by names will order the properties as before, and grouping properties will order the properties based on their categories.
+
+3. A new setting for sorting properties is added to the General tab in the option dialog: Group Attributes by Categories. This setting will be applied to attribute tables for instances in both local projects and databases. Please note: this setting is a global setting. The actions on item 2 is a local setting to control the opened attribute pane. The global setting can be persisted among sessions, while the local setting cannot.
+
+4. Required attributes checking in QA has been re-implemneted to use the new categories for attributes.
+
+5. A new QA check, Mandatory Attribute Check, is added.
+
+6. As required by Marc, a new function, "Create EWAS from RefPepSeq", is implemented in the instance repository view. When one or more ReferencePeptideSeqence instances are selected, a popup menu can be displayed to create EWAS instances from the selected ReferencePeptideSeqence instances. Species, some names (text before the left parenthesis in the description attribute, the UniProt ID, and the first of the geneName attribute) will be copied from RefPepSeq to EWAS. However, this function will be disabled if a shell instance is selected.
+
+7. As required by Esther, the mechanism of propagating species setting for complex is changed as follow: if contained Complexes or EntitiySets contain SimpleEntities or OtherEntities only, they will NOT be assigned species. If Complexes or EntitySets contain only Complexes or EntitySets that cannot be assigned species as indicated in the previous sentence, they will NOT be assigned species. 
+
+
+Build 28 notes:
+
+This is another bug fix build. Two bugs are fixed:
+
+1. Prior to this build, an InstanceEdit might be created when a deletion is committed back to the database even though this InstanceEdit is not used. 
+
+2. This bug is found by Peter: two instances and their referrers are checked out from the database and merged. Do a synchronization to commit all changes (local changes and deletion) back to the database. References to the merged-away instance are deleted instead replaced. This is a serious bug that invalidates the data in the database. 
+
+Build 27 notes:
+
+This is a bug fix build. One BIG bug is fixed: updating of referrers to deleted instances in the database is not under the control of transaction when deletions are committed to the database in the synchronization dialog.
+
+In this build, the schema has been updated to version on May 5, 2006.
+
+Thanks to Marc, a new icon without the reaction sky as the background for the CuratorTool has been used.
+
+Build 26 notes:
+
+New features:
+
+1. New view for the referrers: indexed by the referrers' attributes.
+
+2. Batch editing: required by Esther. The user can add, remove, set attribute value to a list of instances.
+
+3. These items in bugzilla have been done: 12, 16, 60
+
+4. a new installer created for MacOX X: a native MacOS X application bundle.
+
+Build 25 notes:
+
+This is a maintenance build. 
+
+Changes:
+
+1. "Clone of ..." is used as _displayName for the cloned instance.
+
+2. Top level events from all species are listed in the visualization tool. Only human events were listed in the prior versions.
+
+3. Default values will be set for new instances.
+
+Bug Fixes:
+
+1. An instance whose type has changed in the database can be updated now. Thanks to Lisa for pointing this out.
+
+2. Reaction imbalance check is updated for the latest schema.
+
+3. Searching based on reference's _displayName can work for local projects now.
+
+4. REGEXP searching for the local project is fixed now.
+
+Build 24 notes:
+
+New features:
+
+1. Zoom function is added to graphic editor for Pathways and Reactions in the Event Hierarchical View via popup menus or buttons.
+
+2. A checkbox called "Aggregate" is added to the central instance list in the Instance Repository view. When this checkbox is checked, all changed instances will be placed at the top of the list. This is a request from Bernard (bugs 54 and 55)
+
+3. In the new instance dialog, when the type of the new instance is changed, all applicable attributes will be kept. This is a request from David (bug 53).
+
+4. Species will be extracted from ReferenceEntity for PhysicalEntity if species is not specified and species attribute is applicable. The warning dialog will appear if there is a species conflict between these two instances. (bug 50).
+
+5. Stoichiometries are displayed for hasComponent attribute for Complex class. The user can use the popup menu, "Set Stoichiometry", to set stoichiometry for the selected subunit. This new feature control the size of the table for a complex that has a long list of repeated subunits.
+
+6. The feature "Importing the author tool project" is updated for the new schema.
+
+7. A lot of changes in the author tool. See author tool build notes (build 23).
+
+Build 23 notes:
+
+New features:
+
+1. A simple GO annotation issue tracker: two new menues are added, Request GO Term and Track Request under Tools/Reqeust GO Term menu. When the user clicks one of them, the web browser will be opened and linked to GO sourceforge annotation issue tracker site for new request or request tracking. The track number should be input for tracking. The track number will be remembered by the tool and will be auto-completed after the first input. However, the user has to log-in by yourself in the web browser. This is not a sophisticated tracker system but can be used as an interim method before a good tool is in place.
+
+2. Create a new ReferencePeptideSequence: related information from the uniprot web server will be automatically downloaded and parsed. If there are more than one variants, ReferencePeptideSequence instances will be created for each variants. All attributes except variantIdentifiers are the same for all instances. 
+
+3. One click to update schema from the connected database: The schema can be updated with menu Tools/Update Schema From DB. After updating, the tool will be restarted automatically. The old schema will be saved as schema.bak under resources folder.
+
+4. The visualization tool launched from the curator tool can have a write permission if a key is enabled in the property file.
+
+Changes:
+
+1. The scaring message for failure in rollback has been changed to:
+
+Cannot rollback. The database connection might be lost.
+
+2. created slot is uneditable now.
+
+3. Titles for attribute table, project tree and instances list are shorter now.
+
+4. The tooltip text for the instance in the central instance list in the schema view has more information (type, db_id, _displayName).
+
+Bug fixes:
+
+1. Species assignment auto-propagation can work now for the new schema. It was broken in build 22.
+
+2. Converting to an author tool project from a selected event is working now. It was broken in build 22 because of new schema.
+
+3. These bugs in bugzilla have been fixed: 52 (David), 51 (Marc), 48 (Peter)
+
+Known Issues:
+
+1. Known issues 1 and 2 in build 22 have been fixed partially. If a local referrer to the deleted instance has no conflict (has new changes, is identical) to its counterpart in the database, an InstanceEdit will be attached to modifier slot and new changes will be committed to the database (the user will be asked). However, if a local referrer to the deleted instance has a conflict to its counterpart in the database, the deletion will be committed to the database. But the local referrer cannot be checked into the database and will not get an InstanceEdit for its modifier slot even though its DB counterpart can have. The user will be informed of this conflict but the tool does nothing. It is recommended to resolve any conflicts first before committing deletion to avoid such a weird behavior.
+
+2. Issues 3, 4 in build 22 have not resolved yet.
+
+
+
+Build 22 notes:
+
+New features:
+
+1. The new schema is supported in the event tree view and the pathway visualization tool. ConceptualEvent and EquivalentEventSet are not displayed in the graphic pane. New icons are used for these new concepts in the event tree: ConceptualEvent, EquivalientEventSet, isMemberOf, isSpecialisedForm
+
+2. ComponentOf icon is changed: Letter P is changed to C. The background is changed.
+
+Bug fixes:
+
+1. The main menu bar in the mac under MacOS 10.4 should be at the top of the screen.
+
+2. The recent project menu items under mac should be listed correctly now.
+
+Known issues:
+
+1. When a local instance deletion is committed to the gk_central via the synchronization dialog, an InstanceEdit will be attached to modifier slot in referrers in the gk_central. This InstanceEdit is in the database only but not in the local project. If a referrer instance exists in the local project, this referrer cannot be checked in anymore. So it seems that a new change is done to this referrer in the database from another user even though this changed is done by you. This is anti-instinct, and will be fixed in the next build. To workaround, please do an update to this referrer. If there are local changes to this local referrer, please commit these changes first before committing the deletion to avoid merging, which is very tedious.
+
+2. Following issue 1, if more than one deletions are committed into gk_central database, the same number of InstanceEdit instances will be created. However, it should be only ONE InstanceEdit created. This bug will be fixed too in the next build. 
+
+3. Required attribute checking in QA cannot work for the new schema.
+
+4. Import the author tool file cannot work for the new schema.
+
+Issues 3 and 4 will be fixed after the new schema is in action.
+
+
+Build 21 notes:
+
+Bug fix:
+
+1. Failure to fetching the detailed information from the pubmed web site.
+
+Build 20 notes:
+
+New features:
+
+1. A new icon for the curator tool is used. Thanks to Marc for providing this icon.
+
+2. A new icon for _doNotRelease flags are used for the tree node in the event tree views for both the database browser and the local projects. It is a little rectangle. If _doNotRelease is false, it is checked. Otherwise, it is not checked. For the local project, the user can check or uncheck it. The setting can be propagated to the lower level nodes if it is enabled. The user can disable this propagation in the option dialog.
+
+3. Java source code is in the build now (src.jar).
+ 
+Features changed:
+
+1. A local Reaction instance containing a shell instance in its inputs, outputs will not be checked for imbalance. 
+
+2. The popup menu "Delete" in the database browser (Schema View) is removed. The user has to do deletion through check out and synchronization now. For a future reference, a database manager application might be needed.
+
+Bug fixes:
+
+The following bugs are fixed:
+
+http://brie8.cshl.org/bugzilla/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&product=Curator+Tool&long_desc_type=substring&bug_file_loc_type=allwordssubstr&emailassigned_to1=1&emailtype1=substring&emailassigned_to2=1&emailreporter2=1&emailcc2=1&emailtype2=substring&bugidtype=include&bug_id=41%2C40%2C39%2C38%2C18&chfieldto=Now&cmdtype=doitfield0-0-0=noop&type0-0-0=noop
+
+
+Build 19 notes:
+
+New features:
+
+1. Two QA implementations: Imbalance check and requirement slot check. These two QA check can be applied to local projects and for the database browser (Schema view only). The curator can run these QA checks and a list of instances that are not passed the check will be displayed in a new window. For local project, the curator can make changes in that window. But for the database browser, the curator has to check them out to make changes. A shell instance in the local project is not checked. The imbalance is based on Eshter's Perl script. The required attribute check is based on Esther's required attribute file with input from Gopal. The curator can invoke these checks from Tool/QA Check/ menu.
+
+2. Drag and drop an instance from the bookmark view to the attribute editing pane for fast adding instances. To enable DnD, a cell in the attribute table should be selected first.
+
+3. A new checkable button is added to the attribute editing pane. The curator can check this button on/off to turn on/off the pull down list for attribute editing. The check status is persisted after the tool is closed.
+
+4. A new option pane called "Attribute Edit" is added to the option dialog. The curator can turn on/off some editing behaviors.
+
+5. Taxon and compartment setting for a Complex can be propagated to the complex's components included in the "hasComponent" slot, recursively. This behavior can be turned on/off in the option pane "Attribute Edit" (see item 4). The default is on.
+
+6. A new menu Help/Report Bugs and a new button in the main toolbar is added to link to the bugzilla web site to report bugs. The curator can report bugs and ask for new features from that web site. All new reports will be forwarded to developers automatically via email.
+
+7. Two option files (curator.prop, browser.prop) are now saved under .reactome folder under default user directory. The user directory is OS dependent. The curator doesn't need to care about these usually.
+
+Bug fixes:
+
+1. Lists in the synchronization dialog will be refreshed after matching, merging.
+
+2. _displayName for ReferenceGroup instance can be generated correctly now. Thanks to Peter for pointing this out.
+
+3. This bug is fixed: if the last opened project is moved (renamted or deleted), the class hierarchical cannot be opened. (From Gopal).
+
+4. The type of an instance's reference is changed. Check-in this instance will also need to check in this type changed reference. Otherwise, the database integrity will be compromised. This behavior is implemented in this build, but not in build 18. (From Imre).
+
+5. This bug is reported by Peter. A DatabaseIdentifier is used by a GenericSimpleEntity. However, the type of this DI is switched to Reference Group by another user. If this GSE is updated, two instances with same DB_ID will be in the local project, one is DatabaseIdentifier and another ReferenceGroup. In this build, the curator will be notified this prolem and be asked if he or she wants to switch type for this DatabseIdentifier. If yes, the type will be switched for you. Otherwise, the updating will be aborted. Of couse, this scenario is also applied to other types.
+
+6. Auto-restart the too after updating is disabled. It cannot work correctly. The user is asked to restart the tool manually after updating.
+
+Known issues:
+
+1. To use DnD from the bookmark view to the attribute edit pane, the user has to select an cell in the attribute table first. Exceptions might thrown in the console window. But it works fine.
+
+2. This is reported by gopal but difficult to reproduce. Sometimes an instance might be checked out twice.
+
+
+Build 18 notes:
+
+This is a maintenance release. Several new features are added. Some bugs are fixed:
+
+New features:
+
+1. A virtual container can be created if several pathways are selected and exported to a author tool file.
+
+2. Taxon setting for a pathway can be propagated to this pathway's descendants (pathways or reactions).
+
+3. Taxon or compartment setting for a reaction can be propagated to this reaction's inputs and outputs.
+
+Bug fixes:
+
+1. A floating concrete reaction can be listed in the event tree now. (Thanks to Gopal)
+
+2. The attribute pane poppped by View action from menu or toolbar can be edited for the local instance (Thanks to Marc)
+
+3. _DNR can be stored in the database correctly (Thanks to Esther)
+
+4. Names in pubmed like "FirstName van Whatever" can be handled correctly in LiteratureReference editing (Thanks to Peter)
+
+5. Add a VM property to the running script in the installanywhere file. This will remove the problem from file encoding. (Thanks to Marc, Gopal)
+
+6. Cached instance for the database will be refreshed now during synchronizing. This removes a dangerous bug: new changes in the database can be overwritten if two curators are working and checking in changes around the same time.
+
+Build 17 notes:
+
+This is a major release. The version number has been changed to 2.0.
+
+New features:
+
+1. A single file is used for the local repository. The user can do opening, saving, saving as or creating files. Up to four previous opened projects can be listed under File menu for fast access.
+
+2. The error-prone working enviornment setting-up is gone. The user will be asked for a default person for default InstanceEdit during check-in if needed. ID of this default person will be saved in curator.prop file. The tab for user info in the option dialog has been removed.
+
+3. The instance list for the selected schema class contains instances from its subclasses in the local instance repository view now. Searching for the local project can go to subclasses too, just as in the database browser.
+
+4. A flag ">" is added for instances that are changed locally. This flag is also added to schema class if it or its subclasses contain changed instances.
+
+5. Improvements in synchronization: only modifield slots and changed flag (>) are checked during synchronization. The performance has been improved dramatically. Six icons are used for cases resulted from comparison between the local and db instances. (see help for details). Synchronization can be done for the selected schema class only. If no selection, synchronization will be done for the whole project. The bugs reported by Imre have been fixed.
+
+6. A list is used for editing instance type attributes. The user can choose a value from this list.
+
+7. Defining attributes are highlighted and placed at the part of the table.
+
+8. A check out button is added to the property dialog for a database instance if this dialog is popped for a shell instance.
+
+9. A check out popup menu is added for referrers list for a database instance.
+
+10. The user can specify stoichiometries for instances in the instance selecting dialog for attribute editing. (Per Marc's request)
+
+11. Redesigned the table used in the multiple matches dialog. Hope that it is more user-friendly.
+
+12. Version 1.0 project can be imported into version 2.0. But it is recommended to synchronize 1.0 project in 1.1 tool before importing to ver2.0.
+
+13. The help file has been updated.
+
+Known issues:
+
+1. Save before synchronizating a new project: Cancel the file selection in the file dialog cannot stop synchronizing. 
+
+2. Sometimes the local frame cannot display correctly after the database browser is closed. This occurs under Linux only. Not sure under windows or macOSX.
+
+
+Build 12 notes:
+
+New feacture:
+
+1. The user can choose a default InstanceEdit from the database during tool setting up
+
+Bug fixes:
+
+1. Commit deleting to the database problem. There is a null value left in the slot list.
+
+Build 8 Notes:
+
+This is a major release. The version number has been increased from 1.0 to 1.1. The new schema is used in the implementation. Some changes:
+
+1). The author-tool like graphic editing pane is implemented and displayed in the central part in the event centric view. The original graph display for reactions or pathways attached under the attribute table is removed now.
+
+2). A database instance can be used directly during slot editing process. It will be downloaded into the local repository fully. All referred instances will be checked out as shell instances.
+
+3). A shell instance can be downloaded in the attribute view. No need to go to the database browser to search and download it.
+
+4). A new action called "Merge Two Instances" is added. Two instances in the same schema class can be merged into one. This action can be accessed from the popup menu in the central instance list in the schema view, main toolbar and main menu.
+
+5). A new action called "Match Instance in DB..." is added. A local newly created instance can be matched to one or more instances in the database, so that the database instance can be used. Here matching is based on defining attributes values. Please note that this action is only enabled for a newly created local instance (i.e., an instance has negative DB_ID).
+
+6). A new action called "Switch Type" is added. One or more selected instances can be switched to another schema class type. The valid slot values will be kept for the selected type. This action can be accessed only in the popup menu in the central instance list in the schema view.
+
+7). The order of values in one slot can be rearranged by drag and drop now.
+
+8). The actions for checked out instances during importing an author file to the tool is completely re-written. Now merging should be done before the actual importing occurs so that the user can abort importing easily.
+
+9). More friendlier behavior for merging two instances.
+
+10). A description column is added to the bookmarks table. The user can add a short description to each bookmark now.
+
+11). The help file has been updated. New sections have been added.
+
+12). A new application icon is used. 
+
+13). LiteratureReference instance editing: when a pubMedIdentifer is added or changed, author, journal, pages, title, volume, year slots can be automatically filled in if the user selects to do so.
+
+14). And more...
+
+Some bug fixes:
+
+1). Exporting to Protege file: Quotation mark has been escaped, new lines have been replaced with "\n", __is_ghost has been marked as true for shell instances. Thanks to Bernard and Imre for pointing these errors out.
+
+2). The bug related to next db_id has been fixed. This is the bug resulted in some eccentric behaviors during cloning. Thanks to Bernard.
+
+3). Multiple line text can be displayed correctly now. Before, the line information was removed.
+
+4). And more...
+
+
+Build 5 Notes:
+
+New features:
+
+1). Export local repository as a protege pins file or a protege project file
+2). Check out events in the event hierarchical view: All events in the selected branch are checked out, all instances referred by these events are also checked out, and all instances referred by these instances are checked out as shell instances.
+Build 3 notes:
+
+New Features:
+
+1). The user can add or remove bookmarks for instances. He/she can also close the bookmark panel. This is an implemnetation of Imre's idea.
+
+2). Transaction for db connection can be enabled or disabled in the options/DBConnection info pane.
+
+Bug Fixes:
+
+1). The hiearchical event tree can be updated correctly for event checking out and attribute editing for events.
+
+Build 2 notes:
+
+This build is for linking the authoring tool and the curator tool. Here are some hightlights:
+
+1. An event in the event view in the curator tool can be exported as an authoring tool file or directly opened in the authoring tool.
+2. An authoring tool file can be imported into the curator tool. The curator's intervention is needed to make imported types (i.e. SchemaClass assignment) correct.
+3. The menubar in the MacOS has been placed at the top. The menu items for Quit, Preferences, and about in the application menu have been implemented.
+4. Bug fixes (Thanks to Geeta for pointing out these bugs): 
+    1) Text in the password field in the environment setting dialog has been masked as ****. 
+    2) The references to the updated instance in the database will be kept after the instance check-in.
+    3) Drawing is fine after an unloaded pathway reloaded again.
