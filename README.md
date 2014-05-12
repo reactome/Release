@@ -1,4 +1,4 @@
-code-private
+GKB
 ============
 
-Prviate Code Repository
+Prviate GKB Code Repository
