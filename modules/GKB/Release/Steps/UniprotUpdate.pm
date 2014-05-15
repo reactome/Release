@@ -29,7 +29,7 @@ override 'run_commands' => sub {
 	    [
 	    	["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral > $gkcentral.dump"],
 
-	    	["wget --no-passive-ftp -a uniprot.err ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz"],
+	    	["wget -a uniprot.err ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz"],
     		["wget -a uniprot.err -O uniprot-reviewed:no.list.gz 'http://www.uniprot.org/uniprot/?query=reviewed%3Ano&compress=yes&format=list'"]
                 ]
 	); 
