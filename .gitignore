@@ -1,5 +1,6 @@
 BioMart/
 gkbdev
 install*.sh
+!install_slice_db.sh
 tmp/
 tomcat/
