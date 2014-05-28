@@ -39,7 +39,7 @@ override 'run_commands' => sub {
         
     my @args = ("-db", $gkcentral, "-host", $gkcentral_host, "-user", $user, "-pass", $pass);
     
-    cmd("Running GO obsolete update script",[["perl -d:NYTProf go_obo_update.pl @args > go.out 2> go.err"]]);
+    cmd("Running GO obsolete update script",[["perl go_obo_update.pl @args > go.out 2> go.err"]]);
     cmd("Running EC number update script",[["perl addEcNumber2Activity_update.pl @args < ec2go"]]);
     
     foreach my $class ("MolecularFunction", "BiologicalProcess", "CellularComponent") {
