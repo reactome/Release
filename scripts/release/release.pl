@@ -2,6 +2,8 @@
 use strict;
 use warnings;
 
+use lib '/usr/local/gkbdev/modules';
+
 use constant {
     GKB_DEV_ALIAS => 'gkbdev',
     GKB_PROD_ALIAS => 'gkb_prod',
