@@ -70,16 +70,18 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	
 #	print STDERR "$0: old identifier: $identifier, new identifier: $up_to_date_identifier\n";
 	
-	if ($identifier eq $up_to_date_identifier) {
+	if ($identifier eq $up_to_date_identifier && $reference_molecule->name->[0] eq $chebi_name) {
 		next;
 	}
 	
 	print OUT "$0: old name: " . $reference_molecule->name->[0] . " ($identifier), new name: $chebi_name ($up_to_date_identifier)\n";
-	print OUT "";	
 	# Apply the correction to the database
 	$reference_molecule->identifier(undef);
+	$reference_molecule->name(undef);
 	$reference_molecule->identifier($up_to_date_identifier);
+	$reference_molecule->name($chebi_name);
 	$dba->update_attribute($reference_molecule, "identifier");
+	$dba->update_attribute($reference_molecule, "name");
 	
 	$outdated_molecule_identifier_counter++;
 	
