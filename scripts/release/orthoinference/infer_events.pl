@@ -957,27 +957,32 @@ sub create_ReferenceDNASequence {
 #Argument: an instance, returns an instance
 sub check_for_identical_instances {
     my ($i) = @_;
-    
-    # Store defining attributes for instance class type
-    unless (exists $instances{$i->class}) {
-	$instances{$i->class}->{'attributes'}->{'all'} = \($i->ontology->list_class_attributes_with_defining_type($i->class, 'all'));
-	$instances{$i->class}->{'attributes'}->{'any'} = \($i->ontology->list_class_attributes_with_defining_type($i->class, 'any'));
+    $i->identical_instances_in_db(undef); #clear first
+    $dba->fetch_identical_instances($i);
+    if ($i->identical_instances_in_db && $i->identical_instances_in_db->[0]) {
+	my $count_ii = @{$i->identical_instances_in_db}; #number of elements
+	if ($count_ii == 1) {
+	    print STDERR "Replaced with existing identical instance: ",$i->identical_instances_in_db->[0]->db_id , ".\n";
+	    return $i->identical_instances_in_db->[0];
+	} else { #interactive replacement
+	    print STDERR "This entity has more than one identical instances.......\n";
+#The following condition check is only needed for databases in the old data model when isoforms were included in the ReferencePeptideSequence class  - the details are slightly complicated, but that was one reason why we have changed the data model - so it's sorted now and this check is only kept for backward compatibility
+	    if (($protein_class eq 'ReferencePeptideSequence') &&
+		$i->is_a('ReferencePeptideSequence') && $i->identical_instances_in_db->[0]->VariantIdentifier->[0]) {
+		print STDERR $i->identical_instances_in_db->[0]->VariantIdentifier->[0], " ***different isoforms used?***\n";
+	    } else {
+#temporary hack to avoid failing of script due to duplicates
+		print STDERR "***duplicates***:\n";
+		foreach (@{$i->identical_instances_in_db}) {
+		    print STDERR "\t", $_->extended_displayName, "\n";
+		}
+	    }
+	    return $i->identical_instances_in_db->[0]; #return first element for now
+	}
     } else {
-	my $identical_instance = retrieve_identical_instance($i, $instances{$i->class});
-	return $identical_instance if $identical_instance;
-    }
-    
-    $dba->store($i);
-    push @{$instances{$i->class}->{'instances'}}, $i;
-    return $i;
-}
-
-sub retrieve_identical_instance {
-    my $instance = shift;
-    my $instance_class = shift;
-    
-    foreach my $stored_instance (@{$instance_class->{'instances'}}) {
-	return $stored_instance if $instance->reasonably_identical($stored_instance);
+	my $ID = $dba->store($i);
+	print STDERR "Stored instance: ", $ID, "\n";
+	return $i;
     }
 }
 
