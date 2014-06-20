@@ -1,5 +1,0 @@
-Total SimpleEntity instances: 6715
-Total SimpleEntity instances from AraCyc: 2479
-Default IE: [InstanceEdit:1889751] Wu, G, 2011-10-31
-Total time: 183946
-Total deleted instances: 701
