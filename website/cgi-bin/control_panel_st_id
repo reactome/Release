@@ -22,8 +22,6 @@ BEGIN {
     my $libpath = join('/', @a);
     unshift (@INC, $libpath);
 }
-use lib "/tmp/libs/bioperl-1.0";
-use lib "/tmp/libs/my_perl_stuff";
 
 use strict;
 use CGI qw(:standard);
@@ -31,9 +29,16 @@ use GKB::DBAdaptor;
 use GKB::WebUtils;
 use GKB::Utils;
 use GKB::Config;
+use GKB::FrontPage3;
 
 my $script_name = $0;
 my ( $CGI, $WU, $si, $reactome_release_column_name );
+
+my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (Stable ID)", "/stylesheet.css");
+my $header = $front_page->get_header();
+my $footer = $front_page->get_footer();
+my $enclosing_div_start = $front_page->get_enclosing_div_start();
+my $enclosing_div_end = $front_page->get_enclosing_div_end();
 
 $CGI = CGI->new();
 
@@ -59,18 +64,18 @@ eval {
 	# Get StableIdentifier instance
 	my $stable_identifier = $si->get_stable_identifier($identifier);
 	if (!$stable_identifier) {
-		handle_error("Could not get stable_identifier for identifier=$identifier!!\n");
+	    handle_error("Could not find stable ID $identifier");
 	}
 
 	my $display_name = $si->get_current_instance_name($stable_identifier, $identifier, $version);
 	print_page_start($extended_st_id);
-    print $WU->reactome_logo();
+	#print $WU->reactome_logo();
 	print qq(<h1 CLASS="frontpage">Stable identifier history for $extended_st_id</h1>\n);
 	if ($display_name) {
 		print qq(<P><DIV align="center"><B>Instance: "$display_name"</B></DIV></P>);
 	}
 	print "<P>The following table presents the full history of the current instance.</P>\n";
-	print "<P>The first column contains one row for every version of the instance.  The stable identifier (REACT_...)is a clickable link, that will take you to a web page for the given version of the instance, which may well be part of a previous release. </P>\n";
+	print "<P>The first column contains one row for every version of the instance.  The stable identifier (REACT_...) is a clickable link, that will take you to a web page for the given version of the instance, which may well be part of a previous release. </P>\n";
 	print "<P>In the second column, the releases containing a given version of the instance are listed.</P>\n";
 	print "<P>Rows marked in red correspond to the current instance.  Multiple rows will appear in red if the version number has not changed from one release to the next.</P>\n";
 	print html_table($stable_identifier, $identifier, $version, $url_release_num);
@@ -84,13 +89,14 @@ eval {
 sub html_table {
     my ($stable_identifier, $identifier, $version, $release_num) = @_;
     
-	my $table_model = generate_table_model($stable_identifier, $identifier, $version, $release_num);
-	my $forms = generate_forms($table_model);
-	my $rows = generate_rows($table_model);
-	
+    my $table_model = generate_table_model($stable_identifier, $identifier, $version, $release_num);
+    my $forms = generate_forms($table_model);
+    my $rows = generate_rows($table_model);
+    
+    my $tstyle = 'style="border:1px solid black"';
     my $table = '';
-    $table .= '<table WIDTH="100%" CELLSPACING="0" BORDER="3">' . "\n";
-    $table .= "    <TR>\n        <TD WITH=" . '"55%"' . ">Stable ID</TD>\n        <TD WITH=" .'"45%"' . ">Release numbers</TD>\n    </TR>\n";
+    $table .= '<table WIDTH="100%" CELLSPACING="0" style="border:2px solid black">' . "\n";
+    $table .= "    <TR>\n        <TD $tstyle WIDTH=" . '"55%"' . ">Stable ID</TD>\n        <TD $tstyle WIDTH=" .'"45%"' . ">Release numbers</TD>\n    </TR>\n";
     $table .= $forms;
     $table .= $rows;
     $table .= "</table>\n";
@@ -149,7 +155,12 @@ sub generate_table_model {
 		
 				my $release = $si->get_att_value_from_identifier_database_instance($release_id, $reactome_release_column_name);
 				my $num = $si->get_att_value_from_identifier_database_instance($release, 'num');
-				
+				# temporary band-aid -- block fake release number
+				if ($num > 999) {
+				    warn "$0 strange release number $num blocked";
+				    next;
+				}
+
 				$cols[0] = $identifier;
 				$cols[1] = $version;
 				$cols[2] = $num;
@@ -241,17 +252,17 @@ sub generate_rows {
 }
 
 sub generate_row {
-	my ($row_model) = @_;
+    my ($row_model) = @_;
 	
-	if (!$row_model) {
-		return '';
-	}
-	
-	my $identifier = $row_model->[0];
-	my $version = $row_model->[1];
-	my $release_num = $row_model->[2];
-	my $is_current = $row_model->[3];
-				
+    if (!$row_model) {
+	return '';
+    }
+    
+    my $identifier = $row_model->[0];
+    my $version = $row_model->[1];
+    my $release_num = $row_model->[2];
+    my $is_current = $row_model->[3];
+    
     my $identifier_version = $identifier;
     if (defined $version && !($version eq '')) {
     	$identifier_version .= ".$version";
@@ -264,35 +275,34 @@ sub generate_row {
     	$style = "color:red;";
     	$style_string = " STYLE=\"$style\"";
     }
-
+    
     my $bookmark = create_stable_identifier_bookmark($style, $identifier, $version);
 #    my $identifier_version = $identifier . '.' . $version;
-	my @release_table_rows = ();
-	my $form_name = $WU->form_name_for_eventbrowser_st_id($identifier, $version, $release_num);
-	if (defined $bookmark) {
-		if (!($bookmark eq '')) {
-			$bookmark = " ($bookmark)";
-		}
-	} else {
-		$bookmark = '';
+    my @release_table_rows = ();
+    my $form_name = $WU->form_name_for_eventbrowser_st_id($identifier, $version, $release_num);
+    if (defined $bookmark) {
+	if (!($bookmark eq '')) {
+	    $bookmark = " ($bookmark)";
 	}
-	my $link = $WU->onclick_for_eventbrowser_st_id($style, $form_name, $identifier_version, $bookmark);
-	my $release_table_row = "    <TR$style_string>\n        <TD>$link</TD>\n        <TD>$release_num</TD>\n    </TR>\n";
-
-	return $release_table_row;
+    } else {
+	$bookmark = '';
+    }
+    my $link = $WU->onclick_for_eventbrowser_st_id($style, $form_name, $identifier_version, $bookmark);
+    my $tstyle = 'style="border:1px solid black"';
+    my $release_table_row = "    <TR$style_string>\n        <TD $tstyle>$link</TD>\n        <TD $tstyle>$release_num</TD>\n    </TR>\n";
+    
+    return $release_table_row;
 }
 	
 sub handle_error {
 	my ($error_message) = @_;
 	
 	# Print to web page
-    print_page_start();
+	print_page_start();
 	
-    print $WU->reactome_logo();
-	
-	print qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Internal error</FONT></h1>\n);
-	print qq(<PRE>\n\n\n$error_message\n\n</PRE>\n);
-    print_page_end();
+	print qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Error</FONT></h1>\n);
+	print qq(<h2><pre>$error_message</pre></h2>\n);
+	print_page_end();
 
 	# Print to log file
 	print STDERR "$error_message\n";
@@ -304,7 +314,8 @@ sub handle_error {
 }
 
 sub print_page_end {
-    ($WU) &&  print $WU->make_footer;
+#    ($WU) &&  print $WU->make_footer;
+    print $footer;
     print $CGI->end_html;
 }
 
@@ -317,9 +328,9 @@ sub print_page_start {
 	
     print $CGI->header(-charset => 'UTF-8');
 
-    my $header = $CGI->start_html(
-		-style => {-src => '/stylesheet.css'},
-		-title => $title);
+#    my $header = $CGI->start_html(
+#		-style => {-src => '/stylesheet.css'},
+#		-title => $title);
 	
 	print $header;
 
