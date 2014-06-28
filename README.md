@@ -1,4 +1,4 @@
 GKB
 ============
 
-Prviate GKB Code Repository
+Private GKB Code Repository for reactomeclean
