@@ -16,9 +16,6 @@ BEGIN {
     my $libpath = join('/', @a);
     unshift (@INC, $libpath);
 }
-#use lib "/tmp/libs/bioperl-1.0";
-#use lib "/tmp/libs/GKB/modules";
-#use lib "/tmp/libs/my_perl_stuff";
 
 use strict;
 use CGI qw(:standard);
@@ -34,17 +31,12 @@ my $footer = undef;
 my $enclosing_div_start = undef;
 my $enclosing_div_end = undef;
 my $reactome_version_num = "2";
-if (defined $REACTOME_VERSION && !($REACTOME_VERSION eq '')) {
-    $REACTOME_VERSION =~ /^([0-9]+).*$/;
-    $reactome_version_num = $1;
-}
-if ($reactome_version_num eq "3") {
-    my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (instancebrowser)", "/stylesheet.css");
-    $header = $front_page->get_header();
-    $footer = $front_page->get_footer();
-    $enclosing_div_start = $front_page->get_enclosing_div_start();
-    $enclosing_div_end = $front_page->get_enclosing_div_end();
-}
+
+my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (instancebrowser)", "/stylesheet.css");
+$header = $front_page->get_header();
+$footer = $front_page->get_footer();
+$enclosing_div_start = $front_page->get_enclosing_div_start();
+$enclosing_div_end = $front_page->get_enclosing_div_end();
 
 my $DBA;
 
@@ -61,6 +53,7 @@ if (defined $header) {
     # \-dtd => "-//IETF//DTD HTML//EN",
     -style => {-src => '/stylesheet.css'},
     -title => "$PROJECT_NAME (instancebrowser)",
+    -script => {-src => '/google.js'},
     );
 }
 
