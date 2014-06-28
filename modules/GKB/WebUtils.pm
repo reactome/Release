@@ -924,7 +924,7 @@ sub print_remote_attribute_query_form {
     print $self->cgi->start_form(-action => $self->cgi->script_name . "/$s", -method => 'GET');
     print $self->cgi->hidden(-name => 'DB',-value => $self->cgi->param('DB'));
 
-    print qq(<DIV CLASS="section">\n<TABLE cellspacing="0" CLASS="search" WIDTH="$HTML_PAGE_WIDTH">);
+    print qq(<DIV CLASS="section">\n<TABLE cellspacing="0" style="background-color:#B0C4DE;margin-top:-10px"  WIDTH="$HTML_PAGE_WIDTH">);
     my %classes;
     @classes{$self->dba->ontology->list_classes} = $self->dba->ontology->list_classes;
     my $class = $self->cgi->param('QUERY_CLASS');
