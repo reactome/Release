@@ -19,12 +19,19 @@ BEGIN {
 
 use GKB::WebUtils;
 use GKB::Config;
+use GKB::FrontPage3;
+
 use Data::Dumper;
+
 
 use strict;
 
 $NO_SCHEMA_VALIDITY_CHECK = 1;
 
+
+my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (remoteattsearch)", "/stylesheet.css");
+my $header = $front_page->get_header();
+my $footer = $front_page->get_footer();
 
 my $wu;
 eval {
@@ -80,13 +87,14 @@ sub print_html_page_start {
     print $wu->cgi->start_html(
 	-style => {-src => '/stylesheet.css'},
 	-title => "search tool for experts in $PROJECT_NAME data model",
+	-script => {-src => '/google.js'}
 	);
-    print $wu->top_navigation_box;
+    print $header;
 }
 
 sub print_html_page_end {
     my $wu = shift;
-    print $wu->make_footer;
+    print $footer;
     print $wu->cgi->end_html;  
 }
 
