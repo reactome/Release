@@ -33,24 +33,17 @@ my $footer = undef;
 my $enclosing_div_start = undef;
 my $enclosing_div_end = undef;
 my $reactome_version_num = "2";
-if (defined $REACTOME_VERSION && !($REACTOME_VERSION eq '')) {
-    $REACTOME_VERSION =~ /^([0-9]+).*$/;
-    $reactome_version_num = $1;
-}
-if ($reactome_version_num eq "3") {
-    my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (classbrowser)", "/stylesheet.css");
-    $header = $front_page->get_header();
-    $footer = $front_page->get_footer();
-    $enclosing_div_start = $front_page->get_enclosing_div_start();
-    $enclosing_div_end = $front_page->get_enclosing_div_end();
-}
+
+my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (classbrowser)", "/stylesheet.css");
+$header = $front_page->get_header();
+$footer = $front_page->get_footer();
+$enclosing_div_start = $front_page->get_enclosing_div_start();
+$enclosing_div_end = $front_page->get_enclosing_div_end();
 
 my $DBA;
 my $CGI;
 my $ONTOLOGY;
 
-
-print STDERR "new CGI\n";
 $CGI = CGI->new();
 (my $INSTANCEBROWSER = $CGI->script_name) =~ s/[^\/]+$/instancebrowser/;
 my $title;
@@ -67,6 +60,7 @@ if (defined $header) {
     # \-dtd => "-//IETF//DTD HTML//EN",
     -style => {-src => '/stylesheet.css'},
     -title => $title,
+    -script => {-src => '/google.js'},
     );
 }
 
@@ -128,7 +122,7 @@ __HERE__
     print 
 	qq(<TABLE BORDER="0" WIDTH="$HTML_PAGE_WIDTH" CELLPADDING="0" CELLSPACING="0" CLASS="classbrowser">\n) .
 	qq(<TR><TD CLASS="sidebar" width="33%" valign="top">\n$sidebar_content\n</TD>\n) .
-	qq(<TD valign="top">\n$main_content\n</TD>) .
+	qq(<TD valign="top" style="padding-left:10px">\n$main_content\n</TD>) .
 	qq(</TR>\n) .
 	qq(</TABLE>\n);
 }; $@ && handle_error($@);

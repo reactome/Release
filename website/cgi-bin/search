@@ -25,8 +25,12 @@ use GKB::PrettyInstance;
 use GKB::WebUtils;
 use GKB::Config;
 use Data::Dumper;
-
+use GKB::FrontPage3;
 use strict;
+
+my $front_page = GKB::FrontPage3->new("header", "/stylesheet.css");
+my $header = $front_page->get_header();
+my $footer = $front_page->get_footer();
 
 my $CGI = CGI->new();
 
@@ -58,6 +62,7 @@ eval {
     print $CGI->start_html(
 	# \-dtd => "-//IETF//DTD HTML//EN",
 	-style => {-src => '/stylesheet.css'},
+	-script => {-src => '/google.js'},
 	-title => "$PROJECT_NAME (extended search)",
     );
     
@@ -65,7 +70,7 @@ eval {
 				-CGI => $CGI,
 			    );
     $wu->urlmaker->script_name('/cgi-bin/eventbrowser');
-    print $wu->top_navigation_box;
+    print $header;
     $wu->print_simple_query_form;
 
     my ($dbname,$id) = split(/:/,$qstr);
@@ -100,7 +105,7 @@ eval {
 	$CGI->param('FORMAT','list');
     }
     $WU->print_view($ar,1);
-    print $WU->make_footer;
+    print $footer;
 }; $@ && handle_error("$@");
 
 print $CGI->end_html;  
