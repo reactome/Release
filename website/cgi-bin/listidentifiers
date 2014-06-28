@@ -44,8 +44,7 @@ eval {
     @dbname || print_search_form_page_w_message();
 
     my $ar = [];
-#    print $CGI->header('text/plain');
-#    print qq(<PRE>\n);$DBA->debug(1);
+
     if (uc($dbname[0]) eq 'EC') {
 	$ar =  fetch_EC_identifiers(\@dbname,\@spname);
     } elsif (uc($dbname[0]) eq 'GO' or
@@ -59,7 +58,6 @@ eval {
     } else {
 	$ar = fetch_sequence_identifiers(\@dbname,\@spname);
     }
-#    print qq(</PRE>\n);$DBA->debug(undef);
     if (@{$ar}) {
 	report_identifiers($ar);
     } else {
@@ -243,6 +241,7 @@ sub print_search_form_page_w_message {
     print $CGI->header(-charset => 'UTF-8');
     print $CGI->start_html(
 	-style => {-src => '/stylesheet.css'},
+	-script => {-src => '/google.js'},
 	-title => "$PROJECT_NAME (listidentifiers)",
 	);
     $WU->in_html(1);

@@ -38,6 +38,7 @@ print $CGI->start_html(
     # \-dtd => "-//IETF//DTD HTML//EN",
     -style => {-src => '/stylesheet.css'},
     -title => "$PROJECT_NAME pathfinder",
+    -script => {-src => '/google.js'},
     );
 
 #GKB::WebUtils::print_cgi_params($CGI);
