@@ -64,9 +64,13 @@ sub print_page_start {
 }
 
 sub print_page_end {
-    ($WU && $IN_HTML) &&  print $WU->make_footer;
-    ($IN_HTML) && print $CGI->end_html;
-    ($DBA) && $DBA->db_handle->disconnect;
+    if ($IN_HTML) {
+	print $footer;
+	print $CGI->end_html;
+    }
+    if ($DBA) {
+	$DBA->db_handle->disconnect;
+    }
 }
 
 sub print_javascript {
