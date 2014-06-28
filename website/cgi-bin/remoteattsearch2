@@ -16,16 +16,21 @@ BEGIN {
     my $libpath = join('/', @a);
     unshift (@INC, $libpath);
 }
-#use lib "/tmp/libs/bioperl-1.0";
-#use lib "/tmp/libs/my_perl_stuff";
+
 use CGI qw(:standard);
 use GKB::Config;
 use GKB::WebUtils;
-
+use GKB::FrontPage3;
 use strict;
 
 my ($DBA,$WU,$INSTANCES,$IN_HTML,$DB);
 my $CGI = CGI->new();
+
+
+my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (remoteattsearch)", "/stylesheet.css");
+my $header = $front_page->get_header();
+my $footer = $front_page->get_footer();
+
 
 eval {
 
@@ -53,8 +58,9 @@ sub print_page_start {
     print $CGI->start_html(
 	-style => {-src => '/stylesheet.css'},
 	-title => "search tool for experts in $PROJECT_NAME data model",
+	-script => [{-src => "/javascript/tooltip.js"},{-src => "/google.js"}]
 	);
-    print $WU->top_navigation_box;
+    print $header;
 }
 
 sub print_page_end {
@@ -306,7 +312,8 @@ function removeRow(r) {
 }
 
 function createEmptyDivs() {
-    var str = '<div class="section"><div class="search">';
+    // Conflict with DIV.search class?          V          used inline CSS instead (sjm)            V
+    var str = '<div class="section"><div style="background-color:#B0C4DE;padding:2px;margin-top:-10px">';
     str += '<div id="div_class_menu"></div>';
     str += '<div id="rowdivs"></div>';
 //    str += '</div>';
