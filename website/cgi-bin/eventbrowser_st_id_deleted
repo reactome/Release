@@ -1,0 +1,552 @@
+#!/usr/local/bin/perl -w -T
+
+# This script is basically a wrapper arount the eventbrowser
+# functionality that allows stable identifiers to be used
+# to retrieve instances, instead of DB_IDs.  It provides
+# some additional functionality to handle instances that
+# are in some sense out-of-date, e.g. if they have been
+# deleted.
+#
+# It understands the command line
+# argument ST_ID, which is of the form: StableId[.Version],
+# e.g. "16" or "16.1".  It takes this argument and looks for
+# the most recent Reactome release database containing
+# this instance.  The version number is optional; if present
+# it will constrain the script to fetch the most recent instance
+# with the given version.  Don't use the version number unless
+# you really have to.
+#
+# You can further constrain the instance that gets fetched by
+# using the RELEASE_NUM argument; this will force the script
+# to get the instance from a specific release.
+#
+# It then uses the DB_ID of that instance to run an eventbrowser
+# in the appropriate release database.  All command line options,
+# except DB and ID, are passed on to the eventbrowser.
+#
+# There are some exceptions to this.  In particular, if an
+# instance has been deleted, then a web page appears, warning
+# the user of this fact, and providing the option to either
+# go to the web page of the deleted instance or search for
+# similar instances in the current release.
+#
+# If the "FROM_REACTOME" command line flag is used, then the above
+# mechanism will be overridden, and the user will be taken
+# without any warning directly to the old release containing
+# the deleted instance.  This is intended to make life easier
+# for anybody who wants to do screen-scraping with this
+# script.
+
+use strict;
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::WebUtils;
+use GKB::Utils;
+use GKB::Config;
+use GKB::StableIdentifiers;
+use GKB::FrontPage3;
+
+my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (Stable ID)", "/stylesheet.css");
+
+my $script_name = $0;
+$script_name =~ s/.*[^0-9A-Za-z]([0-9A-Za-z]+)$/$1/;
+my ( $CGI, $WU, $si, $reactome_release_column_name );
+$CGI = CGI->new();
+
+eval {
+	# Gives access to a whole bunch of methods for dealing with
+	# previous releases and stable identifiers.
+	$si = GKB::StableIdentifiers->new($CGI);
+
+	# Global setting, needed by print_page_start/end
+	$WU = GKB::WebUtils->new_nocheck( -CGI => $CGI );
+
+	my $url_release_num = $CGI->param("RELEASE_NUM") || $GKB::Config::GK_CURRENT_RELEASE;
+	my $from_reactome = $CGI->param("FROM_REACTOME");
+	my $extended_st_id = $CGI->param("ST_ID");
+	if ( !$extended_st_id ) {
+		handle_error("ST_ID missing!!\n");
+	}
+	
+	my ($identifier, $version) = $si->extract_identifier_and_version_from_string($extended_st_id);
+	if ( !$identifier ) {
+		handle_error("Could not extract identifier from extended_st_id=$extended_st_id!!\n");
+	}
+		
+	# Get StableIdentifier instance
+	my $stable_identifier = $si->get_stable_identifier($identifier);
+
+	if (!(defined $stable_identifier)) {
+		handle_error("Could not find StableIdentifier instance for extended_st_id=$extended_st_id!!\n");
+	}
+
+	# Get corresponding version instance
+	my $stable_identifier_version = $si->get_stable_identifier_version($stable_identifier, $version);
+	if (!(defined $stable_identifier_version)) {
+		handle_error("stable_identifier_version is not defined!!\n");
+	}
+	
+	# Find highest numbered release ID
+	$reactome_release_column_name = $si->reactome_release_column_name;
+	if (!(defined $reactome_release_column_name)) {
+		print STDERR "WARNING - could not find a reactome_release_column_name\n";
+	}
+	my $release_id = $si->get_max_release_id_from_stable_identifier_version_instance($stable_identifier_version);
+	if (!(defined $release_id)) {
+		print STDERR "WARNING - could not find a release_id\n";
+	}
+	my $release = $si->get_att_value_from_identifier_database_instance($release_id, $reactome_release_column_name);
+	
+	# If a release has been specified in the URL and it is
+	# compatible with the stable ID/version of the instance
+	# (i.e. that instance really is present in the release)
+	# then find out the database name for the release.
+	#
+	# Otherwise, find the database name for the highest
+	# numbered release compatible with the stable ID/version
+	# of the instance.
+	#
+	# This will be used to decide which release to use for
+	# the navigation bar and for searching.
+	my $db_name = $GKB::Config::GK_DB_NAME;
+#	if (defined $url_release_num && $url_release_num >= 0) {
+#		if ($si->is_identifier_version_in_release_num($identifier, $version, $url_release_num)) {
+#			$db_name = $si->get_db_name_from_release_num($url_release_num);
+#		} else {
+#			handle_error("$extended_st_id is not in release $url_release_num!!\n");
+#		}
+#	} else {
+#		if (!$release) {
+#			handle_error("Current release could not be determined!!\n");
+#		}
+#		$db_name = $si->get_db_name_from_release($release);
+#		if (!$db_name) {
+#			handle_error("Database name is missing!!\n");
+#		}
+#	}
+		
+
+	# Use Reactome database name extracted from identifier database
+	$CGI->param(-name=>'DB',-value=>$db_name);
+	
+	# Decide what to display: either a fake event browser,
+	# or, if the instance specified by the stable ID and
+	# version number is no longer completely up-to-date,
+	# then display a page explaining this.  Also, if the
+	# 'FROM_REACTOME' parameter is set, go straight
+	# into the fake eventbrowser, don't burden the user
+	# with (in this case) unnecessary intermediate pages.
+	my $current_release = $si->get_att_value_from_identifier_database_instance($release_id, $reactome_release_column_name);
+
+	if ($from_reactome || $si->is_most_recent_release($current_release)) {
+		fake_eventbrowser($stable_identifier, $identifier, $version, $release_id, $db_name);
+	} else {
+		if ($si->is_identifier_existant_in_most_recent_release($identifier)) {
+			this_instance_is_somewhat_out_of_date($stable_identifier, $identifier, $version, $release_id, $db_name);
+		} else {
+			regrettably_this_instance_is_not_in_the_most_recent_release($stable_identifier, $identifier, $version, $release_id, $db_name);
+		}
+	}
+};
+
+sub regrettably_this_instance_is_not_in_the_most_recent_release {
+	my ($stable_identifier, $identifier, $version, $release_id, $db_name) = @_;
+	
+	my $do_not_release = $si->get_att_value_from_identifier_database_instance($stable_identifier, 'doNotRelease');
+
+	my $deleted = $si->get_att_value_from_identifier_database_instance($stable_identifier, 'deleted');
+
+
+	my $deletion_comment = '';
+	my $replacement_string = "";
+	if ($deleted) {
+		my $deleted_reason = $si->get_att_value_from_identifier_database_instance($deleted, 'reason');
+		my $deleted_comment = $si->get_att_value_from_identifier_database_instance($deleted, 'comment');
+		if (defined $deleted_reason) {
+			$deletion_comment .= $deleted_reason;
+		}
+		if (defined $deleted_comment) {
+			if (defined $deletion_comment) {
+				$deletion_comment .= ".  ";
+			}
+			$deletion_comment .= $deleted_comment;
+			if (!($deleted_comment =~ /\.$/)) {
+				$deletion_comment .= ".";
+			}
+		}
+		
+		my $identifier_database_dba = $si->get_identifier_database_dba();
+		$identifier_database_dba->load_attribute_values( $deleted, "replacement");
+		my $replacements_ref = $deleted->replacement;
+		if ($replacements_ref && scalar($replacements_ref) =~ /ARRAY/) {
+			foreach my $replacement (@{$replacements_ref}) {
+				# If the Replacement instance already contains the
+				# stable ID, everything is straightforward.
+				my $replacement_identifier_strings = $replacement->replacementIdentifierString;
+				my $replacement_identifier_string = $si->get_attribute_val_from_list($replacement_identifier_strings);
+				my $deleted_release_db_name = undef;
+				my $replacement_db_id;
+				if (!$replacement_identifier_string) {
+					$replacement_db_id = $si->get_att_value_from_identifier_database_instance($replacement, 'replacementDB_ID');
+					if ($replacement_db_id) {
+						# Let's see if we can use the replacement
+						# instance's DB_ID to fetch the instance
+						# from a release, and then pull the
+						# stable ID out of that.
+						my $deleted_release_num = $si->get_att_value_from_identifier_database_instance($deleted, 'releaseNum');
+						$deleted_release_db_name = $si->get_db_name_from_release_num($deleted_release_num);
+						my $deleted_release_dba = $si->get_dba_from_db_name($deleted_release_db_name);
+						my $deleted_release_instances = $deleted_release_dba->fetch_instance_by_db_id($replacement_db_id);
+						my $deleted_release_instance = $deleted_release_instances->[0];
+						if ($deleted_release_instance) {
+							$deleted_release_dba->load_attribute_values($deleted_release_instance, 'stableIdentifier');
+							my $deleted_release_stable_identifiers = $deleted_release_instance->stableIdentifier;
+							if ($deleted_release_stable_identifiers && $deleted_release_stable_identifiers->[0]) {
+								my $deleted_release_stable_identifier = $deleted_release_stable_identifiers->[0];
+								$replacement_identifier_strings = $deleted_release_stable_identifier->identifier;
+								$replacement_identifier_string = $si->get_attribute_val_from_list($replacement_identifier_strings);
+							}
+						}
+					}
+				}
+				
+				if ($replacement_identifier_string) {
+					if ($replacement_string) {
+						$replacement_string .= ", ";
+					}
+					$replacement_string .= qq(<A HREF="eventbrowser_st_id?ST_ID=$replacement_identifier_string">$replacement_identifier_string</A>);
+				} else {
+					if (defined $deleted_release_db_name && $replacement_db_id) {
+						if ($replacement_string) {
+							$replacement_string .= ", ";
+						}
+						$replacement_string .= qq(<A HREF="eventbrowser?DB=$deleted_release_db_name&ID=$replacement_db_id">$replacement_db_id</A>);
+					}
+				}
+			}
+		}
+	}
+	
+	my $most_recent_release_num = $si->get_most_recent_release_num();
+	my $release = $si->get_att_value_from_identifier_database_instance($release_id, $reactome_release_column_name);
+	my $release_num = $si->get_att_value_from_identifier_database_instance($release, 'num');
+	my $most_recent_release_db_name = $si->get_most_recent_release_db_name();
+	my $most_recent_release_url = "frontpage?DB=$most_recent_release_db_name";
+	my $current_release_url = "eventbrowser_st_id?ST_ID=$identifier";
+	if (defined $version) {
+		$current_release_url .= ".$version";
+	}
+	my $instance_name = $si->get_current_instance_name($stable_identifier, $identifier, $version);
+	my $search_url = generate_search_url($instance_name, $most_recent_release_db_name);
+	
+
+	my $link_text = "View the instance anyway";
+	my $other_text = " (this will take you to release $release_num)";
+	my $form_name = $WU->form_name_for_eventbrowser_st_id($identifier, $version, $release_num);
+	my $form = $WU->form_for_eventbrowser_st_id($form_name, $identifier, $version, $release_num);
+	my $link = $WU->onclick_for_eventbrowser_st_id('', $form_name, $link_text, $other_text);
+	
+	my $what_happened_to_instance_keyword = "deleted";
+	if (defined $do_not_release) {
+		$what_happened_to_instance_keyword = "withdrawn";
+	}
+	my $what_happened_to_instance = "The instance \"$instance_name\" was available up until release $release_num, but was ";
+	if (defined $do_not_release) {
+		$what_happened_to_instance .= "withdrawn for editor review in release $do_not_release";
+	} else {
+		$what_happened_to_instance .= "subsequently deleted";
+	}
+	$what_happened_to_instance .= ".";
+	
+	# Print to web page
+	print_page_start();
+	#print $WU->reactome_logo();
+	print qq(<h1 CLASS="frontpage">Instance with stable identifier $identifier $what_happened_to_instance_keyword</h1>\n);
+	print qq($form\n);
+	print qq(<P>$what_happened_to_instance</P>\n);
+	if (defined $deletion_comment  && !($deletion_comment eq '')) {
+		print qq(<P>Reason for deletion: $deletion_comment</P>\n);
+	}
+	if (defined $replacement_string  && !($replacement_string eq '')) {
+		print qq(<P>The following instances replace the deleted one: $replacement_string</P>\n);
+	}
+	print qq(<P>What do you want to do?</P>\n);
+	print qq(<UL>\n);
+	print qq(<LI>$link</LI>\n);
+	print qq(<LI><A HREF="$most_recent_release_url">Go to the front page of the most recent release</A></LI>\n);
+	print qq(<LI><A HREF="$search_url">Search for similar instances in the most recent release</A></LI>\n);
+	print qq(</UL>\n);
+	print_page_end();
+
+	# Close any open database connections
+	$si->close_all_dbas();
+
+	exit;
+}
+
+# Generates a query based on the longer words in the instance
+# name and generates a URL based on this that will perform a
+# search in the specified most recent release database.
+sub generate_search_url {
+	my ($instance_name, $most_recent_release_db_name) = @_;
+	
+	# Break the instance name into words
+	my @words = split(/[^0-9a-zA-Z]+/, $instance_name);
+	
+	# Extract all words longer than a given number of characters
+	# and ad them to a query string
+	my $query = "";
+	foreach my $word (@words) {
+		if ($word =~ /...../) {
+			if (!($query eq "")) {
+				$query .= "+";
+			}
+			
+			$query .= $word;
+		}
+	}
+	
+	my $sp_id = $CGI->param('SPECIES');
+	if (defined $sp_id) {
+		$query .= "&SPECIES=$sp_id";
+	}
+	
+	my $search_url = "search2?DB=$most_recent_release_db_name&CATEGORY=everything&OPERATOR=REGEXP&QUERY=$query&SUBMIT=Go%21";
+
+	return $search_url;
+}
+
+sub this_instance_is_somewhat_out_of_date {
+	my ($stable_identifier, $identifier, $version, $release_id, $db_name) = @_;
+
+	my $most_recent_release_num = $si->get_most_recent_release_num();
+	my $release = $si->get_att_value_from_identifier_database_instance($release_id, $reactome_release_column_name);
+	my $release_num = $si->get_att_value_from_identifier_database_instance($release, 'num');
+	my $most_recent_release_url = "eventbrowser_st_id?ST_ID=$identifier";
+	my $current_release_url = "eventbrowser_st_id?ST_ID=$identifier";
+	if (defined $version) {
+		$current_release_url .= ".$version";
+	}
+	
+	my $instance_name = $si->get_current_instance_name($stable_identifier, $identifier, $version);
+	my $instance = $si->get_current_instance($stable_identifier, $identifier, $version);
+	my $schema_class_name = undef;
+	if ($instance) {
+		$schema_class_name = $instance->class();
+	}
+	
+	my %changes = $si->get_changes_from_stable_identifier($stable_identifier, $release_num);
+	
+	my $new_schema_class_name_changes = $changes{'newSchemaClassName'};
+	my $new_schema_class_name_changes_line = '';
+	if (defined $schema_class_name && defined $new_schema_class_name_changes && !($schema_class_name eq $new_schema_class_name_changes)) {
+		$new_schema_class_name_changes_line = "The schema class has changed from <SPAN STYLE=\"font-weight: bold;\">$schema_class_name</SPAN> to <SPAN STYLE=\"font-weight: bold;\">$new_schema_class_name_changes</SPAN>";
+	}
+	
+	my $deleted_attributes_with_content = $changes{'deletedAttributesWithContent'};
+	my $deleted_attributes_with_content_line = '';
+	if ($deleted_attributes_with_content && scalar(@{$deleted_attributes_with_content})>0) {
+		$deleted_attributes_with_content_line = "The following attributes have been deleted: ";
+		$deleted_attributes_with_content_line .= "<SPAN STYLE=\"font-weight: bold;\">";
+		my $deleted_attribute_with_content;
+		my $first_iteration = 1;
+		foreach $deleted_attribute_with_content (@{$deleted_attributes_with_content}) {
+			if (!$first_iteration) {
+				$deleted_attributes_with_content_line .= ", ";
+			}
+			$deleted_attributes_with_content_line .= $deleted_attribute_with_content;
+			$first_iteration = 0;
+		}
+		$deleted_attributes_with_content_line .= "</SPAN>";
+	}
+
+	my $added_attributes_with_content = $changes{'addedAttributesWithContent'};
+	my $added_attributes_with_content_line = '';
+	if ($added_attributes_with_content && scalar(@{$added_attributes_with_content})>0) {
+		$added_attributes_with_content_line = "The following attributes have been added: ";
+		$added_attributes_with_content_line .= "<SPAN STYLE=\"font-weight: bold;\">";
+		my $added_attribute_with_content;
+		my $first_iteration = 1;
+		foreach $added_attribute_with_content (@{$added_attributes_with_content}) {
+			if (!$first_iteration) {
+				$added_attributes_with_content_line .= ", ";
+			}
+			$added_attributes_with_content_line .= $added_attribute_with_content;
+			$first_iteration = 0;
+		}
+		$added_attributes_with_content_line .= "</SPAN>";
+	}
+
+	my $changed_attributes = $changes{'changedAttributes'};
+	my $changed_attributes_line = '';
+	if ($changed_attributes && scalar(@{$changed_attributes})>0) {
+		$changed_attributes_line = "The following attributes have been changed: ";
+		$changed_attributes_line .= "<SPAN STYLE=\"font-weight: bold;\">";
+		my $changed_attribute;
+		my $first_iteration = 1;
+		foreach $changed_attribute (@{$changed_attributes}) {
+			if (!$first_iteration) {
+				$changed_attributes_line .= ", ";
+			}
+			$changed_attributes_line .= $changed_attribute;
+			$first_iteration = 0;
+		}
+		$changed_attributes_line .= "</SPAN>";
+	}
+
+	my $changes_header_line = '';
+	if ($new_schema_class_name_changes_line || $deleted_attributes_with_content_line || $added_attributes_with_content_line || $changed_attributes_line) {
+		$changes_header_line = "<P>The following changes have taken place:</P>";
+	}
+	
+	my $link_text = "View the instance anyway";
+	my $other_text = " (this will take you to release $release_num)";
+	my $form_name = $WU->form_name_for_eventbrowser_st_id($identifier, $version, $release_num);
+	my $form = $WU->form_for_eventbrowser_st_id($form_name, $identifier, $version, $release_num);
+	my $link = $WU->onclick_for_eventbrowser_st_id('', $form_name, $link_text, $other_text);
+	
+	
+	# Print to web page
+	print_page_start();
+
+	print qq(<h1 CLASS="frontpage">Instance with stable identifier $identifier out of date</h1>\n);
+	print qq($form\n);
+	print qq(<P>The instance "$instance_name" from release $release_num has been updated in the most recent release of Reactome ($most_recent_release_num).</P>\n);
+	if ($changes_header_line) {
+		print qq($changes_header_line\n);
+		print qq(<UL>\n);
+		if ($new_schema_class_name_changes_line) {
+			print qq(<LI>$new_schema_class_name_changes_line</LI>\n);
+		}
+		if ($deleted_attributes_with_content_line) {
+			print qq(<LI>$deleted_attributes_with_content_line</LI>\n);
+		}
+		if ($changed_attributes_line) {
+			print qq(<LI>$changed_attributes_line</LI>\n);
+		}
+		print qq(</UL>\n);
+	}
+	print qq(<P>What do you want to do?</P>\n);
+	print qq(<UL>\n);
+	print qq(<LI>$link</LI>\n);
+	print qq(<LI><A HREF="$most_recent_release_url">Go to the instance in the most recent release</A></LI>\n);
+	print qq(</UL>\n);
+    print_page_end();
+
+	# Close any open database connections
+	$si->close_all_dbas();
+
+	
+	exit;
+}
+
+sub fake_eventbrowser {
+	my ($stable_identifier, $identifier, $version, $release_id, $db_name) = @_;
+	
+	# Bring the WebUtils up to date with this db_name
+	my $old_wu = $WU;
+	$WU = undef;
+	eval {
+		$WU = GKB::WebUtils->new_from_cgi( -CGI => $CGI );
+	};
+	if (!(defined $WU)) {
+		$WU = $old_wu;
+		handle_error("problem creating new WebUtils, maybe database $db_name does not exist?\n");
+	}
+
+	$WU->urlmaker->script_name('/cgi-bin/eventbrowser');
+
+	GKB::WebUtils::set_cgi_format_parameter_if_unset($CGI);
+	
+	my $current_release_dba = $si->get_dba_from_db_name($db_name);
+	
+	if (!$current_release_dba) {
+		handle_error("Could not find a database adaptor for the current release!!\n");
+	}
+	
+	my $display_name = $si->get_current_instance_name($stable_identifier, $identifier, $version);
+
+	# Launch a fake event browser for the release of Reactome that
+	# has been found.
+	my $instanceDB_ID = $si->get_att_value_from_identifier_database_instance($release_id, 'instanceDB_ID');
+	if (!(defined $instanceDB_ID)) {
+		handle_error("Could not find an instance DB_ID for identifier=$identifier, version=$version!!\n");
+	}
+
+	my $instances = $current_release_dba->fetch_instance_by_db_id($instanceDB_ID);
+
+	if (!$instances || !(scalar($instances) =~ /ARRAY/) || scalar(@{$instances})<1) {
+		handle_error("No instances could be found for instanceDB_ID=$instanceDB_ID!!\n");
+	}
+	
+	print_page_start($display_name);
+
+    # Top navigation box
+    print $WU->navigation_bar;
+    # query form
+    $WU->print_simple_query_form;
+
+	$WU->print_view($instances,1);
+	print_page_end();  
+
+	# Close any open database connections
+	$si->close_all_dbas();
+
+	exit;
+}
+
+sub handle_error {
+	my ($error_message) = @_;
+
+	# Print to web page
+	print_page_start();
+	#print $WU->reactome_logo();
+	print qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Internal error</FONT></h1>\n);
+	print qq(<PRE>\n\n\n$error_message\n\n</PRE>\n);
+	print_page_end();
+	
+	# Print to log file
+	print STDERR "eventbrowser_st_id: $error_message\n";
+	
+	# Close any open database connections
+	$si->close_all_dbas();
+	
+	exit;
+}
+
+sub print_page_start {
+	my ($title) = @_;
+	
+	if (!(defined $title)) {
+		$title = "$PROJECT_NAME ($script_name)";
+	}
+	
+	print $CGI->header(-charset => 'UTF-8');
+	print $CGI->start_html(
+	    -style => {-src => '/stylesheet.css'},
+	    -script => {-src => '/google.js'},
+	    -title => $title,
+	    );
+	print $front_page->get_header();
+}
+
+sub print_page_end {
+    print $front_page->get_footer();
+    print $CGI->end_html;
+}
