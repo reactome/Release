@@ -63,7 +63,7 @@ eval {
 	    $wu->handle_simple_query_form();
 	}
     } else {
-	print $CGI->redirect('/');
+        print $CGI->redirect('/');
     }
 }; $@ && handle_error("$@");
 

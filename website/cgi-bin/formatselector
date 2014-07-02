@@ -50,7 +50,7 @@ print <<__END__;
 	if (value == "elv") {
 	    if (opener) {
 		var loc = opener.window.location + "";
-		loc = loc.replace(/cgi-bin\\/eventbrowser\\?/,"entitylevelview/PathwayBrowser.html#");
+		loc = loc.replace(/cgi-bin\\/eventbrowser\\?/,"/PathwayBrowser/#");
 		opener.window.location = loc;
 		self.close();
 	    }

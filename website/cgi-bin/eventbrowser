@@ -30,22 +30,11 @@ use GKB::Config;
 use Data::Dumper;
 use GKB::FrontPage3;
 
-my $header = undef;
-my $footer = undef;
-my $enclosing_div_start = undef;
-my $enclosing_div_end = undef;
-my $reactome_version_num = "2";
-if (defined $REACTOME_VERSION && !($REACTOME_VERSION eq '')) {
-    $REACTOME_VERSION =~ /^([0-9]+).*$/;
-    $reactome_version_num = $1;
-}
-if ($reactome_version_num eq "3") {
-    my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (instancebrowser)", "/stylesheet.css");
-    $header = $front_page->get_header();
-    $footer = $front_page->get_footer();
-    $enclosing_div_start = $front_page->get_enclosing_div_start();
-    $enclosing_div_end = $front_page->get_enclosing_div_end();
-}
+my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (instancebrowser)", "/stylesheet.css");
+my $header = $front_page->get_header();
+my $footer = $front_page->get_footer();
+my $enclosing_div_start = $front_page->get_enclosing_div_start();
+my $enclosing_div_end = $front_page->get_enclosing_div_end();
 
 my ($CGI,$WU,$DBA,$FOCUS_SPECIES_NAME);
 my $start = time();
