@@ -123,8 +123,10 @@ sub print_page_start {
     print $CGI->start_html(
 	-style => {-src => '/stylesheet.css'},
 	-title => "$PROJECT_NAME ($script_name)",
+	-script => {-src => '/google.js'}
 	);
-    print $WU->top_navigation_box;
+    
+    #print $WU->top_navigation_box;
 }
 
 sub print_page_end {
