@@ -22,7 +22,7 @@ use GKB::FrontPage3;
 
 my $header = undef;
 my $footer = undef;
-my $front_page = GKB::FrontPage3->new("bla", "/stylesheet.css");
+my $front_page = GKB::FrontPage3->new("footer", "/stylesheet.css");
 $footer = $front_page->get_footer();
 
 print header,$footer;
