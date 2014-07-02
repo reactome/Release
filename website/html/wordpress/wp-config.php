@@ -18,11 +18,17 @@
 /** The name of the database for WordPress */
 define('DB_NAME', 'wordpress');
 
-/** MySQL database username */
-define('DB_USER', 'blogger');
+
+
+/** MySQL database username 
+* Please do not change these on github
+* They will be replaced by variable interpolation
+*/
+
+define('DB_USER', '!USERNAME!');
 
 /** MySQL database password */
-define('DB_PASSWORD', 'b10gg3r!');
+define('DB_PASSWORD', '!PASSWORD!');
 
 /** MySQL hostname */
 define('DB_HOST', 'localhost');
