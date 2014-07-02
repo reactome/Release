@@ -8,7 +8,8 @@ dbPort=3306
 # MySQL account name
 dbUser=root
 # MySQL acount password
-dbPwd=macmysql01
+# do not edit
+dbPwd=!PASSWORD!
 # Name of the file containing a list of topics to be released
 releaseTopicsFileName=ver14_topics.txt
 # Name of the file containing a list of species that should be in the slice even though some of
