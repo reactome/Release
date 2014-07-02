@@ -19,14 +19,13 @@ BEGIN {
     unshift (@INC, $libpath);
 }
 
-## These should be deleted eventually. However, I keep them in for the time being
-## in case the BEGIN block turns out to be a bad idea after all.
 use CGI qw(:standard);
 use GKB::DBAdaptor;
 use GKB::PrettyInstance;
 use GKB::WebUtils;
 use GKB::Config;
 use Data::Dumper;
+use GKB::FrontPage3;
 
 use strict;
 
@@ -49,7 +48,7 @@ eval {
     	$dbname = $1;
     	$id = $2;
     } else {
-	    ($dbname && $id) || print_search_form_page_w_message(qq(Need SOURCE and ID));
+	    ($dbname && $id) || print_search_form_page_w_message(qq(This script needs a SOURCE and database ID));
 	}
     
     # Deal with multiple, comma-separated IDs
@@ -146,10 +145,12 @@ sub handle_error {
 
 sub print_search_form_page_w_message {
     my $msg = shift;
-    $WU || die($msg);
-    $WU->print_simple_search_page_top;
-    print qq(<DIV CLASS="nothingfound">$msg</DIV>);
-    $WU->print_simple_search_page_bottom;
+    my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (link)", "/stylesheet.css");
+    my $header = $CGI->header . $front_page->get_header();
+    my $footer = $front_page->get_footer();
+    my $enclosing_div_start = $front_page->get_enclosing_div_start();
+    my $enclosing_div_end = $front_page->get_enclosing_div_end();    $WU || die($msg);
+    print $header,br(),qq(<DIV CLASS="nothingfound">$msg</DIV>),br(),$footer;
     clean_up();
     exit;
 }

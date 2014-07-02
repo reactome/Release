@@ -34,6 +34,8 @@ my ($DBA,$WU,$INSTANCES,$IN_HTML,$DB);
 my $CGI = CGI->new();
 
 my $front_page = GKB::FrontPage3->new("bla", "/stylesheet.css");
+my $header = $front_page->get_header();
+my $footer = $front_page->get_footer();
 
 eval {
 
@@ -98,15 +100,14 @@ sub print_page_start {
 	-title => "$PROJECT_NAME (small_molecule_search)",
 	);
     if (is_decorated()) {
-        #print $WU->top_navigation_box;
-	print $front_page->get_header();
+	print $header;
     }
 }
 
 sub print_page_end {
     if (is_decorated()) {
         #($WU && $IN_HTML) &&  print $WU->make_footer;
-	print $front_page->get_footer();
+	print $footer;
     }
     ($IN_HTML) && print $CGI->end_html;
     ($DBA) && $DBA->db_handle->disconnect;

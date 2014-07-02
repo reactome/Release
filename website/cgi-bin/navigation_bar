@@ -19,10 +19,7 @@ BEGIN {
 
 use CGI qw(:standard);
 use GKB::FrontPage3;
-
-my $header = undef;
-my $footer = undef;
-my $front_page = GKB::FrontPage3->new("bla", "/stylesheet.css");
-$header = $front_page->get_header();
+my $front_page = GKB::FrontPage3->new("header", "/stylesheet.css");
+my $header = $front_page->get_header();
 
 print header,$header;
