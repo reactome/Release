@@ -1,17 +1,16 @@
 # This configuration file is used to set necessary parameters for slicingTool. If all parameters are set, the user will not be asked to input.
 # Database host. Usually it should be localhost to improve the performance.
-# Based on the current server configuration, it should be reactomecurator.
-dbHost=reactomecurator.oicr.on.ca
+dbHost=
 # Database name. Usually it should be gk_central.
 dbName=gk_central
 # Port number. Default 3306.
 dbPort=3306
 # MySQL account name
-dbUser=authortool
+dbUser=
 # MySQL acount password
-dbPwd=***REMOVED***
+dbPwd=
 # Name of the file containing a list of topics to be released
-releaseTopicsFileName=ver48_topics.txt
+releaseTopicsFileName=
 # Name of the file containing a list of species that should be in the slice even though some of
 # them might not be used by insances in the slice.
 speciesFileName=Species.txt
@@ -20,11 +19,11 @@ logFileName=SlicingLog.txt
 # The following parameters are used for target MySQLAdaptor information.
 # If no values are provided, the source database information will be used
 slicingDbHost=localhost
-slicingDbUser=authortool
-slicingDbPwd=***REMOVED***
+slicingDbUser=
+slicingDbPwd=
 slicingDbPort=3306
 # Slicing database name
-slicingDbName=test_slice_48
+slicingDbName=
 # Check if the slicing is used for a non-human Reactome (e.g. Fly-Reactome). If it is set to true, a single layer of referred Events and their Event-type references will be in the slice.
 useForSpecies=false
 # Check if the slicing is used for a branch of a pathway tree. If this value is true, only events contained by a list of
@@ -35,9 +34,9 @@ useForHierarchy=false
 # Control if the slice tool is running under the development stage
 isInDev=false
 # Release number that is used to create a _Release instance
-releaseNumber=48
+releaseNumber=
 # Release Date, in the format of YYYY-MM-DD, which is used to create a _Release instance
-releaseDate=2014-03-12
+releaseDate=
 # Last release Date, in the format of YYYY-MM-DD, which is used to assign releasetStatus for NEW or UPDATED event in homo sapiens.
-lastReleaseDate=2013-12-04
+lastReleaseDate=
 
