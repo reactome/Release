@@ -8,9 +8,9 @@ fi
 
 path_wanted='scripts$'
 PWD=$(pwd)
-if [[ ! $PWD !~ $path_wanted ]] 
+if [[ ! $PWD =~ $path_wanted ]] 
 then
-    echo "\nSorry, you must run this script in situ (.../GKB/scripts)" 1>&2
+    echo -e "\nSorry, you must run this script in situ (.../GKB/scripts)" 1>&2
     exit 1
 fi    
 
