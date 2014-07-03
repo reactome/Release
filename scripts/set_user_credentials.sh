@@ -6,6 +6,15 @@ then
     exit 1
 fi
 
+path_wanted='scripts$'
+PWD=$(pwd)
+if [[ ! $PWD !~ $path_wanted ]] 
+then
+    echo "\nSorry, you must run this script in situ (.../GKB/scripts)" 1>&2
+    exit 1
+fi    
+
+
 read -p "Enter mysql user name: " MUSER
 read -s -p "Enter mysql password: " MPASS
 echo -e "\n"
@@ -21,10 +30,16 @@ then
     exit 1
 fi
 
+
 perl -i -pe "s/!USERNAME!/$MUSER/" ../modules/GKB/Config.pm
 perl -i -pe "s/!PASSWORD!/$MPASS/" ../modules/GKB/Config.pm
 perl -i -pe "s/!USERNAME!/$WUSER/" ../website/html/wordpress/wp-config.php 
 perl -i -pe "s/!PASSWORD!/$WPASS/" ../website/html/wordpress/wp-config.php
 
+
+echo "Affected files are: 
+$PWD/../website/html/wordpress/wp-config.php
+$PWD/../modules/GKB/Config.pm
+"
 
 
