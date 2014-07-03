@@ -34,7 +34,7 @@ chdir("$GK_ROOT_DIR/biopaxexporter") || die2($!);
 
 my $cmd = qq($JAVA_PATH -cp lib/jdom/jdom.jar:lib/owl/xercesImpl.jar:lib/owl/xml-apis.jar:lib/owl/xmlParserAPIs.jar:lib/mysql/mysql.jar:lib/reactome/reactome.jar:classes org.gk.gkCurator.GraphvizDotGenerator);
 
-# Prevents perl -T security problems
+# Prevents perl  security problems
 my $temp_path = $ENV{PATH};
 $ENV{PATH} = ''; 
 
