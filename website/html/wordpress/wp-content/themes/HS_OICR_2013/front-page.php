@@ -5,7 +5,7 @@
 	    <a class="button icon browse" href="/PathwayBrowser/"><span>Browse Pathways</span></a>
  	 </div>
   	<div class="grid_5">
-   	 <a class="button icon data" href="/Analysis/index.html#TOOLS=1&TOOL_TYPE=combined_analysis_set&TAB=0"><span>Analyze Data</span></a>
+   	 <a class="button icon data" href="/PathwayBrowser/#TOOL=AT"><span>Analyze Data</span></a>
   	</div>
     <div class="grid_5 omega">
     <a class="button icon cytoscape" href="http://wiki.reactome.org/index.php/Reactome_FI_Cytoscape_Plugin"><span>Reactome FI Network</span></a>
@@ -30,7 +30,7 @@
     <div class="contentwrap">
     <div class="contenthead">About Reactome</div><!--close contenthead-->
     <div class="contentbody">
-    	Reactome is a free, open-source, curated and peer reviewed pathway database. Our goal is to provide intuitive bioinformatics tools for the visualization, interpretation and analysis of pathway knowledge to support basic research, genome analysis, modeling, systems biology and education. The current version (v46) of Reactome was released on September 23, 2013.
+    	Reactome is a free, open-source, curated and peer reviewed pathway database. Our goal is to provide intuitive bioinformatics tools for the visualization, interpretation and analysis of pathway knowledge to support basic research, genome analysis, modeling, systems biology and education.
     </div><!--close contentbody-->
     </div><!--close contentwrap-->
     
@@ -50,12 +50,12 @@
             <div class="contentbody">
             
             <div class="announcement">
-            <a href="/?p=1673"> Welcome to the New Reactome Website
+            <a href="/?p=1775"> New for 2014: Version 48 Released
             <!--This is a placeholder for static announcements. For example, downtime due to server maintenance, or some other important announcement-->
             </div><!--close annoucement-->
 
             <!--twitter feed --><div class="twitter">
-            <a class="twitter-timeline" width="300" href="https://twitter.com/reactome" data-widget-id="344458797739294721" data-chrome="noheader noborders transparent" data-tweet-limit="3">Tweets by @reactome</a></div>
+            <a class="twitter-timeline" width="300" height="400" href="https://twitter.com/reactome" data-widget-id="344458797739294721" data-chrome="noheader noborders transparent">Tweets by @reactome</a></div>
              </div><!--close content body-->
              </div><!--close contentwrap-->
 
