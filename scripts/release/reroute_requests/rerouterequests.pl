@@ -8,7 +8,6 @@ use warnings;
 
 use autodie;
 use Carp;
-use Net::OpenSSH;
 
 my $port = shift;
 ($port && $port =~ /^\d+$/) || die "$0: Port number is required as the first argument to this script\n" . usage_instructions();
@@ -28,7 +27,7 @@ sub redirect_requests_in_configuration_file {
     
     my @config_file_contents = get_configuration_file_contents($config_file, $remote_server);
     
-    my $new_config_file = get_file_handle(">", "$config_file", $remote_server);
+    my $new_config_file_contents = '';
     
     foreach (@config_file_contents) {
         if (/(Redirect \/ http:\/\/www.reactome.org:8000\/)/) {
@@ -38,21 +37,23 @@ sub redirect_requests_in_configuration_file {
                s/(.+)/#$1/;    
            }        
         }
-        print $new_config_file $_;
+        $new_config_file_contents .= $_;
     }
     
-    close $new_config_file;
+    if ($remote_server) {
+	`ssh $remote_server 'cat $new_config_file_contents > $config_file'`;
+    } else {
+        `cat $new_config_file_contents > $config_file`;
+    }
 } 
 
 sub get_configuration_file_contents {
     my $config_file = shift;
     my $remote_server = shift;
     
-    my $fh = get_file_handle("<", $config_file, $remote_server);
-    my @contents = <$fh>;
-    close $fh;
+    my $contents = $remote_server ? `ssh $remote_server 'cat $config_file'` : `cat $config_file'`;
     
-    return @contents;
+    return split /\n/, $contents ;
 }
 
 sub get_file_handle {
