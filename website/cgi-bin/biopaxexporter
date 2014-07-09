@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w -T
+#!/usr/local/bin/perl -w 
 
 # The following block sets the script to pick up libraries from ../../modules.
 # The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
@@ -56,7 +56,7 @@ else {
     $cmd .= " org.reactome.biopax.ReactomeToBioPAX3XMLConverter";
 } 
 
-# Prevents perl -T security problems
+# Prevents perl  security problems
 my $temp_path = $ENV{PATH};
 $ENV{PATH} = '';
 
