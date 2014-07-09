@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w -T
+#!/usr/local/bin/perl -w 
 
 # This CGI script understands the command line
 # argument ST_ID, which is of the form: StableId.Version,
