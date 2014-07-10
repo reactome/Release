@@ -1,15 +1,14 @@
 # This configuration file is used to set necessary parameters for slicingTool. If all parameters are set, the user will not be asked to input.
 # Database host. Usually it should be localhost to improve the performance.
-# Based on the current server configuration, it should be reactomecurator.
-dbHost=reactomecurator.oicr.on.ca
+dbHost=
 # Database name. Usually it should be gk_central.
 dbName=gk_central
 # Port number. Default 3306.
 dbPort=3306
 # MySQL account name
-dbUser=authortool
+dbUser=
 # MySQL acount password
-dbPwd=T001test
+dbPwd=
 # Name of the file containing a list of topics to be released
 releaseTopicsFileName=ver49_topics.txt
 # Name of the file containing a list of species that should be in the slice even though some of
@@ -20,8 +19,8 @@ logFileName=SlicingLog.txt
 # The following parameters are used for target MySQLAdaptor information.
 # If no values are provided, the source database information will be used
 slicingDbHost=localhost
-slicingDbUser=authortool
-slicingDbPwd=T001test
+slicingDbUser=
+slicingDbPwd=
 slicingDbPort=3306
 # Slicing database name
 slicingDbName=test_slice_49
