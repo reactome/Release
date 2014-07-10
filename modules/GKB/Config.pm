@@ -69,8 +69,10 @@ use Exporter();
 # Database info
 ##################################################################################
 $GK_DB_HOST = 'localhost';
-$GK_DB_USER = 'authortool';
-$GK_DB_PASS = '***REMOVED***';
+
+# Please do not change these on github
+$GK_DB_USER = '!USERNAME!';
+$GK_DB_PASS = '!PASSWORD!';
 
 $GK_DB_PORT = 3306;
 $GK_DB_NAME = 'test_reactome_49';
