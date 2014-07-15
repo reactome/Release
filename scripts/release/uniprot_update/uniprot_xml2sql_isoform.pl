@@ -554,6 +554,7 @@ print FR "\{\| class\=\"wikitable\"
 \! Obsolete UniProt
 \! Reactome instances with obsolete UniProt
 \! EWAS associated with obsolete UniProt
+\! Species
 \|\-\n";
 
 foreach my $t_ac ( sort keys %reactome_gp ) {
@@ -562,12 +563,14 @@ foreach my $t_ac ( sort keys %reactome_gp ) {
             my $pid;
             my @referrer = ();
             my $obs_ac = $dba->fetch_instance_by_attribute( 'ReferenceGeneProduct', [ [ 'identifier', [$t_ac] ] ] );
-            
+	    my $species;            
+
             foreach my $sdi ( @{$obs_ac} ) {
                 my $test = $sdi->VariantIdentifier->[0];
                 next if ( defined $test );
                 $pid = $sdi->db_id;              
-                
+                $species = $sdi->Species->[0]->Name->[0];
+
                 my $ar2 = $dba->fetch_referer_by_instance($sdi);	#CY addition
                 foreach my $ref ( @{$ar2} ) {
 					my $class = $ref->_class->[0];
@@ -580,8 +583,9 @@ foreach my $t_ac ( sort keys %reactome_gp ) {
 	    	my $report_line = "\|\[http\://www.uniprot.org/uniprot/$all_ac $all_ac\]\n\|";
 	        $report_line .= "$t_ac\n\|";		#CY addition
 	        $report_line .= "\[http\://reactomecurator\.oicr\.on.ca/cgi-bin/instancebrowser\?DB=$opt_db\&ID\=$pid\& $pid\]\n\|";
-            	$report_line .= '|'  . join('|', @referrer);
-            	$report_line .= "\n\|\-\n";
+            	$report_line .= '|'  . join('|', @referrer) . "\n\|";
+            	$report_line .= $species;
+		$report_line .= "\n\|\-\n";
 		
 		if ($t_ac ~~ @skip_list) {
 			push @skip_replaceable, $report_line;
@@ -607,6 +611,7 @@ print FR "\{\| class\=\"wikitable\"
 \! Obsolete UniProt
 \! Reactome instances with obsolete UniProt
 \! EWAS associated with obsolete UniProt
+\! Species
 \|\-\n";
 
 foreach my $rac ( sort keys %reactome_gp ) {
@@ -614,10 +619,13 @@ foreach my $rac ( sort keys %reactome_gp ) {
     my $oac;
     my @referrer = ();
     my $obs_ac = $dba->fetch_instance_by_attribute( 'ReferenceGeneProduct', [ [ 'identifier', [$rac] ] ] );
+    my $species;
+
     foreach my $sdi ( @{$obs_ac} ) {
         my $test = $sdi->VariantIdentifier->[0];
         next if ( defined $test );
         $pid = $sdi->db_id;
+        $species = $sdi->Species->[0]->Name->[0];
 
 		my $ar2 = $dba->fetch_referer_by_instance($sdi);	#CY addition
         foreach my $ref ( @{$ar2} ) {
@@ -638,7 +646,8 @@ foreach my $rac ( sort keys %reactome_gp ) {
 	my $report_line = "\|\n\|";
 	$report_line .= "\|$rac\n\|";
 	$report_line .= "\[http\://reactomecurator.oicr.on.ca/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$pid\& $pid\]\n\|";    
-    	$report_line .= '|' . join('|', @referrer);
+    	$report_line .= '|' . join('|', @referrer) . "\n\|";
+        $report_line .= $species;
     	$report_line .= "\n\|\-\n";
 	
 	if ($rac ~~ @skip_list) {
@@ -654,12 +663,14 @@ foreach my $rac ( sort keys %reactome_gp ) {
 foreach my $iac ( sort keys %reactome_iso ) {	
     my $isod = $dba->fetch_instance_by_attribute( 'ReferenceIsoform',
         [ [ 'variantIdentifier', [$iac] ] ] );
-    
+
+    my $species;    
     foreach my $sdi ( @{$isod} )
     {
     	my @referrer = ();
     	my $id = $sdi->db_id;
-    	
+    	$species = $sdi->Species->[0]->Name->[0];
+
     	my $ar2 = $dba->fetch_referer_by_instance($sdi);	#CY addition
         foreach my $ref ( @{$ar2} ) {
 		my $class = $ref->_class->[0];
@@ -679,7 +690,8 @@ foreach my $iac ( sort keys %reactome_iso ) {
 	    	my $report_line = "\|\n\|";
 	    	$report_line .= "\|$iac\n\|";
 	    	$report_line .= "\[http\://reactomecurator.oicr.on.ca/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$id\& $id\]\n\|";	    	
-    		$report_line .= '|' . join('|', @referrer);
+    		$report_line .= '|' . join('|', @referrer) . "\n\|";
+		$report_line .= $species;
     		$report_line .= "\n\|\-\n";
 		
 		if ($iac ~~ @skip_list) {
