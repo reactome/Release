@@ -83,7 +83,8 @@ then
 	openjdk-7-jdk\
 	libexpat1 \
 	libexpat1-dev \
-	libgd-gd2-perl
+	libgd-gd2-perl \
+        libbio-perl-perl
 fi
 
 # cgi scripts look here for perl
@@ -220,6 +221,14 @@ rm -fr webapps
 mv setenv.sh apache-tomcat/bin
 
 chown -R tomcat7:tomcat7 apache-tomcat-7.0.50
+
+echo -e "\nLinking Analysis Service data..."
+cd /usr/local/gkb/AnalysisService
+for file in *.bin
+do
+  ln -s $file analysis.bin
+done
+cd $PWD
 
 echo -e "\nStarting the tomcat server..."
 /etc/init.d/tomcat7 restart
