@@ -206,7 +206,6 @@ echo -e "\nSetting up Tomcat..."
 # This is the user that will own the tomcat process
 groupadd tomcat7
 useradd -g tomcat7 -s /sbin/nologin -d /opt/tomcat/temp tomcat7
-chown -R tomcat7:tomcat7 /usr/local/gkb/AnalysisService
 
 cd /usr/local/gkb/tomcat
 echo -e "\nDownloading tomcat..."
@@ -223,12 +222,13 @@ mv setenv.sh apache-tomcat/bin
 chown -R tomcat7:tomcat7 apache-tomcat-7.0.50
 
 echo -e "\nLinking Analysis Service data..."
-cd /usr/local/gkb/AnalysisService
+cd /usr/local/gkb/AnalysisService/input
 for file in *.bin
 do
   ln -s $file analysis.bin
 done
 cd $PWD
+chown -R tomcat7:tomcat7 /usr/local/gkb/AnalysisService
 
 echo -e "\nStarting the tomcat server..."
 /etc/init.d/tomcat7 restart
