@@ -1,93 +1,57 @@
 #!/usr/local/bin/perl -w
-
 use strict;
-use autodie;
 
-!$ARGV[0] or $ARGV[0] eq '-h' and die<<__END__;
-A script for creating GKB.tar.gz for local installation of Reactome
-
-Usage: $0 dir_to_deposit_tarball release_number [cvs_tag_name, HEAD by default]
-__END__
-
-my $dir_for_tarball = shift;
-my $tag_name = shift || 'HEAD';
+my $dir_for_tarball = 'reactome_tarball';
+my $release = shift or die "Usage $0 release_num\n";
 
 mkdir $dir_for_tarball unless (-e $dir_for_tarball);
-
 chdir $dir_for_tarball;
 
+mkdir $release unless -d $release;
+chdir $release;
+
+system "rm -fr reactome" if -d 'reactome';
+
+# Since the github repo is not public, we will assume it is up-to-date
+# on reactomerelease
+chomp (my $bakdir = `pwd`);
+$bakdir .= '/../../../../..';
+
 my @cmds = (
-    ["cvs -d :ext:reactomecurator.oicr.on.ca:/usr/local/cvs_repository co -r $tag_name GKB"],
-    ["mkdir GKB/website/logs"],
-    ["rm GKB/website/html/redirect_from_survey.html",1],
-    ["rm GKB/website/html/graph.html",1],
-    ["rm -rf GKB/website/html/gkb",1],
-    ['mkdir GKB/website/html/img-tmp', 1],
-    ['chmod 777 GKB/website/html/img-tmp', 1],
-#    ['mv GKB/modules/GKB/Config.pm-dist GKB/modules/GKB/Config.pm'],
-    ['mkdir GKB/scripts_tmp'],
-    ['cp GKB/scripts/fetchEmptyProject.pl GKB/scripts_tmp/.', 1],
-    ['cp GKB/scripts/addSchemaTable.pl GKB/scripts_tmp/.', 1],
-    ['cp GKB/scripts/updateDatabase.pl GKB/scripts_tmp/.', 1],
-	    ['cp GKB/scripts/updateDisplayName.pl GKB/scripts_tmp/.', 1],
-    ['cp GKB/scripts/createDatabase.pl GKB/scripts_tmp/.', 1],
-    ['cp -r GKB/scripts/denormalised_db GKB/scripts_tmp/.', 1],
-    ['cp -r GKB/scripts/release GKB/scripts_tmp/.', 1],
-    ['cp GKB/scripts/merge_2_instances.pl GKB/scripts_tmp/.', 1],
-    ['cp GKB/scripts/merge_2_instances_from_list.pl GKB/scripts_tmp/.', 1],
-    ['cp GKB/scripts/myisam2innodb.pl GKB/scripts_tmp/.', 1],
-    ['cp GKB/scripts/innodb2myisam.pl GKB/scripts_tmp/.', 1],
-	    ['cp GKB/scripts/SBML_dumper.pl GKB/scripts_tmp/.', 1],
-	    ['cp GKB/scripts/report_interactions.pl GKB/scripts_tmp/.', 1],
-	    ['cp GKB/scripts/uniprot_entries_in_reactome.pl GKB/scripts_tmp/.', 1],
-	    ['cp GKB/scripts/uniprot_entries_in_reactome_w_stid.pl GKB/scripts_tmp/.', 1],
-	    ['cp GKB/scripts/fetch_and_print_values.pl GKB/scripts_tmp/.', 1],
-    ['cp -r GKB/scripts/examples GKB/scripts_tmp/.', 1],
-	    ['mkdir GKB/scripts_tmp/QA_scripts'],
-	    ['cp GKB/scripts/QA_scripts/remove_unused_PE.pl GKB/scripts_tmp/QA_scripts/.'],
-	    ['chmod 755 GKB/scripts_tmp/QA_scripts/*'],
-    ['rm -rf GKB/scripts'],
-    ['mv GKB/scripts_tmp GKB/scripts'],
-	    
-	    ['mkdir GKB/orthomcl_project_tmp'],
-	    ['mkdir GKB/orthomcl_project_tmp/orthopairs'],	    
-	    ['mkdir GKB/orthomcl_project_tmp/reports'],
-	    ['mkdir GKB/orthomcl_project_tmp/scripts'],
-	    ['cp GKB/orthomcl_project/scripts/infer_events_orthomcl.pl GKB/orthomcl_project_tmp/scripts/.', 1],
-	    ['cp GKB/orthomcl_project/scripts/prepare_orthopair_files.pl GKB/orthomcl_project_tmp/scripts/.', 1],
-	    ['cp GKB/orthomcl_project/scripts/tweak_datamodel_orthomcl_inference.pl GKB/orthomcl_project_tmp/scripts/.', 1],
-	    ['rm -rf GKB/orthomcl_project'],
-	    ['mv GKB/orthomcl_project_tmp GKB/orthomcl_project'],
-	    ['chmod 755 GKB/orthomcl_project/scripts/*'],
-    ['chmod 755 GKB/website/cgi-bin/*'],
-    ['chmod 644 GKB/website/cgi-bin/protege2mysql'],
-    ['chmod 755 GKB/website/html/*htm*'],
-    ['chmod 755 GKB/website/html/download/*htm*'],
-#    ['mv GKB/website/html/download/16 GKB/website/html/download/current'],
-    ["rm -rf GKB/website/html/download/1*",1],
-    ['find GKB -name CVS -exec rm -rf {} \;', 1],
-    ['mkdir GKB2'],
-    ['cp -r GKB/website GKB2/website'],
-    ['cp -r GKB/scripts GKB2/scripts'],
-    ['cp -r GKB/modules GKB2/modules'],
-    ['cp -r GKB/java GKB2/java'],
-    ['cp -r GKB/BioMart GKB2/BioMart'],
-    ['cp -r GKB/biopaxexporter GKB2/biopaxexporter'],
-    ['cp -r GKB/orthomcl_project GKB2/orthomcl_project'],
-    ['cp -r GKB/ReactomeGWT GKB2/ReactomeGWT'],
-    ['rm -rf GKB'],
-    ['mv GKB2 GKB'],
-    ['tar cvzf GKB.tar.gz GKB'],
-    ['rm -rf GKB', 1]
+    qq(mkdir reactome),
+    qq(cp -r $bakdir/website reactome),
+    qq(cp -r $bakdir/modules reactome),
+    qq(cp -r $bakdir/third_party_install/tomcat reactome),
+    qq(cp $bakdir/third_party_install/website/conf/httpd.conf reactome/website/conf),
+    qq(rm -f reactome/website/html/stats*),
+    qq(cp $bakdir/scripts/release/website_files_update/stats.* reactome/website/html),
+    qq(mkdir reactome/AnalysisService),
+    qq(mkdir reactome/AnalysisService/input),
+    qq(mkdir reactome/AnalysisService/temp),
+    qq(cp $bakdir/../AnalysisService/input/analysis_v$release.bin reactome/AnalysisService/input),
+    qq(rm -fr reactome/website/html/img-tmp/*),
+    qq(rm -fr reactome/website/html/img-fp/*),
+    qq(rm -fr reactome/website/logs/*),
+    qq(rm -fr reactome/website/html/download/*),
+    qq(rm -fr reactome/modules/*ensem*),
+    qq(find ./ -name .gitignore | xargs rm -f),
+    qq(perl -i -pe "s/GK_DB_USER = '\\S+'/GK_DB_USER = 'reactome_user'/" reactome/modules/GKB/Config.pm),
+    qq(perl -i -pe "s/GK_DB_PASS = '\\S+'/GK_DB_PASS = 'reactome_pass'/" reactome/modules/GKB/Config.pm),
+    qq(perl -i -pe "s/GK_DB_NAME = '\\S+'/GK_DB_NAME = 'gk_current'/" reactome/modules/GKB/Config.pm),
+    qq(perl -i -pe "s/GK_IDB_NAME = '\\S+'/GK_IDB_NAME = 'gk_stable_ids'/" reactome/modules/GKB/Config.pm),
+    qq(perl -i -pe "s/GK_ROOT_DIR = '\\S+'/GK_ROOT_DIR = '\\/usr\\/local\\/gkb'/" reactome/modules/GKB/Config.pm),
+    qq(perl -i -pe "s/'DB_USER', '\\S+'/'DB_USER', 'reactome_user'/" reactome/website/html/wordpress/wp-config.php),
+    qq(perl -i -pe "s/'DB_PASSWORD', '\\S+'/'DB_PASSWORD', 'reactome_pass'/" reactome/website/html/wordpress/wp-config.php),
+    qq(perl -i -pe "s/'DB_NAME', '\\S+'/'DB_NAME', 'gk_wordpress'/" reactome/website/html/wordpress/wp-config.php),
+    qq(tar czvf reactome.tar.gz reactome)
 );
 
-foreach my $ar (@cmds) {
-    my $cmd = $ar->[0];
+
+for my $cmd (@cmds) {
     print "$cmd\n";
-    if ($ar->[1]) {
-	system($cmd) == 0 or print STDERR "Something wrong with '$cmd'\n";
-    } else {
-	system($cmd) == 0 or die "Something wrong with '$cmd'\n";
-    }
+    system($cmd) == 0 or die "Something wrong with '$cmd'\n";
+    sleep 1;
 }
+
+
 
