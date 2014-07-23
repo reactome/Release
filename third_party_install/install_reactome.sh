@@ -155,13 +155,13 @@ rm -f gk_stable_ids.sql.gz
 
 echo -e "\nSetting permissions..."
 mysql -uroot $MROOT -e "GRANT SELECT ON gk_stable_ids.* \
-TO 'reactome_user'@'localhost' IDENTIFIED BY 'r3@ctive'"
+TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
 mysql -uroot $MROOT -e "GRANT SELECT ON gk_current.*  \
-TO 'reactome_user'@'localhost' IDENTIFIED BY 'r3@ctive'"
+TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
 mysql -uroot $MROOT -e "GRANT ALL ON gk_current_dn.* \
-TO 'reactome_user'@'localhost' IDENTIFIED BY 'r3@ctive'"
+TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
 mysql -uroot $MROOT -e "GRANT ALL ON gk_wordpress.* \
-TO 'reactome_user'@'localhost' IDENTIFIED BY 'r3@ctive'"
+TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
 
 rm -fr databases*
 
