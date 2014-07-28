@@ -2,7 +2,7 @@
 --
 -- Host: reactomecurator.oicr.on.ca    Database: gk_central
 -- ------------------------------------------------------
--- Server version	5.0.51a-24-log
+-- Server version	5.0.51a-24+lenny5-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -550,7 +550,7 @@ CREATE TABLE `DatabaseObject` (
   KEY `created` (`created`),
   KEY `_displayName` (`_displayName`(10)),
   KEY `stableIdentifier` (`stableIdentifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=5334733 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5577031 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3870,4 +3870,4 @@ CREATE TABLE `_Release` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-02-25 19:01:36
+-- Dump completed on 2014-05-28 16:59:59
