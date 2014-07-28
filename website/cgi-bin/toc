@@ -17,8 +17,6 @@ BEGIN {
     unshift (@INC, $libpath);
 }
 umask(002);
-#use lib "/tmp/libs/bioperl-1.0";
-#use lib "/tmp/libs/my_perl_stuff";
 
 use strict;
 use CGI qw(:standard);
@@ -32,7 +30,7 @@ use GKB::FrontPage3;
 
 
 my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (Table of contents)", "/stylesheet.css");
-my $header = $front_page->get_header();
+
 my $footer = $front_page->get_footer();
 my $enclosing_div_start = $front_page->get_enclosing_div_start();
 my $enclosing_div_end = $front_page->get_enclosing_div_end();
