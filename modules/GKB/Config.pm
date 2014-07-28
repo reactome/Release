@@ -84,7 +84,7 @@ $WWW_USER = 'nobody';
 
 # Various paths
 ##################################################################################
-$GK_ROOT_DIR = '/usr/local/reactomes/Reactome/development/GKB';
+$GK_ROOT_DIR = '/usr/local/gkb';
 $GK_JAVA_CODEBASE = "/jars";
 $GK_TMP_IMG_DIR = "$GK_ROOT_DIR/website/html/img-tmp";
 # Place for frontpage images 
