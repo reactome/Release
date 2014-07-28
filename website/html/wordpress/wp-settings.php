@@ -17,6 +17,11 @@
  */
 define( 'WPINC', 'wp-includes' );
 
+
+// DB credentials
+require( ABSPATH . '/wp-secrets.php');
+
+
 // Include files required for initialization.
 require( ABSPATH . WPINC . '/load.php' );
 require( ABSPATH . WPINC . '/default-constants.php' );
