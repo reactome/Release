@@ -11,8 +11,6 @@
 879693  Taeniopygia guttata
 170941	Dictyostelium discoideum
 170928	Plasmodium falciparum
-879695	Staphylococcus aureus subsp. aureus N315
-159879	Escherichia coli
 49633	Sus scrofa
 176806	Mycobacterium tuberculosis
 186860	Oryza sativa
