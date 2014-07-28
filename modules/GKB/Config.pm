@@ -75,7 +75,7 @@ $GK_DB_USER = '!USERNAME!';
 $GK_DB_PASS = '!PASSWORD!';
 
 $GK_DB_PORT = 3306;
-$GK_DB_NAME = 'test_reactome_911';
+$GK_DB_NAME = 'test_reactome_49';
 $GK_IDB_NAME = 'test_reactome_stable_identifiers';
 
 # Name of the OS user running the web server
@@ -115,7 +115,7 @@ $SKY_REPLACEMENT_IMAGE = undef;
 $DEFAULT_IMAGE_FORMAT = 'png';
 
 # format YYYYMMDD
-$LAST_RELEASE_DATE = 20130918;
+$LAST_RELEASE_DATE = 20140312;
 #$DEFAULT_VIEW_FORMAT = 'sidebarwithdynamichierarchy';
 $DEFAULT_VIEW_FORMAT = 'elv';
 
@@ -167,7 +167,7 @@ $WARNING =
 $CACHE_GENERATED_DOCUMENTS = 0;
 
 
-$MART_URL = 'http://reactomeclean.oicr.on.ca:5555/biomart/martview';
+$MART_URL = 'http://reactomedev.oicr.on.ca:5555/biomart/martview';
 $MART_DB_NAME = "test_reactome_mart";
 $WIKI_URL = "http://wiki.reactome.org/index.php";
 $USER_GUIDE_URL = "$WIKI_URL/Usersguide";
@@ -251,7 +251,7 @@ $PATHWAY_OF_THE_MONTH = 1433557;
 # The directory into which war files are deployed in your servlet container.
 # e.g. /usr/local/apache-tomcat/webapps.  This is needed if you are using
 # either the ELV or GWT.
-$SERVLET_CONTAINER_DEPLOY_DIR = "$GK_ROOT_DIR/apache-tomcat/webapps";
+$SERVLET_CONTAINER_DEPLOY_DIR = "$GK_ROOT_DIR/../apache-tomcat/webapps";
 
 $LIBSBML_LD_LIBRARY_PATH = "/usr/local/lib";
 
