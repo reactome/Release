@@ -21,6 +21,13 @@
 <link href="<?php bloginfo('template_directory'); ?>/buttons.css" rel="stylesheet" type="text/css">
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
+
+<!-- css for the search -->
+<link rel="stylesheet" href="/content/resources/css/main.css" type="text/css">
+<link rel="stylesheet" href="/content/resources/css/ebi-fluid.css" type="text/css" media="screen">
+<link rel="stylesheet" href="/content/resources/css/autocomplete.css" type="text/css">
+<!-- /css for the search -->
+
 <!--[if lt IE 9]>
 <script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
 <![endif]-->
@@ -45,13 +52,18 @@
  <div class="nav">
 	<?php wp_nav_menu( array('menu' => 'Main' )); ?> 
  </div><!--close nav-->
+
   <div class="search_bar">
-      <form method="get" action="/cgi-bin/search2">
-        <input type="hidden" name="OPERATOR" value="ALL" />
-        <input type="search" class="search" name="QUERY" placeholder="e.g. O95631, NTN1, signaling by EGFR, glucose"/> 
-        <input type="submit" class="submit" value="Search"/>
-       </form>
-     </div><!--close search-->
+   <!--SearchForm--><!--DO NOT DELETED THIS LINE-->
+    <form id="search_form" action="/content/query" method="get">
+        <input id="local-searchbox" type="search" class="search" name="q" placeholder="e.g. O95631, NTN1, signaling by EGFR, glucose" />
+        <input type="hidden" name="species" value="Homo sapiens"/>
+        <input type="hidden" name="species" value="Entries without species"/>
+        <input type="hidden" name="cluster" value="true"/>
+        <input type="submit" class="submit" value="Search">
+     </form>
+   <!--DO NOT DELETED THIS LINE--><!--/SearchForm-->
+  </div><!--close search-->
      
  </div><!--close grid 24-->
  <div class="clear"></div><!--clear nav row-->
