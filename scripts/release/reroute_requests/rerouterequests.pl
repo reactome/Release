@@ -7,8 +7,6 @@ use warnings;
 # Author: Joel Weiser (joel.weiser@oicr.on.ca)
 
 use autodie;
-use Carp;
-use Net::OpenSSH;
 
 my $port = shift;
 ($port && $port =~ /^\d+$/) || die "$0: Port number is required as the first argument to this script\n" . usage_instructions();
@@ -28,7 +26,7 @@ sub redirect_requests_in_configuration_file {
     
     my @config_file_contents = get_configuration_file_contents($config_file, $remote_server);
     
-    my $new_config_file = get_file_handle(">", "$config_file", $remote_server);
+    my $new_config_file_contents = '';
     
     foreach (@config_file_contents) {
         if (/(Redirect \/ http:\/\/www.reactome.org:8000\/)/) {
@@ -38,43 +36,23 @@ sub redirect_requests_in_configuration_file {
                s/(.+)/#$1/;    
            }        
         }
-        print $new_config_file $_;
+        $new_config_file_contents .= $_;
     }
     
-    close $new_config_file;
-} 
+    if ($remote_server) {
+	`ssh $remote_server 'cat $new_config_file_contents > $config_file'`;
+    } else {
+        `cat $new_config_file_contents > $config_file`;
+    }
+}
 
 sub get_configuration_file_contents {
     my $config_file = shift;
     my $remote_server = shift;
     
-    my $fh = get_file_handle("<", $config_file, $remote_server);
-    my @contents = <$fh>;
-    close $fh;
+    my $contents = $remote_server ? `ssh $remote_server 'cat $config_file'` : `cat $config_file'`;
     
-    return @contents;
-}
-
-sub get_file_handle {
-    my $mode = shift; # Reading or writing
-    my $file = shift;
-    my $remote_server = shift;
-    
-    my ($file_handle, $pid);
-    if ($remote_server) {
-        my $ssh = Net::OpenSSH->new($remote_server);
-        $ssh->error and croak $ssh->error;
-        
-        if ($mode eq ">") {
-            ($file_handle, $pid) = $ssh->pipe_in("cat >$file") or croak $ssh->error; # Writing
-        } else {
-            ($file_handle, $pid) = $ssh->pipe_out("cat $file") or croak $ssh->error; # Reading
-        }
-    } else {
-        open($file_handle, $mode, $file);
-    }
-    
-    return $file_handle;
+    return split /\n/, $contents ;
 }
 
 sub usage_instructions {
