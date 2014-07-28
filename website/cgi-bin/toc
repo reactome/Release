@@ -30,7 +30,11 @@ use GKB::FrontPage3;
 
 
 my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (Table of contents)", "/stylesheet.css");
+<<<<<<< HEAD
 
+=======
+my $header = $front_page->get_header();
+>>>>>>> ffa789877d9da3cc0f7be8b0fdf104267b900965
 my $footer = $front_page->get_footer();
 my $enclosing_div_start = $front_page->get_enclosing_div_start();
 my $enclosing_div_end = $front_page->get_enclosing_div_end();
