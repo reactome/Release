@@ -1,6 +1,7 @@
 package GKB::Config;
 
 use strict;
+use GKB::Secrets;
 
 use vars qw(@ISA     @EXPORT
 	    $GK_DB_NAME
@@ -68,15 +69,12 @@ use Exporter();
 
 # Database info
 ##################################################################################
-$GK_DB_HOST = 'localhost';
-
-# Please do not change these on github
-$GK_DB_USER = '!USERNAME!';
-$GK_DB_PASS = '!PASSWORD!';
-
-$GK_DB_PORT = 3306;
-$GK_DB_NAME = 'test_reactome_49';
-$GK_IDB_NAME = 'test_reactome_stable_identifiers';
+$GK_DB_HOST  = $GKB::Secrets::GK_DB_HOST;
+$GK_DB_USER  = $GKB::Secrets::GK_DB_USER;
+$GK_DB_PASS  = $GKB::Secrets::GK_DB_PASS;
+$GK_DB_NAME  = $GKB::Secrets::GK_DB_NAME;
+$GK_IDB_NAME = $GKB::Secrets::GK_IDB_NAME;
+$GK_DB_PORT  = $GKB::Secrets::GK_DB_PORT;
 
 # Name of the OS user running the web server
 ##################################################################################
