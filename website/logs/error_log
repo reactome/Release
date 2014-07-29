@@ -1,6 +1,1 @@
-[Wed May 21 14:20:24 2014] [error] [client 216.165.126.125] File does not exist: /usr/local/reactomes/Reactome/development/GKB/website/html/favicon.ico
-[Wed May 21 14:22:01 2014] [error] [client 216.165.126.125] File does not exist: /usr/local/reactomes/Reactome/development/GKB/website/html/PathwayBrowser
-[Wed May 21 14:25:46 2014] [error] [client 10.0.26.61] Symbolic link not allowed or link target not accessible: /usr/local/reactomes/Reactome/development/GKB/website/html/download/current
-[Wed May 21 14:26:09 2014] [error] [client 10.0.26.61] Symbolic link not allowed or link target not accessible: /usr/local/reactomes/Reactome/development/GKB/website/html/download/current
-[Wed May 21 14:26:17 2014] [error] [client 10.0.26.61] Symbolic link not allowed or link target not accessible: /usr/local/reactomes/Reactome/development/GKB/website/html/download/current
-[Wed May 21 14:34:28 2014] [error] [client 10.0.26.61] File does not exist: /usr/local/reactomes/Reactome/development/GKB/website/html/wp-admin
+
