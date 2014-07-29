@@ -1,5 +1,19 @@
 <?php get_header(); ?>
-	<div class="grid_15">     
+<!--     <div id="hideMe" style="background:red;opacity:0.8;font-size:large;padding-left:20px">
+     <p><b>THIS IS JUST A TEST!</b></p>
+     Reactome will be offline for scheduled maintenance July XX, 12:01 AM EDT through 2:01 AM EDT <br>
+     The following sites will be affected:
+     <table style="margin-top:-10px">
+     <tr>
+     <td style="border:none">reactome.org</td>
+     <td style="border:none">wiki.reactome.org</td>
+     <td style="border:none">devwiki.reactome.org</td>
+     <td style="border:none">fly.reactome.org</td>
+     <td style="border:none">gallus.reactome.org</td>
+     </tr>
+     </table>	   
+     </div> -->
+     <div class="grid_15">     
      <div class="buttonswrap"><!--set left colum with buttons-->
 	  <div class="grid_5 alpha">
 	    <a class="button icon browse" href="/PathwayBrowser/"><span>Browse Pathways</span></a>
