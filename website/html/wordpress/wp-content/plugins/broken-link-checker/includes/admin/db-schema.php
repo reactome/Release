@@ -48,7 +48,7 @@ function blc_get_db_schema(){
 	
 	CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}blc_links` (
 		`link_id` int(20) unsigned NOT NULL AUTO_INCREMENT,
-		`url` text CHARACTER SET latin1 COLLATE latin1_general_cs NOT NULL,
+		`url` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
 		`first_failure` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 		`last_check` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 		`last_success` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -80,7 +80,7 @@ function blc_get_db_schema(){
 	CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}blc_synch` (
 		`container_id` int(20) unsigned NOT NULL,
 		`container_type` varchar(40) NOT NULL,
-		`synched` tinyint(3) unsigned NOT NULL,
+		`synched` tinyint(2) unsigned NOT NULL,
 		`last_synch` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 		
 		PRIMARY KEY (`container_type`,`container_id`),

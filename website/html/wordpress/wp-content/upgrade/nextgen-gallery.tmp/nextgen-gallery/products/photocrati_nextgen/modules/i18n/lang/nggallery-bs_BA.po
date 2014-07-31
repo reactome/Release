@@ -1,0 +1,4259 @@
+# NextGEN Gallery base (English) .po source
+# Copyright (C) 2014 Photocrati Media
+# This file is distributed under the same license as the NextGEN Gallery package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NextGEN Gallery\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-02-20 19:45-0800\n"
+"PO-Revision-Date: 2014-05-21 14:56+0100\n"
+"Last-Translator: Photocrati Media\n"
+"Language-Team: Photocrati Media\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
+
+#: nggallery.php:290
+#, php-format
+msgid "Every %d seconds"
+msgstr "Svakih %d sekundi"
+
+#: products/photocrati_nextgen/modules/attach_to_post/adapter.attach_to_post_ajax.php:157
+#, php-format
+msgid "Album: %s"
+msgstr "Album: %s"
+
+#: products/photocrati_nextgen/modules/attach_to_post/adapter.attach_to_post_ajax.php:159
+#, php-format
+msgid "Gallery: %s"
+msgstr "Galerija: %s"
+
+#: products/photocrati_nextgen/modules/attach_to_post/adapter.attach_to_post_ajax.php:177
+msgid "Missing parameters"
+msgstr "Parametri nedostaju"
+
+#: products/photocrati_nextgen/modules/attach_to_post/adapter.attach_to_post_ajax.php:213
+msgid "Displayed gallery does not exist"
+msgstr "Prikazana galerija ne postoji"
+
+#: products/photocrati_nextgen/modules/attach_to_post/adapter.attach_to_post_ajax.php:216
+msgid "Invalid request"
+msgstr "Nevažeći upit"
+
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:248
+msgid "NextGEN Gallery - Attach To Post"
+msgstr "NextGEN Gallery - Dodaj na članak"
+
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:266
+msgid "Display Galleries"
+msgstr "Prikaži galerije"
+
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:273
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_controller.php:7
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:192
+msgid "Add Gallery / Images"
+msgstr "Dodaj Galeriju/Slike"
+
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:280
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:160
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:194
+msgid "Manage Galleries"
+msgid_plural "Manage Galleries"
+msgstr[0] "Uredi Galeriju"
+msgstr[1] "Uredi Galerije"
+
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:287
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:404
+msgid "Manage Albums"
+msgid_plural "Manage Albums"
+msgstr[0] "Uredi Album"
+msgstr[1] "Uredi Albume"
+
+#: products/photocrati_nextgen/modules/attach_to_post/class.attach_controller.php:294
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:162
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:198
+msgid "Manage Tags"
+msgstr "Uredi Oznake"
+
+#: products/photocrati_nextgen/modules/attach_to_post/mixin.attach_to_post_display_tab.php:115
+msgid "What would you like to display?"
+msgstr "Šta želite da prikažete?"
+
+#: products/photocrati_nextgen/modules/attach_to_post/mixin.attach_to_post_display_tab.php:139
+msgid "Select a display type"
+msgstr "Izaberi vrstu prikaza"
+
+#: products/photocrati_nextgen/modules/attach_to_post/mixin.attach_to_post_display_tab.php:162
+msgid "Customize the display settings"
+msgstr "Prilagodi postavke prikaza"
+
+#: products/photocrati_nextgen/modules/attach_to_post/mixin.attach_to_post_display_tab.php:253
+msgid "No display type selected"
+msgstr "Nije izabrana vrsta prikaza"
+
+#: products/photocrati_nextgen/modules/attach_to_post/mixin.attach_to_post_display_tab.php:271
+msgid "Sort or Exclude Images"
+msgstr "Sortiraj ili Isključi slike"
+
+#: products/photocrati_nextgen/modules/attach_to_post/module.attach_to_post.php:186
+msgid "Invalid Displayed Gallery"
+msgstr "Neispravna Prikazana Galerija"
+
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab.php:10
+#: products/photocrati_nextgen/modules/nextgen_admin/templates/nextgen_admin_page.php:25
+msgid "Save"
+msgstr "Sačuvaj"
+
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab_js.php:612
+msgid "Sources"
+msgstr "Izvori"
+
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab_js.php:646
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:362
+msgid "(optional)"
+msgstr "(opcionalno)"
+
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab_js.php:654
+msgid ""
+"Sets an SEO-friendly name to this gallery for URLs. Currently only in use by "
+"the Pro Lightbox."
+msgstr ""
+"Podesite SEO-prijateljsko ime ovoj galeriji za URL-ove. Trenutno u upotrebi "
+"samo na Pro Lightbox."
+
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab_js.php:655
+msgid "Slug"
+msgstr "Slug"
+
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab_js.php:860
+msgid "No entities to display for this source."
+msgstr "Nema entiteta da prikaže za ovaj izvor"
+
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab_js.php:1264
+msgid "Select a gallery"
+msgstr "Izaberi galeriju"
+
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab_js.php:1292
+msgid "Albums"
+msgstr "Albumi"
+
+#: products/photocrati_nextgen/modules/lightbox/adapter.lightbox_library_form.php:34
+msgid "Code"
+msgstr "Kod"
+
+#: products/photocrati_nextgen/modules/lightbox/adapter.lightbox_library_form.php:48
+msgid "Stylesheet URL"
+msgstr "URL stylesheeta"
+
+#: products/photocrati_nextgen/modules/lightbox/adapter.lightbox_library_form.php:62
+msgid "Javascript URL"
+msgstr "URL Javaskripte"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.import_folder_form.php:7
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/import_folder.php:6
+msgid "Import Folder"
+msgstr "Uvezi Fasciklu"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:41
+msgid "No gallery name specified"
+msgstr "Nije određeno ime galerije"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:55
+msgid "Failed to extract images from ZIP"
+msgstr "Nije uspijelo izvlačenje slika iz ZIP"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:61
+msgid "Image generation failed"
+msgstr "Generiranje slika nije uspijelo"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:70
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:150
+msgid "An unexpected error occured."
+msgstr "Nastala je neočekivana greška."
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:77
+msgid ""
+"No permissions to upload images. Try refreshing the page or ensuring that "
+"your user account has sufficient roles/privileges."
+msgstr ""
+"Nije dozvoljen upload slika. Pokušajte osvježiti stranicu ili osigurajte da "
+"vaš korisnički račun ima potrebne dozvole/privilegije. "
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:117
+msgid "Directory does not exist."
+msgstr "Direktorij ne postoji."
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:121
+msgid "No directory specified."
+msgstr "Direktorij nije određen."
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:125
+msgid ""
+"No permissions to browse folders. Try refreshing the page or ensuring that "
+"your user account has sufficient roles/privileges."
+msgstr ""
+"Nije dozvoljeno pregledavanje fascikli. Pokušajte osvježiti stranicu ili "
+"osigurajte da vaš korisnički račun ima potrebne dozvole/privilegije. "
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:155
+msgid "No folder specified"
+msgstr "Nije navedena fascikla"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.nextgen_addgallery_ajax.php:159
+msgid ""
+"No permissions to import folders. Try refreshing the page or ensuring that "
+"your user account has sufficient roles/privileges."
+msgstr ""
+"Nije dozvoljen uvoz fascikli. Pokušajte osvježiti stranicu ili osigurajte da "
+"vaš korisnički račun ima potrebne dozvole/privilegije. "
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/adapter.upload_images_form.php:7
+msgid "Upload Images"
+msgstr "Upload Slika"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/import_folder.php:1
+msgid ""
+"Select a folder to import. The folder name will be used as the title of the "
+"gallery."
+msgstr ""
+"Izaberi fasciklu za uvoz. Ime fascikle će biti iskorišteno kao naziv "
+"galerije."
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/import_folder.php:5
+msgid "Keep images in original location."
+msgstr "Zadrži slike na originalnoj lokaciji"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/import_folder.php:5
+msgid ""
+"Caution: If you keep images in the original folder and later delete the "
+"gallery, the images in that folder might be deleted depending on your "
+"settings."
+msgstr ""
+"Oprez: Ako zadržite slike u originalnoj fascikli i kasnije obrišete "
+"galeriju, ovisno o vašim postavkama slike u toj fascikli mogu biti obrisane."
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/import_folder.php:39
+msgid "Importing gallery"
+msgstr "Uvezi galeriju"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/import_folder.php:41
+msgid "In Progress..."
+msgstr "U tijeku..."
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/import_folder.php:56
+#, php-format
+msgid "Done! Successfully imported %s images"
+msgstr "Učinjeno! Uspiješno uvezeno %s slika"
+
+#: products/photocrati_nextgen/modules/attach_to_post/templates/display_tab_js.php:1268
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:2
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:189
+#: products/photocrati_nextgen/modules/ngglegacy/lib/rewrite.php:217
+#: products/photocrati_nextgen/modules/ngglegacy/lib/rewrite.php:226
+msgid "Gallery"
+msgid_plural "Galleries"
+msgstr[0] "Galerija"
+msgstr[1] "Galerije"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:4
+msgid "Create a new gallery"
+msgstr "Napravi novu galeriju"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:13
+msgid "You browser doesn't have Flash, Silverlight, HTML5, or HTML4 support."
+msgstr "Vaš preglednik nema podršku za Flash, Silverlight, HTML5 ili HTML4"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:99
+msgid "Drag image and ZIP files here or click <strong>Add Files</strong>"
+msgstr ""
+"Prevucite slike ili ZIP datoteke ovdje ili kliknite <strong>Dodaj Datoteke</"
+"strong>"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:149
+#, php-format
+msgid "%s images were uploaded successfully"
+msgstr "%s slika je uspješno dodano"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:152
+msgid "1 image was uploaded successfully"
+msgstr "1 slika je uspiješno dodana"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:155
+msgid "0 images were uploaded"
+msgstr "0 slika je dodano"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:169
+msgid "Upload complete"
+msgstr "Upload završen"
+
+#: products/photocrati_nextgen/modules/nextgen_addgallery_page/templates/upload_images.php:191
+msgid ""
+"An unexpected error occured. This is most likely due to a server "
+"misconfiguration. Check your PHP error log or ask your hosting provider for "
+"assistance."
+msgstr ""
+"Nastala je neočekivana greška. Ovo je najvjerovatnije zbog pogrešne "
+"konfiguracije servera. Provjerite svoj PHP error log ili pitajte vašeg "
+"hosting uslužitelja za pomoč."
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:226
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:167
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:537
+msgid "Enable AJAX pagination"
+msgstr "Osposobite AJAX obilježavanje strana"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:238
+msgid "Override thumbnail settings"
+msgstr "Presnimite postavke umanjenih sličica"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:240
+msgid ""
+"This does not affect existing thumbnails; overriding the thumbnail settings "
+"will create an additional set of thumbnails. To change the size of existing "
+"thumbnails please visit 'Manage Galleries' and choose 'Create new "
+"thumbnails' for all images in the gallery."
+msgstr ""
+"Ovo neće uticati na postojeće umanjene sličice; presnimavanje postavki za "
+"umanjene sličice će stvoriti dodatni set umanjenih sličica. Da zamijenite "
+"veličinu postoječih umanjenih sličica molimo otiđite na 'Uređivanje "
+"Galerija' i izaberite 'Napravi nove umanjene sličice' za sve slike u "
+"galeriji."
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:248
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:37
+msgid "Thumbnail dimensions"
+msgstr "Dimenzije umanjenih sličica"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:262
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:431
+msgid "Thumbnail quality"
+msgstr "Kvaliteta umanjenih sličica"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:272
+msgid "Thumbnail crop"
+msgstr "Podrezivanje umanjenih sličica"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:281
+msgid "Thumbnail watermark"
+msgstr "Vodeni žig umanjenih sličica"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:306
+msgid "Override image settings"
+msgstr "Presnimi postavke slika"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:308
+msgid "Overriding the image settings will create an additional set of images"
+msgstr "Presnimavanje postavki za slike će stvoriti dodatni set slika"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:316
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:66
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:456
+msgid "Image quality"
+msgstr "Kvaliteta slika"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:326
+msgid "Image crop"
+msgstr "Podrezivanje slika"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:335
+msgid "Image watermark"
+msgstr "Vodeni žig slika"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:359
+msgid "Gallery width"
+msgstr "Širina galerije"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:361
+msgid "An empty or 0 setting will make the gallery full width"
+msgstr "prazno ili 0 postavka će napraviti galeriju pune širine"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:365
+msgid "Pixels"
+msgstr "Pikseli"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:365
+msgid "Percent"
+msgstr "Postotak"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:374
+msgid "First Image"
+msgstr "Prva slika"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.form.php:375
+msgid "Average"
+msgstr "Prosječno"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_admin_page_controller.php:100
+msgid "Clear"
+msgstr "Čisto"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_admin_page_controller.php:101
+msgid "Default"
+msgstr "Zadano"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_admin_page_controller.php:102
+msgid "Select Color"
+msgstr "Izaberi Boju"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_admin_page_controller.php:103
+msgid "Current Color"
+msgstr "trenutno Boja"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/class.nextgen_admin_page_controller.php:174
+msgid "Saved successfully"
+msgstr "Uspješnp sačuvano"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/templates/field_generator/nextgen_settings_field_radio.php:16
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/templates/nextgen_basic_singlepic_settings_radio.php:16
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:122
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:24
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/image_options_tab.php:40
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/image_options_tab.php:65
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/image_options_tab.php:191
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/thumbnail_options_tab.php:37
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:407
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:454
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:457
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:460
+msgid "Yes"
+msgstr "Da"
+
+#: products/photocrati_nextgen/modules/nextgen_admin/templates/field_generator/nextgen_settings_field_radio.php:24
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/templates/nextgen_basic_singlepic_settings_radio.php:24
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:123
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:23
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/image_options_tab.php:47
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/image_options_tab.php:72
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/image_options_tab.php:198
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/thumbnail_options_tab.php:44
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:409
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:455
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:458
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:461
+msgid "No"
+msgstr "Ne"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_album/mixin.nextgen_basic_album_form.php:25
+msgid "Display galleries as"
+msgstr "Prikaži galerije kao"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_album/mixin.nextgen_basic_album_form.php:26
+msgid "How would you like galleries to be displayed?"
+msgstr "Kako želite da galerije budu prikazane?"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_album/mixin.nextgen_basic_album_form.php:28
+msgid "Galleries per page"
+msgstr "Galerije po stranici"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_album/mixin.nextgen_basic_album_form.php:47
+msgid "Items per page"
+msgstr "Stavke po stranici"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_album/mixin.nextgen_basic_album_form.php:48
+msgid "Maximum number of galleries or sub-albums to appear on a single page"
+msgstr ""
+"Maksimalan broj galerija ili pod-albuma koje se pojavljuju na jednoj stranici"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_album/templates/compact.php:28
+#: products/photocrati_nextgen/modules/nextgen_basic_album/templates/extended.php:15
+#: products/photocrati_nextgen/modules/ngglegacy/view/album-compact.php:45
+#: products/photocrati_nextgen/modules/ngglegacy/view/album-extend.php:31
+msgid "Photos"
+msgstr "Fotografije"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_gallery_mapper.php:94
+msgid "[Show PicLens]"
+msgstr "[Prikaži PicLens]"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:63
+msgid "Interval"
+msgstr "Odstojanje"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:67
+msgid "# of seconds"
+msgstr "# sekundi"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:77
+msgid "Image limit"
+msgstr "Limit slika"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:79
+msgid "Maximum number of images to display with recent or random sources"
+msgstr "Maaksimalan broj slika za prikazati sa nedavnim ili nasumičnim izvorom"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:81
+msgid "# of images"
+msgstr "# slika"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:112
+msgid "Maximum dimensions"
+msgstr "Maksimalne dimenzije"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:113
+msgid ""
+"Certain themes may allow images to flow over their container if this setting "
+"is too large"
+msgstr ""
+"Određene teme mogu dozvoliti da slike pređu preko svojim rubova ako je ova "
+"postavka prevelika"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:123
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:765
+msgid "Enable flash slideshow"
+msgstr "Osposobi flash slideshow"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:125
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:767
+msgid "Integrate the flash based slideshow for all flash supported devices"
+msgstr ""
+"Integriši slideshow na osnovu flasha za sve uredjaje koji podržavaju flash"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:134
+msgid "Shuffle"
+msgstr "Miješanje"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:146
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:782
+msgid "Show next image on click"
+msgstr "Pokaži sljedeču sliku na klik"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:158
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:786
+msgid "Show navigation bar"
+msgstr "Pokaži navigacijski meni"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:170
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:790
+msgid "Show loading icon"
+msgstr "Pokaži ikonu učitavanja"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:182
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:794
+msgid "Use watermark logo"
+msgstr "Pokaži logo vodenog žiga"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:184
+msgid ""
+"Use the watermark image in the Flash object. Note: this does not watermark "
+"the image itself, and cannot be applied with text watermarks"
+msgstr ""
+"Koristi vodeni žig sliku u Flash objektima. Bilješka: ovo neće staviti "
+"vodeni žig na samu sliku, i ne može se primjeniti sa tekstualnim vodenim "
+"žigom"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:194
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:799
+msgid "Stretch image"
+msgstr "Razvuci sliku"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:231
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:827
+msgid "Use slow zooming effect"
+msgstr "Koristi spor zumirajuči efekt"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:243
+msgid "Background music (url)"
+msgstr "Pozadinska muzika (url)"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:256
+msgid "Try XHTML validation"
+msgstr "Pokušaj XHTML potvrđivanje"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:268
+msgid "Background"
+msgstr "Pozadina"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:280
+msgid "Texts / buttons"
+msgstr "Tekst / dugmad"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:292
+msgid "Rollover / active"
+msgstr "Prevrtanje / aktivno"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:304
+msgid "Screen"
+msgstr "Ekran"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:322
+msgid "Show thumbnail link"
+msgstr "Pokaži link umanjenih sličica"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_slideshow_form.php:338
+msgid "Thumbnail link text"
+msgstr "Tekst umanjenih sličica"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:65
+msgid "Images per page"
+msgstr "Slike po stranici"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:67
+msgid "0 will display all images at once"
+msgstr "0 će prikazati sve slike odjednom"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:85
+msgid "Number of columns to display"
+msgstr "Broj kolona za prikazati"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:89
+msgid "# of columns"
+msgstr "# kolona"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:105
+msgid "Piclens link text"
+msgstr "Piclens link tekst"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:123
+msgid "Show piclens link"
+msgstr "Pokaži piclens link"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:139
+msgid "Add Hidden Images"
+msgstr "Dodaj skrivene slike"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:141
+msgid ""
+"If pagination is used this option will show all images in the modal window "
+"(Thickbox, Lightbox etc.) This increases page load."
+msgstr ""
+"Ako se obilježavanje strana koristi ova opcija će prikazati sve slike u "
+"modal prozoru (Thickbox, Lightbox itd.) Ovo povečava vrijeme učitavanje "
+"strane."
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:150
+msgid "Use imagebrowser effect"
+msgstr "Koristi imagebrowser efekt"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:152
+msgid ""
+"When active each image in the gallery will link to an imagebrowser display "
+"and lightbox effects will not be applied."
+msgstr ""
+"Kada je aktivno svaka slika u galeriji će se linkovat na imagebrowser prikaz "
+"i lightbox efekt neće biti primjenjen."
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:169
+msgid "Browse images without reloading the page."
+msgstr "Pregled slika bez ponovnog učitavanja stranica."
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:184
+msgid "Show slideshow link"
+msgstr "Prikaži link slideshow-a"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/adapter.nextgen_basic_thumbnail_form.php:200
+msgid "Slideshow link text"
+msgstr "Tekst slideshow linka"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/templates/slideshow/index.php:35
+msgid ""
+"Slideshows require the&nbsp;<a href=\"http://www.macromedia.com/go/"
+"getflashplayer\">Flash Player</a>&nbsp;and a&nbsp;<a href=\"http://www."
+"mozilla.com/firefox/\">browser with Javascript support</a>."
+msgstr ""
+"Slideshow zahtijeva&nbsp;<a href=\"http://www.macromedia.com/go/"
+"getflashplayer\">Flash Player</a>&nbsp;and a&nbsp;<a href=\"http://www."
+"mozilla.com/firefox/\">preglednik sa Javaskript podrškom</a>."
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/templates/slideshow/nextgen_basic_slideshow_settings_gallery_dimensions.php:13
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:38
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/templates/nextgen_basic_singlepic_settings_dimensions.php:13
+#: products/photocrati_nextgen/modules/widget/templates/form_slideshow.php:52
+msgid "Width"
+msgstr "Širina"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_gallery/templates/slideshow/nextgen_basic_slideshow_settings_gallery_dimensions.php:21
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:40
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/templates/nextgen_basic_singlepic_settings_dimensions.php:20
+#: products/photocrati_nextgen/modules/widget/templates/form_slideshow.php:40
+msgid "Height"
+msgstr "Visina"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:41
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-caption.php:26
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:30
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser.php:26
+msgid "Back"
+msgstr "Nazad"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:49
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-caption.php:29
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:33
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser.php:29
+msgid "Next"
+msgstr "Iduča"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:55
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:90
+#: products/photocrati_nextgen/modules/ngglegacy/lib/rewrite.php:220
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-caption.php:31
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:35
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser.php:31
+msgid "Picture"
+msgstr "Slika"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_imagebrowser/templates/nextgen_basic_imagebrowser.php:55
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-caption.php:31
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:35
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser.php:31
+msgid "of"
+msgstr "od"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:53
+msgid "Link"
+msgstr "Link"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:78
+msgid "Display watermark"
+msgstr "Prikaži Vodeni žig"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:88
+msgid "Display reflection"
+msgstr "Prikaži odraz"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:98
+msgid "Crop thumbnail"
+msgstr "Podreži  umanjene sličice"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_singlepic/adapter.nextgen_basic_singlepic_form.php:108
+msgid "Float"
+msgstr "Lebdi"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_tagcloud/adapter.nextgen_basic_tagcloud_form.php:24
+msgid "Maximum number of tags"
+msgstr "Maksimalan broj tagova"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_tagcloud/adapter.nextgen_basic_tagcloud_form.php:47
+msgid "Display type"
+msgstr "Vrsta prikaza"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_tagcloud/adapter.nextgen_basic_tagcloud_form.php:50
+msgid "The display type that the tagcloud will point its results to"
+msgstr "The display type that the tagcloud will point its results to"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_templates/adapter.nextgen_basic_template_form.php:46
+msgid "Template"
+msgstr "Šablon"
+
+#: products/photocrati_nextgen/modules/nextgen_basic_templates/adapter.nextgen_basic_template_form.php:47
+msgid "Use a legacy template when rendering (not recommended)."
+msgstr "Koristi legacy šablon dok se renderuje (nije preporučeno)"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.gallerystorage_driver_base.php:580
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:658
+#: products/photocrati_nextgen/modules/ngglegacy/lib/multisite.php:23
+msgid ""
+"Sorry, you have used your space allocation. Please delete some files to "
+"upload more files."
+msgstr ""
+"oprostite, iskoristili ste raspoloživi prostor. Molimo obrišite neke "
+"datoteke da uploadujete još datoteka."
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.gallerystorage_driver_base.php:1002
+msgid "Could not calculate resized image dimensions"
+msgstr "Ne mogu izračunati promijenjene dimenzije slike"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:154
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:135
+msgid " mm"
+msgstr " mm"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:163
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:141
+msgid " sec"
+msgstr " sek"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:168
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:145
+msgid "Fired"
+msgstr "Fired"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:168
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:145
+msgid "Not fired"
+msgstr "Not fired"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:539
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:452
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:46
+msgid "Aperture"
+msgstr "Aparatura"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:540
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:565
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:453
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:478
+msgid "Credit"
+msgstr "Zasluga"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:541
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:454
+msgid "Camera"
+msgstr "Kamera"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:542
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:455
+msgid "Caption"
+msgstr "Natpis"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:543
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:26
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:114
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:456
+msgid "Date/Time"
+msgstr "Datum/Vrijeme"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:544
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:457
+msgid "Copyright"
+msgstr "Autorska prava"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:545
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:458
+msgid "Focal length"
+msgstr "Duljina fokusa"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:546
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:459
+msgid "ISO"
+msgstr "ISO"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:547
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:460
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:54
+msgid "Shutter speed"
+msgstr "Brzina zatvarača"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:548
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:4
+#: products/photocrati_nextgen/modules/widget/templates/form_mediarss.php:3
+#: products/photocrati_nextgen/modules/widget/templates/form_slideshow.php:3
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:678
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:461
+msgid "Title"
+msgstr "Naziv"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:549
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:459
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:410
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:132
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:462
+msgid "Author"
+msgstr "Autor"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:550
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:51
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:176
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:389
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:463
+msgid "Tags"
+msgstr "Tagovi"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:551
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:464
+msgid "Subject"
+msgstr "Tema"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:552
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:465
+msgid "Make"
+msgstr "Napravi"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:553
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:466
+msgid "Edit Status"
+msgstr "Uredi Status"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:554
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:467
+msgid "Category"
+msgstr "Kategorija"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:555
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:468
+msgid "Keywords"
+msgstr "Ključne riječi"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:556
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:469
+msgid "Date Created"
+msgstr "Datum Stvaranja"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:557
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:470
+msgid "Time Created"
+msgstr "Vrijeme Stvaranja"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:558
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:471
+msgid "Author Position"
+msgstr "Pozicija Autora"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:559
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:472
+msgid "City"
+msgstr "Grad"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:560
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:473
+msgid "Location"
+msgstr "Lokacija"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:561
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:474
+msgid "Province/State"
+msgstr "Pokrajina/Država"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:562
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:475
+msgid "Country code"
+msgstr "Broj zemlje"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:563
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:476
+msgid "Country"
+msgstr "Zemlja"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:564
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:477
+msgid "Headline"
+msgstr "Naslov"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:566
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:479
+msgid "Source"
+msgstr "Izvor"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:567
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:480
+msgid "Copyright Notice"
+msgstr "Obavijest za autorska prava"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:568
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:481
+msgid "Contact"
+msgstr "Kontakt"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:569
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:482
+msgid "Last modified"
+msgstr "Zadnje Promijenjeno"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:570
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:483
+msgid "Program tool"
+msgstr "Programski alat"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:571
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:484
+msgid "Format"
+msgstr "Format"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:572
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:485
+msgid "Image Width"
+msgstr "Širina Slike"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:573
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:486
+msgid "Image Height"
+msgstr "Visina Slike"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.nextgen_metadata.php:574
+#: products/photocrati_nextgen/modules/ngglegacy/lib/meta.php:487
+msgid "Flash"
+msgstr "Fleš"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:647
+#, php-format
+msgid "Unable to create directory %s."
+msgstr "Nije u stanju stvoriti direktorij %s."
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:652
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:823
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1021
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1106
+#, php-format
+msgid ""
+"Unable to write to directory %s. Is this directory writable by the server?"
+msgstr ""
+"Nije u stanju zapisati na direktorij %s.Je li ovaj direktorij zapisujuči od "
+"servera?"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:681
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1146
+#, php-format
+msgid "Failed to copy database row for picture %s"
+msgstr "Nije uspijelo da kopira red baze podataka za sliku %s"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:693
+#, php-format
+msgid "Failed to get image path for %s"
+msgstr "Nije uspijelo da pokupi putanju slike za %s"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:711
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1132
+#, php-format
+msgid "Failed to copy image %1$s to %2$s"
+msgstr "Nije uspijelo da kopira sliku %1$s do %2$s"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:715
+#, php-format
+msgid "Copied image %1$s to %2$s"
+msgstr "Kopirane slike %1$s do %2$s"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:723
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1158
+#, php-format
+msgid ""
+"Image %1$s (%2$s) copied as image %3$s (%4$s) &raquo; The file already "
+"existed in the destination gallery."
+msgstr ""
+"Slika %1$s (%2$s) kopirana kao %3$s (%4$s) &raquo; Datoteka je već postojala "
+"u određenoj galeriji."
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:727
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1161
+#, php-format
+msgid "Image %1$s (%2$s) copied as image %3$s (%4$s)"
+msgstr "Slika %1$s (%2$s) kopirana kao %3$s (%4$s)"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:740
+#, php-format
+msgid "Copied %1$s picture(s) to gallery %2$s ."
+msgstr "Kopirao %1$s sliku/e u galeriju %2$s ."
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:767
+msgid "Could not find image"
+msgstr "Nije nađena slika"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:772
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:388
+msgid " is not writeable"
+msgstr "ne može se pisati"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:777
+msgid "Backup file does not exist"
+msgstr "Rezervna(Bekap) datoteka ne postoji"
+
+#: products/photocrati_nextgen/modules/nextgen_data/class.ngglegacy_gallerystorage_driver.php:782
+msgid "Could not restore original image"
+msgstr "Nije moglo vratiti originalnu sliku"
+
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/adapter.display_settings_controller.php:17
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/module.nextgen_gallery_display.php:242
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/module.nextgen_gallery_display.php:328
+msgid "Gallery Settings"
+msgstr "Postavke Galerije"
+
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/class.displayed_gallery.php:73
+msgid "Source not compatible with selected display type"
+msgstr "Izvor nije kompatibilan sa izabranom vrstom prikaza"
+
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/module.nextgen_gallery_display.php:327
+msgid "NextGEN Gallery & Album Settings"
+msgstr "Postavke NextGEN Galerije i Albuma"
+
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/templates/alt_view_link_text.php:15
+#: products/photocrati_nextgen/modules/nextgen_gallery_display/templates/return_link_text.php:15
+msgid "link text"
+msgstr "Tekst linka"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:12
+msgid "Image Options"
+msgstr "Opcije Slike"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:22
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:588
+#: products/photocrati_nextgen/modules/ngglegacy/admin/thumbnails-template.php:76
+msgid "Custom"
+msgstr "Prilagođeno"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:23
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:111
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:549
+msgid "Image ID"
+msgstr "ID Slike"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:24
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:570
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:112
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:166
+msgid "Filename"
+msgstr "Ime datoteke"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:25
+msgid "Alt/Title Text"
+msgstr "Alt/Naziv tekst"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:38
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:115
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:557
+msgid "Ascending"
+msgstr "Uzlazno"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:39
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:116
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:558
+msgid "Descending"
+msgstr "Silazno"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:50
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:388
+msgid "Categories"
+msgstr "Kategorije"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:81
+msgid "Gallery path does not exist and could not be created"
+msgstr "Putanje galerije ne postoji i ne može biti stvorena"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:86
+msgid "Where would you like galleries stored?"
+msgstr "Gdje želite da skladištite galerije"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:87
+msgid "Where galleries and their images are stored"
+msgstr "Gdje se galerije i njihove slike skladište"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:89
+msgid "Delete Image Files?"
+msgstr "Obrišite Datoteke Slika?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:90
+msgid ""
+"When enabled, image files will be removed after a Gallery has been deleted"
+msgstr ""
+"Kad omogućeno, datoteke slika će biti maknute nakon što obrišete Galeriju"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:92
+msgid "Show Related Images on Posts?"
+msgstr "Pokaži povezane Slike na Člancima?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:93
+msgid ""
+"When enabled, related images will be appended to each post by matching the "
+"posts tags/categories to image tags"
+msgstr ""
+"Kada omogućeno, povezane slike će biti dodane na svaki post podudarajuči  "
+"tagove članaka/kategorija sa tagovima slika"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:95
+msgid "(Show Customization Settings)"
+msgstr "(Pokaži Postavke Prilagođavanja)"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:96
+msgid "(Hide Customization Settings)"
+msgstr "(Sakrij Postavke Prilagođavanja)"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:97
+msgid "How should related images be match?"
+msgstr "Kako da se povezane slike podudaraju?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:100
+msgid "Maximum # of related images to display"
+msgstr "Maksimalno # povezanih slika za prikazati"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:102
+msgid "Heading for related images"
+msgstr "Naslov za povezane slike"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:104
+msgid "What's the default sorting method?"
+msgstr "Koja je uobičajena metoda sortiranja?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:107
+msgid "Sort in what direction?"
+msgstr "Sortiraj u kojem smijeru?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:110
+msgid "Automatically resize images after upload"
+msgstr "Automatski promijeni veličinu slika nakon uploada"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:111
+msgid "It is recommended that your images be resized to be web friendly"
+msgstr ""
+"Preporučeno je da vaše slike budu promijenjene na web prijateljske omjere"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:113
+msgid "What should images be resized to?"
+msgstr "Koliko da promijenite veličinu slike"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:114
+msgid ""
+"After images are uploaded, they will be resized to the above dimensions and "
+"quality"
+msgstr ""
+"Nakon što se slike uploaduju, biti će promijenjene na dimenzije i kvalitetu "
+"gore navedenu"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:115
+msgid "Width:"
+msgstr "Širina:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:116
+msgid "Height:"
+msgstr "Visina:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:117
+msgid "Quality:"
+msgstr "Kvaliteta:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.image_options_form.php:121
+msgid "Backup the original images?"
+msgstr "Napravi rezerve originalnih slika?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.lightbox_manager_form.php:12
+msgid "Lightbox Effects"
+msgstr "Lightbox efekti"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.lightbox_manager_form.php:38
+msgid "What effect would you like to use?"
+msgstr "Koji efekt želite koristiti"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:12
+msgid "Miscellaneous"
+msgstr "Raznovrstan"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:21
+msgid "Add MediaRSS link?"
+msgstr "Dodaj MediaRSS link?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:22
+msgid ""
+"When enabled, adds a MediaRSS link to your header. Third-party web services "
+"can use this to publish your galleries"
+msgstr ""
+"Kad omogučeno, dodaj MediaRSS link u vaš header. Web servisi treće strane "
+"mogu koristit ovo da objavljuju vaše galerije"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:26
+msgid "Clear image cache"
+msgstr "Očisti cache slika"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:27
+msgid ""
+"Completely clear the NextGEN cache of all image modifications?\n"
+"\n"
+"Choose [Cancel] to Stop, [OK] to proceed."
+msgstr ""
+"Kompletno očisti NextGEN cacheod svih uređenja slika?\n"
+"\n"
+"Izaberi [Poništi] da prekinete, [OK] da nastavite."
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:32
+msgid "Permalink slug"
+msgstr "slug trajnih linkova"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:39
+msgid "Maximum image count"
+msgstr "Maksimalni broj slika"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.miscellaneous_form.php:41
+msgid ""
+"This is the maximum limit of images that NextGEN will restrict itself to "
+"querying"
+msgstr "Ovo je maksimalni limit slika koje će NextGEN ograničiti na upite"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.other_options_controller.php:22
+#: products/photocrati_nextgen/modules/nextgen_other_options/module.nextgen_other_options.php:39
+msgid "Other Options"
+msgstr "Ostale Opcije"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.reset_form.php:7
+msgid "Reset Options"
+msgstr "Resetiraj Opcije"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.reset_form.php:15
+msgid "Reset all options to default settings"
+msgstr "Resetiraj sve opcije na početne postavke"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.reset_form.php:16
+msgid ""
+"Replace all existing options and gallery options with their default settings"
+msgstr ""
+"Zamijeni sve postojeće opcije i opcije galerija sa njihovim početnim "
+"postavkama"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.reset_form.php:17
+msgid "Reset settings"
+msgstr "Resetiraj postavke"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.reset_form.php:18
+msgid ""
+"Reset all options to default settings?\n"
+"\n"
+"Choose [Cancel] to Stop, [OK] to proceed."
+msgstr ""
+"Resetiraj sve opcije na početne postavke?\n"
+"\n"
+"Izaberite [Poništi] da Prekinete, [OK] da nastavite."
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.roles_form.php:7
+msgid "Roles & Capabilities"
+msgstr "Uloge i Sposobnosti"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.styles_form.php:12
+msgid "Styles"
+msgstr "Stilovi"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.styles_form.php:18
+msgid "What stylesheet would you like to use?"
+msgstr "Koji stylesheet želite koristiti?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.styles_form.php:21
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:136
+msgid "(Show Customization Options)"
+msgstr "(Pokaži Postavke Prilagođavanja)"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.styles_form.php:22
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:137
+msgid "(Hide Customization Options)"
+msgstr "(Sakrij Postavke Prilagođavanja)"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.styles_form.php:23
+msgid "File Content:"
+msgstr "Sadržaj Datoteke:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.styles_form.php:24
+msgid "Changes you make to the contents will be saved to"
+msgstr "Promijene koje napravite na sadržaju bit će saćuvane na"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.styles_form.php:25
+msgid "You could edit this file if it were writable"
+msgstr "Mogli bi urediti datoteku da je dozvoljena za pisanje"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.thumbnail_options_form.php:12
+msgid "Thumbnail Options"
+msgstr "Opcije umanjenih sličica"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.thumbnail_options_form.php:20
+msgid "Default thumbnail dimensions:"
+msgstr "Početne dimenzije umanjenih sličica:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.thumbnail_options_form.php:21
+msgid "When generating thumbnails, what image dimensions do you desire?"
+msgstr "Kada se generišu umanjene sličice, koji dimenzije slika želite?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.thumbnail_options_form.php:24
+msgid "Set fix dimension?"
+msgstr "Postavi fiksne dimenzije?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.thumbnail_options_form.php:25
+msgid "Ignore the aspect ratio, no portrait thumbnails?"
+msgstr "Ignoriši omjer slika, bez potreta umanjenih sličica?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.thumbnail_options_form.php:27
+msgid "Adjust Thumbnail Quality?"
+msgstr "Podesiti Kvalitetu Umanjeni sličica?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.thumbnail_options_form.php:28
+msgid "When generating thumbnails, what image quality do you desire?"
+msgstr "Kada se generišu umanjene sličice, koju kvalitetu slika želite?"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.thumbnail_options_form.php:30
+msgid "Size List"
+msgstr "Lista veličina"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.thumbnail_options_form.php:31
+msgid "List of default sizes used for thumbnails and images"
+msgstr "Lista zadanih veličina korištene za umanjene sličice i slike"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:12
+msgid "Watermarks"
+msgstr "Vodeni žig"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:41
+msgid "Using an Image"
+msgstr "Koristi sliku"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:42
+msgid "Using Text"
+msgstr "Koristi tekst"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:69
+msgid "An absolute or relative (to the site document root) file system path"
+msgstr "An absolute or relative (to the site document root) file system path"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:71
+msgid ""
+"An absolute or relative (to the site document root) file system path or an "
+"HTTP url"
+msgstr ""
+"An absolute or relative (to the site document root) file system path or an "
+"HTTP url"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:74
+msgid "Image URL:"
+msgstr "URL Slike:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:90
+msgid "Font Family:"
+msgstr "Familija Fonta:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:92
+msgid "Font Size:"
+msgstr "Veličina Fonta:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:94
+msgid "Font Color:"
+msgstr "Boja Fonta:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:97
+msgid "Text:"
+msgstr "Tekst:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:99
+msgid "Opacity:"
+msgstr "Providnost:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:126
+msgid ""
+"Please note: You can only activate the watermark under Manage Gallery. This "
+"action cannot be undone."
+msgstr ""
+"Molimo zabilježite: Vodeni žig možete aktivirati samo u Uredi Galeriju. Ova "
+"radnja ne može se poništiti."
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:127
+msgid "How will you generate a watermark?"
+msgstr "Kako će te generisati vodeni žig"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:131
+msgid "Position:"
+msgstr "Pozicija"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:133
+msgid "Offset:"
+msgstr "Razmak:"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:139
+msgid "Preview of saved settings:"
+msgstr "Pregled spremljenih postavki"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/adapter.watermarks_form.php:140
+msgid "Refresh preview image"
+msgstr "Osvježi pregled slike"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:34
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:37
+msgid "(Show Advanced Settings)"
+msgstr "(Pokaži Napredne Postavke)"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:35
+msgid "(Hide Advanced Settings)"
+msgstr "(Sakrij Napredne Postavke)"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:56
+msgid "What must the lightbox be applied to?"
+msgstr "Čemu se mora primijeniti lightbox"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:60
+msgid "Only apply to NextGEN images"
+msgstr "Primijeni samo na NextGEN slike"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:61
+msgid "Only apply to NextGEN and WordPress images"
+msgstr "Primijeni samo na NextGEN i WordPress slike"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:62
+msgid "Try to apply to all images"
+msgstr "Pokušaj primijeniti na sve slike"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/lightbox_library_tab.php:63
+msgid "Try to apply to all images that link to image files"
+msgstr "Pokušaj primijeniti na sve slike koje se linkuju na datoteke slika"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/styling_tab.php:21
+msgid "Place any custom stylesheets in <strong>wp-content/ngg_styles</strong>"
+msgstr ""
+"Stavite bilokoji vlastiti stylesheet u <strong>wp-content/ngg_styles</strong>"
+
+#: products/photocrati_nextgen/modules/nextgen_other_options/templates/styling_tab.php:24
+#, php-format
+msgid "All stylesheets must contain a <a href='#' onclick='%s'>file header</a>"
+msgstr ""
+"Svi stylesheetovi moraju sadržavati <a href='#' onclick='%s'>file header</a>"
+
+#: products/photocrati_nextgen/modules/nextgen_settings/class.nextgen_settings_installer.php:41
+msgid "Related Images"
+msgstr "Povezane Slike"
+
+#: products/photocrati_nextgen/modules/nextgen_settings/class.nextgen_settings_installer.php:61
+msgid "[Show slideshow]"
+msgstr "[Pokaži Slajdshow]"
+
+#: products/photocrati_nextgen/modules/nextgen_settings/class.nextgen_settings_installer.php:62
+msgid "[Show thumbnails]"
+msgstr "[Pokaži umanjene sličice]"
+
+#: products/photocrati_nextgen/modules/nextgen_xmlrpc/module.nextgen_xmlrpc.php:425
+msgid "Sorry, you must be able to manage galleries"
+msgstr "Izvinite, morate biti u mogučnosti da upravljate galerijama"
+
+#: products/photocrati_nextgen/modules/widget/class.widget_gallery.php:7
+msgid "Add recent or random images from the galleries"
+msgstr "Dodaj skorašnju ili nasumičnu sliku iz galerija"
+
+#: products/photocrati_nextgen/modules/widget/class.widget_gallery.php:8
+msgid "NextGEN Widget"
+msgstr "NextGEN Widget"
+
+#: products/photocrati_nextgen/modules/widget/class.widget_mediarss.php:9
+msgid "Widget that displays Media RSS links for NextGEN Gallery."
+msgstr "Widget koji prikazuje Medijski RSS link za NextGEN Galeriju."
+
+#: products/photocrati_nextgen/modules/widget/class.widget_mediarss.php:10
+msgid "NextGEN Media RSS"
+msgstr "NextGEN Medijski RSS"
+
+#: products/photocrati_nextgen/modules/widget/class.widget_mediarss.php:22
+msgid "Media RSS"
+msgstr "Medijski RSS"
+
+#: products/photocrati_nextgen/modules/widget/class.widget_mediarss.php:23
+msgid "Link to the main image feed"
+msgstr "Linkuj na feed glavne slike"
+
+#: products/photocrati_nextgen/modules/widget/class.widget_mediarss.php:93
+#: products/photocrati_nextgen/modules/ngglegacy/view/gallery-caption.php:32
+#: products/photocrati_nextgen/modules/ngglegacy/view/gallery.php:32
+msgid "[View with PicLens]"
+msgstr "[Pogledaj sa PicLens]"
+
+#: products/photocrati_nextgen/modules/widget/class.widget_slideshow.php:7
+msgid "Show a NextGEN Gallery Slideshow"
+msgstr "Pokaži NextGEN Galerija Slajdprikaz"
+
+#: products/photocrati_nextgen/modules/widget/class.widget_slideshow.php:8
+msgid "NextGEN Slideshow"
+msgstr "NextGEN Slajdprikaz"
+
+#: products/photocrati_nextgen/modules/widget/class.widget_slideshow.php:76
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:321
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:521
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:721
+#: products/photocrati_nextgen/modules/ngglegacy/lib/rewrite.php:215
+msgid "Slideshow"
+msgstr "Slajdprikaz"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:15
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:229
+msgid "Show"
+msgstr "Pokaži"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:26
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:316
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:520
+msgid "Thumbnails"
+msgstr "Umanjene sličice"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:29
+msgid "Original images"
+msgstr "Originalne slike"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:42
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:822
+msgid "random"
+msgstr "Nasumično"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:50
+msgid "recently added"
+msgstr "Skoro dodano"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:62
+msgid "Enable IE8 Web Slices"
+msgstr "Osposobi IE8 Web slajsove"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:68
+msgid "Width x Height"
+msgstr "Širina x Visina"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:87
+msgid "Select"
+msgstr "Izaberi"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:92
+msgid "All galleries"
+msgstr "Sve galerije"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:95
+msgid "Only which are not listed"
+msgstr "Samo koje nisu navedene"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:98
+msgid "Only which are listed"
+msgstr "Samo koje su navedene"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:107
+msgid "Gallery ID"
+msgstr "ID broj Galerije"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_gallery.php:114
+msgid "Gallery IDs, separated by commas."
+msgstr "ID brojevi galerija, odvojeni zarezom."
+
+#: products/photocrati_nextgen/modules/widget/templates/form_mediarss.php:19
+msgid "Show Media RSS icon"
+msgstr "Pokaži Medijsku RSS ikonu"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_mediarss.php:30
+msgid "Show the Media RSS link"
+msgstr "Pokaži Medijski RSS link"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_mediarss.php:36
+msgid "Text for Media RSS link"
+msgstr "Tekst za Medijski RSS link"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_mediarss.php:47
+msgid "Tooltip text for Media RSS link"
+msgstr "Pomočni tekst za Medijski RSS link"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_slideshow.php:15
+msgid "Select Gallery"
+msgstr "Izaberi Galeriju"
+
+#: products/photocrati_nextgen/modules/widget/templates/form_slideshow.php:23
+msgid "All images"
+msgstr "Sve slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:159
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:190
+msgid "Overview"
+msgstr "Pregled"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:172
+msgid "Network settings"
+msgstr "Postavke mreže"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:305
+msgid "You do not have the correct permission"
+msgstr "Nemate ispravna dopuštenja"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:306
+msgid "Unexpected Error"
+msgstr "Neočekivana Greška"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:307
+msgid "A failure occurred"
+msgstr "dogodio se neuspijeh"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:311
+msgid "You have attempted to queue too many files."
+msgstr "pokušali ste staviti previše datoteka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:312
+msgid "This file exceeds the maximum upload size for this site."
+msgstr ""
+"Ova datoteka prelazi maksimalnu veličinu dozvoljenu za upload na ovaj sajt."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:313
+msgid "This file is empty. Please try another."
+msgstr "Ova datoteka je prazna. Molimo pokušajte drugu."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:314
+msgid "This file type is not allowed. Please try another."
+msgstr "Ova vrsta datoteke nije dopuštena. Molimo pokušajte drugu."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:315
+msgid "This file is not an image. Please try another."
+msgstr "Ova datoteka nije slika. Molimo pokušajte drugu."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:316
+msgid "Memory exceeded. Please try another smaller file."
+msgstr "Memorija premašena. Molimo pokušajte sa manjom datotekom."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:317
+msgid "This is larger than the maximum size. Please try another."
+msgstr "Ovo je veće od maksimalne veličine. Molimo pokušajte drugu."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:318
+msgid "An error occurred in the upload. Please try again later."
+msgstr "Desila se greška u uploadu. Molimo pokušajte kasnije."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:319
+msgid ""
+"There was a configuration error. Please contact the server administrator."
+msgstr ""
+"Postoji greška u konfiguraciji. Molimo kontaktirajte administratora servera."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:320
+msgid "You may only upload 1 file."
+msgstr "Možete upload-ovati samo 1 datoteku."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:321
+msgid "HTTP error."
+msgstr "HTTP greška."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:322
+msgid "Upload failed."
+msgstr "Upload nije uspio."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:323
+msgid "IO error."
+msgstr "IO greška."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:324
+msgid "Security error."
+msgstr "Bezbjednosna greška"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:325
+msgid "File canceled."
+msgstr "Datoteka otkazana."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:326
+msgid "Upload stopped."
+msgstr "Upload zaustavljen."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:327
+msgid "Dismiss"
+msgstr "Odbaciti"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:328
+msgid "Crunching&hellip;"
+msgstr "Crunching&hellip;"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:329
+msgid "moved to the trash."
+msgstr "Maknuto u smeće"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:330
+#, php-format
+msgid "&#8220;%s&#8221; has failed to upload due to an error"
+msgstr "&#8220;%s&#8221; nije uspio upload zbog greške"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:352
+msgid "L O A D I N G"
+msgstr "U Č I T A V A NJ E"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:353
+msgid "Click to Close"
+msgstr "Klikni da Zatvorite"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:462
+msgid ""
+"<a href=\"http://www.nextgen-gallery.com\" target=\"_blank\">Introduction</a>"
+msgstr ""
+"<a href=\"http://www.nextgen-gallery.com\" target=\"_blank\">Uvođenje</a>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:465
+msgid ""
+"<a href=\"http://www.nextgen-gallery.com/languages\" target=\"_blank"
+"\">Languages</a>"
+msgstr ""
+"<a href=\"http://www.nextgen-gallery.com/languages\" target=\"_blank"
+"\">Jezici</a>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:470
+msgid "Get help with NextGEN Gallery"
+msgstr "Dobij pomoč sa NextGEN Galerijom"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:474
+msgid "More Help & Info"
+msgstr "Više Pomoči i Informacija"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:476
+msgid ""
+"<a href=\"http://wordpress.org/tags/nextgen-gallery?forum_id=10\" target="
+"\"_blank\">Support Forums</a>"
+msgstr ""
+"<a href=\"http://wordpress.org/tags/nextgen-gallery?forum_id=10\" target="
+"\"_blank\">Forumi sa Podrškom</a>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:477
+msgid "FAQ"
+msgstr "FAQ"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:478
+msgid "Feature request"
+msgstr "Upit svojstva"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:479
+msgid "Get your language pack"
+msgstr "Dobijte svoj jezični paket"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:480
+msgid "Contribute development"
+msgstr "Doprinosi Razvoja"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/admin.php:481
+msgid "Download latest version"
+msgstr "Skinite posljednju verziju"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/ajax.php:360
+#, php-format
+msgid "Could create image with %s x %s pixel"
+msgstr "Može stvoriti sliku sa %s x %s piksela"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:172
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:216
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:239
+#: products/photocrati_nextgen/modules/ngglegacy/admin/edit-thumbnail.php:19
+#: products/photocrati_nextgen/modules/ngglegacy/admin/edit-thumbnail.php:22
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:619
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:7
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:10
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:13
+#: products/photocrati_nextgen/modules/ngglegacy/admin/rotate.php:17
+#: products/photocrati_nextgen/modules/ngglegacy/admin/rotate.php:20
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:10
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:13
+msgid "Cheatin&#8217; uh?"
+msgstr "Cheatin&#8217; ha?"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:180
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:209
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:253
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:178
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:24
+msgid "Update Successfully"
+msgstr "Ažuriranje uspješno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:227
+msgid "Album deleted"
+msgstr "Album obrisan"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:389
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:55
+msgid "Edit Album"
+msgstr "Uredi Album"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:410
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:459
+msgid "Select album"
+msgstr "Izaberi Album"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:412
+msgid "No album selected"
+msgstr "Nema izabranog albuma"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:423
+#: products/photocrati_nextgen/modules/ngglegacy/admin/edit-thumbnail.php:166
+#: products/photocrati_nextgen/modules/ngglegacy/admin/rotate.php:94
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:112
+msgid "Update"
+msgstr "Ažuriraj"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:425
+msgid "Edit album"
+msgstr "Uredi Album"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:428
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:187
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:362
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:364
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:227
+msgid "Delete"
+msgstr "Obriši"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:432
+msgid "Add new album"
+msgstr "Dodaj novi album"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:434
+msgid "Add"
+msgstr "Dodaj"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:445
+msgid "Show / hide used galleries"
+msgstr "Pokaži/sakrij korištene galerije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:445
+msgid "[Show all]"
+msgstr "[pokaži sve]"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:446
+msgid "Maximize the widget content"
+msgstr "Maksimiziraj sadržaj Widgeta"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:446
+msgid "[Maximize]"
+msgstr "[Maksimiziraj]"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:447
+msgid "Minimize the widget content"
+msgstr "Minimiziraj sadržaj Widgeta"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:447
+msgid "[Minimize]"
+msgstr "[Minimiziraj]"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:449
+msgid ""
+"After you create and select a album, you can drag and drop a gallery or "
+"another album into your new album below"
+msgstr ""
+"Nakon što napravite i izaberete album, možete prevući i ispustiti galeriju "
+"ili drugi album u vaš novi album ispod"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:475
+msgid "Select gallery"
+msgstr "Izaberi galeriju"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:500
+msgid "Album ID"
+msgstr "ID broj albuma"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:513
+msgid "No album selected!"
+msgstr "Nema izabranih albuma!"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:534
+msgid "Album name:"
+msgstr "Naziv albuma:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:540
+msgid "Album description:"
+msgstr "Opis albuma:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:546
+msgid "Select a preview image:"
+msgstr "Izaberi sliku za prikaz:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:549
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:552
+#: products/photocrati_nextgen/modules/ngglegacy/admin/templates/manage_gallery/gallery_preview_image_field.php:3
+msgid "No picture"
+msgstr "Bez slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:563
+msgid "Page Link to"
+msgstr "Linkuj stranicu prema"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:582
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:337
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:366
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:397
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:406
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:442
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:471
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:502
+msgid "OK"
+msgstr "Dobro"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:584
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:339
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:368
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:399
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:408
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:444
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:473
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:504
+msgid "Cancel"
+msgstr "Otkaži"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:677
+msgid "Name"
+msgstr "Ime"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/album.php:679
+#: products/photocrati_nextgen/modules/ngglegacy/lib/rewrite.php:229
+msgid "Page"
+msgstr "Stranica"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/edit-thumbnail.php:116
+msgid "Select with the mouse the area for the new thumbnail"
+msgstr "Mišem izaberite  područije za nove umanjene sličice"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/edit-thumbnail.php:130
+msgid "Thumbnail updated"
+msgstr "Umanjena sličica ažurirana"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/edit-thumbnail.php:135
+msgid "Error updating thumbnail"
+msgstr "Greška ažuriranja umanjenih sličica"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/edit-thumbnail.php:151
+msgid "Select the area for the thumbnail from the picture on the left."
+msgstr "Izaberite područije za umanjenu sličicu iz slike na lijevo"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:39
+msgid "No valid gallery name!"
+msgstr "Nema važećeg imena galerije!"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:46
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:55
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:80
+msgid "Directory"
+msgstr "Direktorij"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:46
+msgid "didn't exist. Please create first the main gallery folder "
+msgstr "ne postoji. Molimo prvo stvorite fasciklu glavne galerije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:47
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:56
+msgid "Check this link, if you didn't know how to set the permission :"
+msgstr "pregledajte ovaj link, ako ne znate kako namjestit dozvole :"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:55
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:80
+msgid "is not writeable !"
+msgstr "ne može se pisati !"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:76
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:85
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:736
+#: products/photocrati_nextgen/modules/ngglegacy/lib/core.php:101
+msgid "Unable to create directory "
+msgstr "Nije u stanju napraviti direktorij"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:89
+msgid "The server setting Safe-Mode is on !"
+msgstr "Postavke servera Sigurnosnog-moda su uključene !"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:90
+msgid "If you have problems, please create directory"
+msgstr "Ako imate problema, molimo napravite direktorij"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:91
+msgid "and the thumbnails directory"
+msgstr "a direktorij umanjenih sličica"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:91
+msgid "with permission 777 manually !"
+msgstr "sa dozvolama 777 manuelno !"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:116
+#, php-format
+msgid ""
+"Gallery ID %1$s successfully created. You can show this gallery in your post "
+"or page with the shortcode %2$s.<br/>"
+msgstr ""
+"ID broj Galerije %1$s uspješno napravljen. Možete prikazati ovu galeriju na "
+"vašem članku ili stranici sa kratkim kodom %2$s.<br/>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:119
+msgid "Edit gallery"
+msgstr "Uredi galeriju"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:188
+msgid "Error while creating thumbnail."
+msgstr "Greška tijekom stvaranja umanjenih sličica."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:242
+msgid "Error while resizing image."
+msgstr "Greška tijekom promjene veličine slika."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:326
+msgid "Error while rotating image."
+msgstr "Greška tijekom okretanja slika."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:361
+msgid "Error while applying watermark to image."
+msgstr "Greška tijekom primjenjivanja vodenog žiga na sliku."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:385
+msgid "Object didn't contain correct data"
+msgstr "Predmet nije sadržavao ispravne podatke"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:391
+msgid "File do not exists"
+msgstr "Datoteka ne postoji"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:395
+msgid "Couldn't restore original image"
+msgstr "Nije se mogla povratiti originalna slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:511
+msgid "(Error : Couldn't not update data base)"
+msgstr "(Greška : Nije se mogla ažurirati baza podataka)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:518
+msgid "(Error : Couldn't not update meta data)"
+msgstr "(Greška : Nisu se mogli ažurirati meta podaci)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:527
+msgid "(Error : Couldn't not find image)"
+msgstr "(Greška : Nije se mogla naći slika)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:670
+msgid "No valid URL path "
+msgstr "Nema važeće URL putanje"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:686
+msgid "Import via cURL failed."
+msgstr "Uvoz preko cURL nije uspio."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:703
+msgid "Uploaded file was no or a faulty zip file ! The server recognized : "
+msgstr ""
+"Upload-ovana datoteka nije ili je neispravna zip datoteka ! Server je "
+"prepoznao :"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:720
+msgid "Could not get a valid foldername"
+msgstr "Nije mogao dobiti važeći naziv fascikle"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:731
+#, php-format
+msgid ""
+"Unable to create directory %s. Is its parent directory writable by the "
+"server?"
+msgstr ""
+"Nije u stanju napraviti direktorij %s. Da li je glavni direktorij zapisujući "
+"od servera?"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:746
+msgid "Zip-File successfully unpacked"
+msgstr "Zip-Datoteka uspješno odpakovana"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:777
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:877
+msgid "No gallery selected !"
+msgstr "Nema izabrane galerije !"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:785
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:902
+msgid "Failure in database, no gallery path set !"
+msgstr "Neuspijeh u bazi podataka, nije postavljena putanja galerije !"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:809
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:896
+msgid "is no valid image file!"
+msgstr "nije važeća datoteka slike!"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:830
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:919
+msgid "Error, the file could not be moved to : "
+msgstr "Greška, datoteka se nije mogla prebaciti u :"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:835
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:923
+msgid "Error, the file permissions could not be set"
+msgstr "Greška, dozvola datoteke nije mogla bit postavljena"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:853
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:111
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:189
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:238
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:322
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:661
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:740
+msgid "Create new thumbnails"
+msgstr "Napravi nove umanjene sličice"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:858
+msgid " Image(s) successfully added"
+msgstr "Slika/e uspješno dodane"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:885
+msgid "Invalid upload. Error Code : "
+msgstr "Nevažeći upload. Kod Greške :"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:961
+#, php-format
+msgid ""
+"SAFE MODE Restriction in effect! You need to create the folder <strong>%s</"
+"strong> manually"
+msgstr ""
+"SIGURNOSNI MOD Ograničenja u djejstvu! Trebate napraviti fasciklu <strong>"
+"%s</strong> manuelno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:962
+#, php-format
+msgid ""
+"When safe_mode is on, PHP checks to see if the owner (%s) of the current "
+"script matches the owner (%s) of the file to be operated on by a file "
+"function or its directory"
+msgstr ""
+"Kada je sigurnosni_mod uključen, PHP provjerava da li se vlasnik (%s) "
+"trenutne skripte podudara sa vlasnikom (%s) datoteke na kojoj se radi po "
+"funkciji datoteke ili njenom direktoriju"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1015
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1092
+msgid "The destination gallery does not exist"
+msgstr "Odredište galerije ne postoji"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1046
+#, php-format
+msgid "Failed to move image %1$s to %2$s"
+msgstr "Nije uspjelo pomicanje slike %1$s u %2$s"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1066
+#, php-format
+msgid "Moved %1$s picture(s) to gallery : %2$s ."
+msgstr "Prebačene %1$s slika/e u galeriju : %2$s ."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1170
+#, php-format
+msgid "Copied %1$s picture(s) to gallery: %2$s ."
+msgstr "Kopirane %1$s slika/e u galeriju: %2$s ."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1278
+msgid "The uploaded file exceeds the upload_max_filesize directive in php.ini"
+msgstr ""
+"Upload-ovana datoteka prevazilazi upload_max_filesize direktivu u php.ini"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1281
+msgid ""
+"The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in "
+"the HTML form"
+msgstr ""
+"Upload-ovana datoteka prevazilazi MAX_FILE_SIZE direktivu koja je određena u "
+"HTML obrazcu"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1284
+msgid "The uploaded file was only partially uploaded"
+msgstr "Uploadovana datoteka je samo djelomično uploadovana"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1287
+msgid "No file was uploaded"
+msgstr "Nema uploadovanih datoteka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1290
+msgid "Missing a temporary folder"
+msgstr "Nedostaje privremena fascikla"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1293
+msgid "Failed to write file to disk"
+msgstr "Neuspijelo pisanje datoteke na disk"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1296
+msgid "File upload stopped by extension"
+msgstr "Upload datoteke zaustavljen po ekstenziji"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/functions.php:1299
+msgid "Unknown upload error"
+msgstr "Nepoznata greška uploada"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/install.php:20
+msgid "Sorry, NextGEN Gallery works only with a role called administrator"
+msgstr "Izvinite, NextGEN Galerija radi samo sa ulogom zvanom administrator"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/install.php:92
+msgid ""
+"NextGEN Gallery : Tables could not created, please check your database "
+"settings"
+msgstr ""
+"NextGEN Galerija : Tabele nisu mogle biti napravljene, molimo provjerite "
+"postavke baze podataka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:99
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:206
+msgid "No images selected"
+msgstr "Nema izabranih slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:107
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:190
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:234
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:323
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:642
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:724
+msgid "Resize images"
+msgstr "Promjeni veličinu slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:116
+#, php-format
+msgid ""
+"You are about to start the bulk edit for %s galleries \n"
+" \n"
+" 'Cancel' to stop, 'OK' to proceed."
+msgstr ""
+"Započet će te bulk uredjivanje za %s galleries \n"
+" \n"
+" 'Cancel' to stop, 'OK' to proceed."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:154
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:197
+msgid "Add new gallery"
+msgstr "Dodaj novu galeriju"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:171
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:174
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:272
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:275
+msgid "Search Images"
+msgstr "traži slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:186
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:320
+msgid "Bulk actions"
+msgstr "Grupne akcije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:188
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:321
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:572
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:687
+msgid "Set watermark"
+msgstr "Postavi vodeni žig"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:191
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:326
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:577
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:708
+msgid "Import metadata"
+msgstr "Uvezi metadatu"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:192
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:324
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:567
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:684
+msgid "Recover from backup"
+msgstr "Oporavak od bekapa"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:194
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:335
+msgid "Apply"
+msgstr "Primijeni"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:262
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:253
+msgid "Edit"
+msgstr "Uredi"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:309
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:379
+msgid "No entries found"
+msgstr "Nema ponađenih stavki"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:327
+msgid "New Gallery"
+msgstr "Nova Galerija"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:329
+msgid "Create a new , empty gallery below the folder"
+msgstr "Napravi novu, praznu galeriju ispod fascikle"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:331
+msgid "Allowed characters for file and folder names are"
+msgstr "Dozvoljeni znakovi za imena datoteka i fascikli su"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:357
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:462
+msgid "Resize Images to"
+msgstr "Promijeni veličinu slika na"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:361
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:466
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:453
+msgid "Width x height (in pixel). NextGEN Gallery will keep ratio size"
+msgstr ""
+"Širina x visina (u pikselima). NextGEN Galerija ce zadržati omjer slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:385
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:490
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:40
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:416
+msgid "Width x height (in pixel)"
+msgstr "Širina x visina (u pikselima)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:391
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:496
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:426
+msgid "Set fix dimension"
+msgstr "Postavi fiksnu dimenziju"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:393
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:498
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:428
+msgid "Ignore the aspect ratio, no portrait thumbnails"
+msgstr "Ignoriraj omjer slika, nema portreta sličica"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:456
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:568
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:156
+msgid "ID"
+msgstr "ID"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:458
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:571
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:245
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:134
+msgid "Description"
+msgstr "Opis"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-galleries.php:460
+msgid "Page ID"
+msgstr "ID stranice"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:35
+msgid "Gallery not found."
+msgstr "Galerija nije nađena"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:41
+msgid "Sorry, you have no access here"
+msgstr "Izvini, nemate pristup ovdje"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:214
+msgid "Copy image to..."
+msgstr "Kopiraj sliku u..."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:218
+msgid "Move image to..."
+msgstr "Premjesti sliku u..."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:222
+msgid "Add new tags"
+msgstr "Dodaj nove oznake"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:226
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:332
+msgid "Delete tags"
+msgstr "Obriši oznake"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:230
+msgid "Overwrite"
+msgstr "Napiši preko(overwrite)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:243
+#, php-format
+msgid ""
+"You are about to start the bulk edit for %s images \n"
+" \n"
+" 'Cancel' to stop, 'OK' to proceed."
+msgstr ""
+"Započet će te masovno uređivanje za %s slike \n"
+" \n"
+" 'Otkaži' da zaustavite, 'OK' da nastavite."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:269
+#, php-format
+msgid "Search results for &#8220;%s&#8221;"
+msgstr "Rezultati pretrage za &#8220;%s&#8221;"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:298
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:488
+msgid "Gallery settings"
+msgstr "Postavke Galerije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:298
+msgid "Click here for more settings"
+msgstr "Klikni ovdje za još postavki"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:304
+msgid "Scan Folder for new images"
+msgstr "Skeniraj fasciklu za nove slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:306
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:341
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:386
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:400
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:436
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:478
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:563
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:598
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:708
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:861
+msgid "Save Changes"
+msgstr "Sačuvaj postavke"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:325
+msgid "Delete images"
+msgstr "Obriši slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:327
+msgid "Rotate images clockwise"
+msgstr "Rotiraj slike u smjeru kazaljke sata"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:328
+msgid "Rotate images counter-clockwise"
+msgstr "Rotiraj slike u suprotnom smjeru kazaljke sata"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:329
+msgid "Copy to..."
+msgstr "Kopiraj u..."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:330
+msgid "Move to..."
+msgstr "Premjesti u..."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:331
+msgid "Add tags"
+msgstr "Dodaj oznake"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:333
+msgid "Overwrite tags"
+msgstr "Napiši preko(overwrite) oznaka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:338
+msgid "Sort gallery"
+msgstr "Sortiraj galeriju"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:402
+msgid "Enter the tags"
+msgstr "Unesi oznake"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:426
+msgid "Select the destination gallery:"
+msgstr "Izaberi galeriju odredišta"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:569
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:161
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:266
+msgid "Thumbnail"
+msgstr "Sličice"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:571
+msgid "Alt &amp; Title Text"
+msgstr "Alternativni &amp; Tekst Nalova"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-images.php:572
+msgid "Tags (comma separated list)"
+msgstr "Oznake (zarezom odvajajte listu)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:35
+msgid "Sort order changed"
+msgstr "Raspored sortiranja promijenjen"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:97
+msgid "Sort Gallery"
+msgstr "Sortiraj Galeriju"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:101
+msgid "Update Sort Order"
+msgstr "Ažuriraj raspored sortiranja"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:104
+msgid "Back to gallery"
+msgstr "Nazad do galerije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:109
+msgid "Presort"
+msgstr "Raspoređeno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:110
+msgid "Unsorted"
+msgstr "Neraspoređeno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage-sort.php:113
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:241
+msgid "Alt/Title text"
+msgstr "Alternativni/tekst Naslova"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:90
+msgid "deleted successfully"
+msgstr "uspješno obrisano"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:106
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:115
+msgid "Operation successful. Please clear your browser cache."
+msgstr "Operacija uspješna. Molimo očistite cache svog preglednika."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:171
+msgid "Alt & Title Text / Description"
+msgstr "Alternativni i tekst Naslova / opis"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:214
+msgid "Exclude ?"
+msgstr "Odstrani ?"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:299
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:301
+msgid "View"
+msgstr "Pregledaj"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:309
+msgid "Show meta data"
+msgstr "Prikaži meta podatke"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:310
+msgid "Meta"
+msgstr "Meta"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:318
+msgid "Customize thumbnail"
+msgstr "Prilagodi sličice"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:319
+msgid "Edit thumb"
+msgstr "Uredi sličice"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:327
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:328
+msgid "Rotate"
+msgstr "Rotiraj"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:338
+msgid "Publish this image"
+msgstr "Objavi ovu sliku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:339
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:58
+msgid "Publish"
+msgstr "Objavi"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:349
+msgid "Recover image from backup"
+msgstr "Oporavi sliku iz bekapa"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:350
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:352
+msgid "Recover"
+msgstr "Oporavi"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:361
+msgid "Delete image"
+msgstr "Obriši sliku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:392
+msgid "Title:"
+msgstr "Naslov:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:398
+msgid "Description:"
+msgstr "Opis:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:404
+msgid "Gallery path:"
+msgstr "putanja Galerije:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:419
+msgid "Link to page:"
+msgstr "Linkuj na stranicu:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:420
+msgid "Albums will link this gallery to the selected page"
+msgstr "Albumi će linkovat ovu galeriju na izabrane stranice"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:425
+msgid "Preview image:"
+msgstr "Prikaz slike:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:431
+msgid "Create new page:"
+msgstr "Napravi novu stranicu:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:607
+msgid "Gallery deleted successfully "
+msgstr "Galerija uspješno obrisana"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:678
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:681
+msgid "Rotate images"
+msgstr "Rotiraj slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:704
+msgid "Pictures deleted successfully "
+msgstr "Slike uspiješno obrisane"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:802
+msgid "Tags changed"
+msgstr "Oznake promijenjene"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:842
+msgid "Update successful"
+msgstr "Ažuriranje uspješno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:877
+msgid "New gallery page ID"
+msgstr "Novi ID stranice galerije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:877
+msgid "created"
+msgstr "napravljeno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:915
+msgid "Published a new post"
+msgstr "Objavljen novi post"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:1062
+msgid "Go to the first page"
+msgstr "Idi na prvu stranicu"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:1069
+msgid "Go to the previous page"
+msgstr "Idi na prethodnu stranicu"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:1078
+msgid "Current page"
+msgstr "Trenutna stranica"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:1089
+msgid "Go to the next page"
+msgstr "Idi na sljedeću stranicu"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:1096
+msgid "Go to the last page"
+msgstr "Idi na posljednju stranicu"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:1046
+#, php-format
+msgid "1 item"
+msgid_plural "%s items"
+msgstr[0] "1 predmet"
+msgstr[1] "%s predmeta"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/manage.php:1046
+#, php-format
+msgctxt "paging"
+msgid "%1$s of %2$s"
+msgstr "%1$s od %2$s"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:11
+msgid "NextGEN Gallery"
+msgstr "NextGEN Galerija"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:186
+msgid "No gallery"
+msgstr "Nema galerija"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:198
+msgid "Select &#187;"
+msgstr "Izaberi &#187;"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:230
+msgid "Hide"
+msgstr "Sakrij"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:235
+msgid "Image ID:"
+msgstr "ID Slike:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:249
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:45
+msgid "Alignment"
+msgstr "Poravnanje"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:252
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:47
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:583
+msgid "None"
+msgstr "Bez"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:254
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:49
+msgid "Left"
+msgstr "Lijevo"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:256
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:51
+msgid "Center"
+msgstr "Centrirano"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:258
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:53
+msgid "Right"
+msgstr "Desno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:262
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:690
+msgid "Size"
+msgstr "Veličina"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:268
+msgid "Full size"
+msgstr "Puna veličina"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:270
+msgid "Singlepic"
+msgstr "Jedna slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:282
+msgid "Use as featured image"
+msgstr "Koristi kao istaknutu sliku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:284
+msgid "Insert into Post"
+msgstr "Ubaci u članak"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/media-upload.php:295
+msgid "Save all changes"
+msgstr "Spremi sve promijene"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:14
+msgid "NextGEN Gallery Overview"
+msgstr "Pregled NextGEN Galerije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:84
+msgid "Welcome to NextGEN Gallery !"
+msgstr "Dobrodošli u NextGEN Galeriju !"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:85
+msgid "Do you like this Plugin?"
+msgstr "Da li vam se sviđa ovaj Plugin?"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:87
+msgid "About"
+msgstr "O nama"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:90
+msgid "Server Settings"
+msgstr "Postavke servera"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:97
+msgid ""
+"NextGEN Gallery is one of the most popular Wordpress plugins of all time "
+"with over 9 million downloads. It is developed and supported by Photocrati "
+"Media. We'd like to offer a special thanks to Alex Rabe, who first developed "
+"the plugin and maintained it through 2011."
+msgstr ""
+"NextGEN galerija je jedan on najpopularnijih Wordpress plugina ssvih vremena "
+"sa preko 9 miliona skidanja. razvijena je i podržavana od strane Photocrati "
+"Media. Željeli bismo da ponudimo posebnu zahvalnost Alex Rabe, koji je prvi "
+"razvio plugin i održavao ga kroz 2011."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:98
+msgid ""
+"<strong>NEED  HELP?</strong> If you need help or assistance please visit the "
+"<a href='http://wordpress.org/support/plugin/nextgen-gallery'>NextGEN "
+"Gallery forums on WordPress.org</a>. Please note that we actively monitor "
+"and  participate in the forums, but given that NextGEN Gallery is a free  "
+"product, we don't guarantee replies to support queries."
+msgstr ""
+"<strong>TREBATE POMOČ?</strong>Ako trebate pomoć ili asistenciju molimo "
+"opsjetite <a href='http://wordpress.org/support/plugin/nextgen-"
+"gallery'>NextGEN Gallery forum na WordPress.org</a>. Imajte na umu da "
+"aktivno nadziremo i sudjelujemo u forumima, ali s obzirom da je NextGEN "
+"Gallery besplatan proizvod, ne garantujemo odgovore na upite."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:99
+msgid ""
+"<strong>EXTENDING NEXTGEN?</strong> There are many third party plugins that "
+"add displays and functionality for NextGEN Gallery. See our <a href='http://"
+"www.nextgen-gallery.com/nextgen-gallery-extension-plugins/'>Complete List of "
+"NextGEN Extension  Plugins</a>."
+msgstr ""
+"<strong>PRIDUŽETAK NEXTGENA?</strong> Postoje mnogi plugini treće strane "
+"koji dodaju prikaz i funkcionalnost za NextGEN Gallery. Pogledajte našu<a "
+"href='http://www.nextgen-gallery.com/nextgen-gallery-extension-"
+"plugins/'>Kompletnu listu plugina za NextGEN Ekstenzije</a>."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:107
+#, php-format
+msgid ""
+"This plugin is primarily developed, maintained, supported and documented by "
+"<a href=\"%s\" target=\"_blank\">Photocrati Media</a> with a lot of love & "
+"effort. Any kind of contribution would be highly appreciated. Thanks!"
+msgstr ""
+"Ovaj plugin je prvenstveno razvijen, održavan, podržavan i dokumentiran od "
+"<a href=\"%s\" target=\"_blank\">Photocrati Media</a> sa mnogo ljubavi i "
+"napora. Svaka vrsta doprinosa će biti veoma poštovana. Hvala!"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:112
+msgid "Please click \"Works\" on WordPress.org"
+msgstr "Molimo kliknite \"Works\" na WordPress.org"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:117
+msgid "Give it a good rating on WordPress.org"
+msgstr "Dajte dobar rejting na WordPress.org"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:122
+msgid "Visit the plugin homepage"
+msgstr "Posjeti stranicu plugina"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:127
+msgid "Help translating it"
+msgstr "Pomognite u prevođenju"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:149
+msgid "Graphic Library"
+msgstr "Grafička Biblioteka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:165
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:214
+msgid "Loading&#8230;"
+msgstr "Učitavanje&#8230;"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:165
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:214
+msgid "This widget requires JavaScript."
+msgstr "Ovaj widget zahtijeva JavaSkriptu"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:178
+msgid "Thanks to all donators..."
+msgstr "Hvala svima koji su donirali..."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:200
+msgid "View all"
+msgstr "Pregledaj sve"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:226
+#, php-format
+msgid ""
+"Newsfeed could not be loaded.  Check the <a href=\"%s\">front page</a> to "
+"check for updates."
+msgstr ""
+"Vijesti nisu mogle biti učitane. Provjerite <a href=\"%s\">front page</a> da "
+"povjerite za ažuriranja."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:238
+msgid "Untitled"
+msgstr "Bez naslova"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:303
+msgid "At a Glance"
+msgstr "Na prvi pogled"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:356
+msgid "Storage Space"
+msgstr "Skladišni prostor"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:360
+#, php-format
+msgid ""
+"<a href=\"%1$s\" title=\"Manage Uploads\" class=\"musublink\">%2$sMB</a>"
+msgstr ""
+"<a href=\"%1$s\" title=\"Upravljaj Uploadima\" class=\"musublink\">%2$sMB</a>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:361
+msgid "Space Allowed"
+msgstr "Dozvoljen prostor"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:368
+#, php-format
+msgid ""
+"<a href=\"%1$s\" title=\"Manage Uploads\" class=\"musublink\">%2$sMB (%3$s%%)"
+"</a>"
+msgstr ""
+"<a href=\"%1$s\" title=\"Upravljaj Uploadima\" class=\"musublink\">%2$sMB "
+"(%3$s%%)</a>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:369
+msgid "Space Used"
+msgstr "Iskorišten prostor"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:395
+msgid "No GD support"
+msgstr "Nema GD podrške"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:427
+msgid "Not set"
+msgstr "Nije postavljeno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:429
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:432
+msgid "On"
+msgstr "Uključen"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:430
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:433
+msgid "Off"
+msgstr "Isključen"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:437
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:440
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:443
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:446
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:449
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:452
+msgid "N/A"
+msgstr "N/A"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:451
+msgid " MByte"
+msgstr "Mbajt"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:464
+msgid "Operating System"
+msgstr "Operativni sistem"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:465
+msgid "Server"
+msgstr "Server"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:466
+msgid "Memory usage"
+msgstr "Upotreba memorije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:467
+msgid "MYSQL Version"
+msgstr "MYSQL Verzija"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:468
+msgid "SQL Mode"
+msgstr "SQL Mod"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:469
+msgid "PHP Version"
+msgstr "PHP Verzija"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:470
+msgid "PHP Safe Mode"
+msgstr "PHP Sigurnosni Mod"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:471
+msgid "PHP Allow URL fopen"
+msgstr "PHP Dozvoli URL fopen"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:472
+msgid "PHP Memory Limit"
+msgstr "PHP Ograničenje memorije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:473
+msgid "PHP Max Upload Size"
+msgstr "PHP Maksimalna veličina uploada"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:474
+msgid "PHP Max Post Size"
+msgstr "PHP Maksimalna Veličina Posta"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:475
+msgid "PCRE Backtracking Limit"
+msgstr "PCRE Backtracking Ograničenje"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:476
+msgid "PHP Max Script Execute Time"
+msgstr "PHP Maksimalno Vrijeme Izvršenja Skripte"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:477
+msgid "PHP Exif support"
+msgstr "PHP Exif podrška"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:478
+msgid "PHP IPTC support"
+msgstr "PHP IPTC podrška"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:479
+msgid "PHP XML support"
+msgstr "PHP XML podrška"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/overview.php:491
+msgid ""
+"NextGEN Gallery contains some functions which are only available under PHP "
+"5.2. You are using the old PHP 4 version, upgrade now! It's no longer "
+"supported by the PHP group. Many shared hosting providers offer both PHP 4 "
+"and PHP 5, running simultaneously. Ask your provider if they can do this."
+msgstr ""
+"NextGEN Gallery sadržava neke funkcije koje su samo dostupne na PHP 5.2. Vi "
+"koristite staru PHP 4 verziju, nadogradite sada! Nije više podržavana od PHP "
+"grupe. Mnogi zajednički hosting provajderi nude obadvije PHP 4 i PHP 5, da "
+"rade istovemeno. Pitajte svog provajdera da li mogu to napraviti."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:35
+msgid "Post title"
+msgstr "Naslov Članka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:37
+msgid "Enter the post title "
+msgstr "Upiši naslov članka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:42
+msgid "Size of the image"
+msgstr "Veličina slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/publish.php:60
+msgid "Draft"
+msgstr "Nacrt"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:26
+msgid ""
+"Select the lowest role which should be able to access the following "
+"capabilities. NextGEN Gallery supports the standard roles from WordPress."
+msgstr ""
+"Izaberite najnižu ulogu koja bi trebala imat pristup sljedećim "
+"sposobnostima. NextGEN Galerija podržava standardne uloge iz WordPressa."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:27
+msgid "For a more flexible user management you can use the"
+msgstr "Za fleksibilnije upravljanje korisnicima možete koristiti"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:31
+msgid "Main NextGEN Gallery overview"
+msgstr "Glavni NextGEN Gallery pregled"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:35
+msgid "Use TinyMCE Button / Upload tab"
+msgstr "Koristi TinyMCE Dugmad / Upload tab"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:39
+msgid "Add gallery / Upload images"
+msgstr "Dodaj galeriju / Uploadaj slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:43
+msgid "Manage gallery"
+msgstr "Upravljaj galerijom"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:47
+msgid "Manage others gallery"
+msgstr "Upravljaj ostalim galerijama"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:51
+msgid "Manage tags"
+msgstr "Upravljaj oznakama"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:59
+msgid "Change style"
+msgstr "Promijeni stil"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:63
+msgid "Change options"
+msgstr "Promijeni opcije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/roles.php:67
+msgid "NextGEN Attach Interface"
+msgstr "NextGEN sučelje priložaka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/rotate.php:60
+msgid "Image rotated"
+msgstr "Slika rotirana"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/rotate.php:62
+msgid "Error rotating thumbnail"
+msgstr "Greška rotiranja sličice"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/rotate.php:85
+msgid "90&deg; clockwise"
+msgstr "90&deg; smjer kazaljke sata"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/rotate.php:86
+msgid "90&deg; anticlockwise"
+msgstr "90&deg; suprotan smjer kazaljke sata"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/rotate.php:87
+msgid "Flip vertically"
+msgstr "Okreni vertikalno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/rotate.php:88
+msgid "Flip horizontally"
+msgstr "Okreni horizontalno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:22
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:204
+#, php-format
+msgid "Rebuild image structure : %s / %s images"
+msgstr "Obnovi strukturu slike : %s / %s slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:23
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:205
+#, php-format
+msgid "Rebuild gallery structure : %s / %s galleries"
+msgstr "Obnovi strukturu galerije : %s / %s galerija"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:24
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:206
+#, php-format
+msgid "Rebuild album structure : %s / %s albums"
+msgstr "Obnovi strukturu albuma: %s / %s albuma"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:81
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:263
+msgid "Done."
+msgstr "Završeno."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:196
+msgid "Cache cleared"
+msgstr "Cache očišćen"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:315
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:334
+msgid "General Options"
+msgstr "Opće opcije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:317
+msgid "Image"
+msgid_plural "Images"
+msgstr[0] "Slika"
+msgstr[1] "Slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:319
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:572
+msgid "Effects"
+msgstr "Efekti"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:320
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:614
+msgid "Watermark"
+msgstr "Vodeni Žig"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:340
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:54
+msgid "Gallery path"
+msgstr "Putanja galerije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:342
+msgid "This is the default path for all galleries"
+msgstr "Ovo je zadana putanja za sve galerije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:345
+msgid "Delete image files"
+msgstr "Obriši datoteke slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:347
+msgid "Delete files, when removing a gallery in the database"
+msgstr "Obriši datoteke, kad se uklanja galerija iz baze podataka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:350
+msgid "Activate permalinks"
+msgstr "Aktiviraj trajne linkove"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:352
+msgid ""
+"When you activate this option, you need to update your permalink structure "
+"one time."
+msgstr ""
+"Kad aktivirate ovu opciju, morate ažurirati vašu strukturu trajnih linkova "
+"jednom."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:353
+msgid "Gallery slug name :"
+msgstr "Slug naziv galerije:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:357
+msgid "Create new URL friendly image slugs"
+msgstr "Napravi nove URL prijateljske slug slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:358
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:474
+msgid "Proceed now"
+msgstr "Pristupi sad"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:361
+msgid "Select graphic library"
+msgstr "Izaberi grafičku biblioteku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:362
+msgid "GD Library"
+msgstr "GD Biblioteka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:363
+msgid "ImageMagick (Experimental). Path to the library :"
+msgstr "ImageMagick (Eksperimentalno). Putanja do biblioteke :"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:368
+msgid "Activate Media RSS feed"
+msgstr "Aktiviraj Medijski RSS feed"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:370
+msgid ""
+"A RSS feed will be added to you blog header. Useful for CoolIris/PicLens"
+msgstr ""
+"RSS feed će biti dodan u header vašeg bloga. Korisno za CoolIris/PicLens"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:373
+msgid "Activate PicLens/CoolIris support"
+msgstr "Aktiviraj PicLens/CoolIris podršku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:375
+msgid ""
+"When you activate this option, some javascript is added to your site footer. "
+"Make sure that wp_footer is called in your theme."
+msgstr ""
+"Kad aktivirate ovu opciju, nešto javaskripte je dodano u podnožje vašeg "
+"sajta. Budite sigurno da se wp_footer tako zove u vašoj temi."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:378
+msgid "Tags / Categories"
+msgstr "Oznake / Kategorije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:381
+msgid "Activate related images"
+msgstr "Aktivne povezane slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:383
+msgid "This option will append related images to every post"
+msgstr "Ova opcija će prikaćiti povezane slike na svaki članak"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:387
+msgid "Match with"
+msgstr "Podudara se sa"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:393
+msgid "Max. number of images"
+msgstr "Max. broj slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:395
+msgid "0 will show all images"
+msgstr "0 će prikazati sve slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:399
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:435
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:477
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:562
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:597
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:860
+msgid "More settings"
+msgstr "Još postavki"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:409
+msgid "Thumbnail settings"
+msgstr "Postavke sličica"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:413
+msgid ""
+"Please note : If you change the settings, you need to recreate the "
+"thumbnails under -> Manage Gallery ."
+msgstr ""
+"Imajte na umu: ako promijenite postavke, morate ponovno napraviti sličice na "
+"-> Upravljaj Galerijom."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:422
+msgid "These values are maximum values "
+msgstr "Ove vrijednosti su maksimalne vrijednosti"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:445
+msgid "Image settings"
+msgstr "Postavke slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:451
+msgid "Resize Images"
+msgstr "Promijeni veličinu slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:460
+msgid "Backup original images"
+msgstr "Bekapujte originalne slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:462
+msgid "Creates a backup for inserted images"
+msgstr "Stvara bekap za ubačene slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:465
+msgid "Automatically resize"
+msgstr "Automatski promijeni veličinu"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:467
+msgid "Automatically resize images on upload."
+msgstr "Automatski promijeni veličinu pri uploadu."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:470
+msgid "Single picture"
+msgstr "Jedna slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:473
+msgid "Clear cache folder"
+msgstr "Očisti cache fasciklu"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:494
+msgid "Deactivate gallery page link"
+msgstr "Deaktiviraj link stranice galerije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:496
+msgid ""
+"The album will not link to a gallery subpage. The gallery is shown on the "
+"same page."
+msgstr ""
+"Album se neće linkovati sa podstranom galerije. Galerija je prikazana na "
+"istoj stranici."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:500
+msgid "Number of images per page"
+msgstr "Broj slika po stranici"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:502
+msgid "0 will disable pagination, all images on one page"
+msgstr "0 će onesposobiti stranice, sve slike će biti na jednoj stranici"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:506
+msgid "Number of columns"
+msgstr "Broj kolona"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:508
+msgid ""
+"0 will display as much as possible based on the width of your theme. Setting "
+"normally only required for captions below the images"
+msgstr ""
+"0 će prikazati što je više moguće ovisno o širini vaše teme. Setting "
+"normally only required for captions below the images"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:512
+msgid "Integrate slideshow"
+msgstr "Integriši slajdshow"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:519
+msgid "Show first"
+msgstr "Pokaži prvo"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:525
+msgid "Show ImageBrowser"
+msgstr "Pokaži pregled slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:527
+msgid "The gallery will open the ImageBrowser instead the effect."
+msgstr "Galerija će otvoriti pregled slika umjesto efekta"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:531
+msgid "Add hidden images"
+msgstr "Dodaj sakrivene slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:533
+msgid ""
+"If pagination is used, this option will still show all images in the modal "
+"window (Thickbox, Lightbox etc.). Note : This increases the page load"
+msgstr ""
+"Ako se koristi obilježavanje strana, ova opcija će opet prikazati sve slike "
+"u modal prozoru (Tickbox, Lightbox itd.) Bilješka : ovo povečava vrijeme "
+"učitavanje strane"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:539
+msgid ""
+"Browse images without reload the page. Note : Works only in combination with "
+"Shutter effect"
+msgstr ""
+"Pregled slika bez učitavanje strane: Bilješka : Ovo radi samo u kombinaciji "
+"sa Shutter efektom"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:543
+msgid "Sort options"
+msgstr "Sortiraj opcije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:546
+msgid "Sort thumbnails"
+msgstr "Sortiraj sličice"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:548
+msgid "Custom order"
+msgstr "Prilagođen redoslijed"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:550
+msgid "File name"
+msgstr "Naziv datoteke"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:551
+msgid "Alt / Title text"
+msgstr "Alternativni / Tekst naslova"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:552
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:58
+msgid "Date / Time"
+msgstr "Datum / Vrijeme"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:556
+msgid "Sort direction"
+msgstr "Smjer sortiranja"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:576
+msgid ""
+"Here you can select the thumbnail effect, NextGEN Gallery will integrate the "
+"required HTML code in the images. Please note that only the Shutter and "
+"Thickbox effect will automatic added to your theme."
+msgstr ""
+"Ovdje možete izabrati efekt sličica, NextGEN Gallery će integrisati potrebni "
+"HTM code u slike. Imajte na umu da samo Shutter i Thickbox efekti će biti "
+"automatski dodani u vašu temu."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:577
+msgid "With the placeholder"
+msgstr "Sa placeholderom"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:577
+msgid ""
+"you can activate a navigation through the images (depend on the effect). "
+"Change the code line only , when you use a different thumbnail effect or you "
+"know what you do."
+msgstr ""
+"Možete aktivirati navigaciju kroz slike (ovisno o efektu). Promijeniti samo "
+"liniju koda, kad koristite drukčiji efekt sličica ili znate šta radite."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:580
+msgid "JavaScript Thumbnail effect"
+msgstr "JavaSkript efekt sličica"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:584
+msgid "Thickbox"
+msgstr "Thickbox"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:585
+msgid "Lightbox"
+msgstr "Lightbox"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:586
+msgid "Highslide"
+msgstr "Highslide"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:587
+msgid "Shutter"
+msgstr "Shutter"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:593
+msgid "Link Code line"
+msgstr "Linkujte liniju koda"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:615
+msgid ""
+"Please note : You can only activate the watermark under -> Manage Gallery . "
+"This action cannot be undone."
+msgstr ""
+"Imajte na umu : Vodeni žig možete aktivirati samo pod -> upravljanje "
+"galerijom. Ova akcija se ne može poništiti."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:620
+msgid "Preview"
+msgstr "Pregled"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:622
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:627
+msgid "Position"
+msgstr "Pozicija"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:647
+msgid "Offset"
+msgstr "Offset"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:663
+msgid "Use image as watermark"
+msgstr "Koristi sliku kao vodeni žig"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:666
+msgid "URL to file"
+msgstr "URL prema datoteci"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:668
+msgid "The accessing of URL files is disabled at your server (allow_url_fopen)"
+msgstr ""
+"Pristupanje URL datoteke je onemogučeno na vašem serveru (allow_url_fopen)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:671
+msgid "Use text as watermark"
+msgstr "Koristi tekst kao vodeni žig"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:674
+msgid "Font"
+msgstr "Font"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:683
+msgid "This function will not work, cause you need the FreeType library"
+msgstr "Ova funkcija neće raditi, jer vam treba FreeType biblioteka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:685
+msgid ""
+"You can upload more fonts in the folder <strong>nggallery/fonts</strong>"
+msgstr ""
+"Možete uploadovati više fontova u fasciklu <strong>nggallery/fonts</strong>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:694
+msgid "Color"
+msgstr "Boja"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:696
+msgid "(hex w/o #)"
+msgstr "(hex w/o #)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:699
+msgid "Text"
+msgstr "tekst"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:703
+msgid "Opaque"
+msgstr "Providnost"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:724
+msgid "Default size (W x H)"
+msgstr "Zadana veličina (Š x V)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:729
+msgid "Duration time"
+msgstr "Vrijeme trajanja"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:730
+msgid "sec."
+msgstr "sek."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:733
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:810
+msgid "Transition / Fade effect"
+msgstr "Prijelaz / efekt izblijedjeti"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:736
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:813
+msgid "fade"
+msgstr "izblijedjeti"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:737
+msgid "blindX"
+msgstr "blindX"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:738
+msgid "cover"
+msgstr "cover"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:739
+msgid "scrollUp"
+msgstr "scrollUp"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:740
+msgid "scrollDown"
+msgstr "scrollDown"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:741
+msgid "shuffle"
+msgstr "shuffle"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:742
+msgid "toss"
+msgstr "toss"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:743
+msgid "wipe"
+msgstr "wipe"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:745
+msgid "See here for more information about the effects :"
+msgstr "Pogledajte ovdje za više informacija o efektima :"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:749
+msgid "Settings for the JW Image Rotator"
+msgstr "Postavke za JW Rotator Slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:758
+msgid ""
+"The path to JW Image Rotator is not defined, the slideshow will not work."
+msgstr "putanja za JW Rotator Slika nije definisan, slajdshow neće raditi"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:770
+msgid "Path to the JW Image Rotator (URL)"
+msgstr "Putanja za JW Rotator Slika (URL)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:773
+msgid "Search now"
+msgstr "Traži sad"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:774
+msgid "Press the button below to search for the JW Image Rotator"
+msgstr "Stisnite dugme ispod da tražite za JW Rotator Slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:778
+msgid "Shuffle mode"
+msgstr "Shuffle mod"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:796
+msgid "You can change the logo at the watermark settings"
+msgstr "Možete promijeniti logo na postavkama vodenog žiga"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:802
+msgid "true"
+msgstr "true"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:803
+msgid "false"
+msgstr "false"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:804
+msgid "fit"
+msgstr "fit"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:805
+msgid "none"
+msgstr "none"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:814
+msgid "bgfade"
+msgstr "bgfade"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:815
+msgid "slowfade"
+msgstr "slowfade"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:816
+msgid "circles"
+msgstr "circles"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:817
+msgid "bubbles"
+msgstr "bubbles"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:818
+msgid "blocks"
+msgstr "blocks"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:819
+msgid "fluids"
+msgstr "fluids"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:820
+msgid "flash"
+msgstr "flash"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:821
+msgid "lines"
+msgstr "lines"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:831
+msgid "Background Color"
+msgstr "Pozadinska boja"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:836
+msgid "Texts / Buttons Color"
+msgstr "Boja Teksta / Dugmadi"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:841
+msgid "Rollover / Active Color"
+msgstr "Boja Prevrtanja / Aktivna"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:846
+msgid "Screen Color"
+msgstr "Boja ekrana"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:851
+msgid "Background music (URL)"
+msgstr "Pozadinska muzika (URL)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:855
+msgid "Try XHTML validation (with CDATA)"
+msgstr "Pokušaj XHTML potvrđivanje (sa CDATA)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/settings.php:857
+msgid ""
+"Important : Could causes problem at some browser. Please recheck your page."
+msgstr ""
+"Važno: Može uzrokovati problem sa nekim preglednicima. molimo provjerite "
+"svoju stranicu."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:29
+msgid "Meta Data"
+msgstr "Meta podaci"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:34
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:60
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:85
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:109
+msgid "Tag"
+msgstr "Oznake"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:35
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:61
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:86
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:110
+msgid "Value"
+msgstr "Vrijednost"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:49
+msgid "No meta data saved"
+msgstr "Nema sačuvanih meta podataka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:55
+msgid "EXIF Data"
+msgstr "EXIF podaci"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:74
+msgid "No exif data"
+msgstr "Nema exif podaci"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:81
+msgid "IPTC Data"
+msgstr "IPTC podaci"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/showmeta.php:105
+msgid "XMP Data"
+msgstr "XMP podaci"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:11
+msgid "(From the theme folder)"
+msgstr "(Iz fascikle teme"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:43
+msgid "You do not have sufficient permissions to edit templates for this blog."
+msgstr "Nemate dovoljne dozvole za uređivanje predložaka za ovaj blog."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:52
+msgid "CSS file successfully updated"
+msgstr "CSS datoteka uspješno ažurirana"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:91
+msgid "Activate and use style sheet:"
+msgstr "Aktiviraj i koristi style sheet:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:111
+msgid "Activate"
+msgstr "Aktiviraj"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:121
+#, php-format
+msgid "Editing <strong>%s</strong>"
+msgstr "Uređivanje <strong>%s</strong>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:123
+#, php-format
+msgid "Browsing <strong>%s</strong>"
+msgstr "Pregledanje <strong>%s</strong>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:133
+msgid "Version"
+msgstr "Verzija"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:136
+msgid ""
+"Tip : Copy your stylesheet (nggallery.css) to your theme folder, so it will "
+"be not lost during a upgrade"
+msgstr ""
+"Tip : Kopiraj svoj stylesheet (nggallery.css) u svoju fasciklu teme, tako da "
+"se ne izgubi tijekom nadograđivanja"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:138
+msgid ""
+"Your theme contain a NextGEN Gallery stylesheet (nggallery.css), this file "
+"will be used"
+msgstr ""
+"Vaša tema sadržava NextGEN Gallery stylesheet (nggallery.css), ova datoteka "
+"će biti korištena"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:140
+msgid ""
+"Tip No. 2: Use the color picker below to help you find the right color "
+"scheme for your gallery!"
+msgstr ""
+"Savjet Br. 2: Koristite birač boja ispod da vam pomogne naći pravu boju za "
+"šemu galerije!"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:156
+msgid "Update File"
+msgstr "Ažuriraj datoteku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:159
+msgid "If this file were writable you could edit it."
+msgstr "Da je ova datoteka zapisujuća mogli bi ju urediti."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/style.php:164
+msgid "Oops, no such file exists! Double check the name and try again, merci."
+msgstr ""
+"Ups, ovakva datoteka ne postoji! Provjerite ime i pokušajte ponovno, hvala."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:41
+msgid "Most popular"
+msgstr "Najpopularnije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:42
+msgid "Least used"
+msgstr "najmanje korisšteno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:43
+msgid "Alphabetical"
+msgstr "Abecedno"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:100
+msgid "Manage image tags"
+msgstr "Upravljaj oznakama slika"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:112
+msgid "Existing Tags"
+msgstr "Postojeće oznake"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:116
+msgid "Search tags"
+msgstr "oznake pretraživanja"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:120
+msgid "Go"
+msgstr "Idi"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:125
+msgid "Sort Order:"
+msgstr "Redoslied sortiranja:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:160
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:164
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:177
+msgid "Previous tags"
+msgstr "Prethodna oznaka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:173
+msgid "Next tags"
+msgstr "Sljedeća oznaka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:185
+msgid "Rename Tag"
+msgstr "Preimenuj oznaku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:193
+msgid ""
+"Enter the tag to rename and its new value.  You can use this feature to "
+"merge tags too. Click \"Rename\" and all posts which use this tag will be "
+"updated."
+msgstr ""
+"Unesite oznaku da preimenujete i njenu novu vrijednost. Možete koristiti ovo "
+"svojstvo da spojite oznake. Klikni \"Rename\" i svi članci koji koriste ovu "
+"oznaku će biti zamijenjeni."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:194
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:242
+msgid "You can specify multiple tags to rename by separating them with commas."
+msgstr ""
+"Možete specifikovati više oznaka za preimenovanje tako što ih razdvojite "
+"zarezom."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:198
+msgid "Tag(s) to rename:"
+msgstr "Oznaka za preimenovanje:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:202
+msgid "New tag name(s):"
+msgstr "Ime novih oznaka:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:205
+msgid "Rename"
+msgstr "Preimenuj"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:211
+msgid "Delete Tag"
+msgstr "Obriši oznaku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:219
+msgid ""
+"Enter the name of the tag to delete.  This tag will be removed from all "
+"posts."
+msgstr ""
+"Upiši ime oznake za brisanje. Ova oznaka če biti maknuta iz svih članaka."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:220
+msgid "You can specify multiple tags to delete by separating them with commas"
+msgstr ""
+"Možete specifikovati više oznaka za brisanje tako što ih razdvojite zarezom"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:224
+msgid "Tag(s) to delete:"
+msgstr "Oznake za brisanje:"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:233
+msgid "Edit Tag Slug"
+msgstr "Uredi slug oznake"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:241
+msgid ""
+"Enter the tag name to edit and its new slug. This will be used in tagcloud "
+"links. <a href=\"http://codex.wordpress.org/Glossary#Slug\" target=\"_blank"
+"\">Slug definition</a>"
+msgstr ""
+"Unesi ime oznake za uređivanje i njen novi slug. Ovo će biti korištenu u "
+"tagcloud linkovima. <a href=\"http://codex.wordpress.org/Glossary#Slug\" "
+"target=\"_blank\">Slug definition</a>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:246
+msgid "Tag(s) to match:"
+msgstr "Oznake za slaganje"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/tags.php:250
+msgid "Slug(s) to set:"
+msgstr "Slugovi za postavljanje"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/templates/manage_gallery/gallery_create_page_field.php:3
+msgid "Main Page (no parent)"
+msgstr "Glavna stranica (no parent)"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/templates/manage_gallery/gallery_create_page_field.php:10
+msgid "Add page"
+msgstr "Dodaj stranicu"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/templates/manage_gallery/gallery_link_to_page_field.php:3
+msgid "Not linked"
+msgstr "Nije linkovano"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/thumbnails-template.php:103
+msgid "These are maximum values"
+msgstr "Ovo su maksimalne vrijednosti"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:61
+msgid ""
+"Some folders/files could not renamed, please recheck the permission and "
+"rescan the folder in the manage gallery section."
+msgstr ""
+"Neke fascikle/datoteke nisu mogle biti preimenovane, molimo provjerite "
+"dozvole i ponovo skenirajte fasciklu u dijelu za uređivanje galerije."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:63
+msgid "Rename failed"
+msgstr "Preimenovanje nije uspjelo"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:159
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:178
+msgid "Upgrade NextGEN Gallery"
+msgstr "Nadogradi NextGEN Gallery"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:160
+msgid "The script detect that you upgrade from a older version."
+msgstr "Skripta je detektovala da ste nadogradili sa starije verzije"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:161
+msgid ""
+"Your database tables for NextGEN Gallery is out-of-date, and must be "
+"upgraded before you can continue."
+msgstr ""
+"Vaša tabela baze podataka za NextGEN Gallery je zastarjela, i mora biti "
+"nadograđena prij enastavljanja."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:162
+msgid ""
+"If you would like to downgrade later, please make first a complete backup of "
+"your database and the images."
+msgstr ""
+"Ako želite kasnije da unazadite, molimo da prvo uradite kompletan bekap vaše "
+"baze podatada i slika."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:163
+msgid "The upgrade process may take a while, so please be patient."
+msgstr "Proces nadogradnje može potrajati, molimo za vaše strpljenje."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:164
+msgid "Start upgrade now"
+msgstr "Započni nadogradnju sada"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:180
+msgid "Upgrade finished..."
+msgstr "Nadogradnja završena"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/upgrade.php:181
+msgid "Continue"
+msgstr "Nastavi"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:33
+msgid "Update successfully"
+msgstr "Ažuriranje uspjelo"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:48
+msgid "Network Options"
+msgstr "Opcije mreže"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:56
+msgid ""
+"This is the default path for all blogs. With the placeholder %BLOG_ID% you "
+"can organize the folder structure better."
+msgstr ""
+"Ovo je zadana putanja za sve blogove. Sa placeholder %BLOG_ID%  možete bolje "
+"organizovati strukturu fascikle."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:57
+#, php-format
+msgid "The default setting should be %s"
+msgstr "Zadana postavka bi trebala biti %s"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:61
+msgid "Enable upload quota check"
+msgstr "Osposobi provjeru kvote uploada"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:63
+msgid "Should work if the gallery is bellow the blog.dir"
+msgstr "Trebalo bi raditi ako je galerije ispod blog.dir"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:67
+msgid "Enable zip upload option"
+msgstr "Osposobi opciju uploada zipa"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:69
+msgid "Allow users to upload zip folders."
+msgstr "Dozvoli korisnicima da uploaduju zip fascikle."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:73
+msgid "Enable import function"
+msgstr "Omoguči funciju uvoza"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:75
+msgid "Allow users to import images folders from the server."
+msgstr "Dozvli korisnicima da uvoze fascikle slika sa servera."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:79
+msgid "Enable style selection"
+msgstr "Omoguči izbor stila"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:81
+msgid "Allow users to choose a style for the gallery."
+msgstr "Dozvoli korisnicima da izaberu stil za galeriju."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:85
+msgid "Enable roles/capabilities"
+msgstr "Omoguči uloge/sposobnosti"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:87
+msgid "Allow users to change the roles for other blog authors."
+msgstr "Dozvoli korisnicima da promijene uloge za druge autore blogova."
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:91
+msgid "Default style"
+msgstr "Zadani stil"
+
+#: products/photocrati_nextgen/modules/ngglegacy/admin/wpmu.php:108
+msgid "Choose the default style for the galleries."
+msgstr "Izaberi zadani stil za galerije."
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/core.php:410
+#, php-format
+msgid ""
+"Note : Based on your server memory limit you should not upload larger images "
+"then <strong>%d x %d</strong> pixel"
+msgstr ""
+"Zabilješka : Bazirano na ograničenju memorije vašeg servera nebi trebali "
+"uploadovati slike veće od <strong>%d x %d</strong> piksela"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/ngg-db.php:337
+#: products/photocrati_nextgen/modules/ngglegacy/lib/ngg-db.php:338
+msgid "Album overview"
+msgstr "Pregled Albuma"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/post-thumbnail.php:68
+#: products/photocrati_nextgen/modules/ngglegacy/lib/post-thumbnail.php:70
+msgid "Set NextGEN featured image"
+msgstr "Postavi NextGEN istaknutu sliku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/post-thumbnail.php:328
+#: products/photocrati_nextgen/modules/ngglegacy/lib/post-thumbnail.php:329
+msgid "Set featured image"
+msgstr "Postavi istaknutu sliku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/post-thumbnail.php:356
+msgid "Remove featured image"
+msgstr "Makni istaknutu sliku"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/rewrite.php:223
+msgid "Album"
+msgid_plural "Albums"
+msgstr[0] "Album"
+msgstr[1] "Albumi"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:35
+msgid "No new tag specified!"
+msgstr "Nisu određene nove oznake!"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:50
+msgid "No new/old valid tag specified!"
+msgstr "Nisu određene nove/stare važeće oznake!"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:86
+msgid "No tag renamed."
+msgstr "Nema preimenovanih oznaka."
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:88
+#, php-format
+msgid "Renamed tag(s) &laquo;%1$s&raquo; to &laquo;%2$s&raquo;"
+msgstr "Preimenovane oznake &laquo;%1$s&raquo; u &laquo;%2$s&raquo;"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:95
+msgid "No valid new tag."
+msgstr "Nema važećih novih oznaka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:112
+msgid "No objects (post/page) found for specified old tags."
+msgstr "Nema nađenih objekata (članci/stranice) određene za stare oznake"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:141
+msgid "No tag merged."
+msgstr "Nema spojenih oznaka"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:143
+#, php-format
+msgid ""
+"Merge tag(s) &laquo;%1$s&raquo; to &laquo;%2$s&raquo;. %3$s objects edited."
+msgstr ""
+"Spoji oznake &laquo;%1$s&raquo; sa &laquo;%2$s&raquo;. %3$s objekt uređen."
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:146
+msgid "Error. Not enough tags provided to rename or merge."
+msgstr ""
+"Greška. Nema dovoljno obezbijeđenih oznaka za preimenovanje ili spajanje."
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:165
+msgid "No tag specified!"
+msgstr "Nema određenih oznaka!"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:188
+msgid "No tag deleted."
+msgstr "Nema obrisanih oznaka."
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:190
+#, php-format
+msgid "%1s tag(s) deleted."
+msgstr "%1s oznaka obrisana."
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:206
+msgid "No new slug(s) specified!"
+msgstr "Nema određenih novih slugova!"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:218
+msgid "Tags number and slugs number isn't the same!"
+msgstr "Brojevi oznaka i brojevi slugova nisu isti!"
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:245
+msgid "No slug edited."
+msgstr "Nema uređenih slugova."
+
+#: products/photocrati_nextgen/modules/ngglegacy/lib/tags.php:247
+#, php-format
+msgid "%s slug(s) edited."
+msgstr "%s uređenih slagova."
+
+#: products/photocrati_nextgen/modules/ngglegacy/nggallery.php:64
+msgid ""
+"<strong>Translation by : </strong><a target=\"_blank\" href=\"http://www."
+"nextgen-gallery.com/languages/\">See here</a>"
+msgstr ""
+"<strong>Prijevod od : </strong><a target=\"_blank\" href=\"http://www."
+"nextgen-gallery.com/languages/\">Pogledaj ovdje</a>"
+
+#: products/photocrati_nextgen/modules/ngglegacy/nggallery.php:65
+msgid ""
+"<strong>This translation is not yet updated for Version 1.9.0</strong>. If "
+"you would like to help with translation, download the current po from the "
+"plugin folder and read <a href=\"http://www.nextgen-gallery.com/languages/"
+"\">here</a> how you can translate the plugin."
+msgstr ""
+"<strong>Ovaj prijevod još nije ažuriran za verziju 1.9.0</strong>.Ako želite "
+"pomoći sa prevođenjem, skinite trenutni po iz fascikle plugina i pročitajte "
+"<a href=\"http://www.nextgen-gallery.com/languages/\">here</a> kako možete "
+"prevesti plugin."
+
+#: products/photocrati_nextgen/modules/ngglegacy/nggallery.php:158
+msgid ""
+"Sorry, NextGEN Gallery works only with a Memory Limit of 16 MB or higher"
+msgstr ""
+"Izvini, NextGEN Gallery radi samo sa Ograničenom Memorijom od 16 MB ili više"
+
+#: products/photocrati_nextgen/modules/ngglegacy/nggallery.php:184
+msgid "Picture tag"
+msgstr "Oznaka slike"
+
+#: products/photocrati_nextgen/modules/ngglegacy/nggallery.php:185
+msgid "Picture tag: %2$l."
+msgstr "Oznaka slike: %2$l."
+
+#: products/photocrati_nextgen/modules/ngglegacy/nggallery.php:186
+msgid "Separate picture tags with commas."
+msgstr "Odvojite oznake slika sa zarezima."
+
+#: products/photocrati_nextgen/modules/ngglegacy/nggallery.php:324
+msgid "Get help"
+msgstr "Dobijte pomoć"
+
+#: products/photocrati_nextgen/modules/ngglegacy/nggallery.php:325
+msgid "Contribute"
+msgstr "Doprinesite"
+
+#: products/photocrati_nextgen/modules/ngglegacy/nggfunctions.php:29
+msgid "[Gallery not found]"
+msgstr "[Galerija nije nađena]"
+
+#: products/photocrati_nextgen/modules/ngglegacy/nggfunctions.php:163
+msgid "Related images for"
+msgstr "Povezane slike za"
+
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:38
+msgid "Meta data"
+msgstr "Meta podaci"
+
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:42
+msgid "Camera / Type"
+msgstr "Kameta / vrsta"
+
+#: products/photocrati_nextgen/modules/ngglegacy/view/imagebrowser-exif.php:50
+msgid "Focal Length"
+msgstr "Focal Dužina"
+
+#: products/photocrati_nextgen/modules/ngglegacy/xml/media-rss.php:50
+msgid "No galleries have been yet created."
+msgstr "Još nema napravljenih galerija."
+
+#: products/photocrati_nextgen/modules/ngglegacy/xml/media-rss.php:69
+#, php-format
+msgid "The gallery ID=%s does not exist."
+msgstr "ID=%s galerije ne postoji."
+
+#: products/photocrati_nextgen/modules/ngglegacy/xml/media-rss.php:100
+msgid "No album ID has been provided as parameter"
+msgstr "Nema obezbijeđenih parametara za ID albuma"
+
+#: products/photocrati_nextgen/modules/ngglegacy/xml/media-rss.php:108
+#, php-format
+msgid "The album ID=%s does not exist."
+msgstr "ID=%s albuma ne postoji."
+
+#: products/photocrati_nextgen/modules/ngglegacy/xml/media-rss.php:115
+msgid "Invalid MediaRSS command"
+msgstr "Nevažeća MedijskaRSS komanda"
+
+msgid "NextGEN Basic Compact Album"
+msgstr "NextGEN Basic Compact Album"
+
+msgid "NextGEN Basic Extended Album"
+msgstr "NextGEN Basic Extended Album"
+
+msgid "NextGEN Basic Thumbnails"
+msgstr "NextGEN Basic Thumbnails"
+
+msgid "NextGEN Basic Slideshow"
+msgstr "NextGEN Basic Slideshow"
+
+msgid "NextGEN Basic ImageBrowser"
+msgstr "NextGEN Basic ImageBrowser"
+
+msgid "NextGEN Basic Singlepic"
+msgstr "NextGEN Basic Singlepic"
+
+msgid "NextGEN Basic Tagcloud"
+msgstr "NextGEN Basic Tagcloud"

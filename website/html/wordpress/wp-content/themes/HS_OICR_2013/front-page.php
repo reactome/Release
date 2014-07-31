@@ -1,5 +1,19 @@
 <?php get_header(); ?>
-	<div class="grid_15">     
+<!--     <div id="hideMe" style="background:red;opacity:0.8;font-size:large;padding-left:20px">
+     <p><b>THIS IS JUST A TEST!</b></p>
+     Reactome will be offline for scheduled maintenance July XX, 12:01 AM EDT through 2:01 AM EDT <br>
+     The following sites will be affected:
+     <table style="margin-top:-10px">
+     <tr>
+     <td style="border:none">reactome.org</td>
+     <td style="border:none">wiki.reactome.org</td>
+     <td style="border:none">devwiki.reactome.org</td>
+     <td style="border:none">fly.reactome.org</td>
+     <td style="border:none">gallus.reactome.org</td>
+     </tr>
+     </table>	   
+     </div> -->
+     <div class="grid_15">     
      <div class="buttonswrap"><!--set left colum with buttons-->
 	  <div class="grid_5 alpha">
 	    <a class="button icon browse" href="/PathwayBrowser/"><span>Browse Pathways</span></a>
@@ -17,7 +31,7 @@
     <a class="button icon overview" href="http://wiki.reactome.org/index.php/Usersguide"><span>User Guide</span></a>
     </div>
 	  <div class="grid_5">
-	    <a class="button icon download" href="/download/index.html"><span>Data Download</span></a>
+	    <a class="button icon download" href="/download-data/"><span>Data Download</span></a>
 	  </div>
           <div class="grid_5 omega">
         <a class="button icon contact" href="/?page_id=328"><span>Contact Us</span></a>
@@ -30,7 +44,7 @@
     <div class="contentwrap">
     <div class="contenthead">About Reactome</div><!--close contenthead-->
     <div class="contentbody">
-    	Reactome is a free, open-source, curated and peer reviewed pathway database. Our goal is to provide intuitive bioinformatics tools for the visualization, interpretation and analysis of pathway knowledge to support basic research, genome analysis, modeling, systems biology and education.
+    	Reactome is a free, open-source, curated and peer reviewed pathway database. Our goal is to provide intuitive bioinformatics tools for the visualization, interpretation and analysis of pathway knowledge to support basic research, genome analysis, modeling, systems biology and education. The current version (v49) of Reactome was released on July 15, 2014.
     </div><!--close contentbody-->
     </div><!--close contentwrap-->
     
@@ -50,7 +64,7 @@
             <div class="contentbody">
             
             <div class="announcement">
-            <a href="/?p=1775"> New for 2014: Version 48 Released
+            <a href="/?p=1841"> New for 2014: Version 49 Released
             <!--This is a placeholder for static announcements. For example, downtime due to server maintenance, or some other important announcement-->
             </div><!--close annoucement-->
 
