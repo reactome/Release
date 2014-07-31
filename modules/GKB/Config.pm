@@ -85,6 +85,10 @@ $WWW_USER = 'nobody';
 # Various paths
 ##################################################################################
 $GK_ROOT_DIR = '/usr/local/gkb';
+<<<<<<< HEAD
+=======
+
+>>>>>>> ed03efb86776463a35d8e2f22accc277a0a7b268
 $GK_JAVA_CODEBASE = "/jars";
 $GK_TMP_IMG_DIR = "$GK_ROOT_DIR/website/html/img-tmp";
 # Place for frontpage images 
