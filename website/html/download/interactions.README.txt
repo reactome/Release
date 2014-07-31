@@ -1,0 +1,100 @@
+Inferred Protein-Protein Interactions in Reactome
+-------------------------------------------------
+
+Interactions are generated electronically based on the data that
+we store on complexes and reactions, i.e. the interactions
+provided by Reactome are not curated and are not experimental
+data.  In addition, the complexes and reactions in species other
+than human are derived by orthology inference from the corresponding
+human complexes and reactions.
+
+The meaning of "interaction" is quite broad: 2 protein sequences 
+occur in the same complex or they occur in the same reaction.
+
+The 1st line begins with '#' and gives the number of unique 
+interactions, i.e. unique pairs if UniProt accession numbers.
+
+The rest of the file is tab delimited with columns having following 
+meaning/content:
+
+1. Protein ID (e.g. UniProt accession) for interactor 1.
+
+2. Ensembl gene id(s delimited by '|') for interactor 1. Note that one 
+UniProt entry may be mapped to multiple Ensembl genes.
+
+3. Entrez Gene id(s delimited by '|') for interactor 1. Note that one 
+UniProt entry may be mapped to multiple Entrez Gene ids.
+
+4. Protein ID (e.g. UniProt accession) for interactor 2.
+
+5. Ensembl gene id(s delimited by '|') for interactor 2. Note that one 
+UniProt entry may be mapped to multiple Ensembl genes.
+
+6. Entrez Gene id(s delimited by '|') for interactor 2. Note that one 
+UniProt entry may be mapped to multiple Entrez Gene ids.
+
+7. Type of interaction, either 'direct_complex', 'indirect_complex',
+'reaction' or 'neighbouring_reaction'. Meanings of those below.
+
+8. Interaction context. This is the class and internal identifier of 
+Reactome instance via which this interaction happens. For
+'neighbouring_reaction' type interaction this contains a pair of
+class:identifier string separated by '<->'.
+
+9. Comma-delimited list of PubMed identifiers supporting this 
+interaction. For a reaction these are the PMIDs from the 
+Reaction.literatureReference slot (and not from the "second tier" 
+Reaction.summation.literatureReference).
+For a complex these are from reations which produce the complex.
+For 'neighbouring_reaction' type interaction this field is empty.
+
+
+Interaction types:
+------------------
+In Reactome, complexes can be arbitrarily nested, i.e., contain
+subcomplexes. Here we have complex C1 consisting of complexes C2 and
+C3. C2 consist of molecules A and B. C3 consists of molecules C and D:
+
+C1 --- C2 --- A
+     |      |
+     |      |- B
+     |
+     |- C3 --- C
+            |
+            |- D
+
+Now really to the interaction types:
+- direct_complex - interactors are directly in the same complex, i.e. 
+w/o further nested complexes. From the example interactions A <->B and 
+C<-D> are of this type.
+- indirect_complex - interactors in different subcomplexes of a complex.
+From the example above interactions A<->C, A<->D, B<->C and B<->D are 
+of this type.
+- reaction - interactors participate in the same reaction. Only those 
+reactions are reported for which the intreactors are not complexed (with 
+the exception being association dissociation reactions which are reported).
+- neighbouring_reaction - interactor participate in 2 "consecutive"
+reactions, i.e. when one reaction produces a PhysicalEntity which is either an 
+input or a catalyst for another reaction. However, to avoid the "trivial" (i.e.
+over ATP, ADP etc) interactions, the computation is done using the
+'precedingEvent' attribute used to order reactions in a pathway.
+
+The 'direct_complex' type doesn't really mean true pairwise interaction. 
+For example, Reactome's representation of ribosomal S60  subunit consists
+"directly" of 40+ proteins and has no sub-complexes. Obviously this can 
+hardly mean that each one of those component proteins directly interacts 
+with every other protein. Hence, the 'direct_complex' vs. 
+'indirect_complex' distinction is quite meaningless.
+
+
+
+Other notes:
+------------
+- If the same interaction (i.e same UniProte accession pair) happens in 
+multiple contexts, each context is reported on a separate row and hence 
+the row number in the file is bigger than the number of unique 
+interactions reported on the 1st line.
+- The order of interactors on one line has no meaning (they are just 
+ordered according to the Reactome internal identifier...). Every 
+interaction with context is reported once, i.e. A<->B is not reported as 
+B<->A.
