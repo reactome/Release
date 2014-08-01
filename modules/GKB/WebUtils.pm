@@ -3604,12 +3604,13 @@ __END__
 
 sub get_db_connection {
     my $cgi = shift || confess("Need CGI");
-    require GKB::Config;
+
     require GKB::ReactomeDBAdaptor;
     my $db = $cgi->param('DB') || $GKB::Config::GK_DB_NAME;
     $db =~ /^(\w+)$/;
     $db = $1;
     $cgi->param('DB',$db);
+
     return GKB::ReactomeDBAdaptor->new
 	(
 	 -dbname => $db,
