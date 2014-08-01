@@ -64,3 +64,6 @@ if ( !defined('ABSPATH') )
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
 
+/** Set up WordPress without using FTP */
+define('FS_METHOD', 'direct');
+

@@ -1,0 +1,6 @@
+The pathway information files consist of tab-separated tables that provide information about Reactome pathway hierarchy:
+
+1. The "Complete list of pathways" file maps the Reactome Stable identifier (ST_ID) to a pathway name and corresponding species.
+
+2. The "Pathway hierarchy relationship" file consists of two columns of Reactome Stable identifiers (ST_ID), defining the relationship between pathways within the pathway hierarchy. The first column provides the parent pathway stable identifier, whereas the second column provides the child pathway stable identifier.
+
