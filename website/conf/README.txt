@@ -1,4 +1,4 @@
-reactome.conf is under revision control.
+reactome.conf is under revision control.  httpd.conf is not undver revision control and can be used for server-specific configuration.
 To install:
 
 1) cp reactome.conf httpd.conf
