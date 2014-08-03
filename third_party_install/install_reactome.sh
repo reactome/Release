@@ -49,16 +49,6 @@ sleep 1
 
 PWD=$(pwd)
 
-echo -e "\nDownloading the reactome software..."
-rm -f reactome.tar.gz
-wget http://www.reactome.org/download/current/reactome.tar.gz
-
-echo -e "\nUnpacking the software..."
-tar zxf reactome.tar.gz 
-rm -fr /usr/local/gkb
-mv reactome /usr/local/gkb
-rm -f reactome.tar.gz
-
 if [[ -n $APT ]]
 then
     echo -e "Installing system software for Debian/Ubuntu..."
@@ -110,10 +100,27 @@ Net::OpenSSH \
 XML::Simple \
 Search::Tools \
 Capture::Tiny \
-WWW::SearchResult
+WWW::SearchResult \
+JSON
 
+echo -e "\nDownloading the reactome software..."
+mkdir /usr/local/reactomes
+mkdir /usr/local/reactomes/Reactome
+cd /usr/local/reactomes/Reactome
+rm -f reactome.tar.gz
+wget http://www.reactome.org/download/current/reactome.tar.gz
 
-echo -e "\nSetting up MySQL databases..."
+echo -e "\nUnpacking the software..."
+tar zxf reactome.tar.gz
+mv reactome production
+rm -f /usr/local/gkb
+rm -f reactome.tar.gz
+ln -s /usr/local/gkb /usr/local/reactomes/Reactome/production/GKB
+
+echo -e "Updating configuration..."
+cd /
+tar zxvf /usr/local/gkb/third_party_install/config.tar.gz
+rm -fr /usr/local/gkb/third_party_install
 
 cd $PWD
 echo -e "\nDownloading the reactome databases..."
@@ -153,7 +160,7 @@ echo -e "\nLoading main reactome_stable_identifiers database..."
 zcat gk_stable_ids.sql.gz | mysql -uroot $MROOT gk_stable_ids
 rm -f gk_stable_ids.sql.gz
 
-echo -e "\nSetting permissions..."
+echo -e "\nSetting database permissions..."
 mysql -uroot $MROOT -e "GRANT SELECT ON gk_stable_ids.* \
 TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
 mysql -uroot $MROOT -e "GRANT SELECT ON gk_current.*  \
@@ -165,11 +172,10 @@ TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
 
 rm -fr databases*
 
-echo -e "Configuring Apache..."
+echo -e "Setting up Apache..."
 
 cd /usr/local/gkb/website/html
 chown -R www-data img-*
-
 
 
 cd /etc/apache2/mods-available
@@ -185,15 +191,15 @@ a2enmod \
     rewrite
 
 cd ../sites-available
-cp /usr/local/gkb/website/conf/httpd.conf reactome.conf
+ln -s /usr/local/gkb/website/conf/httpd.conf reactome
 a2dissite default
-a2ensite reactome.conf
+a2ensite reactome
 
 # are we apache > 2.4?  # New syntax
 if [[ -d /etc/apache2/conf-available ]]
 then
     echo -e "\napache 2.4 or greater detected"
-    perl -i -pe 's/\#Require all/Require all/' reactome.conf
+    perl -i -pe 's/\#Require all/Require all/' reactome
 fi
 
 APACHE=apache2
@@ -206,29 +212,11 @@ echo -e "\nSetting up Tomcat..."
 # This is the user that will own the tomcat process
 groupadd tomcat7
 useradd -g tomcat7 -s /sbin/nologin -d /opt/tomcat/temp tomcat7
-
-cd /usr/local/gkb/tomcat
-echo -e "\nDownloading tomcat..."
-rm -fr apache-tomcat*
-wget https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.50/bin/apache-tomcat-7.0.50.tar.gz
-tar zxf apache-tomcat-7.0.50.tar.gz
-rm -f apache-tomcat-7.0.50.tar.gz
-ln -s apache-tomcat-7.0.50 apache-tomcat
-cp etc_init.d_tomcat7 /etc/init.d/tomcat7
-mv webapps/*.war apache-tomcat/webapps
-rm -fr webapps
-mv setenv.sh apache-tomcat/bin
-
+cd /usr/local/reactomes/Reactome/production
 chown -R tomcat7:tomcat7 apache-tomcat-7.0.50
-
-echo -e "\nLinking Analysis Service data..."
-cd /usr/local/gkb/AnalysisService/input
-for file in *.bin
-do
-  ln -s $file analysis.bin
-done
+chown -R tomcat7:tomcat7 AnalysisService
+chown -R tomcat7:tomcat7 Solr
 cd $PWD
-chown -R tomcat7:tomcat7 /usr/local/gkb/AnalysisService
 
 echo -e "\nStarting the tomcat server..."
 /etc/init.d/tomcat7 restart
