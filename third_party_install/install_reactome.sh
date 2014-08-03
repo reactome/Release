@@ -115,7 +115,8 @@ tar zxf reactome.tar.gz
 mv reactome production
 rm -f /usr/local/gkb
 rm -f reactome.tar.gz
-ln -s /usr/local/gkb /usr/local/reactomes/Reactome/production/GKB
+cd /usr/local
+ln -s /usr/local/reactomes/Reactome/production/GKB gkb
 
 echo -e "Updating configuration..."
 cd /
