@@ -30,6 +30,17 @@ my $usage = "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -
 &GetOptions("user:s", "host:s", "pass:s", "port:i", "db=s", "debug");
 $opt_db || die $usage;
 
+my $version;
+if ($opt_db =~ /_(\d+)$/) {
+    $version = $1;
+} else {
+    until ($version && $version =~ /^\d+$/) {
+	print "Enter release version number: ";
+	$version = <>;
+	chomp $version;
+    }
+}
+
 my $dba = GKB::DBAdaptor->new
     (
      -dbname => $opt_db,
@@ -68,7 +79,6 @@ my @local_species_order = (
 	"Arabidopsis thaliana",
 	"Oryza sativa",
 	"Synechococcus sp.",
-	"Escherichia coli",
 	"Mycobacterium tuberculosis",
 	"Sulfolobus solfataricus",
 	"Methanocaldococcus jannaschii",
@@ -248,7 +258,32 @@ if (!open (OUTPUT1,">$out1")) {
 	exit(1);
 }
 
-print OUTPUT1 '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"><html><head><title>Stats</title><link rel="stylesheet" type="text/css" href="/stylesheet.css" /></head><body><!--#include virtual="/cgi-bin/navigation_bar" --><table    WIDTH="100%" CLASS="contents"><tr><td CLASS="summation"><h1 CLASS="frontpage">Reactome Statistics (Version 30)</h1><!-- Start of the stats table  --><table border="0" width="90%" CELLPADDING="0" CELLSPACING="0" CLASS="classbrowser"><td valign="top" align="center"><table class="class attributes"><tr height="40"><th><b>Species</b></td><th><b>PROTEINS</b></th><th><b>COMPLEXES</b></th><th><b>REACTIONS</b></th><th><b>PATHWAYS</b></th>'."\n";
+print OUTPUT1 <<HTML;
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Stats</title>
+<link rel="stylesheet" type="text/css" href="/stylesheet.css" />
+</head>
+<body>
+<!--#include virtual="/cgi-bin/navigation_bar" -->
+<table    WIDTH="100%" CLASS="contents">
+<tr>
+<td CLASS="summation">
+<h1 CLASS="frontpage">Reactome Statistics (Version $version)</h1>
+<!-- Start of the stats table  -->
+<table border="0" width="90%" CELLPADDING="0" CELLSPACING="0" CLASS="classbrowser">
+<td valign="top" align="center">
+<table class="class attributes">
+<tr height="40">
+<th><b>Species</b>
+</td>
+<th><b>PROTEINS</b></th>
+<th><b>COMPLEXES</b></th>
+<th><b>REACTIONS</b></th>
+<th><b>PATHWAYS</b></th>
+
+HTML
  
 my $own = "\"own\"";
 my $center = "\"center\"";
