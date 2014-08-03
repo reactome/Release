@@ -28,12 +28,14 @@ our($opt_host,$opt_db,$opt_pass,$opt_port,$opt_debug,$opt_user,$opt_r,$opt_sp);
 
 my $usage = "Usage: $0 -db db_name -user db_user -host db_host -pass db_pass -port db_port -r release_num -sp species\nA release number is mandatory.";
 
-&GetOptions("user:s", "host:s", "pass:s", "port:i", "debug", "db=s", "r:i", "sp=s");
-
-#my $gkb_dir = $0;
-#$gkb_dir =~ s/\/[^\/]*$//;
-#$gkb_dir .= "/../..";
-#print STDERR "$0: gkb_dir=$gkb_dir\n";
+&GetOptions("user:s",
+"host:s",
+"pass:s",
+"port:i",
+"debug",
+"db=s",
+"r:i",
+"sp=s");
 
 $opt_r || die $usage;
 
@@ -58,14 +60,13 @@ if (!(defined $opt_port) || $opt_port eq '') {
 	$opt_port = $GK_DB_PORT;
 }
 
-my $skypainter_db = "${db}_dn";
+
 # Check for presence of optional databases
+$opt_host ||= 'localhost';
 my $dsn = "DBI:mysql:host=$opt_host;port=$opt_port";
 my $dbh = eval { DBI->connect($dsn,$opt_user,$opt_pass, {RaiseError => 1}); };
-my $sth = $dbh->prepare("SHOW DATABASES LIKE '$skypainter_db'");
-$sth->execute();
-my @row = $sth->fetchrow_array();
-my $exists_skypainter_db = scalar(@row);
+
+my ($sth,@row);
 my $exists_stable_identifier_db = 0;
 if (defined $GK_IDB_NAME && !($GK_IDB_NAME eq '')) {
 	$sth = $dbh->prepare("SHOW DATABASES LIKE '$GK_IDB_NAME'");
@@ -100,7 +101,6 @@ my $biopaxexporter_db_options = "";
 my $reactome_to_msig_export_db_options = "";
 my $diagram_dump_options = "";
 my $mysqldump_db_options = $db;
-my $mysqldump_dn_db_options = $skypainter_db;
 my $mysqldump_mart_db_options = "test_reactome_mart";
 my $mysqldump_identifier_db_options = "test_reactome_stable_identifiers";
 my $mysqldump_wordpress_db_options = "wordpress";
@@ -113,7 +113,6 @@ if (defined $opt_host && !($opt_host eq '')) {
     $reactome_to_msig_export_db_options .= $opt_host;
     $diagram_dump_options .= $opt_host;
     $mysqldump_db_options .= " -h $opt_host";
-    $mysqldump_dn_db_options .= " -h $opt_host";
     $mysqldump_mart_db_options .= " -h $opt_host";
     $mysqldump_identifier_db_options .= " -h $opt_host";
     $mysqldump_wordpress_db_options .= " -h reactome.org";
@@ -131,7 +130,6 @@ if (defined $opt_user && !($opt_user eq '')) {
     $reactome_to_msig_export_db_options .= " $opt_user";
     $diagram_dump_options .= " $opt_user";
     $mysqldump_db_options .= " -u $opt_user";
-    $mysqldump_dn_db_options .= " -u $opt_user";
     $mysqldump_mart_db_options .= " -u $opt_user";
     $mysqldump_identifier_db_options .= " -u $opt_user";
     $mysqldump_wordpress_db_options .= " -u $opt_user";
@@ -150,7 +148,6 @@ if (defined $opt_pass && !($opt_pass eq '')) {
 	$reactome_to_msig_export_db_options .= " '$pass'";
 	$diagram_dump_options .= " '$pass'";
 	$mysqldump_db_options .= " -p$pass";
-	$mysqldump_dn_db_options .= " -p$pass";
 	$mysqldump_mart_db_options .= " -p$pass";
 	$mysqldump_identifier_db_options .= " -p$pass";
 	$mysqldump_wordpress_db_options .= " -p$pass";
@@ -163,7 +160,6 @@ if (defined $opt_port && !($opt_port eq '')) {
 	$reactome_to_msig_export_db_options .= " $opt_port";
 	$diagram_dump_options .= " $opt_port";
 	$mysqldump_db_options .= " -P $opt_port";
-	$mysqldump_dn_db_options .= " -P $opt_port";
 	$mysqldump_mart_db_options .= " -P $opt_port";
 	$mysqldump_identifier_db_options .= " -P $opt_port";
 	$mysqldump_wordpress_db_options .= " -P $opt_port"
@@ -188,50 +184,75 @@ print "mysqldump_db_options=$mysqldump_db_options\n";
 print "reactome_db_options=$reactome_db_options\n";
 print "opt_sp=$opt_sp\n";
 my @cmds = (
-
     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' | sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz",
     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -col_grps ids,context,source_ids,source_st_ids,participating_protein_count,lit_refs,intact -headers title,table | sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.intact.txt.gz", # this is for the IntAct group at the EBI
     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -mitab | gzip -c > $release_nr/$species_file_stem.mitab.interactions.txt.gz",
+
     "mkdir $release_nr/databases",
     "mysqldump --opt $mysqldump_db_options | gzip -c > $release_nr/databases/gk_current.sql.gz",
     "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
     "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
+    "./make_release_tarball.pl $opt_r",
+
     "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' | gzip -c > $release_nr/$species_file_stem.sbml.gz",
     "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.2.sbml.gz",
-    #"perl PSIMI_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.psimi.xml.gz",
+    "perl PSIMI_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.psimi.xml.gz",
 
     "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options",
     "perl psicquic_indexers.pl -release $release_nr",
 
     "cp ../goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome $release_nr/gene_association.reactome",
-### Produce a list of curated complexes for IntAct to check that nothing has disappeared from the release
 
-    "cd WebELVTool && rm -f $diagram_dump_filename/PNG/* && rm -f $diagram_dump_filename/PDF/* && ./runDiagramDumper.sh $diagram_dump_options && cd $diagram_dump_filename && rm -f *.zip && zip -r diagrams.pdf.zip PDF && zip -r diagrams.png.zip PNG && mv *.zip ../download_directory/$release_nr",
-
+    "cd WebELVTool",
+    "rm -f $diagram_dump_filename/PNG/*",
+    "rm -f $diagram_dump_filename/PDF/*",
+    "./runDiagramDumper.sh $diagram_dump_options",
+    "cd $diagram_dump_filename",
+    "rm -f *.zip",
+    "zip -r diagrams.pdf.zip PDF",
+    "zip -r diagrams.png.zip PNG",
+    "mv *.zip ../download_directory/$release_nr",
+    
     qq{perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" -class Complex $reactome_db_options -output DB_ID -output 'species.name[0]' -output _displayName > $release_nr/curated_complexes.txt},
     qq{perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" -class Complex $reactome_db_options -output 'stableIdentifier._displayName' -output 'species.name[0]' -output _displayName > $release_nr/curated_complexes.stid.txt},
     
-    "cd biopaxexporter && ./runAllSpecies.sh $biopaxexporter_db_options . && zip biopax *.owl && rm *.owl && cd - && mv biopaxexporter/biopax.zip $release_nr/biopax2.zip",
+    "cd biopaxexporter",
+    "./runAllSpecies.sh $biopaxexporter_db_options .",
+    "zip biopax *.owl",
+    "rm *.owl",
+    "cd -",
+    "mv biopaxexporter/biopax.zip $release_nr/biopax2.zip",
     
-    "cd biopaxexporter && ./runAllSpeciesLevel3.sh $biopaxexporter_db_options . && zip biopax *.owl && rm -f *.owl && cd - && mv biopaxexporter/biopax.zip $release_nr/biopax.zip",
+    "cd biopaxexporter",
+    "./runAllSpeciesLevel3.sh $biopaxexporter_db_options .",
+    "zip biopax *.owl",
+    "rm -f *.owl",
+    "cd -",
+    "mv biopaxexporter/biopax.zip $release_nr/biopax.zip",
     
-    "cd WebELVTool && ./runGSEAOutput.sh $reactome_to_msig_export_db_options && zip $reactome_to_msig_export_db_filename.zip $reactome_to_msig_export_db_filename && cd - && mv WebELVTool/$reactome_to_msig_export_db_filename.zip $release_nr",
+    "cd WebELVTool",
+    "./runGSEAOutput.sh $reactome_to_msig_export_db_options",
+    "zip $reactome_to_msig_export_db_filename.zip $reactome_to_msig_export_db_filename",
+    "cd -",
+    "mv WebELVTool/$reactome_to_msig_export_db_filename.zip $release_nr",
     
-# Don't enable this line please! ReactomeToBioSystems export will be handled by other script because of the requirement of the otherIdentifier slot!
-#    "cd $gkb_dir/WebELVTool && ./runReactomeToBioSystems.sh $reactome_to_biosystems_db_options BioSystems && cd - && mv $gkb_dir/WebELVTool/BioSystems/ReactomeToBioSystems.zip .",
     "./generate_packaged_pathway_diagrams.sh $diagram_dump_options",
-    "perl genbook_rtf.pl -depth 100 $reactome_db_options -split -react_rep 2 && zip -r TheReactomeBook.rtf.zip TheReactomeBook && rm -rf TheReactomeBook && mv TheReactomeBook.rtf.zip $release_nr",
-    "perl genbook_pdf.pl -depth 100 $reactome_db_options -stdout -react_rep 2 > TheReactomeBook.pdf && zip TheReactomeBook.pdf.zip TheReactomeBook.pdf && rm TheReactomeBook.pdf && mv TheReactomeBook.pdf.zip $release_nr",
+    "perl genbook_rtf.pl -depth 100 $reactome_db_options -split -react_rep 2",
+    "zip -r TheReactomeBook.rtf.zip TheReactomeBook",
+    "rm -rf TheReactomeBook",
+    "mv TheReactomeBook.rtf.zip $release_nr",
+    "perl genbook_pdf.pl -depth 100 $reactome_db_options -stdout -react_rep 2 > TheReactomeBook.pdf",
+    "zip TheReactomeBook.pdf.zip TheReactomeBook.pdf",
+    "rm TheReactomeBook.pdf",
+    "mv TheReactomeBook.pdf.zip $release_nr",
     "perl fetchEmptyProject.pl reactome_data_model -outputdir $release_nr $fetch_empty_project_db_options",
-);
-if ($exists_skypainter_db) {
-	push(@cmds, "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/sql_dn.gz");
-}
+    );
+
 if ($exists_stable_identifier_db) {
 	push(@cmds, "perl create_EB-eye_dump.pl $release_nr $create_ebeye_db_options | gzip -c > $release_nr/EB-eye.xml.gz");
 }
 
-print "cmds=@cmds\n=$mysqldump_db_options\n";
+print STDERR "All commande to be executed:\n", join("\n",@cmds), "\n\n";
 
 my $broken_command_counter = 0;
 foreach my $cmd (@cmds) {
