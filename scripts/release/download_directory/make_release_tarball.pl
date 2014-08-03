@@ -2,11 +2,11 @@
 use strict;
 
 use constant REPO => '/tmp/Release';
-use constant TARD => './reactome_tarball';
+use constant TARD => '/tmp';
 use constant BASE => '/usr/local/reactomes/Reactome/production';
 
 # You need to be root to run this script!
-die "Sorry, root permission required.\n" unless $> == 0;
+# die "Sorry, root permission required.\n" unless $> == 0;
 
 my $dir_for_tarball = TARD;
 
@@ -20,12 +20,18 @@ chdir $release;
 
 system "rm -fr reactome" if -d 'reactome';
 
+my $base  = BASE;
+my $repo  = REPO;
+my $rhome = "$base/GKB/scripts/release/download_directory/$release";
+mkdir $rhome unless -d $rhome;
+
 # Since the github repo is not public, we will have to make sure it is checked
 # out into /tmp on reactomerelease
 check_github_repo();
 
-my $base = BASE;
-my $repo = REPO;
+# Make sure that other data are up-to-date
+check_analysis_data($base);
+check_solr_data($base);
 
 my $unwanted_webapps = join(' ',(
 "reactome/apache-tomcat/webapps/Analysis",
@@ -37,12 +43,14 @@ my $unwanted_webapps = join(' ',(
 "reactome/apache-tomcat/webapps/solr"
 ));
 
+print `pwd`;
 my @cmds = (
     qq(mkdir reactome),
     qq(mkdir reactome/GKB),
     qq(cp -r $repo/website reactome/GKB),
     qq(cp -r $repo/modules reactome/GKB),
-    qq(cp -r $repo/third_party_install reactome/GKB),
+    qq(mkdir reactome/GKB/third_party_install),
+    qq(cp $repo/third_party_install/config.tar.gz reactome/GKB/third_party_install),
     qq(rm -f reactome/GKB/website/html/stats*),
     qq(cp $base/GKB/scripts/release/website_files_update/stats.* reactome/GKB/website/html),
     qq(cp -r $base/Solr reactome),
@@ -58,10 +66,9 @@ my @cmds = (
     qq(rm -fr reactome/GKB/modules/*ensem*),
     qq(find ./ -name .git* | xargs rm -f),
     qq(tar czf reactome.tar.gz reactome),
-    qq(chown -R ':gkb' *),
-    qq(chmod -R g+w *)
+    qq(cp reactome.tar.gz $rhome),
+    qq(cp $repo/third_party_install/install_reactome.sh $rhome),
 );
-
 
 for my $cmd (@cmds) {
     print "$cmd\n";
@@ -72,14 +79,13 @@ for my $cmd (@cmds) {
 
 
 sub check_github_repo {
-
     # existence
     unless (-d REPO && -d REPO . '/.git') {
 	die "Please get a copy of the github repo:\n",
 	"cd /tmp\ngit clone https://github.com/reactome/Release.git\n";
     }
 
-    #ageism
+    # ageism
     my $now = time();
     my $max_age = 
 	  7   # days
@@ -95,4 +101,21 @@ sub check_github_repo {
 	"Please pull, checkout or clone a fresh copy to /tmp/Release\n";
     }
 
+}
+
+
+sub check_analysis_data {
+    my $base = shift;
+    my $data = "$base/AnalysisService/input/analysis_v$release.bin";
+    unless (-e $data) {
+	die "$data does not exist!  Make sure that you update the AnalysisService data before proceeding\n";
+    }
+}
+
+sub check_solr_data {
+    my $base = shift;
+    my $data = "$base/Solr/cores/reactome_v$release";
+    unless (-e $data) {
+        die "$data does not exist!  Make sure that you update the Solr data before proceeding\n";
+    }
 }
