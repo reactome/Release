@@ -195,7 +195,7 @@ ln -s /usr/local/gkb/website/conf/httpd.conf reactome.conf
 cd ../sites-enabled
 a2ensite reactome
 a2dissite default
-
+rm -f *default*
 
 # are we apache > 2.4?  # New syntax
 if [[ -d /etc/apache2/conf-available ]]
