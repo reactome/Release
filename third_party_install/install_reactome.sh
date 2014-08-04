@@ -178,7 +178,6 @@ echo -e "Setting up Apache..."
 cd /usr/local/gkb/website/html
 chown -R www-data img-*
 
-
 cd /etc/apache2/mods-available
 a2enmod \
     mime \
@@ -192,21 +191,20 @@ a2enmod \
     rewrite
 
 cd ../sites-available
-ln -s /usr/local/gkb/website/conf/httpd.conf reactome
-a2dissite default
+ln -s /usr/local/gkb/website/conf/httpd.conf reactome.conf
+cd ../sites-enabled
 a2ensite reactome
+a2dissite default
+
 
 # are we apache > 2.4?  # New syntax
 if [[ -d /etc/apache2/conf-available ]]
 then
     echo -e "\napache 2.4 or greater detected"
-    perl -i -pe 's/\#Require all/Require all/' reactome
+    perl -i -pe 's/\#Require all/Require all/' reactome.conf
 fi
 
 APACHE=apache2
-
-# Double check that the default site is disabled
-rm -f /etc/apache2/sites-enabled/*default*
 
 echo -e "\nSetting up Tomcat..."
 
@@ -215,8 +213,8 @@ groupadd tomcat7
 useradd -g tomcat7 -s /sbin/nologin -d /opt/tomcat/temp tomcat7
 cd /usr/local/reactomes/Reactome/production
 chown -R tomcat7:tomcat7 apache-tomcat-7.0.50
-chown -R tomcat7:tomcat7 AnalysisService
-chown -R tomcat7:tomcat7 Solr
+chown -R tomcat7:tomcat7 AnalysisService Solr RESTful
+
 cd $PWD
 
 echo -e "\nStarting the tomcat server..."
