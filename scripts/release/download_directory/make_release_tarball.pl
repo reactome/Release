@@ -1,10 +1,18 @@
 #!/usr/local/bin/perl -w
 use strict;
 
-my $dir_for_tarball = 'reactome_tarball';
+use constant REPO => '/tmp/Release';
+use constant TARD => '/tmp';
+use constant BASE => '/usr/local/reactomes/Reactome/production';
+
+# You need to be root to run this script!
+# die "Sorry, root permission required.\n" unless $> == 0;
+
+my $dir_for_tarball = TARD;
+
 my $release = shift or die "Usage $0 release_num\n";
 
-mkdir $dir_for_tarball unless (-e $dir_for_tarball);
+mkdir $dir_for_tarball unless (-d $dir_for_tarball);
 chdir $dir_for_tarball;
 
 mkdir $release unless -d $release;
@@ -12,40 +20,55 @@ chdir $release;
 
 system "rm -fr reactome" if -d 'reactome';
 
-# Since the github repo is not public, we will assume it is up-to-date
-# on reactomerelease
-chomp (my $bakdir = `pwd`);
-$bakdir .= '/../../../../..';
+my $base  = BASE;
+my $repo  = REPO;
+my $rhome = "$base/GKB/scripts/release/download_directory/$release";
+mkdir $rhome unless -d $rhome;
 
+# Since the github repo is not public, we will have to make sure it is checked
+# out into /tmp on reactomerelease
+check_github_repo();
+
+# Make sure that other data are up-to-date
+check_analysis_data($base);
+check_solr_data($base);
+
+my $unwanted_webapps = join(' ',(
+"reactome/apache-tomcat/webapps/Analysis",
+"reactome/apache-tomcat/webapps/reactomepathwaysummary",
+"reactome/apache-tomcat/webapps/ELVWebApp",
+"reactome/apache-tomcat/webapps/SBMLsqueezer",
+"reactome/apache-tomcat/webapps/PDMap",
+"reactome/apache-tomcat/webapps/ReactomeTools",
+"reactome/apache-tomcat/webapps/solr"
+));
+
+print `pwd`;
 my @cmds = (
     qq(mkdir reactome),
-    qq(cp -r $bakdir/website reactome),
-    qq(cp -r $bakdir/modules reactome),
-    qq(cp -r $bakdir/third_party_install/tomcat reactome),
-    qq(cp $bakdir/third_party_install/website/conf/httpd.conf reactome/website/conf),
-    qq(rm -f reactome/website/html/stats*),
-    qq(cp $bakdir/scripts/release/website_files_update/stats.* reactome/website/html),
+    qq(mkdir reactome/GKB),
+    qq(cp -r $repo/website reactome/GKB),
+    qq(cp -r $repo/modules reactome/GKB),
+    qq(mkdir reactome/GKB/third_party_install),
+    qq(cp $repo/third_party_install/config.tar.gz reactome/GKB/third_party_install),
+    qq(rm -f reactome/GKB/website/html/stats*),
+    qq(cp $base/GKB/scripts/release/website_files_update/stats.* reactome/GKB/website/html),
+    qq(cp -r $base/Solr reactome),
+    qq(cp -r $base/apache-tomcat* reactome),
+    qq(rm -f reactome/apache-tomcat/webapps/*.war),
+    qq(rm -fr $unwanted_webapps),
     qq(mkdir reactome/AnalysisService),
     qq(mkdir reactome/AnalysisService/input),
     qq(mkdir reactome/AnalysisService/temp),
-    qq(cp $bakdir/../AnalysisService/input/analysis_v$release.bin reactome/AnalysisService/input),
-    qq(rm -fr reactome/website/html/img-tmp/*),
-    qq(rm -fr reactome/website/html/img-fp/*),
-    qq(rm -fr reactome/website/logs/*),
-    qq(rm -fr reactome/website/html/download/*),
-    qq(rm -fr reactome/modules/*ensem*),
-    qq(find ./ -name .gitignore | xargs rm -f),
-    qq(perl -i -pe "s/GK_DB_USER = '\\S+'/GK_DB_USER = 'reactome_user'/" reactome/modules/GKB/Config.pm),
-    qq(perl -i -pe "s/GK_DB_PASS = '\\S+'/GK_DB_PASS = 'reactome_pass'/" reactome/modules/GKB/Config.pm),
-    qq(perl -i -pe "s/GK_DB_NAME = '\\S+'/GK_DB_NAME = 'gk_current'/" reactome/modules/GKB/Config.pm),
-    qq(perl -i -pe "s/GK_IDB_NAME = '\\S+'/GK_IDB_NAME = 'gk_stable_ids'/" reactome/modules/GKB/Config.pm),
-    qq(perl -i -pe "s/GK_ROOT_DIR = '\\S+'/GK_ROOT_DIR = '\\/usr\\/local\\/gkb'/" reactome/modules/GKB/Config.pm),
-    qq(perl -i -pe "s/'DB_USER', '\\S+'/'DB_USER', 'reactome_user'/" reactome/website/html/wordpress/wp-config.php),
-    qq(perl -i -pe "s/'DB_PASSWORD', '\\S+'/'DB_PASSWORD', 'reactome_pass'/" reactome/website/html/wordpress/wp-config.php),
-    qq(perl -i -pe "s/'DB_NAME', '\\S+'/'DB_NAME', 'gk_wordpress'/" reactome/website/html/wordpress/wp-config.php),
-    qq(tar czvf reactome.tar.gz reactome)
+    qq(mkdir reactome/RESTful),
+    qq(mkdir reactome/RESTful/temp),
+    qq(cp $base/AnalysisService/input/analysis_v$release.bin reactome/AnalysisService/input),
+    qq(rm -fr reactome/GKB/modules/*ensem*),
+    qq(find ./ -name .git* | xargs rm -f),
+    qq(tar czf reactome.tar.gz reactome),
+    qq(cp reactome.tar.gz $rhome),
+    qq(cp $repo/third_party_install/install_reactome.sh $rhome),
 );
-
 
 for my $cmd (@cmds) {
     print "$cmd\n";
@@ -55,3 +78,44 @@ for my $cmd (@cmds) {
 
 
 
+sub check_github_repo {
+    # existence
+    unless (-d REPO && -d REPO . '/.git') {
+	die "Please get a copy of the github repo:\n",
+	"cd /tmp\ngit clone https://github.com/reactome/Release.git\n";
+    }
+
+    # ageism
+    my $now = time();
+    my $max_age = 
+	  7   # days
+	* 24  # hours
+	* 60  # minutes
+	* 60; # seconds
+
+    my $mod_date = (stat(REPO))[9];
+
+    my $age = ($now - $mod_date)/60/60/24;
+    if ($age > $max_age) {
+	die "Your github clone is more than a week old.\n",
+	"Please pull, checkout or clone a fresh copy to /tmp/Release\n";
+    }
+
+}
+
+
+sub check_analysis_data {
+    my $base = shift;
+    my $data = "$base/AnalysisService/input/analysis_v$release.bin";
+    unless (-e $data) {
+	die "$data does not exist!  Make sure that you update the AnalysisService data before proceeding\n";
+    }
+}
+
+sub check_solr_data {
+    my $base = shift;
+    my $data = "$base/Solr/cores/reactome_v$release";
+    unless (-e $data) {
+        die "$data does not exist!  Make sure that you update the Solr data before proceeding\n";
+    }
+}
