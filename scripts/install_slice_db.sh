@@ -1,6 +1,6 @@
 #!/bin/bash
 
-API_CONF=/usr/local/reactomes/Reactome/development/apache-tomcat-6.0.20/webapps/ReactomeRESTfulAPI/WEB-INF/applicationContext.xml
+API_CONF=/usr/local/reactomes/Reactome/development/apache-tomcat/webapps/ReactomeRESTfulAPI/WEB-INF/applicationContext.xml
 WEB_CONF=/usr/local/reactomes/Reactome/development/GKB/modules/GKB/Config.pm
 RESTART=/usr/local/reactomes/Reactome/development/GKB/scripts/tomcat.pl
 

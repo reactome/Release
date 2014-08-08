@@ -216,9 +216,8 @@ foreach my $rxn (@{$reaction_ar}) {
 
 #exclude some events based on a number of criteria
     next if grep {$rxn->db_id == $_} @list; #list of ids to be excluded
-    next if $rxn->Species->[1]; #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway
-    my $is_chimeric = $rxn->IsChimeric;
-    if (defined $is_chimeric && scalar(@{$is_chimeric}) > 0 && ($is_chimeric->[0] eq 'TRUE' || $is_chimeric->[0] eq '1')) {
+    next if $rxn->Species->[1]; #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway    
+    if (is_chimeric($rxn)) {
         print "infer_events: skipping chimeric reaction DB_ID=" . $rxn->db_id . "\n";
         next;
     }
@@ -235,7 +234,7 @@ foreach my $rxn (@{$reaction_ar}) {
 #the InferredFrom attribute here as not all of these reactions have the
 #'orthologousEvent' slot filled in - should maybe addressed by a 'filler script'
 #(this is now available in QA_collection.pm)
-    my @tmp = grep {$_->Species->[0]->db_id == $taxon->db_id} (@{$rxn->OrthologousEvent}, @{$rxn->InferredFrom});
+    my @tmp = grep {$_->Species->[0]->db_id == $taxon->db_id && !(is_chimeric($_))} (@{$rxn->OrthologousEvent}, @{$rxn->InferredFrom});
 	print "infer_events: scalar(tmp)=" . scalar(@tmp) . "\n";
     if ($tmp[0]) { #the event exists in the other species, need not be inferred but should be kept for the step when the event hierarchy is created, so that it can be fit in at the appropriate position in the event hierarchy
 	$inferred_event{$rxn} = $tmp[0]; #disregards multiple events here..., the first event is taken into the hash to allow building the event structure further down
@@ -351,6 +350,12 @@ sub get_reaction_instances {
 	push @tmp, @{$ar};
     }
     return \@tmp;
+}
+
+sub is_chimeric {
+    my ($rxn) = @_;
+    
+    return $rxn->isChimeric->[0] && $rxn->isChimeric->[0] eq 'TRUE'; 
 }
 
 #This method reads an orthopair file (in the format 'from_species tab to_species(=list separated by space)'), and returns a hash reference 'homologue'.

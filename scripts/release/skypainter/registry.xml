@@ -1,4 +1,4 @@
 
 <MartRegistry>
-  <MartURLLocation database="ensembl_mart_75" default="1" displayName="ENSEMBL GENES 75 (SANGER UK)" host="www.biomart.org" includeDatasets="" martUser="" name="ensembl" path="/biomart/martservice" port="80" serverVirtualSchema="default" visible="1" />
+  <MartURLLocation database="ensembl_mart_76" default="1" displayName="ENSEMBL GENES 76 (SANGER UK)" host="www.ensembl.org" includeDatasets="" martUser="" name="ENSEMBL_MART_ENSEMBL" path="/biomart/martservice" port="80" serverVirtualSchema="default" visible="1" />
 </MartRegistry>

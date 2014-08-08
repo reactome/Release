@@ -32,7 +32,7 @@ system($cmd) == 0 or die "$cmd failed.";
 
 print STDERR "$0: about to createDatabase.pl\n";
 my $skypainter_db = $opt_db . '_dn';
-$cmd = qq(../createDatabase.pl model.pprj -host $opt_host -port $opt_port -pass $opt_pass -db $skypainter_db);
+$cmd = qq(./createDatabase.pl model.pprj -host $opt_host -port $opt_port -pass $opt_pass -db $skypainter_db);
 print "$cmd\n";
 system($cmd) == 0 or die "$cmd failed.";
 
