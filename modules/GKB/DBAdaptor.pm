@@ -421,6 +421,7 @@ sub new {
     	$self->throw($throw_string);
     }
     $self->debug($debug);
+    #$self->debug(1);
     $self->db_handle($dbh);
     if (!$no_ontology_flag) {
 	    # If db name defined assume that it contains the schema. Otherwise need ontology (schema).
@@ -2002,9 +2003,9 @@ sub _create_minimal_instancefetching_sql {
     $statement .= "\n" . join("\n",@{$join}) if (@{$join});
     $statement .= "\nWHERE " . join("\nAND ",@{$where}) if (@{$where});
     $statement .= "\nORDER BY $root_class.$DB_ID_NAME";
-    
-    my $sth = $self->prepare($statement);
 
+    my $sth = $self->prepare($statement);
+    
     $self->debug && print join("\n", $statement, @{$values}), "\n";
 #    print "<PRE>\n", join("\n", $statement, @{$values}), "\n</PRE>\n";
     my $res = $sth->execute(@{$values});
@@ -3945,6 +3946,46 @@ sub fetch_frontpage_species {
     my $self = shift;
     return [];
 }
+
+
+# Given a list reference database name, find all species who have
+# reference entities associated with those databases
+sub species_for_ref_dbs {
+    my $self  = shift;
+    my @rdbs = @_;
+    my $query = 'SELECT DB_ID FROM DatabaseObject WHERE _displayName LIKE ? ' .
+        'AND _Protege_id is NOT NULL';
+
+    my @rids;
+    for my $rdb (@rdbs) {
+	my ($sth) = $self->execute($query,$rdb);
+        while (my $id = $sth->fetchrow_arrayref) {
+            push @rids, $id->[0];
+	}
+    }
+
+    $query = <<"END";
+    SELECT DISTINCT(do._displayName)
+    FROM ReferenceEntity re, ReferenceSequence rs, DatabaseObject do
+    WHERE re.referenceDatabase = ?
+    AND do.DB_ID = rs.species
+    AND rs.DB_ID = re.DB_ID
+END
+;
+
+    my @out;
+    for my $rdb (@rids) {
+	my ($sth) = $self->execute($query,$rdb);
+        while (my $id = $sth->fetchrow_arrayref) {
+            push @out, $id->[0];
+        }
+    }
+
+    my %out = map {$_ => 1} @out;
+
+    return sort keys %out;
+}
+
 
 1;
 
