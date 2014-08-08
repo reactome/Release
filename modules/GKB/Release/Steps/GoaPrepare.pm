@@ -32,7 +32,7 @@ override 'run_commands' => sub {
     cmd("Updating GO ontology folder from GO SVN",[["svn --ignore-externals update $go"]]);
     cmd("Preparing GO submission",
     	[
-    		["perl goa_submission.pl", @args],
+    		["perl goa_submission.pl @args"],
     		["perl goa_submission_stats.pl gene_association.reactome gene_association.reactome.stats"],
     		["rm -f $go/gene-associations/submission/gene_association.reactome"],
     		["mv gene_association.reactome $go/gene-associations/submission"],

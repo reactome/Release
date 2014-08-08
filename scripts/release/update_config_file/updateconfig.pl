@@ -8,7 +8,7 @@ use Getopt::Long;
 use Net::OpenSSH;
 
 # Author: Joel Weiser (joel.weiser@oicr.on.ca)
-# Last Modified: February 7th, 2014
+# Created: February 2014
 # Purpose: Update the Reactome GKB configuration file to reference a new test_reactome_XX database and "last release" date
 #	   This script can modify the configuration file on the local server and remotely (useful for updating the fallback
 #	   and live server copies from the automation pipeline on the release server)
@@ -59,7 +59,7 @@ if ($ssh) {
 # Go through the current configuration line by line
 while (my $line = <$current>) {
 	# If the line contains it, change the database name to test_reactome_xx for the live site configuration file
-   	$line =~ s/(GK_DB_NAME = 'test_reactome_)\d+/$1$opt_version/;
+   	$line =~ s/(GK_DB_NAME = ).*/$1'test_reactome_$opt_version';/;
     
 	# If the line contains it, update the last release date
 	$line =~ s/(LAST_RELEASE_DATE = )\d{8}/$1$opt_lastrelease/;
@@ -73,7 +73,7 @@ close $current;
 close $new;
 
 my $archive = "mv $current_config $current_config.$opt_version"; # Archive the old configuration file
-my $rename = "mv $new_config $current_config"; # Rename the new configuration file to config.pm
+my $rename = "mv $new_config $current_config; chgrp gkb $current_config; chmod 775 $current_config"; # Rename the new configuration file to config.pm
 
 if ($ssh) {
 	$ssh->system($archive) or die $ssh->error;
