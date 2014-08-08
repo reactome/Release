@@ -45,11 +45,11 @@ if ($sp->displayName =~ /^(\w)\w+ (\w+)$/) {
     die "Can't form species abbreviation for mart from '" . $sp->displayName . "'.\n";
 }
 
-my $initializer = BioMart::Initializer->new('registryFile'=>'registry.xml','action'=>'clean');
+my $initializer = BioMart::Initializer->new('registryFile'=>'registry.xml','action'=>'cached');
 my $registry = $initializer->getRegistry;
 
 foreach my $identifier (get_identifiers($sp_mart_name)) {
-    next if $identifier =~ /chembl|clone_based|dbass3|description|ottg|ottt|shares_cds|merops/;
+    next if $identifier =~ /chembl|clone_based|dbass|description|ottg|ottt|shares_cds|merops|mirbase/;
     
     my $query = BioMart::Query->new('registry'=>$registry,'virtualSchemaName'=>'default');
 

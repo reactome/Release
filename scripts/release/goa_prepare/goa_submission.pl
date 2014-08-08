@@ -510,6 +510,7 @@ sub break_complex {
 	}
 	
 	#print $cmplx->db_id, "\n";
+	return unless $cmplx->StableIdentifier->[0];
 	return if $subcomplexes{$cmplx->StableIdentifier->[0]->Identifier->[0]}++; # If the current complex is a subcomplex that has already been done, it is skipped
 	
 	if ($letter eq "F") {

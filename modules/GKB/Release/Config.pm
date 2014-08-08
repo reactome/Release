@@ -41,8 +41,8 @@ our $gkcentral = "gk_central";
 our $gkcentral_host = "reactomecurator.oicr.on.ca";
 
 if ($TEST_MODE) {
-    $gkcentral = "gk_clean";
-    $gkcentral_host = "localhost";
+    $gkcentral = "test_gk_central";
+    $gkcentral_host = "reactomerelease.oicr.on.ca";
     $prevver = 46;
 }
 
@@ -67,26 +67,23 @@ our %passwords = (
 
 our $release_server = "reactomerelease.oicr.on.ca";
 our $live_server = "reactome.oicr.on.ca";
-our $biomart_server = "reactomedev.oicr.on.ca";
+our $dev_server = "reactomedev.oicr.on.ca";
 
 if ($TEST_MODE) {
-    $release_server = "reactomeclean.oicr.on.ca";
-    $live_server = $release_server;
-    $biomart_server = $release_server;
+    $live_server = "reactomeclean.oicr.on.ca";
 }
 
 # Host to gkb directory and vice-versa
 our %hosts = (
     $release_server => "gkbdev",
-    $biomart_server => "gkbdev",
+    $dev_server => "gkbdev",
     $live_server => "gkb_prod",
    
     "gkbdev" => $release_server,
     "gkb_prod" => $live_server,
     "gkb_test" => $live_server,
 
-    # Alternate servers
-    "reactomedev.oicr.on.ca" => "gkbdev",
+    # Alternate servers    
     "brie8.cshl.edu" => "gkbdev",
     "reactomeclean.oicr.on.ca" => "gkbdev" 
 );
@@ -105,7 +102,7 @@ our @EXPORT = qw/
     $user $pass $sudo $date $version $prevver 
     $db $slicedb $releasedb $biomartdb $gkcentral $gkcentral_host
     $gkbdev $scripts $release $compara $website $html $gkbmodules $go $dumpdir $tmp $cvs $logdir $logfile
-    %passwords $release_server $live_server $biomart_server %hosts %maillist
+    %passwords $release_server $live_server $dev_server %hosts %maillist
     $log_conf
 /;
 

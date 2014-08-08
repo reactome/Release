@@ -10,7 +10,7 @@
 BEGIN {
     my @a = split('/',$0);
     pop @a;
-    push @a, ('..','..','modules');
+    push @a, ('..','..','..','modules');
     my $libpath = join('/', @a);
     unshift (@INC, $libpath);
 }
