@@ -61,50 +61,6 @@ foreach my $sp (@species) {
 
 print STDERR "$0: no fatal errors.\n";
 
-sub ref_db_ids {
-    my $dba = shift;
-    my @rdbs = @_;
-    my $query = 'SELECT DB_ID FROM DatabaseObject WHERE _displayName = ? ' .
-	'AND _Protege_id is NOT NULL';
 
-    my $sth = $dba->prepare($query);
-    my @out;
-    for my $rdb (@rdbs) {
-	$sth->execute($rdb);
-        while (my $id = $sth->fetchrow_arrayref) {
-            push @out, $id->[0];
-	}
-    }
-    return @out;
-}
-
-
-sub species_for_ref_dbs {
-    my $dba  = shift;
-    my @rdbs = @_;
-
-    my $query = <<"END";
-    SELECT DISTINCT(do._displayName)
-    FROM ReferenceEntity re, ReferenceSequence rs, DatabaseObject do
-    WHERE re.referenceDatabase = ?
-    AND do.DB_ID = rs.species
-    AND rs.DB_ID = re.DB_ID
-END
-;
-
-    my $sth = $dba->prepare($query);
-    my @out;
-    for my $rdb (@rdbs) {
-        $sth->execute($rdb);
-        while (my $id = $sth->fetchrow_arrayref) {
-	    push @out, $id->[0];
-	}
-    }
-
-    # unique species names
-    my %out = map {$_ => 1} @out;
-
-    return sort keys %out;
-}
 
 

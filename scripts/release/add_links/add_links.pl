@@ -5,9 +5,27 @@
 # as UniProt.  These will appear as hyperlinks on
 # displayed web pages.
 
+
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+        $#a = $#a - 2;
+    } else {
+        push @a, ('..','..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+
 use Getopt::Long;
 use strict;
 use GKB::Config;
+use Cwd;
+
+use constant EXE => './add_links_to_single_resource.pl';
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_edb,$opt_db_ids);
 
@@ -16,33 +34,16 @@ my $usage = "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -
 &GetOptions("user:s", "host:s", "pass:s", "port:i", "db=s", "debug", "test", "db_ids:s");
 $opt_db || die $usage;
 
+
 my $gk_root_dir = $GK_ROOT_DIR;
-my $add_links_to_single_resource = undef;
-if (!(defined $gk_root_dir) || $gk_root_dir eq '') {
-	# If no root directory is defined for GKB,
-	# assume that the current directory is GKB/scripts/release.
-	# A bit nieave, we can but try, sigh.
-	my $curr_work_dir = &Cwd::cwd();
-		
-	$add_links_to_single_resource = "$curr_work_dir/add_links_to_single_resource.pl";
-} else {
-	$add_links_to_single_resource = "$gk_root_dir/scripts/release/add_links/add_links_to_single_resource.pl";
+my $pwd = &Cwd::cwd();
+
+unless ($pwd =~ m!/scripts/release/add_links$! && -d '../../../modules') {
+    die "Current working directory is $pwd:\n",
+    "Please run this script from $gk_root_dir/scripts/release/add_links.\n"; 
 }
-if (!(-e $add_links_to_single_resource)) {
-	# Last resort
-	my $home = $ENV{HOME};
-	if (defined $home && !($home eq '')) {
-		$add_links_to_single_resource = "$home/GKB/scripts/release/add_links_to_single_resource.pl";
-	}
-}
-if (!(defined $add_links_to_single_resource)) {
-    print STDERR "$0: ERROR - cannot find add_links_to_single_resource.pl\n";
-    exit(1);
-}
-if (!(-e $add_links_to_single_resource)) {
-    print STDERR "$0: ERROR - file $add_links_to_single_resource does not exist!\n";
-    exit(1);
-}
+
+my $exe = EXE;
 
 if (!(defined $opt_host) || $opt_host eq '') {
 	$opt_host = $GK_DB_HOST;
@@ -103,20 +104,67 @@ my @resources = (
 
 my $resource;
 my $cmd;
-my $broken_resource_count = 0;
+
 foreach $resource (@resources) {
     if (!(defined $resource) || $resource eq '') {
     	print STDERR "$0: WARNING - missing resource value!\n";
     	next;
     }
-    $cmd = "$add_links_to_single_resource $reactome_db_options -res $resource";
-    if (system($cmd) != 0) {
-    	print STDERR "$0: WARNING - something went wrong while executing '$cmd'!!\n";
-    	$broken_resource_count++;
+
+    print STDERR "$resource\n";
+    run($exe, "$reactome_db_options -res $resource", $resource);
+}
+
+# pause until all jobs are done
+while(1) {
+    sleep 300 and next if check_running($exe);
+    last;
+}
+
+my (@failed, @passed);
+if (-e "resources.txt") {
+    open IN, "resources.txt";
+    while (<IN>) { 
+	push @passed, $_ if /PASSED/;
+	push @failed, $_ if /FAILED/;
     }
 }
 
-if ($broken_resource_count > 0) {
-    print STDERR "$0: $broken_resource_count linkers failed to run to completion, please check the diagnostic output!\n";
+if (@failed) {
+    my $failed = @failed;
+    print STDERR "$0: $failed linkers failed to run to completion, please check the diagnostic output!\n",
+    join("\n",@failed), "\n";
 }
+if (@passed) {
+    print STDERR join("\n",@passed), "\n";
+}
+
 print STDERR "$0 has finished its job\n";
+
+sub run {
+    my $exe  = shift;
+    my $args = shift;
+    my $resource = shift;
+
+    my $stdout = "logs/$resource.stdout.txt";
+    my $stderr = "logs/$resource.stderr.txt";
+
+    my $howmany = 99;
+
+    while ($howmany > 6) {
+	$howmany = check_running($exe);
+	print STDERR "$howmany processes running at this time\n"; 
+	sleep 300 if $howmany > 6;
+    }
+
+    print "running $exe $args\n";
+    system "./run.pl $exe $args > $stdout 2> $stderr &";
+}
+
+
+sub check_running {
+    my $exe = shift;
+    my @running = `ps aux |grep $exe | grep -v 'run.pl' | grep -v grep`;
+    #print STDERR "These are running:\n@running\n";
+    return scalar(@running);
+}
