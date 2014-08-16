@@ -16,11 +16,11 @@ IGNORE THIS MESSAGE IF YOU HAVE ALREADY DOWNLOADED mim2gene.
 
 END
 
-my  $ftp = Net::FTP->new("ftp.ncbi.nih.gov", Debug => 0);
-    $ftp->login("anonymous",'-anonymous@');
+my  $ftp = Net::FTP->new(Host => "ftp.ncbi.nih.gov", Debug => 0, Passive => 1);
+    $ftp->login("anonymous",'-anonymous@') or die;
     
-    $ftp->cwd("/gene/DATA");
-    $ftp->get("mim2gene_medgen") or print $instructions;
+    $ftp->cwd("/gene/DATA") or die;
+    $ftp->get("mim2gene_medgen") or die $instructions . $ftp->message;
     $ftp->quit;
 
 my $num = $ARGV[0];

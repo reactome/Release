@@ -41,7 +41,7 @@ sub set_environment {
     $ENV{'PERL5LIB'} .= ":/usr/local/$gkb/modules:/usr/local/bioperl-1.0";
     umask 0002;
     `mv ~/GKB ~/GKB_$user` if (-e "~/GKB");
-    `ln -sf /usr/local/$gkb ~/GKB` if (-e "/home/$user"); 
+    #`ln -sf /usr/local/$gkb ~/GKB` if (-e "/home/$user"); 
 }
 
 # Mail sent when some steps completed
@@ -149,6 +149,8 @@ sub cmd {
 	
 		print releaselog("Executing $nopasscmd -- " . `date`);
 
+		$cmd = "screen /bin/bash -c '$cmd'";
+		
 		# Execute command
 		my ($stdout, $stderr, $exit_code);
 		

@@ -27,7 +27,7 @@ override 'run_commands' => sub {
     	[
             ["mkdir -p $version"],
             ["perl wrapper_ortho_inference.pl -r $version -user $user -pass $pass > $version/wrapper_ortho_inference.out"],
-            ["mysqldump --opt -p$pass $db > $dumpdir/$db\_after_ortho.dump"]
+            ["mysqldump --opt -u$user -p$pass $db > $db\_after_ortho.dump"]
 	]
     );
 };
