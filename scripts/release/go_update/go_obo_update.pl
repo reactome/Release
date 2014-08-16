@@ -406,7 +406,9 @@ foreach my $obs_id ( sort keys %obsolete) {
 			$dba->update($go_ref);
 		    }
 		}
-	    }	
+	    }
+	    print "Deleting alternate accession instance " . $sdi->db_id . "...\n";
+	    $dba->delete_by_db_id($sdi->db_id);
         }
     } elsif ( $pending_obsoletion{$obs_id}) {
     	$action = 'pending obsoletion -- no action required';	

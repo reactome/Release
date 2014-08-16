@@ -95,7 +95,7 @@ if (defined $opt_port && !($opt_port eq '')) {
 my $reactome_to_biosystems_db_options = $reactome_to_msig_export_db_options;
 
 my @cmds = (
-    "cd $GK_ROOT_DIR/WebELVTool && ./runReactomeToBioSystems.sh $reactome_to_biosystems_db_options BioSystems && cd - && mv $GK_ROOT_DIR/WebELVTool/BioSystems/ReactomeToBioSystems.zip .",
+    "cd $GK_ROOT_DIR/scripts/release/WebELVTool && ./runReactomeToBioSystems.sh $reactome_to_biosystems_db_options BioSystems && cd - && mv $GK_ROOT_DIR/scripts/release/WebELVTool/BioSystems/ReactomeToBioSystems.zip .",
 );
 
 my $broken_command_counter = 0;

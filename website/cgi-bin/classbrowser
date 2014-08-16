@@ -16,9 +16,7 @@ BEGIN {
     my $libpath = join('/', @a);
     unshift (@INC, $libpath);
 }
-#use lib "/tmp/libs/bioperl-1.0";
-#use lib "/tmp/libs/GKB/modules";
-#use lib "/tmp/libs/my_perl_stuff";
+
 
 use CGI qw(:standard);
 use GKB::DBAdaptor;
@@ -55,6 +53,7 @@ if ($CGI->param('CLASS')) {
 print $CGI->header(-charset => 'UTF-8');
 if (defined $header) {
     print $header;
+    print "<pre>P $GK_DB_PASS</pre>";
 } else {
     print $CGI->start_html(
     # \-dtd => "-//IETF//DTD HTML//EN",

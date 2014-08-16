@@ -1,18 +1,8 @@
 <?php get_header(); ?>
-<!--     <div id="hideMe" style="background:red;opacity:0.8;font-size:large;padding-left:20px">
-     <p><b>THIS IS JUST A TEST!</b></p>
-     Reactome will be offline for scheduled maintenance July XX, 12:01 AM EDT through 2:01 AM EDT <br>
-     The following sites will be affected:
-     <table style="margin-top:-10px">
-     <tr>
-     <td style="border:none">reactome.org</td>
-     <td style="border:none">wiki.reactome.org</td>
-     <td style="border:none">devwiki.reactome.org</td>
-     <td style="border:none">fly.reactome.org</td>
-     <td style="border:none">gallus.reactome.org</td>
-     </tr>
-     </table>	   
-     </div> -->
+<!--     <div id="hideMe" style="background:yellow;font-size:medium;padding:5px;padding-left:20px;border:1px solid red">
+     July 31, 2014: fly.reactome.org and gallus.reactome.org are offline for scheduled maintenance
+     </div>
+-->
      <div class="grid_15">     
      <div class="buttonswrap"><!--set left colum with buttons-->
 	  <div class="grid_5 alpha">
@@ -21,6 +11,7 @@
   	<div class="grid_5">
    	 <a class="button icon data" href="/PathwayBrowser/#TOOL=AT"><span>Analyze Data</span></a>
   	</div>
+
     <div class="grid_5 omega">
     <a class="button icon cytoscape" href="http://wiki.reactome.org/index.php/Reactome_FI_Cytoscape_Plugin"><span>Reactome FI Network</span></a>
     </div>

@@ -1,0 +1,224 @@
+[Sun Aug 03 06:29:41 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 06:34:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 06:39:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 06:44:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 06:49:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 06:54:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 06:59:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:04:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:09:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:14:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:19:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:24:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:29:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:34:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:39:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:45:03 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:49:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:54:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 07:59:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:04:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:09:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:14:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:19:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:24:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:29:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:34:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:39:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:44:56 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:49:43 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:54:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 08:59:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:04:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:09:41 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:14:53 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:19:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:25:02 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:29:39 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:34:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:39:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:45:06 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:49:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:54:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 09:59:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:04:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:09:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:15:02 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:19:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:24:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:29:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:34:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:39:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:44:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:49:39 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:54:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 10:59:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:04:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:09:43 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:14:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:19:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:25:02 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:29:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:34:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:39:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:44:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:49:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:54:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 11:59:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:04:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:09:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:14:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:19:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:24:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:29:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:34:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:39:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:44:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:49:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:55:10 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 12:59:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:05:51 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:09:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:14:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:19:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:24:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:29:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:34:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:39:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:45:02 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:49:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:55:09 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 13:59:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:04:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:09:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:14:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:19:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:24:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:29:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:35:05 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:39:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:44:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:49:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:54:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 14:59:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:05:02 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:09:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:14:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:19:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:24:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:29:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:34:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:39:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:44:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:49:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:55:02 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 15:59:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:04:53 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:09:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:14:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:19:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:24:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:29:42 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:34:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:39:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:45:01 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:49:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:54:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 16:59:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:05:09 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:09:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:14:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:19:39 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:24:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:29:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:34:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:39:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:44:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:49:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:55:02 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 17:59:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:04:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:09:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:14:21 2014] [error] [client 192.99.19.154] small_molecule_search: starting up
+[Sun Aug 03 18:14:21 2014] [error] [client 192.99.19.154] small_molecule_search: print_page_start
+[Sun Aug 03 18:14:21 2014] [error] [client 192.99.19.154] small_molecule_search: getting url
+[Sun Aug 03 18:14:21 2014] [error] [client 192.99.19.154] small_molecule_search: html=<iframe src="http://www.ebi.ac.uk/chebi/advancedSearchForward.do?printerFriendlyView=true&datasourceQuery[0].value=Reactome&callbackUrl=http://reactomerelease.oicr.on.ca/cgi-bin/link%3FDB=test_reactome_48%26ID=*&specialDataset=reactome" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto" width="100%" height="1150"></iframe>
+[Sun Aug 03 18:14:21 2014] [error] [client 192.99.19.154] script not found or unable to stat: /usr/local/gkb/website/cgi-bin/mart
+[Sun Aug 03 18:15:02 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:17:16 2014] [error] [client 192.99.19.154] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080
+[Sun Aug 03 18:24:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:29:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:31:01 2014] [error] [client 199.21.99.200] script not found or unable to stat: /usr/local/gkb/website/cgi-bin/mart
+[Sun Aug 03 18:35:10 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:39:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:45:02 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:49:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:54:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 18:59:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:04:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:09:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:14:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:19:42 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:25:13 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:29:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:34:57 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:39:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:44:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:49:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:54:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 19:59:36 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:04:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:09:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:14:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:19:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:25:07 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:29:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:34:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:39:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:45:06 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:49:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:54:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 20:59:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 21:04:59 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 21:09:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 21:15:00 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 21:19:37 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 21:20:55 2014] [error] [client 74.89.229.199] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:20:55 2014] [error] [client 74.89.229.199] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:20:55 2014] [error] [client 74.89.229.199] proxy: Error reading from remote server returned by /content/resources/css/ebi-fluid.css, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:20:58 2014] [error] [client 74.89.229.199] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:20:58 2014] [error] [client 74.89.229.199] proxy: Error reading from remote server returned by /content/resources/js/jquery.autocomplete.min.js, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:21:04 2014] [error] [client 74.89.229.199] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:21:04 2014] [error] [client 74.89.229.199] proxy: Error reading from remote server returned by /content/resources/css/autocomplete.css, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:21:04 2014] [error] [client 74.89.229.199] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:21:04 2014] [error] [client 74.89.229.199] proxy: Error reading from remote server returned by /content/resources/js/reactome.search.footer.js, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:21:30 2014] [error] [client 74.89.229.199] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080
+[Sun Aug 03 21:21:30 2014] [error] [client 74.89.229.199] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:21:30 2014] [error] [client 74.89.229.199] proxy: Error reading from remote server returned by /PathwayBrowser/
+[Sun Aug 03 21:21:30 2014] [error] [client 74.89.229.199] proxy: Error reading from remote server returned by /content/resources/js/jquery.autocomplete.min.js, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:21:36 2014] [error] [client 74.89.229.199] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:21:36 2014] [error] [client 74.89.229.199] proxy: Error reading from remote server returned by /PathwayBrowser/, referer: http://reactomerelease.oicr.on.ca/
+[Sun Aug 03 21:24:58 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 21:29:38 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Sun Aug 03 21:35:02 2014] [error] [client 127.0.0.1] (104)Connection reset by peer: proxy: error reading status line from remote server localhost:8080, referer: http://localhost/
+[Mon Aug 04 05:24:08 2014] [error] (111)Connection refused: proxy: HTTP: attempt to connect to 127.0.0.1:8080 (localhost) failed
+[Mon Aug 04 05:24:08 2014] [error] ap_proxy_connect_backend disabling worker for (localhost)
+[Tue Aug 05 09:27:57 2014] [error] [client 37.58.100.137] script not found or unable to stat: /usr/local/gkb/website/cgi-bin/mart
+[Tue Aug 05 11:01:37 2014] [error] [client 37.58.100.137] small_molecule_search: starting up
+[Tue Aug 05 11:01:37 2014] [error] [client 37.58.100.137] small_molecule_search: print_page_start
+[Tue Aug 05 11:01:37 2014] [error] [client 37.58.100.137] small_molecule_search: getting url
+[Tue Aug 05 11:01:37 2014] [error] [client 37.58.100.137] small_molecule_search: html=<iframe src="http://www.ebi.ac.uk/chebi/advancedSearchForward.do?printerFriendlyView=true&datasourceQuery[0].value=Reactome&callbackUrl=http://reactomerelease.oicr.on.ca/cgi-bin/link%3FDB=test_reactome_48%26ID=*&specialDataset=reactome" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto" width="100%" height="1150"></iframe>
+[Wed Aug 06 00:49:40 2014] [error] [client 66.249.73.178] Name "GKB::Config::GK_CURRENT_RELEASE" used only once: possible typo at /usr/local/gkb/website/cgi-bin/eventbrowser_st_id_deleted line 80.
+[Wed Aug 06 00:49:40 2014] [error] [client 66.249.73.178] StableIdentifier.get_identifier_database_dba: no identifier database name!  Maybe you need to add GK_IDB_NAME to config.pm?
+[Wed Aug 06 00:49:40 2014] [error] [client 66.249.73.178] StableIdentifier.get_identifier_database_dba: no identifier database name!  Maybe you need to add GK_IDB_NAME to config.pm?
+[Wed Aug 06 00:49:40 2014] [error] [client 66.249.73.178] StableIdentifiers.get_stable_identifier: WARNING - no DBA available!!
+[Wed Aug 06 00:49:40 2014] [error] [client 66.249.73.178] eventbrowser_st_id: Could not find StableIdentifier instance for extended_st_id= REACT_169122.1!!
+[Wed Aug 06 00:49:40 2014] [error] [client 66.249.73.178] 
+[Thu Aug 07 09:27:46 2014] [error] [client 192.99.19.154] small_molecule_search: starting up
+[Thu Aug 07 09:27:46 2014] [error] [client 192.99.19.154] small_molecule_search: print_page_start
+[Thu Aug 07 09:27:46 2014] [error] [client 192.99.19.154] small_molecule_search: getting url
+[Thu Aug 07 09:27:46 2014] [error] [client 192.99.19.154] small_molecule_search: html=<iframe src="http://www.ebi.ac.uk/chebi/advancedSearchForward.do?printerFriendlyView=true&datasourceQuery[0].value=Reactome&callbackUrl=http://reactomerelease.oicr.on.ca/cgi-bin/link%3FDB=test_reactome_48%26ID=*&specialDataset=reactome" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto" width="100%" height="1150"></iframe>
+[Thu Aug 07 09:27:46 2014] [error] [client 192.99.19.154] script not found or unable to stat: /usr/local/gkb/website/cgi-bin/mart
+[Thu Aug 07 12:05:48 2014] [error] [client 199.21.99.200] Use of uninitialized value $db in pattern match (m//) at /usr/local/gkb/modules/GKB/WebUtils.pm line 3610.
+[Thu Aug 07 14:32:43 2014] [error] [client 199.21.99.200] Use of uninitialized value $db in pattern match (m//) at /usr/local/gkb/modules/GKB/WebUtils.pm line 3610.
+[Thu Aug 07 20:11:06 2014] [error] [client 180.76.6.143] script not found or unable to stat: /usr/local/gkb/website/cgi-bin/mart

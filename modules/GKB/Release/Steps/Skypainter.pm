@@ -23,6 +23,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
     
+    cmd("Backing up database",[["mysqldump -u$user -p$pass $db > $db.before_skypainter"]]);
     cmd("Creating skypainter database",[["perl create_skypainter_db.pl -user $user -pass $pass -db $db > create_skypainter_db.out.$version"]]);
 };
 

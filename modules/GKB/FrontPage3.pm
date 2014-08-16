@@ -127,7 +127,9 @@ sub get_enclosing_div_end {
 sub get_index_html_content {
     my ($self) = @_;
     
-    my $content = `wget -qO- localhost`;
+    my $host = `hostname -f`;
+    chomp $host;
+    my $content = `wget -qO- $host`;
     
     return $content;
 }

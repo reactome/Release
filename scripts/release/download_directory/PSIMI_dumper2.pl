@@ -31,9 +31,7 @@ open(my $diagnostics, '>', "$opt_outputdir/PSIMI_dumper2.out");
 
 print $diagnostics "PSIMI_dumper2.pl has started\n";
 
-my $gkb = $GK_ROOT_DIR;
-my $reactome_gwt = "$gkb/ReactomeGWT";
-my $libs = "$reactome_gwt/libs";
+my $libs = $GK_ROOT_DIR . "/java/libs";
 my $sbml_libs = "$libs/sbml";
 my $psicquic_libs = "$libs/psicquic";
 my $default = "$libs/default";
