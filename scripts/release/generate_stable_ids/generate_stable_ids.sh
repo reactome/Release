@@ -34,7 +34,7 @@ export LIB=$AUTHOR_TOOL/lib
 export SRC=$AUTHOR_TOOL/src
 
 # Collect stuff for classpath
-export GENERAL_CLASSPATH=$LIB/mysql-connector-java-3.0.11-stable-bin.jar:$LIB/mysql-connector-java-3.1.7-bin.jar:$LIB/osxAdapter.jar
+export GENERAL_CLASSPATH=$LIB/mysql-connector-java-3.0.11-stable-bin.jar:$LIB/mysql-connector-java-3.1.7-bin.jar:$LIB/osxAdapter.jar:$LIB/commons-lang-2.3.jar
 export SKIN_CLASSPATH=$LIB/skin/skinlf.jar
 export CLASSPATH=$GENERAL_CLASSPATH:$SKIN_CLASSPATH:$AUTHOR_TOOL:$AUTHOR_TOOL/src
 

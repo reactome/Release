@@ -34,9 +34,7 @@ if (-e $LIBSBML_LD_LIBRARY_PATH) {
 	exit(1);
 }
 
-my $gkb = $GK_ROOT_DIR;
-my $reactome_gwt = "$gkb/ReactomeGWT";
-my $libs = "$reactome_gwt/libs";
+my $libs = $GK_ROOT_DIR . "/java/libs";
 my $sbml_libs = "$libs/sbml";
 my $default = "$libs/default";
 my $classpath = "$default/reactome.jar";

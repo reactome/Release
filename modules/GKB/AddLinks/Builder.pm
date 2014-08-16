@@ -284,9 +284,10 @@ sub remove_typed_instances_from_attribute {
 	my @attribute_instances;
 	my $attribute_instance;
 	foreach $attribute_instance (@{$instance->$attribute}) {
-		if ($attribute_instance->referenceDatabase->[0]->db_id != $reference_database->db_id) {
-			push(@attribute_instances, $attribute_instance);
-		}
+	    defined $attribute_instance && $attribute_instance->can('referenceDatabase') or next;
+	    if ($attribute_instance->referenceDatabase->[0]->db_id != $reference_database->db_id) {
+		push(@attribute_instances, $attribute_instance);
+	    }
 	}
 	$instance->$attribute(undef);
 	$instance->$attribute(@attribute_instances);

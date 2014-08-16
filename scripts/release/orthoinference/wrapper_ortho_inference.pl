@@ -65,7 +65,9 @@ foreach my $sp (@species) {
     print "wrapper_ortho_inference: considering sp=$sp\n";
     next if $sp eq $opt_from; #skip source species in species list
     if ($opt_sp) {
-	next unless $sp eq $opt_sp;
+       next unless $sp eq $opt_sp;
+    } else {
+       next unless $sp eq 'mtub';
     }
     print "wrapper_ortho_inference: running infer_events script\n";
     run("perl infer_events.pl -db $db -r $opt_r -from $opt_from -sp $sp -thr 75 @ARGV $db_option_string"); #run script with 75% complex threshold
