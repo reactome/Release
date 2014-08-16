@@ -51,7 +51,7 @@ foreach $resource (@resources) {
     	print STDERR "$0: WARNING - missing resource value!\n";
     	next;
     }
-    $cmd = "$psicquic_indexers_to_single_resource -release $opt_release -gk_root $gk_root_dir -builder $resource";
+    $cmd = "perl $psicquic_indexers_to_single_resource -release $opt_release -gk_root $gk_root_dir -builder $resource";
     if (system($cmd) != 0) {
     	print STDERR "$0: WARNING - something went wrong while executing '$cmd'!!\n";
     }

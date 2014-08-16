@@ -8,7 +8,7 @@ use Exporter();
 @ISA=qw(Exporter);
 
 #defines the order in which the species should be handled for orthology inference
-@species = qw(hsap ddis pfal spom scer cele sscr btau cfam mmus rnor ggal tgut xtro drer dmel atha osat saur ecol mtub);
+@species = qw(hsap ddis pfal spom scer cele sscr btau cfam mmus rnor ggal tgut xtro drer dmel atha osat mtub);
 
 %species_info = ('atha' => {'name' => ['Arabidopsis thaliana'],
 			    'refdb' => {'dbname' => ['ENSEMBL', 'Ensembl', 'ENSEMBL_Arabidopsis_PROTEIN'],
@@ -80,15 +80,6 @@ use Exporter();
 					    'access' => 'http://flybase.net/.bin/fbidq.html?###ID###'},
                             'group' => 'Metazoan',
                             'mart_group' => 'dmelanogaster_eg_gene'},
-		 'ecol' => {'name' => ['Escherichia coli'],
-                            'pan_name' => 'escherichia_coli_str_k_12_substr_mg1655',
-			    'refdb' => {'dbname' => ['ENSEMBL', 'Ensembl', 'ENSEMBL_E_coli_PROTEIN'],
-                                        'url' => 'http://bacteria.ensembl.org/Escherichia_shigella/E_coli_K12/Info/Index',
-                                        'access' => 'http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/Transcript/ProteinSummary?peptide=###ID###',
-					'ensg_access' => 'http://bacteria.ensembl.org/Escherichia_Shigella/E_coli_K12/geneview?gene=###ID###&db=core'},
-                            'group' => 'Eubacteria',
-                            'mart_group' => 'esc_18_gene',
-                            'prokaryote' => 1},
 		 'ggal' => {'name' => ['Gallus gallus'],
                             'refdb' => {'dbname' => ['ENSEMBL', 'Ensembl', 'ENSEMBL_Gallus_gallus_PROTEIN'],
                                         'url' => 'http://www.ensembl.org/Gallus_gallus/Info/Index/',
@@ -149,15 +140,6 @@ use Exporter();
                             'group' => 'Vertebrate',
                             'compara' => 'core',
                             'mart_group' => 'rnorvegicus_gene_ensembl'},
-		 'saur' => {'name' => ['Staphylococcus aureus N315'],
-			    'pan_name' => 'staphylococcus_aureus_subsp_aureus_n315',
-			    'refdb' => {'dbname' => ['ENSEMBL', 'Ensembl', 'ENSEMBL_S_aureus_PROTEIN'],
-					'url' => 'http://bacteria.ensembl.org/Staphylococcus/S_aureus_N315/Info/Index/',
-					'access' => 'http://bacteria.ensembl.org/Staphylococcus/S_aureus_N315/Transcript/ProteinSummary?peptide=###ID###',
-					'ensg_access' => 'http://bacteria.ensembl.org/Staphylococcus/S_aureus_N315/geneview?gene=###ID###&db=core'},
-			    'group' => 'Eubacteria',
-                            'mart_group' => 'sta_50_gene',
-			    'prokaryote' => 1},
                  'scer' => {'name' => ['Saccharomyces cerevisiae'],
 			    'refdb' => {'dbname' => ['ENSEMBL', 'Ensembl', 'ENSEMBL_S_cerevisiae_PROTEIN'],
                                         'url' => 'http://fungi.ensembl.org/Saccharomyces_cerevisiae/Info/Index',

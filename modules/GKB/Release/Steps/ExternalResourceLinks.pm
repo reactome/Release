@@ -24,22 +24,15 @@ override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
 
     # Backup database and run add links script
-    cmd("Backup database", [["mysqldump --opt -p$pass $db > $db\_before_addlinks.dump"]]);
-    my $return = cmd("Running add links script", [["perl add_links.pl -db $db > add_links_$version.out"]],1);
+    cmd("Backup database", [["mysqldump --opt -u$user -p$pass $db > $db\_before_addlinks.dump"]]);
+    my @results = cmd("Running add links script", [["perl add_links.pl -db $db > add_links_$version.out"]]);
     
+    my $exit_code = ($results[0])->{'exit_code'};
     # Backup the database or else drop and remake the database if the add links script fails  
-    if (!$return) {
+    if ($exit_code == 0) {
     	cmd("Backing up database $db",
     		[
-    			["mysqldump --opt -p$pass $db > $db\_after_addlinks.dump"]
-    		]
-    	);
-    } else {
-        cmd("Recreating database $db",
-        	[
-        		["mysql -e drop database $db"],
-        		["mysql -e create database $db"],
-        		["cat $db\_before_addlinks.dump | mysql $db"]
+    			["mysqldump --opt -u$user -p$pass $db > $db\_after_addlinks.dump"]
     		]
     	);
     }

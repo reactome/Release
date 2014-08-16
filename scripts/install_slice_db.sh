@@ -1,8 +1,14 @@
 #!/bin/bash
 
+<<<<<<< HEAD
 SEARCH=/usr/local/reactomes/Reactome/production/apache-tomcat/webapps/content/WEB-INF/classes/web.properties
 API=/usr/local/reactomes/Reactome/production/apache-tomcat/webapps/ReactomeRESTfulAPI/WEB-INF/applicationContext.xml
 WEB=/usr/local/reactomes/Reactome/production/GKB/modules/GKB/Secrets.pm
+=======
+API_CONF=/usr/local/reactomes/Reactome/development/apache-tomcat/webapps/ReactomeRESTfulAPI/WEB-INF/applicationContext.xml
+WEB_CONF=/usr/local/reactomes/Reactome/development/GKB/modules/GKB/Config.pm
+RESTART=/usr/local/reactomes/Reactome/development/GKB/scripts/tomcat.pl
+>>>>>>> 0cec58908ad93165505663e4038c9f385e8593ba
 
 if [[ $EUID -ne 0 ]]; then
     echo "This script must be run as root!" 1>&2

@@ -72,5 +72,35 @@
 
 <div class="clear"></div><!--clear header-->
 
+<!-- Conditional header for dev site --> 
+
+<?php
+   $host_name = php_uname('n');
+   $dev = '';
+
+    if ( preg_match('/dev/', $host_name) ) {
+        $dev = 'SOFTWARE DEVELOPMENT AND TESTING';
+    }
+
+    if ( preg_match('/release/', $host_name) ) {
+        $dev = 'RELEASE TESTING';
+    }
+   
+   if ( $dev ) {
+   echo "
+   <div style='background:gainsboro;border:1px solid gray; text-align:center' id='hideMe'>
+     <div style='font-size:small;padding:10px'>
+       <span style='font-size:larger;color:red'>
+	 THIS SITE IS USED FOR $dev
+       </span><br/>
+       <span style='font-size:smaller;color:red'>
+	 IT IS NOT STABLE, IS LINKED TO AN INCOMPLETE DATA SET, AND IS NOT MONITORED FOR PERFORMANCE.
+	 WE STRONGLY RECOMMEND THE USE OF OUR <a href='http://www.reactome.org'>PUBLIC SITE</a>
+       </span>
+     </div>
+   </div>";
+    }
+?>
+
 <!--content-->
 <div class="wrapper">
