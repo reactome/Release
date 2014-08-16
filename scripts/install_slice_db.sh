@@ -1,8 +1,8 @@
 #!/bin/bash
 
-API_CONF=/usr/local/reactomes/Reactome/development/apache-tomcat-6.0.20/webapps/ReactomeRESTfulAPI/WEB-INF/applicationContext.xml
-WEB_CONF=/usr/local/reactomes/Reactome/development/GKB/modules/GKB/Config.pm
-RESTART=/usr/local/reactomes/Reactome/development/GKB/scripts/tomcat.pl
+SEARCH=/usr/local/reactomes/Reactome/production/apache-tomcat/webapps/content/WEB-INF/classes/web.properties
+API=/usr/local/reactomes/Reactome/production/apache-tomcat/webapps/ReactomeRESTfulAPI/WEB-INF/applicationContext.xml
+WEB=/usr/local/reactomes/Reactome/production/GKB/modules/GKB/Secrets.pm
 
 if [[ $EUID -ne 0 ]]; then
     echo "This script must be run as root!" 1>&2
@@ -15,23 +15,33 @@ if [[ ! -n $db_name ]]; then
     exit 1
 fi
 
-perl -i -pe "s/<constructor-arg index=\"1\" value=\"\w+\"/<constructor-arg index=\"1\" value=\"${db_name}\"/" $API_CONF
-AOK=`grep $db_name $API_CONF`
+perl -i -pe "s/<constructor-arg index=\"1\" value=\"\w+\"/<constructor-arg index=\"1\" value=\"${db_name}\"/" $API
+AOK=`grep $db_name $API`
+echo $AOK
 if [[ ! -n $AOK ]]; then
-    echo "Database renaming for $API_CONF failed" 1>&2
+    echo "Database renaming for $API failed" 1>&2
     exit 1
 fi
 
-perl -i -pe "s/GK_DB_NAME = '\w+';/GK_DB_NAME = '$db_name';/" $WEB_CONF; 
-BOK=`grep $db_name $WEB_CONF`
+perl -i -pe "s/GK_DB_NAME\s*=\s*'\S+';/GK_DB_NAME  = '$db_name';/" $WEB; 
+BOK=`grep $db_name $WEB`
+echo $BOK
 if [[ ! -n $BOK ]]; then
-    echo "Database renaming for $WEB_CONF failed" 1>&2
+    echo "Database renaming for $WEB failed" 1>&2
+    exit 1
+fi
+
+perl -i -pe "s/database_currentDatabase=\S+/database_currentDatabase=$db_name/" $SEARCH;
+COK=`grep $db_name $SEARCH`
+echo $COK
+if [[ ! -n $COK ]]; then
+    echo "Database renaming for $SEARCH failed" 1>&2
     exit 1
 fi
 
 
 # restart tomcat
-$RESTART -f
+/etc/init.d/tomcat7 restart
 
 
 
