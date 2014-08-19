@@ -128,6 +128,9 @@ sub get_index_html_content {
     my ($self) = @_;
     
     my $host = `hostname -f`;
+
+    $host = 'reactome.org' if $host =~ /reactomeprd1/;
+
     chomp $host;
     my $content = `wget -qO- $host`;
     
