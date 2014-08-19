@@ -101,7 +101,8 @@ XML::Simple \
 Search::Tools \
 Capture::Tiny \
 WWW::SearchResult \
-JSON
+JSON \
+PDF::API2
 
 echo -e "\nDownloading the reactome software..."
 mkdir /usr/local/reactomes
