@@ -47,9 +47,17 @@ use Carp qw(cluck confess);
 use Getopt::Long qw(:config pass_through);
 use Bio::Root::Root;
 use Data::Dumper;
+use File::Basename;
 use GKB::Config;
 use GKB::IntAct;
 use GKB::Utils;
+use Log::Log4perl qw/get_logger/;
+
+my ($file_name) = $0 =~ /(.*)\./;
+$file_name =~ s/^\.//g;
+Log::Log4perl->init(dirname(__FILE__) . $file_name . "_log.conf");
+
+
 
 @ISA = qw(Bio::Root::Root);
 
@@ -159,20 +167,23 @@ sub set_display_only_intact_lines {
 
 sub find_interactors_for_ReferenceSequences {
     my ($self, $rss, $participating_protein_count_cutoff, $mitab) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my %interactions;
     my $rs_count = scalar(@{$rss});
     
     if (defined $participating_protein_count_cutoff) {
-    	print STDERR "InteractionGenerator.find_interactors_for_ReferenceSequences: participating_protein_count_cutoff=$participating_protein_count_cutoff\n";
+    	$logger->info("InteractionGenerator.find_interactors_for_ReferenceSequences: participating_protein_count_cutoff=$participating_protein_count_cutoff");
     } else {
-    	print STDERR "InteractionGenerator.find_interactors_for_ReferenceSequences: participating_protein_count_cutoff is undef\n";
+    	$logger->info("InteractionGenerator.find_interactors_for_ReferenceSequences: participating_protein_count_cutoff is undef");
     }
-    print STDERR "InteractionGenerator.find_interactors_for_ReferenceSequences: total number of ReferenceSequences=$rs_count\n";
+    $logger->info("InteractionGenerator.find_interactors_for_ReferenceSequences: total number of ReferenceSequences=$rs_count");
     
     my $rs_num = 0;
     foreach my $rs (@{$rss}) {
     	if ($rs_num%100 == 0) {
-    		print STDERR "InteractionGenerator.find_interactors_for_ReferenceSequences: rs_num=$rs_num (" . ($rs_num*100)/$rs_count . "%)\n";
+    	    $logger->info("InteractionGenerator.find_interactors_for_ReferenceSequences: rs_num=$rs_num (" . ($rs_num*100)/$rs_count . "%)");
     	}
 	if (defined $mitab) {
             $self->find_mitab_interactors_for_ReferenceSequence($rs,\%interactions, $participating_protein_count_cutoff);
@@ -911,11 +922,13 @@ sub interaction_hash_2_split_array {
 sub insert_intact_xrefs {
     my ($self, $hr, $participating_protein_count_cutoff) = @_;
     
-    print STDERR "InteractionGenerator.insert_intact_xrefs: hey-ho, inserting some cross-references, ";
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->info("InteractionGenerator.insert_intact_xrefs: hey-ho, inserting some cross-references, ");
     if (defined $participating_protein_count_cutoff) {
-    	print STDERR "participating_protein_count_cutoff=$participating_protein_count_cutoff\n";
+    	$logger->info("participating_protein_count_cutoff=$participating_protein_count_cutoff");
     } else {
-    	print STDERR "participating_protein_count_cutoff is undef\n";
+    	$logger->info("participating_protein_count_cutoff is undef");
     }
     
     # Interaction data is stored in a hash of hashes, the outer key
@@ -1053,6 +1066,8 @@ sub insert_intact_xrefs_into_neighbouring_reaction_pairs {
 sub insert_intact_xrefs_into_instance {
     my ($self, $instance, $intact_ids) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my $dba = $self->dba;
     my $reference_database_intact = GKB::Utils::get_reference_database_intact($dba);
 
@@ -1060,7 +1075,8 @@ sub insert_intact_xrefs_into_instance {
 	if (!($instance->is_valid_attribute($cross_reference_attribute_name))) {
 	    $cross_reference_attribute_name = 'crossReference';
 		if (!($instance->is_valid_attribute($cross_reference_attribute_name))) {
-			print STDERR "InteractionGenerator.insert_intact_xrefs_into_instance: WARNING - instance of type " . $instance->class() . " does not support attribute $cross_reference_attribute_name, ignoring\n";
+			$logger->warn("InteractionGenerator.insert_intact_xrefs_into_instance: WARNING - instance of type " . $instance->class()
+			. " does not support attribute $cross_reference_attribute_name, ignoring");
 			return;
 		}
 	}
@@ -1081,7 +1097,7 @@ sub insert_intact_xrefs_into_instance {
 		}
 	}
 		
-	print STDERR "InteractionGenerator.insert_intact_xrefs_into_instance: inserting xrefs into instance " . $instance->db_id() . ":" . $instance->_displayName->[0] . ": ";
+	$logger->info("InteractionGenerator.insert_intact_xrefs_into_instance: inserting xrefs into instance " . $instance->db_id() . ":" . $instance->_displayName->[0] . ": ");
 		
 	# Get or create new cross-references for the IntAct IDs
 	# associated with the current interaction.
@@ -1090,15 +1106,13 @@ sub insert_intact_xrefs_into_instance {
 	foreach $intact_id (@{$intact_ids}) {
 		$intact_id =~ s/^intact://i;
 		
-		print STDERR "$intact_id, ";
+		$logger->info("$intact_id");
 			
 		if (!$existing_intact_ids{$intact_id}) {
 			$intact = GKB::Utils::get_database_identifier($dba, $reference_database_intact, $intact_id);
 			push(@{$cross_references}, $intact);
 		}
 	}
-					
-	print STDERR "\n";
 		
 	# Overwrite existing list of cross-references
 	$instance->attribute_value($cross_reference_attribute_name, undef);
@@ -1544,6 +1558,8 @@ sub print_array {
 sub print_line {
     my ($self, $line) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     if (defined $self->line_cache && defined $self->line_cache->{$line}) {
     	# If the line is a duplicate of the one just printed, suppress printing.
     	return;
@@ -1560,10 +1576,9 @@ sub print_line {
     	my $previous_field_count = length($previous_tabs);
     	
     	if ($field_count != $previous_field_count) {
-    		print STDERR "InteractionGenerator.print_line: WARNING - the following lines have respectively $field_count and $previous_field_count fields, is this a bug?\n";
-    		print STDERR "	$line\n";
-     		print STDERR "	$previous_line\n";
-     		print STDERR "\n";
+    		$logger->warn("InteractionGenerator.print_line: WARNING - the following lines have respectively $field_count and $previous_field_count fields, is this a bug?");
+    		$logger->warn("$line");
+     		$logger->warn("$previous_line");
     	}
     }
     
@@ -1597,6 +1612,8 @@ sub _db_name_colon_identifier {
 sub _interaction_context_info {
     my ($self, $context, $context_num) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my @context_info = ();
     if ($self->column_groups->{$COLUMN_GROUP_SOURCE_IDS}) {
     	push(@context_info, $self->source_id_info_from_context($context, $context_num));
@@ -1604,7 +1621,7 @@ sub _interaction_context_info {
     if ($self->column_groups->{$COLUMN_GROUP_SOURCE_STABLE_IDS}) {
     	my $stable_id_flag = 1;
 						
-		print STDERR "InteractionGenerator._interaction_context_info: stable_id_flag=$stable_id_flag\n";
+	$logger->info("InteractionGenerator._interaction_context_info: stable_id_flag=$stable_id_flag");
 						
     	push(@context_info, $self->source_id_info_from_context($context, $context_num, $stable_id_flag));
     }
@@ -1627,6 +1644,8 @@ sub _interaction_context_info {
 sub source_id_info_from_context {
     my ($self, $context, $context_num, $stable_id_flag) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my $source_id_info = "";
     if (!(defined $stable_id_flag)) {
     	$stable_id_flag = 0;
@@ -1637,7 +1656,7 @@ sub source_id_info_from_context {
     	$source_id_info = $self->previous_source_id_info->{$stableIdentifier_or_class_and_id}->{$context_num};
     } else {
     	if ($self->column_groups->{$COLUMN_GROUP_SOURCE_STABLE_IDS}) {
-			print STDERR "InteractionGenerator.source_id_info_from_context: context_num=$context_num, stable_id_flag=$stable_id_flag\n";
+	    $logger->info("InteractionGenerator.source_id_info_from_context: context_num=$context_num, stable_id_flag=$stable_id_flag");
     	}
     			
 	    # Generates three columns containing IDs for pathways, reactions and complexes.
@@ -1652,7 +1671,7 @@ sub source_id_info_from_context {
 			$source_reaction_ids = $self->stringify_db_ids([$context->db_id()], $stable_id_flag);
 			$reaction_db_ids = [$context->db_id()];
 						
-			print STDERR "InteractionGenerator.source_id_info_from_context: context 4, source_reaction_ids=$source_reaction_ids\n";
+			$logger->info("InteractionGenerator.source_id_info_from_context: context 4, source_reaction_ids=$source_reaction_ids");
 	    } else {
 	    	# Deal with complexes
 			$source_complex_ids = $self->stringify_db_ids([$context->db_id()], $stable_id_flag);
@@ -1662,7 +1681,7 @@ sub source_id_info_from_context {
 		my $pathway_db_ids = $self->pathway_db_ids_from_reaction_db_ids($reaction_db_ids);
 		$source_pathway_ids = $self->stringify_db_ids($pathway_db_ids, $stable_id_flag);
 						
-		print STDERR "InteractionGenerator.source_id_info_from_context: source_pathway_ids=$source_pathway_ids\n";
+		$logger->info("InteractionGenerator.source_id_info_from_context: source_pathway_ids=$source_pathway_ids");
 						
 		$source_id_info = $source_pathway_ids  . "\t" . $source_reaction_ids  . "\t" . $source_complex_ids;
 			
@@ -1783,6 +1802,8 @@ sub participating_protein_count_from_reactions {
 sub reaction_db_ids_from_complexes {
     my ($self, $complexes) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my $source_reaction_ids = "";
     my $dba = $self->dba;
     
@@ -1800,7 +1821,7 @@ sub reaction_db_ids_from_complexes {
 	foreach $complex (@{$complexes}) {
 		($reaction_instances, $x, $y) = $dba->follow_reverse_attributes(-INSTANCE => $complex, -ATTRIBUTES => ['hasComponent', 'hasMember', 'input', 'output'], -OUT_CLASSES => ['ReactionlikeEvent']);
 					
-		print STDERR "InteractionGenerator.reaction_db_ids_from_complexes : scalar(reaction_instances)=" . scalar(@{$reaction_instances}) . "\n";
+		$logger->info("InteractionGenerator.reaction_db_ids_from_complexes : scalar(reaction_instances)=" . scalar(@{$reaction_instances}));
 					
 		if (defined $reaction_instances && scalar(@{$reaction_instances})>0) {
 			foreach $reaction_instance (@{$reaction_instances}) {
@@ -1821,6 +1842,8 @@ sub reaction_db_ids_from_complexes {
 sub pathway_db_ids_from_reaction_db_ids {
     my ($self, $reaction_db_ids, $mitab) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my $source_pathway_ids = "";
     my $dba = $self->dba;
     if (!(defined $dba)) {
@@ -1837,11 +1860,11 @@ sub pathway_db_ids_from_reaction_db_ids {
 	my %seen;
 	foreach $reaction_db_id (@{$reaction_db_ids}) {
 
-            print STDERR "InteractionGenerator.pathway_db_ids_from_reaction_db_ids: reaction_db_id=$reaction_db_id\n";
+            $logger->info("InteractionGenerator.pathway_db_ids_from_reaction_db_ids: reaction_db_id=$reaction_db_id");
 
             $pathway_instances = $dba->fetch_instance(-CLASS => 'Pathway', -QUERY => [['hasEvent',[$reaction_db_id],0]]);
 
-            print STDERR "InteractionGenerator.pathway_db_ids_from_reaction_db_ids: scalar(pathway_instances)=" . scalar(@{$pathway_instances}) . "\n";
+            $logger->info("InteractionGenerator.pathway_db_ids_from_reaction_db_ids: scalar(pathway_instances)=" . scalar(@{$pathway_instances}));
 
             if (defined $pathway_instances && scalar(@{$pathway_instances})>0) {
 #here the mitab method is different from the one below in that the order in which reaction_db_ids come in is retained for the corresponding pathway ids (unless they are duplicates...)
@@ -1853,11 +1876,11 @@ sub pathway_db_ids_from_reaction_db_ids {
 	}
     } else {
 	foreach $reaction_db_id (@{$reaction_db_ids}) {
-	    print STDERR "InteractionGenerator.pathway_db_ids_from_reaction_db_ids: reaction_db_id=$reaction_db_id\n";
+	    $logger->info("InteractionGenerator.pathway_db_ids_from_reaction_db_ids: reaction_db_id=$reaction_db_id");
 	    
 	    $pathway_instances = $dba->fetch_instance(-CLASS => 'Pathway', -QUERY => [['hasEvent',[$reaction_db_id],0]]);
 	    
-	    print STDERR "InteractionGenerator.pathway_db_ids_from_reaction_db_ids: scalar(pathway_instances)=" . scalar(@{$pathway_instances}) . "\n";
+	    $logger->info("InteractionGenerator.pathway_db_ids_from_reaction_db_ids: scalar(pathway_instances)=" . scalar(@{$pathway_instances}));
 	    
 	    if (defined $pathway_instances && scalar(@{$pathway_instances})>0) {
 		# Use a hash to avoid duplications
@@ -2028,13 +2051,15 @@ sub _literature_refs_for_complex {
 sub _insert_intact_ids {
 	my ($self, $interaction) = @_;
 	
+	my $logger= get_logger(__PACKAGE__);
+	
 	my $interactors = $interaction->{'interactors'};
 	my $id1 = $interactors->[0]->identifier->[0];
 	my $id2 = $interactors->[1]->identifier->[0];
 	my $intact_ids = $self->intact->find_intact_ids_for_uniprot_pair_using_web_services($id1, $id2);
 	
 	if (defined $intact_ids && scalar(@{$intact_ids})>0) {
-		print STDERR "InteractionGenerator._insert_intact_ids: intact_ids=" . $self->stringify_intact_ids($intact_ids) . "\n";
+	    $logger->info("InteractionGenerator._insert_intact_ids: intact_ids=" . $self->stringify_intact_ids($intact_ids));
 	}
 	
 	$interaction->{"IntActIds"} = $intact_ids;
