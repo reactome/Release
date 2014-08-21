@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+
+<html> <head>
+<script src="/google.js"></script>
+
+<title>Electronically inferred events in Reactome</title>
+<link rel="stylesheet" type="text/css" href="./stylesheet.css" />
+<!--#include virtual="/cgi-bin/general_meta_tags" -->
+        
+
+        
+
+
+<body>
+
+
+<!--#include virtual="/cgi-bin/navigation_bar" -->
+
+
+<TABLE WIDTH="100%" BORDER="0" CLASS="contents"><TR><TD CLASS="summation">
+<H1 CLASS="frontpage">Electronically inferred events in Reactome</H1>
+
+<p style="text-align:justify">
+
+
+We use the set of manually curated human reactions to electronically infer reactions in twenty evolutionarily divergent species for
+which high-quality whole-genome sequence data are available, and hence a comprehensive and high-quality set of protein predictions
+exists. These species include the laboratory mouse and rat, the nematode <i style="">C. elegans</i>, budding and fission yeasts,
+two plants and <i style="">E.coli</i>. The estimated success rates of our orthology inference strategy can be stated as 'the percentage of
+eligible reactions, defined in step 2 below, in the current human data set for which an event can be inferred in the model organism'.
+By this measure, success rates range from  95.6% for the laboratory mouse to 5.5% for the bacterium <i>S. aureus</i>.
+</p>
+
+<p style="text-align:justify">
+Electronic inference proceeds in four steps.</p>
+
+<p style="text-align:justify">
+1) Protein homology data were obtained from <a href="http://www.ensembl.org/info/docs/compara/index.html">Ensembl Compara</a>. Briefly, this method is based on the construction of gene trees, using the longest protein translation for every Ensembl gene, for all species included in the Compara database. Homologues are deduced from these trees. The method is described in more detail in <a href= "http://www.ncbi.nlm.nih.gov/pubmed/19029536">EnsemblCompara GeneTrees: Analysis of complete, duplication aware phylogenetic trees in vertebrates. Vilella et al., Genome Research, 2008</a>. For the purpose of inferring homologous events in Reactome, we use the Core Compara database, containing vertebrate species, and the Pan Compara database, containing a wider spread of species, available from <a href="http://www.ensemblgenomes.org/">Ensembl Genomes</a>.
+</p>
+
+<p style="text-align:justify">
+2) All human reactions in the Reactome knowledgebase involving one or more proteins are eligible for electronic inference, with two exceptions.
+Reactions that were themselves inferred based on data from the model organism, and reactions involving species in addition to human
+(e.g., HIV infection of human cells) are excluded from electronic inference. Eligible reactions are checked to determine whether each involved
+protein has at least one homologous protein (HP) in the model organism. If a human reaction involves a complex, at least 75%
+of the accessioned protein components of the human complex must have HPs in the model organism.
+</p>
+
+<p style="text-align:justify">
+3) For each reaction that meets these criteria, an equivalent reaction
+is created for the model organism by replacing each human protein with its model organism HP. If a human
+protein corresponds to more than one model organism HP, a  <a href= "/cgi-bin/classbrowser?&CLASS=DefinedSet">DefinedSet</a>
+called 'Homologues of ...' is created, with the model organism HPs as members. For human proteins that
+lack a model organism HP but that are included in complexes inferred due to the 75% threshold rule,
+placeholder model organism entities (called 'Ghost homologue of...') are created.
+</p>
+
+<p style="text-align:justify">
+4) If this analysis generates reactions in the model organism corresponding to any of the steps of a human pathway,
+then the pathway event is also inferred for the model organism.
+</p>
+
+<p style="text-align:justify">
+These electronically inferred reactions are predictions based on a number of assumptions.
+Most basically, we assume that if we can find model organism HPs corresponding to all proteins involved in a
+human reaction, then the proteins mediate the same reaction in the model organism. This may not be true. On the
+other hand we may miss a truly homologous reaction in the model organism because it is mediated by structurally
+divergent proteins and the Compara strategy failed to identify them. Similarly, complexes sharing less than 75%
+homologous subunits between species may nevertheless continue to perform the same function. The electronically
+inferred reactions presented in Reactome are thus not data, but hypotheses useful to direct the design of confirmatory experiments.
+</p>
+
+
+
+<p align="left" style="line-height: 100%"><img border="0" src=
+"images/inference_stats.png" width="525" height="450"></p>
+
+</TD></TR></TBODY></TABLE>
+
+<!--#include virtual="/cgi-bin/footer" -->
+
+</body>
+
+</html>
+
+
+
+
+
