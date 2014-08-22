@@ -41,7 +41,7 @@ use GKB::SOAPServer::ProxyPlusURI;
 
 #my $proxy = 'http://www.ebi.ac.uk/webservices/chebi/webservice?wsdl';
 my $proxy = 'http://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl';
-my $uri = 'http://www.ebi.ac.uk/webservices/chebi/2.0';
+my $uri = 'http://www.ebi.ac.uk/webservices/chebi';
 
 sub AUTOLOAD {
     my $self = shift;
