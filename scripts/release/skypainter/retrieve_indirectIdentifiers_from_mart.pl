@@ -45,7 +45,9 @@ if ($sp->displayName =~ /^(\w)\w+ (\w+)$/) {
     die "Can't form species abbreviation for mart from '" . $sp->displayName . "'.\n";
 }
 
-my $initializer = BioMart::Initializer->new('registryFile'=>'registry.xml','action'=>'cached');
+my $registry_file = 'registry.xml';
+update_registry_file($registry_file);
+my $initializer = BioMart::Initializer->new('registryFile'=>$registry_file,'action'=>'cached');
 my $registry = $initializer->getRegistry;
 
 foreach my $identifier (get_identifiers($sp_mart_name)) {
@@ -67,6 +69,26 @@ foreach my $identifier (get_identifiers($sp_mart_name)) {
     open(my $fh, '>', "output/$sp_mart_name\_$identifier");
     $query_runner->printResults($fh);
     close $fh;
+}
+
+if ($sp_mart_name eq 'hsapiens') {
+    `curl --data-urlencode query\@affy_huex_query.xml http://www.ensembl.org/biomart/martservice/results -o output/hsapiens_affy_huex_1_0_st_v2`;
+}
+
+sub update_registry_file {
+    my $registry_file = shift;
+    
+    require 'ensembl.lib';
+    my $version = get_ensembl_version();
+    return unless $version =~ /^\d+$/;
+    
+    my $contents = `cat $registry_file`;
+    chomp $contents;
+    $contents =~ s/(ensembl_mart_)(\d+)/$1$version/;    
+    
+    my $update = $version != $2;
+    `echo '$contents' > $registry_file` if $update;
+    `rm -r *[Cc]ached*/` if $update;
 }
 
 sub get_identifiers {
