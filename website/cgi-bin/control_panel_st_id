@@ -136,7 +136,6 @@ sub generate_table_model {
 	my $stable_identifier_version;
 	$reactome_release_column_name = $si->reactome_release_column_name;
 	foreach $stable_identifier_version (@{$stable_identifier_versions}) {
-	    print "\n\nRELEASE VERSION\n\n";
 		my $version = $si->get_att_value_from_identifier_database_instance($stable_identifier_version, 'identifierVersion');
 			
 		my $is_current = 0;
@@ -153,7 +152,6 @@ sub generate_table_model {
 	    if ($release_ids && scalar($release_ids) =~ /ARRAY/) {
 	    	my $release_id;
 	    	foreach $release_id (@{$release_ids}) {
-		    print "\n\nRELEASE ID\n\n";
 				my @cols;
 		
 				my $release = $si->get_att_value_from_identifier_database_instance($release_id, $reactome_release_column_name);
