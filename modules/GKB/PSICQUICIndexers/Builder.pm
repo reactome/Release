@@ -44,6 +44,8 @@ use GKB::Utils::Timer;
 use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -116,7 +118,9 @@ sub set_builder_params {
 sub buildPart {
 	my ($self) = @_;
 	
-	print STDERR "\n\nBuilder.buildPart: entered\n";
+	my $logger = get_logger(__PACKAGE__);
+	
+	$logger->info("Builder.buildPart: entered");
 	
 	$self->timer->start($self->timer_message);
 	
@@ -147,9 +151,9 @@ sub print_termination_status {
 	
 	if (defined $self->termination_status) {
 		if (defined $self->class_name) {
-			print STDERR $self->class_name . ": " . $self->termination_status . "\n";
+		    print $self->class_name . ": " . $self->termination_status . "\n";
 		} else {
-			print STDERR $self->termination_status . "\n";
+		    print $self->termination_status . "\n";
 		}
 	}
 }
@@ -157,27 +161,29 @@ sub print_termination_status {
 sub get_current_download_dir {
 	my ($self) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	if (defined $self->current_download_dir) {
-		return $self->current_download_dir;
+	    return $self->current_download_dir;
 	}
 	
 	my $release_num = $self->builder_params->get_release_num();
 	my $gkb_root_dir = $self->builder_params->get_gkb_root_dir();
 	
 	if (!(defined $release_num)) {
-		print STDERR "Builder.get_current_download_dir: WARNING - release number is undef\n";
-    	$self->termination_status("release number is undef");
-    	return undef;		
+	    $logger->warn("Builder.get_current_download_dir: WARNING - release number is undef");
+	    $self->termination_status("release number is undef");
+	    return undef;		
 	}
 	if (!(defined $gkb_root_dir)) {
-		print STDERR "Builder.get_current_download_dir: WARNING - GKB directory is undef\n";
-    	$self->termination_status("GKB directory is undef");
-    	return undef;		
+	    $logger->warn("Builder.get_current_download_dir: WARNING - GKB directory is undef");
+	    $self->termination_status("GKB directory is undef");
+	    return undef;		
 	}
 
 	my $current_download_dir = "$gkb_root_dir/website/html/download/$release_num";
 	if (!(-e $current_download_dir)) {
-		print STDERR "Builder.get_current_download_dir: WARNING - missing directory: $current_download_dir\n";
+	    $logger->warn("Builder.get_current_download_dir: WARNING - missing directory: $current_download_dir");
 	    $self->termination_status("missing directory: $current_download_dir");
 	    return undef;		
 	}
@@ -188,101 +194,109 @@ sub get_current_download_dir {
 }
 
 sub create_index_path {
-	my ($self) = @_;
-	
-	if (defined $self->index_path) {
-		return $self->index_path;
+    my ($self) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
+    
+    if (defined $self->index_path) {
+	return $self->index_path;
+    }
+    
+    my $current_download_dir = $self->get_current_download_dir();
+    my $status;
+    
+    my $indexes_path = "$current_download_dir/psicquic_indexes";
+    if (!(-e $indexes_path)) {
+	$status = system("mkdir $indexes_path");
+	if ($status != 0) {
+	    $logger->warn("Builder.create_index_path: WARNING - could not make directory $indexes_path");
+	    $self->termination_status("could not make directory $indexes_path");
+	    return undef;					
 	}
-	
-	my $current_download_dir = $self->get_current_download_dir();
-	my $status;
-	
-	my $indexes_path = "$current_download_dir/psicquic_indexes";
-	if (!(-e $indexes_path)) {
-		$status = system("mkdir $indexes_path");
-		if ($status != 0) {
-			print STDERR "Builder.create_index_path: WARNING - could not make directory $indexes_path\n";
-	    	$self->termination_status("could not make directory $indexes_path");
-	    	return undef;					
-		}
+    }
+
+    my $index_path = "$indexes_path/" . $self->index_dir_name;
+    if (!(-e $index_path)) {
+	$status = system("mkdir $index_path");
+	if ($status != 0) {
+	    $logger->warn("Builder.create_index_path: WARNING - could not make directory $index_path");
+	    $self->termination_status("could not make directory $index_path");
+	    return undef;					
 	}
-	my $index_path = "$indexes_path/" . $self->index_dir_name;
-	if (!(-e $index_path)) {
-		$status = system("mkdir $index_path");
-		if ($status != 0) {
-			print STDERR "Builder.create_index_path: WARNING - could not make directory $index_path\n";
-	    	$self->termination_status("could not make directory $index_path");
-	    	return undef;					
-		}
-	}
-	
-	$self->index_path($index_path);
-	
-	return $index_path;
+    }
+
+    $self->index_path($index_path);
+
+    return $index_path;
 }
 
 sub get_mitab_path {
-	my ($self) = @_;
-	
-	print STDERR "Builder.get_mitab_path: this subroutine must be explicitly defined in the inheriting class\n";
-	exit(1);
+    my ($self) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->error_die("Builder.get_mitab_path: this subroutine must be explicitly defined in the inheriting class");
 }
 
 sub create_mitab_path {
-	my ($self) = @_;
-	
-	if (defined $self->mitab_path) {
-		return $self->mitab_path;
-	}
-	
-	my $mitab_path = $self->get_mitab_path();
-	
-	print STDERR "Builder.create_mitab_path: INITIAL mitab_path=$mitab_path\n";
+    my ($self) = @_;
 
-	my $command;
-	my $status;
-	my $gzipped_mitab_path = undef;
-	if ($mitab_path =~ /\.gz$/) {
-		$gzipped_mitab_path = $mitab_path;
-		$mitab_path =~ s/\.gz$//;
-	} elsif (!(-e $mitab_path)) {
-		$gzipped_mitab_path = "$mitab_path.gz";		
+    my $logger = get_logger(__PACKAGE__);
+
+    if (defined $self->mitab_path) {
+	return $self->mitab_path;
+    }
+    
+    my $mitab_path = $self->get_mitab_path();
+
+    $logger->info("Builder.create_mitab_path: INITIAL mitab_path=$mitab_path");
+
+    my $command;
+    my $status;
+    my $gzipped_mitab_path = undef;
+    if ($mitab_path =~ /\.gz$/) {
+	$gzipped_mitab_path = $mitab_path;
+	$mitab_path =~ s/\.gz$//;
+    } elsif (!(-e $mitab_path)) {
+	$gzipped_mitab_path = "$mitab_path.gz";		
+    }
+    if (defined $gzipped_mitab_path) {
+	if (!(-e $gzipped_mitab_path)) {
+	    $logger->warn("Builder.create_mitab_path: WARNING - missing gzipped MITAB file: $gzipped_mitab_path");
+	    $self->termination_status("missing gzipped MITAB file: $gzipped_mitab_path");
+	    return undef;		
 	}
-	if (defined $gzipped_mitab_path) {
-		if (!(-e $gzipped_mitab_path)) {
-			print STDERR "Builder.create_mitab_path: WARNING - missing gzipped MITAB file: $gzipped_mitab_path\n";
-	    	$self->termination_status("missing gzipped MITAB file: $gzipped_mitab_path");
-	    	return undef;		
-		}
-		$status = system("gunzip $gzipped_mitab_path");
-		if ($status != 0) {
-			print STDERR "Builder.create_mitab_path: WARNING - could not unzip $gzipped_mitab_path\n";
-	    	$self->termination_status("could not unzip $gzipped_mitab_path");
-	    	return undef;					
-		}
-		$self->gzipped_mitab_path($gzipped_mitab_path);
+	$status = system("gunzip $gzipped_mitab_path");
+	if ($status != 0) {
+	    $logger->warn("Builder.create_mitab_path: WARNING - could not unzip $gzipped_mitab_path");
+	    $self->termination_status("could not unzip $gzipped_mitab_path");
+	    return undef;					
 	}
+	$self->gzipped_mitab_path($gzipped_mitab_path);
+    }
 	
-	if (!(-e $mitab_path)) {
-		print STDERR "Builder.create_mitab_path: WARNING - missing MITAB file: $mitab_path\n";
+    if (!(-e $mitab_path)) {
+	$logger->warn("Builder.create_mitab_path: WARNING - missing MITAB file: $mitab_path");
     	$self->termination_status("missing MITAB file: $mitab_path");
     	return undef;		
-	}
-	if (-s $mitab_path == 0) {
-		print STDERR "Builder.create_mitab_path: WARNING - zero length MITAB file: $mitab_path\n";
+    }
+    if (-s $mitab_path == 0) {
+    	$logger->warn("Builder.create_mitab_path: WARNING - zero length MITAB file: $mitab_path");
     	$self->termination_status("zero length MITAB file: $mitab_path");
     	return undef;		
-	}
-	
-	$self->mitab_path($mitab_path);
-	
-	print STDERR "Builder.create_mitab_path: FINAL mitab_path=$mitab_path\n";
+    }
 
-	return $mitab_path;
+    $self->mitab_path($mitab_path);
+
+    $logger->info("Builder.create_mitab_path: FINAL mitab_path=$mitab_path");
+
+    return $mitab_path;
 }
 
 sub build_indexes {
 	my ($self) = @_;
+	
+	my $logger = get_logger(__PACKAGE__);
 	
 	my $status;
 	my $index_path = $self->create_index_path();
@@ -293,52 +307,52 @@ sub build_indexes {
 	my $cd_command = "cd $index_path";
 	my $checkout_command = "svn checkout https://psicquic.googlecode.com/svn/trunk/psicquic-webservice";
 	my $command = "$cd_command; $checkout_command";
-	print STDERR "Builder.build_indexes: checkout, $command=$command\n";
+	$logger->info("Builder.build_indexes: checkout, $command=$command");
 	$status = system($command);
 	if ($status != 0) {
-		print STDERR "Builder.build_indexes: WARNING - could not run Subversion checkout\n";
+	    $logger->warn("Builder.build_indexes: WARNING - could not run Subversion checkout");
 	    $self->termination_status("could not run Subversion checkout");
 	}
 	
 	# Do the indexing
 	my $compile_command = "mvn -e clean compile -P createIndex -D psicquic.index=$index_path -D mitabFile=$mitab_path -D hasHeader=true";
 	$command = "$cd_command/psicquic-webservice; $compile_command";
-	print STDERR "Builder.build_indexes: indexing, $command=$command\n";
+	$logger->info("Builder.build_indexes: indexing, $command=$command");
 	$status = system($command);
 	if ($status != 0) {
-		print STDERR "Builder.build_indexes: WARNING - could not run Maven compile\n";
+	    $logger->warn("Builder.build_indexes: WARNING - could not run Maven compile");
 	    $self->termination_status("could not run Maven compile");
 	}
 	
 	if ($create_war_flag) {
-		# Create a WAR file, this is a nice-to-have rather than being really essential.
-		my $package_command = "mvn clean package -D psicquic.index=$index_path";
-		$command = "$cd_command/psicquic-webservice; $package_command";
-		print STDERR "Builder.build_indexes: packaging, $command=$command\n";
-		$status = system($command);
-		if ($status != 0) {
-			print STDERR "Builder.build_indexes: WARNING - could not run Maven packaging\n";
-		    $self->termination_status("could not run Maven packaging");
-		}
+	    # Create a WAR file, this is a nice-to-have rather than being really essential.
+	    my $package_command = "mvn clean package -D psicquic.index=$index_path";
+	    $command = "$cd_command/psicquic-webservice; $package_command";
+	    $logger->info("Builder.build_indexes: packaging, $command=$command");
+	    $status = system($command);
+	    if ($status != 0) {
+		$logger->warn("Builder.build_indexes: WARNING - could not run Maven packaging");
+		$self->termination_status("could not run Maven packaging");
+	    }
 	} else {
-		# Get rid of the code, we don't need it anymore
-		my $delete_command = "rm -rf psicquic-webservice";
-		$command = "$cd_command; $delete_command";
-		print STDERR "Builder.build_indexes: deleting, $command=$command\n";
-		$status = system($command);
-		if ($status != 0) {
-			print STDERR "Builder.build_indexes: WARNING - could not delete psicquic-webservice\n";
-		    $self->termination_status("could not delete psicquic-webservice");
-		}
+	    # Get rid of the code, we don't need it anymore
+	    my $delete_command = "rm -rf psicquic-webservice";
+	    $command = "$cd_command; $delete_command";
+	    $logger->info("Builder.build_indexes: deleting, $command=$command");
+	    $status = system($command);
+	    if ($status != 0) {
+		$logger->warn("Builder.build_indexes: WARNING - could not delete psicquic-webservice");
+		$self->termination_status("could not delete psicquic-webservice");
+	    }
 	}
 	
 	# Compress everything.
 	my $compress_command = "tar zcvf " . $self->index_dir_name . ".tgz " . $self->index_dir_name;
 	$command = "$cd_command/..; $compress_command";
-	print STDERR "Builder.build_indexes: compressing, $command=$command\n";
+	$logger->info("Builder.build_indexes: compressing, $command=$command");
 	$status = system($command);
 	if ($status != 0) {
-		print STDERR "Builder.build_indexes: WARNING - could not compress " . $self->index_dir_name . "\n";
+	    $logger->warn("Builder.build_indexes: WARNING - could not compress " . $self->index_dir_name);
 	    $self->termination_status("could not compress " . $self->index_dir_name);
 	    return;
 	}
@@ -346,26 +360,28 @@ sub build_indexes {
 	# Delete original indexes etc.
 	my $rm_command = "rm -rf " . $self->index_dir_name;
 	$command = "$cd_command/..; $rm_command";
-	print STDERR "Builder.build_indexes: delete, $command=$command\n";
+	$logger->info("Builder.build_indexes: delete, $command=$command");
 	$status = system($command);
 	if ($status != 0) {
-		print STDERR "Builder.build_indexes: WARNING - could not delete " . $self->index_dir_name . "\n";
+	    $logger->warn("Builder.build_indexes: WARNING - could not delete " . $self->index_dir_name);
 	    $self->termination_status("could not delete " . $self->index_dir_name);
 	    return;
 	}
 }
 
 sub clean_up {
-	my ($self) = @_;
-	
-	my $status;
-	if (defined $self->gzipped_mitab_path) {
-		$status = system("gzip " . $self->mitab_path);
-		if ($status != 0) {
-			print STDERR "ReactomeBuilder.buildPart: WARNING - could not gzip " . $self->mitab_path . "\n";
-	    	$self->termination_status("could not gzip " . $self->mitab_path);
-		}
+    my ($self) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    my $status;
+    if (defined $self->gzipped_mitab_path) {
+	$status = system("gzip " . $self->mitab_path);
+	if ($status != 0) {
+	    $logger->warn("ReactomeBuilder.buildPart: WARNING - could not gzip " . $self->mitab_path);
+	    $self->termination_status("could not gzip " . $self->mitab_path);
 	}
+    }
 }
 
 1;
