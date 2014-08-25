@@ -32,6 +32,8 @@ use GKB::PSICQUICIndexers::Builder;
 use Data::Dumper;
 use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::PSICQUICIndexers::Builder);
 
@@ -71,39 +73,41 @@ sub get_ok_field {
 }
 
 sub get_mitab_path {
-	my ($self) = @_;
-	
-	my $current_download_dir = $self->get_current_download_dir();
-	my $fi_filename = "FIsInMITTab.txt";
-	
-	print STDERR "ReactomeFIBuilder.get_mitab_path: deleting old FI file\n";
-	
-	my $status = system("cd $current_download_dir; rm -f $fi_filename $fi_filename.zip");
-	if ($status != 0) {
-		print STDERR "ReactomeFIBuilder.get_mitab_path: WARNING - could not delete file $fi_filename\n";
-	    $self->termination_status("could not delete file $fi_filename");
-	    return undef;					
-	}
-	
-	print STDERR "ReactomeFIBuilder.get_mitab_path: downloading FI file\n";
-	
-	$status = system("wget -P $current_download_dir http://reactomews.oicr.on.ca:8080/caBigR3WebApp/hosted/org.reactome.r3.fiview.gwt.FIView/$fi_filename.zip");
-	if ($status != 0) {
-		print STDERR "ReactomeFIBuilder.get_mitab_path: WARNING - could not get file $fi_filename from reactomedev\n";
-	    $self->termination_status("could not get file $fi_filename from reactomedev");
-	    return undef;					
-	}
+    my ($self) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
-	print STDERR "ReactomeFIBuilder.get_mitab_path: uncompressing FI file\n";
+    my $current_download_dir = $self->get_current_download_dir();
+    my $fi_filename = "FIsInMITTab.txt";
 	
-	$status = system("cd $current_download_dir; unzip $fi_filename.zip");
-	if ($status != 0) {
-		print STDERR "ReactomeFIBuilder.get_mitab_path: WARNING - could not unzip file $fi_filename.zip\n";
-	    $self->termination_status("could not unzip file $fi_filename.zip");
-	    return undef;					
-	}
+    $logger->info("ReactomeFIBuilder.get_mitab_path: deleting old FI file");
 	
-	return "$current_download_dir/$fi_filename";
+    my $status = system("cd $current_download_dir; rm -f $fi_filename $fi_filename.zip");
+    if ($status != 0) {
+	$logger->warn("ReactomeFIBuilder.get_mitab_path: WARNING - could not delete file $fi_filename");
+	$self->termination_status("could not delete file $fi_filename");
+	return undef;					
+    }
+
+    $logger->info("ReactomeFIBuilder.get_mitab_path: downloading FI file");
+
+    $status = system("wget -P $current_download_dir http://reactomews.oicr.on.ca:8080/caBigR3WebApp/hosted/org.reactome.r3.fiview.gwt.FIView/$fi_filename.zip");
+    if ($status != 0) {
+	$logger->warn("ReactomeFIBuilder.get_mitab_path: WARNING - could not get file $fi_filename from reactomedev");
+	$self->termination_status("could not get file $fi_filename from reactomedev");
+	return undef;					
+    }
+
+    $logger->info("ReactomeFIBuilder.get_mitab_path: uncompressing FI file");
+
+    $status = system("cd $current_download_dir; unzip $fi_filename.zip");
+    if ($status != 0) {
+	$logger->warn("ReactomeFIBuilder.get_mitab_path: WARNING - could not unzip file $fi_filename.zip");
+	$self->termination_status("could not unzip file $fi_filename.zip");
+	return undef;					
+    }
+
+    return "$current_download_dir/$fi_filename";
 }
 
 1;

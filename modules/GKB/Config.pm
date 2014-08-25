@@ -62,6 +62,7 @@ use vars qw(@ISA     @EXPORT
 	    $PATHWAY_OF_THE_MONTH
 	    $SERVLET_CONTAINER_DEPLOY_DIR
 	    $LIBSBML_LD_LIBRARY_PATH
+	    $LOG_CONF
 	    );
 
 use Exporter();
@@ -253,6 +254,33 @@ $SERVLET_CONTAINER_DEPLOY_DIR = "$GK_ROOT_DIR/../apache-tomcat/webapps";
 
 $LIBSBML_LD_LIBRARY_PATH = "/usr/local/lib";
 
+############################################################
+# A simple root logger with a Log::Log4perl::Appender::File 
+# file appender in Perl.
+############################################################
+$LOG_CONF = '
+log4perl.rootLogger=TRACE, FullLog, ErrorLog
+
+log4perl.appender.FullLog=Log::Log4perl::Appender::File
+log4perl.appender.FullLog.filename='.get_name().'.log
+log4perl.appender.FullLog.mode=append
+log4perl.appender.FullLog.layout=PatternLayout
+log4perl.appender.FullLog.layout.ConversionPattern=%p %l %d - %m%n
+
+log4perl.appender.ErrorLog=Log::Log4perl::Appender::File
+log4perl.appender.ErrorLog.filename='.get_name().'.err
+log4perl.appender.ErrorLog.mode=append
+log4perl.appender.ErrorLog.layout=PatternLayout
+log4perl.appender.ErrorLog.layout.ConversionPattern=%p %l %d - %m%n
+log4perl.appender.ErrorLog.Threshold = WARN
+';
+
+sub get_name {
+    my ($name) = $0 =~ /(.*)\./;
+    
+    return $name;
+}
+
 ##################################################################################
 @EXPORT = qw(
 	     $GK_DB_NAME
@@ -313,6 +341,7 @@ $LIBSBML_LD_LIBRARY_PATH = "/usr/local/lib";
 	     $PATHWAY_OF_THE_MONTH
 	     $SERVLET_CONTAINER_DEPLOY_DIR
 	     $LIBSBML_LD_LIBRARY_PATH
+	     $LOG_CONF
 	     );
 
 
