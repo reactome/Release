@@ -52,12 +52,7 @@ use GKB::Config;
 use GKB::IntAct;
 use GKB::Utils;
 use Log::Log4perl qw/get_logger/;
-
-my ($file_name) = $0 =~ /(.*)\./;
-$file_name =~ s/^\.//g;
-Log::Log4perl->init(dirname(__FILE__) . $file_name . "_log.conf");
-
-
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -2056,7 +2051,7 @@ sub _insert_intact_ids {
 	my $interactors = $interaction->{'interactors'};
 	my $id1 = $interactors->[0]->identifier->[0];
 	my $id2 = $interactors->[1]->identifier->[0];
-	my $intact_ids = $self->intact->find_intact_ids_for_uniprot_pair_using_web_services($id1, $id2);
+	my $intact_ids = $self->intact->find_intact_ids_for_uniprot_pair($id1, $id2);
 	
 	if (defined $intact_ids && scalar(@{$intact_ids})>0) {
 	    $logger->info("InteractionGenerator._insert_intact_ids: intact_ids=" . $self->stringify_intact_ids($intact_ids));
