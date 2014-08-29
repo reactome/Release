@@ -278,5 +278,6 @@ sub hide_password {
     
     s/$opt_pass/$asterisks/ foreach @input;
     
+    return $input[0] if (scalar @input == 1);
     return @input;
 }
