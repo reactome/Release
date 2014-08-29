@@ -429,6 +429,7 @@ sub generate_image_from_file_basic {
 sub generate_image {
     my ($self, $image, $filename) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
     $logger->error_die("GenerateText.generate_image: ERROR - this method must be defined in the subclass");
 }
 
@@ -748,6 +749,7 @@ sub generate_bullit_text {
     my $logger = get_logger(__PACKAGE__);
 
     $logger->error_die("GenerateText.generate_bullit_text: ERROR - this method must be defined in the subclass");
+}
 
 sub generate_numbered_text {
     my ($self, $text, $number) = @_;

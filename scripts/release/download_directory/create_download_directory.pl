@@ -191,74 +191,76 @@ my @cmds = (
     "mkdir $release_nr/databases",
     "mysqldump --opt $mysqldump_db_options | gzip -c > $release_nr/databases/gk_current.sql.gz",
     "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
-    "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
-    "./make_release_tarball.pl $opt_r",
+    "mysqldump --opt $mysqldump_wordpress_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
 
     "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' | gzip -c > $release_nr/$species_file_stem.sbml.gz",
     "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.2.sbml.gz",
-    "perl PSIMI_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.psimi.xml.gz",
+    #"perl PSIMI_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.psimi.xml.gz",
 
     "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options",
     "perl psicquic_indexers.pl -release $release_nr",
 
     "cp ../goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome $release_nr/gene_association.reactome",
 
-    "cd WebELVTool",
-    "rm -f $diagram_dump_filename/PNG/*",
-    "rm -f $diagram_dump_filename/PDF/*",
-    "./runDiagramDumper.sh $diagram_dump_options",
-    "cd $diagram_dump_filename",
-    "rm -f *.zip",
-    "zip -r diagrams.pdf.zip PDF",
-    "zip -r diagrams.png.zip PNG",
-    "mv *.zip ../download_directory/$release_nr",
+    "cd WebELVTool;
+    rm -f $diagram_dump_filename/PNG/*;
+    rm -f $diagram_dump_filename/PDF/*;
+    ./runDiagramDumper.sh $diagram_dump_options;
+    cd $diagram_dump_filename;
+    rm -f *.zip;
+    zip -r diagrams.pdf.zip PDF;
+    zip -r diagrams.png.zip PNG;
+    mv *.zip ../download_directory/$release_nr",
     
     qq{perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" -class Complex $reactome_db_options -output DB_ID -output 'species.name[0]' -output _displayName > $release_nr/curated_complexes.txt},
     qq{perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" -class Complex $reactome_db_options -output 'stableIdentifier._displayName' -output 'species.name[0]' -output _displayName > $release_nr/curated_complexes.stid.txt},
     
-    "cd biopaxexporter",
-    "./runAllSpecies.sh $biopaxexporter_db_options .",
-    "zip biopax *.owl",
-    "rm *.owl",
-    "cd -",
-    "mv biopaxexporter/biopax.zip $release_nr/biopax2.zip",
+    "cd biopaxexporter;
+    ./runAllSpecies.sh $biopaxexporter_db_options .;
+    zip biopax *.owl;
+    rm *.owl;
+    cd -;
+    mv biopaxexporter/biopax.zip $release_nr/biopax2.zip",
     
-    "cd biopaxexporter",
-    "./runAllSpeciesLevel3.sh $biopaxexporter_db_options .",
-    "zip biopax *.owl",
-    "rm -f *.owl",
-    "cd -",
-    "mv biopaxexporter/biopax.zip $release_nr/biopax.zip",
+    "cd biopaxexporter;
+    ./runAllSpeciesLevel3.sh $biopaxexporter_db_options .;
+    zip biopax *.owl;
+    rm -f *.owl;
+    cd -;
+    mv biopaxexporter/biopax.zip $release_nr/biopax.zip",
     
-    "cd WebELVTool",
-    "./runGSEAOutput.sh $reactome_to_msig_export_db_options",
-    "zip $reactome_to_msig_export_db_filename.zip $reactome_to_msig_export_db_filename",
-    "cd -",
-    "mv WebELVTool/$reactome_to_msig_export_db_filename.zip $release_nr",
+    "cd WebELVTool;
+    ./runGSEAOutput.sh $reactome_to_msig_export_db_options;
+    zip $reactome_to_msig_export_db_filename.zip $reactome_to_msig_export_db_filename;
+    cd -;
+    mv WebELVTool/$reactome_to_msig_export_db_filename.zip $release_nr",
     
     "./generate_packaged_pathway_diagrams.sh $diagram_dump_options",
-    "perl genbook_rtf.pl -depth 100 $reactome_db_options -split -react_rep 2",
-    "zip -r TheReactomeBook.rtf.zip TheReactomeBook",
-    "rm -rf TheReactomeBook",
-    "mv TheReactomeBook.rtf.zip $release_nr",
-    "perl genbook_pdf.pl -depth 100 $reactome_db_options -stdout -react_rep 2 > TheReactomeBook.pdf",
-    "zip TheReactomeBook.pdf.zip TheReactomeBook.pdf",
-    "rm TheReactomeBook.pdf",
-    "mv TheReactomeBook.pdf.zip $release_nr",
+    
+    "perl genbook_rtf.pl -depth 100 $reactome_db_options -split -react_rep 2;
+    zip -r TheReactomeBook.rtf.zip TheReactomeBook;
+    rm -rf TheReactomeBook;
+    mv TheReactomeBook.rtf.zip $release_nr",
+    
+    "perl genbook_pdf.pl -depth 100 $reactome_db_options -stdout -react_rep 2 > TheReactomeBook.pdf;
+    zip TheReactomeBook.pdf.zip TheReactomeBook.pdf;
+    rm TheReactomeBook.pdf;
+    mv TheReactomeBook.pdf.zip $release_nr",
+    
     "perl fetchEmptyProject.pl reactome_data_model -outputdir $release_nr $fetch_empty_project_db_options",
-    );
+);
 
 if ($exists_stable_identifier_db) {
-	push(@cmds, "perl create_EB-eye_dump.pl $release_nr $create_ebeye_db_options | gzip -c > $release_nr/EB-eye.xml.gz");
+    push(@cmds, "perl create_EB-eye_dump.pl $release_nr $create_ebeye_db_options | gzip -c > $release_nr/EB-eye.xml.gz");
 }
 
-print STDERR "All commande to be executed:\n", join("\n",@cmds), "\n\n";
+print STDERR "All commands to be executed:\n", join("\n",hide_password(@cmds)), "\n\n";
 
 my $broken_command_counter = 0;
 foreach my $cmd (@cmds) {
-    print "cmd=$cmd\n";
+    print "cmd=" . hide_password($cmd) . "\n";
     if (system($cmd) != 0) {
-    	print STDERR "WARNING - something went wrong while executing '$cmd'!!\n";
+    	print STDERR "WARNING - something went wrong while executing '" . hide_password($cmd) . "'!!\n";
     	$broken_command_counter++;
     }
 }
@@ -269,3 +271,12 @@ if ($broken_command_counter > 0) {
 
 print "create_download_directory.pl has finished its job\n";
 
+sub hide_password {
+    my @input = @_;
+    
+    my $asterisks = '*' x length $opt_pass;
+    
+    s/$opt_pass/$asterisks/ foreach @input;
+    
+    return @input;
+}
