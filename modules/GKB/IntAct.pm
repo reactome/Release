@@ -150,7 +150,7 @@ sub get_interaction_data {
     my $file = $self->get_file();
     (my $db_file = $file) =~ s/txt$/db/;
 
-    my $db = BerkeleyDB::Hash->new(-Filename => $db_file, -Flags => DB_CREATE);
+    $db = BerkeleyDB::Hash->new(-Filename => $db_file, -Flags => DB_CREATE);
 
     open INT, "cut -f1,2,14 $file |";
     while (<INT>) {

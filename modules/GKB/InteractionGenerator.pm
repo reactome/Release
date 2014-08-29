@@ -192,6 +192,9 @@ sub find_interactors_for_ReferenceSequences {
 
 sub find_interactors_for_ReferenceSequence {
     my ($self, $rs, $interactions, $participating_protein_count_cutoff) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     $interactions ||= {};
     my $participating_protein_count;
     
@@ -248,7 +251,7 @@ sub find_interactors_for_ReferenceSequence {
 			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
 			if ($self->add_intact_ids_flag) {
 			    if (!(defined $participating_protein_count_cutoff) || $participating_protein_count <= $participating_protein_count_cutoff) {
-				print STDERR "InteractionGenerator.find_interactors_for_ReferenceSequence: participating_protein_count=$participating_protein_count\n";
+				$logger->info("InteractionGenerator.find_interactors_for_ReferenceSequence: participating_protein_count=$participating_protein_count");
 				
 				$self->_insert_intact_ids($interactions->{$t1->db_id}->{$t2->db_id});
 			    }
