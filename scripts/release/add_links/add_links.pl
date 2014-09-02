@@ -5,7 +5,6 @@
 # as UniProt.  These will appear as hyperlinks on
 # displayed web pages.
 
-
 BEGIN {
     my ($path) = $0 =~ /^(\S+)$/;
     my @a = split('/',$path);
@@ -25,9 +24,11 @@ use strict;
 use GKB::Config;
 use Cwd;
 
-use constant EXE => './add_links_to_single_resource.pl';
+use constant EXE  => './add_links_to_single_resource.pl';
+use constant RLOG => 'resource_log.txt';
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_edb,$opt_db_ids);
+my $pid;
 
 # Parse commandline
 my $usage = "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -edb ENSEMBL_db -db_ids 'id1,id2,..'\n";
@@ -81,25 +82,33 @@ if (defined $opt_edb && !($opt_edb eq '')) {
 	$reactome_db_options .= " -edb $opt_edb";
 }
 
+
+# These are the ones that have failed
+#my @resources = (
+#'ENSGReferenceDNASequenceToReferencePeptideSequence',
+#'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
+#'OrphanetToUniprotReferenceDNASequence'
+#    );
+
 my @resources = (
 	'ENSGReferenceDNASequenceToReferencePeptideSequence',
 	'EntrezGeneToUniprotReferenceDNASequence',
 	'BioGPSGeneToUniprotReferenceDNASequence',
 	'CTDGeneToUniprotReferenceDNASequence',
 	'DbSNPGeneToUniprotReferenceDNASequence',
-	'GenecardsReferenceDatabaseToReferencePeptideSequence',
-	'OmimReferenceDNASequenceToReferencePeptideSequence',
-	'UCSCReferenceDatabaseToReferencePeptideSequence',
-	'RefseqReferenceDatabaseToReferencePeptideSequence',
-	'RefseqReferenceRNASequenceToReferencePeptideSequence',
-	'KEGGReferenceGeneToReferencePeptideSequence',
-	'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
-	'BioModelsEventToDatabaseIdentifier',
-	'FlyBaseToUniprotReferenceDNASequence',
-	'OrphanetToUniprotReferenceDNASequence',
-	'PDBToReferencePeptideSequence',
-	'DOCKBlasterToUniprotDatabaseIdentifier',
-	'RHEAIdentifierToReactionlikeEvent',
+#	'GenecardsReferenceDatabaseToReferencePeptideSequence',
+#	'OmimReferenceDNASequenceToReferencePeptideSequence',
+#	'UCSCReferenceDatabaseToReferencePeptideSequence',
+#	'RefseqReferenceDatabaseToReferencePeptideSequence',
+#	'RefseqReferenceRNASequenceToReferencePeptideSequence',
+#	'KEGGReferenceGeneToReferencePeptideSequence',
+#	'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
+#	'BioModelsEventToDatabaseIdentifier',
+#	'FlyBaseToUniprotReferenceDNASequence',
+#	'OrphanetToUniprotReferenceDNASequence',
+#	'PDBToReferencePeptideSequence',
+#	'DOCKBlasterToUniprotDatabaseIdentifier',
+#	'RHEAIdentifierToReactionlikeEvent',
 );
 
 my $resource;
@@ -111,32 +120,36 @@ foreach $resource (@resources) {
     	next;
     }
 
-    print STDERR "$resource\n";
+    #print STDERR "$resource\n";
     run($exe, "$reactome_db_options -res $resource", $resource);
 }
 
+exit 0 if defined $pid && $pid == 0;
+
 # pause until all jobs are done
-while(1) {
-    sleep 300 and next if check_running($exe);
-    last;
+while(check_running($exe)) {
+    sleep 300;
 }
 
 my (@failed, @passed);
-if (-e "resources.txt") {
-    open IN, "resources.txt";
+if (-e RLOG) {
+    open IN, RLOG or die $!;
     while (<IN>) { 
-	push @passed, $_ if /PASSED/;
-	push @failed, $_ if /FAILED/;
+	my ($resource) = split;
+	push @passed, $resource if /PASSED/;
+	push @failed, $resource if /FAILED/;
     }
 }
 
 if (@failed) {
     my $failed = @failed;
     print STDERR "$0: $failed linkers failed to run to completion, please check the diagnostic output!\n",
-    join("\n",@failed), "\n";
+    my %failed = map { $_ => 1 } @failed;
+    print "The following resources failed:\n", join("\n", (sort keys %failed)), "\n";
 }
 if (@passed) {
-    print STDERR join("\n",@passed), "\n";
+    my %passed = map { $_ => 1 } @passed;
+    print "The following resources passed:\n", join("\n", (sort keys %passed)), "\n";
 }
 
 print STDERR "$0 has finished its job\n";
@@ -146,9 +159,11 @@ sub run {
     my $args = shift;
     my $resource = shift;
 
-    my $stdout = "logs/$resource.stdout.txt";
-    my $stderr = "logs/$resource.stderr.txt";
-
+    if (defined $pid && $pid == 0) {
+        # this is a child process, we are done.
+        return 0;
+    }
+    
     my $howmany = 99;
 
     while ($howmany > 6) {
@@ -157,14 +172,31 @@ sub run {
 	sleep 300 if $howmany > 6;
     }
 
-    print "running $exe $args\n";
-    system "./run.pl $exe $args > $stdout 2> $stderr &";
+    $pid = fork;
+
+    unless ($pid) {
+	print "Running $exe $args\n";
+	_run($exe,$resource,$args);
+    }
 }
 
+sub _run {
+    my ($exe,$resource,$args) = @_;
+
+    chomp(my $timestamp = `date`);
+    print STDERR "$timestamp Starting $args\n";
+
+    my $retval = system "$exe $args > logs/$resource.out 2>&1";
+
+    chomp($timestamp = `date`);
+    open LOG, ">>" . RLOG or die $!;
+    my $state = $retval ? 'FAILED' : 'PASSED';
+    print LOG "$resource $state $retval $timestamp\n";
+    close LOG;
+}
 
 sub check_running {
     my $exe = shift;
-    my @running = `ps aux |grep $exe | grep -v 'run.pl' | grep -v grep`;
-    #print STDERR "These are running:\n@running\n";
+    my @running = `ps aux |grep $exe | grep -v 'grep' | grep -v 'sh -c'`;
     return scalar(@running);
 }
