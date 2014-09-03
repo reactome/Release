@@ -177,6 +177,8 @@ rm -fr databases*
 echo -e "Setting up Apache..."
 
 cd /usr/local/gkb/website/html
+mkdir img-fp
+mkdir img-tmp
 chown -R www-data img-*
 
 cd /etc/apache2/mods-available
