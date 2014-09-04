@@ -96,6 +96,7 @@ my @resources = (
 	'BioGPSGeneToUniprotReferenceDNASequence',
 	'CTDGeneToUniprotReferenceDNASequence',
 	'DbSNPGeneToUniprotReferenceDNASequence',
+	'PROToReferencePeptideSequence',
 #	'GenecardsReferenceDatabaseToReferencePeptideSequence',
 #	'OmimReferenceDNASequenceToReferencePeptideSequence',
 #	'UCSCReferenceDatabaseToReferencePeptideSequence',
