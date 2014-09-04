@@ -250,10 +250,6 @@ my @cmds = (
     "perl fetchEmptyProject.pl reactome_data_model -outputdir $release_nr $fetch_empty_project_db_options",
 );
 
-if ($exists_stable_identifier_db) {
-    push(@cmds, "perl create_EB-eye_dump.pl $release_nr $create_ebeye_db_options | gzip -c > $release_nr/EB-eye.xml.gz");
-}
-
 print STDERR "All commands to be executed:\n", join("\n",hide_password(@cmds)), "\n\n";
 
 my $broken_command_counter = 0;
