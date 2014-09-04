@@ -316,6 +316,15 @@ sub get_pdb_database_identifier {
 	return $self->get_database_identifier($self->reference_database->get_pdb_reference_database(), $identifier);
 }
 
+# Gets a DatabaseIdentifier instance for PRO.
+#
+# Returns a DatabaseIdentifier instance.
+sub get_pro_database_identifier {
+    my ($self, $identifier) = @_;
+    
+	return $self->get_database_identifier($self->reference_database->get_pro_reference_database(), $identifier);
+}
+
 # Gets a DatabaseIdentifier instance for Rhea.
 #
 # Returns a DatabaseIdentifier instance.
