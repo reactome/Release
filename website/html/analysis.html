@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://gsui.genomespace.org/jsui/js/jquery-1.7.2.min.js"/></script>
+        <script src="/js/analysis.js"/></script>
+        <script>
+
+          function getQueryParams(qs) {
+              qs = qs.split("+").join(" ");
+              var params = {}, tokens,
+                  re = /[?&]?([^=]+)=([^&]*)/g;
+
+              while (tokens = re.exec(qs)) {
+                  params[decodeURIComponent(tokens[1])]
+                      = decodeURIComponent(tokens[2]);
+              }
+              return params;
+          }
+
+          var reactomeQuery = "No Good";
+
+          var listFileUrl = getQueryParams(window.location.search)['listFileUrl'];
+	  if (! listFileUrl) {
+	      window.location = '/';
+	  }
+	  else {
+	      listFileUrl = listFileUrl.replace(/^.+file/,'https://gsui.genomespace.org/jsui/preview/file');
+	      listFileUrl = listFileUrl.replace(/\%2F/g,'/');
+
+              var client = window.XMLHttpRequest ?
+                           new XMLHttpRequest()  :
+                           window.ActiveXObject  ?
+                           new ActiveXObject("Microsoft.XMLHTTP") :
+                           alert('No XMLHTTP object');
+              client.withCredentials = true;
+              client.open('GET', listFileUrl, true );
+              client.setRequestHeader("Content-Type", "text/plain");
+              client.onreadystatechange = function() {
+                   if (client.readyState == 4) {
+                       reactomeQuery = client.responseText;
+                       to_reactome(reactomeQuery);
+                   }
+              }
+
+              client.send();
+          }
+
+        </script>
+    </head>
+    
+    <body>
+      <img src="images/spinner.gif" style="position:absolute;top:50%;left:50%"/>
+    </body>
+</html>
+
