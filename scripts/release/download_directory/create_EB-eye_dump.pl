@@ -14,8 +14,11 @@ BEGIN {
 
 use strict;
 use GKB::Utils;
-use GKB::Config qw($NO_SCHEMA_VALIDITY_CHECK $PROJECT_NAME);
+use GKB::Config;
 $NO_SCHEMA_VALIDITY_CHECK = 0;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 my %event_instructions = 
 (
@@ -67,8 +70,9 @@ printf qq(<?xml version="1.0" encoding="UTF-8"?>
 <entries>
 ), $PROJECT_NAME, $PROJECT_NAME, $release_num,$release_date, scalar(@{$ar});
 
+my $logger = get_logger(__PACKAGE__);
 foreach my $i (@{$ar}) {
-    print STDERR "i=$i\n";
+    $logger->info("i=$i");
     printf qq(<entry id="%s" acc="%s.%i">\n), 
     $i->StableIdentifier->[0]->Identifier->[0],
     $i->StableIdentifier->[0]->Identifier->[0],
@@ -157,8 +161,11 @@ sub creation_and_modification_dates {
 
 sub get_formatted_date_string {
     my $in = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     if (!(defined $in)) {
-        print STDERR "create_EB-eye_dump.get_formatted_date_string: input is undef!!\n";
+        $logger->warn("create_EB-eye_dump.get_formatted_date_string: input is undef!!");
         return "00-00-0000";
     }
     my ($yyyy,$mm,$dd) = $in =~ /^(\d{4})-?(\d{2})-?(\d{2})/;
@@ -167,16 +174,18 @@ sub get_formatted_date_string {
 }
 
 sub get_db_connection {
+    my $logger = get_logger(__PACKAGE__);
+    
     @ARGV || die "Usage: $0 RELEASE_NUMBER -db STABLE_ID_DB [-user ... -host ... -port ... -pass ...]\n";
     my $dba = GKB::Utils::get_db_connection();
     my $release_num = shift @ARGV;
     $release_num || die "Need release number\n";
-    print STDERR "get_db_connection: release_num=$release_num\n";
+    $logger->info("get_db_connection: release_num=$release_num");
     my $release = $dba->fetch_instance_by_attribute('ReactomeRelease',[['num',[$release_num]]])->[0] || die "No release with number $release_num\n";
     my $release_date = get_formatted_date_string($release->DateTime->[0]);
-    print STDERR "get_db_connection: release_date=$release_date\n";
+    $logger->info("get_db_connection: release_date=$release_date");
     my $db_name = $release->releaseDbParams->[0]->DbName->[0];
-    print STDERR "get_db_connection: db_name=$db_name\n";
+    $logger->info("get_db_connection: db_name=$db_name");
     $dba->instance_cache->clean;
     $dba->execute("USE $db_name");
     $dba->fetch_schema;

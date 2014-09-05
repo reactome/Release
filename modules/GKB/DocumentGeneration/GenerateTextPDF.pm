@@ -42,7 +42,10 @@ use constant mm => 25.4/72;
 use constant in =>    1/72;
 use constant pt =>    1;
 
+use GKB::Config;
 use GKB::DocumentGeneration::GenerateText;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::DocumentGeneration::GenerateText);
 
@@ -253,7 +256,9 @@ sub generate_toc_page {
 sub generate_toc {
     my ($self, $toc_depth) = @_;
 
-    print STDERR "GenerateTextPDF.generate_toc: WARNING - this subroutine should never be used during PDF generation!!\n";
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->warn("GenerateTextPDF.generate_toc: WARNING - this subroutine should never be used during PDF generation!!");
 }
 
 # Get the Helvatica Latin font.  If it has already been got before,
@@ -428,17 +433,19 @@ sub generate_page_top_header {
 # Emit a paragraph containing the supplied image file
 sub generate_image {
     my ($self, $image, $filename) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
     if (!(defined $image)) {
-        print STDERR "GenerateTextPDF.generate_image: WARNING - no image!!\n";
-		return;
+        $logger->warn("GenerateTextPDF.generate_image: WARNING - no image!!");
+	return;
     }
 
     # Dump image into temporary file
     my $image_file_name = GKB::FileUtils->print_image($image, undef, 1);
 
     if (!(defined $image_file_name)) {
-        print STDERR "GenerateTextPDF.generate_image: WARNING - no image file name!!\n";
+        $logger->warn("GenerateTextPDF.generate_image: WARNING - no image file name!!");
         return;
     }
 
@@ -476,7 +483,7 @@ sub generate_image {
 	}
 	
 	if ($new_position[1] < $margins->[1]) {
-		print STDERR "GenerateTextPDF.generate_image: WARNING - image is still flopping over edge of page!!!\n";
+	    $logger->warn("GenerateTextPDF.generate_image: WARNING - image is still flopping over edge of page!!!");
 	}
 	
 	my $pdf_ok = 0;
@@ -491,7 +498,7 @@ sub generate_image {
 		} elsif ($image_file_name =~ /\.jpg/i || $image_file_name =~ /\.jpeg/i) {
 			$image_file=$pdf->image_jpeg($image_file_name);
 		} else {
-			print STDERR "GenerateTextPDF.generate_image: WARNING - unknown image type for image_file_name=$image_file_name\n";
+			$logger->warn("GenerateTextPDF.generate_image: WARNING - unknown image type for image_file_name=$image_file_name");
 		}
 	
 		if (defined $image_file) {
@@ -501,7 +508,7 @@ sub generate_image {
 	}; # eval
 	
 	if ($pdf_ok == 0) {
-		print STDERR "GenerateTextPDF.generate_image: WARNING - problem occured while trying to insert image into PDF\n";
+	    $logger->warn("GenerateTextPDF.generate_image: WARNING - problem occured while trying to insert image into PDF");
 	}
 	
 	
@@ -527,6 +534,8 @@ sub generate_image {
 sub generate_vector_graphics_from_file {
     my ($self, $filename) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     unless ($filename) {
 #        print STDERR "generate_vector_graphics_from_file: WARNING - no image!!\n";
 	return 0;
@@ -535,7 +544,7 @@ sub generate_vector_graphics_from_file {
     # Open the file containing the vector graphics to be imported
     my $vg_pdf = PDF::API2->open($filename);
     unless ($vg_pdf) {
-	print STDERR "GenerateTextPDF.generate_vector_graphics_from_file: WARNING - could not open file to read PDF!!\n";
+	$logger->warn("GenerateTextPDF.generate_vector_graphics_from_file: WARNING - could not open file to read PDF!!");
 	return 0;
     }
 
@@ -545,7 +554,7 @@ sub generate_vector_graphics_from_file {
     # that the file will only have one page anyway.
     my $form = $pdf->importPageIntoForm($vg_pdf, 1);
     unless ($form) {
-	print STDERR "GenerateTextPDF.generate_vector_graphics_from_file: WARNING - form is null!!\n";
+	$logger->warn("GenerateTextPDF.generate_vector_graphics_from_file: WARNING - form is null!!");
 	return 0;
     }
 
@@ -584,7 +593,7 @@ sub generate_vector_graphics_from_file {
     }
 
     if ($new_position[1] < $margins->[1]) {
-	print STDERR "GenerateTextPDF.generate_vector_graphics_from_file: WARNING - image is still flopping over edge of page!!!\n";
+	$logger->warn("GenerateTextPDF.generate_vector_graphics_from_file: WARNING - image is still flopping over edge of page!!!");
     }
 
     my $gfx = $page->gfx;
@@ -641,6 +650,8 @@ sub read_pdf_core {
 # Returns scaling value
 sub find_scale_to_fit_image_to_page {
     my ($self, $width, $height) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
     my $paragraph_size = $self->paragraph_size;
     my $max_width = $paragraph_size->[0];
@@ -656,7 +667,7 @@ sub find_scale_to_fit_image_to_page {
     }
 
     if ($reactome_scale * $height > $paragraph_size->[1]) {
-	print STDERR "GenerateTextPDF.scale_image_to_fit_page: WARNING - new image height=" . $reactome_scale * $height . " is bigger than paragraph height=" . $paragraph_size->[1] . "\n";
+	$logger->warn("GenerateTextPDF.scale_image_to_fit_page: WARNING - new image height=" . $reactome_scale * $height . " is bigger than paragraph height=" . $paragraph_size->[1]);
     }
 
     return $reactome_scale;
@@ -724,6 +735,8 @@ sub top_left_corner {
 # entire text (will generally be 0).
 sub generate_paragraph {
     my ($self, $text, $formatting, $recursion_depth) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
     
     if (!(defined $recursion_depth)) {
         $recursion_depth  = 0;
@@ -778,7 +791,7 @@ sub generate_paragraph {
 	    $right_indent = $formatting->{$format_key};
 	} elsif ($format_key eq "first_line_indent") {
 	    # Set first line extra left indent
-	    print STDERR "GenerateTextPDF.generate_paragraph: WARNING - do not know how to set first line extra indent\n";
+	    $logger->warn("GenerateTextPDF.generate_paragraph: WARNING - do not know how to set first line extra indent");
 	} elsif ($format_key eq "justify") {
 	    # Set the justification
 	    $justify = $formatting->{$format_key};
@@ -801,7 +814,7 @@ sub generate_paragraph {
 	    # Sets text block - only understood by PDF
 	    $text_block = $formatting->{$format_key};
 	} else {
-	    print STDERR "GenerateTextPDF.generate_paragraph: WARNING - format_key=$format_key not recognised, skipping!\n";
+	    $logger->warn("GenerateTextPDF.generate_paragraph: WARNING - format_key=$format_key not recognised, skipping!");
 	    next;
 	}
     }

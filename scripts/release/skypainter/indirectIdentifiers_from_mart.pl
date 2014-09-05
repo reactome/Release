@@ -76,7 +76,7 @@ while(my $resource = readdir($dir)) {
 	$enst_to_ids{$transcript}{$id}++ if $id;
 	$enst_to_ids{$transcript}{$gene}++ if $gene;
 	$enst_to_ids{$transcript}{$protein}++ if $protein;
-	$uniprot_to_ensp{$id} = $protein if $resource =~ /sptrembl|swissprot_accession/ && $id;
+	push @{$uniprot_to_ensp{$id}}, $protein if $resource =~ /sptrembl|swissprot_accession/ && $id;
     }
     close $resource_file;
 }
@@ -87,24 +87,25 @@ map {push @{$accs{uc($_->Identifier->[0])}},$_} @{$rpss};
 
 foreach my $rpg_id (keys %accs) {
     foreach my $i (@{$accs{uc($rpg_id)}}) {
-	my %ids;
 	eval {
 	    my $ref_db = $i->referenceDatabase->[0]->name->[0];
 	    
 	    no warnings 'uninitialized';
+	    my @ensp;
 	    if ($ref_db =~ /ensembl/i) {
-	        %ids = % {$enst_to_ids{$ensp_to_enst{$rpg_id}}};
+		push @ensp, $rpg_id;
 	    } elsif ($ref_db =~ /uniprot/i) {
-	        %ids = % {$enst_to_ids{$ensp_to_enst{$uniprot_to_ensp{$rpg_id}}}};
+		@ensp = @{$uniprot_to_ensp{$rpg_id}};
+	    }
+	
+	    foreach my $ensp (@ensp) {
+		my $enst = $ensp_to_enst{$ensp};
+		my $ids = $enst_to_ids{$enst};
+		delete $ids->{$rpg_id};
+    
+		$i->add_attribute_value_if_necessary('otherIdentifier', keys %$ids);
 	    }
 	};
-	delete $ids{$rpg_id};
-    
-	print $rpg_id . "\n";
-	print "Ids:" . join(keys %ids,',') . "\n";
-    
-    
-	$i->add_attribute_value_if_necessary('otherIdentifier', keys %ids);
     }
 }
 

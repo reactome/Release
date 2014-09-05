@@ -73,8 +73,16 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	if ($identifier eq $up_to_date_identifier && $reference_molecule->name->[0] eq $chebi_name) {
 		next;
 	}
+		
+	my $report_line = "$0: old name: " . $reference_molecule->name->[0] . " ($identifier), new name: $chebi_name ($up_to_date_identifier)\n";
+	if ($identifier eq $up_to_date_identifier &&
+	    lc $reference_molecule->name->[0] eq lc $chebi_name) {
+		print $report_line;
+	} else {
+		print OUT $report_line;
+	}
 	
-	print OUT "$0: old name: " . $reference_molecule->name->[0] . " ($identifier), new name: $chebi_name ($up_to_date_identifier)\n";
+	
 	# Apply the correction to the database
 	$reference_molecule->identifier(undef);
 	$reference_molecule->name(undef);
