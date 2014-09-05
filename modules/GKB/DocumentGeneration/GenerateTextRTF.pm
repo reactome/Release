@@ -37,7 +37,10 @@ use Tie::File;
 use RTF::Writer;
 use Data::Dumper;
 
+use GKB::Config;
 use GKB::DocumentGeneration::GenerateText;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::DocumentGeneration::GenerateText);
 
@@ -60,43 +63,43 @@ sub AUTOLOAD {
 sub new {
     my($pkg) = @_;
 
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	$pkg->get_ok_field();
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    $pkg->get_ok_field();
 
-   	my $self = $pkg->SUPER::new();
-   	
+    my $self = $pkg->SUPER::new();
+
     return $self;
 }
 
 # Needed by subclasses to gain access to class variables defined in
 # this base class.
 sub get_ok_field {
-	my ($pkg) = @_;
-	
-	%ok_field = $pkg->SUPER::get_ok_field();
-	$ok_field{"rtf"}++;
+    my ($pkg) = @_;
 
-	return %ok_field;
+    %ok_field = $pkg->SUPER::get_ok_field();
+    $ok_field{"rtf"}++;
+
+    return %ok_field;
 }
 
 # Open stream to RTF file
 sub open_stream {
     my ($self, $stream) = @_;
 
-	$self->rtf(RTF::Writer->new_to_filehandle($stream));
+    $self->rtf(RTF::Writer->new_to_filehandle($stream));
 }
 
 # Open stream to named output file.
 sub open_filename {
     my ($self, $filename) = @_;
 
-	# Add an appropriate extension, if it doesn't already exist
-	unless ($filename =~ /\.rtf$/i) {
-		   $filename .= ".rtf";
-	}
-	
-	$self->rtf(RTF::Writer->new_to_file($filename));
+    # Add an appropriate extension, if it doesn't already exist
+    unless ($filename =~ /\.rtf$/i) {
+       $filename .= ".rtf";
+    }
+
+    $self->rtf(RTF::Writer->new_to_file($filename));
 }
 
 # Close stream to RTF file
@@ -125,95 +128,97 @@ sub close {
 sub split_op_file_into_smaller_files {
     my ($self) = @_;
     
-    print STDERR "split_op_file_into_smaller_files: entered\n";
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->info("split_op_file_into_smaller_files: entered");
 
-	my $output_file_name = $self->get_output_file_name();
-	# Add an appropriate extension, if it doesn't already exist
-	unless ($output_file_name =~ /\.rtf$/i) {
-		$output_file_name .= ".rtf";
-	}
+    my $output_file_name = $self->get_output_file_name();
+    # Add an appropriate extension, if it doesn't already exist
+    unless ($output_file_name =~ /\.rtf$/i) {
+	$output_file_name .= ".rtf";
+    }
 	
-	# First get the stuff that needs to be appended to all
-	# files that get generated.
-	my $header1 = "";
-	my $ok_flag = 1;
-	my $line;
-	CORE::open(FILE, $output_file_name);
-	while (<FILE>) {
-		my $line = $_;
-		
-#		if ($_ =~ /info/) {
-#			$ok_flag = 0;
-#		} elsif ($_ =~ /stylesheet/) {
-#			$ok_flag = 1;
-#		} elsif ($_ =~ /(.*)}}/) {
-#			$header1 .= $1;
-#			last;
-#		}
-		if ($line =~ /(.*)}}/) {
-			$header1 .= $1;
-			last;
-		}
-		
-#		if ($ok_flag) {
-			$header1 .= $line;
-#		}
+    # First get the stuff that needs to be appended to all
+    # files that get generated.
+    my $header1 = "";
+    my $ok_flag = 1;
+    my $line;
+    CORE::open(FILE, $output_file_name);
+    while (<FILE>) {
+	my $line = $_;
+	
+#	if ($_ =~ /info/) {
+#		$ok_flag = 0;
+#	} elsif ($_ =~ /stylesheet/) {
+#		$ok_flag = 1;
+#	} elsif ($_ =~ /(.*)}}/) {
+#		$header1 .= $1;
+#		last;
+#	}
+	if ($line =~ /(.*)}}/) {
+	    $header1 .= $1;
+	    last;
 	}
-	CORE::close(FILE);
+		
+#	if ($ok_flag) {
+	    $header1 .= $line;
+#	}
+    }
+    CORE::close(FILE);
 	
     my $tail1 = "\\par}\n\n}\n";
     
     my @tie_array;
     tie @tie_array, 'Tie::File', $output_file_name, memory => 0, mode => 0 or print STDERR "split_op_file_into_smaller_files: oh horrors, could not open $output_file_name with Tie::File!!\n";
 	
-	# Now break into separate files, chapter by chapter, using page
-	# breaks to detect chapter boundaries
-	my $split_file_counter = 0;
-	my $split_file_name;
-	my $split_filehandle = undef;
-	my $new_file_flag = 1;
-	my $skip_page_break_count = 3;
+    # Now break into separate files, chapter by chapter, using page
+    # breaks to detect chapter boundaries
+    my $split_file_counter = 0;
+    my $split_file_name;
+    my $split_filehandle = undef;
+    my $new_file_flag = 1;
+    my $skip_page_break_count = 3;
 	
-	foreach $line (@tie_array) {
-		if ($new_file_flag || ($line =~ /^\\page$/ && $skip_page_break_count<=0)) {
-			# Found a page boundary; open new file and close previous
-			# one.
-			if (defined $split_filehandle) {
-				print $split_filehandle $tail1;
-				CORE::close($split_filehandle);
-			}
+    foreach $line (@tie_array) {
+	if ($new_file_flag || ($line =~ /^\\page$/ && $skip_page_break_count<=0)) {
+	    # Found a page boundary; open new file and close previous
+	    # one.
+	    if (defined $split_filehandle) {
+		print $split_filehandle $tail1;
+		CORE::close($split_filehandle);
+	    }
 			
-			$split_file_counter++;
-			if ($output_file_name =~ /\.rtf$/i) {
-				$split_file_name = $output_file_name;
-				$split_file_name =~ s/\.rtf$/.$split_file_counter.rtf/i;
-			} else {
-				$split_file_name = "$output_file_name.$split_file_counter";
-			}
-			if (!($split_file_name =~ /\.rtf$/i)) {
-				$split_file_name .= ".rtf";
-			}
-			
-			my $open_flag = CORE::open($split_filehandle, ">$split_file_name");
-			
-			if ($new_file_flag) {
-				print $split_filehandle $line;
-			} else {
-				print $split_filehandle $header1;
-			}
-			
-			$new_file_flag = 0;
-		} else {
-			print $split_filehandle $line;
-		}
-		if ($line =~ /^\\page$/) {
-			$skip_page_break_count--;
-		}
+	    $split_file_counter++;
+	    if ($output_file_name =~ /\.rtf$/i) {
+		$split_file_name = $output_file_name;
+		$split_file_name =~ s/\.rtf$/.$split_file_counter.rtf/i;
+	    } else {
+		$split_file_name = "$output_file_name.$split_file_counter";
+	    }
+	    if (!($split_file_name =~ /\.rtf$/i)) {
+		$split_file_name .= ".rtf";
+	    }
+
+	    my $open_flag = CORE::open($split_filehandle, ">$split_file_name");
+    
+	    if ($new_file_flag) {
+		print $split_filehandle $line;
+	    } else {
+		print $split_filehandle $header1;
+	    }
+    
+	    $new_file_flag = 0;
+	} else {
+	    print $split_filehandle $line;
 	}
-	
-	print $split_filehandle $tail1;
-	CORE::close($split_filehandle);
-	untie @tie_array;
+	if ($line =~ /^\\page$/) {
+	    $skip_page_break_count--;
+	}
+    }
+
+    print $split_filehandle $tail1;
+    CORE::close($split_filehandle);
+    untie @tie_array;
 }
 
 # Document meta-data
@@ -352,16 +357,18 @@ sub generate_image_from_file_basic {
 sub generate_image {
     my ($self, $image, $filename) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     if (!(defined $image)) {
-        print STDERR "GenerateTextRTF.generate_image: WARNING - no image!!\n";
-		return;
+        $logger->warn("GenerateTextRTF.generate_image: WARNING - no image!!");
+	return;
     }
 
     # Dump image into temporary file
     my $image_file_name = GKB::FileUtils->print_image($image, undef, 1);
 
     if (!(defined $image_file_name)) {
-        print STDERR "GenerateTextRTF.generate_image: WARNING - cant do anything with image, skipping\n";
+        $logger->warn("GenerateTextRTF.generate_image: WARNING - cant do anything with image, skipping");
         return;
     }
     
@@ -419,6 +426,8 @@ sub generate_page_break {
 sub generate_paragraph {
     my ($self, $text, $formatting) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     my $rtf = $self->rtf;
     
     # Take formatting information and use it to generate RTF
@@ -441,9 +450,9 @@ sub generate_paragraph {
     };
     if (!$paragraph_printed_ok) {
         if (defined $text) {
-            print STDERR "GenerateTextRTF.generate_paragraph: WARNING - serious problem printing paragraph, params=" . Dumper(@params) . ", text=|$text|\n";
+            $logger->warn("GenerateTextRTF.generate_paragraph: WARNING - serious problem printing paragraph, params=" . Dumper(@params) . ", text=|$text|");
         } else {
-            print STDERR "GenerateTextRTF.generate_paragraph: WARNING - serious problem printing paragraph, params=" . Dumper(@params) . ", text=undef\n";
+            $logger->warn("GenerateTextRTF.generate_paragraph: WARNING - serious problem printing paragraph, params=" . Dumper(@params) . ", text=undef");
         }
     }
 
@@ -454,6 +463,8 @@ sub generate_paragraph {
 # RTF formatting directives
 sub translate_formatting {
     my ($self, $formatting) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
 
     # Take formatting information and use it to generate RTF
     # formatting commands.
@@ -505,7 +516,7 @@ sub translate_formatting {
 	    } elsif ($formatting->{$format_key} eq "center") {
 		$param_ref = \'\qc'; #'
 	    } else {
-		print STDERR "translate_formatting: WARNING - format value=" . $formatting->{$format_key} . " not recognised, skipping!\n";
+		$logger->warn("translate_formatting: WARNING - format value=" . $formatting->{$format_key} . " not recognised, skipping!");
 		next;
 	    }
 	} elsif ($format_key eq "bind_next_para") {
@@ -515,7 +526,7 @@ sub translate_formatting {
 	    # Set mysterious command that magically makes things work
 	    $param_ref = \'\tx0\ls11'; #'
 	} else {
-	    print STDERR "translate_formatting: WARNING - format_key=$format_key not recognised, skipping!\n";
+	    $logger->warn("translate_formatting: WARNING - format_key=$format_key not recognised, skipping!");
 	    next;
 	}
 
@@ -666,6 +677,8 @@ sub header_formatting {
 # something that will be understood by the RTF interpreter
 sub interpret_markup {
     my ($self, $text) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
 	my $rtf_string;
     my $rtf;
@@ -721,12 +734,12 @@ sub interpret_markup {
 				$src =~ s/\\'2e/./g; #'
 				
 				if (!(defined $src) || $src eq '') { #'
-					print STDERR "GenerateTextRTF.interpret_markup: WARNING - cannot find image source file, skipping to next line\n";
-					next;
+				    $logger->warn("GenerateTextRTF.interpret_markup: WARNING - cannot find image source file, skipping to next line");
+				    next;
 				}
 				if (!(-e $src)) {
-					print STDERR "GenerateTextRTF.interpret_markup: WARNING - we cant see the file $src, skipping to next line\n";
-					next;
+				    $logger->warn("GenerateTextRTF.interpret_markup: WARNING - we cant see the file $src, skipping to next line");
+				    next;
 				}
 				
 				$line3 =~ /width="([^"]+)"/; #"
@@ -771,7 +784,7 @@ sub interpret_markup {
 				$new_text .= "\n" . '}' . "\n";
 			} else {
 				# unknown markup, or maybe not markup at all
-				print STDERR "GenerateTextRTF.interpret_markup: possible unknown markup, line3=$line3\n";
+				$logger->info("GenerateTextRTF.interpret_markup: possible unknown markup, line3=$line3");
 				$new_text .= $line3;
 			}
 		} else {

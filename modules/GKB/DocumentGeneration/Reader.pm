@@ -44,9 +44,12 @@ it under the same terms as Perl itself.  See DISCLAIMER for
 disclaimers of warranty.
 
 =cut
-
-use vars qw(@ISA $AUTOLOAD %ok_field);
 use strict;
+use GKB::Config;
+use vars qw(@ISA $AUTOLOAD %ok_field);
+use Bio::Root::Root;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -77,7 +80,9 @@ sub new {
     my($pkg, @args) = @_;
     my $self = bless {}, $pkg;
     
-    print STDERR "Reader.new: setting initial depth_offset\n";
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->info("Reader.new: setting initial depth_offset");
     
     my $depth_offset = 0;
     $self->depth_offset($depth_offset);
@@ -171,8 +176,9 @@ sub get_acknowledgements {
 sub get_next_text_unit {
     my ($self, $depth, $depth_limit,$include_images_flag) = @_;
 
-    print STDERR "get_next_text_unit: this method must be defined in the subclass\n";
-    exit;
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->error_die("get_next_text_unit: this method must be defined in the subclass");
 }
 
 # Invent new section number.  If previous section number was null/empty,
@@ -334,21 +340,23 @@ sub get_italic_end_markup {
 sub get_image_markup {
     my ($self, $src, $width, $height) = @_;
 
-	my $markup = '';
- 	if (!(defined $src)) {
-    	print STDERR "get_next_text_unit: image source file not defined!\n";
- 	} else {
- 		$markup = "<img src=\"$src\"";
- 		if (defined $width) {
- 			$markup .= " width=\"$width\"";
- 		}
- 		if (defined $height) {
- 			$markup .= " height=\"$height\"";
- 		}
- 		$markup .= "/>";
+    my $logger = get_logger(__PACKAGE__);
+
+    my $markup = '';
+    if (!(defined $src)) {
+    	$logger->warn("get_next_text_unit: image source file not defined!");
+    } else {
+ 	$markup = "<img src=\"$src\"";
+ 	if (defined $width) {
+ 	    $markup .= " width=\"$width\"";
  	}
- 	
- 	return $markup;
+ 	if (defined $height) {
+	    $markup .= " height=\"$height\"";
+ 	}
+ 	$markup .= "/>";
+    }
+ 
+    return $markup;
 }
 
 1;

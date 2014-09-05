@@ -60,6 +60,8 @@ use GKB::DocumentGeneration::Reader;
 use GKB::Graphics::ReactomeReaction;
 use Storable qw(nstore retrieve);
 use Data::Dumper;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::DocumentGeneration::Reader);
 
@@ -360,6 +362,8 @@ sub get_copyright_conditions {
 # Emits a page containing the preface text.
 sub get_preface {
     my ($self) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
 #    # Pull the text out of the about.html file
 #    my $content = $self->get_about_html_content();
@@ -393,7 +397,7 @@ sub get_preface {
 #    $text .= "\n";
     my $text = "REACTOME is an open-source, open access, manually curated and peer-reviewed pathway database. Pathway annotations are authored by expert biologists, in collaboration with Reactome editorial staff and cross-referenced to many bioinformatics databases. These include NCBI Entrez Gene, Ensembl and UniProt databases, the UCSC and HapMap Genome Browsers, the KEGG Compound and ChEBI small molecule databases, PubMed, and Gene Ontology.\n";
     
-    print STDERR "get_preface: text=|$text|\n";
+    $logger->info("get_preface: text=|$text|");
 
     return $text;
 }
@@ -402,6 +406,8 @@ sub get_preface {
 sub get_acknowledgements {
     my ($self) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+    
     my $text = "";
 
     # The grant awarding bodies
@@ -562,13 +568,15 @@ sub get_next_text_unit {
 sub get_next_text_unit_old {
     my ($self, $depth, $depth_limit,$include_images_flag) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+    
     my $text_unit;
     my $blobbi_text_unit = $self->retrieve_next_array_element();
     
 	if (defined $blobbi_text_unit) {
-    	print STDERR "ReactomeDatabaseReader.get_next_text_unit: blobbi_text_unit=$blobbi_text_unit\n";
+	    $logger->info("ReactomeDatabaseReader.get_next_text_unit: blobbi_text_unit=$blobbi_text_unit");
 	} else {
-    	print STDERR "ReactomeDatabaseReader.get_next_text_unit: blobbi_text_unit=undef\n";
+	    $logger->info("ReactomeDatabaseReader.get_next_text_unit: blobbi_text_unit=undef");
 	}
 
     # If there are still text units for the current chapter hanging around,
@@ -587,14 +595,14 @@ sub get_next_text_unit_old {
 		    @global_text_units = $self->get_chapters_from_events_text_units($depth, $depth_limit, $chapter_num, "", \@initial_pathways, $include_images_flag);
 	
 		    if (@global_text_units && scalar(@global_text_units)>0) {
-		    	print STDERR "ReactomeDatabaseReader.get_next_text_unit: storing new array\n";
+		    	$logger->info("ReactomeDatabaseReader.get_next_text_unit: storing new array");
 		    	$self->store_array(\@global_text_units);
-		    	print STDERR "ReactomeDatabaseReader.get_next_text_unit: get a new blobbi\n";
+		    	$logger->info("ReactomeDatabaseReader.get_next_text_unit: get a new blobbi");
 		    	$blobbi_text_unit = $self->retrieve_next_array_element();
 				if (defined $blobbi_text_unit) {
-			    	print STDERR "ReactomeDatabaseReader.get_next_text_unit: blobbi_text_unit=$blobbi_text_unit\n";
+				    $logger->info("ReactomeDatabaseReader.get_next_text_unit: blobbi_text_unit=$blobbi_text_unit");
 				} else {
-			    	print STDERR "ReactomeDatabaseReader.get_next_text_unit: blobbi_text_unit=undef\n";
+				    $logger->info("ReactomeDatabaseReader.get_next_text_unit: blobbi_text_unit=undef");
 				}
 				$text_unit = shift @global_text_units;
 		    }
@@ -696,16 +704,18 @@ sub get_chapter_num {
 sub get_chapters_from_events_text_units {
     my ($self, $depth, $depth_limit, $section, $parent_event, $events, $include_images_flag, $step_thru_increments) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+    
     my @actual_events = @{$events};
     if (scalar(@actual_events) == 2 && $events->[0]->is_a("Pathway") && $events->[1]->is_a("Pathway")) {
-        print STDERR "ReactomeDatabaseReader.get_chapters_from_events_text_units: we have 2 pathways\n";
+        $logger->info("ReactomeDatabaseReader.get_chapters_from_events_text_units: we have 2 pathways");
 
         if (scalar(@{$events->[0]->disease}) > 0 && scalar(@{$events->[1]->disease}) == 0) {
-            print STDERR "ReactomeDatabaseReader.get_chapters_from_events_text_units: first pathway is diseased\n";
+            $logger->info("ReactomeDatabaseReader.get_chapters_from_events_text_units: first pathway is diseased");
             @actual_events = ($events->[0]);
         }
         if (scalar(@{$events->[0]->disease}) == 0 && scalar(@{$events->[1]->disease}) > 0) {
-            print STDERR "ReactomeDatabaseReader.get_chapters_from_events_text_units: second pathway is diseased\n";
+            $logger->info("ReactomeDatabaseReader.get_chapters_from_events_text_units: second pathway is diseased");
             @actual_events = ($events->[1]);
         }
     }
@@ -1062,12 +1072,14 @@ sub get_instance_name {
 sub get_instance_text_units {
     my ($self, $instance, $depth, $new_section, $instance_hash, $include_images_flag) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+    
     my @text_units = ();
     my $text_unit;
 
     unless ($instance) {
-		print STDERR "get_instance_text_units: WARNING - instance is null!\n";
-		return @text_units;
+	$logger->info("get_instance_text_units: WARNING - instance is null!");
+	return @text_units;
     }
 
     my $instance_name = $self->get_instance_name($instance);
@@ -1449,12 +1461,14 @@ sub get_regulation_text_units_from_instance() {
 sub get_descriptive_text_units_from_instance() {
     my ($self, $instance, $use_italics) = @_;
 
+    my logger = get_logger(__PACKAGE__);
+    
     my @text_units = ();
     my $text_unit;
 
     unless ($instance) {
-		print STDERR "ReactomeDatabaseReader.get_descriptive_text_units_from_instance: WARNING - instance is null!\n";
-		return @text_units;
+	$logger->warn("ReactomeDatabaseReader.get_descriptive_text_units_from_instance: WARNING - instance is null!");
+	return @text_units;
     }
 
 	my $text = GKB::Utils->get_pathway_text($instance);
@@ -1632,8 +1646,10 @@ sub get_literature_refs {
 sub get_reaction_description_text_units {
     my ($self, $reaction) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+    
     unless ($reaction) {
-	print STDERR "generate_reaction_description: yurks, reaction is null!!\n";
+	$logger->info("generate_reaction_description: yurks, reaction is null!!");
 	return;
     }
 
@@ -1691,23 +1707,25 @@ sub get_reaction_description_text_units {
 sub get_reaction_diagram_text_units {
     my ($self, $reaction) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my @text_units = ();
 
     unless ($reaction) {
-        print STDERR "ReactomeDatabaseReader.get_reaction_diagram_text_units: WARNING - reaction is undef!!\n";
+        $logger->warn("ReactomeDatabaseReader.get_reaction_diagram_text_units: WARNING - reaction is undef!!");
         return @text_units;
     }
 
     my $gr = GKB::Graphics::ReactomeReaction->new($reaction);
     if (!(defined $gr)) {
-        print STDERR "ReactomeDatabaseReader.get_reaction_diagram_text_units: WARNING - gr is undef!!\n";
+        $logger->warn("ReactomeDatabaseReader.get_reaction_diagram_text_units: WARNING - gr is undef!!");
         return @text_units;
     }
 
     # Get object of type GD::Image
     my $gd = $gr->draw;
     if (!(defined $gd)) {
-        print STDERR "ReactomeDatabaseReader.get_reaction_diagram_text_units: WARNING - gd is undef!!\n";
+        $logger->warn("ReactomeDatabaseReader.get_reaction_diagram_text_units: WARNING - gd is undef!!");
         return @text_units;
     }
 
@@ -1716,7 +1734,7 @@ sub get_reaction_diagram_text_units {
     # of GD.
     my $image_file_name = GKB::FileUtils->print_image($gd, $reaction->db_id() . "_reaction_diagram", 1);
     if (!(defined $image_file_name)) {
-        print STDERR "ReactomeDatabaseReader.get_reaction_diagram_text_units: WARNING - cannot use image for reaction: " . $reaction->db_id() . ", skipping\n";
+        $logger->warn("ReactomeDatabaseReader.get_reaction_diagram_text_units: WARNING - cannot use image for reaction: " . $reaction->db_id() . ", skipping");
         return @text_units;
     }
 
@@ -1751,11 +1769,13 @@ sub get_reaction_diagram_text_units {
 sub get_instance_diagram_text_units {
     my ($self, $instance) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my @text_units = ();
 
     unless ($instance) {
-		print STDERR "get_instance_diagram_text_units: WARNING - instance is null!!\n";
-		return @text_units;
+	$logger->warn("get_instance_diagram_text_units: WARNING - instance is null!!");
+	return @text_units;
     }
 
     my $image_file = GKB::Utils->find_image_file($instance);

@@ -28,6 +28,9 @@ disclaimers of warranty.
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use strict;
 use Bio::Root::Root;
+use GKB::Config;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -57,23 +60,25 @@ sub new {
     my($pkg, @args) = @_;
     my $self = bless {}, $pkg;
 
+    my $logger = get_logger(__PACKAGE__);
+    
     my ($type, $contents) = @args;
 
-	if (defined $type) {
-	    print STDERR "TextUnit->new: type=$type\n";
+    if (defined $type) {
+	$logger->info("TextUnit->new: type=$type");
 
     	$self->type($type);
-	}
-	if (defined $contents) {
-	    print STDERR "TextUnit->new: contents=$contents\n";
+    }
+    if (defined $contents) {
+	$logger->info("TextUnit->new: contents=$contents");
 
-    	$self->contents($contents);
-	}
+	$self->contents($contents);
+    }
     
     my $depth = 0;
     $self->depth($depth);
 
-	return $self;
+    return $self;
 }
 
 # Gets the contents (text or whatever) contained in this object.
