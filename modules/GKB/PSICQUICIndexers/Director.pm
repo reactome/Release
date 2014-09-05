@@ -115,7 +115,6 @@ sub construct {
     
     # Loop over the builders a second time and report their
     # exit status
-    print STDERR "\n\n\n";
     foreach $builder (@{$self->builders}) {
     	$builder->print_termination_status();
     }

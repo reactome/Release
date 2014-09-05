@@ -78,6 +78,7 @@ disclaimers of warranty.
 
 =cut
 
+use GKB::Config;
 use GKB::HTMLUtils;
 use GKB::FileUtils;
 use GKB::DocumentGeneration::TextUnit;
@@ -86,6 +87,8 @@ use constant font => "Helvetica";
 use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -269,6 +272,8 @@ sub set_book_flag {
 sub open {
     my ($self, $qualifier) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my $output_file_stream = $self->get_output_file_stream();
 	if (defined $output_file_stream) {
 		$self->open_stream($output_file_stream);
@@ -281,13 +286,13 @@ sub open {
 		    
 		    # Create/use a directory to put all the split files into
 		    if (-e $filename && !(-d $filename)) {
-			    print STDERR "GenerateText.open: WARNING - $filename exists but is not a directory\n";
+			$logger->warn("GenerateText.open: WARNING - $filename exists but is not a directory");
 		    } elsif (!(-e $filename) && !(mkdir $filename)) {
-			    print STDERR "GenerateText.open: WARNING - could not create directory $filename\n";
+			$logger->warn("GenerateText.open: WARNING - could not create directory $filename");
 		    } else {
-			    $filename =~ s/\/+$//;
-			    $filename .= "/";
-			    $self->set_output_file_name($filename);
+			$filename =~ s/\/+$//;
+			$filename .= "/";
+			$self->set_output_file_name($filename);
 		    }
 	    }
 	    if (defined $qualifier) {
@@ -306,39 +311,44 @@ sub open {
 sub open_stream {
     my ($self, $stream) = @_;
 
-    print STDERR "GenerateText.open_stream: ERROR - this method must be defined in the subclass\n";
-    exit;
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->error_die("GenerateText.open_stream: ERROR - this method must be defined in the subclass");
 }
 
 # Open stream to named output file.
 sub open_filename {
     my ($self, $filename) = @_;
 
-    print STDERR "GenerateText.open_filename: ERROR - this method must be defined in the subclass\n";
-    exit;
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->error_die("GenerateText.open_filename: ERROR - this method must be defined in the subclass");
 }
 
 # Close stream to currently open output file
 sub close {
     my ($self) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
-    print STDERR "GenerateText.close: ERROR - this method must be defined in the subclass\n";
-    exit;
+    $logger->error_die("GenerateText.close: ERROR - this method must be defined in the subclass");
 }
 
 # Document meta-data
 sub generate_prolog {
     my ($self, $depth_limit, $author, $company, $title, $subject, $sheet_size, $margins) = @_;
 
-    print STDERR "GenerateText.generate_prolog: ERROR - this method must be defined in the subclass\n";
-    exit;
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->error_die("GenerateText.generate_prolog: ERROR - this method must be defined in the subclass");
 }
 
 sub generate_page_numbering {
     my ($self, $starting_page_number) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
-    print STDERR "GenerateText.generate_page_numbering: ERROR - this method must be defined in the subclass\n";
-    exit;
+    $logger->error_die("GenerateText.generate_page_numbering: ERROR - this method must be defined in the subclass");
 }
 
 # Emits a page containing the table of contents
@@ -356,9 +366,10 @@ sub generate_toc_page {
 # Prints out the raw table of contents
 sub generate_toc {
     my ($self, $toc_depth) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
-    print STDERR "GenerateText.generate_toc: ERROR - this method must be defined in the subclass\n";
-    exit;
+    $logger->error_die("GenerateText.generate_toc: ERROR - this method must be defined in the subclass");
 }
 
 # Emit the image contained in the supplied file.  If the $delete_flag
@@ -367,11 +378,13 @@ sub generate_toc {
 sub generate_image_from_file {
     my ($self, $image_file, $delete_flag) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     $image_file =~ /^(.+)$/;
     my $detainted_image_file = $1;
     
     if (!(-e $detainted_image_file)) {
-    	print STDERR "GenerateText.generate_image_from_file: WARNING - detainted_image_file=$detainted_image_file does not exist!!\n";
+    	$logger->warn("GenerateText.generate_image_from_file: WARNING - detainted_image_file=$detainted_image_file does not exist!!");
     	return;
     }
 
@@ -405,7 +418,8 @@ sub generate_image_from_file {
 sub generate_image_from_file_basic {
     my ($self, $image_file) = @_;
     
-    print STDERR "GenerateText.generate_image_from_file_basic: WARNING - could not generate image for $image_file\n";
+    my $logger = get_logger(__PACKAGE__);
+    $logger->warn("GenerateText.generate_image_from_file_basic: WARNING - could not generate image for $image_file");
 }
 
 # Emit the image contained in the supplied GD::Image argument.
@@ -415,8 +429,8 @@ sub generate_image_from_file_basic {
 sub generate_image {
     my ($self, $image, $filename) = @_;
 
-    print STDERR "GenerateText.generate_image: ERROR - this method must be defined in the subclass\n";
-    exit;
+    my $logger = get_logger(__PACKAGE__);
+    $logger->error_die("GenerateText.generate_image: ERROR - this method must be defined in the subclass");
 }
 
 # Given a file containing a diagram as vector graphics, emit
@@ -451,8 +465,9 @@ sub generate_vertical_space {
 sub generate_page_break {
     my ($self) = @_;
 
-    print STDERR "GenerateText.generate_page_break: ERROR - this method must be defined in the subclass\n";
-    exit;
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->error_die("GenerateText.generate_page_break: ERROR - this method must be defined in the subclass");
 }
 
 # Generates an entire book for you, dont cost nothing, cant
@@ -723,22 +738,25 @@ sub generate_underlined_paragraph {
 sub generate_paragraph {
     my ($self, $text, $formatting) = @_;
 
-    print STDERR "GenerateText.generate_paragraph: ERROR - this method must be defined in the subclass\n";
-    exit;
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->error_die("GenerateText.generate_paragraph: ERROR - this method must be defined in the subclass");
 }
 
 sub generate_bullit_text {
     my ($self, $text) = @_;
 
-    print STDERR "GenerateText.generate_bullit_text: ERROR - this method must be defined in the subclass\n";
-    exit;
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->error_die("GenerateText.generate_bullit_text: ERROR - this method must be defined in the subclass");
 }
 
 sub generate_numbered_text {
     my ($self, $text, $number) = @_;
 
-    print STDERR "GenerateText.generate_numbered_text: ERROR - this method must be defined in the subclass\n";
-    exit;
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->error_die("GenerateText.generate_numbered_text: ERROR - this method must be defined in the subclass");
 }
 
 # You should overwrite this in your implementation.  Default behavior
@@ -917,12 +935,14 @@ sub calculate_header_font_size {
 sub generate_chapters {
     my ($self) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my $text_unit;
     while (1) {
 		$text_unit = $reader->get_next_text_unit(0, $self->get_depth_limit(), $self->get_include_images_flag());
 		
 		if (!(defined $text_unit)) {
-			print STDERR "GenerateText.generate_chapters: yikes, text_unit is undef!!\n";
+		    $logger->warn("GenerateText.generate_chapters: yikes, text_unit is undef!!");
 		}
 
 		if ($text_unit->isa("eof")) {
@@ -947,6 +967,8 @@ sub generate_chapters {
 # contents in an appropriate way.
 sub generate_text_unit {
     my ($self, $text_unit) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
     
     # Decide how to emit the text unit, depending on its type
     if ($text_unit->isa("section_header")) {
@@ -995,9 +1017,9 @@ sub generate_text_unit {
 		}
     } elsif ($text_unit->isa("empty") || $text_unit->isa("eof")) {
     	# Nothing to do, yahoo!!
-    	print STDERR "GenerateText.generate_text_unit: doing nothing, how relaxing\n";
+    	$logger->info("GenerateText.generate_text_unit: doing nothing, how relaxing");
     } else {
-		print STDERR "GenerateText.generate_text_unit: WARNING -strewf mate, never erd of a " . $text_unit->get_type() . " before, cant print that, more than me jobs worf\n";
+	$logger->warn("GenerateText.generate_text_unit: WARNING -strewf mate, never erd of a " . $text_unit->get_type() . " before, cant print that, more than me jobs worf");
     }
 
     # Let's see if we can free up some memory
@@ -1028,6 +1050,8 @@ sub finish_page {
 # You may wish to overwite this.
 sub interpret_markup {
     my ($self, $text) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
 	my $rtf_string;
     my $rtf;
@@ -1094,7 +1118,7 @@ sub interpret_markup {
 				$new_text .= ""; # Do nothing
 			} else {
 				# unknown markup, or maybe not markup at all
-				print STDERR "GenerateText.interpret_markup: possible unknown markup, line3=$line3, text=$text\n";
+				$logger->info("GenerateText.interpret_markup: possible unknown markup, line3=$line3, text=$text");
 				$new_text .= ""; # Do nothing
 			}
 		} else {
