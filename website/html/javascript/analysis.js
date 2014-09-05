@@ -3,7 +3,7 @@ function to_reactome(rQuery) {
         data: rQuery,
         processData: false,
         type: "POST",
-        contentType: "application/json",
+        contentType: "text/plain",
         success: function(response,status,jqXHR) {
           var token = response.summary.token;
           var url = "/PathwayBrowser/#DTAB=AN&TOOL=AT&ANALYSIS=" + token;
