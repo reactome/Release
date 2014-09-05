@@ -29,12 +29,15 @@ disclaimers of warranty.
 
 package GKB::PSICQUICIndexers::BuilderFactory;
 
+use GKB::Config;
 use GKB::PSICQUICIndexers::ReactomeBuilder;
 use GKB::PSICQUICIndexers::ReactomeFIBuilder;
 
 use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -73,32 +76,34 @@ sub new {
 # for names are available, e.g. the class name or the
 # name of the script that it replaces.
 sub construct {
-	my ($self, $name) = @_;
-	
-	if (!(defined $name)) {
-		print STDERR "BuilderFactory.construct: WARNING - name is undef, aborting!\n";
-		return undef;
+    my ($self, $name) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
+
+    if (!(defined $name)) {
+	$logger->warn("BuilderFactory.construct: WARNING - name is undef, aborting!");
+	return undef;
+    }
+
+    my $builder = undef;
+    my $class = $builder_map{$name};
+    eval {
+	if (defined $class) {
+	    $logger->info("BuilderFactory.construct: class=$class");
+	    $builder = $class->new();
+	} else {
+	    # Assume a valid class name has been specified and keep fingers crossed
+	    $builder = $name->new();
 	}
 	
-	my $builder = undef;
-	my $class = $builder_map{$name};
-	eval {
-		if (defined $class) {
-			print STDERR "BuilderFactory.construct: class=$class\n";
-			$builder = $class->new();
-		} else {
-			# Assume a valid class name has been specified and keep fingers crossed
-			$builder = $name->new();
-		}
-		
-		print STDERR "BuilderFactory.construct: successfully created an object for $name\n";
-	};
-	
-	if (!(defined $builder)) {
-		print STDERR "BuilderFactory.construct: WARNING - could not find a Builder subclass corresponding to $name\n";
-	}
-	
-	return $builder;
+	$logger->info("BuilderFactory.construct: successfully created an object for $name");
+    };
+
+    if (!(defined $builder)) {
+	$logger->warn("BuilderFactory.construct: WARNING - could not find a Builder subclass corresponding to $name");
+    }
+
+    return $builder;
 }
 
 1;
