@@ -1,6 +1,7 @@
 package GKB::Config;
 
 use strict;
+use Cwd 'abs_path';
 use GKB::Secrets;
 
 use vars qw(@ISA     @EXPORT
@@ -273,7 +274,7 @@ log4perl.appender.ErrorLog.mode=append
 log4perl.appender.ErrorLog.layout=PatternLayout
 log4perl.appender.ErrorLog.layout.ConversionPattern=%p %l %d - %m%n
 log4perl.appender.ErrorLog.Threshold = WARN
-';
+' if abs_path($0) !~ /cgi-bin/;
 
 sub get_name {
     my ($name) = $0 =~ /(.*)\./;
