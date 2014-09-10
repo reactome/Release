@@ -11,7 +11,6 @@ database.
 
 =head1 DESCRIPTION
 
-
 =head1 SEE ALSO
 
 GKB::Utils
@@ -19,9 +18,10 @@ GKB::Utils
 =head1 AUTHOR
 
 David Croft E<lt>croft@ebi.ac.ukE<gt>
+Sheldon McKay E<lt>sheldon.mckay@gmail.com<gt>
 
 Copyright (c) 2007 European Bioinformatics Institute and Cold Spring
-Harbor Laboratory.
+Harbor Laboratory, 2014 Ontario Institute for Cancer Research
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  See DISCLAIMER for
@@ -51,22 +51,8 @@ sub new {
     my($pkg, @args) = @_;
     my $self = bless {}, $pkg;
     
+    $self->get_interaction_data;
     return $self;
-}
-
-sub interaction_ids {
-    my $self = shift;
-    my $file = $self->file;
-
-    open IDS, "cut -f14 $file |";
-    my @ids;
-    while (<IDS>) {
-	chomp;
-	next if /^\#/;
-	s/^\S+://;
-	push @ids, $_;
-    }
-    return \@ids;
 }
 
 # Gets the path to the PSIMITAB interaction file.  If this
@@ -85,7 +71,7 @@ sub get_file {
     my $cwd = getcwd;
     chdir $dir;
 
-    unless ($file) {
+    unless ($file && 0) {
 	my $url = 'ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.zip';
 
 	$file = "intact.txt";
@@ -127,18 +113,15 @@ sub find_intact_ids_for_uniprot_pair {
     
     my $logger = get_logger(__PACKAGE__);
     
-    #print STDERR "IntAct.find_intact_ids_for_uniprot_pair: uniprot1=$uniprot1, uniprot2=$uniprot2\n";
-    
     my $data = $self->get_interaction_data;
 
     my $key = join('|', $uniprot1, $uniprot2);
-    warn "$key\n";
     my $ids;
     $data->db_get($key,$ids);
     $ids || return;
 
     my @ids = grep {/\S+/} split(/\s+/, $ids);
-    $logger->info("IntAct.find_intact_ids_for_uniprot_pair: GOT $ids!");
+    $logger->info("IntAct.find_intact_ids_for_uniprot_pair: GOT $ids for $uniprot1, $uniprot2");
     return \@ids;
 }
 
@@ -157,18 +140,32 @@ sub get_interaction_data {
 	chomp;
 	next if /^\#/;
 	my ($id1,$id2,$id3) = grep { s/\S+:// } split "\t";
-	#print STDERR "Interaction: $id1,$id2,$id3\n";
 	my $key = join('|',sort($id1,$id2));
 	my $other_ids;
+	next unless $db && $key && $id1 && $id2;
 	$db->db_get($key,$other_ids);
 	my $ids = $id3;
 	$ids .= " $other_ids" if $other_ids;
+	next unless $ids;
 	$db->db_put($key,$ids);
+	$db->db_put($id1,1);
+	$db->db_put($id2,1);
     }
     close INT;
 
     $self->interaction_data($db);
     return $db;
+}
+
+sub is_in_interaction {
+    my $self = shift;
+    my $rs   = shift;
+    my $uniprot = $rs->identifier->[0] || return 0;
+    my $db = $self->get_interaction_data;
+    my $ok;
+    $db->db_get($uniprot,$ok);
+    print STDERR $ok ? "DEBUG: This one is OK $uniprot\n" : "DEBUG: This one is not in any interactions\n";
+    return $ok;
 }
 
 sub interaction_data {
@@ -178,39 +175,6 @@ sub interaction_data {
 	$self->{_interaction_data} = $hash;
     }
     return $self->{_interaction_data};
-}
-
-# Given a hash of interactions, will attempt to get the corresponding
-# IntAct IDs.  Uses the IntAct web services, so potentially slow.
-sub find_intact_ids_for_interactions {
-    my ($self, $interactions) = @_;
-    my @db_ids1 = keys(%{$interactions});
-    my @db_ids2;
-    my $db_id1;
-    my $db_id2;
-    my $interactor1;
-    my $interactor2;
-    my $id1;
-    my $id2;
-    my $interaction;
-
-    foreach $db_id1 (@db_ids1) {
-	@db_ids2 = keys(%{$interactions->{$db_id1}});
-	foreach $db_id2 (@db_ids2) {
-	    $interaction = $interactions->{$db_id1}->{$db_id2};
-	    $interactor1 = $interaction->{'interactors'}->[0];
-	    $interactor2 = $interaction->{'interactors'}->[1];
-	    
-	    # TODO: we may also need to get the name of the
-	    # reference database in order to build an
-	    # unequivocal query.
-	    $id1 = $interactor1->identifier->[0];
-	    $id2 = $interactor2->identifier->[0];
-	    
-	    my $intact_ids = $self->find_intact_ids_for_uniprot_pair($id1, $id2);
-	    $interaction->{'intact_ids'} = $intact_ids;
-	}
-    }
 }
 
 1;
