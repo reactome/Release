@@ -140,7 +140,7 @@ abstract class PreviousInstanceFinder {
 			return previousInstance;
 		
 		int oldestReleaseNumInt = currentReleaseNumInt;
-		if (previousReleaseNumInt >=0 && previousReleaseNumInt < currentReleaseNumInt)
+		if (previousReleaseNumInt >= 0 && previousReleaseNumInt < currentReleaseNumInt)
 			oldestReleaseNumInt = previousReleaseNumInt;
 		List validReleases = ReleaseList.createValidReleaseList(currentProjectName, oldestReleaseNumInt);
 		
@@ -162,7 +162,7 @@ abstract class PreviousInstanceFinder {
 					continue;
 				MySQLAdaptor dba = identifierDatabase.getReleaseDbaFromReleaseNum(releaseNum, projectName);
 				if (dba==null) {
-					System.err.println("PreviousInstanceFinder.generateIDsFromUnspecifiedReleases: was not able to get DBA for releaseNum=" + releaseNum);
+				    System.err.println("PreviousInstanceFinder.generateIDsFromUnspecifiedReleases: was not able to get DBA for releaseNum=" + releaseNum);
 					continue;
 				}
 				try {
