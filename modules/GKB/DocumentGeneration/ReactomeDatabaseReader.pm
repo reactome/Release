@@ -1461,7 +1461,7 @@ sub get_regulation_text_units_from_instance() {
 sub get_descriptive_text_units_from_instance() {
     my ($self, $instance, $use_italics) = @_;
 
-    my logger = get_logger(__PACKAGE__);
+    my $logger = get_logger(__PACKAGE__);
     
     my @text_units = ();
     my $text_unit;
