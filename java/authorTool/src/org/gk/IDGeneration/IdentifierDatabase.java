@@ -1534,8 +1534,8 @@ public class IdentifierDatabase {
 				System.err.println("IdentifierDatabase.getReleaseDbaFromDbParams: port number " + port + "is strange for database name: " + dbName);
 				e.printStackTrace();
 			} catch (SQLException e1) {
-				System.err.println("IdentifierDatabase.getReleaseDbaFromDbParams: something went wrong with mysql for database name: " + dbName);
-				e1.printStackTrace();
+			    System.err.println("IdentifierDatabase.getReleaseDbaFromDbParams: something went wrong with mysql for database name: " + dbName);
+			    e1.printStackTrace();
 			} catch (Exception e2) {
 				System.err.println("IdentifierDatabase.getReleaseDbaFromDbParams: unknown problem with dbName=" + dbName + ", username=" + username + ", password=" + password + ", port=" + port);
 				e2.printStackTrace();

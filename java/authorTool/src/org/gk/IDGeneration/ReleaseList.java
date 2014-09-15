@@ -32,8 +32,11 @@ class ReleaseList {
 				if (!projectName.equals(currentProjectName))
 					continue;
 				String releaseNum = (String)release.getAttributeValue("num");
+				releaseNumInt = (new Integer(releaseNum)).intValue();
 				if (releaseNum==null)
-					continue;
+				    continue;
+				if (releaseNumInt < 42) 
+				    continue;
 				try {
 					releaseNumInt = (new Integer(releaseNum)).intValue();
 					if (releaseNumInt > maxReleaseNum)
