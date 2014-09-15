@@ -26,6 +26,7 @@ use Cwd;
 
 use constant EXE  => './add_links_to_single_resource.pl';
 use constant RLOG => 'resource_log.txt';
+use constant JOBS => 4;
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_edb,$opt_db_ids);
 my $pid;
@@ -83,13 +84,6 @@ if (defined $opt_edb && !($opt_edb eq '')) {
 }
 
 
-# These are the ones that have failed
-#my @resources = (
-#'ENSGReferenceDNASequenceToReferencePeptideSequence',
-#'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
-#'OrphanetToUniprotReferenceDNASequence'
-#    );
-
 my @resources = (
 	'ENSGReferenceDNASequenceToReferencePeptideSequence',
 	'EntrezGeneToUniprotReferenceDNASequence',
@@ -97,23 +91,25 @@ my @resources = (
 	'CTDGeneToUniprotReferenceDNASequence',
 	'DbSNPGeneToUniprotReferenceDNASequence',
 	'PROToReferencePeptideSequence',
-#	'GenecardsReferenceDatabaseToReferencePeptideSequence',
-#	'OmimReferenceDNASequenceToReferencePeptideSequence',
-#	'UCSCReferenceDatabaseToReferencePeptideSequence',
-#	'RefseqReferenceDatabaseToReferencePeptideSequence',
-#	'RefseqReferenceRNASequenceToReferencePeptideSequence',
-#	'KEGGReferenceGeneToReferencePeptideSequence',
-#	'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
-#	'BioModelsEventToDatabaseIdentifier',
-#	'FlyBaseToUniprotReferenceDNASequence',
-#	'OrphanetToUniprotReferenceDNASequence',
-#	'PDBToReferencePeptideSequence',
-#	'DOCKBlasterToUniprotDatabaseIdentifier',
-#	'RHEAIdentifierToReactionlikeEvent',
+	'GenecardsReferenceDatabaseToReferencePeptideSequence',
+	'OmimReferenceDNASequenceToReferencePeptideSequence',
+	'UCSCReferenceDatabaseToReferencePeptideSequence',
+	'RefseqReferenceDatabaseToReferencePeptideSequence',
+	'RefseqReferenceRNASequenceToReferencePeptideSequence',
+	'KEGGReferenceGeneToReferencePeptideSequence',
+	'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
+	'BioModelsEventToDatabaseIdentifier',
+	'FlyBaseToUniprotReferenceDNASequence',
+	'OrphanetToUniprotReferenceDNASequence',
+	'PDBToReferencePeptideSequence',
+	'DOCKBlasterToUniprotDatabaseIdentifier',
+	'RHEAIdentifierToReactionlikeEvent',
 );
 
 my $resource;
 my $cmd;
+
+unlink RLOG if -e RLOG;
 
 foreach $resource (@resources) {
     if (!(defined $resource) || $resource eq '') {
@@ -121,11 +117,15 @@ foreach $resource (@resources) {
     	next;
     }
 
-    #print STDERR "$resource\n";
     run($exe, "$reactome_db_options -res $resource", $resource);
 }
 
-exit 0 if defined $pid && $pid == 0;
+if (defined $pid && $pid == 0) { 
+    print "This is where this child process exits\n";
+    exit 0;
+}
+
+sleep 5;
 
 # pause until all jobs are done
 while(check_running($exe)) {
@@ -167,7 +167,8 @@ sub run {
     
     my $howmany = 99;
 
-    while ($howmany > 6) {
+    # Do JOBS jobs in parallel
+    while ($howmany > JOBS) {
 	$howmany = check_running($exe);
 	print STDERR "$howmany processes running at this time\n"; 
 	sleep 300 if $howmany > 6;
@@ -198,6 +199,10 @@ sub _run {
 
 sub check_running {
     my $exe = shift;
-    my @running = `ps aux |grep $exe | grep -v 'grep' | grep -v 'sh -c'`;
-    return scalar(@running);
+    my $ps = "ps aux |grep $exe | grep -v 'grep' | grep -v 'sh -c'";
+    print "$ps\n";
+    my @running = `$ps`;
+    my $num = scalar(@running) || 0;
+    print "There are $num processes runnning\n";
+    return $num;
 }
