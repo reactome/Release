@@ -1,0 +1,59 @@
+#!/usr/local/bin/perl -w 
+
+# The following block sets the script to pick up libraries from ../../modules.
+# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
+# on different server setups.
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+	$#a = $#a - 2;
+    } else {
+	push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+
+use strict;
+use CGI qw(:standard);
+use GKB::Config;
+use GKB::FrontPage3;
+
+
+my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (query_by_id)", "/stylesheet.css");
+my $header = $front_page->get_header();
+my $footer = $front_page->get_footer();
+my $enclosing_div_start = $front_page->get_enclosing_div_start();
+my $enclosing_div_end = $front_page->get_enclosing_div_end();
+my $REST = 'http://reactomecurator.oicr.on.ca:7080/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/';
+
+my $id = param('id') || '';
+
+print header,$header,$enclosing_div_start,start_form();
+print h1('Search the Reactome RESTful API');
+print '<center>';
+print '<center>Enter database ID or stable identifier: ', input({-type => 'text', -name => 'id', -value => $id});
+print submit(), '</center><br clear="ALL"/>';
+print end_form();
+
+if ($id) {
+    $id =~ s/\.\d+$//;
+    my $url = $REST . "$id";
+    print <<"    END";
+    <script type='text/javascript'>
+      var win = window.open('$url','_blank');
+      if (win) {
+  	  win.focus();
+      }
+      else {
+	  alert('Please disable pop-up blocking for ' + location.hostname);
+      }
+    </script>
+    END
+}
+
+print $enclosing_div_end, $footer;
+
