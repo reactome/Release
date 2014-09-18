@@ -101,6 +101,7 @@ my $biopaxexporter_db_options = "";
 my $reactome_to_msig_export_db_options = "";
 my $diagram_dump_options = "";
 my $mysqldump_db_options = $db;
+my $mysqldump_dn_db_options = "$db\_dn";
 my $mysqldump_mart_db_options = "test_reactome_mart";
 my $mysqldump_identifier_db_options = "test_reactome_stable_identifiers";
 my $mysqldump_wordpress_db_options = "wordpress";
@@ -114,6 +115,7 @@ if (defined $opt_host && !($opt_host eq '')) {
     $diagram_dump_options .= $opt_host;
     $mysqldump_db_options .= " -h $opt_host";
     $mysqldump_mart_db_options .= " -h $opt_host";
+    $mysqldump_dn_db_options .= " -h $opt_host";
     $mysqldump_identifier_db_options .= " -h $opt_host";
     $mysqldump_wordpress_db_options .= " -h reactome.org";
 }
@@ -130,6 +132,7 @@ if (defined $opt_user && !($opt_user eq '')) {
     $reactome_to_msig_export_db_options .= " $opt_user";
     $diagram_dump_options .= " $opt_user";
     $mysqldump_db_options .= " -u $opt_user";
+    $mysqldump_dn_db_options .= " -u $opt_user";
     $mysqldump_mart_db_options .= " -u $opt_user";
     $mysqldump_identifier_db_options .= " -u $opt_user";
     $mysqldump_wordpress_db_options .= " -u $opt_user";
@@ -148,6 +151,7 @@ if (defined $opt_pass && !($opt_pass eq '')) {
 	$reactome_to_msig_export_db_options .= " '$pass'";
 	$diagram_dump_options .= " '$pass'";
 	$mysqldump_db_options .= " -p$pass";
+	$mysqldump_dn_db_options .= " -p$pass";
 	$mysqldump_mart_db_options .= " -p$pass";
 	$mysqldump_identifier_db_options .= " -p$pass";
 	$mysqldump_wordpress_db_options .= " -p$pass";
@@ -160,10 +164,13 @@ if (defined $opt_port && !($opt_port eq '')) {
 	$reactome_to_msig_export_db_options .= " $opt_port";
 	$diagram_dump_options .= " $opt_port";
 	$mysqldump_db_options .= " -P $opt_port";
+	$mysqldump_dn_db_options .= " -P $opt_port";
 	$mysqldump_mart_db_options .= " -P $opt_port";
 	$mysqldump_identifier_db_options .= " -P $opt_port";
 	$mysqldump_wordpress_db_options .= " -P $opt_port"
 }
+
+$biopaxexporter_db_options .= " $release_nr";
 
 my $reactome_to_biosystems_db_options = $reactome_to_msig_export_db_options;
 my $reactome_to_msig_export_db_filename = "ReactomePathways.gmt";
@@ -192,6 +199,7 @@ my @cmds = (
     "mysqldump --opt $mysqldump_db_options | gzip -c > $release_nr/databases/gk_current.sql.gz",
     "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
     "mysqldump --opt $mysqldump_wordpress_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
+    "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
 
     "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' | gzip -c > $release_nr/$species_file_stem.sbml.gz",
     "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.2.sbml.gz",
@@ -215,19 +223,7 @@ my @cmds = (
     qq{perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" -class Complex $reactome_db_options -output DB_ID -output 'species.name[0]' -output _displayName > $release_nr/curated_complexes.txt},
     qq{perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" -class Complex $reactome_db_options -output 'stableIdentifier._displayName' -output 'species.name[0]' -output _displayName > $release_nr/curated_complexes.stid.txt},
     
-    "cd biopaxexporter;
-    ./runAllSpecies.sh $biopaxexporter_db_options .;
-    zip biopax *.owl;
-    rm *.owl;
-    cd -;
-    mv biopaxexporter/biopax.zip $release_nr/biopax2.zip",
-    
-    "cd biopaxexporter;
-    ./runAllSpeciesLevel3.sh $biopaxexporter_db_options .;
-    zip biopax *.owl;
-    rm -f *.owl;
-    cd -;
-    mv biopaxexporter/biopax.zip $release_nr/biopax.zip",
+    "./run_biopax.pl $biopaxexporter_db_options",
     
     "cd WebELVTool;
     ./runGSEAOutput.sh $reactome_to_msig_export_db_options;
@@ -255,9 +251,13 @@ print STDERR "All commands to be executed:\n", join("\n",hide_password(@cmds)), 
 my $broken_command_counter = 0;
 foreach my $cmd (@cmds) {
     print "cmd=" . hide_password($cmd) . "\n";
-    if (system($cmd) != 0) {
+    my $retval = system $cmd;
+    if ($retval) {
     	print STDERR "WARNING - something went wrong while executing '" . hide_password($cmd) . "'!!\n";
     	$broken_command_counter++;
+    }
+    else {
+	print STDERR "Sucess!\n";
     }
 }
 
