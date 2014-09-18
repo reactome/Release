@@ -148,8 +148,6 @@ sub cmd {
 		my $nopasscmd = _hide_passwords($cmd);
 	
 		print releaselog("Executing $nopasscmd -- " . `date`);
-
-		$cmd = "screen /bin/bash -c '$cmd'";
 		
 		# Execute command
 		my ($stdout, $stderr, $exit_code);
