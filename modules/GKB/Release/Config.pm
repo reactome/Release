@@ -66,7 +66,7 @@ our %passwords = (
 
 
 our $release_server = "reactomerelease.oicr.on.ca";
-our $live_server = "reactome.oicr.on.ca";
+our $live_server = "reactomeprd1.oicr.on.ca";
 our $dev_server = "reactomedev.oicr.on.ca";
 
 if ($TEST_MODE) {
