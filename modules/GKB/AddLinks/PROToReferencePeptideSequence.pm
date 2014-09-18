@@ -86,7 +86,7 @@ sub buildPart {
     # Load the values of an attribute to be updated. Not necessary for the 1st time though.
     $dba->load_class_attribute_values_of_multiple_instances('DatabaseIdentifier','identifier',$reference_peptide_sequences);
 
-    my $pro_reference_database = $self->builder_params->reference_database->get_genecards_reference_database();
+    my $pro_reference_database = $self->builder_params->reference_database->get_pro_reference_database();
     foreach my $reference_peptide_sequence (@{$reference_peptide_sequences}) {
 	print STDERR "$pkg.buildPart: i->Identifier=" . $reference_peptide_sequence->Identifier->[0] . "\n";
 		
