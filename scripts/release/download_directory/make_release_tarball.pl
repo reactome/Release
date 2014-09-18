@@ -6,7 +6,7 @@ use constant TARD => '/tmp';
 use constant BASE => '/usr/local/reactomes/Reactome/production';
 
 # You need to be root to run this script!
-# die "Sorry, root permission required.\n" unless $> == 0;
+die "Sorry, root permission required.\n" unless $> == 0;
 
 my $dir_for_tarball = TARD;
 
@@ -57,6 +57,7 @@ my @cmds = (
     qq(cp -r $base/apache-tomcat* reactome),
     qq(rm -f reactome/apache-tomcat/webapps/*.war),
     qq(rm -fr $unwanted_webapps),
+    qq(rm -f reactome/apache-tomcat/logs/*),
     qq(mkdir reactome/AnalysisService),
     qq(mkdir reactome/AnalysisService/temp),
     qq(mkdir reactome/AnalysisService/input),
