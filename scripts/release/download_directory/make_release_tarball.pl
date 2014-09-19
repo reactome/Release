@@ -40,7 +40,8 @@ my $unwanted_webapps = join(' ',(
 "reactome/apache-tomcat/webapps/SBMLsqueezer",
 "reactome/apache-tomcat/webapps/PDMap",
 "reactome/apache-tomcat/webapps/ReactomeTools",
-"reactome/apache-tomcat/webapps/solr"
+"reactome/apache-tomcat/webapps/solr",
+"reactome/apache-tomcat/webapps/AnalysisService_Antonio.war"
 ));
 
 print `pwd`;
@@ -76,8 +77,6 @@ for my $cmd (@cmds) {
     system($cmd) == 0 or die "Something wrong with '$cmd'\n";
     sleep 1;
 }
-
-
 
 sub check_github_repo {
     # existence
