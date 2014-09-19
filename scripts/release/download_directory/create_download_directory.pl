@@ -190,7 +190,7 @@ $species_file_stem =~ s/ +/_/g;
 print "mysqldump_db_options=$mysqldump_db_options\n";
 print "reactome_db_options=$reactome_db_options\n";
 print "opt_sp=$opt_sp\n";
-my @ZZZcmds = (
+my @cmds = (
     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' | sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz",
     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -col_grps ids,context,source_ids,source_st_ids,participating_protein_count,lit_refs,intact -headers title,table | sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.intact.txt.gz", # this is for the IntAct group at the EBI
     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -mitab | gzip -c > $release_nr/$species_file_stem.mitab.interactions.txt.gz",
@@ -200,6 +200,8 @@ my @ZZZcmds = (
     "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
     "mysqldump --opt $mysqldump_wordpress_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
     "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
+    "./make_reactome_tarball.pl $release_nr",
+
 
     "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' | gzip -c > $release_nr/$species_file_stem.sbml.gz",
     "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.2.sbml.gz",
@@ -245,8 +247,6 @@ my @ZZZcmds = (
     
     "perl fetchEmptyProject.pl reactome_data_model -outputdir $release_nr $fetch_empty_project_db_options",
 );
-
-my @cmds = ( "./run_biopax.pl $biopaxexporter_db_options" );
 
 print STDERR "All commands to be executed:\n", join("\n",hide_password(@cmds)), "\n\n";
 
