@@ -16,7 +16,7 @@ closedir D;
 
 for my $species (@owl) {
     (my $nospace = $species) =~ s/\s+/_/g;
-    system "mv ../biopaxexporter/$release_nr/$species ../biopaxexporter/$release_nr/$nospace";
+    system "mv '../biopaxexporter/$release_nr/$species' ../biopaxexporter/$release_nr/$nospace";
     $species = $nospace;
     $species =~ s/.owl$//;
 
