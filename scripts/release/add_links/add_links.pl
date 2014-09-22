@@ -25,8 +25,8 @@ use GKB::Config;
 use Cwd;
 
 use constant EXE  => './add_links_to_single_resource.pl';
-use constant LOG  => 'logs2';
-use constant RLOG => 'resource_log2.txt';
+use constant LOG  => 'logs';
+use constant RLOG => 'resource_log.txt';
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_edb,$opt_db_ids);
 my $pid;
@@ -85,25 +85,25 @@ if (defined $opt_edb && !($opt_edb eq '')) {
 
 
 my @resources = (
-#	'ENSGReferenceDNASequenceToReferencePeptideSequence',
-#	'EntrezGeneToUniprotReferenceDNASequence',
-#	'BioGPSGeneToUniprotReferenceDNASequence',
-#	'CTDGeneToUniprotReferenceDNASequence',
-#	'DbSNPGeneToUniprotReferenceDNASequence',
-	'PROToReferencePeptideSequence',
-	'GenecardsReferenceDatabaseToReferencePeptideSequence',
- #       'PDBToReferencePeptideSequence',
-#	'OmimReferenceDNASequenceToReferencePeptideSequence',
-#	'UCSCReferenceDatabaseToReferencePeptideSequence',
-#	'RefseqReferenceDatabaseToReferencePeptideSequence',
-#	'RefseqReferenceRNASequenceToReferencePeptideSequence',
-#	'KEGGReferenceGeneToReferencePeptideSequence',
-#	'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
-#	'BioModelsEventToDatabaseIdentifier',
-#	'FlyBaseToUniprotReferenceDNASequence',
+    'ENSGReferenceDNASequenceToReferencePeptideSequence',
+    'EntrezGeneToUniprotReferenceDNASequence',
+    'BioGPSGeneToUniprotReferenceDNASequence',
+    'CTDGeneToUniprotReferenceDNASequence',
+    'DbSNPGeneToUniprotReferenceDNASequence',
+    'PROToReferencePeptideSequence',
+    'GenecardsReferenceDatabaseToReferencePeptideSequence',
+    'PDBToReferencePeptideSequence',
+    'OmimReferenceDNASequenceToReferencePeptideSequence',
+    'UCSCReferenceDatabaseToReferencePeptideSequence',
+    'RefseqReferenceDatabaseToReferencePeptideSequence',
+    'RefseqReferenceRNASequenceToReferencePeptideSequence',
+    'KEGGReferenceGeneToReferencePeptideSequence',
+    'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
+    'BioModelsEventToDatabaseIdentifier',
+    'FlyBaseToUniprotReferenceDNASequence',
 #	'OrphanetToUniprotReferenceDNASequence',
-#	'DOCKBlasterToUniprotDatabaseIdentifier',
-#	'RHEAIdentifierToReactionlikeEvent',
+    'DOCKBlasterToUniprotDatabaseIdentifier',
+    'RHEAIdentifierToReactionlikeEvent',
 );
 
 my $resource;
