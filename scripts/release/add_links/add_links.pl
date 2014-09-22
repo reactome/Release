@@ -25,8 +25,8 @@ use GKB::Config;
 use Cwd;
 
 use constant EXE  => './add_links_to_single_resource.pl';
-use constant RLOG => 'resource_log.txt';
-use constant JOBS => 4;
+use constant LOG  => 'logs2';
+use constant RLOG => 'resource_log2.txt';
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_edb,$opt_db_ids);
 my $pid;
@@ -85,25 +85,25 @@ if (defined $opt_edb && !($opt_edb eq '')) {
 
 
 my @resources = (
-	'ENSGReferenceDNASequenceToReferencePeptideSequence',
-	'EntrezGeneToUniprotReferenceDNASequence',
-	'BioGPSGeneToUniprotReferenceDNASequence',
-	'CTDGeneToUniprotReferenceDNASequence',
-	'DbSNPGeneToUniprotReferenceDNASequence',
+#	'ENSGReferenceDNASequenceToReferencePeptideSequence',
+#	'EntrezGeneToUniprotReferenceDNASequence',
+#	'BioGPSGeneToUniprotReferenceDNASequence',
+#	'CTDGeneToUniprotReferenceDNASequence',
+#	'DbSNPGeneToUniprotReferenceDNASequence',
 	'PROToReferencePeptideSequence',
 	'GenecardsReferenceDatabaseToReferencePeptideSequence',
-	'OmimReferenceDNASequenceToReferencePeptideSequence',
-	'UCSCReferenceDatabaseToReferencePeptideSequence',
-	'RefseqReferenceDatabaseToReferencePeptideSequence',
-	'RefseqReferenceRNASequenceToReferencePeptideSequence',
-	'KEGGReferenceGeneToReferencePeptideSequence',
-	'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
-	'BioModelsEventToDatabaseIdentifier',
-	'FlyBaseToUniprotReferenceDNASequence',
-	'OrphanetToUniprotReferenceDNASequence',
-	'PDBToReferencePeptideSequence',
-	'DOCKBlasterToUniprotDatabaseIdentifier',
-	'RHEAIdentifierToReactionlikeEvent',
+ #       'PDBToReferencePeptideSequence',
+#	'OmimReferenceDNASequenceToReferencePeptideSequence',
+#	'UCSCReferenceDatabaseToReferencePeptideSequence',
+#	'RefseqReferenceDatabaseToReferencePeptideSequence',
+#	'RefseqReferenceRNASequenceToReferencePeptideSequence',
+#	'KEGGReferenceGeneToReferencePeptideSequence',
+#	'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
+#	'BioModelsEventToDatabaseIdentifier',
+#	'FlyBaseToUniprotReferenceDNASequence',
+#	'OrphanetToUniprotReferenceDNASequence',
+#	'DOCKBlasterToUniprotDatabaseIdentifier',
+#	'RHEAIdentifierToReactionlikeEvent',
 );
 
 my $resource;
@@ -118,18 +118,6 @@ foreach $resource (@resources) {
     }
 
     run($exe, "$reactome_db_options -res $resource", $resource);
-}
-
-if (defined $pid && $pid == 0) { 
-    print "This is where this child process exits\n";
-    exit 0;
-}
-
-sleep 5;
-
-# pause until all jobs are done
-while(check_running($exe)) {
-    sleep 300;
 }
 
 my (@failed, @passed);
@@ -160,26 +148,8 @@ sub run {
     my $args = shift;
     my $resource = shift;
 
-    if (defined $pid && $pid == 0) {
-        # this is a child process, we are done.
-        return 0;
-    }
-    
-    my $howmany = 99;
-
-    # Do JOBS jobs in parallel
-    while ($howmany > JOBS) {
-	$howmany = check_running($exe);
-	print STDERR "$howmany processes running at this time\n"; 
-	sleep 300 if $howmany > 6;
-    }
-
-    $pid = fork;
-
-    unless ($pid) {
-	print "Running $exe $args\n";
-	_run($exe,$resource,$args);
-    }
+    print "Running $exe $args\n";
+    _run($exe,$resource,$args);
 }
 
 sub _run {
@@ -188,7 +158,7 @@ sub _run {
     chomp(my $timestamp = `date`);
     print STDERR "$timestamp Starting $args\n";
 
-    my $retval = system "$exe $args > logs/$resource.out 2>&1";
+    my $retval = system "$exe $args > ".LOG."/$resource.out 2>&1";
 
     chomp($timestamp = `date`);
     open LOG, ">>" . RLOG or die $!;
@@ -197,12 +167,3 @@ sub _run {
     close LOG;
 }
 
-sub check_running {
-    my $exe = shift;
-    my $ps = "ps aux |grep $exe | grep -v 'grep' | grep -v 'sh -c'";
-    print "$ps\n";
-    my @running = `$ps`;
-    my $num = scalar(@running) || 0;
-    print "There are $num processes runnning\n";
-    return $num;
-}
