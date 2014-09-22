@@ -284,11 +284,11 @@ sub remove_typed_instances_from_attribute {
     my $we_need_to_do_some_cleanup;
     foreach $attribute_instance (@{$instance->$attribute}) {
 	my $ref_db = $attribute_instance->referenceDatabase || next;
-	my $first  = $ref_db->[0] || next;
+	my $first  = $ref_db->[0]  || next;
 	my $db_id  = $first->db_id || next;
-	print STDERR "DEBUG: Checking on XREF $db_id\n";
+	#print STDERR "DEBUG: Checking on XREF $db_id\n";
 	if ($db_id != $reference_database->db_id) {
-	    print STDERR "DEBUG: We have a XREF we want to preserve here! $db_id\n";
+	    #print STDERR "DEBUG: We have a XREF we want to preserve here! $db_id\n";
 	    push(@attribute_instances, $attribute_instance);
 	}
 	elsif ($db_id == $reference_database->db_id) {
@@ -296,7 +296,7 @@ sub remove_typed_instances_from_attribute {
 	}
     }
     if (@attribute_instances || $we_need_to_do_some_cleanup) {
-	print STDERR "DEBUG: We are doing some cleanup\n";
+	#print STDERR "DEBUG: We are doing some cleanup\n";
 	$instance->$attribute(undef);
 	$instance->$attribute(@attribute_instances);
     }
