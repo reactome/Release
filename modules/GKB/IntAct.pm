@@ -164,7 +164,6 @@ sub is_in_interaction {
     my $db = $self->get_interaction_data;
     my $ok;
     $db->db_get($uniprot,$ok);
-    print STDERR $ok ? "DEBUG: This one is OK $uniprot\n" : "DEBUG: This one is not in any interactions\n";
     return $ok;
 }
 
