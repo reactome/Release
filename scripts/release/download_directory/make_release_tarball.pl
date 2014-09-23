@@ -41,7 +41,7 @@ my $unwanted_webapps = join(' ',(
 "reactome/apache-tomcat/webapps/PDMap",
 "reactome/apache-tomcat/webapps/ReactomeTools",
 "reactome/apache-tomcat/webapps/solr",
-"reactome/apache-tomcat/webapps/AnalysisService_Antonio.war"
+"reactome/apache-tomcat/webapps/AnalysisService_Antonio"
 ));
 
 print `pwd`;
