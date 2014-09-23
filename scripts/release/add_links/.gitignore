@@ -3,3 +3,5 @@ log*/*
 *.err
 *.log
 *.dump
+4* 
+5*
