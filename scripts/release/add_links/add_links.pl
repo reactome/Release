@@ -101,7 +101,7 @@ my @resources = (
     'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
     'BioModelsEventToDatabaseIdentifier',
     'FlyBaseToUniprotReferenceDNASequence',
-#	'OrphanetToUniprotReferenceDNASequence',
+    'OrphanetToUniprotReferenceDNASequence',
     'DOCKBlasterToUniprotDatabaseIdentifier',
     'RHEAIdentifierToReactionlikeEvent',
 );
@@ -110,6 +110,7 @@ my $resource;
 my $cmd;
 
 unlink RLOG if -e RLOG;
+mkdir LOG unless -d LOG;
 
 foreach $resource (@resources) {
     if (!(defined $resource) || $resource eq '') {
@@ -161,9 +162,9 @@ sub _run {
     my $retval = system "$exe $args > ".LOG."/$resource.out 2>&1";
 
     chomp($timestamp = `date`);
-    open LOG, ">>" . RLOG or die $!;
+    open LOGFILE, ">>" . RLOG or die $!;
     my $state = $retval ? 'FAILED' : 'PASSED';
-    print LOG "$resource $state $retval $timestamp\n";
-    close LOG;
+    print LOGFILE "$resource $state $retval $timestamp\n";
+    close LOGFILE;
 }
 
