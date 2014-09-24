@@ -469,69 +469,70 @@ public class IDGenerationCommandLine {
     		System.err.println("IDGenerationCommandline.setCurrentReleaseParams: IdentifierDatabase.getReleaseTable()=" + IdentifierDatabase.getReleaseTable());			
     		System.err.println("IDGenerationCommandline.setCurrentReleaseParams: releases.size()=" + releases.size());			
 			
-			if (releases.size()>0)
-				release = (GKInstance)releases.toArray()[0];
-			else {
-				release = IdentifierDatabase.createBlankRelease();
-				release.setAttributeValue("num", currentReleaseNum);
-				release.setAttributeValue("project", project);
-				release.setAttributeValue("dateTime", currentReleaseDateTime);
-			}
-			
-			if (currentSliceDbParams.dbName!=null && !currentSliceDbParams.dbName.equals("")) {
-//			if (currentSliceDbParams.dbName!=null && !currentSliceDbParams.dbName.equals("") && !orthologyMode) {
-				sliceDbParams = new GKInstance();
-				sliceDbParams.setSchemaClass(instanceDatabaseDba.getSchema().getClassByName("DbParams"));
-				sliceDbParams.setDbAdaptor(instanceDatabaseDba);
-				sliceDbParams.setAttributeValue("host", currentSliceDbParams.hostname);
-				sliceDbParams.setAttributeValue("dbName", currentSliceDbParams.dbName);
-				sliceDbParams.setAttributeValue("port", currentSliceDbParams.port);
-		    	// Replace username and password with NULL in the identifier
-		    	// database, if requested.  This is for security reasons.
-		    	if (nullifyUserAndPassword) {
-					sliceDbParams.setAttributeValue("host", "localhost");
-					sliceDbParams.setAttributeValue("user", "NULL");
-					sliceDbParams.setAttributeValue("pwd", "NULL");
-		    	} else {
-					sliceDbParams.setAttributeValue("user", currentSliceDbParams.username);
-					sliceDbParams.setAttributeValue("pwd", currentSliceDbParams.password);
-		    	}
-		    	
-				instanceDatabaseDba.storeInstance(sliceDbParams);
-				release.setAttributeValue("sliceDbParams", sliceDbParams);
-			}
-			if (currentReleaseDbParams.dbName!=null && !currentReleaseDbParams.dbName.equals("")) {
-				releaseDbParams = new GKInstance();
-				releaseDbParams.setSchemaClass(instanceDatabaseDba.getSchema().getClassByName("DbParams"));
-				releaseDbParams.setDbAdaptor(instanceDatabaseDba);
-				releaseDbParams.setAttributeValue("host", currentReleaseDbParams.hostname);
-				releaseDbParams.setAttributeValue("dbName", currentReleaseDbParams.dbName);
-				releaseDbParams.setAttributeValue("port", currentReleaseDbParams.port);
-		    	// Replace username and password with NULL in the identifier
-		    	// database, if requested.  This is for security reasons.
-		    	if (nullifyUserAndPassword) {
-		    		releaseDbParams.setAttributeValue("host", "localhost");
-		    		releaseDbParams.setAttributeValue("user", "NULL");
-		    		releaseDbParams.setAttributeValue("pwd", "NULL");
-		    	} else {
-		    		releaseDbParams.setAttributeValue("user", currentSliceDbParams.username);
-		    		releaseDbParams.setAttributeValue("pwd", currentSliceDbParams.password);
-		    	}
-				
-				instanceDatabaseDba.storeInstance(releaseDbParams);
-				release.setAttributeValue("releaseDbParams", releaseDbParams);
-			}
-			
-			// This stuff has to be inserted into the identifier
-			// database, otherwise the rest of the code fails
-			// These are new instances, so store them.
-			if (releases.size()>0)
-				instanceDatabaseDba.updateInstance(release);
-			else
-				instanceDatabaseDba.storeInstance(release);
-		} catch (Exception e) {
-			handleError("Problem setting database parameters for the current release");
+		if (releases.size()>0)
+		    release = (GKInstance)releases.toArray()[0];
+		else {
+		    release = IdentifierDatabase.createBlankRelease();
+		    release.setAttributeValue("num", currentReleaseNum);
+		    release.setAttributeValue("project", project);
+		    release.setAttributeValue("dateTime", currentReleaseDateTime);
 		}
+		
+		if (currentSliceDbParams.dbName!=null && !currentSliceDbParams.dbName.equals("")) {
+		    //			if (currentSliceDbParams.dbName!=null && !currentSliceDbParams.dbName.equals("") && !orthologyMode) {
+		    sliceDbParams = new GKInstance();
+		    sliceDbParams.setSchemaClass(instanceDatabaseDba.getSchema().getClassByName("DbParams"));
+		    sliceDbParams.setDbAdaptor(instanceDatabaseDba);
+		    sliceDbParams.setAttributeValue("host", currentSliceDbParams.hostname);
+		    sliceDbParams.setAttributeValue("dbName", currentSliceDbParams.dbName);
+		    sliceDbParams.setAttributeValue("port", currentSliceDbParams.port);
+		    // Replace username and password with NULL in the identifier
+		    // database, if requested.  This is for security reasons.
+		    if (nullifyUserAndPassword) {
+			sliceDbParams.setAttributeValue("host", "localhost");
+			sliceDbParams.setAttributeValue("user", "NULL");
+			sliceDbParams.setAttributeValue("pwd", "NULL");
+		    } else {
+			sliceDbParams.setAttributeValue("user", currentSliceDbParams.username);
+			sliceDbParams.setAttributeValue("pwd", currentSliceDbParams.password);
+		    }
+		    
+		    instanceDatabaseDba.storeInstance(sliceDbParams);
+		    release.setAttributeValue("sliceDbParams", sliceDbParams);
+		}
+		if (currentReleaseDbParams.dbName!=null && !currentReleaseDbParams.dbName.equals("")) {
+		    releaseDbParams = new GKInstance();
+		    releaseDbParams.setSchemaClass(instanceDatabaseDba.getSchema().getClassByName("DbParams"));
+		    releaseDbParams.setDbAdaptor(instanceDatabaseDba);
+		    releaseDbParams.setAttributeValue("host", currentReleaseDbParams.hostname);
+		    releaseDbParams.setAttributeValue("dbName", currentReleaseDbParams.dbName);
+		    releaseDbParams.setAttributeValue("port", currentReleaseDbParams.port);
+		    // Replace username and password with NULL in the identifier
+		    // database, if requested.  This is for security reasons.
+		    if (nullifyUserAndPassword) {
+			releaseDbParams.setAttributeValue("host", "localhost");
+			releaseDbParams.setAttributeValue("user", "NULL");
+			releaseDbParams.setAttributeValue("pwd", "NULL");
+		    } else {
+			releaseDbParams.setAttributeValue("user", currentSliceDbParams.username);
+			releaseDbParams.setAttributeValue("pwd", currentSliceDbParams.password);
+		    }
+		    
+		    instanceDatabaseDba.storeInstance(releaseDbParams);
+		    release.setAttributeValue("releaseDbParams", releaseDbParams);
+		}
+		
+		// This stuff has to be inserted into the identifier
+		// database, otherwise the rest of the code fails
+		// These are new instances, so store them.
+		if (releases.size()>0)
+		    instanceDatabaseDba.updateInstance(release);
+		else
+		    instanceDatabaseDba.storeInstance(release);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    handleError("Problem setting database parameters for the current release: "+e);
+	}
     }
     
     private void handleError(String text) {
