@@ -744,7 +744,7 @@ public class IDGenerator {
 								gkcentralStableID.setDbAdaptor(gk_centraldba);
 								gkcentralStableID.setAttributeValue("identifier", stableIdentifierString);
 								if (!testMode) {
-									gk_centraldba.storeInstance(gkcentralStableID);
+									gk_centraldba.txStoreInstance(gkcentralStableID);
 								}
 							} else {
 								gkcentralStableID = (GKInstance)gkcentralStableIDs.toArray()[0];
@@ -762,14 +762,14 @@ public class IDGenerator {
 							
 							if (!testMode) {
 								// Make sure the version gets updated.
-								gk_centraldba.updateInstanceAttribute(gkcentralStableID, "identifierVersion");
+								gk_centraldba.txUpdateInstanceAttribute(gkcentralStableID, "identifierVersion");
 								// Update the instance in the current release so that it
 								// contains the appropriate stable ID info.
-								gk_centraldba.updateInstanceAttribute(gk_centralInstance, "stableIdentifier");
+								gk_centraldba.txUpdateInstanceAttribute(gk_centralInstance, "stableIdentifier");
 								// Update the instance in the current release so that it
 								// contains the appropriate DOI info.
 								if (doi!=null)
-									gk_centraldba.updateInstanceAttribute(gk_centralInstance, "doi");
+									gk_centraldba.txUpdateInstanceAttribute(gk_centralInstance, "doi");
 							}
 						} else {
 							System.err.println("IDGenerator.generateIDs: WARNING - gk_central has no valid instance corresponding to DB_ID=" + currentInstance.getDBID());
