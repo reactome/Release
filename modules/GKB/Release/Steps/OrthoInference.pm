@@ -27,6 +27,8 @@ override 'run_commands' => sub {
     	[
             ["mkdir -p $version"],
             ["perl wrapper_ortho_inference.pl -r $version -user $user -pass $pass > $version/wrapper_ortho_inference.out"],
+            ["rm -f ../website_files_update/report_ortho_inference.txt"],
+            ["ln -s report_ortho_inference_$db.txt ../website_files_update/report_ortho_inference.txt"],
             ["mysqldump --opt -u$user -p$pass $db > $db\_after_ortho.dump"]
 	]
     );

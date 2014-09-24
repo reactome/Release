@@ -32,7 +32,7 @@ override 'run_commands' => sub {
     
     cmd("Generating stable ids for orthoinferences",
     	[
-    	    ["./generate_stable_ids.sh -f  -user $user -pass $pass -port 3306 -prnum $prevver -crdbname $db -crnum $version -idbname test_reactome_stable_identifiers -o  -nullify > generate_stable_ids_$version.ortho.out"]
+    	    ["./generate_stable_ids.sh -f  -user $user -pass $pass -port 3306 -prnum $prevver -crdbname $db -crnum $version -idbname test_reactome_stable_identifiers -o  -nullify > generate_stable_ids_$version.ortho.out 2>&1"]
     	]
     );
     
