@@ -559,9 +559,9 @@ sub infer_event {
     my $inf_e = new_inferred_instance($event);
 =head #was used when event names contained e.g. species info, should be resolved now... (?)
     my $event_name = $event->Name->[0];
-    print STDERR "infer_events.infer_event: event_name=$event_name\n";
+    print "infer_events.infer_event: event_name=$event_name\n";
     $event_name =~ s/([^\[])\[[\w\s\/,]+\]/$1/g; #remove bracketed text
-    print STDERR "infer_events.infer_event: NEW event_name=$event_name\n";
+    print "infer_events.infer_event: NEW event_name=$event_name\n";
     $inf_e->Name($event_name);
 =cut
     $inf_e->Name(@{$event->Name});
@@ -967,26 +967,26 @@ sub check_for_identical_instances {
     if ($i->identical_instances_in_db && $i->identical_instances_in_db->[0]) {
 	my $count_ii = @{$i->identical_instances_in_db}; #number of elements
 	if ($count_ii == 1) {
-	    print STDERR "Replaced with existing identical instance: ",$i->identical_instances_in_db->[0]->db_id , ".\n";
+	    print "Replaced with existing identical instance: ",$i->identical_instances_in_db->[0]->db_id , ".\n";
 	    return $i->identical_instances_in_db->[0];
 	} else { #interactive replacement
-	    print STDERR "This entity has more than one identical instances.......\n";
+	    print "This entity has more than one identical instances.......\n";
 #The following condition check is only needed for databases in the old data model when isoforms were included in the ReferencePeptideSequence class  - the details are slightly complicated, but that was one reason why we have changed the data model - so it's sorted now and this check is only kept for backward compatibility
 	    if (($protein_class eq 'ReferencePeptideSequence') &&
 		$i->is_a('ReferencePeptideSequence') && $i->identical_instances_in_db->[0]->VariantIdentifier->[0]) {
-		print STDERR $i->identical_instances_in_db->[0]->VariantIdentifier->[0], " ***different isoforms used?***\n";
+		print $i->identical_instances_in_db->[0]->VariantIdentifier->[0], " ***different isoforms used?***\n";
 	    } else {
 #temporary hack to avoid failing of script due to duplicates
-		print STDERR "***duplicates***:\n";
+		print "***duplicates***:\n";
 		foreach (@{$i->identical_instances_in_db}) {
-		    print STDERR "\t", $_->extended_displayName, "\n";
+		    print "\t", $_->extended_displayName, "\n";
 		}
 	    }
 	    return $i->identical_instances_in_db->[0]; #return first element for now
 	}
     } else {
 	my $ID = $dba->store($i);
-	print STDERR "Stored instance: ", $ID, "\n";
+	print "Stored instance: ", $ID, "\n";
 	return $i;
     }
 }

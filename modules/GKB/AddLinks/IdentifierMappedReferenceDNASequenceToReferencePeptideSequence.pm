@@ -133,7 +133,7 @@ sub insert_xrefs {
 		
 		# Get rid of old xrefs of this type, if necessary.
 		if ($overwrite_old_xrefs) {
-			$self->remove_typed_instances_from_reference_peptide_sequence_hash($accs, $attribute, $reference_database, $species);
+		    $self->remove_typed_instances_from_reference_peptide_sequence_hash($accs, $attribute, $reference_database, $species);
 		}
 		
 		@input_ids = keys(%{$accs->{$species}});
@@ -221,11 +221,12 @@ sub insert_xrefs {
 			}
 		}
 		if (!$output_id_hash_defined_flag) {
-			if (!(defined $self->termination_status)) {
-				$self->termination_status("no xrefs for species: ");
-			}
-			$self->termination_status($self->termination_status . "$species, ");
-			next;
+		    #if (!(defined $self->termination_status)) {
+		    #	$self->termination_status("no xrefs for species: ");
+		    #}
+		    #$self->termination_status($self->termination_status . "$species, ");
+		    warn "No xrefs for species $species";
+		    next;
 		}
 		
 		# Update to database.
@@ -233,7 +234,7 @@ sub insert_xrefs {
 		    foreach my $i (@{$ar}) {
 				print STDERR $self->class_name . ".insert_xrefs: for protein $acc adding following to database: \t", join(',',map {$_->displayName} @{$i->$attribute}), "\n";
 #				if (scalar(@{$i->$attribute})>0 && $i->$attribute->[0]) {
-				if ($self->insertion_stats_hash->{$i->db_id}) {
+				if ($i && $self->insertion_stats_hash->{$i->db_id}) {
 				    $i->add_attribute_value('modified', $self->instance_edit);
 				    $dba->update_attribute($i, 'modified');
 				    $dba->update_attribute($i, $attribute);

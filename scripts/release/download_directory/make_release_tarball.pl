@@ -6,7 +6,7 @@ use constant TARD => '/tmp';
 use constant BASE => '/usr/local/reactomes/Reactome/production';
 
 # You need to be root to run this script!
-# die "Sorry, root permission required.\n" unless $> == 0;
+die "Sorry, root permission required.\n" unless $> == 0;
 
 my $dir_for_tarball = TARD;
 
@@ -40,7 +40,8 @@ my $unwanted_webapps = join(' ',(
 "reactome/apache-tomcat/webapps/SBMLsqueezer",
 "reactome/apache-tomcat/webapps/PDMap",
 "reactome/apache-tomcat/webapps/ReactomeTools",
-"reactome/apache-tomcat/webapps/solr"
+"reactome/apache-tomcat/webapps/solr",
+"reactome/apache-tomcat/webapps/AnalysisService_Antonio"
 ));
 
 print `pwd`;
@@ -57,6 +58,7 @@ my @cmds = (
     qq(cp -r $base/apache-tomcat* reactome),
     qq(rm -f reactome/apache-tomcat/webapps/*.war),
     qq(rm -fr $unwanted_webapps),
+    qq(rm -f reactome/apache-tomcat/logs/*),
     qq(mkdir reactome/AnalysisService),
     qq(mkdir reactome/AnalysisService/temp),
     qq(mkdir reactome/AnalysisService/input),
@@ -75,8 +77,6 @@ for my $cmd (@cmds) {
     system($cmd) == 0 or die "Something wrong with '$cmd'\n";
     sleep 1;
 }
-
-
 
 sub check_github_repo {
     # existence
