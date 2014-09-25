@@ -100,7 +100,7 @@ my @cmds = (
 
 my $broken_command_counter = 0;
 foreach my $cmd (@cmds) {
-    print STDERR "cmd=$cmd\n";
+    print "cmd=$cmd\n";
     if (system($cmd) != 0) {
     	print STDERR "WARNING - something went wrong while executing '$cmd'!!\n";
     	$broken_command_counter++;

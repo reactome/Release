@@ -161,12 +161,15 @@ sub set_display_only_intact_lines {
 }
 
 sub find_interactors_for_ReferenceSequences {
-    my ($self, $rss, $participating_protein_count_cutoff, $mitab) = @_;
-    
+    my ($self, $rss, $participating_protein_count_cutoff, $mitab, $rs_num) = @_;
+    my $rs_count = $self->{rs_count};
+
+    # skip if the refseq is not in IntAct
+    return undef if @$rss == 1 && ! $self->intact->is_in_interaction($rss->[0]);
+
     my $logger = get_logger(__PACKAGE__);
     
     my %interactions;
-    my $rs_count = scalar(@{$rss});
     
     if (defined $participating_protein_count_cutoff) {
     	$logger->info("InteractionGenerator.find_interactors_for_ReferenceSequences: participating_protein_count_cutoff=$participating_protein_count_cutoff");
@@ -175,7 +178,6 @@ sub find_interactors_for_ReferenceSequences {
     }
     $logger->info("InteractionGenerator.find_interactors_for_ReferenceSequences: total number of ReferenceSequences=$rs_count");
     
-    my $rs_num = 0;
     foreach my $rs (@{$rss}) {
     	if ($rs_num%100 == 0) {
     	    $logger->info("InteractionGenerator.find_interactors_for_ReferenceSequences: rs_num=$rs_num (" . ($rs_num*100)/$rs_count . "%)");
@@ -184,8 +186,7 @@ sub find_interactors_for_ReferenceSequences {
             $self->find_mitab_interactors_for_ReferenceSequence($rs,\%interactions, $participating_protein_count_cutoff);
         } else {
             $self->find_interactors_for_ReferenceSequence($rs,\%interactions, $participating_protein_count_cutoff);
-        }	
-	$rs_num++;
+        }
     }
     return \%interactions;
 }
@@ -1086,14 +1087,16 @@ sub insert_intact_xrefs_into_instance {
 		$cross_references = [];
 	}
 
-	# Find already-existing IntAct cross-references and note their IDs
-	my %existing_intact_ids = ();
+    # Find already-existing IntAct cross-references and note their IDs
+    my %existing_intact_ids = ();
     my $cross_reference;
-	foreach $cross_reference (@{$cross_references}) {
-		if ($cross_reference->referenceDatabase->[0]->db_id() == $reference_database_intact->db_id()) {
-			$existing_intact_ids{$cross_reference->identifier->[0]} = 1;
-		}
+    foreach $cross_reference (@{$cross_references}) {
+	next unless $cross_reference && $cross_reference->referenceDatabase;
+	next unless $cross_reference->referenceDatabase->[0];
+	if ($cross_reference->referenceDatabase->[0]->db_id() == $reference_database_intact->db_id()) {
+	    $existing_intact_ids{$cross_reference->identifier->[0]} = 1;
 	}
+    }
 		
 	$logger->info("InteractionGenerator.insert_intact_xrefs_into_instance: inserting xrefs into instance " . $instance->db_id() . ":" . $instance->_displayName->[0] . ": ");
 		
