@@ -159,24 +159,29 @@ sub buildPart {
 		    print STDERR "IntActDatabaseIdentifierToComplexOrReactionlikeEvent.buildPart: WARNING - no " . $self->get_reference_protein_class() . " instances - is the species name correct?\n";
 		    return;
 		}
-		
-		# This will get IntAct IDs for interactions, but only for
-		# those arising from reactions or complexes involving 3 or
-		# fewer proteins.
-		my $interactions_hash = $interaction_generator->find_interactors_for_ReferenceSequences($reference_peptide_sequences, 3);
-	
-		# Only insert cross-references for reactions or complexes involving 3 or
-		# fewer proteins.
-		# Note that insert_intact_xrefs deals with removing old IntAct
-		# cross references wherever it finds them, be it on Events or
-		# complexes.
-		$interaction_generator->insert_intact_xrefs($interactions_hash, 3);
-		
-		print STDERR "IntActDatabaseIdentifierToComplexOrReactionlikeEvent.buildPart: done inserting xrefs\n";
 
-		$interactions_hash = undef; # memory hog, force garbage collection
+		my $idx;
+		my $rs_count = @$reference_peptide_sequences;
+		$interaction_generator->{rs_count} = $rs_count;
+		for my $refpep (@$reference_peptide_sequences) {
+		    # This will get IntAct IDs for interactions, but only for
+		    # those arising from reactions or complexes involving 3 or
+		    # fewer proteins.
+		    my $interactions_hash = $interaction_generator->find_interactors_for_ReferenceSequences([$refpep], 3, undef, ++$idx);
+		    next unless $interactions_hash;
+		    
+		    # Only insert cross-references for reactions or complexes involving 3 or
+		    # fewer proteins.
+		    # Note that insert_intact_xrefs deals with removing old IntAct
+		    # cross references wherever it finds them, be it on Events or
+		    # complexes.
+		    $interaction_generator->insert_intact_xrefs($interactions_hash, 3);
 		
-		print STDERR "IntActDatabaseIdentifierToComplexOrReactionlikeEvent.buildPart: garbage should now be collected\n";
+		    print STDERR "IntActDatabaseIdentifierToComplexOrReactionlikeEvent.buildPart: done inserting xrefs\n";
+
+#		    $interactions_hash = undef; # memory hog, force garbage collection
+#		    print STDERR "IntActDatabaseIdentifierToComplexOrReactionlikeEvent.buildPart: garbage should now be collected\n";
+		}
 	}
 	
 	print STDERR "IntActDatabaseIdentifierToComplexOrReactionlikeEvent.buildPart: time to do some timing\n";

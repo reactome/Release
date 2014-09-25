@@ -46,6 +46,7 @@ use GKB::AddLinks::BioModelsEventToDatabaseIdentifier;
 use GKB::AddLinks::FlyBaseToUniprotReferenceDNASequence;
 use GKB::AddLinks::OrphanetToUniprotReferenceDNASequence;
 use GKB::AddLinks::PDBToReferencePeptideSequence;
+use GKB::AddLinks::PROToReferencePeptideSequence;
 use GKB::AddLinks::DOCKBlasterToUniprotDatabaseIdentifier;
 use GKB::AddLinks::WormbaseReferenceDNASequenceToReferencePeptideSequence;
 use GKB::AddLinks::RHEAIdentifierToReactionlikeEvent;
@@ -108,6 +109,8 @@ my %builder_map = (
 	'RHEAIdentifierToReactionlikeEvent' => 'GKB::AddLinks::RHEAIdentifierToReactionlikeEvent',
 	
 	'PDBToReferencePeptideSequence' => 'GKB::AddLinks::PDBToReferencePeptideSequence',
+	
+	'PROToReferencePeptideSequence' => 'GKB::AddLinks::PROToReferencePeptideSequence',
 	
 	'DOCKBlasterToUniprotDatabaseIdentifier' => 'GKB::AddLinks::DOCKBlasterToUniprotDatabaseIdentifier',
 	

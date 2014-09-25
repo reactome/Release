@@ -81,7 +81,7 @@ my %reference_database_info_hash = (
     'Orphanet' => {'Name' => ['Orphanet'], 'URL' => 'http://www.orpha.net', 'AccessUrl' => 'http://www.orpha.net/consor/cgi-bin/Disease_Genes.php?data_id=###ID###'},
 #    'PDB' => {'Name' => ['PDB', 'Protein Data Bank'], 'URL' => 'http://www.pdb.org', 'AccessUrl' => 'http://www.pdb.org/pdb/explore/explore.do?structureId=###ID###'},
     'PDB' => {'Name' => ['PDB', 'Protein Data Bank'], 'URL' => 'http://www.pdb.org', 'AccessUrl' => 'http://pdbe.org/###ID###'},
-    'PRO' => {'Name' => ['PRO', 'Protein Ontology'], 'URL' => 'http://pir.georgetown.edu/pro', 'AccessUrl' => 'http://pir.georgetown.edu/cgi-bin/pro/textsearch_pro?search=search&field0=ALLFLDS&query0=###ID###'},
+    'PRO' => {'Name' => ['PRO', 'Protein Ontology'], 'URL' => 'http://pir.georgetown.edu/pro', 'AccessUrl' => 'http://purl.obo.library.org/obo/PR_###ID###'},
     'RefSeq' => {'Name' => ['RefSeq'], 'URL' => 'http://www.ncbi.nlm.nih.gov/RefSeq/', 'AccessUrl' => 'http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=###ID###'},
     'Rhea' => {'Name' => ['Rhea'], 'URL' => 'http://www.ebi.ac.uk/rhea//', 'AccessUrl' => 'http://www.ebi.ac.uk/rhea/reaction.xhtml?id=###ID###'},
     'UniProt' => {'Name' => ['UniProt', 'SwissProt'], 'URL' => 'http://www.uniprot.org', 'AccessUrl' => 'http://www.uniprot.org/entry/###ID###'},
