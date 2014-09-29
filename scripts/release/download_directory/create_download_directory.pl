@@ -196,30 +196,30 @@ print "opt_sp=$opt_sp\n";
 # [eg: 'foo_script', 1, 1, "perl fool.pl"]
 # log files foo_script.err, foo_script.out
 my @cmds = (
-    [
-     "$species_file_stem.interactions.stid", 
-     1, 
-     0, # set to 0 if STDOUT is redirected in command
-     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' ".
-     "| sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz"
-    ],
+#    [
+#     "$species_file_stem.interactions.stid", 
+#     1, 
+#     0, # set to 0 if STDOUT is redirected in command
+#     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' ".
+#     "| sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz"
+#    ],
 
-    [
-     "$species_file_stem.interactions.intact",
-     1,
-     0,
-     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -col_grps ids,context,".
-     "source_ids,source_st_ids,participating_protein_count,lit_refs,intact -headers title,table | ".
-     "sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.intact.txt.gz"
-    ],
+#    [
+#     "$species_file_stem.interactions.intact",
+#     1,
+#     0,
+#     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -col_grps ids,context,".
+#     "source_ids,source_st_ids,participating_protein_count,lit_refs,intact -headers title,table | ".
+#     "sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.intact.txt.gz"
+#    ],
 
-    [
-     "$species_file_stem.mitab.interactions",
-     1,
-     0,
-     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -mitab | ".
-     "gzip -c > $release_nr/$species_file_stem.mitab.interactions.txt.gz"
-    ],
+#    [
+#     "$species_file_stem.mitab.interactions",
+#     1,
+#     0,
+#     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -mitab | ".
+#     "gzip -c > $release_nr/$species_file_stem.mitab.interactions.txt.gz"
+#    ],
 
     [
      "database_dumps",
@@ -247,102 +247,102 @@ my @cmds = (
      "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.2.sbml.gz",
     ],
 
-    [
-     "interactions_for_all_species",
-     1,
-     1,
-     "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options"
-    ],
+ #   [
+ #    "interactions_for_all_species",
+ #    1,
+ #    1,
+ #    "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options"
+ #   ],
 
-    [
-     "psicquic_indexers",
-     1,
-     1,
-     "perl psicquic_indexers.pl -release $release_nr"
-    ],
+ #   [
+ #    "psicquic_indexers",
+ #    1,
+ #    1,
+ #    "perl psicquic_indexers.pl -release $release_nr"
+ #   ],
 
-    [
-     "gene_association.reactome",
-     1,
-     0,
-     "cp ../goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome ".
-     "$release_nr/gene_association.reactome",
-    ],
+ #   [
+ #    "gene_association.reactome",
+ #    1,
+ #    0,
+ #    "cp ../goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome ".
+ #    "$release_nr/gene_association.reactome",
+ #   ],
 
-    [
-     "runDiagramDumper",
-     1,
-     1,
-    "cd WebELVTool",
-    "rm -f $diagram_dump_filename/PNG/*",
-    "rm -f $diagram_dump_filename/PDF/*",
-    "./runDiagramDumper.sh $diagram_dump_options",
-    "cd $diagram_dump_filename",
-    "rm -f *.zip",
-    "zip -r diagrams.pdf.zip PDF",
-    "zip -r diagrams.png.zip PNG",
-    "mv *.zip ../download_directory/$release_nr",
-    ],
+ #   [
+ #    "runDiagramDumper",
+ #    1,
+ #    1,
+ #   "cd WebELVTool",
+ #   "rm -f $diagram_dump_filename/PNG/*",
+ #   "rm -f $diagram_dump_filename/PDF/*",
+ #   "./runDiagramDumper.sh $diagram_dump_options",
+ #   "cd $diagram_dump_filename",
+ #   "rm -f *.zip",
+ #   "zip -r diagrams.pdf.zip PDF",
+ #   "zip -r diagrams.png.zip PNG",
+ #   "mv *.zip ../download_directory/$release_nr",
+ #   ],
 
-    [
-     "fetch_and_print_values",
-     1,
-     0,
-     qq(perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" ).
-     qq(-class Complex $reactome_db_options -output DB_ID -output 'species.name[0]' ).
-     qq(-output _displayName > $release_nr/curated_complexes.txt 2> fetch_and_print_values.err),
-    
-     qq(perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" ).
-     qq(-class Complex $reactome_db_options -output 'stableIdentifier._displayName' -output ).
-     qq('species.name[0]' -output _displayName > $release_nr/curated_complexes.stid.txt)
-    ],
+ #   [
+ #    "fetch_and_print_values",
+ #    1,
+ #    0,
+ #    qq(perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" ).
+ #    qq(-class Complex $reactome_db_options -output DB_ID -output 'species.name[0]' ).
+ #    qq(-output _displayName > $release_nr/curated_complexes.txt 2> fetch_and_print_values.err),
+ #   
+ #    qq(perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" ).
+ #    qq(-class Complex $reactome_db_options -output 'stableIdentifier._displayName' -output ).
+ #    qq('species.name[0]' -output _displayName > $release_nr/curated_complexes.stid.txt)
+ #   ],
 
-    [
-     "run_biopax",
-     1,
-     1,
-    "./run_biopax.pl $biopaxexporter_db_options",
-    ],
+ #   [
+ #    "run_biopax",
+ #    1,
+ #    1,
+ #   "./run_biopax.pl $biopaxexporter_db_options",
+ #   ],
+ #   
+ #   [
+ #    "runGSEAOutput",
+ #    1,
+ #    1,
+ #    "cd WebELVTool",
+ #    "./runGSEAOutput.sh $reactome_to_msig_export_db_options",
+ #    "zip $reactome_to_msig_export_db_filename.zip $reactome_to_msig_export_db_filename",
+ #    "cd -",
+ #    "mv WebELVTool/$reactome_to_msig_export_db_filename.zip $release_nr"
+ #   ],
     
-    [
-     "runGSEAOutput",
-     1,
-     1,
-     "cd WebELVTool",
-     "./runGSEAOutput.sh $reactome_to_msig_export_db_options",
-     "zip $reactome_to_msig_export_db_filename.zip $reactome_to_msig_export_db_filename",
-     "cd -",
-     "mv WebELVTool/$reactome_to_msig_export_db_filename.zip $release_nr"
-    ],
+#    [
+#     "generate_packaged_pathway_diagrams",
+#     1,
+#     2,
+#    "./generate_packaged_pathway_diagrams.sh $diagram_dump_options"
+#    ],
     
-    [
-     "generate_packaged_pathway_diagrams",
-     1,
-     2,
-    "./generate_packaged_pathway_diagrams.sh $diagram_dump_options"
-    ],
+#    [
+#     "TheReactomeBook",
+#     1,
+#     1,
+#     "perl genbook_rtf.pl -depth 100 $reactome_db_options -split -react_rep 2",
+#     "zip -r TheReactomeBook.rtf.zip TheReactomeBook",
+#     "rm -rf TheReactomeBook",
+#     "mv TheReactomeBook.rtf.zip $release_nr",
+#    
+#     "perl genbook_pdf.pl -depth 100 $reactome_db_options -stdout -react_rep 2 > TheReactomeBook.pdf",
+#     "zip TheReactomeBook.pdf.zip TheReactomeBook.pdf",
+#     "rm TheReactomeBook.pdf",
+#     "mv TheReactomeBook.pdf.zip $release_nr"
+#    ],
     
-    [
-     "TheReactomeBook",
-     1,
-     1,
-     "perl genbook_rtf.pl -depth 100 $reactome_db_options -split -react_rep 2",
-     "zip -r TheReactomeBook.rtf.zip TheReactomeBook",
-     "rm -rf TheReactomeBook",
-     "mv TheReactomeBook.rtf.zip $release_nr",
-    
-     "perl genbook_pdf.pl -depth 100 $reactome_db_options -stdout -react_rep 2 > TheReactomeBook.pdf",
-     "zip TheReactomeBook.pdf.zip TheReactomeBook.pdf",
-     "rm TheReactomeBook.pdf",
-     "mv TheReactomeBook.pdf.zip $release_nr"
-    ],
-    
-    [
-     "fetchEmptyProject",
-     1,
-     1,
-     "perl fetchEmptyProject.pl reactome_data_model -outputdir $release_nr $fetch_empty_project_db_options"
-    ]
+#    [
+#     "fetchEmptyProject",
+#     1,
+#     1,
+#     "perl fetchEmptyProject.pl reactome_data_model -outputdir $release_nr $fetch_empty_project_db_options"
+#    ]
 );
 
 
@@ -372,19 +372,20 @@ sub run {
 
     print STDERR "\nExecuting task $label\n";
     my $not_good = 0;
-    for my $command (@commands) {
-	$command .= " $redirect";
-	print STDERR "Executing: ", hide_password($command), "\n";
-	my $retval = system $command; 
-	if ($retval) {
-	    print STDERR "WARNING - something went wrong while executing '" . hide_password($command) . " ($!)'!!\n";
-	    $not_good++;
-	}
-	else {
-	    print STDERR "Success!\n";
-	}
+
+    # create the list of commands with individual logging 
+    my $command = join(';', map {"$_ $redirect"} @commands);
+		       
+    print STDERR "Executing: ", hide_password($command), "\n";
+
+    my $retval = system $command; 
+    if ($retval) {
+	print STDERR "WARNING - something went wrong while executing '" . hide_password($command) . " ($!)'!!\n";
+	$not_good++;
     }
-    
+    else {
+	print STDERR "Success!\n";
+    }
 
     if ($log || $elog) {
 	my $files = $log && $elog ? 'files are' : 'file is';
