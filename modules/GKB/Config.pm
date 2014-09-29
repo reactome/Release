@@ -5,6 +5,7 @@ use Cwd 'abs_path';
 use GKB::Secrets;
 
 use vars qw(@ISA     @EXPORT
+            $ORPHAN_PWD
 	    $GK_DB_NAME
 	    $GK_IDB_NAME
 	    $GK_DB_HOST 
@@ -77,6 +78,7 @@ $GK_DB_PASS  = $GKB::Secrets::GK_DB_PASS;
 $GK_DB_NAME  = $GKB::Secrets::GK_DB_NAME;
 $GK_IDB_NAME = $GKB::Secrets::GK_IDB_NAME;
 $GK_DB_PORT  = $GKB::Secrets::GK_DB_PORT;
+$ORPHAN_PWD  = $GKB::Secrets::ORPHAN_PWD;
 
 # Name of the OS user running the web server
 ##################################################################################
@@ -115,7 +117,7 @@ $SKY_REPLACEMENT_IMAGE = undef;
 $DEFAULT_IMAGE_FORMAT = 'png';
 
 # format YYYYMMDD
-$LAST_RELEASE_DATE = 20140312;
+$LAST_RELEASE_DATE = 20140715;
 #$DEFAULT_VIEW_FORMAT = 'sidebarwithdynamichierarchy';
 $DEFAULT_VIEW_FORMAT = 'elv';
 

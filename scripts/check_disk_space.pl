@@ -38,7 +38,7 @@ while (my $line = shift @df) {
 sub report {
     my ($fs,$mount,$line) = @_;
     my $email = EMAIL;
-    my $subject = "TEST IGNORE $fs ($mount) is getting full on $host";
+    my $subject = "DISK SPACE WARNING  $fs ($mount) is getting full on $host";
     system qq(echo '$host: $line' | mailx -s '$subject' '$email');
 }
 
