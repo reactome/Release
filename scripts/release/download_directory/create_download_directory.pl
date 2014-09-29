@@ -385,8 +385,13 @@ sub run {
 	}
     }
     
-    print STDERR "The log file for this task is $log\n";
-    
+
+    if ($log || $elog) {
+	my $files = $log && $elog ? 'files are' : 'file is';
+	$files .= $log && $elog ? " $log and $elog." : $log ? " $log." : " $elog.";
+	print STDERR "The log $files\n"; 
+    }
+
     return $not_good;
 }
 
