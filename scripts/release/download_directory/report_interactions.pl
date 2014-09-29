@@ -114,11 +114,13 @@ $opt_useDB_ID and $GKB::Instance::USE_STABLE_ID_IN_DUMPING = 0;
 # This will also get IntAct IDs for interactions, but only for
 # those arising from reactions or complexes involving 3 or
 # fewer proteins.
+
 my $interactions_hash = $interaction_generator->find_interactors_for_ReferenceSequences($reference_peptide_sequences, 3, $opt_mitab);
 if ($opt_xrefs) {
-	# Insert IntAct cross-references into database.
-	$interaction_generator->insert_intact_xrefs($interactions_hash, 3);
+    # Insert IntAct cross-references into database.
+    $interaction_generator->insert_intact_xrefs($interactions_hash, 3);
 }
+
 
 if (defined $opt_mitab) {
     $interaction_generator->print_psi_mitab_interaction($interactions_hash);

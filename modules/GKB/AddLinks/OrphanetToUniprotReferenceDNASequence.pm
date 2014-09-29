@@ -203,7 +203,7 @@ sub get_mapping_file {
 	if (!(-e $path) || (-s $path == 0)) {
 		# Get file from Orphanet mapping genes to proteins, if there
 		# is no pre-existing file less than two weeks old.
-		$cmd = "wget -O $path --user=Reactome --password=Ke0iqX9  http://www.orphadata.org/data/BDD_partners/$filename";
+		$cmd = "wget -O $path --user=Reactome --password='$GKB::Config::ORPHAN_PWD'  http://www.orphadata.org/data/BDD_partners/$filename";
 		print STDERR "OrphanetToUniprotReferenceDNASequence.buildPart: cmd=$cmd\n";
 		if (system($cmd) != 0) {
 			print STDERR "OrphanetToUniprotReferenceDNASequence.buildPart: WARNING: $cmd failed\n";

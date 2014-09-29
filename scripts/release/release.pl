@@ -9,7 +9,6 @@ use constant {
     GKB_LIVE_ALIAS => 'gkb'
 };
 
-
 my @options = (
 	['UniprotUpdate',"gkbdev","-runs uniprot update"],
 	['GoUpdate', "gkbdev", "-runs go update"],
@@ -43,6 +42,7 @@ my @options = (
     	['SetEmailReminders',"gkbdev","-sets automation of e-mail reminders for next release"],
     	['EventsAndEntities', "gkbdev", "-creates reaction and pathway to/from genes and molecules"]
 );
+
 
 my @choices;
 my @allchoices;
