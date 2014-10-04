@@ -120,6 +120,7 @@ sub person_table {
 	my $checkbox = $checked ? '' : checkbox({ -name    => 'DB_ID', 
 						  -value   => $person->[0],
 						  -label   => '',
+						  -onclick => 'document.f1.submit()'
 						});
 	if ($name) {
 		$person->[1] =~ s!($name)!<span style="color:red">$1</span>!gi;
@@ -165,7 +166,7 @@ qq(
 <td>Name <input name="name" size=20 value="$name" placeholder="Firstname Lastname"></td>
 <td>Email address <input name="email" size=20 value="$email"></td>
 <td><input type="checkbox" name="bibtex" onclick="document.f1.submit()" $bibchecked> Use bibtex format</td>
-<td><input type=submit></td>
+<td><input type=submit ></td>
 </tr>
 </table>
 )
