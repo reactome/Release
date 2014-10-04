@@ -21,39 +21,50 @@ use strict;
 use CGI qw(:standard);
 use GKB::Config;
 use GKB::FrontPage3;
-
+use HTTP::Tiny;
+use Data::Dumper;
+use JSON;
 
 my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (query_by_id)", "/stylesheet.css");
 my $header = $front_page->get_header();
 my $footer = $front_page->get_footer();
 my $enclosing_div_start = $front_page->get_enclosing_div_start();
 my $enclosing_div_end = $front_page->get_enclosing_div_end();
-my $REST = 'http://reactomecurator.oicr.on.ca:7080/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/';
+my $host = url(-base => 1);
+my $REST = $host . '/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/';
 
-my $id = param('id') || '';
+my $id = param('DB_ID') || '';
 
 print header,$header,$enclosing_div_start,start_form();
 print h1('Search the Reactome RESTful API');
-print '<center>';
-print '<center>Enter database ID or stable identifier: ', input({-type => 'text', -name => 'id', -value => $id});
-print submit(), '</center><br clear="ALL"/>';
+print div( {style=>'text-align:center'},
+    'Enter database ID or stable identifier: ', input({-type => 'text', -name => 'DB_ID', -value => $id}),
+    submit()
+    );
+print '<br clear="ALL"/>';
 print end_form();
 
 if ($id) {
     $id =~ s/\.\d+$//;
-    my $url = $REST . "$id";
-    print <<"    END";
-    <script type='text/javascript'>
-      var win = window.open('$url','_blank');
-      if (win) {
-  	  win.focus();
-      }
-      else {
-	  alert('Please disable pop-up blocking for ' + location.hostname);
-      }
-    </script>
-    END
+    my $data = REST_query($id);
+    $data = Dumper decode_json($data);
+    
+    print div({-style=>'border:1px solid gray'}, pre($data));
 }
 
 print $enclosing_div_end, $footer;
 
+
+sub REST_query {
+    my $id = shift;
+
+    my $url = "$REST$id";
+
+    my $response = HTTP::Tiny->new->get($url);
+
+    if ($response->{success}) {
+        return $response->{content};
+    }
+
+    return undef;
+}
