@@ -164,6 +164,13 @@ sub find_interactors_for_ReferenceSequences {
     my ($self, $rss, $participating_protein_count_cutoff, $mitab, $rs_num) = @_;
     my $rs_count = $self->{rs_count};
 
+    my $count;
+    unless ($rs_num && $rs_count) {
+	$rs_count = @$rss;
+	$rs_num = 1;
+	$count++;
+    }
+
     # skip if the refseq is not in IntAct
     return undef if @$rss == 1 && ! $self->intact->is_in_interaction($rss->[0]);
 
@@ -179,6 +186,7 @@ sub find_interactors_for_ReferenceSequences {
     $logger->info("InteractionGenerator.find_interactors_for_ReferenceSequences: total number of ReferenceSequences=$rs_count");
     
     foreach my $rs (@{$rss}) {
+	$rs_num++ if $count;
     	if ($rs_num%100 == 0) {
     	    $logger->info("InteractionGenerator.find_interactors_for_ReferenceSequences: rs_num=$rs_num (" . ($rs_num*100)/$rs_count . "%)");
     	}
