@@ -27,7 +27,7 @@ our $date = `date "+%Y%m%d"`; # Today's date
 chomp $date;
 
 print 'Enter current version number: ' unless $TEST_MODE;
-our $version = $TEST_MODE ? 911 : <STDIN>; # New Reactome Version
+our $version = $TEST_MODE ? 999 : <STDIN>; # New Reactome Version
 chomp $version;
 
 our $prevver = $version - 1; # Previous Reactome Version

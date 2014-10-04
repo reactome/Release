@@ -30,7 +30,6 @@ override 'run_commands' => sub {
     if ($gkbdir eq "gkbdev") {
         cmd("Creating download directory",[["perl create_download_directory.pl -host $host -port 3306 -user $user -pass $pass -r $version -db $db > create_download_directory.out.$version"]]);
         cmd("Creating BioSystems export file",[["perl create_reactome2biosystems.pl -host $host -port 3306 -user $user -pass $pass -r $version -db $db > create_reactome2biosystems.out.$version"]]);
-	cmd("Creating tarball",[["perl make_release_tarball.pl $version"]]);
 	cmd("Moving download directory to website folder",
 	    [
 		["mkdir -p $download_dir/$version"],

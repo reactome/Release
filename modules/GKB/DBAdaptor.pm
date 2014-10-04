@@ -1652,6 +1652,7 @@ sub fetch_instance_wo_class_or_attribute {
 ###
 sub store_if_necessary {
     my ($self,$i) = @_;
+    return 0 unless $i;
     $self->debug && print "<PRE>", join("\n", $i->extended_displayName, (caller(0))[3],$self->stack_trace_dump), "</PRE>\n";
     (ref($i) && $i->isa("GKB::Instance")) || $self->throw("Need GKB::Instance, got '$i'.");
     $i->db_id && return $i->db_id;

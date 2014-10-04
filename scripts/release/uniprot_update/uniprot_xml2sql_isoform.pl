@@ -76,16 +76,6 @@ my $initial = 'JD';
 my $date    = `date \+\%F`;
 chomp $date;
 
-#save trembl entries - needed further down to identify non-updated entries
-open( TREMBL, "$update_dir/$trembl_file" ) || die "Can't open $update_dir/$trembl_file\n";
-my %trembl;
-while (<TREMBL>) {
-    chomp;
-    $trembl{$_}++;
-}
-close(TREMBL);
-
-
 my $db_inst;
 unless (
     $db_inst =
@@ -473,6 +463,15 @@ open( FD, ">./$update_dir/duplicated_db_id.txt" ) || die "Can't open duplicated 
 
 print "Deleting obsolete instances with no referers....\n";
 
+#save trembl entries - needed further down to identify non-updated entries
+open( TREMBL, "$update_dir/$trembl_file" ) || die "Can't open $update_dir/$trembl_file\n";
+my %trembl;
+while (<TREMBL>) {
+    chomp;
+    $trembl{$_}++;
+}
+close(TREMBL);
+
 foreach my $sp_ac ( sort keys %reactome_gp ) {
     if ( defined $trembl{$sp_ac} ) {
         print FT "$sp_ac\n";
@@ -715,6 +714,7 @@ print FR "\{\| class\=\"wikitable\"
 \! Obsolete UniProt
 \! Reactome instances with obsolete UniProt
 \! EWAS associated with obsolete UniProt
+\! Species
 \|\-\n";
 
 print FR foreach (@skip_replaceable);
@@ -727,6 +727,7 @@ print FR "\{\| class\=\"wikitable\"
 \! Obsolete UniProt
 \! Reactome instances with obsolete UniProt
 \! EWAS associated with obsolete UniProt
+\! Species
 \|\-\n";
 
 print FR foreach (@skip_no_replacement);
