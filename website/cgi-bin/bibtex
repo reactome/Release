@@ -1,0 +1,162 @@
+#!/usr/local/bin/perl -w 
+
+use strict;
+use CGI qw(:standard);
+use CGI::Carp 'fatalsToBrowser';
+use HTTP::Tiny;
+use Data::Dumper;
+use JSON;
+
+my $host = url(-base => 1);
+my $REST = $host . '/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject/';
+
+my $id  = param('DB_ID');
+my $pid = param('personId'); 
+
+
+my %month = qw/
+01 January
+02 February
+03 March
+04 April
+05 May
+06 June
+07 July
+08 August
+09 September
+10 October
+11 November
+12 December
+/;
+
+my $bibtex_template = '
+<bibtex>
+    @MISC{ STABLE_ID,
+	   author          = {ATSTR},
+	   title           = {TITLE},
+	   crossref        = {XREF},
+	   howpublished    = {HOW_PUB},
+	   publisher       = {PUBLISHER},
+	   month           = {MONTH},
+	   year            = {YEAR},
+	   url             = {URL}
+	   }
+</bibtex>
+';
+
+print header("text/plain");
+
+if ($id && $pid) {
+    $id =~ s/\.\d+$//;
+    my $pathway = REST_query($id);
+    #print Dumper $pathway;
+    my $stable_id = $pathway->{stableIdentifier}->{displayName} || 'NO STABLE ID';
+    my $doi       = $pathway->{doi};
+    my $title     = $pathway->{displayName}      || 'NO NAME';
+    my @authors   = filter_authors($pathway->{authored},$pid);
+    my @reviewers = filter_authors($pathway->{reviewed},$pid);
+
+    my $xref      = "Reactome:$stable_id";
+    if ($doi) {
+	$xref .= ", DOI:$doi";
+    }
+    my $publisher = 'Reactome Pathway Knowledgebase, http://www.reactome.org/';
+    my $url       = "http://www.reactome.org/PathwayBrowser/#$stable_id";
+    my $how_pub   = "Reactome Online Document????";
+    
+    if (@authors) {
+	print "Authors:\n";
+	for my $event (@authors) {
+	    my ($authorstring, $year, $mon) = @$event;
+	    my $month = $month{$mon};
+
+	    my $bibtex = $bibtex_template;
+	    $bibtex    =~ s/STABLE_ID/$stable_id/gm;
+	    $bibtex    =~ s/TITLE/$title/gm;
+            $bibtex    =~ s/XREF/$xref/gm;
+            $bibtex    =~ s/HOW_PUB/$how_pub/gm;
+            $bibtex    =~ s/PUBLISHER/$publisher/gm;
+            $bibtex    =~ s/MONTH/$month/gm;
+	    $bibtex    =~ s/YEAR/$year/gm;
+            $bibtex    =~ s/URL/$url/gm;
+	    $bibtex    =~ s/ATSTR/$authorstring/gm;
+	    $bibtex    =~ s/XREF/DOI:$doi/gm;
+
+	    print "$bibtex\n";
+	}
+    }
+
+    if (@reviewers) {
+        print "REVIEWERS:\n";
+        for my $event (@reviewers) {
+            my ($authorstring, $year, $mon) = @$event;
+            my $month = $month{$mon};
+
+
+	    #Sheldon, when you have time, modularize this redundant code
+            my $bibtex = $bibtex_template;
+            $bibtex    =~ s/STABLE_ID/$stable_id/gm;
+            $bibtex    =~ s/TITLE/$title/gm;
+            $bibtex    =~ s/XREF/$xref/gm;
+            $bibtex    =~ s/HOW_PUB/$how_pub/gm;
+            $bibtex    =~ s/PUBLISHER/$publisher/gm;
+            $bibtex    =~ s/MONTH/$month/gm;
+            $bibtex    =~ s/YEAR/$year/gm;
+            $bibtex    =~ s/URL/$url/gm;
+            $bibtex    =~ s/ATSTR/$authorstring/gm;
+            $bibtex    =~ s/XREF/DOI:$doi/gm;
+
+            print "$bibtex\n";
+        }
+
+	unless (@authors || @reviewers) {
+	    print "No data found for Pathway $id, Person $pid\n";
+	}
+    }
+}
+else {
+    print "No DB_ID was provided\n";
+}
+
+sub filter_authors {
+    my $authored = shift;
+    my $pid      = shift;
+
+    $authored && @$authored > 0 or return undef;
+   
+    my @events = map { get_object($_) } @$authored;
+    
+    for my $event (@events) {
+	my @authors = @{$event->{author}};
+	unless ( grep {$_->{dbId} == $pid} @authors) {
+	    return ();
+	}
+	else {
+	    my @rtn;
+	    for my $event (@events) {
+		my $display_name = $event->{displayName};
+		push @rtn, [$display_name =~ /^(.+), (\d+)-(\d+)-\d+/];
+	    }
+	    return @rtn
+	}
+    }
+}
+
+sub get_object {
+    my $thing = shift;
+    return REST_query($thing->{dbId});
+}
+
+sub REST_query {
+    my $id = shift;
+
+    my $url = "$REST$id";
+
+    my $response = HTTP::Tiny->new->get($url);
+
+    if ($response->{success}) {
+        return decode_json($response->{content});
+    }
+
+    return undef;
+}
