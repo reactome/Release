@@ -1,0 +1,244 @@
+#!/usr/local/bin/perl -w 
+
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+        $#a = $#a - 2;
+    } else {
+        push @a, ('..','..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+
+
+use strict;
+use GKB::Config;
+use GKB::FrontPage3;
+use CGI qw(:standard);
+use CGI::Carp 'fatalsToBrowser';
+use HTTP::Tiny;
+use JSON;
+use Data::Dumper;
+use Email::Valid;
+use URI::Encode 'uri_encode';
+
+use constant AUTHORED => '/ReactomeRESTfulAPI/RESTfulWS/queryReviewedPathways';
+use constant BY_EMAIL => '/ReactomeRESTfulAPI/RESTfulWS/queryPeopleByEmail';
+use constant BY_NAME  => '/ReactomeRESTfulAPI/RESTfulWS/queryPeopleByName';
+use constant BY_ID    => '/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject';
+
+my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (author_contributions)", "/stylesheet.css");
+my $header = $front_page->get_header();
+my $footer = $front_page->get_footer();
+my $enclosing_div_start = $front_page->get_enclosing_div_start();
+my $enclosing_div_end = $front_page->get_enclosing_div_end();
+
+my $host = url(-base => 1);
+my $warning = '';
+
+print header, $header, $enclosing_div_start;
+print h1("Search the Reactome database for author contributions to pathway annotation");
+
+my $name   = param("name")  || '';
+my $email  = param("email") || '';
+my @db_id  = param("DB_ID");
+my $bibtex = param('bibtex');
+my $clear_ids = param('clear_ids');
+
+if ($clear_ids) {
+    @db_id = ();
+}
+
+print start_input_form();
+
+# Get user data
+my $people_json = get_people_by_email($email) if $email;
+$people_json  ||= get_people_by_name($name)   if $name;
+
+my %people;
+if ($people_json && @$people_json > 0) {
+    my @people = get_person_data($people_json);
+
+    if (@people == 1) {
+        @db_id = $people[0]->[0];
+    }
+    
+    if (@people > 0) {
+	print person_table(@people);
+    }
+}
+
+print end_form;
+
+if (@db_id > 0) {
+    for my $id (@db_id) {
+	my $pathways = get_authored_pathways($id);
+	my $person_instance = $people{$id} . " ($id)";
+	if (@$pathways > 0) {
+	    print h1("Reactome pathways reviewed by $person_instance");
+	    my @table = th([qw/DB_ID Name/]);
+	    for my $pathway (@$pathways) {
+		my $pid = $pathway->{dbId};
+		my $desc = $pathway->{displayName};
+		my $href;
+		if ($bibtex) {
+		    $href = "${host}/cgi-bin/bibtex?DB_ID=$pid;personId=$id";
+		}
+		else {
+		    $href = "${host}/".BY_ID."/$pid";
+		}
+		push @table, td([$pid, a({href => "$href", -target => '_BLANK'}, $desc)]);
+	    }
+	    print table({-style => 'width:100%'},TR(\@table));
+	}
+	else {
+	    warning("No pathways have been reviewed by $person_instance");
+	}
+    }
+}
+
+print $warning, $enclosing_div_end, $footer;
+exit 0;
+
+
+sub person_table {
+    my @people = @_;
+    my @rows = (th([qw/Select DB_ID Name Project Other_IDs/]));
+
+    for my $person (@people) {
+	if (@db_id > 0) {
+	    print hidden('clear_ids', 1);
+	    my $hits = grep {$person->[0] == $_} @db_id;
+	    next unless $hits && $hits > 0;
+	}
+	
+	my $checked  = grep {$_ == $person->[0]} @db_id;
+	my $checkbox = $checked ? '' : checkbox({ -name    => 'DB_ID', 
+						  -value   => $person->[0],
+						  -label   => '',
+						});
+	if ($name) {
+		$person->[1] =~ s!($name)!<span style="color:red">$1</span>!gi;
+	}
+	push @rows, join("\n",
+			 td({style => 'width:35px'}, $checkbox),
+			    map {td($_)} @$person
+	    );
+    }
+    return h3("Choose a person"),table({-style => 'width:100%;border:none'},TR(\@rows));
+}
+
+sub get_person_data {
+    my $json = shift || [];
+    my @people;
+    
+    for my $person (@$json) {
+
+	my @person_data;
+	$person_data[0] = $person->{dbId};
+	$person_data[1] = $person->{displayName};
+	$person_data[2] = $person->{project} || '';
+	$person_data[3] = '';
+	
+	if (my $xrefs = $person->{crossReference}) {
+	    $person_data[3] = join(', ', map {$_->{displayName}} @$xrefs);
+	}
+	
+	$people{$person_data[0]} = $person_data[1];
+
+	push @people, \@person_data;
+    }
+    
+    return @people;
+}
+
+sub start_input_form {
+    my $bibchecked = 'checked=1' if $bibtex;
+qq(
+<form name="f1" method="POST">
+<table width="100%">
+<tr>
+<td>Name <input name="name" size=20 value="$name" placeholder="Firstname Lastname"></td>
+<td>Email address <input name="email" size=20 value="$email"></td>
+<td><input type="checkbox" name="bibtex" onclick="document.f1.submit()" $bibchecked> Use bibtex format</td>
+<td><input type=submit></td>
+</tr>
+</table>
+)
+}
+
+sub contributions {
+    "<div style='background:gainsboro;border:1px solid gray; text-align:center'>Placeholder text</div>"
+}
+
+
+sub warning {
+    my $message = shift;
+    $warning .= div({style => 'font-size:medium;color:red;text-align:center;margin-bottom:25px'}, "Sorry: $message");
+}
+
+sub email_OK {
+    my $email = shift;
+    my $OK = Email::Valid->address($email);
+    return $OK;
+}
+
+sub get_authored_pathways {
+    my $person_id = shift;
+    my $rest_url = $host . uri_encode(join('/',AUTHORED,$person_id));
+    my $result = REST_query($rest_url);
+    
+    unless ($result) {
+        warning("No data found for person $person_id");
+    }
+
+    return $result;
+}
+
+sub get_people_by_email {
+    my $email = shift;
+
+    unless (email_OK($email)) {
+	warning("$email does not appear to be a valid email address");
+	return undef;
+    }
+
+    my $rest_url = $host . uri_encode(join('/',BY_EMAIL,$email));
+    my $result = REST_query($rest_url);
+    unless ($result && $result->[0]) {
+	warning("No person found for email $email");
+    }
+    
+    return $result;
+}
+
+sub get_people_by_name {
+    my $name = shift;
+
+    my $rest_url = $host . uri_encode(join('/',BY_NAME,$name));
+    my $result = REST_query($rest_url);
+    unless ($result && $result->[0]) {
+	warning("No person found for name $name");
+    }
+
+    return $result;
+}
+
+sub REST_query {
+    my $url = shift;
+    print STDERR "author_contributions: REST URL: $url\n";
+    my $response = HTTP::Tiny->new->get($url, {'content-type' => 'application/json'});
+
+    if ($response->{success}) {
+	my $json = $response->{content};
+	my $result = decode_json($json);
+        return $result;
+    }
+
+    return undef;
+}
+
