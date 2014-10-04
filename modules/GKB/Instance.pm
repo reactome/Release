@@ -177,7 +177,7 @@ sub add_attribute_value {
     my ($self,$attribute,@vals) = @_;
     $self->class || $self->throw("Instance has to know it's class to set attribute value.");
     $attribute || $self->throw("Need attribute to store value");
-    #print join("\t",(caller(0))[3], $attribute,@vals), "\n";
+
     if ($self->ontology->class($self->class)->{'attribute'}->{$attribute}) {
 	if (@vals) {
 	    if($self->is_instance_type_attribute($attribute)) {

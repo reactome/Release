@@ -6,7 +6,7 @@ use constant TARD => '/tmp';
 use constant BASE => '/usr/local/reactomes/Reactome/production';
 
 # You need to be root to run this script!
-die "Sorry, root permission required.\n" unless $> == 0;
+#die "Sorry, root permission required.\n" unless $> == 0;
 
 my $dir_for_tarball = TARD;
 

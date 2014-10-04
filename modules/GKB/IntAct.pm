@@ -71,7 +71,18 @@ sub get_file {
     my $cwd = getcwd;
     chdir $dir;
 
-    unless ($file && 0) {
+    $file = 'intact.txt';
+    if (-e $file) {
+	my $age = -M $file;
+	if ($age > 7) { # > a week old
+	    print STDERR "The file $file is too old ($age days), deleting\n"; 
+	    unlink $file or die $!;
+	    unlink 'intact.zip' or die $!;
+	    $file = undef;
+	}
+    }
+
+    unless ($file) {
 	my $url = 'ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.zip';
 
 	$file = "intact.txt";
@@ -132,6 +143,19 @@ sub get_interaction_data {
 
     my $file = $self->get_file();
     (my $db_file = $file) =~ s/txt$/db/;
+
+    if (-e $db_file) {
+	my $age = -M $file;
+	if ($age > 7) {# > a week old
+	    print STDERR "The file $file is too old ($age days), deleting\n";
+	    unlink $db_file;
+	}
+	else {
+	    $db = BerkeleyDB::Hash->new(-Filename => $db_file);
+	    $self->interaction_data($db);
+	    return $db;
+	}
+    }
 
     $db = BerkeleyDB::Hash->new(-Filename => $db_file, -Flags => DB_CREATE);
 
