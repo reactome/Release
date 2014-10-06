@@ -48,7 +48,9 @@ print header("text/plain");
 
 if ($id && $pid) {
     $id =~ s/\.\d+$//;
-    my $pathway = REST_query($id);
+    my $pathway = REST_query($id) || die "NO pathway data for $id";
+    
+
     #print Dumper $pathway;
     my $stable_id = $pathway->{stableIdentifier}->{displayName} || 'NO STABLE ID';
     my $doi       = $pathway->{doi};
@@ -125,21 +127,19 @@ sub filter_authors {
     $authored && @$authored > 0 or return undef;
    
     my @events = map { get_object($_) } @$authored;
-    
+
+    my @rtn;
+
     for my $event (@events) {
-	my @authors = @{$event->{author}};
-	unless ( grep {$_->{dbId} == $pid} @authors) {
-	    return ();
-	}
-	else {
-	    my @rtn;
-	    for my $event (@events) {
-		my $display_name = $event->{displayName};
-		push @rtn, [$display_name =~ /^(.+), (\d+)-(\d+)-\d+/];
-	    }
-	    return @rtn
-	}
+	my @authors = grep {$_->{dbId} == $pid} @{$event->{author}};
+	next unless @authors && @authors > 0;
+
+	my $display_name = $event->{displayName};
+	push @rtn, [$display_name =~ /^(.+), (\d+)-(\d+)-\d+/];
     }
+
+    return @rtn;
+
 }
 
 sub get_object {
