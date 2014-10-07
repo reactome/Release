@@ -14,7 +14,6 @@ BEGIN {
     unshift (@INC, $libpath);
 }
 
-
 use strict;
 use GKB::Config;
 use GKB::FrontPage3;
@@ -26,7 +25,8 @@ use Data::Dumper;
 use Email::Valid;
 use URI::Encode 'uri_encode';
 
-use constant AUTHORED => '/ReactomeRESTfulAPI/RESTfulWS/queryReviewedPathways';
+use constant REVIEWED => '/ReactomeRESTfulAPI/RESTfulWS/queryReviewedPathways';
+use constant AUTHORED => '/ReactomeRESTfulAPI/RESTfulWS/queryAuthoredPathways';
 use constant BY_EMAIL => '/ReactomeRESTfulAPI/RESTfulWS/queryPeopleByEmail';
 use constant BY_NAME  => '/ReactomeRESTfulAPI/RESTfulWS/queryPeopleByName';
 use constant BY_ID    => '/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject';
@@ -41,19 +41,19 @@ my $host = url(-base => 1);
 my $warning = '';
 
 print header, $header, $enclosing_div_start;
-print h1("Search the Reactome database for author contributions to pathway annotation");
+
+print h1("Query your pathway contributions in Reactome");
 
 my $name   = param("name")  || '';
 my $email  = param("email") || '';
 my @db_id  = param("DB_ID");
-my $bibtex = param('bibtex');
 my $clear_ids = param('clear_ids');
 
 if ($clear_ids) {
     @db_id = ();
 }
 
-print start_input_form();
+print preamble(), start_input_form();
 
 # Get user data
 my $people_json = get_people_by_email($email) if $email;
@@ -76,27 +76,43 @@ print end_form;
 
 if (@db_id > 0) {
     for my $id (@db_id) {
-	my $pathways = get_authored_pathways($id);
+	my @apaths = grep {defined $_ && ref $_} get_authored_pathways($id);
+	my @rpaths = grep {defined $_ && ref $_} get_reviewed_pathways($id);
+	my $nothing = @apaths + @rpaths == 0;
+
 	my $person_instance = $people{$id} . " ($id)";
-	if (@$pathways > 0) {
-	    print h1("Reactome pathways reviewed by $person_instance");
+
+	if (@apaths > 0 ) {
+	    print h1("Pathways authored by $person_instance");
 	    my @table = th([qw/DB_ID Name/]);
-	    for my $pathway (@$pathways) {
-		my $pid = $pathway->{dbId};
-		my $desc = $pathway->{displayName};
-		my $href;
-		if ($bibtex) {
-		    $href = "${host}/cgi-bin/bibtex?DB_ID=$pid;personId=$id";
+	    for my $pathway_wrapper (@apaths) {
+		for my $pathway (@$pathway_wrapper) {
+		    my $pid = $pathway->{dbId};
+		    my $desc = $pathway->{displayName};
+		    my $href = "${host}/cgi-bin/bibtex?DB_ID=$pid;personId=$id";
+		    my $title = "Export bibtex record";
+		    push @table, td([$pid, a({href => "$href", -title => "$title", -target => '_BLANK'}, $desc)]);
 		}
-		else {
-		    $href = "${host}/".BY_ID."/$pid";
-		}
-		push @table, td([$pid, a({href => "$href", -target => '_BLANK'}, $desc)]);
 	    }
 	    print table({-style => 'width:100%'},TR(\@table));
 	}
-	else {
-	    warning("No pathways have been reviewed by $person_instance");
+        if (@rpaths > 0 ) {
+            print h1("Pathways reviewed by $person_instance");
+            my @table = th([qw/DB_ID Name/]);
+            for my $pathway_wrapper (@rpaths) {
+                for my $pathway (@$pathway_wrapper) {
+                    my $pid = $pathway->{dbId};
+                    my $desc = $pathway->{displayName};
+                    my $href = "${host}/cgi-bin/bibtex?DB_ID=$pid;personId=$id";
+                    my $title = "Export bibtex record";
+                    push @table, td([$pid, a({href => "$href", -title => "$title", -target => '_BLANK'}, $desc)]);
+                }
+            }
+            print table({-style => 'width:100%'},TR(\@table));
+        }
+
+	if ($nothing) {
+	    warning("No pathways have been reviewed or authored by $person_instance");
 	}
     }
 }
@@ -107,7 +123,7 @@ exit 0;
 
 sub person_table {
     my @people = @_;
-    my @rows = (th([qw/Select DB_ID Name Project Other_IDs/]));
+    my @rows = (th([qw/Select DB_ID Name Project ORCID_ID/]));
 
     for my $person (@people) {
 	if (@db_id > 0) {
@@ -122,13 +138,30 @@ sub person_table {
 						  -label   => '',
 						  -onclick => 'document.f1.submit()'
 						});
-	if ($name) {
+
+	my $single = @db_id == 1;
+	if ($single) {
+	    $rows[0] = th([qw/DB_ID Name Project Other_IDS ORCID/]);
+	}
+
+	if ($name && !$single) {
 		$person->[1] =~ s!($name)!<span style="color:red">$1</span>!gi;
 	}
-	push @rows, join("\n",
-			 td({style => 'width:35px'}, $checkbox),
-			    map {td($_)} @$person
-	    );
+
+	unless ($single) {
+	    push @rows, 
+	    join("\n",
+		 td({style => 'width:35px'}, $checkbox),
+		 map {td($_)} @$person
+		);
+	}
+	else {
+	    my $button = orcid_button($person);
+	    push @rows,     
+	    join("\n",
+		 map {td($_)} @$person, $button
+		)
+	}
     }
     return h3("Choose a person"),table({-style => 'width:100%;border:none'},TR(\@rows));
 }
@@ -144,10 +177,9 @@ sub get_person_data {
 	$person_data[1] = $person->{displayName};
 	$person_data[2] = $person->{project} || '';
 	$person_data[3] = '';
-	
-	if (my $xrefs = $person->{crossReference}) {
-	    $person_data[3] = join(', ', map {$_->{displayName}} @$xrefs);
-	}
+
+	my @xrefs = grep {$_->{displayName} =~ /ORCID/} @{$person->{crossReference}};
+	$person_data[3] = join(', ',map {$_->{displayName}} @xrefs) if @xrefs;
 	
 	$people{$person_data[0]} = $person_data[1];
 
@@ -158,14 +190,12 @@ sub get_person_data {
 }
 
 sub start_input_form {
-    my $bibchecked = 'checked=1' if $bibtex;
-qq(
+return qq(
 <form name="f1" method="POST">
 <table width="100%">
 <tr>
 <td>Name <input name="name" size=20 value="$name" placeholder="Firstname Lastname"></td>
 <td>Email address <input name="email" size=20 value="$email"></td>
-<td><input type="checkbox" name="bibtex" onclick="document.f1.submit()" $bibchecked> Use bibtex format</td>
 <td><input type=submit ></td>
 </tr>
 </table>
@@ -188,15 +218,29 @@ sub email_OK {
     return $OK;
 }
 
-sub get_authored_pathways {
+sub get_reviewed_pathways {
     my $person_id = shift;
-    my $rest_url = $host . uri_encode(join('/',AUTHORED,$person_id));
+    my $rest_url = $host . uri_encode(join('/',REVIEWED,$person_id));
     my $result = REST_query($rest_url);
     
     unless ($result) {
         warning("No data found for person $person_id");
     }
 
+    $result = undef if @$result == 0;
+    return $result;
+}
+
+sub get_authored_pathways {
+    my $person_id = shift;
+    my $rest_url = $host . uri_encode(join('/',AUTHORED,$person_id));
+    my $result = REST_query($rest_url);
+
+    unless ($result) {
+	warning("No data found for person $person_id");
+    }
+
+    $result = undef if @$result == 0;
     return $result;
 }
 
@@ -243,3 +287,60 @@ sub REST_query {
     return undef;
 }
 
+sub orcid_button {
+    my $person = shift;
+    my $person_id = $person->[0];
+    my $has_orcid = $person->[-1] && $person->[-1] =~ /ORCID/;
+    my $button_text = $has_orcid ? "Sign on to ORCID" : "Create an ORCID ID";
+    my $url = $has_orcid ? "https://orcid.org/signin" : "https://orcid.org/register"; 
+    my $name = $person->[1] . " (DB_ID $person_id)";
+    my $mail_url = 'mailto:help@reactome.org?subject=' . uri_encode("ORCID ID for Reactome user $name"); 
+    my $button = <<"END";
+<script  type="text/javascript">
+    function openOrcid() {
+        var win = window.open('$url', '_blank');
+        win.focus();
+    }
+    function reportToUs() {
+	window.location.href = '$mail_url';
+    }
+</script>
+<button type="button" onclick="openOrcid()"  style="margin-top:-3px;cursor:pointer">
+<img id="orcid-id-logo" src="http://orcid.org/sites/default/files/images/orcid_24x24.png"
+width='18' height='18' alt="ORCID logo"/> $button_text</button>\&nbsp;
+END
+;
+
+    unless ($has_orcid) {
+	$button .= <<"END";
+<button type="button" style="margin-top:-3px;cursor:pointer" onclick="reportToUs()">
+<img id="nothing" src="/images/nothing.png" width='18' height='18' 
+style="margin-right:-17px" alt="Nothing to see here, folks" /> Report ORCID ID to Reactome</button>
+END
+;
+    }
+
+    return $button;
+}
+
+sub preamble {
+    my $ORCID = a({-href => 'http://orcid.org/'},'ORCID');
+    my $rtn = p(<<END);
+Reactome depends on collaboration between our curation team and outside experts to 
+assemble and peer-review its pathway modules. The integration of $ORCID within Reactome 
+enables us to meet a key challenge with authoring, curating and reviewing biological 
+information by incentivizing and crediting the external experts that contribute their 
+expertise and time to the Reactome curation process. More information is available at
+$ORCID and <a href="http://www.reactome.org/pages/content/orcid-integration-project/">Reactome</a>. 
+
+END
+;
+
+    $rtn .= p(<<END);
+If you have an ORCID ID that is not listed on this page, please <a href="mailto:help\@reactome.org">
+forward this information to us</a> and we will update your Reactome pathway records.
+END
+;
+
+    return $rtn;
+}
