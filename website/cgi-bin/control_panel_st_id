@@ -29,8 +29,13 @@ use GKB::DBAdaptor;
 use GKB::WebUtils;
 use GKB::Utils;
 use GKB::Config;
+use HTTP::Tiny;
+use JSON;
 use GKB::FrontPage3;
 
+use constant BY_ID    => '/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject';
+
+my $host = url(-base => 1);
 my $script_name = $0;
 my ( $CGI, $WU, $si, $reactome_release_column_name );
 
@@ -39,11 +44,12 @@ my $header = $front_page->get_header();
 my $footer = $front_page->get_footer();
 my $enclosing_div_start = $front_page->get_enclosing_div_start();
 my $enclosing_div_end = $front_page->get_enclosing_div_end();
+my $real_current_stable_id_version;
+my $warning;
 
 $CGI = CGI->new();
 
 eval {
-
 	# Gives access to a whole bunch of methods for dealing with
 	# previous releases and stable identifiers.
 	$si = GKB::StableIdentifiers->new($CGI);
@@ -56,21 +62,41 @@ eval {
 	if ( !$extended_st_id ) {
 		handle_error("ST_ID missing!!\n");
 	}
+
+
+	my ($identifier, $version) = $extended_st_id =~ /^(\S+)\.(\d+)$/;
+
+        # Let's check to see what the real stable id version is
+        $real_current_stable_id_version = get_current_stable_id($identifier);
 	
-	my ($identifier, $version) = $si->extract_identifier_and_version_from_string($extended_st_id);
 	if (!$identifier) {
-		handle_error("Looks like the identifier is malformed in extended_st_id=$extended_st_id!!\n");
+	    handle_warning("Looks like the identifier is malformed in extended_st_id=$extended_st_id!!\n");
+	    ($identifier = $extended_st_id) =~ s/\.\d+$//;
+	}
+	if (!$version) {
+	    handle_warning("The version was not specified for $extended_st_id.  Using version $real_current_stable_id_version");
+	    $version = $real_current_stable_id_version;
+	}
+	if ($version > $real_current_stable_id_version) {
+	    handle_warning("The specified version for $extended_st_id is not valid.  Using $identifier.$real_current_stable_id_version");
+            $version = $real_current_stable_id_version;
 	}
 
-	# Get StableIdentifier instance
+
+
+        # Get StableIdentifier instance
 	my $stable_identifier = $si->get_stable_identifier($identifier);
+
 	if (!$stable_identifier) {
 	    handle_error("Could not find stable ID $identifier");
 	}
 
 	my $display_name = $si->get_current_instance_name($stable_identifier, $identifier, $version);
 	print_page_start($extended_st_id);
-	#print $WU->reactome_logo();
+	my $warn = handle_warning();
+	if ($warn) {
+	    print "<br clear='ALL'><p>$warn</p>";
+	}
 	print qq(<h1 CLASS="frontpage">Stable identifier history for $extended_st_id</h1>\n);
 	if ($display_name) {
 		print qq(<P><DIV align="center"><B>Instance: "$display_name"</B></DIV></P>);
@@ -137,7 +163,14 @@ sub generate_table_model {
 	$reactome_release_column_name = $si->reactome_release_column_name;
 	foreach $stable_identifier_version (@{$stable_identifier_versions}) {
 		my $version = $si->get_att_value_from_identifier_database_instance($stable_identifier_version, 'identifierVersion');
-			
+
+		if ($version > $real_current_stable_id_version) {
+		    my $st_id = $CGI->param("ST_ID");
+		    warn "Something is wonky with $st_id: The version ($version) is higher " .
+			 "than the actual current version($real_current_stable_id_version)\n";
+		    $version = $real_current_stable_id_version;
+		}
+
 		my $is_current = 0;
 		if (defined $current_version && !( $current_version eq "" ) && $version eq $current_version) {
 			$is_current = 1;
@@ -147,45 +180,45 @@ sub generate_table_model {
 		# valid
 		$identifier_database_dba->load_attribute_values( $stable_identifier_version, 'releaseIds' );
 		$release_ids = $stable_identifier_version->releaseIds;
-	    # Get a list of release numbers where the supplied
-	    # version is valid
-	    if ($release_ids && scalar($release_ids) =~ /ARRAY/) {
-	    	my $release_id;
-	    	foreach $release_id (@{$release_ids}) {
-				my @cols;
-		
-				my $release = $si->get_att_value_from_identifier_database_instance($release_id, $reactome_release_column_name);
-				my $num = $si->get_att_value_from_identifier_database_instance($release, 'num');
-				# temporary band-aid -- block fake release number
-				if ($num > 999) {
-				    warn "$0 strange release number $num blocked";
-				    next;
-				}
-
-				$cols[0] = $identifier;
-				$cols[1] = $version;
-				$cols[2] = $num;
-				if (defined $current_release_num && !($current_release_num eq '')) {
-					if ($current_release_num == $num) {
-						$cols[3] = 1;
-					} else {
-						$cols[3] = 0;
-					}
-				} else {
-					$cols[3] = $is_current;
-				}
-				
-				$rows[$row_counter] = \@cols;
-				
-				$row_counter++;
-	    	}
-	    }
+		# Get a list of release numbers where the supplied
+		# version is valid
+		if ($release_ids && scalar($release_ids) =~ /ARRAY/) {
+		    my $release_id;
+		    foreach $release_id (@{$release_ids}) {
+			my @cols;
+			
+			my $release = $si->get_att_value_from_identifier_database_instance($release_id, $reactome_release_column_name);
+			my $num = $si->get_att_value_from_identifier_database_instance($release, 'num');
+			# temporary band-aid -- block fake release number
+			if (!$num || $num > 99) {
+			    warn "$0 strange release number (".$num||'unknown'.") blocked";
+			    next;
+			}
+			
+			$cols[0] = $identifier;
+			$cols[1] = $version;
+			$cols[2] = $num;
+			if (defined $current_release_num && !($current_release_num eq '')) {
+			    if ($current_release_num == $num) {
+				$cols[3] = 1;
+			    } else {
+				$cols[3] = 0;
+			    }
+			} else {
+			    $cols[3] = $is_current;
+			}
+			
+			$rows[$row_counter] = \@cols;
+			
+			$row_counter++;
+		    }
+		}
 	}
-	
-	# Sort rows by release num
-	my @sorted_rows = sort { $a->[2] <=> $b->[2] } @rows;
-	
-	return \@sorted_rows;
+    
+    # Sort rows by release num
+    my @sorted_rows = sort { $a->[2] <=> $b->[2] } @rows;
+    
+    return \@sorted_rows;
 }
 
 sub generate_forms {
@@ -314,6 +347,14 @@ sub handle_error {
 	exit;
 }
 
+sub handle_warning {
+    my $message = shift;
+    if ($message) {
+	$warning .= qq(<span style="font-size:large;color:red">Warning: $message</span>);
+    }
+    return $warning;
+}
+
 sub print_page_end {
 #    ($WU) &&  print $WU->make_footer;
     print $footer;
@@ -362,4 +403,34 @@ sub create_stable_identifier_bookmark {
 	my $bookmark = $WU->create_bookmark($style, "Reactome instance: $instance_version", $redirect_string);
 
 	return $bookmark;
+}
+
+
+
+# get the real current stable ID from the main database
+sub get_current_stable_id {
+    my $id = shift;
+    my $json = REST_query($id);
+    my $stable_id = $json->{stableIdentifier} 
+      or warn "get_current_stable_id: No stable identifier found!\n";
+    my $display_name = $stable_id->{displayName} 
+      or warn "get_current_stable_id: No stable identifier dsiplayName found!\n";
+    my ($version) = $display_name =~ /\.(\d+)$/;
+    return $version;
+}
+
+
+# use this to query the current daatabase through the RESTful API
+sub REST_query {
+    my $id = shift;
+
+    my $url = join('/',$host,BY_ID,$id);
+
+    my $response = HTTP::Tiny->new->get($url);
+
+    if ($response->{success}) {
+        return decode_json($response->{content});
+    }
+
+    return undef;
 }
