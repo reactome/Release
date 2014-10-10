@@ -65,23 +65,29 @@ eval {
 
 
 	my ($identifier, $version) = $extended_st_id =~ /^(\S+)\.(\d+)$/;
+	unless ($identifier) {
+	    ($identifier = $extended_st_id) =~ s/\.\d+$//;
+	}
 
         # Let's check to see what the real stable id version is
         $real_current_stable_id_version = get_current_stable_id($identifier);
+
+	unless ($real_current_stable_id_version) {
+	    handle_error("A current version of $extended_st_id was not found in the database");
+	}
 	
 	if (!$identifier) {
-	    handle_warning("Looks like the identifier is malformed in extended_st_id=$extended_st_id!!\n");
-	    ($identifier = $extended_st_id) =~ s/\.\d+$//;
+	    handle_error("I could not figure out whiuch stable Id you mean (), I give up");
 	}
 	if (!$version) {
 	    handle_warning("The version was not specified for $extended_st_id.  Using version $real_current_stable_id_version");
 	    $version = $real_current_stable_id_version;
+	    $extended_st_id = "$identifier.$version";
 	}
 	if ($version > $real_current_stable_id_version) {
 	    handle_warning("The specified version for $extended_st_id is not valid.  Using $identifier.$real_current_stable_id_version");
             $version = $real_current_stable_id_version;
 	}
-
 
 
         # Get StableIdentifier instance
@@ -333,9 +339,7 @@ sub handle_error {
 	
 	# Print to web page
 	print_page_start();
-	
-	print qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Error</FONT></h1>\n);
-	print qq(<h2><pre>$error_message</pre></h2>\n);
+	print handle_warning($error_message);
 	print_page_end();
 
 	# Print to log file
@@ -349,8 +353,10 @@ sub handle_error {
 
 sub handle_warning {
     my $message = shift;
+    my $error   = shift;
+    my $class = $error ? "Error" : "Warning";
     if ($message) {
-	$warning .= qq(<span style="font-size:large;color:red">Warning: $message</span>);
+	$warning .= qq(<br><p style="font-size:large;color:red">$class: $message</p>);
     }
     return $warning;
 }
