@@ -2,7 +2,7 @@
 use strict;
 
 use constant REPO => '/tmp/Release';
-use constant TARD => '/tmp';
+use constant TARD => '/tmp/tarball';
 use constant BASE => '/usr/local/reactomes/Reactome/production';
 
 # You need to be root to run this script!

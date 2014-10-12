@@ -27,9 +27,9 @@ override 'run_commands' => sub {
  	
    	cmd("Backing up databases and generating stable ids",
 		[
-	    	["mysqldump --opt -u $user -h $host -p$pass $slicedb > $slicedb.dump"],
-    		["mysqldump --opt -u $user -h $host -p$pass test_reactome_stable_identifiers > test_reactome_stable_identifiers_$version.dump"],
-    		["mysqldump --opt -u $user -h $gkcentral_host -p$pass $gkcentral > $gkcentral\_$version.dump"],
+	    	["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE $slicedb > $slicedb.dump"],
+    		["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE test_reactome_stable_identifiers > test_reactome_stable_identifiers_$version.dump"],
+    		["mysqldump --opt -u $user -h $gkcentral_host -p$pass --lock-tables=FALSE $gkcentral > $gkcentral\_$version.dump"],
     		["./generate_stable_ids.sh -f -ghost $gkcentral_host -host $host -user $user -pass $pass -port 3306 -prnum $prevver -cdbname $slicedb -crdbname $db -crnum $version -idbname test_reactome_stable_identifiers -gdbname $gkcentral -nullify > generate_stable_ids_$version.out"]
     	]
     );
