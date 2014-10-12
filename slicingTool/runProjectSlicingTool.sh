@@ -1,4 +1,2 @@
 #!/bin/bash
-date
-java -Xmx4G -jar ProjectSlicingTool.jar
-date
+java -Xmx8G -jar ProjectSlicingTool.jar >& out.txt &
