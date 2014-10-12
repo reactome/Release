@@ -7,7 +7,7 @@
 BEGIN {
     my @a = split('/',$0);
     pop @a;
-    push @a, ('..','..');
+    push @a, ('..','..','..');
     my $libpath = join('/', @a);
     unshift (@INC, "$libpath/modules");
     $ENV{PATH} = "$libpath/scripts:$libpath/scripts/release:" . $ENV{PATH};
@@ -43,34 +43,30 @@ my $dba = GKB::DBAdaptor->new
 
 ## Get all species that have front page items or that have orthologous
 ## pathways with front page items.
-#my $species = $dba->fetch_instance_by_remote_attribute
-#    (
-#     'Species',
-#     [
-#      ['species:Event.orthologousEvent.frontPageItem:FrontPage','IS NOT NULL',[]],
-#     ]
-#    );
-#
-#my $tmp = $dba->fetch_instance_by_remote_attribute
-#    (
-#     'Species',
-#     [
-#      ['species:Event.frontPageItem:FrontPage','IS NOT NULL',[]],
-#     ]
-#    );
-#
-#my %h;
-#map {$h{$_->db_id} = $_} (@{$tmp},@{$species});
-#@{$species} = values %h;
-# TODO: Probably we should get all species whose pathways have diagrams tather than FrontPage items.
 my $species = $dba->fetch_instance_by_remote_attribute
     (
      'Species',
      [
-      ['species:Pathway.representedPathway:PathwayDiagram','IS NOT NULL',[]],
+      ['species:Pathway.representedPathway.PathwayDiagram','IS NOT NULL',[]],
      ]
     );
 
+my $related_species = $dba->fetch_instance_by_remote_attribute
+    (
+     'Species',
+     [
+      ['relatedSpecies:Pathway.representedPathway.PathwayDiagram','IS NOT NULL',[]],
+     ]
+    );
+
+foreach (@$related_species) {
+    next unless /influenza|immunodeficiency/;
+    
+    push @$species, $_;
+}
+
+@{$species};
+# TODO: Probably we should get all species whose pathways have diagrams tather than FrontPage items.
 
 print "$0: species=";
 foreach my $specie (@{$species}) {

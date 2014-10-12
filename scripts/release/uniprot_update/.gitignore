@@ -1,10 +1,4 @@
-duplicated_db_id.txt
-gk_central.dump
-trembl_to_update.acc
-uniprot.err
-uniprot.out
-uniprot_report
-uniprot-reviewed:no.list*
-uniprot_sprot.xml*
-uniprot.wiki
-
+*
+!*.pl
+!*.sh
+!*.txt

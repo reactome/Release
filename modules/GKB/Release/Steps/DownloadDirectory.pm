@@ -36,21 +36,12 @@ override 'run_commands' => sub {
 		["mv $version/* $download_dir/$version"],
 		["rmdir $version"]
 	    ]);
-    } elsif ($gkbdir eq "gkb_prod") {
-	my $archive_live = replace_gkb_alias_in_dir("$html/download/archive", 'gkb_test');
+    } elsif ($gkbdir eq "gkb") {
+	my $archive_live = replace_gkb_alias_in_dir("$html/download/archive", 'gkb');
 	cmd("Archiving version $prevver download directory", [["tar zcvf - $html/download/$prevver | ssh $live_server 'cat > $archive_live/$prevver.tgz'"]]);
     	cmd("Copying current download directory from $host",[["scp -r $html/download/$version $live_server:$download_dir"]]);
-    } elsif ($gkbdir eq "gkb_test") {
-        my $html_prod = replace_gkb_alias_in_dir($html, "gkb_prod");
-	#my $html_live = replace_gkb_alias_in_dir($html, $gkbdir);
         
-	cmd("Moving gkb_prod download directory to $gkbdir and establishing symbolic links",
-            [
-            	["mv $html_prod/download/$version $download_dir/$version"],
-            	["ln -s $download_dir/$version $html_prod/download/$version"]
-            ],
-	    {'ssh' => $live_server}
-        );
+	#my $html_live = replace_gkb_alias_in_dir($html, $gkbdir);
 	
 	cmd("Removing version $prevver download directory from $live_server (archive still available)",
 	    [["rm -r $download_dir/$prevver"]], {'ssh' => $live_server}
@@ -59,7 +50,7 @@ override 'run_commands' => sub {
 
     
     # The command is run on the live server when $gkbdir is gkb_prod or gkb_test
-    my $ssh_server = ($gkbdir eq "gkb_prod" || $gkbdir eq "gkb_test") ? $live_server : undef;
+    my $ssh_server = ($gkbdir eq "gkb") ? $live_server : undef;
     cmd("Creating link to current download directory",
     	[
     		["mv $download_dir/$prevver $download_dir/foo 2> /dev/null"],
