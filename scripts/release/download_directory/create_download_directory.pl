@@ -221,99 +221,99 @@ my @cmds = (
 #     "gzip -c > $release_nr/$species_file_stem.mitab.interactions.txt.gz"
 #    ],
 
-    [
-     "database_dumps",
-     1,
-     0,
-     "mkdir $release_nr/databases",
-     "mysqldump --opt $mysqldump_db_options | gzip -c > $release_nr/databases/gk_current.sql.gz",
-     "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
-     "mysqldump --opt $mysqldump_wordpress_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
-     "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
-    ],
+#    [
+#     "database_dumps",
+#     1,
+#     0,
+#     "mkdir $release_nr/databases",
+#     "mysqldump --opt $mysqldump_db_options | gzip -c > $release_nr/databases/gk_current.sql.gz",
+#     "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
+#     "mysqldump --opt $mysqldump_wordpress_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
+#     "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
+#    ],
 
-    [
-     "release_tarball",
-     1,
-     1,
-     "./make_reactome_tarball.pl $release_nr"
-    ],
+#    [
+#     "release_tarball",
+#     1,
+#     1,
+#     "./make_release_tarball.pl $release_nr"
+#    ],
 
-    [
-     "SBML_dumpers",
-     1,
-     0,
-     "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' | gzip -c > $release_nr/$species_file_stem.sbml.gz",
-     "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.2.sbml.gz",
-    ],
+#    [
+#     "SBML_dumpers",
+#     1,
+#     0,
+#     "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' | gzip -c > $release_nr/$species_file_stem.sbml.gz",
+#     "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.2.sbml.gz",
+#    ],
 
- #   [
- #    "interactions_for_all_species",
- #    1,
- #    1,
- #    "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options"
- #   ],
+#    [
+#     "interactions_for_all_species",
+#     1,
+#     1,
+#     "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options"
+#    ],
 
- #   [
- #    "psicquic_indexers",
- #    1,
- #    1,
- #    "perl psicquic_indexers.pl -release $release_nr"
- #   ],
+#    [
+#    "psicquic_indexers",
+#     1,
+#     1,
+#     "perl psicquic_indexers.pl -release $release_nr"
+#    ],
 
- #   [
- #    "gene_association.reactome",
- #    1,
- #    0,
- #    "cp ../goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome ".
- #    "$release_nr/gene_association.reactome",
- #   ],
+#    [
+#     "gene_association.reactome",
+#     1,
+#     0,
+#     "cp ../goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome ".
+#     "$release_nr/gene_association.reactome",
+#    ],
 
- #   [
- #    "runDiagramDumper",
- #    1,
- #    1,
- #   "cd WebELVTool",
- #   "rm -f $diagram_dump_filename/PNG/*",
- #   "rm -f $diagram_dump_filename/PDF/*",
- #   "./runDiagramDumper.sh $diagram_dump_options",
- #   "cd $diagram_dump_filename",
- #   "rm -f *.zip",
- #   "zip -r diagrams.pdf.zip PDF",
- #   "zip -r diagrams.png.zip PNG",
- #   "mv *.zip ../download_directory/$release_nr",
- #   ],
+#    [
+#     "runDiagramDumper",
+#     1,
+#     1,
+#    "cd WebELVTool",
+#    "rm -f $diagram_dump_filename/PNG/*",
+#    "rm -f $diagram_dump_filename/PDF/*",
+#    "./runDiagramDumper.sh $diagram_dump_options",
+#    "cd $diagram_dump_filename",
+#    "rm -f *.zip",
+#    "zip -r diagrams.pdf.zip PDF",
+#    "zip -r diagrams.png.zip PNG",
+#    "mv *.zip ../download_directory/$release_nr",
+#    ],
 
- #   [
- #    "fetch_and_print_values",
- #    1,
- #    0,
- #    qq(perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" ).
- #    qq(-class Complex $reactome_db_options -output DB_ID -output 'species.name[0]' ).
- #    qq(-output _displayName > $release_nr/curated_complexes.txt 2> fetch_and_print_values.err),
- #   
- #    qq(perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" ).
- #    qq(-class Complex $reactome_db_options -output 'stableIdentifier._displayName' -output ).
- #    qq('species.name[0]' -output _displayName > $release_nr/curated_complexes.stid.txt)
- #   ],
+#    [
+#     "fetch_and_print_values",
+#     1,
+#     0,
+#     qq(perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" ).
+#     qq(-class Complex $reactome_db_options -output DB_ID -output 'species.name[0]' ).
+#     qq(-output _displayName > $release_nr/curated_complexes.txt 2> fetch_and_print_values.err),
+    
+#     qq(perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" ).
+#     qq(-class Complex $reactome_db_options -output 'stableIdentifier._displayName' -output ).
+#     qq('species.name[0]' -output _displayName > $release_nr/curated_complexes.stid.txt)
+#    ],
 
- #   [
- #    "run_biopax",
- #    1,
- #    1,
- #   "./run_biopax.pl $biopaxexporter_db_options",
- #   ],
- #   
- #   [
- #    "runGSEAOutput",
- #    1,
- #    1,
- #    "cd WebELVTool",
- #    "./runGSEAOutput.sh $reactome_to_msig_export_db_options",
- #    "zip $reactome_to_msig_export_db_filename.zip $reactome_to_msig_export_db_filename",
- #    "cd -",
- #    "mv WebELVTool/$reactome_to_msig_export_db_filename.zip $release_nr"
- #   ],
+#    [
+#     "run_biopax",
+#     1,
+#     1,
+#    "./run_biopax.pl $biopaxexporter_db_options",
+#    ],
+    
+#    [
+#     "runGSEAOutput",
+#     1,
+#     1,
+#     "cd WebELVTool",
+#     "./runGSEAOutput.sh $reactome_to_msig_export_db_options",
+#     "zip $reactome_to_msig_export_db_filename.zip $reactome_to_msig_export_db_filename",
+#     "cd -",
+#     "mv WebELVTool/$reactome_to_msig_export_db_filename.zip $release_nr"
+#    ],
     
 #    [
 #     "generate_packaged_pathway_diagrams",
@@ -322,20 +322,20 @@ my @cmds = (
 #    "./generate_packaged_pathway_diagrams.sh $diagram_dump_options"
 #    ],
     
-#    [
-#     "TheReactomeBook",
-#     1,
-#     1,
-#     "perl genbook_rtf.pl -depth 100 $reactome_db_options -split -react_rep 2",
-#     "zip -r TheReactomeBook.rtf.zip TheReactomeBook",
+    [
+     "TheReactomeBook",
+     1,
+     0,
+#    "perl genbook_rtf.pl -depth 100 $reactome_db_options -split -react_rep 2",
+# "zip -r TheReactomeBook.rtf.zip TheReactomeBook",
 #     "rm -rf TheReactomeBook",
 #     "mv TheReactomeBook.rtf.zip $release_nr",
-#    
-#     "perl genbook_pdf.pl -depth 100 $reactome_db_options -stdout -react_rep 2 > TheReactomeBook.pdf",
-#     "zip TheReactomeBook.pdf.zip TheReactomeBook.pdf",
-#     "rm TheReactomeBook.pdf",
-#     "mv TheReactomeBook.pdf.zip $release_nr"
-#    ],
+    
+     "perl genbook_pdf.pl -depth 100 $reactome_db_options -stdout -react_rep 2 > TheReactomeBook.pdf",
+     "zip TheReactomeBook.pdf.zip TheReactomeBook.pdf",
+     "rm TheReactomeBook.pdf",
+     "mv TheReactomeBook.pdf.zip $release_nr"
+    ],
     
 #    [
 #     "fetchEmptyProject",

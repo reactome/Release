@@ -1,2 +1,3 @@
+*
+!*.pm
 Secrets.pm
-*.conf

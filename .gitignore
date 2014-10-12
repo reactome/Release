@@ -1,6 +1,10 @@
 BioMart/
 gkbdev
-install*.sh
-!install_slice_db.sh
 tmp/
+*.gz
+*.dump
+*.log
+*.old
+news.html
+inference_stats.png
 

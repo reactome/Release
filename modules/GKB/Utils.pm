@@ -781,7 +781,7 @@ sub get_literature_references {
 			unless ($authors eq "") {
 			    $authors .= ", ";
 			}
-			$initial = $author->attribute_value("initial")->[0];
+			$initial = $author->attribute_value("initial")->[0] || '';
 			$surname = $author->attribute_value("surname")->[0];
 			$surname = ucfirst($surname); # to help sorting
 #			$authors .= $initial . " " . $surname;

@@ -10,7 +10,7 @@ use File::Basename;
 # Created by: Joel Weiser (joel.weiser@oicr.on.ca for questions/comments)
 # Purpose: A module to set and export reactome release variables
 
-my $TEST_MODE = 0;
+my $TEST_MODE = 1;
 
 # Set user variables
 my $defaultuser = `whoami`;
