@@ -48,7 +48,7 @@ public class InstanceReferenceChecker {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                             "gk_central",
                                             "authortool",
-                                            "***REMOVED***");
+                                            "**REMOVED**");
 //        Collection<GKInstance> c = dba.fetchInstancesByClass(ReactomeJavaConstants.ReferenceGroupCount);
 //        System.out.println("Total ReferenceMolecule: " + c.size());
         Collection<GKInstance> c1 = dba.fetchInstancesByClass(ReactomeJavaConstants.ReferenceMoleculeClass);

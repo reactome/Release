@@ -232,7 +232,7 @@ public class PhysicalEntityRename {
 //        MySQLAdaptor dba = new MySQLAdaptor("reactomecurator.oicr.on.ca", 
 //                                            "gk_central",
 //                                            "authortool",
-//                                            "***REMOVED***");
+//                                            "**REMOVED**");
         return dba;
     }
     
