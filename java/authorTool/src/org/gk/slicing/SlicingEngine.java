@@ -1263,7 +1263,7 @@ public class SlicingEngine {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                             "test_gk_central",
                                             "authortool",
-                                            "T001test",
+                                            "**REMOVED**",
                                             3306);
         processFileName = "ver28_topics.txt";
         List list = getReleasedProcesses();

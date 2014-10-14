@@ -161,7 +161,7 @@ public class EventGOHtmlOutputer {
             MySQLAdaptor dba = new MySQLAdaptor("brie8",
                                                 "gk_central",
                                                 "authortool",
-                                                "T001test",
+                                                "**REMOVED**",
                                                 3306);
             new EventGOHtmlOutputer().generateHTML(dba);
         }

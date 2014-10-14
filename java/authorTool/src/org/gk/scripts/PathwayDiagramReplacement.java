@@ -154,7 +154,7 @@ public class PathwayDiagramReplacement {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                             "gk_central",
                                             "authortoor",
-                                            "T001test");
+                                            "**REMOVED**");
         String idText = "174143, 196854, 194068, 453279, 376176, 418592, 76002, " +
         		"375165, 73923, 453274, 375170, 69620, 373760, 199991, 202131, " +
         		"162906, 425397, 201451, 211859, 373752, 191273, 71387, 392170, " +
