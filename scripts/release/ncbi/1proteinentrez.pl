@@ -65,12 +65,12 @@ print OUTPUT1  "-" x  56,"\n";
 
 print OUTPUT1 "linkid:   0\n";
 
-my ($user,$host,$pass) = ('authortool','localhost','T001test');
+my ($user,$host,$pass) = ('authortool','localhost','**REMOVED**');
 
  
-#my ($db,$user,$host,$pass) = ('test_reactome_16','authortool','brie8','T001test'); 
+#my ($db,$user,$host,$pass) = ('test_reactome_16','authortool','brie8','**REMOVED**'); 
 
-#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','T001test');
+#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','**REMOVED**');
 
 my $dba = GKB::DBAdaptor->new
     (
