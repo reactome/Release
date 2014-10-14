@@ -78,7 +78,7 @@ public class PathwayDiagramScripts {
         MySQLAdaptor gk_central = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                                    "gk_central",
                                                    "authortool",
-                                                   "T001test");
+                                                   "**REMOVED**");
         GKInstance gkCentralInst = gk_central.fetchInstance(dbId);
         DiagramGKBReader diagramReader = new DiagramGKBReader();
         RenderablePathway pathway = diagramReader.openDiagram(gkCentralInst);
@@ -131,7 +131,7 @@ public class PathwayDiagramScripts {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                             "gk_central",
                                             "authortool",
-                                            "T001test");
+                                            "**REMOVED**");
         return dba;
     }
     

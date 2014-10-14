@@ -71,7 +71,7 @@ public class DatabaseComparison {
             MySQLAdaptor remoteDBA = new MySQLAdaptor("brie8",
                                                       "test_slicing",
                                                       "authortool",
-                                                      "T001test",
+                                                      "**REMOVED**",
                                                       3306);
             DatabaseComparison comparer = new DatabaseComparison(localDBA, remoteDBA);
             comparer.compare("Reaction");

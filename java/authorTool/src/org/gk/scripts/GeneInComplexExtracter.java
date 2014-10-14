@@ -35,7 +35,7 @@ public class GeneInComplexExtracter {
 	public void extractComplexList() {
 		try {
 			MySQLAdaptor adaptor = new MySQLAdaptor("brie8.cshl.org",
-					"gk_central", "authortool", "T001test");
+					"gk_central", "authortool", "**REMOVED**");
 			Collection instances = adaptor.fetchInstanceByAttribute("Species",
 					"_displayName", "=", "homo sapiens");
 			GKInstance human = (GKInstance) instances.iterator().next();
@@ -86,7 +86,7 @@ public class GeneInComplexExtracter {
 	public void extract() {
 		try {
 			MySQLAdaptor adaptor = new MySQLAdaptor("brie8.cshl.org",
-					"gk_central", "authortool", "T001test");
+					"gk_central", "authortool", "**REMOVED**");
 			Collection instances = adaptor.fetchInstanceByAttribute("Species",
 					"_displayName", "=", "homo sapiens");
 			GKInstance human = (GKInstance) instances.iterator().next();
