@@ -64,7 +64,7 @@ public class AttributesChecker {
         MySQLAdaptor dba = new MySQLAdaptor("reactomecurator.oicr.on.ca", 
                                             "gk_central", 
                                             "authortool", 
-                                            "***REMOVED***");
+                                            "**REMOVED**");
         Collection<GKInstance> efs = dba.fetchInstancesByClass(ReactomeJavaConstants.EntityFunctionalStatus);
         System.out.println("Total EntityFunctionalStatus: " + efs.size());
         System.out.println("DB_ID\tCurrent\tCorrect");
@@ -92,7 +92,7 @@ public class AttributesChecker {
         MySQLAdaptor dba = new MySQLAdaptor("reactomecurator.oicr.on.ca", 
                                             "gk_central", 
                                             "authortool", 
-                                            "***REMOVED***");
+                                            "**REMOVED**");
 //        MySQLAdaptor dba = new MySQLAdaptor("localhost", 
 //                                            "gk_central_050313", 
 //                                            "root", 
@@ -144,7 +144,7 @@ public class AttributesChecker {
 //        dba = new MySQLAdaptor("reactomecurator.oicr.on.ca", 
 //                             "gk_central", 
 //                             "authortool", 
-//                             "***REMOVED***");
+//                             "**REMOVED**");
 //        List<Long> gkcentralIds = fetchIDsForNameDuplicatedEWASes(dba);
 //        gkcentralIds.removeAll(localIds);
 //        System.out.println("New DBIDs: " + gkcentralIds.size());
@@ -185,7 +185,7 @@ public class AttributesChecker {
         MySQLAdaptor dba = new MySQLAdaptor("reactomecurator.oicr.on.ca", 
                                             "gk_central", 
                                             "authortool", 
-                                            "***REMOVED***");
+                                            "**REMOVED**");
         Connection connection = dba.getConnection();
         String query = "SELECT DB_ID, hasModifiedResidue FROM EntityWithAccessionedSequence_2_hasModifiedResidue";
         Statement stat = connection.createStatement();
@@ -222,7 +222,7 @@ public class AttributesChecker {
         MySQLAdaptor dba = new MySQLAdaptor("reactomecurator.oicr.on.ca", 
                                             "gk_central", 
                                             "authortool", 
-                                            "***REMOVED***");
+                                            "**REMOVED**");
         // Homo sapiens
         GKInstance human = dba.fetchInstance(48887L);
         Collection<GKInstance> c = dba.fetchInstanceByAttribute(ReactomeJavaConstants.EntityWithAccessionedSequence,
@@ -360,7 +360,7 @@ public class AttributesChecker {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                             "gk_central",
                                             "authortool",
-                                            "***REMOVED***");
+                                            "**REMOVED**");
         Collection<?> c = dba.fetchInstancesByClass(ReactomeJavaConstants.ReactionlikeEvent);
         SchemaClass cls = dba.getSchema().getClassByName(ReactomeJavaConstants.ReactionlikeEvent);
         dba.loadInstanceAttributeValues(c, cls.getAttribute(ReactomeJavaConstants.species));

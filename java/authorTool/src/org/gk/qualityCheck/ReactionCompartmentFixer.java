@@ -262,7 +262,7 @@ public class ReactionCompartmentFixer extends ReactionCompartmentCheck {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                             "test_gk_central_110410",
                                             "authortool",
-                                            "***REMOVED***");
+                                            "**REMOVED**");
         this.dataSource = dba;
         Collection<?> c = dba.fetchInstancesByClass(ReactomeJavaConstants.Reaction);
         progressPane = new ProgressPane();

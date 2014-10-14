@@ -682,7 +682,7 @@ public class DiagramGeneratorFromDB {
         MySQLAdaptor dba = new MySQLAdaptor("reactomecurator.oicr.on.ca",
                                             "gk_central",
                                             "authortool",
-                                            "***REMOVED***");
+                                            "**REMOVED**");
         setMySQLAdaptor(dba);
         setImageBaseDir("tiles");
         //generateImages(69620L); // Cell Cycle Checkpoints

@@ -102,12 +102,12 @@ public class ELVMemberAndSetLinkTest {
         MySQLAdaptor srcDBA = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                                "test_gk_central_041112",
                                                "authortool", 
-                                               "***REMOVED***");
+                                               "**REMOVED**");
         // Current database
         MySQLAdaptor targetDBA = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                                   "gk_central",
                                                   "authortool", 
-                                                  "***REMOVED***");
+                                                  "**REMOVED**");
         int count = 0;
         try {
             targetDBA.startTransaction();
