@@ -75,9 +75,9 @@ open (OUTPUT3, ">archive/$output3") or die "Can't write to file";
 print OUTPUT3 "UniProt ID"."\t"."Gene id"."\n\n";
 
 
-my ($user,$host,$pass) = ('authortool','localhost','***REMOVED***');
+my ($user,$host,$pass) = ('authortool','localhost','**REMOVED**');
  
-#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','***REMOVED***');
+#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','**REMOVED**');
 
 my $dba = GKB::DBAdaptor->new
     (
