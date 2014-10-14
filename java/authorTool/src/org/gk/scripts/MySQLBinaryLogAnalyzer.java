@@ -94,7 +94,7 @@ public class MySQLBinaryLogAnalyzer {
         MySQLAdaptor dba = new MySQLAdaptor("reactomecurator.oicr.on.ca",
                                             "gk_central",
                                             "authortool", 
-                                            "***REMOVED***");
+                                            "T001test");
         for (Long dbId : dbIds) {
             GKInstance ie = dba.fetchInstance(dbId);
             Collection<GKInstance> referrers = ie.getReferers(ReactomeJavaConstants.modified);

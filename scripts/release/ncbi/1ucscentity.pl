@@ -51,9 +51,9 @@ my %hash;
 my $dbid;
 
 
-my ($user,$host,$pass) = ('authortool','localhost','***REMOVED***');
+my ($user,$host,$pass) = ('authortool','localhost','**REMOVED**');
 
-#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','***REMOVED***');
+#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','**REMOVED**');
 
 my $dba = GKB::DBAdaptor->new(
      -dbname => $db,
