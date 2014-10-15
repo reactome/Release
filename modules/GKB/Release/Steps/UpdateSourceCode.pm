@@ -28,9 +28,9 @@ override 'run_commands' => sub {
     my $ssh_server = ($gkbdir eq "gkb") ? $live_server : undef;
    
     cmd("Updating source code from git",[
-                                         ["echo $sudo | sudo -S git stash"],
-                                         ["echo $sudo | sudo -S git pull"],
-                                         ["echo $sudo | sudo -S git stash pop"]
+                                         ["git stash"],
+                                         ["git pull"],
+                                         ["git stash pop"]
                                         ],
 	{'ssh' => $ssh_server}
     );
