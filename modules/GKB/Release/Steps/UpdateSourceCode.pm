@@ -7,7 +7,7 @@ use Moose;
 extends qw/GKB::Release::Step/;
 
 has '+gkb' => ( default => "gkbdev" );
-has '+passwords' => ( default => sub { ['sudo'] });
+has '+passwords' => ( default => sub { [] });
 has '+directory' => ( default => "$release/update_source_code" );
 has '+mail' => ( default => sub { 
 					my $self = shift;
