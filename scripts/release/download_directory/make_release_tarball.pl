@@ -1,19 +1,18 @@
 #!/usr/local/bin/perl -w
 use strict;
 
-use constant REPO => '/tmp/Release';
 use constant TARD => '/tmp/tarball';
 use constant BASE => '/usr/local/reactomes/Reactome/production';
-
-# You need to be root to run this script!
-#die "Sorry, root permission required.\n" unless $> == 0;
+use constant MAXAGE => 2;
 
 my $dir_for_tarball = TARD;
+system "rm -fr $dir_for_tarball" if -d $dir_for_tarball;
 
 my $release = shift or die "Usage $0 release_num\n";
 
 mkdir $dir_for_tarball unless (-d $dir_for_tarball);
 chdir $dir_for_tarball;
+my $repo = "$dir_for_tarball/$release/Release";
 
 mkdir $release unless -d $release;
 chdir $release;
@@ -21,15 +20,10 @@ chdir $release;
 system "rm -fr reactome" if -d 'reactome';
 
 my $base  = BASE;
-my $repo  = REPO;
 my $rhome = "$base/GKB/scripts/release/download_directory/$release";
 mkdir $rhome unless -d $rhome;
 
-# Since the github repo is not public, we will have to make sure it is checked
-# out into /tmp on reactomerelease
-check_github_repo();
-
-# Make sure that other data are up-to-date
+# Make sure that ancillary data are up-to-date
 check_analysis_data($base);
 check_solr_data($base);
 
@@ -44,8 +38,10 @@ my $unwanted_webapps = join(' ',(
 "reactome/apache-tomcat/webapps/AnalysisService_Antonio"
 ));
 
-print `pwd`;
+print "My working directory is ", `pwd`;
+
 my @cmds = (
+    qq(git clone https://github.com/reactome/Release.git),
     qq(mkdir reactome),
     qq(mkdir reactome/GKB),
     qq(cp -r $repo/website reactome/GKB),
@@ -66,7 +62,11 @@ my @cmds = (
     qq(mkdir reactome/RESTful),
     qq(mkdir reactome/RESTful/temp),
     qq(rm -fr reactome/GKB/modules/*ensem*),
-    qq(find ./ -name .git* | xargs rm -f),
+    qq(find reactome/GKB -name .git* | xargs rm -f)
+    );
+
+
+my @cmds2 = (
     qq(tar czf reactome.tar.gz reactome),
     qq(cp reactome.tar.gz $rhome),
     qq(cp $repo/third_party_install/install_reactome.sh $rhome),
@@ -78,31 +78,13 @@ for my $cmd (@cmds) {
     sleep 1;
 }
 
-sub check_github_repo {
-    # existence
-    unless (-d REPO && -d REPO . '/.git') {
-	die "Please get a copy of the github repo:\n",
-	"cd /tmp\ngit clone https://github.com/reactome/Release.git\n";
-    }
+cleanse_solr_data();
 
-    # ageism
-    my $now = time();
-    my $max_age = 
-	  7   # days
-	* 24  # hours
-	* 60  # minutes
-	* 60; # seconds
-
-    my $mod_date = (stat(REPO))[9];
-
-    my $age = ($now - $mod_date)/60/60/24;
-    if ($age > $max_age) {
-	die "Your github clone is more than a week old.\n",
-	"Please pull, checkout or clone a fresh copy to /tmp/Release\n";
-    }
-
+for my $cmd (@cmds2) {
+    print "$cmd\n";
+    system($cmd) == 0 or die "Something wrong with '$cmd'\n";
+    sleep 1;
 }
-
 
 sub check_analysis_data {
     my $base = shift;
@@ -117,5 +99,13 @@ sub check_solr_data {
     my $data = "$base/Solr/cores/reactome_v$release";
     unless (-e $data) {
         die "$data does not exist!  Make sure that you update the Solr data before proceeding\n";
+    }
+}
+
+sub cleanse_solr_data {
+    while (my $path = <Solr/cores/reactome_v*>) {
+	if ($path !~ /reactome_v$release$/) {
+	    print STDERR "Removing old release $path\n"; 
+	}
     }
 }
