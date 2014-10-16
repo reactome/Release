@@ -49,7 +49,7 @@ if ($id && $pid) {
     }
     my $note      = 'Reactome Pathway Knowledgebase, http://www.reactome.org/';
     my $url       = "http://www.reactome.org/PathwayBrowser/#$stable_id";
-    my $how_pub   = "\\url{http://www.reactome.org/PathwayBrowser/\#REACT_228223.1\}";
+    my $how_pub   = "\\url{http://www.reactome.org/PathwayBrowser/\#$stable_id\}";
     
     my $OK;
     if (@authors && has_event(@authors)) {
