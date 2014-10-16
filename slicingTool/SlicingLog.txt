@@ -1,13 +1,20 @@
+Instance existence checking:
+Instance attribute values checking:
+"[Pathway:5602415] UNC93B1 deficiency - HSE" in "representedPathway" for "[PathwayDiagram:1679287] Diagram of Trafficking and processing of endosomal TLR and UNC93B1 deficiency - HSE" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:3928661] Adam10 cleaves Efna2" in "inferredFrom" for "[BlackBoxEvent:3928660] ADAM10 cleaves EFNAs" is not in the slice and removed from the attribute list!
 "[Reaction:2559639] Collagen type IV sulfilimine cross-linking by peroxidasin" in "hasEvent" for "[Pathway:2243919] Crosslinking of collagen fibrils" is not in the slice and removed from the attribute list!
 "[Pathway:5338608] Papillomavirus Infection" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
 "[Pathway:2872314] FBXW7 in Cancer" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
 "[Pathway:3701007] Transcriptional Regulation by TP53 R175H" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
-"[Pathway:3781865] Diseases of glycosylation" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
 "[Pathway:5423599] Diseases of Mismatch Repair (MMR)" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
-"[Pathway:3274531] Glycogen storage disease type Ia (G6PC)" in "representedPathway" for "[PathwayDiagram:541418] Diagram of Hexose transport, Glycogen storage disease type Ia (G6PC deficiency), Glycogen storage disease type Ib (SLC37A4 deficiency),  and Severe congenital neutropenia type 4" is not in the slice and removed from the attribute list!
-"[Pathway:3229133] Glycogen storage disease type Ib (SLC37A4)" in "representedPathway" for "[PathwayDiagram:541418] Diagram of Hexose transport, Glycogen storage disease type Ia (G6PC deficiency), Glycogen storage disease type Ib (SLC37A4 deficiency),  and Severe congenital neutropenia type 4" is not in the slice and removed from the attribute list!
-"[Pathway:3282872] Severe congenital neutropenia type 4 (G6PC3)" in "representedPathway" for "[PathwayDiagram:541418] Diagram of Hexose transport, Glycogen storage disease type Ia (G6PC deficiency), Glycogen storage disease type Ib (SLC37A4 deficiency),  and Severe congenital neutropenia type 4" is not in the slice and removed from the attribute list!
+"[Pathway:5579029] Metabolic disorders of biological oxidation enzymes" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
+"[Pathway:5260271] Diseases of Immune System" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
+"[Pathway:5619115] Disorders of transmembrane transporters" in "hasEvent" for "[Pathway:1643685] Disease" is not in the slice and removed from the attribute list!
+"[Pathway:3274531] Glycogen storage disease type Ia (G6PC)" in "representedPathway" for "[PathwayDiagram:541418] Diagram of Hexose transport, Glycogen storage disease type Ia (G6PC), Glycogen storage disease type Ib (SLC37A4), Severe congenital neutropenia type 4 (G6PC3), Defective GCK causes maturity-onset diabetes of the young 2 (MODY2),  and Defective HK1 causes hexokinase deficiency (HK deficiency)" is not in the slice and removed from the attribute list!
+"[Pathway:3229133] Glycogen storage disease type Ib (SLC37A4)" in "representedPathway" for "[PathwayDiagram:541418] Diagram of Hexose transport, Glycogen storage disease type Ia (G6PC), Glycogen storage disease type Ib (SLC37A4), Severe congenital neutropenia type 4 (G6PC3), Defective GCK causes maturity-onset diabetes of the young 2 (MODY2),  and Defective HK1 causes hexokinase deficiency (HK deficiency)" is not in the slice and removed from the attribute list!
+"[Pathway:3282872] Severe congenital neutropenia type 4 (G6PC3)" in "representedPathway" for "[PathwayDiagram:541418] Diagram of Hexose transport, Glycogen storage disease type Ia (G6PC), Glycogen storage disease type Ib (SLC37A4), Severe congenital neutropenia type 4 (G6PC3), Defective GCK causes maturity-onset diabetes of the young 2 (MODY2),  and Defective HK1 causes hexokinase deficiency (HK deficiency)" is not in the slice and removed from the attribute list!
+"[Pathway:5619073] Defective GCK causes maturity-onset diabetes of the young 2 (MODY2)" in "representedPathway" for "[PathwayDiagram:541418] Diagram of Hexose transport, Glycogen storage disease type Ia (G6PC), Glycogen storage disease type Ib (SLC37A4), Severe congenital neutropenia type 4 (G6PC3), Defective GCK causes maturity-onset diabetes of the young 2 (MODY2),  and Defective HK1 causes hexokinase deficiency (HK deficiency)" is not in the slice and removed from the attribute list!
+"[Pathway:5619056] Defective HK1 causes hexokinase deficiency (HK deficiency)" in "representedPathway" for "[PathwayDiagram:541418] Diagram of Hexose transport, Glycogen storage disease type Ia (G6PC), Glycogen storage disease type Ib (SLC37A4), Severe congenital neutropenia type 4 (G6PC3), Defective GCK causes maturity-onset diabetes of the young 2 (MODY2),  and Defective HK1 causes hexokinase deficiency (HK deficiency)" is not in the slice and removed from the attribute list!
 "[Pathway:997416] Isoprenoid metabolism" in "hasEvent" for "[Pathway:556833] Metabolism of lipids and lipoproteins" is not in the slice and removed from the attribute list!
 "[Pathway:2262748] Cellular response to oxidative stress" in "hasEvent" for "[Pathway:2262752] Cellular responses to stress" is not in the slice and removed from the attribute list!
 "[Pathway:2025928] Calcineurin activates NFAT" in "hasEvent" for "[Pathway:1168372] Downstream signaling events of B Cell Receptor (BCR)" is not in the slice and removed from the attribute list!
@@ -75,15 +82,28 @@
 "[Reaction:83530] Release of RNA Polymerase II from the cleaved transcript" in "hasEvent" for "[Pathway:112296] Post-Elongation Processing of Intron-Containing pre-mRNA" is not in the slice and removed from the attribute list!
 "[Reaction:109825] (Controversial - not included in public release.) SOS mediated nucleotide exchange of RAS (IRS, Crk)" in "precedingEvent" for "[Reaction:109827] SOS phosphorylation and dissociation (IRS, Crk)" is not in the slice and removed from the attribute list!
 "[Reaction:109825] (Controversial - not included in public release.) SOS mediated nucleotide exchange of RAS (IRS, Crk)" in "precedingEvent" for "[Reaction:109803] Transient dissociation of 14-3-3 upon Ras binding" is not in the slice and removed from the attribute list!
+"[Reaction:2672196] Viral serpin blocks caspase-8 activity" in "hasEvent" for "[Pathway:109581] Apoptosis" is not in the slice and removed from the attribute list!
 "[Pathway:211676] Induction of cytostasis through the targeting of Pak2 (gamma-PAK) to the endoplasmic reticulum" in "hasEvent" for "[Pathway:109581] Apoptosis" is not in the slice and removed from the attribute list!
-"[Reaction:2672196] Viral serpin blocks caspase-8 activity" in "hasEvent" for "[Pathway:109607] Extrinsic Pathway for Apoptosis" is not in the slice and removed from the attribute list!
 "[Reaction:110314] Recognition of DNA damage by error-prone polymerases" in "precedingEvent" for "[Reaction:110316] Binding of Pol eta to lesioned DNA template" is not in the slice and removed from the attribute list!
 "[Reaction:110314] Recognition of DNA damage by error-prone polymerases" in "precedingEvent" for "[Reaction:110307] Binding of REV1 to lesioned DNA template" is not in the slice and removed from the attribute list!
 "[Reaction:110314] Recognition of DNA damage by error-prone polymerases" in "precedingEvent" for "[Reaction:110321] Binding of Pol zeta to lesioned DNA template" is not in the slice and removed from the attribute list!
-"[Reaction:5333671] CLCAs self cleave" in "hasEvent" for "[Pathway:2672351] Stimuli-sensing channels" is not in the slice and removed from the attribute list!
+"[Reaction:5607043] factor VIIIa associates with cell membrane" in "hasEvent" for "[Pathway:140837] Intrinsic Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5607023] factor IXa associates with cell membrane" in "hasEvent" for "[Pathway:140837] Intrinsic Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5591052] PROCR binds Protein C" in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5603467] Activated protein C is released from PROCR" in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5604929] Activated protein C binds Protein S" in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5591040] Activated protein C cleaves Factor Va intermediate form for Factor Va" in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5607002] Activated protein C cleaves factor VIIIa" in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5578883] Heparin cofactor 2 (SERPIND1) binds activated thrombin (factor IIa)" in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5602080] Protease nexin-1 (PN1) is a specific and extremely efficient inhibitor of thrombin." in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5591086] SERPINA5 binds activated protein C" in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5607058] Activated protein C:PROCR binds F2R" in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5606996] Soluble PROCR binds activated protein C" in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5607004] Soluble PROCR binds PRTN3:CD177" in "hasEvent" for "[Pathway:140875] Common Pathway" is not in the slice and removed from the attribute list!
+"[Reaction:5604929] Activated protein C binds Protein S" in "precedingEvent" for "[Reaction:141026] Activated protein C cleaves factor Va to factor Vi intermediate form" is not in the slice and removed from the attribute list!
+"[Reaction:5591052] PROCR binds Protein C" in "precedingEvent" for "[Reaction:141040] Activated thrombin:thrombomodulin cleaves PROCR:Protein C to PROCR:Activated protein C" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:3781943] WLS:WNT complex is internalized for maturation into exosomes" in "hasEvent" for "[Pathway:3238698] WNT ligand biogenesis and trafficking" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:3781941] WNTs are secreted in exosomes" in "hasEvent" for "[Pathway:3238698] WNT ligand biogenesis and trafficking" is not in the slice and removed from the attribute list!
-"[Reaction:5333671] CLCAs self cleave" in "precedingEvent" for "[Reaction:2684901] ANOs transport cytosolic Cl- to extracellular region" is not in the slice and removed from the attribute list!
 "[Pathway:3828065] Glycogen storage disease type 0 (GYS1 and GYS2)" in "hasEvent" for "[Pathway:3229121] Glycogen storage diseases" is not in the slice and removed from the attribute list!
 "[Pathway:3274531] Glycogen storage disease type Ia (G6PC)" in "hasEvent" for "[Pathway:3229121] Glycogen storage diseases" is not in the slice and removed from the attribute list!
 "[Pathway:3282872] Severe congenital neutropenia type 4 (G6PC3)" in "hasEvent" for "[Pathway:3229121] Glycogen storage diseases" is not in the slice and removed from the attribute list!
@@ -91,26 +111,34 @@
 "[Pathway:5357609] Glycogen storage disease type II (GAA)" in "hasEvent" for "[Pathway:3229121] Glycogen storage diseases" is not in the slice and removed from the attribute list!
 "[Pathway:3878781] Glycogen storage disease type IV (GBE1)" in "hasEvent" for "[Pathway:3229121] Glycogen storage diseases" is not in the slice and removed from the attribute list!
 "[Pathway:3814836] Glycogen storage disease type XV (GYG1)" in "hasEvent" for "[Pathway:3229121] Glycogen storage diseases" is not in the slice and removed from the attribute list!
-"[Reaction:3301943] 2xGSTK1 conjugates GSH with CDNB" in "hasEvent" for "[Pathway:156590] Glutathione conjugation" is not in the slice and removed from the attribute list!
-"[Reaction:3160769] MTR transfers CH3 group from MTHFPG to B12s" in "hasEvent" for "[Pathway:156581] Methylation" is not in the slice and removed from the attribute list!
+"[Reaction:3301943] GSTK1 dimer transfers GS from GSH to CDNB" in "hasEvent" for "[Pathway:156590] Glutathione conjugation" is not in the slice and removed from the attribute list!
+"[Reaction:3160769] MTR transfers CH3 from MTHFPG to B12s" in "hasEvent" for "[Pathway:156581] Methylation" is not in the slice and removed from the attribute list!
 "[Reaction:157076] Notch 4 heterodimer traffics to the plasma membrane" in "precedingEvent" for "[Reaction:157633] Notch 4 heterodimer binds with a Notch ligand in the extracellular space" is not in the slice and removed from the attribute list!
 "[Reaction:157000] Notch 3 heterodimer traffics to the plasma membrane" in "precedingEvent" for "[Reaction:157644] Notch 3 heterodimer binds with a Notch ligand in the extracellular space" is not in the slice and removed from the attribute list!
 "[Pathway:158589] Hematopoiesis" in "hasEvent" for "[Pathway:1266738] Developmental Biology" is not in the slice and removed from the attribute list!
 "[Pathway:157083] Notch receptor binds with a ligand" in "precedingEvent" for "[Pathway:156988] Receptor-ligand binding initiates the second proteolytic cleavage of Notch receptor" is not in the slice and removed from the attribute list!
 "[Pathway:163153] NMDA-mediated neuronal signaling" in "hasEvent" for "[Pathway:162582] Signal Transduction" is not in the slice and removed from the attribute list!
 "[Pathway:162641] Rho GTPases in actin and microtubule dynamics" in "hasEvent" for "[Pathway:162582] Signal Transduction" is not in the slice and removed from the attribute list!
+"[Pathway:5362517] Signaling by Retinoic Acid" in "hasEvent" for "[Pathway:162582] Signal Transduction" is not in the slice and removed from the attribute list!
 "[Pathway:176036] Host immune responses to HIV infection" in "hasEvent" for "[Pathway:162906] HIV Infection" is not in the slice and removed from the attribute list!
 "[Pathway:173108] Role of CypA protein in HIV-1 infection" in "hasEvent" for "[Pathway:162909] Host Interactions of HIV factors" is not in the slice and removed from the attribute list!
+"[Pathway:3781860] Diseases associated with N-glycosylation of proteins" in "hasEvent" for "[Pathway:3781865] Diseases of glycosylation" is not in the slice and removed from the attribute list!
+"[Pathway:3906995] Diseases associated with O-glycosylation of proteins" in "hasEvent" for "[Pathway:3781865] Diseases of glycosylation" is not in the slice and removed from the attribute list!
+"[Pathway:5609975] Diseases associated with glycosylation precursor biosynthesis" in "hasEvent" for "[Pathway:3781865] Diseases of glycosylation" is not in the slice and removed from the attribute list!
+"[Pathway:5602780] JAK3 deficiency causes SCID (IL7R)" in "representedPathway" for "[PathwayDiagram:1271495] Diagram of Interleukin-7 signaling and JAK3 deficiency causes SCID (IL7R)" is not in the slice and removed from the attribute list!
 "[Reaction:4754176] JMJD6 demethylates Me2R3/MeR3 of histone H3 and Me2R4/MeR4 of histone H4." in "hasEvent" for "[Pathway:3214842] HDMs demethylate histones" is not in the slice and removed from the attribute list!
 "[Reaction:5144549] EP300 acetylates replicative histone H2B" in "hasEvent" for "[Pathway:3214847] HATs acetylate histones" is not in the slice and removed from the attribute list!
 "[Reaction:3215427] HSP90 binds MEP50:PRMT5" in "hasEvent" for "[Pathway:3214858] RMTs methylate histone arginines" is not in the slice and removed from the attribute list!
 "[Reaction:174488] Synthesis of  GAGPOL polyprotein by ribosomal frameshifting" in "hasEvent" for "[Pathway:174495] Synthesis And Processing Of GAG, GAGPOL Polyproteins" is not in the slice and removed from the attribute list!
 "[Reaction:189305] Transport of GAGPOL precursor to plasma membrane" in "hasEvent" for "[Pathway:174495] Synthesis And Processing Of GAG, GAGPOL Polyproteins" is not in the slice and removed from the attribute list!
-"[Reaction:3160769] MTR transfers CH3 group from MTHFPG to B12s" in "precedingEvent" for "[Reaction:174374] MTR transfers CH3 group from MeCbl to HCYS" is not in the slice and removed from the attribute list!
+"[Reaction:3160769] MTR transfers CH3 from MTHFPG to B12s" in "precedingEvent" for "[Reaction:174374] MTR transfers CH3 from MeCbl to HCYS" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:480621] Expression of BAMBI" in "precedingEvent" for "[Reaction:173483] BAMBI interferes with the interaction of type I receptor with type II receptor" is not in the slice and removed from the attribute list!
+"[Reaction:5615637] POMT1:POMT2 transfers Man from DOLPman to DAG1(30-653)" in "hasEvent" for "[Pathway:5173105] O-linked glycosylation" is not in the slice and removed from the attribute list!
+"[Reaction:5617037] POMGNT1 transfers GlcNAc from UDP-GlcNAc to Man-O-Ser-DAG1" in "hasEvent" for "[Pathway:5173105] O-linked glycosylation" is not in the slice and removed from the attribute list!
+"[Reaction:5617138] LARGE,GYLTL1B transfer Xyl from UDP-Xyl to GlcA" in "hasEvent" for "[Pathway:5173105] O-linked glycosylation" is not in the slice and removed from the attribute list!
+"[Reaction:5617143] LARGE,GYLTL1B transfer GlcA from UDP-GlcA to Xyl-GlcA" in "hasEvent" for "[Pathway:5173105] O-linked glycosylation" is not in the slice and removed from the attribute list!
 "[Reaction:177508] Pincher-mediated pynocytosis" in "precedingEvent" for "[Reaction:177479] Axonal transport of NGF:Trk complexes" is not in the slice and removed from the attribute list!
 "[Reaction:177508] Pincher-mediated pynocytosis" in "hasEvent" for "[Pathway:177504] Retrograde neurotrophin signalling" is not in the slice and removed from the attribute list!
-"[Pathway:179419] APC:Cdc20 mediated degradation of cell cycle proteins prior to satisfation of the cell cycle checkpoint" in "hasEvent" for "[Pathway:176409] APC/C:Cdc20 mediated degradation of mitotic proteins" is not in the slice and removed from the attribute list!
 "[Pathway:167164] HIV-1 Transcription Pre-Initiation" in "hasEvent" for "[Pathway:167172] Transcription of the HIV genome" is not in the slice and removed from the attribute list!
 "[Reaction:167239] Association of Tat:P-TEFb(Cyclin T1:Cdk9) with the TAR sequence" in "precedingEvent" for "[Reaction:167191] Hyperphosphorylation (Ser2) of RNA Pol II CTD by the P-TEFb(Cyclin T1:Cdk9) complex" is not in the slice and removed from the attribute list!
 "[Reaction:167135] Formation of the HIV-1 closed pre-initiation complex" in "precedingEvent" for "[Reaction:167097] HIV Promoter Opening: First Transition" is not in the slice and removed from the attribute list!
@@ -125,6 +153,7 @@
 "[Reaction:177692] Activation of recruited TAK1 within the complex viral dsRNA:TLR3:TRIF:pUb-TRAF6:TAB1:Ub-TAB2:Ub-TAB3: TAK1" in "hasEvent" for "[Pathway:168180] TRAF6 Mediated Induction of proinflammatory cytokines" is not in the slice and removed from the attribute list!
 "[Reaction:847070] activated TAK1 complex dissociates from the TLR3 receptor complex" in "hasEvent" for "[Pathway:168180] TRAF6 Mediated Induction of proinflammatory cytokines" is not in the slice and removed from the attribute list!
 "[Reaction:847070] activated TAK1 complex dissociates from the TLR3 receptor complex" in "precedingEvent" for "[Reaction:168184] Activated TAK1 mediates phosphorylation of the IKK Complex" is not in the slice and removed from the attribute list!
+"[Pathway:5621481] C-type lectin receptors (CLRs)" in "hasEvent" for "[Pathway:168249] Innate Immune System" is not in the slice and removed from the attribute list!
 "[Reaction:168287] Caveolae Endocytosis" in "hasEvent" for "[Pathway:168275] Entry of Influenza Virion into Host Cell via Endocytosis" is not in the slice and removed from the attribute list!
 "[Reaction:168292] Non-Clathrin, Non-Caveolae Endocytosis Pathways" in "hasEvent" for "[Pathway:168275] Entry of Influenza Virion into Host Cell via Endocytosis" is not in the slice and removed from the attribute list!
 "[Reaction:168286] Macropinocytosis" in "hasEvent" for "[Pathway:168275] Entry of Influenza Virion into Host Cell via Endocytosis" is not in the slice and removed from the attribute list!
@@ -132,19 +161,20 @@
 "[Reaction:168903] Phosphorylation and Release of IRF3 or IRF7" in "precedingEvent" for "[Reaction:168933] Dimerization of phosphorylated IRF3/IRF7" is not in the slice and removed from the attribute list!
 "[Pathway:5432759] Regulation of TLR signaling" in "hasEvent" for "[Pathway:168898] Toll-Like Receptors Cascades" is not in the slice and removed from the attribute list!
 "[Reaction:168930] Viral dsRNA:TLR3:TRIF Complex recruits and activates RIP1" in "precedingEvent" for "[Reaction:168910] RIP1 facilitates IKK complex phosphorylation" is not in the slice and removed from the attribute list!
-"[Reaction:5340195] NR1H4 binds DCA, CDCA, LCHA" in "precedingEvent" for "[Reaction:192051] Cholesterol is hydroxylated to 7alpha-hydroxycholesterol by CYP7A1" is not in the slice and removed from the attribute list!
-"[Reaction:5340195] NR1H4 binds DCA, CDCA, LCHA" in "precedingEvent" for "[Reaction:192065] 25-hydroxycholesterol is 7alpha-hydroxylated by CYP7B1" is not in the slice and removed from the attribute list!
+"[Reaction:5340195] NR1H4 binds DCA, CDCA, LCHA" in "precedingEvent" for "[Reaction:192051] CYP7A1 7-hydroxylates CHOL" is not in the slice and removed from the attribute list!
+"[Reaction:5340195] NR1H4 binds DCA, CDCA, LCHA" in "precedingEvent" for "[Reaction:192065] CYP7B1 7-hydroxylates 25OH-CHOL" is not in the slice and removed from the attribute list!
 "[Reaction:5340195] NR1H4 binds DCA, CDCA, LCHA" in "precedingEvent" for "[Reaction:191972] 27-hydroxycholesterol is 7alpha-hydroxylated" is not in the slice and removed from the attribute list!
 "[Reaction:1449663] Sex hormones bind to 2xSHBG in blood" in "hasEvent" for "[Pathway:193048] Androgen biosynthesis" is not in the slice and removed from the attribute list!
-"[Reaction:5340195] NR1H4 binds DCA, CDCA, LCHA" in "precedingEvent" for "[Reaction:194187] SLC10A2,6 transport bile salts and acids and Na+ from extracellular region to cytosol" is not in the slice and removed from the attribute list!
+"[Reaction:5340195] NR1H4 binds DCA, CDCA, LCHA" in "precedingEvent" for "[Reaction:194187] SLC10A2 transports bile salts and acids and Na+ from extracellular region to cytosol" is not in the slice and removed from the attribute list!
 "[Reaction:1013013] Association of GABA B receptor with G protein beta-gamma subunits" in "hasEvent" for "[Pathway:1296041] Activation of G protein gated Potassium channels" is not in the slice and removed from the attribute list!
 "[Reaction:1013012] Binding of Gbeta/gamma to GIRK/Kir3 channels" in "hasEvent" for "[Pathway:1296041] Activation of G protein gated Potassium channels" is not in the slice and removed from the attribute list!
 "[Pathway:195259] Rho GTPases in Actin dynamics" in "hasEvent" for "[Pathway:194315] Signaling by Rho GTPases" is not in the slice and removed from the attribute list!
 "[Pathway:195260] Rho GTPases in microtubule dynamics" in "hasEvent" for "[Pathway:194315] Signaling by Rho GTPases" is not in the slice and removed from the attribute list!
-"[Pathway:195258] Regulation of enzymes by Rho GTPases" in "hasEvent" for "[Pathway:194315] Signaling by Rho GTPases" is not in the slice and removed from the attribute list!
+"[Pathway:195258] Regulation of effector enzymes by Rho GTPases" in "hasEvent" for "[Pathway:194315] Signaling by Rho GTPases" is not in the slice and removed from the attribute list!
 "[Reaction:1449687] Corticosteroids bind to CBG in blood" in "hasEvent" for "[Pathway:194002] Glucocorticoid biosynthesis" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:877173] Syk couples sensing of fungal pathogens to NLRP3 inflammasome" in "precedingEvent" for "[BlackBoxEvent:1306876] NLRP3 activation by small molecules" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:877173] Syk couples sensing of fungal pathogens to NLRP3 inflammasome" in "precedingEvent" for "[BlackBoxEvent:1306876] NLRP3 activation by small molecules" is not in the slice and removed from the attribute list!
+"[Pathway:5619035] Defective SLC17A5 causes Salla disease (SD) and ISSD" in "representedPathway" for "[PathwayDiagram:4594867] Diagram of Sialic acid metabolism and Defective SLC17A5 causes Salla disease (SD) and ISSD" is not in the slice and removed from the attribute list!
 "[Pathway:3214841] PKMTs methylate histone lysines" in "hasEvent" for "[Pathway:3247509] Chromatin modifying enzymes" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:3247541] PADI4 associates with histone deacetylase 1 (HDAC1)" in "hasEvent" for "[Pathway:3247509] Chromatin modifying enzymes" is not in the slice and removed from the attribute list!
 "[Reaction:3247569] PADI4 deiminates Histones" in "hasEvent" for "[Pathway:3247509] Chromatin modifying enzymes" is not in the slice and removed from the attribute list!
@@ -163,9 +193,10 @@
 "[Reaction:212329] Formation of CSL Hairless corepressor complex" in "hasEvent" for "[Pathway:212436] Generic Transcription Pathway" is not in the slice and removed from the attribute list!
 "[Reaction:212360] Formation of PC2 coactivator complex" in "hasEvent" for "[Pathway:212436] Generic Transcription Pathway" is not in the slice and removed from the attribute list!
 "[Pathway:5250913] Positive epigenetic regulation of rRNA expression" in "hasEvent" for "[Pathway:212165] Epigenetic regulation of gene expression" is not in the slice and removed from the attribute list!
-"[Pathway:5334118] DNA methylation" in "hasEvent" for "[Pathway:212165] Epigenetic regulation of gene expression" is not in the slice and removed from the attribute list!
-"[Reaction:215526] CYP4F3 omega-hydroxylates leukotriene B4, thus inactivating it" in "hasEvent" for "[Pathway:211979] Eicosanoids" is not in the slice and removed from the attribute list!
+"[Reaction:215526] CYP4F3 20-hydroxylates LTB4" in "hasEvent" for "[Pathway:211979] Eicosanoids" is not in the slice and removed from the attribute list!
+"[Reaction:5602295] CYP4F22 20-hydroxylates TrXA3" in "hasEvent" for "[Pathway:211979] Eicosanoids" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:432089] LDL activates PECAM-1" in "hasEvent" for "[Pathway:210990] PECAM1 interactions" is not in the slice and removed from the attribute list!
+"[Pathway:5601884] PIWI-interacting RNA (piRNA) biogenesis" in "hasEvent" for "[Pathway:211000] Regulatory RNA pathways" is not in the slice and removed from the attribute list!
 "[Reaction:211953] Orphan CYP2A7" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
 "[Reaction:211933] Orphan CYP4A22" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
 "[Reaction:211902] Orphan CYP4F22" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
@@ -174,14 +205,14 @@
 "[Reaction:212000] Orphan CYP4Z1" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
 "[Reaction:211986] Orphan CYP20A1" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
 "[Reaction:211949] Orphan CYP27C1" in "hasEvent" for "[Pathway:211958] Miscellaneous substrates" is not in the slice and removed from the attribute list!
-"[Reaction:5362576] ALDH1 oxidises 9cRAL to 9cRA" in "precedingEvent" for "[Reaction:211923] CYP26C1 4-hydroxylates 9cRA" is not in the slice and removed from the attribute list!
+"[Reaction:211923] CYP26C1 4-hydroxylates 9cRA" in "hasEvent" for "[Pathway:211916] Vitamins" is not in the slice and removed from the attribute list!
 "[Pathway:211680] Down-regulation of translation initiation in apoptosis by Pak-2-mediated phosphorylation of Mnk1" in "hasEvent" for "[Pathway:211736] Stimulation of the cell death response by PAK-2p34" is not in the slice and removed from the attribute list!
-"[Reaction:5333671] CLCAs self cleave" in "precedingEvent" for "[Reaction:2744242] TTYH2/3 transport cytosolic Cl- to extracellular region" is not in the slice and removed from the attribute list!
+"[Reaction:5607742] K63polyUb-p-3T,1S-TAK1 phosphorylates IKK-beta" in "precedingEvent" for "[BlackBoxEvent:202534] Ubiquitination of NEMO by TRAF6" is not in the slice and removed from the attribute list!
 "[Pathway:211296] CECAM1 interactions" in "hasEvent" for "[Pathway:202733] Cell surface interactions at the vascular wall" is not in the slice and removed from the attribute list!
 "[Pathway:203711] iNOS NO production" in "hasEvent" for "[Pathway:202131] Metabolism of nitric oxide" is not in the slice and removed from the attribute list!
 "[Pathway:203761] nNOS NO production" in "hasEvent" for "[Pathway:202131] Metabolism of nitric oxide" is not in the slice and removed from the attribute list!
 "[Pathway:1474115] Nitric oxide biology" in "hasEvent" for "[Pathway:202131] Metabolism of nitric oxide" is not in the slice and removed from the attribute list!
-"[Reaction:5333671] CLCAs self cleave" in "precedingEvent" for "[Reaction:2744361] BESTs transport cytosolic Cl- to extracellular region" is not in the slice and removed from the attribute list!
+"[Reaction:5578717] BCDIN3D dimethylates 5' phosphate of pre-miRNA" in "hasEvent" for "[Pathway:203927] MicroRNA (miRNA) biogenesis" is not in the slice and removed from the attribute list!
 "[Reaction:443034] PDK1 and AKT associate in the cytoplasm" in "hasEvent" for "[Pathway:198203] PI3K/AKT activation" is not in the slice and removed from the attribute list!
 "[Reaction:443390] PKCalpha/betaII phosphorylate AKT at S473" in "hasEvent" for "[Pathway:198203] PI3K/AKT activation" is not in the slice and removed from the attribute list!
 "[Reaction:443390] PKCalpha/betaII phosphorylate AKT at S473" in "precedingEvent" for "[Reaction:198298] AKT translocates to the nucleus" is not in the slice and removed from the attribute list!
@@ -196,15 +227,72 @@
 "[Reaction:197512] PKC interacts with and phosphorylates RKIP" in "hasEvent" for "[Pathway:197529] Feedback control in the MAPK signaling module" is not in the slice and removed from the attribute list!
 "[Reaction:197482] Phospho-RKIP is released from RAF, contributing to a positive feedback" in "hasEvent" for "[Pathway:197529] Feedback control in the MAPK signaling module" is not in the slice and removed from the attribute list!
 "[Reaction:197502] ERK directly phosphorylates RAF, providing positive feedback" in "hasEvent" for "[Pathway:197529] Feedback control in the MAPK signaling module" is not in the slice and removed from the attribute list!
-"[Reaction:5223313] ABCD4 may transport cobalamin from lysosomal lumen to cytosol" in "hasEvent" for "[Pathway:196741] Cobalamin (Cbl, vitamin B12) transport and metabolism" is not in the slice and removed from the attribute list!
 "[Reaction:203787] p38MAPK is inactivated by DUSP1 or DUSP10" in "hasEvent" for "[Pathway:198753] ERK/MAPK targets" is not in the slice and removed from the attribute list!
 "[Pathway:210992] ALCAM interactions" in "hasEvent" for "[Pathway:198933] Immunoregulatory interactions between a Lymphoid and a non-Lymphoid cell" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5607724] 26S proteasome processes K48PolyUb-K21,22-p-S32,36-IkBA:NF-kB complex to form NF-kB complex" in "precedingEvent" for "[Reaction:2730894] Released NF-kB complex is transported to the nucleus" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:216806] Processing of Proinsulin to Insulin" in "precedingEvent" for "[BlackBoxEvent:216852] Insulin secretory granule translocates to cell cortex" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:216825] Docking of Insulin Secretory Granules at the Plasma Membrane" in "precedingEvent" for "[BlackBoxEvent:216883] Exocytosis of Insulin" is not in the slice and removed from the attribute list!
 "[Reaction:264563] Calcium Influx through Voltage-gated Calcium Channels" in "precedingEvent" for "[BlackBoxEvent:216883] Exocytosis of Insulin" is not in the slice and removed from the attribute list!
 "[Reaction:4086185] Thrombospondin 1 and 2 bind integrin alpha6beta1" in "hasEvent" for "[Pathway:216083] Integrin cell surface interactions" is not in the slice and removed from the attribute list!
 "[Pathway:4088286] Integrin-ADAM interactions" in "hasEvent" for "[Pathway:216083] Integrin cell surface interactions" is not in the slice and removed from the attribute list!
 "[Pathway:1500751] DNA repair" in "hasEvent" for "[Pathway:1222499] Response of Mtb to phagocytosis" is not in the slice and removed from the attribute list!
+"[Reaction:5223317] ABCB9 transports peptides from cytosol to lysosomal lumen" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5223305] ABCE1 binds RNASEL, inhibiting it" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5227009] ABCF1 binds EIF2" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5226979] ADD1:ADD2 binds DMTN" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5226999] ADD1:ADD3 binds DMTN" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5226904] AHCYL1 binds ITPR1" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5226964] ANKH transports PPi from cytosol to extracellular region" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5229132] AP4 binds APP" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5229111] AP4 transports APP from trans-Golgi network to endosome lumen" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5229115] AP1G2 binds HBV surface protein S" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5246478] APOM binds retinoids" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5246471] ARF1-GTP hydrolyses GTP" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5250217] ARL2:GTP binds ARL2BP" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5250210] ARL2:GTP:ARL2BP translocates from cytosol to the mitochondrial matrix" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5250209] ARL2:GTP:ARL2BP binds SLC25A4" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5250230] EAAC1 exchanges L-Glu, H+ and 3Na+ for K+" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5250579] ASNA1 transports TA proteins from cytosol to ER membrane" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5251989] ATP13A4,5 may transport divalent ions from extracellular region to cytosol" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5252001] ATP1B4 binds SNW1" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5251950] ATP1B4:SNW1 increases expression of SMAD7" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5252133] ATP6AP1 binds V-ATPase" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5252072] AZGP1 binds PIP" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5251959] HSP40s activate intrinsic ATPase activity of HSP70s in the cytosol" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5252079] HSP110s exchange ATP for ADP on HSP70s:ADP" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5251942] Hikeshi binds HSP70s:ATP" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5252041] NPC transports Hikeshi:HSP70s:ATP from cytosol to nucleoplasm" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5251955] HSP40s activate intrinsic ATPase activity of HSP70s in the nucleoplasm" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5260201] p-AKT2 phosphorylates C2CD5" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5263618] CACFD1 transports Ca2+ from extracellular region to cytosol" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5263633] DYSF, CAV3 and TRIM72 bind" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5263628] CAV3:TRIM72:DYSF binds ANXAs" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5333678] CPNEs bind PL" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5333658] CLAT:AP1:CLVS bind PI(3,5)P2" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5334827] SUMO-CRABP2 binds atRA then translocates from cytosol to nucleus" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5334854] RAR:RXR bind SUMO-CRABP2:atRA" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5334794] FABPs bind LCFAs" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5334788] CUTC binds Cu+" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5336454] MMGT1 transports Mg2+ from cytosol to Golgi lumen" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5336466] MRS2 transports Mg2+ from cytosol to mitochondrial matrix" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5336453] NIPAs transport Mg2+ from extracellular region to cytosol" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5336443] LIN7, CASK and APBA1 bind" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5339538] MAGT1 transports Mg2+ from extracellular region to cytosol" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5339528] TUSC3 transports Mg2+ from extracellular region to cytosol" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5339524] GLUT1 tetramer transports Glc from extracellular region to cytosol" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5339535] GLTPD1 transports C1P from plasma membrane to Golgi membrane" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5340320] GLTP transports GSL from plasma membrane to ER membrane" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5340124] CSN polymer binds CaPO4" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5340130] CTNS transports L-Cyst from lysosmal lumen to cytosol" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5340214] CYGB binds O2" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5340226] CYGB dioxygenates NO" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5340195] NR1H4 binds DCA, CDCA, LCHA" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5340251] NR1H4:DCA,CDCA,LCHA binds RXRA and NCOA1,2" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5579018] NCOA1:PAX3 oncogene causes rhabdomyosarcoma" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5579023] NCOA2:KAT6A fusion protein causes acute myeloid leukemias" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5340385] HAVCR2 binds LGALS9" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5252079] HSP110s exchange ATP for ADP on HSP70s:ADP" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
+"[Reaction:5250230] EAAC1 exchanges L-Glu, H+ and 3Na+ for K+" in "hasEvent" for "[Pathway:5223345] Orphan transporters" is not in the slice and removed from the attribute list!
 "[Reaction:420233] VIP receptors bind VIP" in "precedingEvent" for "[Reaction:744887] Liganded Gs-activating GPCRs bind inactive heterotrimeric Gs" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:877173] Syk couples sensing of fungal pathogens to NLRP3 inflammasome" in "hasEvent" for "[Pathway:844456] The NLRP3 inflammasome" is not in the slice and removed from the attribute list!
 "[Reaction:844608] NLRP1 binds procaspase-1" in "hasEvent" for "[Pathway:844455] The NLRP1 inflammasome" is not in the slice and removed from the attribute list!
@@ -218,16 +306,19 @@
 "[Reaction:5444523] Formation of MSH1:PMS2 Complex" in "precedingEvent" for "[Reaction:5358510] MSH2:MSH6 recruits MLH1:PMS2 to mismatch and interacts with PCNA" is not in the slice and removed from the attribute list!
 "[Reaction:5444511] Formation of MSH2:MSH3 Complex" in "hasEvent" for "[Pathway:5358606] Mismatch repair (MMR) directed by MSH2:MSH3 (MutSbeta)" is not in the slice and removed from the attribute list!
 "[Pathway:5423599] Diseases of Mismatch Repair (MMR)" in "representedPathway" for "[PathwayDiagram:5358966] Diagram of Mismatch Repair and Diseases of Mismatch Repair (MMR)" is not in the slice and removed from the attribute list!
-"[Reaction:5229283] LCNs bind lipids" in "hasEvent" for "[Pathway:804914] Transport of fatty acids" is not in the slice and removed from the attribute list!
 "[Pathway:5336415] Uptake and function of diphtheria toxin" in "hasEvent" for "[Pathway:5339562] Uptake and actions of bacterial toxins" is not in the slice and removed from the attribute list!
 "[Reaction:4549503] SLC7A4 (CAT-4)-mediated uptake of cationic amino acids" in "hasEvent" for "[Pathway:352230] Amino acid transport across the plasma membrane" is not in the slice and removed from the attribute list!
 "[Reaction:350058] Formation of CSL NCOR corepressor complex" in "hasEvent" for "[Pathway:350054] Notch-HLH transcription pathway" is not in the slice and removed from the attribute list!
 "[Reaction:913408] Vav constitutively associates with Grb2" in "hasEvent" for "[Pathway:912526] Interleukin receptor SHC signaling" is not in the slice and removed from the attribute list!
 "[Reaction:913968] Tetraspanin-32 and CD151 regulate alphaIIbbeta3 outside-in signaling" in "hasEvent" for "[Pathway:354192] Integrin alphaIIb beta3 signaling" is not in the slice and removed from the attribute list!
 "[Reaction:913969] CD63 and CD9 form a complex with Integrin AlphaIIbBeta3" in "hasEvent" for "[Pathway:354192] Integrin alphaIIb beta3 signaling" is not in the slice and removed from the attribute list!
+"[Pathway:3656234] Defective HEXA causes GM2G1" in "hasEvent" for "[Pathway:3560782] Diseases associated with glycosaminoglycan metabolism" is not in the slice and removed from the attribute list!
+"[Pathway:3656248] Defective HEXB causes GM2G2" in "hasEvent" for "[Pathway:3560782] Diseases associated with glycosaminoglycan metabolism" is not in the slice and removed from the attribute list!
+"[Pathway:3656224] Defective HPSE2 causes urofacial syndrome" in "hasEvent" for "[Pathway:3560782] Diseases associated with glycosaminoglycan metabolism" is not in the slice and removed from the attribute list!
+"[Pathway:3656243] Defective ST3GAL3 causes MCT12 and EIEE15" in "hasEvent" for "[Pathway:3560782] Diseases associated with glycosaminoglycan metabolism" is not in the slice and removed from the attribute list!
+"[Pathway:4420332] Defective B3GALT6 causes EDSP2 and SEMDJL1" in "hasEvent" for "[Pathway:3560782] Diseases associated with glycosaminoglycan metabolism" is not in the slice and removed from the attribute list!
 "[Pathway:3244612] Regulation by pathogen's factors" in "hasEvent" for "[Pathway:3134975] Regulation of innate immune responses to cytosolic DNA" is not in the slice and removed from the attribute list!
 "[Reaction:1022127] Glycoproteins with major folding defects are sent to degradation by OS9" in "hasEvent" for "[Pathway:901032] ER Quality Control Compartment (ERQC)" is not in the slice and removed from the attribute list!
-"[Pathway:5223345] Orphan transporters" in "hasEvent" for "[Pathway:382551] Transmembrane transport of small molecules" is not in the slice and removed from the attribute list!
 "[Reaction:5223317] ABCB9 transports peptides from cytosol to lysosomal lumen" in "hasEvent" for "[Pathway:382556] ABC-family proteins mediated transport" is not in the slice and removed from the attribute list!
 "[Reaction:5223305] ABCE1 binds RNASEL, inhibiting it" in "hasEvent" for "[Pathway:382556] ABC-family proteins mediated transport" is not in the slice and removed from the attribute list!
 "[Reaction:5227009] ABCF1 binds EIF2" in "hasEvent" for "[Pathway:382556] ABC-family proteins mediated transport" is not in the slice and removed from the attribute list!
@@ -243,25 +334,11 @@
 "[Reaction:392021] Dissociation of the alpha-2 adrenergic receptor:Gz complex" in "hasEvent" for "[Pathway:392023] Adrenaline signalling through Alpha-2 adrenergic receptor" is not in the slice and removed from the attribute list!
 "[Reaction:392021] Dissociation of the alpha-2 adrenergic receptor:Gz complex" in "precedingEvent" for "[Reaction:392064] G alpha (z) inhibits adenylate cyclase" is not in the slice and removed from the attribute list!
 "[Reaction:392021] Dissociation of the alpha-2 adrenergic receptor:Gz complex" in "precedingEvent" for "[Reaction:392133] G alpha (z) auto-inactivates by hydrolysing GTP to GDP" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5250548] Arv1 transports sterols from ER to plasma membrane" in "inferredFrom" for "[BlackBoxEvent:5250531] ARV1 transports sterols from ER to plasma membrane" is not in the slice and removed from the attribute list!
+"[Pathway:5617833] assembly of the primary cilium" in "hasEvent" for "[Pathway:1852241] Organelle biogenesis and maintenance" is not in the slice and removed from the attribute list!
 "[Pathway:212161] Maintenance of Pericentric Heterochromatin During Replication" in "hasEvent" for "[Pathway:4839726] Chromatin organization" is not in the slice and removed from the attribute list!
 "[Pathway:921118] Regulation by RGS proteins" in "hasEvent" for "[Pathway:372790] Signaling by GPCR" is not in the slice and removed from the attribute list!
 "[Reaction:420542] BAI receptors are orphans" in "hasEvent" for "[Pathway:373080] Class B/2 (Secretin family receptors)" is not in the slice and removed from the attribute list!
-"[Pathway:3560801] Defective B3GAT3 causes JDSSDHD" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3656244] Defective B4GALT1 causes B4GALT1-CDG (CDG-2d)" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3560783] Defective B4GALT7 causes EDS, progeroid type" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3595174] Defective CHST14 causes EDS, musculocontractural type" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3595172] Defective CHST3 causes SEDCJD" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3656225] Defective CHST6 causes MCDC1" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3595177] Defective CHSY1 causes TPBS" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3656253] Defective EXT1 causes exostoses 1, TRPS2 and CHDS" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3656237] Defective EXT2 causes exostoses 2" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3656234] Defective HEXA causes GM2G1" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3656248] Defective HEXA causes GM2G2" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3656224] Defective HPSE2 causes urofacial syndrome" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3560796] Defective PAPSS2 causes SEMD-PA" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3560792] Defective SLC26A2 causes chondrodysplasias" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:3656243] Defective ST3GAL3 causes MCT12 and EIEE15" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
-"[Pathway:4420332] Defective B3GALT6 causes EDSP2 and SEMDJL1" in "representedPathway" for "[PathwayDiagram:1836730] Diagram of Glycosaminoglycan metabolism, MPS I - Hurler syndrome, MPS II - Hunter syndrome, MPS IIIA - Sanfilippo syndrome A, MPS IIIB - Sanfilippo syndrome B, MPS IIIC - Sanfilippo syndrome C, MPS IIID - Sanfilippo syndrome D, MPS IV - Morquio syndrome A, MPS IV - Morquio syndrome B, MPS IX - Natowicz syndrome, MPS VI - Maroteaux-Lamy syndrome, MPS VII - Sly syndrome, Defective B3GAT3 causes JDSSDHD, Defective B4GALT1 causes B4GALT1-CDG (CDG-2d), Defective B4GALT7 causes EDS, progeroid type, Defective CHST14 causes EDS, musculocontractural type, Defective CHST3 causes SEDCJD, Defective CHST6 causes MCDC1, Defective CHSY1 causes TPBS, Defective EXT1 causes exostoses 1, TRPS2 and CHDSA, Defective EXT2 causes exostoses 2, Defective HEXA causes GM2G1, Defective HEXA causes GM2G2, Defective HPSE2 causes urofacial syndrome, Defective PAPSS2 causes SEMD-PA, Defective SLC26A2 causes chondrodysplasias, Defective ST3GAL3 causes MCT12 and EIEE15,  and Defective B3GALT6 causes EDSP2 and SEMDJL1" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:420714] Retinoic acid induces expression of RAIG receptors" in "hasEvent" for "[Pathway:420499] Class C/3 (Metabotropic glutamate/pheromone receptors)" is not in the slice and removed from the attribute list!
 "[Reaction:420233] VIP receptors bind VIP" in "hasEvent" for "[Pathway:420092] Glucagon-type ligand receptors" is not in the slice and removed from the attribute list!
 "[Pathway:418551] cAMP effects" in "hasEvent" for "[Pathway:418555] G alpha (s) signalling events" is not in the slice and removed from the attribute list!
@@ -272,7 +349,6 @@
 "[Pathway:418136] Telomere lagging strand synthesis" in "precedingEvent" for "[Reaction:418106] Packaging of telomere ends" is not in the slice and removed from the attribute list!
 "[Pathway:418136] Telomere lagging strand synthesis" in "hasEvent" for "[Pathway:418124] Telomere maintenance" is not in the slice and removed from the attribute list!
 "[Reaction:5246478] APOM binds retinoids" in "hasEvent" for "[Pathway:975634] Retinoid metabolism and transport" is not in the slice and removed from the attribute list!
-"[Pathway:5362517] Retinoic acid metabolism and signalling" in "hasEvent" for "[Pathway:975634] Retinoid metabolism and transport" is not in the slice and removed from the attribute list!
 "[Pathway:428814] Sugar-phosphate/phosphate exchangers" in "hasEvent" for "[Pathway:425366] Transport of glucose and other sugars, bile salts and organic acids, metal ions and amine compounds" is not in the slice and removed from the attribute list!
 "[Pathway:428786] Sugar/H+ symporters" in "hasEvent" for "[Pathway:425366] Transport of glucose and other sugars, bile salts and organic acids, metal ions and amine compounds" is not in the slice and removed from the attribute list!
 "[Reaction:5340130] CTNS transports L-Cyst from lysosmal lumen to cytosol" in "hasEvent" for "[Pathway:425393] Transport of inorganic cations/anions and amino acids/oligopeptides" is not in the slice and removed from the attribute list!
@@ -292,16 +368,18 @@
 "[Reaction:376125] Interaction between Trio and Rac1" in "hasEvent" for "[Pathway:416476] G alpha (q) signalling events" is not in the slice and removed from the attribute list!
 "[Reaction:376148] Trio family RhoGEFs activate RhoA" in "hasEvent" for "[Pathway:416476] G alpha (q) signalling events" is not in the slice and removed from the attribute list!
 "[Reaction:2022382] Renin binds the Renin Receptor" in "precedingEvent" for "[Reaction:2065357] Prorenin:Prorenin Receptor hydrolyzes Angiotensinogen to Angiotensin-(1-10)" is not in the slice and removed from the attribute list!
+"[Pathway:5576891] Cardiac conduction" in "hasEvent" for "[Pathway:397014] Muscle contraction" is not in the slice and removed from the attribute list!
 "[Pathway:434313] Intracellular metabolism of fatty acids regulates insulin secretion" in "hasEvent" for "[Pathway:400451] Free fatty acids regulate insulin secretion" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:2026996] FABP1 transports fatty acids into the nucleus" in "precedingEvent" for "[Reaction:400204] PPARA binds RXRA forming PPARA:RXRA heterodimer at promoter of target gene" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:2026996] FABP1 transports fatty acids into the nucleus" in "hasEvent" for "[Pathway:400206] Regulation of lipid metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)" is not in the slice and removed from the attribute list!
 "[Reaction:392021] Dissociation of the alpha-2 adrenergic receptor:Gz complex" in "precedingEvent" for "[Reaction:398040] Gbeta:gamma activation of PLC beta" is not in the slice and removed from the attribute list!
 "[Pathway:451491] ERK1 activation" in "hasEvent" for "[Pathway:451478] ERK activation" is not in the slice and removed from the attribute list!
 "[Reaction:446241] Downregulation of MAP kinases by MAPK phosphatases" in "hasEvent" for "[Pathway:451524] MAPK activation in TLR cascade" is not in the slice and removed from the attribute list!
-"[Pathway:5334688] Papillomavirus Host Interactions" in "representedPathway" for "[PathwayDiagram:450960] Diagram of Extrinsic Pathway for Apoptosis and Papillomavirus Host Interactions" is not in the slice and removed from the attribute list!
 "[Reaction:539047] DO NOT RELEASE - IL2R beta binds LCK" in "hasEvent" for "[Pathway:451927] Interleukin-2 signaling" is not in the slice and removed from the attribute list!
 "[Reaction:452099] DO NOT RELEASE - LCK phosphorylates multiple tyrosines of IL2RB" in "hasEvent" for "[Pathway:451927] Interleukin-2 signaling" is not in the slice and removed from the attribute list!
 "[Reaction:539002] DO NOT RELEASE - STAT3 is phosphorylated" in "hasEvent" for "[Pathway:451927] Interleukin-2 signaling" is not in the slice and removed from the attribute list!
+"[Reaction:5609665] IKBKA, IKBKB and IKBKG form IKK complex" in "hasEvent" for "[Pathway:445989] TAK1 activates NFkB by phosphorylation and activation of IKKs complex" is not in the slice and removed from the attribute list!
+"[Reaction:5609665] IKBKA, IKBKB and IKBKG form IKK complex" in "precedingEvent" for "[Pathway:445989] TAK1 activates NFkB by phosphorylation and activation of IKKs complex" is not in the slice and removed from the attribute list!
 "[Reaction:209087] IKBA is phosphorylated by Phospho IKKB kinase" in "hasEvent" for "[Pathway:446652] Interleukin-1 signaling" is not in the slice and removed from the attribute list!
 "[Reaction:209125] SCF Beta-TrCP complex binds to NFKB p50:p65: phospho IKBA complex" in "hasEvent" for "[Pathway:446652] Interleukin-1 signaling" is not in the slice and removed from the attribute list!
 "[Reaction:209063] Beta-TrCP ubiquitinates and then dissociates from NFKB p50:p65:phospho IKBA complex" in "hasEvent" for "[Pathway:446652] Interleukin-1 signaling" is not in the slice and removed from the attribute list!
@@ -309,7 +387,7 @@
 "[BlackBoxEvent:5358976] ATP7A:PDZD11 translocates from plasma membrane to TGN membrane" in "hasEvent" for "[Pathway:936837] Ion transport by P-type ATPases" is not in the slice and removed from the attribute list!
 "[Reaction:5358977] ATP7A transports cytosolic Cu2+ to Golgi lumen" in "hasEvent" for "[Pathway:936837] Ion transport by P-type ATPases" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:5358981] ATP7A:PDZD11 translocates from TGN membrane to plasma membrane" in "hasEvent" for "[Pathway:936837] Ion transport by P-type ATPases" is not in the slice and removed from the attribute list!
-"[BlackBoxEvent:5251989] ATP13A1-5 may transport divalent ions from extracellular region to cytosol" in "hasEvent" for "[Pathway:936837] Ion transport by P-type ATPases" is not in the slice and removed from the attribute list!
+"[BlackBoxEvent:5251989] ATP13A4,5 may transport divalent ions from extracellular region to cytosol" in "hasEvent" for "[Pathway:936837] Ion transport by P-type ATPases" is not in the slice and removed from the attribute list!
 "[Reaction:844608] NLRP1 binds procaspase-1" in "precedingEvent" for "[Reaction:448678] Caspase-1 precursor is cleaved releasing p10 and p20 subunits" is not in the slice and removed from the attribute list!
 "[Reaction:449855] Interleukin-10 dimerization" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
 "[Reaction:449803] Interleukin-10 receptor alpha binds interleukin-10" in "hasEvent" for "[Pathway:449147] Signaling by Interleukins" is not in the slice and removed from the attribute list!
@@ -345,6 +423,7 @@
 "[Reaction:847070] activated TAK1 complex dissociates from the TLR3 receptor complex" in "precedingEvent" for "[Reaction:450337] Activated TAK1 phosphorylates MKK4/MKK7" is not in the slice and removed from the attribute list!
 "[Reaction:847070] activated TAK1 complex dissociates from the TLR3 receptor complex" in "precedingEvent" for "[Reaction:450346] activated human TAK1 phosphorylates MKK3/MKK6" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:450259] Auto ubiqitination of human TRAF6 bound to the complex viral dsRNS:TLR3:TRIF " in "precedingEvent" for "[Polymerisation:450358] Activated TRAF6 synthesizes unanchored polyubiquitin chains upon TLR stimulation " is not in the slice and removed from the attribute list!
+"[Reaction:5578777] DMPK phosphorylates PLN" in "precedingEvent" for "[Reaction:427910] ATP2A1-3 transport Ca2+ from cytosol to ER lumen" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:480808] Expression of EXOSC9 (Exonuclease RRP45)" in "precedingEvent" for "[Reaction:430028] Exosome Complex hydrolyzes mRNA by 3' to 5' exoribonuclease digestion" is not in the slice and removed from the attribute list!
 "[Reaction:435238] PP2A inhibits p38 MAPK" in "precedingEvent" for "[Reaction:428961] Phosphorylation of cPLA2 by MAPK p38 alpha" is not in the slice and removed from the attribute list!
 "[Reaction:432146] SHP-1/2 inhibit p38 MAPK" in "precedingEvent" for "[Reaction:428961] Phosphorylation of cPLA2 by MAPK p38 alpha" is not in the slice and removed from the attribute list!
@@ -352,11 +431,10 @@
 "[Reaction:913591] GPIb-IX-V binds thrombin" in "hasEvent" for "[Pathway:430116] GP1b-IX-V activation signalling" is not in the slice and removed from the attribute list!
 "[Reaction:913590] Cleavage of GpIb alpha and GPV ectodomains by ADAM17" in "hasEvent" for "[Pathway:430116] GP1b-IX-V activation signalling" is not in the slice and removed from the attribute list!
 "[Reaction:434089] IRAK2 possibly binds to Pellino proteins" in "hasEvent" for "[Pathway:433822] NFkB  and MAPK activation mediated by TRAF6" is not in the slice and removed from the attribute list!
+"[Pathway:5602322] JAK3 deficiency causes SCID (IL2R)" in "representedPathway" for "[PathwayDiagram:919410] Diagram of Interleukin-2 signaling and JAK3 deficiency (IL2)" is not in the slice and removed from the attribute list!
 "[Reaction:435238] PP2A inhibits p38 MAPK" in "hasEvent" for "[Pathway:432142] Platelet sensitization by LDL" is not in the slice and removed from the attribute list!
 "[Reaction:432146] SHP-1/2 inhibit p38 MAPK" in "hasEvent" for "[Pathway:432142] Platelet sensitization by LDL" is not in the slice and removed from the attribute list!
 "[Reaction:5252133] ATP6AP1 binds V-ATPase" in "hasEvent" for "[Pathway:917977] Transferrin endocytosis and recycling" is not in the slice and removed from the attribute list!
-"[Reaction:5229273] LNC2 binds Fe3+" in "hasEvent" for "[Pathway:917937] Iron uptake and transport" is not in the slice and removed from the attribute list!
-"[BlackBoxEvent:5246444] SLC22A17 binds LNC2" in "hasEvent" for "[Pathway:917937] Iron uptake and transport" is not in the slice and removed from the attribute list!
 "[Reaction:5229132] AP4 binds APP" in "hasEvent" for "[Pathway:432720] Lysosome Vesicle Biogenesis" is not in the slice and removed from the attribute list!
 "[Reaction:5229111] AP4 transports APP from trans-Golgi network to endosome lumen" in "hasEvent" for "[Pathway:432720] Lysosome Vesicle Biogenesis" is not in the slice and removed from the attribute list!
 "[Reaction:5229115] AP1G2 binds HBV surface protein S" in "hasEvent" for "[Pathway:432720] Lysosome Vesicle Biogenesis" is not in the slice and removed from the attribute list!
@@ -372,6 +450,8 @@
 "[Reaction:1454810] MTMMPs are targetted to specific cell membrane domains" in "hasEvent" for "[Pathway:1474228] Degradation of the extracellular matrix" is not in the slice and removed from the attribute list!
 "[Reaction:5260201] p-AKT2 phosphorylates C2CD5" in "hasEvent" for "[Pathway:1445148] Translocation of GLUT4 to the plasma membrane" is not in the slice and removed from the attribute list!
 "[Reaction:3788022] Syndecan-4 binds CXCL12" in "hasEvent" for "[Pathway:3000170] Syndecan interactions" is not in the slice and removed from the attribute list!
+"[Pathway:5579007] Defective ACY1 causes encephalopathy" in "representedPathway" for "[PathwayDiagram:5424635] Diagram of Aflatoxin activation and detoxification and Defective ACY1 causes encephalopathy" is not in the slice and removed from the attribute list!
+"[Reaction:5432580] 55S ribosome with peptidyl-tRNA in A site binds GFM1:GTP" in "precedingEvent" for "[Reaction:5432422] Translocation of 55S ribosome by 3 bases in the 3' direction" is not in the slice and removed from the attribute list!
 "[Reaction:2454264] 11cROL binds to RLBP1 to form RLBP1:11cROL" in "precedingEvent" for "[Reaction:2454081] RDH5 oxidises 11cROL to 11cRAL" is not in the slice and removed from the attribute list!
 "[Reaction:2454264] 11cROL binds to RLBP1 to form RLBP1:11cROL" in "hasEvent" for "[Pathway:2453902] The canonical retinoid cycle in rods (twilight vision)" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:2528996] Defective RHO does not catalyse GDP/GTP exchange on Gt" in "hasEvent" for "[Pathway:2453864] Retinoid cycle disease events" is not in the slice and removed from the attribute list!
@@ -386,9 +466,956 @@
 "[BlackBoxEvent:879923] SRC is activated" in "hasEvent" for "[Pathway:512988] Interleukin-3, 5 and GM-CSF signaling" is not in the slice and removed from the attribute list!
 "[Reaction:879941] SRC binds STAT3" in "hasEvent" for "[Pathway:512988] Interleukin-3, 5 and GM-CSF signaling" is not in the slice and removed from the attribute list!
 "[Reaction:879902] SRC phosphorylates STAT3" in "hasEvent" for "[Pathway:512988] Interleukin-3, 5 and GM-CSF signaling" is not in the slice and removed from the attribute list!
+"[Pathway:5619077] Defective SLC24A1 causes congenital stationary night blindness 1D (CSNB1D)" in "representedPathway" for "[PathwayDiagram:2468358] Diagram of Visual phototransduction, Diseases associated with visual transduction,  and Defective SLC24A1 causes congenital stationary night blindness 1D (CSNB1D)" is not in the slice and removed from the attribute list!
+"[Pathway:5579031] Defective ACTH causes Obesity and Pro-opiomelanocortinin deficiency (POMCD)" in "representedPathway" for "[PathwayDiagram:500790] Diagram of GPCR ligand binding, Defective ACTH causes Obesity and Pro-opiomelanocortinin deficiency (POMCD),  and Defective AVP causes neurohypophyseal diabetes insipidus (NDI)" is not in the slice and removed from the attribute list!
+"[Pathway:5619099] Defective AVP causes neurohypophyseal diabetes insipidus (NDI)" in "representedPathway" for "[PathwayDiagram:500790] Diagram of GPCR ligand binding, Defective ACTH causes Obesity and Pro-opiomelanocortinin deficiency (POMCD),  and Defective AVP causes neurohypophyseal diabetes insipidus (NDI)" is not in the slice and removed from the attribute list!
 "[Pathway:379046] Receptor-ligand complexes bind G proteins" in "hasEvent" for "[Pathway:500792] GPCR ligand binding" is not in the slice and removed from the attribute list!
+"[Pathway:5578997] Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD)" in "representedPathway" for "[PathwayDiagram:500771] Diagram of Phase II conjugation, Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD), Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD), Defective GGT1 causes Glutathionuria (GLUTH), Defective GSS causes Glutathione synthetase deficiency (GSS deficiency), Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD), Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD), Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD), Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency), Defective UGT1A1 causes hyperbilirubinemia,  and Defective UGT1A4 causes hyperbilirubinemia" is not in the slice and removed from the attribute list!
+"[Pathway:5578999] Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD)" in "representedPathway" for "[PathwayDiagram:500771] Diagram of Phase II conjugation, Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD), Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD), Defective GGT1 causes Glutathionuria (GLUTH), Defective GSS causes Glutathione synthetase deficiency (GSS deficiency), Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD), Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD), Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD), Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency), Defective UGT1A1 causes hyperbilirubinemia,  and Defective UGT1A4 causes hyperbilirubinemia" is not in the slice and removed from the attribute list!
+"[Pathway:5579022] Defective GGT1 causes Glutathionuria (GLUTH)" in "representedPathway" for "[PathwayDiagram:500771] Diagram of Phase II conjugation, Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD), Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD), Defective GGT1 causes Glutathionuria (GLUTH), Defective GSS causes Glutathione synthetase deficiency (GSS deficiency), Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD), Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD), Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD), Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency), Defective UGT1A1 causes hyperbilirubinemia,  and Defective UGT1A4 causes hyperbilirubinemia" is not in the slice and removed from the attribute list!
+"[Pathway:5579006] Defective GSS causes Glutathione synthetase deficiency (GSS deficiency)" in "representedPathway" for "[PathwayDiagram:500771] Diagram of Phase II conjugation, Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD), Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD), Defective GGT1 causes Glutathionuria (GLUTH), Defective GSS causes Glutathione synthetase deficiency (GSS deficiency), Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD), Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD), Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD), Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency), Defective UGT1A1 causes hyperbilirubinemia,  and Defective UGT1A4 causes hyperbilirubinemia" is not in the slice and removed from the attribute list!
+"[Pathway:5579024] Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD)" in "representedPathway" for "[PathwayDiagram:500771] Diagram of Phase II conjugation, Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD), Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD), Defective GGT1 causes Glutathionuria (GLUTH), Defective GSS causes Glutathione synthetase deficiency (GSS deficiency), Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD), Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD), Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD), Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency), Defective UGT1A1 causes hyperbilirubinemia,  and Defective UGT1A4 causes hyperbilirubinemia" is not in the slice and removed from the attribute list!
+"[Pathway:5578998] Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD)" in "representedPathway" for "[PathwayDiagram:500771] Diagram of Phase II conjugation, Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD), Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD), Defective GGT1 causes Glutathionuria (GLUTH), Defective GSS causes Glutathione synthetase deficiency (GSS deficiency), Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD), Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD), Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD), Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency), Defective UGT1A1 causes hyperbilirubinemia,  and Defective UGT1A4 causes hyperbilirubinemia" is not in the slice and removed from the attribute list!
+"[Pathway:5579020] Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD)" in "representedPathway" for "[PathwayDiagram:500771] Diagram of Phase II conjugation, Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD), Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD), Defective GGT1 causes Glutathionuria (GLUTH), Defective GSS causes Glutathione synthetase deficiency (GSS deficiency), Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD), Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD), Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD), Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency), Defective UGT1A1 causes hyperbilirubinemia,  and Defective UGT1A4 causes hyperbilirubinemia" is not in the slice and removed from the attribute list!
+"[Pathway:5578995] Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency)" in "representedPathway" for "[PathwayDiagram:500771] Diagram of Phase II conjugation, Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD), Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD), Defective GGT1 causes Glutathionuria (GLUTH), Defective GSS causes Glutathione synthetase deficiency (GSS deficiency), Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD), Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD), Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD), Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency), Defective UGT1A1 causes hyperbilirubinemia,  and Defective UGT1A4 causes hyperbilirubinemia" is not in the slice and removed from the attribute list!
+"[Pathway:5579002] Defective UGT1A1 causes hyperbilirubinemia" in "representedPathway" for "[PathwayDiagram:500771] Diagram of Phase II conjugation, Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD), Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD), Defective GGT1 causes Glutathionuria (GLUTH), Defective GSS causes Glutathione synthetase deficiency (GSS deficiency), Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD), Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD), Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD), Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency), Defective UGT1A1 causes hyperbilirubinemia,  and Defective UGT1A4 causes hyperbilirubinemia" is not in the slice and removed from the attribute list!
+"[Pathway:5579016] Defective UGT1A4 causes hyperbilirubinemia" in "representedPathway" for "[PathwayDiagram:500771] Diagram of Phase II conjugation, Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD), Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD), Defective GGT1 causes Glutathionuria (GLUTH), Defective GSS causes Glutathione synthetase deficiency (GSS deficiency), Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD), Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD), Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD), Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency), Defective UGT1A1 causes hyperbilirubinemia,  and Defective UGT1A4 causes hyperbilirubinemia" is not in the slice and removed from the attribute list!
+"[Pathway:5619042] Defective RHAG causes regulator type Rh-null hemolytic anemia (RHN)" in "representedPathway" for "[PathwayDiagram:500171] Diagram of Transport of glucose and other sugars, bile salts and organic acids, metal ions and amine compounds, Defective RHAG causes regulator type Rh-null hemolytic anemia (RHN), Defective SLC16A1 causes symptomatic deficiency in lactate transport (SDLT), Defective SLC22A12 causes renal hypouricemia 1 (RHUC1), Defective SLC22A18 causes lung cancer (LNCR) and embryonal rhabdomyosarcoma 1 (RMSE1),  and Defective SLC22A5 causes systemic primary carnitine deficiency (CDSP)" is not in the slice and removed from the attribute list!
+"[Pathway:5619070] Defective SLC16A1 causes symptomatic deficiency in lactate transport (SDLT)" in "representedPathway" for "[PathwayDiagram:500171] Diagram of Transport of glucose and other sugars, bile salts and organic acids, metal ions and amine compounds, Defective RHAG causes regulator type Rh-null hemolytic anemia (RHN), Defective SLC16A1 causes symptomatic deficiency in lactate transport (SDLT), Defective SLC22A12 causes renal hypouricemia 1 (RHUC1), Defective SLC22A18 causes lung cancer (LNCR) and embryonal rhabdomyosarcoma 1 (RMSE1),  and Defective SLC22A5 causes systemic primary carnitine deficiency (CDSP)" is not in the slice and removed from the attribute list!
+"[Pathway:5619071] Defective SLC22A12 causes renal hypouricemia 1 (RHUC1)" in "representedPathway" for "[PathwayDiagram:500171] Diagram of Transport of glucose and other sugars, bile salts and organic acids, metal ions and amine compounds, Defective RHAG causes regulator type Rh-null hemolytic anemia (RHN), Defective SLC16A1 causes symptomatic deficiency in lactate transport (SDLT), Defective SLC22A12 causes renal hypouricemia 1 (RHUC1), Defective SLC22A18 causes lung cancer (LNCR) and embryonal rhabdomyosarcoma 1 (RMSE1),  and Defective SLC22A5 causes systemic primary carnitine deficiency (CDSP)" is not in the slice and removed from the attribute list!
+"[Pathway:5619066] Defective SLC22A18 causes lung cancer (LNCR) and embryonal rhabdomyosarcoma 1 (RMSE1)" in "representedPathway" for "[PathwayDiagram:500171] Diagram of Transport of glucose and other sugars, bile salts and organic acids, metal ions and amine compounds, Defective RHAG causes regulator type Rh-null hemolytic anemia (RHN), Defective SLC16A1 causes symptomatic deficiency in lactate transport (SDLT), Defective SLC22A12 causes renal hypouricemia 1 (RHUC1), Defective SLC22A18 causes lung cancer (LNCR) and embryonal rhabdomyosarcoma 1 (RMSE1),  and Defective SLC22A5 causes systemic primary carnitine deficiency (CDSP)" is not in the slice and removed from the attribute list!
+"[Pathway:5619053] Defective SLC22A5 causes systemic primary carnitine deficiency (CDSP)" in "representedPathway" for "[PathwayDiagram:500171] Diagram of Transport of glucose and other sugars, bile salts and organic acids, metal ions and amine compounds, Defective RHAG causes regulator type Rh-null hemolytic anemia (RHN), Defective SLC16A1 causes symptomatic deficiency in lactate transport (SDLT), Defective SLC22A12 causes renal hypouricemia 1 (RHUC1), Defective SLC22A18 causes lung cancer (LNCR) and embryonal rhabdomyosarcoma 1 (RMSE1),  and Defective SLC22A5 causes systemic primary carnitine deficiency (CDSP)" is not in the slice and removed from the attribute list!
+"[Pathway:5619104] Defective SLC12A1 causes Bartter syndrome 1 (BS1)" in "representedPathway" for "[PathwayDiagram:499927] Diagram of Transport of inorganic cations/anions and amino acids/oligopeptides, Defective SLC12A1 causes Bartter syndrome 1 (BS1), Defective SLC12A3 causes Gitelman syndrome (GS), Defective SLC12A6 causes agenesis of the corpus callosum, with peripheral neuropathy (ACCPN), Defective SLC17A8 causes autosomal dominant deafness 25 (DFNA25), Defective SLC1A1 is implicated in schizophrenia 18 (SCZD18), Defective SLC1A3 causes episodic ataxia 6 (EA6), Defective SLC20A2 causes idiopathic basal ganglia calcification 1 (IBGC1), Defective SLC24A4 causes hypomineralized amelogenesis imperfecta (AI),  and Defective SLC24A5 causes oculocutaneous albinism 6 (OCA6)" is not in the slice and removed from the attribute list!
+"[Pathway:5619087] Defective SLC12A3 causes Gitelman syndrome (GS)" in "representedPathway" for "[PathwayDiagram:499927] Diagram of Transport of inorganic cations/anions and amino acids/oligopeptides, Defective SLC12A1 causes Bartter syndrome 1 (BS1), Defective SLC12A3 causes Gitelman syndrome (GS), Defective SLC12A6 causes agenesis of the corpus callosum, with peripheral neuropathy (ACCPN), Defective SLC17A8 causes autosomal dominant deafness 25 (DFNA25), Defective SLC1A1 is implicated in schizophrenia 18 (SCZD18), Defective SLC1A3 causes episodic ataxia 6 (EA6), Defective SLC20A2 causes idiopathic basal ganglia calcification 1 (IBGC1), Defective SLC24A4 causes hypomineralized amelogenesis imperfecta (AI),  and Defective SLC24A5 causes oculocutaneous albinism 6 (OCA6)" is not in the slice and removed from the attribute list!
+"[Pathway:5619039] Defective SLC12A6 causes agenesis of the corpus callosum, with peripheral neuropathy (ACCPN)" in "representedPathway" for "[PathwayDiagram:499927] Diagram of Transport of inorganic cations/anions and amino acids/oligopeptides, Defective SLC12A1 causes Bartter syndrome 1 (BS1), Defective SLC12A3 causes Gitelman syndrome (GS), Defective SLC12A6 causes agenesis of the corpus callosum, with peripheral neuropathy (ACCPN), Defective SLC17A8 causes autosomal dominant deafness 25 (DFNA25), Defective SLC1A1 is implicated in schizophrenia 18 (SCZD18), Defective SLC1A3 causes episodic ataxia 6 (EA6), Defective SLC20A2 causes idiopathic basal ganglia calcification 1 (IBGC1), Defective SLC24A4 causes hypomineralized amelogenesis imperfecta (AI),  and Defective SLC24A5 causes oculocutaneous albinism 6 (OCA6)" is not in the slice and removed from the attribute list!
+"[Pathway:5619076] Defective SLC17A8 causes autosomal dominant deafness 25 (DFNA25)" in "representedPathway" for "[PathwayDiagram:499927] Diagram of Transport of inorganic cations/anions and amino acids/oligopeptides, Defective SLC12A1 causes Bartter syndrome 1 (BS1), Defective SLC12A3 causes Gitelman syndrome (GS), Defective SLC12A6 causes agenesis of the corpus callosum, with peripheral neuropathy (ACCPN), Defective SLC17A8 causes autosomal dominant deafness 25 (DFNA25), Defective SLC1A1 is implicated in schizophrenia 18 (SCZD18), Defective SLC1A3 causes episodic ataxia 6 (EA6), Defective SLC20A2 causes idiopathic basal ganglia calcification 1 (IBGC1), Defective SLC24A4 causes hypomineralized amelogenesis imperfecta (AI),  and Defective SLC24A5 causes oculocutaneous albinism 6 (OCA6)" is not in the slice and removed from the attribute list!
+"[Pathway:5619067] Defective SLC1A1 is implicated in schizophrenia 18 (SCZD18)" in "representedPathway" for "[PathwayDiagram:499927] Diagram of Transport of inorganic cations/anions and amino acids/oligopeptides, Defective SLC12A1 causes Bartter syndrome 1 (BS1), Defective SLC12A3 causes Gitelman syndrome (GS), Defective SLC12A6 causes agenesis of the corpus callosum, with peripheral neuropathy (ACCPN), Defective SLC17A8 causes autosomal dominant deafness 25 (DFNA25), Defective SLC1A1 is implicated in schizophrenia 18 (SCZD18), Defective SLC1A3 causes episodic ataxia 6 (EA6), Defective SLC20A2 causes idiopathic basal ganglia calcification 1 (IBGC1), Defective SLC24A4 causes hypomineralized amelogenesis imperfecta (AI),  and Defective SLC24A5 causes oculocutaneous albinism 6 (OCA6)" is not in the slice and removed from the attribute list!
+"[Pathway:5619062] Defective SLC1A3 causes episodic ataxia 6 (EA6)" in "representedPathway" for "[PathwayDiagram:499927] Diagram of Transport of inorganic cations/anions and amino acids/oligopeptides, Defective SLC12A1 causes Bartter syndrome 1 (BS1), Defective SLC12A3 causes Gitelman syndrome (GS), Defective SLC12A6 causes agenesis of the corpus callosum, with peripheral neuropathy (ACCPN), Defective SLC17A8 causes autosomal dominant deafness 25 (DFNA25), Defective SLC1A1 is implicated in schizophrenia 18 (SCZD18), Defective SLC1A3 causes episodic ataxia 6 (EA6), Defective SLC20A2 causes idiopathic basal ganglia calcification 1 (IBGC1), Defective SLC24A4 causes hypomineralized amelogenesis imperfecta (AI),  and Defective SLC24A5 causes oculocutaneous albinism 6 (OCA6)" is not in the slice and removed from the attribute list!
+"[Pathway:5619111] Defective SLC20A2 causes idiopathic basal ganglia calcification 1 (IBGC1)" in "representedPathway" for "[PathwayDiagram:499927] Diagram of Transport of inorganic cations/anions and amino acids/oligopeptides, Defective SLC12A1 causes Bartter syndrome 1 (BS1), Defective SLC12A3 causes Gitelman syndrome (GS), Defective SLC12A6 causes agenesis of the corpus callosum, with peripheral neuropathy (ACCPN), Defective SLC17A8 causes autosomal dominant deafness 25 (DFNA25), Defective SLC1A1 is implicated in schizophrenia 18 (SCZD18), Defective SLC1A3 causes episodic ataxia 6 (EA6), Defective SLC20A2 causes idiopathic basal ganglia calcification 1 (IBGC1), Defective SLC24A4 causes hypomineralized amelogenesis imperfecta (AI),  and Defective SLC24A5 causes oculocutaneous albinism 6 (OCA6)" is not in the slice and removed from the attribute list!
+"[Pathway:5619055] Defective SLC24A4 causes hypomineralized amelogenesis imperfecta (AI)" in "representedPathway" for "[PathwayDiagram:499927] Diagram of Transport of inorganic cations/anions and amino acids/oligopeptides, Defective SLC12A1 causes Bartter syndrome 1 (BS1), Defective SLC12A3 causes Gitelman syndrome (GS), Defective SLC12A6 causes agenesis of the corpus callosum, with peripheral neuropathy (ACCPN), Defective SLC17A8 causes autosomal dominant deafness 25 (DFNA25), Defective SLC1A1 is implicated in schizophrenia 18 (SCZD18), Defective SLC1A3 causes episodic ataxia 6 (EA6), Defective SLC20A2 causes idiopathic basal ganglia calcification 1 (IBGC1), Defective SLC24A4 causes hypomineralized amelogenesis imperfecta (AI),  and Defective SLC24A5 causes oculocutaneous albinism 6 (OCA6)" is not in the slice and removed from the attribute list!
+"[Pathway:5619036] Defective SLC24A5 causes oculocutaneous albinism 6 (OCA6)" in "representedPathway" for "[PathwayDiagram:499927] Diagram of Transport of inorganic cations/anions and amino acids/oligopeptides, Defective SLC12A1 causes Bartter syndrome 1 (BS1), Defective SLC12A3 causes Gitelman syndrome (GS), Defective SLC12A6 causes agenesis of the corpus callosum, with peripheral neuropathy (ACCPN), Defective SLC17A8 causes autosomal dominant deafness 25 (DFNA25), Defective SLC1A1 is implicated in schizophrenia 18 (SCZD18), Defective SLC1A3 causes episodic ataxia 6 (EA6), Defective SLC20A2 causes idiopathic basal ganglia calcification 1 (IBGC1), Defective SLC24A4 causes hypomineralized amelogenesis imperfecta (AI),  and Defective SLC24A5 causes oculocutaneous albinism 6 (OCA6)" is not in the slice and removed from the attribute list!
+"[Pathway:5602410] TLR3 deficiency - HSE" in "representedPathway" for "[PathwayDiagram:500232] Diagram of Toll-Like Receptors Cascades and TLR3 deficiency" is not in the slice and removed from the attribute list!
+"[Pathway:5579026] Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579017] Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579009] Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579028] Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579030] Defective CYP19A1 causes Aromatase excess syndrome (AEXS)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579000] Defective CYP1B1 causes Glaucoma" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579021] Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579010] Defective CYP24A1 causes Hypercalcemia, infantile (HCAI)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579015] Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579004] Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5578996] Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579014] Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579027] Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579011] Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579005] Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579013] Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579019] Defective FMO3 causes Trimethylaminuria (TMAU)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579012] Defective MAOA causes Brunner syndrome (BRUNS)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
+"[Pathway:5579032] Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" in "representedPathway" for "[PathwayDiagram:500339] Diagram of Phase 1 - Functionalization of compounds, Defective CYP11A1 causes Adrenal insufficiency, congenital, with 46,XY sex reversal (AICSR), Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4), Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency), Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5), Defective CYP19A1 causes Aromatase excess syndrome (AEXS), Defective CYP1B1 causes Glaucoma, Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3), Defective CYP24A1 causes Hypercalcemia, infantile (HCAI), Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA), Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4), Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX), Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A), Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B), Defective CYP2U1 causes Spastic paraplegia 56, autosomal recessive (SPG56), Defective CYP4F22 causes Ichthyosis, congenital, autosomal recessive 5 (ARCI5), Defective CYP7B1 causes Spastic paraplegia 5A, autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3), Defective FMO3 causes Trimethylaminuria (TMAU), Defective MAOA causes Brunner syndrome (BRUNS),  and Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)" is not in the slice and removed from the attribute list!
 "[BlackBoxEvent:480826] Expression of REST" in "precedingEvent" for "[Reaction:996727] REST recruits the BHC complex" is not in the slice and removed from the attribute list!
 "[Reaction:1013013] Association of GABA B receptor with G protein beta-gamma subunits" in "hasEvent" for "[Pathway:997272] Inhibition  of voltage gated Ca2+ channels via Gbeta/gamma subunits" is not in the slice and removed from the attribute list!
 "[Reaction:1013012] Binding of Gbeta/gamma to GIRK/Kir3 channels" in "hasEvent" for "[Pathway:997272] Inhibition  of voltage gated Ca2+ channels via Gbeta/gamma subunits" is not in the slice and removed from the attribute list!
 "[Reaction:2168987] DLL4 binds NOTCH4" in "hasEvent" for "[Pathway:1980150] Signaling by NOTCH4" is not in the slice and removed from the attribute list!
+"[Pathway:5619060] Defective CP causes aceruloplasminemia (ACERULOP)" in "representedPathway" for "[PathwayDiagram:984845] Diagram of Iron uptake and transport, Ion channel transport, Defective CP causes aceruloplasminemia (ACERULOP),  and Defective SLC11A2 causes hypochromic microcytic anemia, with iron overload 1 (AHMIO1)" is not in the slice and removed from the attribute list!
+"[Pathway:5619048] Defective SLC11A2 causes hypochromic microcytic anemia, with iron overload 1 (AHMIO1)" in "representedPathway" for "[PathwayDiagram:984845] Diagram of Iron uptake and transport, Ion channel transport, Defective CP causes aceruloplasminemia (ACERULOP),  and Defective SLC11A2 causes hypochromic microcytic anemia, with iron overload 1 (AHMIO1)" is not in the slice and removed from the attribute list!
+"[Pathway:5602636] IKBKB deficiency causes SCID" in "representedPathway" for "[PathwayDiagram:1486161] Diagram of TAK1 activates NFkB by phosphorylation and activation of IKKs complex, IKBKB deficiency causes SCID, IkBA variant leads to EDA-ID,  and IKBKG deficiency causes EDA-ID (via TLR)" is not in the slice and removed from the attribute list!
+"[Pathway:5603029] IkBA variant leads to EDA-ID" in "representedPathway" for "[PathwayDiagram:1486161] Diagram of TAK1 activates NFkB by phosphorylation and activation of IKKs complex, IKBKB deficiency causes SCID, IkBA variant leads to EDA-ID,  and IKBKG deficiency causes EDA-ID (via TLR)" is not in the slice and removed from the attribute list!
+"[Pathway:5603027] IKBKG deficiency causes anhidrotic ectodermal dysplasia with immunodeficiency (EDA-ID) (via TLR)" in "representedPathway" for "[PathwayDiagram:1486161] Diagram of TAK1 activates NFkB by phosphorylation and activation of IKKs complex, IKBKB deficiency causes SCID, IkBA variant leads to EDA-ID,  and IKBKG deficiency causes EDA-ID (via TLR)" is not in the slice and removed from the attribute list!
+"[Pathway:5602498] MyD88 deficiency (TLR2/4)" in "representedPathway" for "[PathwayDiagram:1486163] Diagram of MyD88:Mal cascade initiated on plasma membrane, MyD88 deficiency (TLR2/4),  and IRAK4 deficiency (TLR2/4)" is not in the slice and removed from the attribute list!
+"[Pathway:5603041] IRAK4 deficiency (TLR2/4)" in "representedPathway" for "[PathwayDiagram:1486163] Diagram of MyD88:Mal cascade initiated on plasma membrane, MyD88 deficiency (TLR2/4),  and IRAK4 deficiency (TLR2/4)" is not in the slice and removed from the attribute list!
+"[Pathway:5602566] TICAM1 deficiency - HSE" in "representedPathway" for "[PathwayDiagram:1486164] Diagram of MyD88-independent cascade , TICAM1 deficiency - HSE,  and TRAF3 deficiency - HSE" is not in the slice and removed from the attribute list!
+"[Pathway:5602571] TRAF3 deficiency - HSE" in "representedPathway" for "[PathwayDiagram:1486164] Diagram of MyD88-independent cascade , TICAM1 deficiency - HSE,  and TRAF3 deficiency - HSE" is not in the slice and removed from the attribute list!
+"[Pathway:5602680] MyD88 deficiency (TLR5)" in "representedPathway" for "[PathwayDiagram:1486154] Diagram of MyD88 cascade initiated on plasma membrane, MyD88 deficiency (TLR5),  and IRAK4 deficiency (TLR5)" is not in the slice and removed from the attribute list!
+"[Pathway:5603037] IRAK4 deficiency (TLR5)" in "representedPathway" for "[PathwayDiagram:1486154] Diagram of MyD88 cascade initiated on plasma membrane, MyD88 deficiency (TLR5),  and IRAK4 deficiency (TLR5)" is not in the slice and removed from the attribute list!
 "[Pathway:975458] Voltage-gated ion channel transport" in "hasEvent" for "[Pathway:983712] Ion channel transport" is not in the slice and removed from the attribute list!
+
+Events that have not listed in the pathway hierarchy: 887
+[Reaction:2255341] Rab8A/10/13/14 Exchange GDP for GTP
+[Reaction:2255339] RalA Exchanges GDP for GTP
+[Reaction:3371385] TNF-alpha cleavage by TACE
+[Reaction:3371353] Soluble TNF-alpha binds TNF-R1
+[Reaction:1671699] Prlr-bound Stat5 is phosphorylated
+[BlackBoxEvent:2247925] Notch1 gene transcription
+[Reaction:1676051] PI is phosphorylated to PI5P by Pikfyve at the late endosome membrane
+[Reaction:1676139] PI(3,4)P2 is transported from the plasma membrane to the early endosome membrane
+[Reaction:3928643] Activation of CDC42 by intersectin-1
+[Reaction:1675925] PI3P is phosphorylated to PI(3,5)P2 by Pikfyve at the late endosome membrane
+[Reaction:1675982] PI3P is phosphorylated to PI(3,5)P2 by Pikfyve at the Golgi membrane
+[Reaction:3928579] Interaction of Src family kinases with p-EPHs
+[Reaction:3928596] Phosphorylation of ephexin1
+[Reaction:3928599] Ptk2 autophosporylates at Y397
+[Reaction:3928593] Sfks phosphorylate EfnB1
+[Reaction:3928605] N-Wasp binds intersectin-1
+[Reaction:3928613] Fyn phosphorylates Nmdar2b
+[Reaction:3928622] SFKs phosphorylate Git1
+[Reaction:3928621] Ephexin1 binds to EphA4
+[Reaction:3928630] EphBs binds Ptk2
+[Reaction:3928626] EphB2 recruits inetersectin-1
+[Reaction:3928635] Ephb2 bind Nmdar
+[Reaction:1675886] PI3P is phosphorylated to PI(3,5)P2 by Pikfyve at the early endosome membrane
+[Reaction:3907289] Integrin alpha6beta1, alpha7beta1, alpha1beta1, alpha2beta1, alphaVbeta1 bind laminin-111
+[Reaction:5610740] Pka phosphorylates GLI1
+[BlackBoxEvent:5610751] Gli2is degraded by the proteasome
+[Reaction:5610711] SCF(beta-TrCP) ubiquitinates p-Gli2
+[Reaction:5610710] Pka phosphorylates Gli2
+[Reaction:5610715] CK1 phosphorylates p-Gli2
+[Reaction:5610714] GSK3 phosphorylates p-Gli2
+[Reaction:525831] NCAM1 interacts with T- and L-type VDCC
+[Reaction:535524] Phosphorylated Ire1 Dimer Binds ADP
+[Reaction:548848] lignoceroyl-CoA + malonyl-CoA => 3-oxocerotoyl-CoA + CO2 + CoASH [Elovl4]
+[BlackBoxEvent:1655838] SREBP2:SCAP Binds CopII Coat Complex
+[BlackBoxEvent:1655840] SREBP2:SCAP Transits to the Golgi
+[Reaction:3876071] RPS6KA1/2/3 phosphorylates Cebpb on S273
+[Reaction:1655440] Csad decarboxylates 3-sulfinoalanine to hypotaurine
+[BlackBoxEvent:1169494] Rasgrp1 and Rasgrp3 are recruited to the membrane and phosphorylated
+[Reaction:1169563] CARMA1 recruits TAK1 and the IKK complex
+[Reaction:1169240] Shp1 (Ptpn6) dephosphorylates Jak2
+[Reaction:1169229] Ptp1b dephosphorylates Jak2
+[BlackBoxEvent:1169264] Ghr internalization
+[Reaction:1169250] Shp1 binds Jak2 in the receptor complex
+[Reaction:1169206] Jak2 phosphorylates Stat1/Stat3
+[Reaction:1169195] SOCS binding to Ghr
+[Reaction:1169194] Socs binding to JAK2
+[Reaction:1169142] Jak2 binds Stat1/Stat3
+[Reaction:1168910] Stat5 association with Ghr
+[Reaction:1168923] Stat5 tyrosine phosphorylation
+[Reaction:1168927] Growth hormone receptor binds Lyn
+[Reaction:1168854] JAK2 phosphorylation of Irs-1/2
+[Reaction:1168790] ADAM17 cleavage of Ghr
+[Reaction:548968] Recruitment of Shp-2 to pSirp alpha
+[Reaction:548971] Recruitment of Shp-1 to pSirp alpha
+[Reaction:548973] Phosphorylation of ITIM in SIRP alpha
+[Reaction:548972] Phosphorylation of ITIM in SIRP alpha
+[Reaction:549062] NrCAM binds Neuropilin-2
+[Reaction:71234] 2-amino-3-carboxymuconate semialdehyde => 2-aminomuconate semialdehyde + CO2 [rat]
+[Reaction:71196] N-formylkynurenine + H2O => kynurenine + formate [mouse]
+[Reaction:71050] Trimerization of the FASL:FAS receptor complex
+[Pathway:71737] Pyrophosphate hydrolysis
+[Reaction:1614571] Sqr oxidizes sulfide to bound persulfide
+[Reaction:1614611] Persulfide sulfur is transferred onto sulfite
+[Reaction:3299417] MAP3K5 (ASK1) phosphorylates Map2k4(Sek1)
+[Reaction:3299567] xTLE4 binds HDAC1
+[BlackBoxEvent:2316351] Translocation of Glut4 Vesicle and Docking at the Plasma Membrane
+[Reaction:2316350] Rab4a:GTP Activates Kif3
+[Reaction:2316348] RalA:GTP Activates Myo1c
+[BlackBoxEvent:2317526] SREBP1A/1C/2 is retained in the endoplasmic reticulum by SCAP:cholesterol:INSIG
+[BlackBoxEvent:2317528] SREBP2 (SREBF2) is retained in the endoplasmic reticulum by SCAP:INSIG2:oxysterol
+[Reaction:73747] Assembly of RNA Polymerase I Holoenzyme (mouse)
+[Pathway:73887] Death Receptor  Signalling
+[Reaction:74066] Gnat1-GTP binds Pde6 and activates it
+[Pathway:74159] Transcription
+[Reaction:74447] Calcium binds calmodulin
+[Reaction:74618] PkCa/q phosphorylate Rgs9-1:Gn5b:R9s9bp
+[Reaction:74831] p-MII:Sag dissociates to p-Rho and Sag
+[Reaction:75040] Phosphorylation of Wee1 kinase by Chk1
+[Reaction:75045] Phosphorylation and activation of Chk1 by ATM kinase
+[Reaction:75146] TRAIL:TRAIL-Receptor2 Trimer:FADD complex binds Caspase-8
+[Pathway:75157] FasL/ CD95L signaling
+[Pathway:75158] TRAIL  signaling
+[Reaction:75187] TRAIL:TRAIL receptor-2 Trimer Binds FADD
+[Reaction:75238] TRAIL Binds TRAIL-Receptor2
+[Reaction:75244] FASL binds FAS Receptor
+[Reaction:75240] TRADD:TRAF2:RIP1:FADD complex binds Pro-Caspase 8  
+[Reaction:3858478] Rat Dvl is phosophorylated upon Wnt binding
+[Pathway:75893] TNF signaling
+[Pathway:76044] Post-Elongation Processing of the Transcript
+[BlackBoxEvent:1606727] Tfam translocates from the cytosol to the mitochondrial matrix
+[Reaction:2872452] Slc9c1 exchanges Na+ for H+
+[Reaction:83650] FasL:Fas binds FADD
+[Reaction:83660] Membrane-anchored TNF-alpha binds TNF-R1
+[Reaction:83656] TNF:TNF-R1 binds TRADD, TRAF2 and RIP 
+[Reaction:83586] FASL:FAS Receptor Trimer:FADD complex binds pro-Caspase-8
+[Reaction:83582] TRADD:TRAF2:RIP1 complex dissociates from the TNF-alpha:TNF-R1 complex.
+[Reaction:4568768] Crebbp acetylates replicative histone H2B, H3, H4
+[Reaction:4568832] Wnt11 binds Fzd7 to regulate convergent extension in Xenopus
+[Reaction:4568946] Clock acetylates histones H3, H4
+[Reaction:1067645] Jaks associate with IL6RB (gp130)
+[Reaction:593680] Myosin-X binds DCC/Neogenin
+[Reaction:593695] PITPalpha binds DCC
+[Reaction:113649] Replication initiation regulation by E2F1/Rbf1
+[Reaction:113636] Association of Cdc13/Cdk1 with replicative origin
+[Reaction:4551554] Wnt5a binds RYK and VANGL2
+[Reaction:4551566] Wnt5a binds Ror2 and Vangl2
+[Reaction:4551572] Vangl2 is phosphorylated in response to Wnt5a
+[Reaction:4551534] RFzd binds trimeric G-proteins
+[Reaction:4551446] Prkg is activated upon cGMP binding
+[Reaction:4551334] NuA4 complex actetylates H2A and H4
+[Reaction:111519] inosine 5'-monophosphate + L-aspartate + GTP => adenylosuccinate + guanosine  5'-diphosphate + orthophosphate
+[Reaction:111849] RNA Polymerase III Promoter Opening
+[Reaction:111942] RNA Polymerase III Initiation At a Simple Start Sequence
+[Reaction:111943] RNA Polymerase III Abortive Initiation
+[Reaction:111945] Beginning of RNA Polymerase III Productive Transcription
+[Reaction:111946] RNA Polymerase III Retractive RNase Activity at U-tract Pause Sites
+[Pathway:112297] Post-Elongation Processing of Intronless pre-mRNA
+[Pathway:112296] Post-Elongation Processing of Intron-Containing pre-mRNA
+[Reaction:112348] Dimerisation of phospho-ERK-2
+[Reaction:112377] SOS mediated nucleotide exchange of RAS (IRS)
+[Reaction:112378] SOS mediated nucleotide exchange of RAS (SHC)
+[Reaction:112353] Nuclear translocation of phospho-ERK-2 dimer
+[Pathway:112387] Elongation arrest and recovery
+[Reaction:112466] RNA Polymerase III Transcriptional Pause at Terminator Sequence
+[Reaction:112480] RNA Polymerase III Termination and release of transcribed mRNA
+[Reaction:4549228] KAT2A acetylates replicative histone H3
+[Reaction:4549261] Elongator complex acetylates H3, H4
+[Reaction:110035] Activated Raf complex binds MEK
+[Reaction:110053] Raf1 phosphorylates MEK2
+[Reaction:110051] Raf1 phosphorylates MEK1
+[Pathway:109607] Extrinsic Pathway
+[Reaction:1605530] Formation of Nrf1:Pgc-1beta (Ppargc1b)
+[Reaction:1605464] p38 Mapk phosphorylates Ppargc1a
+[Reaction:1605475] Ampk phosphorylates Ppargc1a
+[Reaction:3814821] Aggrecan degradation by MMP1,2,3,7,9,12,13
+[Reaction:622360] PIKE-L interaction with UNC5B
+[Reaction:622387] PIP2 hydrolysis
+[BlackBoxEvent:622372] Phosphorylation of PLCgamma by Netrin-1
+[BlackBoxEvent:622403] Activation of TRPC channels by Netrin-1
+[Reaction:2326808] Interaction of DAP12 and NKG2D
+[Reaction:140978] TRADD:TRAF2:RIP1 complex binds FADD
+[Reaction:141139] Trimerization of TRAIL: TRAIL receptor-2 complex
+[Reaction:141310] FASL:FAS Receptor Trimer:FADD complex binds pro-Caspase-10
+[Reaction:1250500] Recruitment of GRB2:Sos1 to P-Shc1:P-Erbb2mut complex
+[Reaction:1250468] Ras guanyl-nucleotide exchange mediated by Sos1 in complex with GRB2 and P-Erbb2mut
+[Reaction:1250475] Direct recruitment of GRB2:Sos1 to P-Erbb2mut dimer
+[Reaction:1250472] Ras guanyl-nucleotide exchange mediated by Sos1 bound to GRB2 in complex with P-Shc1:P-Erbb2mut
+[Pathway:139943] PLC-mediated hydrolysis of PIP2
+[Reaction:1250256] Txnip is released from oxidized thioredoxin
+[Reaction:1250247] Txnip binds Nlrp3
+[Reaction:1253318] ERBB4s80 binds Tab2:Ncor1 complex
+[Reaction:1253330] ERBB4:Tab2:Ncor1 complex translocates to the nucleus
+[Reaction:1251988] Cleavage of P-ERBB4jmA isoforms by Adam17
+[Reaction:1251923] Plcg1 binds P-ERBB2:P-EGFR
+[Reaction:1251929] Plcg1 phosphorylation by P-ERBB2:P-EGFR
+[Pathway:1252265] Mitochondrial Protein Import (yeast)
+[Reaction:1252260] MIA40:ERV1 oxidizes cysteine residues to cystine disulfide bonds
+[Reaction:1252261] SAM50 complex inserts proteins into outer membrane
+[Reaction:1252262] TIM8:TIM13 chaperones hydrophobic proteins
+[Reaction:1252258] TIM22 complex inserts proteins into inner membrane
+[Reaction:1252259] TIM9:TIM10 binds hydrophobic proteins
+[Reaction:1252255] TOM40:TOM70 complex translocates proteins from the cytosol to the mitochondrial intermembrane space
+[Reaction:1252253] TIM23 PAM complex translocates proteins from the mitochondrial intermembrane space to the mitochondrial matrix
+[Reaction:1252249] TIM23 SORT complex inserts proteins into inner membrane
+[Reaction:141316] TRAIL:TRAIL-Receptor2 Trimer:FADD complex binds Caspase-10
+[Reaction:141698] Polypeptide release from the eRF3-GDP:eRF1:mRNA:80S Ribosome complex
+[Pathway:141696] Eukaryotic Translation Termination
+[Reaction:141667] GTP bound eRF3:eRF1 complex binds the peptidyl-tRNA:mRNA:Ribosome complex
+[Reaction:141687] GTP Hydrolysis by eRF3 bound to the eRF1:mRNA:polypeptide:80S Ribosome complex
+[Reaction:4649029] Gro binds Aes
+[Reaction:1248744] Shc1 binds phosphorylated ERBB2:EGFR heterodimers
+[Reaction:1248753] Shc1 binds phosphorylated ERBB2:ERBB3 heterodimers
+[Reaction:3238687] PORCN palmitoleoylates WNT3a
+[BlackBoxEvent:3238692] Glycosylation of mouse WNTs
+[Reaction:1810473] Recruitment Tbk1 to dsDNA:Dai followed by its activation
+[Reaction:1810458] Recruitment of Irf3 to activated Dai:Tbk1
+[Reaction:3229197] Gnat1-GDP binds to Gnb1:Gngt1
+[Reaction:2128982] Strap binds phosphorylated TGF-beta receptor complex
+[Reaction:3779389] H2O2 diffuses from the mitochondrial matrix to the cytosol
+[Pathway:157212] A third proteolytic cleavage releases NICD
+[Pathway:157279] 3' -UTR-mediated translational regulation
+[Reaction:1266699] PPBSF is a complex of IL7 and HGFbeta
+[Pathway:156988] Receptor-ligand binding initiates the second proteolytic cleavage of Notch receptor
+[Pathway:157052] NICD traffics to nucleus
+[Reaction:1268015] Precursor proteins enter TIM23 SORT complex
+[Reaction:1268014] Precursor proteins enter TIM23 PAM complex
+[Reaction:1268017] MPP hydrolyzes presequence of matrix precursors
+[Reaction:1268019] MPP hydrolyzes presequence of inner membrane precursors
+[Reaction:159534] reEF1A complexes with GTP
+[Reaction:159540] reEF1A:GTP:Aminoacyl-tRNA ternary complex formation
+[Reaction:159603] Hydrolysis of reEF1A:GTP
+[Reaction:159620] Aminoacyl-tRNA  binds to the ribosome at the A-site
+[Reaction:159111] Drosophila NICD traffics to nucleus
+[Reaction:159884] Peptide transfer from P-site tRNA to the A-site tRNA
+[Reaction:159887] Translocation of ribosome by 3 bases in the 3' direction
+[Reaction:162352] Phosphorylation of PDE3B by AKT-1
+[Reaction:3221949] Msr1 (Scara1) binds collagen
+[Reaction:3221864] Scarf1 (Srec-I) binds ligands
+[Reaction:3780959] Sod1 apoenzyme binds Ccs
+[Reaction:3780963] Ccs transfers Cu to Sod1
+[Reaction:163597] Phosphorylated HSL dimer translocates from the cytosol to the lipid particle
+[Reaction:163609] phosphorylated perilipin + H2O -> perilipin + orthophosphate
+[Reaction:163601] perilipin + 3 ATP -> phosphorylated perilipin + 3 ADP
+[Reaction:163440] diacylglycerol + H2O -> 2-acylglycerol + fatty acid
+[Reaction:163439] 2-acylglycerol + H2O -> glycerol + fatty acid
+[Reaction:163422] perilipin + 3 ATP -> phosphorylated perilipin + 3 ADP
+[Reaction:163407] cholesterol ester + H2O -> cholesterol + fatty acid
+[Reaction:163398] phosphorylated HSL + H2O -> HSL + orthophosphate
+[Reaction:163511] perilipin:CGI-58 complex -> perilipin + CGI-58
+[Reaction:163515] triacylglycerol + H2O -> diacylglycerol + fatty acid
+[Reaction:163519] 2 phosphorylated HSL monomers -> phosphorylated HSL dimer
+[Reaction:163472] hormone-sensitive lipase (HSL) + 2 ATP -> phosphorylated HSL + 2 ADP
+[Reaction:163523] phosphorylated HSL dimer + FABPA -> phosphorylated HSL dimer:FABPA complex
+[Reaction:162863] mannose (a1-2) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI + phosphatidylethanolamine -> (ethanolamineP) mannose (a1-2) mannose (a1-6) (ethanolamineP) mannose (a1-4) glucosaminyl-acyl-PI (acyl-GPI) + diacylglycerol
+[Reaction:3769366] Wif1 binds Wnts
+[Reaction:3772439] sFrp binds Wnt3a and inhibits WNT-FZD binding
+[Reaction:179883] Mouse pro-EGF is cleaved by ADAM sheddases
+[Reaction:3270622] Rcvrn:Ca2+ binds to and inhibits Grk1
+[Reaction:177478] Formation of clathrin-coated vesicle
+[Reaction:176971] Multiple Xenopus proteins are localized at replication fork
+[Reaction:167235] Formation of the P-TEFb(Cyclin T1:Cdk9) complex
+[Pathway:164928] Inhibition of HSL
+[Reaction:164926] 2-aminomuconate semialdehyde + NAD+ + H2O => aminomuconate + NADH + H+
+[Reaction:165642] Transfer of electrons through the bovine succinate dehydrogenase complex
+[BlackBoxEvent:164158] Transcriptional activation of pyruvate kinase L isoform gene by mChREBP:mMLX
+[Reaction:164136] Phosphorylation of mChREBP at Thr (666) residue by mPKA
+[Reaction:164129] Dephosphorylation of prChREBP (Thr 666) by rPP2A
+[Reaction:164132] Dephosphorylation of prChREBP (Ser 568) by rPP2A complex
+[Reaction:164124] Dephosphorylation of PF2K-Pase by  rPP2A complex
+[Reaction:164113] Dephosphorylation of prChREBP (Ser 196) by rPP2A
+[Reaction:164106] rLkb-1 (Stk-11) activates AMPK by phosphorylation
+[Reaction:164189] Formation of mChREBP:mMlx complex
+[Reaction:164162] Activation of rPP2A by  Xylulose-5-phosphate
+[Reaction:164341] Phosphorylation of rPF2K-Pase by rPKA
+[Reaction:164087] Phosphorylation of rChREBP(Ser 568) by rAMPK
+[Reaction:164055] Phosphorylation of mpChREBP (Thr 666) at Ser(196) by mPKA
+[Reaction:2161718] PGH2 is reduced to PGF2a by Fam213b
+[Reaction:2161847] 15k-LXA4 is reduced to dhk-LXA4 by PTGR1
+[Reaction:2161896] 5S-HpETE is reduced to 5S-HETE by GPX1
+[Reaction:2162073] carbovir monophosphate + ATP => carbovir diphosphate + ADP
+[Reaction:2162084] carbovir diphosphate + ATP => carbovir triphosphate + ADP
+[Reaction:2162292] HHB is hydroxylated to DHHB by Coq6
+[Reaction:2161147] TGFBR1 is recruited to tight junction by binding Pard6a
+[Reaction:2161165] TGFBR2 phosphorylates Pard6a
+[Reaction:2161160] TGFBR2 is recruited to tight junctions-associated, Pard6a-bound, TGFBR1 after TGF-beta stimulation
+[Reaction:2161533] abacavir [cytosol] + ATP + H2O => abacavir[extracellular] + ADP + phosphate
+[Reaction:2161526] abacavir [cytosol] + ATP + H2O => abacavir[extracellular] + ADP + phosphate
+[Reaction:2161638] 15k-PGE2/F2a is reduced to dhk-PGE2/F2a by Ptgr2
+[Reaction:2161646] PGA2 is dehydrated to 15d-PGA2
+[Reaction:2161617] LTB4 is oxidised to 12-oxoLTB4 by PTGR1
+[Reaction:2161568] PGD2/E2/F2a is oxidised to 15k-PGD2/E2/F2a by HPGD
+[Reaction:169439] Yeast Mcm2-7 mediated fork unwinding
+[Reaction:169440] Xenopus Mcm8 mediated fork unwinding
+[Reaction:2160463] phenylpyruvate + NADH + H+ => phenyllactate + NAD+
+[Pathway:168180] TRAF6 Mediated Induction of proinflammatory cytokines
+[Reaction:4608842] Fz3 asymmetric membrane localization depends on direct interaction with Vangl2
+[Reaction:4608838] Scrib is required for Vangl2 asymmetric membrane localization in mouse
+[Reaction:190708] Connexin oligomerization in the Trans-Golgi network
+[Reaction:190695] Connexin oligomerization in  ER-Golgi-intermediate compartment
+[Reaction:190685] Transport of Connexin to the Trans-Golgi network
+[Reaction:191676] Insertion of connexons in the plasma membrane forming hemi-channels
+[Reaction:191616] Association of Cx43 with ZO-1
+[Reaction:191736] Docking of connexons into junctional, double-membrane spanning channels
+[BlackBoxEvent:189119] HNF6 transactivates Onecut3 during morphogenesis
+[Reaction:189019] trehalose + H2O => 2 D-glucose
+[BlackBoxEvent:190088] FGF10 activates Pdx1 expression in the developing early pancreatic bud
+[BlackBoxEvent:190093] FGF10 activates Ptf1 expression in early pancreatic buds
+[Reaction:189618] TrkA activation by adenosine A2a receptor
+[Reaction:189632] TrkA activation by PACAP type 1 receptor
+[BlackBoxEvent:189543] RBP-Jkappa transactivates Hes1 in the presence of NICD
+[Reaction:194578] Prdm4 translocates to the nucleus
+[Reaction:194493] Prdm4 (Sc1) binds to p75NTR
+[Reaction:194544] NRIF binds to p75NTR
+[Reaction:194339] Sphingomyelinase is activated by the NGF:p75NTR complex
+[Reaction:1295768] Il7ra associates with Jak1
+[Reaction:1295764] IL7ra is phosphorylated on Y449
+[BlackBoxEvent:1295765] p(Y449)-Il7ra mediates Stat5 activation
+[Reaction:1295758] p85 binds to p(Y449)-Il7ra
+[Reaction:193887] Irak is activated
+[Reaction:193905] p75NTR interacts with Irak:Myd88
+[Reaction:182564] Phosphorylation of Cyclin D1 on Thr-286 by GSK-3 beta
+[Reaction:182097] Calcium release from intracellular stores by IP3 receptor activation
+[Reaction:182091] Active Plcg1 dissociates from Trk receptor
+[Reaction:182041] Endocytosis of clathrin-coated vesicle
+[Reaction:182040] Binding of Plcg1 to active Trk receptor
+[Reaction:182018] p-Frs3 binds Crk
+[Reaction:182065] Rap1-GTP binds and activates B-Raf
+[Reaction:182052] IP3 binds to the IP3 receptor, opening the Ca2+ channel
+[Reaction:182053] C3G stimulates nucleotide exchange on Rap1
+[Reaction:182060] ARMS:Crk binds to active Trk receptor
+[Reaction:182061] Active Plcg1 hydrolyses PIP2
+[Reaction:181827] Phospho-Shc dissociates from the Trk receptor
+[Reaction:181835] Shc binds to active Trk receptor
+[Reaction:181788] The signal peptide is excised from pre-pro-NGF
+[Reaction:181799] Shc, complexed with TrkA, is Tyrosine-phosphorylated
+[Reaction:181812] Trk receptor autophosphorylates
+[Reaction:181822] pro-NGF dimerizes
+[BlackBoxEvent:186479] PDX1 transactivates the Insulin gene
+[BlackBoxEvent:186469] HNF1a transactivates Glut2
+[BlackBoxEvent:186468] NKX2.2 transactivates the Insulin gene
+[BlackBoxEvent:186524] PDX1 transactivates Nkx6.1
+[Reaction:186501] Akt phosphorylates Foxo1 in the presence of IRS2
+[BlackBoxEvent:186510] NeuroD1 transactivates the glucokinase gene
+[BlackBoxEvent:186511] PDX1 transactivates Lrh1
+[BlackBoxEvent:186509] HNF1a transactivates Pklr
+[BlackBoxEvent:186507] FOXa2/HNF3b transactivates Pdx1
+[BlackBoxEvent:186548] Ngn3 transactivates Nkx2.2
+[BlackBoxEvent:186550] HNF6 transactivates Pdx1
+[BlackBoxEvent:186544] Ngn3 transactivates NeuroD1
+[BlackBoxEvent:186558] Ngn3 transactivates Pax4
+[BlackBoxEvent:186554] PAX6 transactivates Pdx1
+[BlackBoxEvent:186535] MafA transactivates the Insulin gene
+[BlackBoxEvent:186542] MafA transactivates Pdx1
+[BlackBoxEvent:186583] Hnf6-dependent synthesis of Ngn3 protein during morphogenesis
+[Pathway:186589] Late stage (branching morphogenesis) pancreatic bud precursor cells
+[BlackBoxEvent:186588] PDX1 transactivates the glucokinase gene
+[Pathway:186574] Endocrine-committed (Ngn3+) progenitor cells
+[BlackBoxEvent:186609] PDX1 transactivates Iapp
+[BlackBoxEvent:186617] HNF1a regulates Foxa3
+[Pathway:186601] Regulation of gene expression in beta cells
+[Pathway:186666] FOXO1-mediated regulation of Pdx1 expression
+[BlackBoxEvent:186663] HNF1a regulates Hnf4a
+[BlackBoxEvent:186679] HNF6 positively regulates Hnf1b expression
+[Pathway:186674] Early stage pancreatic precursor cells
+[Reaction:186709] Phosphorylated Foxo1 is excluded from the nucleus
+[BlackBoxEvent:186710] PAX6 transactivates the Insulin gene
+[BlackBoxEvent:186723] HNF1a regulates Hnf4g
+[BlackBoxEvent:187197] HNF1b transactivates Hnf6
+[BlackBoxEvent:187247] HNF1b transactivates Ptf1a
+[BlackBoxEvent:187246] HNF6 transactivates Onecut3 during early pancreas specification
+[BlackBoxEvent:187253] Ngn3 transactivates Ia1
+[Reaction:187713] TrkA recruits Rit/Rin
+[Reaction:187759] Rit is activated
+[Reaction:187762] Guanine nucleotide exchange on Ral
+[Reaction:187670] Activation of Src by Ral
+[Reaction:187682] Binding and activation of MAP kinase
+[Reaction:188325] pro-beta-NGF homodimer transits to the golgi apparatus
+[Reaction:188339] Rit-GTP binds Raf
+[Reaction:3245934] Mapk1 (Erk2) phosphorylates ERF
+[Reaction:1181148] Cleavage of Nodal proprotein
+[Pathway:209943] Steroid hormones
+[Pathway:210774] Regulation of Beta-Cell Development
+[Reaction:1181349] Phosphorylation of Smad2 by Nodal Receptor
+[Reaction:1181347] Lefty binds Nodal
+[Reaction:1181356] Cerberus binds Nodal
+[Reaction:1181357] Lefty binds EGF-CFC coreceptor
+[Reaction:209226] DL/SER is ubiquitinated by E3 ubiquitination ligases (NEUR/MIB1)
+[Reaction:209162] Murine ADAM10 cleaves Notch at the S2 site producing transmembrane spanning NEXT and ligand-bound NECD
+[Reaction:209285] The transmembrane complex Murine gamma-secretase cleaves Murine NEXT at the S3 site leaving NTM and releasing NICD into the cytoplasm
+[Reaction:209096] Murine Axin1 is dephosphorylated by PP2A leading to reduced binding affinity with beta-catenin
+[BlackBoxEvent:209770] Photolytic cleavage and thermal isomerization of 7-dehydrocholesterol
+[Reaction:209562] Production of ceramide which can activate JNK and other targets
+[Reaction:2186736] Rnf111 binds SKI/SKIL in complex with SMAD2/3:SMAD4 upon TGF-beta stimulation
+[BlackBoxEvent:212917] Proteasome mediated degradation of PAK-2p34
+[BlackBoxEvent:212920] Ubiquitination of PAK-2p34
+[Reaction:2187263] Platelet glycoprotein 4 binds ligands
+[Reaction:2186755] Ubiquitination of SKI/SKIL by Rnf11
+[Reaction:2186775] Rnf111 ubiquitinates Smad7
+[Reaction:211119] Trans-phosphorylation of Tie2
+[Pathway:211724] Regulation of PAK-2p34 activity by PS-GAP
+[Reaction:211725] Interaction of PAK-2p34 with PS-GAP results in accumulation of PAK-2p34 in the perinuclear region
+[Reaction:211704] PS-GAP interacts Â with caspase-activated PAK-2p34
+[Reaction:211643] Cleavage of PAK-2 at 212
+[Reaction:211638] Autophosphorylation of PAK-2p34
+[Reaction:2179313] Uchl5 deubiquitinates TGFBR1
+[Reaction:2179307] Uchl5 is recruited to TGF-beta receptor complex through Smad7
+[Reaction:205027] Nrage activates Jnk1
+[Reaction:205010] Prdm4 inhibits cyclin E transcription
+[Reaction:204967] NGF:p75NTR complex binds to Nrage
+[Reaction:205099] Nrage sequesters Che1 in the cytoplasm
+[Reaction:205060] NRIF and TRAF6 may activate JNK
+[Reaction:2193065] Adam10 cleaves Notch2
+[Reaction:201760] Ppp3 complex dephosphorylates DARPP-32 on T34
+[Reaction:2752136] Osteopontin binds Integrin alpha4beta1
+[BlackBoxEvent:198263] NTRK1 phosphorylates IRS
+[Reaction:2752145] Tnc binds sdc3
+[Reaction:198275] Active NTRK1 binds IRS1/2
+[Reaction:2752124] Osteopontin binds Integrins alphaVbeta1, 3, 5
+[Reaction:198333] Akt translocates to the nucleus
+[Reaction:198601] Akt1 phosphorylates GSK3
+[Reaction:197190] E.Coli deamination of nicotinamide
+[Reaction:2187267] Scara5 binds ligands
+[Reaction:2750176] Syndecan-4 binds Actn1
+[Reaction:2750184] Syndecan-2 binds Cask
+[Reaction:2750175] Syndecan-2 binds Trappc4
+[Reaction:199913] ERK5 activates the transcription factor MEF2
+[Reaction:198706] ERK1/2 activates ELK1
+[Reaction:198717] STAT3 activation
+[Reaction:198739] ERK5 is activated
+[Reaction:199089] Epithelial cadherin binds to KLRG1 in mice
+[Reaction:2167890] Smad7 recruits GADD34:PP1CC to phosphorylated TGF-beta receptor complex
+[Reaction:2167888] Smad7:SMURF2 complex translocates to the cytosol
+[Reaction:2167872] PP1CC dephosphorylates TGFBR1
+[Reaction:2167836] MDMQ6H2 is methylated to DMQ6H2 by Coq5
+[Reaction:2167856] DMQ6H2  is hydroxylated to DeMQ6H2 by Cat5
+[Reaction:2169004] Smad7 binds SMURF1
+[Reaction:2169016] Smad7:SMURF1 complex translocates to the cytosol
+[Reaction:2169012] Smad7:SMURF1 complex binds XPO1 (CRM1)
+[Reaction:2169036] Smad7:SMURF1 binds phosphorylated TGFBR1
+[Reaction:2169043] Smad7:SMURF2 binds phosphorylated TGFBR1
+[BlackBoxEvent:2164813] HMPhOH is hydroxylated to MDMQ6H2 by HMPhOH monooxygenase
+[BlackBoxEvent:2164816] MHHB is decarboxylated to HMPhOH by MHHB decarboxylase
+[Reaction:2730846] Recruitment of Gab2 to PM and FCERI by binding to Grb2
+[Reaction:2730869] Phoshorylation of Gab2 by Syk/Fyn
+[Reaction:2730865] RasGRP interacts with DAG and Ca2+
+[Reaction:2730850] Recruitment of Tec kinases to p-Slp-76
+[Reaction:2730951] Clcn3 exchanges Cl- for H+
+[Reaction:2730893] Interaction of Bcl10:Malt1 with Carma1 to form CBM complex
+[Reaction:2730881] Phosphorylation of PLC-gamma
+[Reaction:2730880] Autophosphorylation and activation of Mekk1
+[Reaction:2176396] SMURF1 ubiquitinates Smad7 and phosphorylated TGFBR1
+[Reaction:2176393] SMURF2 ubiquitinates Smad7 and phosphorylated TGFBR1
+[Reaction:2176428] Translocation of Smad7:NEDD4L complex to the cytosol
+[Reaction:2176431] Smad7 recruits NEDD4L to activated TGF-beta receptor complex
+[Reaction:2176430] NEDD4L binds Smad7
+[Reaction:2176427] NEDD4L ubiquitinates Smad7 and TGFBR1
+[Reaction:2731112] Syndecan-1 binds THBS1
+[Reaction:2731130] Syndecan-1 binds integrin alphaVbeta5
+[Reaction:2731085] Syndecan-1 binds integrin alphaVbeta3
+[Reaction:2731094] Syndecan-1 binds collagen types I, III,  V
+[Reaction:2731138] Syndecan-4 binds PI(4,5)P2
+[Reaction:213303] Association of Pak2 with Cdc42-GTP
+[Reaction:213297] Partial autophosphorylation of PAK-2 at  Ser-19, Ser-20, Ser-55, Ser-192, and Ser-197
+[Reaction:2173783] Marco binds ligands
+[Reaction:2173779] Msr1 (Scara1) Binds Ligands
+[Pathway:215126] Transport of connexins along the secretory pathway
+[Reaction:215125] Transport of connexins to the ER-Golgi intermediate compartment
+[BlackBoxEvent:216852] Insulin secretory granule translocates to cell cortex
+[BlackBoxEvent:216855] Insulin secretory granules translocate across the cortical actin network to dock at the plasma membrane
+[BlackBoxEvent:216883] Exocytosis of Insulin
+[Reaction:1214205] Prdm9 Trimethylates Histone H3 (murine, bovine)
+[BlackBoxEvent:3697899] Atp7a transfers Cu from Atox1 to Sod3
+[Reaction:1222667] Iron is reduced and separates from enterobactin
+[Reaction:1222301] Ferritin takes up and mineralizes iron
+[Reaction:1222605] Ferritin takes up and mineralizes iron
+[Reaction:1225898] The Nodal Receptor binds Nodal ligands
+[Reaction:5218834] Fak/Src phosphorylate p130Cas
+[Reaction:5218853] P85-subuunit of PI3K binds p-6Y-VEGFR2
+[Reaction:5218849] p130Cas binds Fak
+[Reaction:5220936] Tet1,2,3 oxidizes 5-formylcytosine to 5-carboxylcytosine
+[Reaction:5220931] Tet1,2,3 oxidizes 5-hydroxymethylcytosine to 5-formylcytosine
+[Reaction:5220944] Tet1,2,3 oxidizes 5-methylcytosine to 5-hydroxymethylcytosine
+[Reaction:749516] Mannose-1-phosphate converted to GDP-Mannose
+[Reaction:2197556] Gamma-secretase complex cleaves mNEXT2
+[BlackBoxEvent:2197579] Notch2 stimulates transcription of Hes5
+[BlackBoxEvent:2197575] Notch2 stimulates Hes1 transcription
+[Reaction:1236960] Processing of ovalbumin by cathepsin S 
+[BlackBoxEvent:1236962] Peptide loading on MHC class I in phagosome
+[Reaction:1236959] Egress of internalized antigen to the cytosol via sec61
+[Reaction:1236951] Interaction of soluble ovalbumin with mannose receptor
+[Reaction:1236944] Translocation of antigenic peptides back to phagosomes via TAP
+[BlackBoxEvent:1236945] Proteasomal cleavage of ovalbumin (OVA)
+[Reaction:5211233] Sirt1 deacetylates Taf1b in SL1 complex
+[Reaction:5211235] Kat2b (Pcaf) acetylates Taf1b in SL1 Complex
+[Reaction:1237121] Dehydration of methylthio-ribulose-P
+[Reaction:1237106] Transamination of MOB to methionine
+[Reaction:741383] Card9 binds Rip2 (and Nod2)
+[Reaction:2203911] Active Mmp3 can cleave pro-Hbegf to form active Hbegf
+[BlackBoxEvent:844613] Ipaf is activated
+[Reaction:265529] NPC1L1-mediated cholesterol uptake
+[Reaction:266151] Proteolytic PAK-2p34 fragment translocates to the nucleus
+[Reaction:5368583] Cxxc4 binds DVL to prevent AXIN binding
+[Reaction:5368587] DVL binds Ccdc88c
+[Reaction:2520871] Cdk1 phosphorylates condensin I
+[Reaction:5362406] mouse Disp2 binds SHH N-terminal fragment
+[BlackBoxEvent:2507848] Endocytosis of Scara5:Ferritin
+[Reaction:5362792] Shh is released from the plasma membrane by ADAM17-mediated cleavage
+[Reaction:2514835] Degradation of fibrilin-1 by Elane
+[Reaction:2533858] Fibronectin degradation by MMP10
+[Reaction:2534148] Nckx1 exchanges Na+ for Ca2+/K+
+[Reaction:2534170] Degradation of HSPG2 by Mmp13 and Ctss
+[Reaction:2534162] E-cadherin strand dimer degradation by MMP3, MMP7 and Plasmin
+[Reaction:2534247] E-cadherin strand dimer degradation by Casp3
+[Reaction:2534209] E-cadherin strand dimer degradation by PS1
+[BlackBoxEvent:2534076] Unknown Nat N-acylates Gly in Gnat1
+[Reaction:2533890] Laminin-511 degradation by MMP14
+[Reaction:2533988] Aggrecan degradation by ADAMTS4,ADAMTS5
+[Reaction:2533972] Nid1 degradation by MMP1, 9, 12, ELANE
+[Reaction:2533964] Nid1 degradation by MMP14, MMP15
+[Reaction:2533953] Degradation of laminin-111, -332 by Mmp3, 7, 12, 13, 19, 20 and plasmin
+[Reaction:2533958] Nid1 degradation by Mmp3, 7
+[Reaction:804924] Gz (rat) is a substrate for PKC (cow)
+[BlackBoxEvent:2537524] Gelatin degradation by MMP19
+[Reaction:1433273] Interaction of Src kinases with c-Kit
+[Reaction:2530504] MII catalyses GDP/GTP exchange on Gt
+[Reaction:5334134] Dnmt3a:Dnmt3l binds chromatin
+[Reaction:5336403] Dnmt3b:Dnmt3l binds chromatin
+[Reaction:5336365] Uhrf1:Chromatin binds Dnmt1
+[Reaction:5336369] Dnmt1 methylates cytosine in hemimethylated DNA
+[Reaction:5336380] Dnmt3b:Dnmt3l methylates cytosine in DNA
+[Reaction:5336316] Dnmt3a:Dnmt3l methylates cytosine in DNA
+[Reaction:5336231] Uhrf1 binds chromatin with hemimethylC
+[Reaction:2545201] Collagen type X binds integrin alpha2beta1
+[Reaction:351337] Release of 78 kDa glucose-regulated protein
+[Reaction:350735] Release of Calumenin 
+[Reaction:2564819] NADPH reduces TAH18:DRE2
+[Pathway:2564818] Cytosolic iron-sulfur cluster assembly (yeast)
+[BlackBoxEvent:2564817] CIA Targeting Complex transfers 4Fe-4S clusters to apoproteins
+[BlackBoxEvent:2564822] 4Fe-4S cluster assembles on CFD1:NBP35 scaffold
+[Reaction:909775] (R)-3-aminoisobutyric acid + pyruvate => 2-methyl-3-oxopropanoate + alanine
+[BlackBoxEvent:909763] Mitochondrial uptake of beta-alanine
+[Reaction:909762] beta-alanine + pyruvate => 3-oxopropanoate + alanine
+[BlackBoxEvent:909781] Mitochondrial uptake of (R)-3-aminoisobutyric acid
+[Reaction:912730] Cbl binds B-cell linker protein
+[Reaction:912695] Inhibition of Jak kinase activity by Socs1/3
+[Reaction:912619] Cbl is tyrosine phosphorylated
+[BlackBoxEvent:914045] Src is activated
+[Reaction:914027] Src phosphorylates Stat3
+[Reaction:914072] Src binds Stat3
+[Reaction:914067] Shp2 can recruit Grb2
+[Reaction:3139045] AKT phosphorylates Bad
+[Reaction:2581495] Sag binds p-MII to form p-MII:Sag
+[Reaction:1369093] Prlr binds Stat5
+[Reaction:1369092] Prlr binds Shp2
+[Reaction:1369099] Shp2 is phosphorylated
+[Reaction:1369121] Tyrosine phosphorylation of Prlr
+[Reaction:379960] Calmodulin binds CaMK IV
+[Reaction:379842] Dimerization of phospho-Creb1
+[Reaction:379836] PKA catalytic subunit translocates to the nucleus
+[Reaction:379832] CaMK IV phosphorylates CREB
+[Reaction:379814] PKA phosphorylates CREB
+[Reaction:879862] Passive Transport of Anions into Vesicles by Aquaporin-6 (rat)
+[Reaction:879863] Passive Transport of Anions out of Vesicles by Aquaporin-6 (rat)
+[Reaction:879922] Mouse JAK2 binds human common beta chain
+[Reaction:879372] Ager-1,2,3 bind AGEs
+[Pathway:389967] Formation of tubulin folding intermediates by CCT/TriC
+[Reaction:389973] ADP is exchanged for ATP in the  ADP:CCT/TriC:tubulin complex
+[BlackBoxEvent:5246466] Slc22a17 binds Lcn2, internalising it, releasing Fe3+
+[Reaction:391408] Hydrolysis of ATP and release of tubulin folding intermediate from CCT/TriC
+[BlackBoxEvent:1362301] Transcription of E2f targets under negative control by p107 (Rbl1) and p130 (Rbl2) in complex with Hdac1
+[Reaction:391444] Actin/tubulin:prefoldin complex associates with CCT/TriC
+[Reaction:391433] unfolded actin/tubulin associates with prefoldin
+[Reaction:391434] Exchange of ADP for ATP in CCT/TriC:actin complex
+[Reaction:391437] Hydrolysis of ATP and release of folded actin from CCT/TriC
+[Pathway:391548] Post-chaperonin tubulin folding pathway
+[Reaction:391535] alpha-tubulin:GTP:Cofactor B  +Cofactor E ->  alpha-tubulin:GTP: Cofactor E +Cofactor B
+[Reaction:391533] Beta-tubulin:GTP:Cofactor D:alpha-tubulin:GTP:Cofactor E:Cofactor C-> Beta-tubulin:GDP :alpha-tubulin:GTP heterodimer +Cofactor E+ Cofactor D+ Cofactor C+ Pi
+[Reaction:391522] Beta-tubulin:GTP:Cofactor D:alpha-tubulin:GTP:Cofactor E+ Cofactor C-> Beta-tubulin:GTP:Cofactor D:alpha-tubulin:GTP:Cofactor E:Cofactor C
+[Reaction:391520] Beta-tubulin:GTP + Cofactor D ->  Beta-tubulin:GTP: Cofactor D
+[Reaction:391521] Beta-tubulin:GTP + Cofactor A ->  Beta-tubulin:GTP: Cofactor A
+[Reaction:391517] Beta-tubulin:GTP: Cofactor A+ Cofactor D ->  Beta-tubulin:GTP:Cofactor D + Cofactor A
+[Reaction:391519] alpha-tubulin:GTP + Cofactor E ->  alpha-tubulin:GTP:Cofactor E
+[Reaction:391513] alpha-tubulin:GTP + Cofactor B -> alpha-tubulin:GTP: Cofactor B
+[Reaction:391512] Beta-tubulin:GTP:Cofactor D+alpha-tubulin:GTP:Cofactor E-> Beta-tubulin:GTP:Cofactor D:alpha-tubulin:GTP:Cofactor E
+[Reaction:1362412] Mitoferrin Transports Iron Across the Mitochondrial Inner Membrane
+[Reaction:877219] ATP binds to p2x7
+[Reaction:877301] Dephosphorylation of Jaks by Ptps
+[Reaction:877248] p2x7 forms oligomeric non-selective cation channels
+[Reaction:391979] Association of CCT/TriC with other substrates during biosynthesis (unknown chaperone)
+[Pathway:392029] Prefoldin mediated transfer of substrate to CCT/TriC
+[Pathway:392030] Folding of actin by CCT/TriC
+[Reaction:877385] dsDNA:Aim2 clusters bind Asc
+[Reaction:877388] dsDNA:AIM2:ASC cluster binds procaspase-1
+[Pathway:392033] Cooperation of Prefoldin and TriC/CCT in actin and tubulin folding
+[Polymerisation:877396] Aim2 oligomerizes
+[Reaction:1366606] Prlr associates with Jak2
+[Reaction:4086394] Gnat2 binds and activates Pde6
+[Reaction:4086208] Ibsp binds collagen type I
+[Reaction:4084497] Collagen VII binds collagen IV
+[Reaction:4084922] Collagen type IV binds integrin alpha2beta1, alpha1beta1
+[Reaction:4084908] Collagen type I binds integrin alpha1beta1, alpha2beta1, alpha10beta1
+[Reaction:4084899] Collagen type II binds integrin alpha2beta1, alpha1beta1, alpha11beta1
+[Reaction:4085088] Collagen type IV binds integrin alpha10beta1
+[Reaction:4085131] Osteopontin binds integrin alpha8beta1
+[Reaction:373700] Caspase-9 binds DCC:DIP13alpha complex
+[Reaction:373705] Caspase cleavage of DCC
+[Reaction:373717] DCC interacts with DIP13alpha
+[Reaction:373735] Shootin-1 links L1 and retrograde actin flow
+[Reaction:373731] Neurofascin binds contactin-1:CASPR complex
+[Reaction:373737] Ankyrins link voltage-gated sodium and pottasium channels to spectrin and L1
+[Reaction:374699] UNC5A binds NRAGE
+[Reaction:374858] Activation of PLC beta-1
+[Reaction:375176] Inactive catalytic PP2B is activated by the binding of calmodulin
+[Reaction:375145] Interaction of NCAM-1 with  Neurocan
+[Reaction:4093335] Ephb2 binds p120-RasGAP
+[Reaction:372347] Cytosolic PYR is transported to the mitochondrial matrix
+[Reaction:420383] Interaction of NCAM1 with GFRalpha-1
+[Reaction:420382] Phosphorylation of FAK by Src kinases
+[Reaction:420390] Interaction of NCAM1 with contactin-2
+[Reaction:420388] Dephosphorylation of NCAM1 bound pFyn
+[Reaction:420389] Interaction of NCAM1 with agrin
+[Reaction:420386] Fyn binds NCAM1
+[Reaction:420387] NCAM1 cis-homophilic interaction
+[Reaction:420384] NCAM1 binds Major prion protein (PrP)
+[Reaction:420398] Autophosphorylation of NCAM1 bound Fyn
+[Reaction:420396] Interaction of NCAM1:GFRalpha-1 with GDNF
+[Reaction:420397] NCAM1 trans-homophilic interaction
+[Reaction:420394] Recruitment of FAK to NCAM1:Fyn in lipid rafts
+[Reaction:420393] NCAM1 binds FGFR-1
+[Reaction:420000] Homophilic interaction of claudin-1 at tight junctions
+[Reaction:421724] Myosin regulatory light chain phosphorylation by Rock2
+[Reaction:421733] ROCK1 phosphorylates LIMK2 (rat)
+[Reaction:421693] FADK1 interaction with DCC
+[Reaction:421695] DCC heterodimerizes with Unc-5:Netrin-1
+[Reaction:421694] Phosphorylation of FADK1
+[Reaction:421689] Neogenin binds repulsive guidance molecules
+[Reaction:421688] Neogenin binds Netrin-1
+[Reaction:421690] Recruitment of ABLIM to the plasma membrane
+[Reaction:421687] Unc-5 binds Netrin-1
+[Reaction:421879] Adenylate cyclase converts ATP to 3',5'-cyclic AMP (cAMP) and pyrophosphate
+[Reaction:421821] G alpha (i) inhibits adenylate cyclase
+[Reaction:421147] Activation of Rac1 by FARP2
+[Reaction:421144] Recruitment of Rnd1 to Plexin-A
+[Reaction:421148] Rac1 binds plexin-1
+[Reaction:421139] Limk1 phosphorylates Cfl1, inactivating it
+[Reaction:421138] Activation of Fyn
+[Reaction:421136] Recruitment and activation of Cdk5
+[Reaction:421143] Phosphorylation of Plexin-A
+[Reaction:421142] Inactivation of R-Ras by Sema3A-Plexin-A1 GAP activity
+[Reaction:421140] Plexin-A binds to neuropilin-1
+[BlackBoxEvent:981784] Removal of SPO11 and Resection of 5' Ends of DNA (yeast)
+[Pathway:418889] Role of DCC in regulating apoptosis
+[Reaction:418862] Shp2 binds pUnc5C
+[Reaction:418848] Caspase cleavage of Unc5h2
+[Reaction:418849] DAPK binds UNC5B
+[Reaction:418855] Caspase cleavage of Unc5h1
+[Reaction:418852] Caspase cleavage of UNC5B
+[Reaction:418853] DAPK binds Unc5h2
+[Reaction:418871] Unc5h1 binds NRAGE
+[Reaction:418870] Phosphorylation of Unc5C
+[Reaction:418845] Activation of caspase-3
+[Reaction:418846] Caspase cleavage of UNC5A
+[Reaction:425898] Calcium and Diacylglycerol activate Ras guanyl-releasing protein 2
+[Pathway:425428] Amine compound SLC transporters
+[Pathway:425471] Bile salt and organic anion SLC transporters
+[Pathway:425374] Amino acid and oligopeptide SLC transporters
+[Reaction:1524177] Socs1 as a regulator of kit signaling
+[Reaction:421896] G alpha (i)1 auto-inactivates by hydrolysing GTP to GDP
+[Reaction:421961] Dissociation of beta-2 adrenergic receptor:Gs complex
+[Reaction:2065560] mNICD1 binds HIF1A
+[BlackBoxEvent:2065441] mNOTCH1 coactivator complex positively regulates transcription of Hey1, Hey2 and Heyl
+[Reaction:2065510] rHes1 binds TLE
+[Reaction:2065812] Notch1 binds Cntn1
+[BlackBoxEvent:2065902] Gamma secretase complex cleaves Cntn1-actived Notch1
+[Reaction:2064916] MAML recruits CDK8:CCNC to xNICD1
+[Reaction:2064924] Wwtr1 (Taz) binds Runx2
+[BlackBoxEvent:2065278] mNICD1 stimulates Hes1 transcription
+[Reaction:2065178] CDK8 phosphorylates xNICD1
+[Reaction:2064883] FBXW7 mediates ubiquitination of phosphorylated NICD1
+[Reaction:2064853] FBXW7 binds phosphorylated NICD1
+[BlackBoxEvent:2067638] Gamma secretase cleaves Dner:Notch1 complex
+[Reaction:2066712] Dner binds Notch1
+[Reaction:2071846] Deltex recruits Kurtz arrestin to Notch
+[BlackBoxEvent:2071858] Kurtz promotes ubiquitination of Notch
+[Reaction:2071906] Notch1 binds Dlk1
+[Reaction:2076711] rDll1 binds NOTCH1 in cis
+[Reaction:2076706] Serrate binds Notch in cis
+[Reaction:2077479] Itch ubiquitinates Notch
+[Reaction:2077477] Numb recruits Itch to Notch1
+[Reaction:451348] Dscam binds Netrin-1
+[Reaction:451384] Interaction of nephrin with adherens junction-associated proteins
+[Reaction:451360] Dscam binds Dcc
+[Reaction:451396] Nephrin binds Cask
+[Reaction:451204] Phosphorylation of Khsrp by p38
+[Reaction:2050606] Dll1 binds Notch1
+[Reaction:451755] p85 associates with both p-Nephrin and CD2AP
+[Reaction:451756] Nephrin binds CD2AP
+[Reaction:451681] Tpl2 phosphorylates Mek1, Sek1
+[Reaction:2395436] Phosphorylation of DAP12
+[Reaction:947656] Ghsr is a receptor for ghrelin
+[Reaction:2053938] Dll4 binds Notch1
+[Reaction:2053963] Notch1 binds Jag1
+[Reaction:2054095] Phosphorylation of syk
+[Reaction:442561] WASP/N-WASP activate the Arp2/3 complex
+[Reaction:442572] Activation of WASP and N-WASP by CDC42
+[Reaction:443049] L1 dimer binds Ankyrin
+[Reaction:443818] Phosphorylation of L1 by EPHB2
+[Reaction:443785] Interaction of L1 with Laminin-1
+[Reaction:443777] CHL1 interacts with contactin-6
+[Reaction:443776] Cis-heterodimerization of NgCAM and Contactin-1/F3/F11
+[Reaction:443781] Cis-heterodimerization of NgCAM and DM-GRASP/ALCAM
+[Reaction:443767] NrCAM binds synapse-associated proteins
+[Reaction:443773] Neurofascin binds Ankyrin-G
+[Reaction:443772] Doublecortin binds phosphorylated neurofascin
+[Reaction:443770] Interaction of L1 with Neurocan
+[Reaction:443769] Cis-heterodimerization of NgCAM and Axonin-1
+[Reaction:443768] L1 binds ERM family members
+[Reaction:444204] GPR120 is a receptor for unsaturated long-chain free fatty acids
+[Reaction:443942] Thrombopoietin binds the thrombopoietin receptor
+[Reaction:445275] Translocon (canine) translocates Preprolactin (bovine)
+[Reaction:445309] Signal Peptidase (Canis) hydrolyzes the signal peptide of Preprolactin
+[Reaction:445202] SRP binds SRP Receptor (Canis familiaris)
+[Reaction:445078] CHL1 interacts with NP-1
+[Reaction:445075] CHL1 interacts with Hsc70
+[Reaction:445082] Transport of L1 from C-domain to P-domain
+[Reaction:445080] Phosphorylation of Neurofascin
+[Reaction:445068] CHL1 interacts with beta1 integrins
+[Reaction:445066] Phosphorylation of L1 by p90rsk
+[Reaction:445065] NrCAM binds axonin-1
+[Reaction:445860] Activation of Phospholipase C beta1 by G(q)alpha:GTP
+[BlackBoxEvent:446487] Closing of L-type Calcium Channels (rat)
+[BlackBoxEvent:446503] Opening of Low Conductance Potassium Channels
+[Reaction:936387] Inhibition of Rig-I signaling by Atg5-Atg12 conjugate
+[Reaction:446974] cAMP Induces dissociation of active protein kinase A subunits from the PKA:Akap150:Iqgap1 complex
+[BlackBoxEvent:936401] RNF125 mediated ubiquitination of RIG-I, MDA5 and IPS-1
+[Reaction:446954] Activation of G(s) by the Glucagon-like peptide-1 receptor (Glp1r, rat)
+[Reaction:447024] NrCAM binds Ankyrin-G
+[Reaction:447026] CHL1 interacts with Ankyrin-G
+[Reaction:2063915] ADAM17 cleaves Notch1 at S2
+[Reaction:2064264] NICD1 displaces NCOR co-repressor complex from CSL
+[Reaction:448960] Interaction of p38 MAPK with JLP
+[BlackBoxEvent:448961] Activation of p38 alpha/beta MAPK
+[Reaction:2060798] Dll1 binds Notch2
+[Reaction:448947] Interaction of Bnip-2 with Cdc42
+[Reaction:448949] Heterodimerization of E proteins with Myod
+[Reaction:448954] JLP interacts with CDO complex
+[Reaction:448953] Phosphorylation of E47 by p38 MAPK
+[Reaction:448959] Bnip2 interacts with CDO complex
+[Reaction:4332392] translocation of Xenopus prkca to plasma membrane
+[Reaction:449201] Neogenin:Netrin-3 binds CDO complex
+[Reaction:449198] Interaction of ABL1 with CDO complex
+[Reaction:449324] Addition of the fourth and fifth mannose  to the N-glycan precursor skeleton by Alg11
+[Reaction:449661] Addition of a third glucose to the N-glycan skeleton by Alg10
+[Reaction:449748] Addition of a third mannose to the N-glycan precursor by Alg2
+[Reaction:449765] Flipping of the N-glycan precursor into the ER lumen
+[Reaction:933534] Interaction of MEKK1 with TRAF6
+[Reaction:434963] Ena/VASP binds Robo1:Slit2 complex
+[Reaction:434991] Sema7A binds integrin alpha1beta1
+[Reaction:434702] Stim activation of CRAC
+[Reaction:434802] Calcium influx via CRAC
+[Reaction:434629] PIP3 stimulates Vav1
+[Reaction:434634] PIP2 inhibits Vav1
+[Reaction:437945] Pig Syk binds human Vav1
+[Reaction:437938] Syk phosphorylates Vav1
+[Reaction:2033005] Sialylation of Pre-Notch
+[Reaction:2032746] Rab6 positively regulates Notch trafficking through Golgi
+[Reaction:2032750] Sel1l negatively regulates Pre-Notch exit from endoplasmic reticulum
+[Reaction:437145] Znt7 transports zinc into the golgi apparatus
+[Reaction:437189] PDK1 binds PKC zeta
+[Reaction:437185] PDK1 activates PKC zeta
+[Reaction:437240] Heat-Stable Antigen binds L1
+[Reaction:437092] Znt3 transports zinc into synaptic vesicles
+[Reaction:437094] Znt2 facilitates zinc vesicular sequestration
+[Reaction:2032355] Galactosylation of Pre-Notch
+[Reaction:2032379] Jag2 binds Notch2
+[Reaction:2032378] Jag1 binds Notch2
+[Reaction:442359] rZip10 mediates zinc influx into cells
+[Reaction:442319] mZIP5 mediates zinc uptake by cells
+[Reaction:442289] Syk binds Vav2
+[Reaction:427308] cGMP stimulates Protein Kinase G
+[Reaction:427288] Soluble guanylate cyclase converts GTP to cGMP
+[Reaction:427279] NO binds to Guanylate Cyclase
+[Reaction:427858] Thrombin-activated PAR binds G-protein G12/13
+[Reaction:427888] PKG1a phosphorylates BK channels
+[Reaction:426560] Binding of Acetylcholine by Muscarinic Acetylcholine Receptor M3
+[Reaction:426547] Activation of Gq by Muscarinic Acetylcholine Receptor M3
+[Reaction:429913] 5' to 3' Exoribonuclease Digestion of Decapped mRNA (yeast)
+[Reaction:428519] Inactivation of Cdc42
+[Reaction:428517] SrGAP binds Robo:Slit
+[Reaction:428523] Activation of Rac by Sos
+[Reaction:428520] Inactivation of Rac1
+[Reaction:428527] Recruitment of Pak to Dock
+[Reaction:428525] Robo3 antagonizes Robo1 to allow floor plate crossing
+[Reaction:428528] Dock binds Robo:Slit
+[Reaction:428529] Vilse binds Robo1:Slit2
+[Reaction:428532] Recruitment of Sos to plasma membrane
+[Reaction:428953] DCC interaction with Robo-1
+[Reaction:428884] Activation of Clasp
+[Reaction:428887] Recruitment of CAPT to Abl
+[Reaction:428715] Activated human P2Y purinoceptor 1 binds mouse G-protein Gq
+[Reaction:430200] p-SLP-76:ADAP binds Ena/VASP
+[Reaction:2046091] Desaturation of tetracosapentaenoyl-CoA to tetracosahexaenoyl-CoA
+[Reaction:433717] Interaction of Afadin with F-actin
+[Reaction:2045917] Sema6A binds Plexin-A2 and Plexin-A4
+[Reaction:2422970] Phosphorylation of Gorasp1, Golga2 and RAB1A by CDK1:CCNB
+[Reaction:2423781] PLK1 binds phosphorylated Gorasp1
+[Reaction:1458501] RalA Hydrolyzes GTP
+[Reaction:1458507] Akt2 Phosphorylates Rgc2
+[Reaction:2022369] ANPEP hydrolyzes Angiotensin III to Angiotensin IV
+[Reaction:1458902] frog CK1gamma phosphorylates LRP5/6
+[Reaction:1458871] mFz8CRD binds LRP6N in vitro
+[Reaction:2023179] Glucosylation of Pre-Notch by Poglut1
+[Reaction:2023158] Glycosylation of Pre-Notch by Fringe
+[Reaction:2425403] Extracellular CR:atREs are transported to cytosol by Ldlr
+[Reaction:2426184] Srebf1a/1c/2 Binds the Elovl6 Promoter
+[Reaction:2426196] Srebp1a/1c Binds the Gpam Promoter
+[Reaction:2426460] Mouse emilin-1 binds human elastin and mouse fibulin-5
+[Reaction:2426496] Laminins bind Nidogens 1, 2
+[Reaction:2426528] Laminins:Nidogens binds HSPG2
+[Reaction:2426616] Dystroglycan bind Laminins and Dystrophin
+[Reaction:2426638] Dystroglycan binds Agrn and Hspg2
+[Polymerisation:2426626] Formation of laminin networks
+[Reaction:2426675] Dystroglycan binds Nrxn1
+[Reaction:1470014] Downregulation of c-Kit signaling by Socs6
+[Reaction:482767] Release of mouse platelet cytosolic components
+[Reaction:2024090] Glce epimerises GlcA to IdoA
+[Reaction:3965440] Wnt5a/11b bind Ca2+ Fzd receptors
+[Reaction:2025890] Calcineurin binds NFATC1,2,3
+[BlackBoxEvent:2025882] Calcineurin dephosphorylates NFATC1,2,3
+[BlackBoxEvent:2025936] Calcineurin Dephosphorylates Nfatc2
+[Reaction:2434198] CDK1 phosphorylates Mastl
+[BlackBoxEvent:1445150] Akt Phosphorylates As160 (Tbc1d4)
+[Pathway:1445146] Translocation of Glut4 to the Plasma Membrane
+[Reaction:1445145] 14-3-3 Binds Phosphorylated Tbc1d4 (AS160)
+[Reaction:2447196] Collagen type IV binds laminin-111
+[Reaction:2447193] Ntn4 binds laminin-gamma-1 and -3
+[Reaction:1449633] Rab8a/10/13/14 Hydrolyze GTP
+[BlackBoxEvent:1449573] Fusion of Glut4 Vesicle with the Plasma Membrane
+[Reaction:1449591] Akt2 Phosphorylates Myosin 5a
+[Reaction:2445086] p-S67-Ensa/p-S67-Arpp19 binds PP2A-Ppp2r2d
+[Reaction:469703] ATP + D-glyceraldehyde => ADP + D-glyceraldehyde 3-phosphate
+[Reaction:5432551] TUFM binds GTP displacing TSFM
+[Reaction:5432536] TSFM binds TUFM displacing GDP
+[Reaction:5432520] MTFMT formylates methionyl-tRNA
+[Reaction:5432456] MTIF3 binds 28S ribosomal subunit
+[Reaction:5432463] 28S subunit binds MITF2:GTP, mRNA, and formylMet-tRNA
+[Reaction:5432444] Peptide transfer from P-site to A-site (peptide bond formation)
+[Reaction:5432421] 39S subunit binds 28S subunit:mRNA:fMet-tRNA
+[Reaction:5432422] Translocation of 55S ribosome by 3 bases in the 3' direction
+[Reaction:5432388] TUFM:GDP dissociates from 55S ribosome
+[Reaction:5432387] TUFM:GTP:aminoacyl-tRNA binds 55S ribosome:mRNA:fMet-tRNA
+[Reaction:5432586] TUFM:GTP binds aminoacyl-tRNA
+[Reaction:1454711] Ampk-alpha2 Phosphorylates Tbc1d1
+[Reaction:1454713] 14-3-3 Binds Phosphorylated Tbc1d1
+[Reaction:1986584] Fucosylation of Pre-Notch by POFUT1
+[Reaction:3451144] KAT5 HAT complex acetylates TCF4 (ITF-2) gene at histone H4
+[Reaction:1008243] Small MAF family members dimerize with p45-NF-E2
+[Reaction:2464776] Rdh8 reduces atRAL to atROL
+[Reaction:2457808] Rab8A/13/14 Exchange GDP for GTP
+[Reaction:1013867] Cables1 links Cdk2 and Wee-1
+[Reaction:1013873] Cables links Cdk5 and Abl1
+[Reaction:517516] Frizzled receptors bind Wnts
+[Reaction:517521] Patched binds Smoothened
+[Reaction:1497770] Salvage - BH2 is reduced to BH4 by Dhfr
+[BlackBoxEvent:1984022] Endoplasmic reticulum calcium ATPases positively regulate Notch precursor trafficking
+[Reaction:2470495] Activin AB/B binds Activin Receptor Acvr2a:Acvr1c
+[Reaction:2470487] Acvr2a phosphorylates Acvr1c in response to Activin
+[Reaction:4395232] Ccnd1:Crebbp binds Notch1 promoter
+[Reaction:4396363] mNICD1 Chimeric Enhancer Complex binds Hes1 promoter
+[Reaction:4396387] mNOTCH1 coactivator complex bind promoters of Hey genes
+[Reaction:2473583] Collagen type I degradation by MMP14
+[Reaction:2473590] Collagen type II degradation by MMP14
+[Reaction:2473498] Collagen type XXIII binds Integrin alpha2beta1
+[Reaction:1504194] mDvl1 binds FZD7
+[Reaction:1504196] dDsh binds dFz2
+[Reaction:2466767] NRPE is a substrate for Abca4
+[Reaction:2466133] SLRPs bind TGF beta
+[Reaction:2466177] BGN binds Collagen types II, III, IV
+[Reaction:508227] Pcsk1 hydrolyzes ProGip to Gip
+[Reaction:508205] Pcsk1 hydrolyzes Proglucagon to Glucagon-like Peptide-1 (7-37)
+[Reaction:508217] Pcsk1 hydrolyzes Proglucagon to Glucagon-like Peptide-1 (7-36)
+[Reaction:2466303] MRS3/4 Transports Iron Across the Mitochondrial Inner Membrane
+[Reaction:2465886] Laminin binds galactosyl sulfatide and related sulfated glycolipids
+[Reaction:2465871] VTN binds collagen I, IV and VI
+[Reaction:2465974] An REH hydrolyses 11cRE to 11cROL
+[Reaction:2465929] Isomerase II  isomerises atROL to 11cROL
+[Reaction:2467624] Agrin binds Lrp4:Musk
+[Reaction:2467642] AGRN binds NCAM1, PTPRS
+[Reaction:2467431] Agrin binds Integrin alphaVbeta1 (alpha1beta1)
+[Reaction:2467578] Agrin binds alpha-dystroglycan
+[Reaction:2467092] AGRN binds laminins
+[Reaction:3446785] Ptpmt1 dephosphorylates PGP to PG
+[Reaction:994158] F-actin capping protein binds to elongating F-actin
+[Reaction:992753] p53 and Sin3a bind c-Myb
+[Reaction:997411] AGER binds rat ERK1/2
+[Reaction:2976723] Notch2 binds Hes5 promoter
+[BlackBoxEvent:2976707] Notch2 stimulates Gzmb transcription
+[Reaction:2976706] Notch2 and phosphorylated Creb1 bind Gzmb promoter
+[Reaction:2976717] Notch2 binds Hes1 promoter
+[Reaction:1482836] CL is hydrolyzed to MLCL by Pla2g6 (IM)
+[Reaction:1482978] CDP-DAG is converted to PGP by Pgs1
+[Reaction:1483065] PE transports from the mitochondrial membrane to the ER
+[Reaction:1483112] GPCho is hydrolyzed to Cho and G3P by Gpcpd1
+[Reaction:1483118] PS is decarboxylated to PE by Pisd
+[Reaction:1483078] PS transports from the ER membrane to the IM membrane
+[Reaction:1483172] PC is transphosphatidylated to PG by Pld1-4/6
+[Reaction:1483154] PA transports from the outer to the inner mitochondrial membrane
+[Reaction:1483231] GPETA is hydrolyzed to ETA and G3P by Gpcpd1
+[Reaction:984713] Kinesin-2 is a heterotrimer
+[Reaction:984753] Kinesin-9 is a dimer
+[Reaction:984820] Xenopus kinesin-12 is a dimer
+[Reaction:984665] Kinesin-8 is a dimer
+[BlackBoxEvent:2974720] Gamma-secretase cleaves Cntn1:Notch2 to release NICD2
+[BlackBoxEvent:983702] Phosphorylation of ITAMs of Ig-alpha (Cd79a) and Ig-beta (Cd79b)
+[Reaction:2974714] Notch2 binds Cntn1
+[Reaction:983160] Interaction of Erp57 with MHC class I HC
+[Reaction:990504] Ncd is a dimer
+[Reaction:2482219] Collagen type IX degradation
+[Reaction:2482182] Cleavage of collagen type VIII by ELANE
+[Reaction:2485115] Collagen type III degradation by MMP10
+[Reaction:2484859] Collagen type XI degradation by MMP1,2,3,9
+[Reaction:2484854] Collagen type X degradation by MMP3, 13
+[Reaction:2484869] Collagen type X degradation by MMP1,2
+[Reaction:2484927] Collagen type XVI degradation
+[Reaction:2484926] Collagen type XXIII ectodomain shedding
+[Reaction:2484948] Collagen XIV degradation
+[Reaction:2484957] Collagen type XVII ectodomain shedding

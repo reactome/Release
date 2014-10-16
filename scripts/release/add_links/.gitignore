@@ -1,7 +1,2 @@
-log*/*
-*.txt
-*.err
-*.log
-*.dump
-4* 
-5*
+*
+!*.pl

@@ -27,7 +27,7 @@ public class DatabaseSchemaUpdates {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca", 
                                             "gk_central", 
                                             "authortool", 
-                                            "***REMOVED***");
+                                            "**REMOVED**");
         Collection<GKInstance> instances = dba.fetchInstancesByClass(ReactomeJavaConstants.SequenceOntology);
         System.out.println("Total SequenceOntology instances: " + instances.size());
         try {

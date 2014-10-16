@@ -24,7 +24,7 @@ override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
     
     cmd("Updating stable id database",
-	[["mysql -e -p$pass use reactome_stable_identifiers; select * from DbParams; update DbParams set dbName='gk_current' where dbName='$db';"]],
+	[["mysql -e -u $user -p$pass 'use reactome_stable_identifiers; select * from DbParams; update DbParams set dbName=\'gk_current\' where dbName=\'$db\';'"]],
 	{"ssh" => $live_server}
     );
 };

@@ -39,7 +39,7 @@ public class MySQLAdaptorTest {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca", 
                                             "test_gk_central_new_schema_041212",
                                             "authortool",
-                "***REMOVED***");
+                "**REMOVED**");
         Schema schema = dba.getSchema();
         AuthorToolAppletUtilities.saveLocalSchema(schema);
     }
@@ -286,7 +286,7 @@ public class MySQLAdaptorTest {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca", 
                                             "test_reactome_41", 
                                             "authortool", 
-                                            "***REMOVED***");
+                                            "**REMOVED**");
         List<AttributeQueryRequest> queries = new ArrayList<MySQLAdaptor.AttributeQueryRequest>();
         
         // Get ReferenceGeneProduct for the specified gene id
