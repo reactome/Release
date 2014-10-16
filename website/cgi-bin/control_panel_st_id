@@ -77,7 +77,7 @@ eval {
 	}
 	
 	if (!$identifier) {
-	    handle_error("I could not figure out whiuch stable Id you mean (), I give up");
+	    handle_error("I could not figure out which stable ID you mean ($extended_st_id), I'm sorry, I give up");
 	}
 	if (!$version) {
 	    handle_warning("The version was not specified for $extended_st_id.  Using version $real_current_stable_id_version");
@@ -87,6 +87,7 @@ eval {
 	if ($version > $real_current_stable_id_version) {
 	    handle_warning("The specified version for $extended_st_id is not valid.  Using $identifier.$real_current_stable_id_version");
             $version = $real_current_stable_id_version;
+	    $extended_st_id = "$identifier.$version";
 	}
 
 

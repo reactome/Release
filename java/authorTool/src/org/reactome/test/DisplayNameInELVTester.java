@@ -34,7 +34,7 @@ public class DisplayNameInELVTester {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                             "test_slice_37b",
                                             "authortool",
-                                            "***REMOVED***");
+                                            "**REMOVED**");
         Collection<?> c = dba.fetchInstancesByClass(ReactomeJavaConstants.PathwayDiagram);
         dba.loadInstanceAttributeValues(c, new String[]{ReactomeJavaConstants.storedATXML});
         String regex = "reactomeId=\"((\\d)+)\"";
