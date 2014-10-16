@@ -265,36 +265,6 @@ CREATE TABLE `Complex` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `ComplexDomain`
---
-
-DROP TABLE IF EXISTS `ComplexDomain`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ComplexDomain` (
-  `DB_ID` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`DB_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ComplexDomain_2_hasComponent`
---
-
-DROP TABLE IF EXISTS `ComplexDomain_2_hasComponent`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ComplexDomain_2_hasComponent` (
-  `DB_ID` int(10) unsigned default NULL,
-  `hasComponent_rank` int(10) unsigned default NULL,
-  `hasComponent` int(10) unsigned default NULL,
-  `hasComponent_class` varchar(64) default NULL,
-  KEY `DB_ID` (`DB_ID`),
-  KEY `hasComponent` (`hasComponent`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `Complex_2_entityOnOtherCell`
 --
 
@@ -550,7 +520,7 @@ CREATE TABLE `DatabaseObject` (
   KEY `created` (`created`),
   KEY `_displayName` (`_displayName`(10)),
   KEY `stableIdentifier` (`stableIdentifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=5577031 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5626753 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -619,35 +589,6 @@ DROP TABLE IF EXISTS `Disease`;
 CREATE TABLE `Disease` (
   `DB_ID` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`DB_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `Domain`
---
-
-DROP TABLE IF EXISTS `Domain`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Domain` (
-  `DB_ID` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`DB_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `Domain_2_name`
---
-
-DROP TABLE IF EXISTS `Domain_2_name`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `Domain_2_name` (
-  `DB_ID` int(10) unsigned default NULL,
-  `name_rank` int(10) unsigned default NULL,
-  `name` text,
-  KEY `DB_ID` (`DB_ID`),
-  KEY `name` (`name`(10))
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1786,36 +1727,6 @@ CREATE TABLE `GO_MolecularFunction_2_regulate` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `GenericDomain`
---
-
-DROP TABLE IF EXISTS `GenericDomain`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `GenericDomain` (
-  `DB_ID` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`DB_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `GenericDomain_2_hasInstance`
---
-
-DROP TABLE IF EXISTS `GenericDomain_2_hasInstance`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `GenericDomain_2_hasInstance` (
-  `DB_ID` int(10) unsigned default NULL,
-  `hasInstance_rank` int(10) unsigned default NULL,
-  `hasInstance` int(10) unsigned default NULL,
-  `hasInstance_class` varchar(64) default NULL,
-  KEY `DB_ID` (`DB_ID`),
-  KEY `hasInstance` (`hasInstance`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `GeneticallyModifiedResidue`
 --
 
@@ -2347,23 +2258,6 @@ CREATE TABLE `PhysicalEntity_2_figure` (
   `figure_class` varchar(64) default NULL,
   KEY `DB_ID` (`DB_ID`),
   KEY `figure` (`figure`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `PhysicalEntity_2_hasDomain`
---
-
-DROP TABLE IF EXISTS `PhysicalEntity_2_hasDomain`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `PhysicalEntity_2_hasDomain` (
-  `DB_ID` int(10) unsigned default NULL,
-  `hasDomain_rank` int(10) unsigned default NULL,
-  `hasDomain` int(10) unsigned default NULL,
-  `hasDomain_class` varchar(64) default NULL,
-  KEY `DB_ID` (`DB_ID`),
-  KEY `hasDomain` (`hasDomain`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -3429,26 +3323,6 @@ CREATE TABLE `Requirement` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `SequenceDomain`
---
-
-DROP TABLE IF EXISTS `SequenceDomain`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `SequenceDomain` (
-  `DB_ID` int(10) unsigned NOT NULL default '0',
-  `endCoordinate` int(10) default NULL,
-  `referenceEntity` int(10) unsigned default NULL,
-  `referenceEntity_class` varchar(64) default NULL,
-  `startCoordinate` int(10) default NULL,
-  PRIMARY KEY  (`DB_ID`),
-  KEY `endCoordinate` (`endCoordinate`),
-  KEY `referenceEntity` (`referenceEntity`),
-  KEY `startCoordinate` (`startCoordinate`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `SequenceOntology`
 --
 
@@ -3870,4 +3744,4 @@ CREATE TABLE `_Release` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-05-28 16:59:59
+-- Dump completed on 2014-10-10 18:19:36

@@ -847,7 +847,7 @@ public class PredictedPathwayDiagramGeneratorFromDB extends DiagramGeneratorFrom
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca", 
                                             "test_reactome_34_brie8_diagrams",
                                             "authortool", 
-                                            "T001test");
+                                            "**REMOVED**");
         PredictedPathwayDiagramGeneratorFromDB generator = new PredictedPathwayDiagramGeneratorFromDB();
         generator.setMySQLAdaptor(dba);
         generator.setImageBaseDir("tmp");

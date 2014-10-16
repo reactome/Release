@@ -27,7 +27,7 @@ public class CleanUpVertexSearchableTermInstances {
         MySQLAdaptor dba = new MySQLAdaptor("brie8.cshl.edu",
                                             "test_gk_central_121108",
                                             "authortool",
-                                            "T001test",
+                                            "**REMOVED**",
                                             3306);
         return dba;
     }

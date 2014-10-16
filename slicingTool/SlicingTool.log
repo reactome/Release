@@ -1,2 +1,0 @@
-2014-05-28 17:00:08,026 [main] INFO  org.gk.slicing.ProjectBasedSlicingEngine  - Total events as specified: 9315
-2014-05-28 17:00:29,210 [main] INFO  org.gk.slicing.ProjectBasedSlicingEngine  - Total instances after figuing out event references: 10160

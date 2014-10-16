@@ -486,7 +486,7 @@ public class EventCheckOutHandler {
 //        MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca",
 //                                            "gk_central",
 //                                            "authortool",
-//                                            "T001test");
+//                                            "**REMOVED**");
         PersistenceManager.getManager().setActiveMySQLAdaptor(dba);
         GKInstance event = dba.fetchInstance(109581L);
         XMLFileAdaptor fileAdaptor = new XMLFileAdaptor();

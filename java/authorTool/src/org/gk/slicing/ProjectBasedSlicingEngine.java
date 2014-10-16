@@ -436,7 +436,7 @@ public class ProjectBasedSlicingEngine extends SlicingEngine {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                             "test_gk_central",
                                             "authortool",
-                                            "T001test",
+                                            "**REMOVED**",
                                             3306);
         String fileName = "ver28_topics.txt";
         
