@@ -97,7 +97,7 @@ public class ComplexCompartmentChecker {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca",
                                             "gk_central",
                                             "authortool",
-                                            "T001test");
+                                            "**REMOVED**");
         return dba;
     }
     

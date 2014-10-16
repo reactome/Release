@@ -22,10 +22,10 @@
     <a class="button icon overview" href="http://wiki.reactome.org/index.php/Usersguide"><span>User Guide</span></a>
     </div>
 	  <div class="grid_5">
-	    <a class="button icon download" href="/download-data/"><span>Data Download</span></a>
+	    <a class="button icon download" href="/pages/download-data/"><span>Data Download</span></a>
 	  </div>
           <div class="grid_5 omega">
-        <a class="button icon contact" href="/?page_id=328"><span>Contact Us</span></a>
+        <a class="button icon contact" href="/pages/contact-us/"><span>Contact Us</span></a>
       </div>
       
       <div class="clear"></div> <!--clear second row of buttons -->
@@ -51,6 +51,7 @@
     <div class="grid_9"> 
             <div class="contentwrap">
             <div class="contenthead">
+
             Tweets  </div>
             <div class="contentbody">
             

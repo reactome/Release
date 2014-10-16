@@ -19,15 +19,15 @@ has '+mail' => ( default => sub {
 					};
 				}
 );
+has '+user_input' => (default => sub {{'fallback' => {'query' => 'Redirect requests to fallback (y/n):'}}});
 
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
     
-    my $port = ($gkbdir eq "gkb_prod" ) ? 8000 : 80;
-    my $config_file = "/usr/local/gkb_test/website/conf/httpd.conf";
-    $config_file = "$website/conf/httpd.conf"; # For testing only
+    my $config_file = "/usr/local/gkb/website/conf/httpd.conf";
+    my $fallback = $self->user_input->{'fallback'}->{'response'} =~ /^y/ ? 1 : 0;
     
-    cmd("Rerouting requests to port $port", [["perl rerouterequests.pl $port $config_file $live_server"]]);    
+    cmd("Rerouting requests", [["perl rerouterequests.pl $config_file $live_server $fallback"]]);    
     cmd("Restarting apache", [["echo $sudo | sudo -S /etc/init.d/apache2 restart"]], {"ssh" => $live_server});
 };
   

@@ -33,9 +33,9 @@ open (OUTPUT2, ">$output2"); # Output file
 
 # Database connection info 
 my $db = "test_reactome_$num"; 
-my ($user,$host,$pass) = ('authortool','localhost','T001test');
+my ($user,$host,$pass) = ('authortool','localhost','**REMOVED**');
 
-#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','T001test');
+#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','**REMOVED**');
 
 my $dba = GKB::DBAdaptor->new
     (

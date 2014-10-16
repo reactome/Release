@@ -23,7 +23,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
-    my $html_dir = replace_gkb_alias_in_dir($html, "gkb_test");
+    my $html_dir = replace_gkb_alias_in_dir($html, "gkb");
 
     cmd("Clearing search cache",
 	[

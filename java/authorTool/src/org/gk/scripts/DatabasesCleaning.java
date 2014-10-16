@@ -177,7 +177,7 @@ public class DatabasesCleaning {
         String connectionStr = "jdbc:mysql://reactome.oicr.on.ca:3306/test_reactome_39";
         Properties prop = new Properties();
         prop.setProperty("user", "authortool");
-        prop.setProperty("password", "T001test");
+        prop.setProperty("password", "**REMOVED**");
         prop.setProperty("autoReconnect", "true");
         // The following two lines have been commented out so that
         // the default charset between server and client can be used.
@@ -225,7 +225,7 @@ public class DatabasesCleaning {
         MySQLAdaptor dba = new MySQLAdaptor("reactomedev.oicr.on.ca", 
                                             "gk_central",
                                             "authortool",
-                                            "T001test");
+                                            "**REMOVED**");
         Collection<GKInstance> soInstances = dba.fetchInstanceByAttribute(ReactomeJavaConstants.DatabaseIdentifier,
                                                                           ReactomeJavaConstants._displayName, 
                                                                           "like", 

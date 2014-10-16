@@ -11,7 +11,7 @@ use constant EXE => join(' ',
 my $release_nr = shift or die "Usage: ./validate_biopax.pl release_num\n";
 
 opendir D, "../biopaxexporter/$release_nr" or die $!;
-my @owl = grep {/owl/} readdir D;
+my @owl = grep {!/_/} grep {/owl/} readdir D;
 closedir D;			 
 
 for my $species (@owl) {

@@ -58,7 +58,7 @@ public class DisplayNameExtractor {
             MySQLAdaptor dba = new MySQLAdaptor("brie8.cshl.edu",
                                                 "gk_central",
                                                 "authortool",
-                                                "T001test",
+                                                "**REMOVED**",
                                                 3306);
             DisplayNameExtractor extractor = new DisplayNameExtractor(dba);
             extractor.extract("resources");
