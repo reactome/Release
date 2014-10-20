@@ -1,0 +1,53 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:component-scan base-package="org.reactome.server.analysis.core.components"/>
+    <context:component-scan base-package="org.reactome.server.analysis.service.controller"/>
+    <context:component-scan base-package="org.reactome.server.analysis.service.entrypoint"/>
+
+    <mvc:annotation-driven/>
+
+    <context:property-placeholder location="classpath:/analysis.properties" />
+
+    <mvc:resources mapping="/**" location="/resources/" />
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="10485760"/> <!-- 10 MB  // 52428800 = 50 MB-->
+    </bean>
+
+    <bean id="fileSizeExceeds" class= "org.reactome.server.analysis.service.handler.HandlerExceptionResolverImpl" />
+
+    <bean id="analysisData" class="org.reactome.server.analysis.core.data.AnalysisData">
+        <property name="fileName" value="${analysis.data.file}"/>
+    </bean>
+
+    <bean id="fileCheckerController" class="org.reactome.server.analysis.service.helper.FileCheckerController">
+        <property name="pathDirectory" value="${analysis.data.tmp}"/>
+        <property name="maxSize" value="5368709120"/> <!-- 104857600 = 100MB // 5368709120 = 5 GB // 10737418240 = 10GB -->
+        <property name="threshold" value="524288000"/> <!-- 10485760 = 10MB // 524288000 = 500MB // 1073741824 = 1GB -->
+        <property name="time" value="10000"/> <!-- 10 sec -->
+        <property name="ttl" value="604800000"/> <!-- 1 week (SAB suggestion) -->
+    </bean>
+
+    <bean id="analysisHelper" class="org.reactome.server.analysis.service.helper.AnalysisHelper">
+        <property name="pathDirectory" value="${analysis.data.tmp}"/>
+    </bean>
+
+    <bean id="templateCacher" class="org.reactome.server.analysis.service.utils.HeaderFooterCacher">
+        <constructor-arg name="server" value="${template_server_host}"/>
+    </bean>
+
+     <!-- Creates a controller at /api-docs from this uri, which serves swagger's raw documentation in JSON format. -->
+    <bean id="springSwaggerConfig" class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
+    <bean class="org.reactome.server.analysis.service.swagger.AnalysisServiceSwaggerConfig" />
+</beans>
