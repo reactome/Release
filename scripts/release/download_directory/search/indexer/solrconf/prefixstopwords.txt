@@ -1,0 +1,78 @@
+aracyc
+biogps
+biogps gene
+biogps_gene
+biogpsgene
+biomodels
+brenda
+cas
+chebi
+cl
+comound
+cosmic
+ctd
+ctd gene
+ctd_gene
+ctdgene
+dbsnp
+dbsnp gene
+dbsnp_gene
+dbsnpgene
+dictybase
+dock
+dock blaster
+dock_blaster
+dockblaster
+doid
+ec
+embl
+ensembl
+flybase
+genecards
+genedb
+go
+hapmap
+intact
+intenz
+kegg
+kegg gene
+kegg_gene
+kegggene
+mirbase
+mod
+ncbi
+ncbi gene
+ncbi_gene
+ncbigene
+ncbi nucleotide
+ncbi_nucleotide
+ncbinucleotide
+ncbi taxonomy
+ncbi_taxonomy
+ncbitaxonomy
+ncbi protein
+ncbi_protein
+ncbiprotein
+omim
+orcid
+plasmodb
+prf
+pdb
+pubchem
+pubchem compound
+pubchem_compound
+pubchemcompound
+pubchem substance
+pubchem_substance
+pubchemsubstance
+refseq
+rhea
+sgd
+so
+tair
+ucsc
+ucsc human
+ucsc_human
+ucschuman
+uniprot
+wormbase
