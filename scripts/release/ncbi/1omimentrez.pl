@@ -1,6 +1,7 @@
 #!/usr/bin/perl  -w
 use strict;
 use Net::FTP;
+use Getopt::Long;
 
 #to get mim2gene file from Entrez gene ftp site
 
@@ -23,8 +24,12 @@ my  $ftp = Net::FTP->new(Host => "ftp.ncbi.nih.gov", Debug => 0, Passive => 1);
     $ftp->get("mim2gene_medgen") or die $instructions . $ftp->message;
     $ftp->quit;
 
-my $num = $ARGV[0];
-chomp $num;
+our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
+(@ARGV)  || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
+&GetOptions( "user:s", "host:s", "pass:s", "port:i", "db:s");
+$opt_db  || die "Need database name (-db).\n";
+
+my ($num) = $opt_db =~ /(\d+)/;
 
 my $output = 'genemim'.$num;  #this is for gene to mim id mapping; for test not for sending out;
 open (OUTPUT, ">archive/$output");
