@@ -347,6 +347,17 @@ my @cmds = (
      1,
      1,
      "perl fetchEmptyProject.pl reactome_data_model -outputdir $release_nr $fetch_empty_project_db_options"
+    ],
+    
+    [
+     "Search Indexer",
+     1,
+     1,
+     "cd $GK_ROOT_DIR",
+     "git subtree pull --prefix scripts/release/download_directory/search --squash search master",
+     "cd -",
+     "perl search_indexer.pl -release $release_nr $reactome_db_options",
+     "mv ebeye.xml.gz $release_nr"
     ]
 );
 
