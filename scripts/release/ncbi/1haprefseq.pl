@@ -2,7 +2,6 @@
 #this script is used to generate Uniprot to Refseq id mapping for Hapmap
 
 # Author: Unknown
-# Last modified: Wed April 27th, 2011
 # Edited by: Joel Weiser (joel.weiser@oicr.on.ca)
 
 use lib '/usr/local/gkbdev/modules';
@@ -15,34 +14,24 @@ use Getopt::Long;
 use strict;
 use GKB::Utils;
 
-my $num;
-unless ($ARGV[0]) {
-   $num = <STDIN>;
-   chomp $num;
-} else {
-   $num = $ARGV[0];
-}
+our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
+(@ARGV)  || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
+&GetOptions( "user:s", "host:s", "pass:s", "port:i", "db:s");
+$opt_db  || die "Need database name (-db).\n";
 
-
-#my $num ='30';
+my ($num) = $opt_db =~ /(\d+)/;
 my $output1 = "archive/haprefseq_errorfile.txt"; 
 my $output2 = 'archive/hapmap_reactome'.$num."\.txt";
 
 open (OUTPUT, ">$output1"); # Error file
 open (OUTPUT2, ">$output2"); # Output file
 
-# Database connection info 
-my $db = "test_reactome_$num"; 
-my ($user,$host,$pass) = ('authortool','localhost','**REMOVED**');
-
-#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','**REMOVED**');
-
 my $dba = GKB::DBAdaptor->new
     (
-     -dbname => $db,
-     -user   => $user,
-     -host   => $host, # host where mysqld is running
-     -pass   => $pass,
+     -dbname => $opt_db,
+     -user   => $opt_user,
+     -host   => $opt_host, # host where mysqld is running
+     -pass   => $opt_pass,
      -port   =>  3306
          );
         

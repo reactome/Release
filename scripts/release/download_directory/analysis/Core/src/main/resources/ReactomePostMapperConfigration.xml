@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PostMappers>
+    <PostMapper class="DatabaseIdentifier" mapper="org.reactome.core.mapper.DatabaseIdentifierMapper" />
+    <PostMapper class="Event" mapper="org.reactome.core.mapper.EventMapper" />
+    <PostMapper class="Pathway" mapper="org.reactome.core.mapper.PathwayMapper" />
+    <PostMapper class="ReactionlikeEvent" mapper="org.reactome.core.mapper.ReactionlikeEventMapper" />
+    <PostMapper class="StableIdentifier" mapper="org.reactome.core.mapper.StableIdentifierMapper" />
+    <PostMapper class="PhysicalEntity" mapper="org.reactome.core.mapper.PhysicalEntityMapper"/>
+    <PostMapper class="ReferenceSequence" mapper="org.reactome.core.mapper.ReferenceSequenceMapper"/>
+</PostMappers>

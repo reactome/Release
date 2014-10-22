@@ -11,6 +11,11 @@ use Getopt::Long;
 use strict;
 use GKB::Utils;
 
+our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
+(@ARGV)  || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
+&GetOptions( "user:s", "host:s", "pass:s", "port:i", "db:s");
+$opt_db  || die "Need database name (-db).\n";
+
 my $count =0;
 
 my $tag = "<LinkSet>";
@@ -28,10 +33,9 @@ my $tag7 = "</LinkSet>\n";
 
 my $tag6 = $tag1b.$tag2a;
 
-my $num = $ARGV[0];
 
 #my $num='31';
-
+my ($num) = $opt_db =~ /(\d+)/;
 chomp $num;
 
 my $output2 = 'gene_reactome'.$num.'.xml';
@@ -74,17 +78,15 @@ open (OUTPUT3, ">archive/$output3") or die "Can't write to file";
 
 print OUTPUT3 "UniProt ID"."\t"."Gene id"."\n\n";
 
-
-my ($user,$host,$pass) = ('authortool','localhost','**REMOVED**');
  
 #my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','**REMOVED**');
 
 my $dba = GKB::DBAdaptor->new
     (
-     -dbname => $db,
-     -user   => $user,
-     -host   => $host, # host where mysqld is running
-     -pass   => $pass,
+     -dbname => $opt_db,
+     -user   => $opt_user,
+     -host   => $opt_host, # host where mysqld is running
+     -pass   => $opt_pass,
      -port   =>  3306
          );
 

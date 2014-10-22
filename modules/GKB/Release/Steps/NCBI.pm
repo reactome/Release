@@ -31,7 +31,7 @@ override 'run_commands' => sub {
     
     # Run entrez scripts
     foreach my $script (qw/gene protein omim/) {
-    	cmd("Running $script script", [['./1' . $script . 'entrez.pl', $version]]);
+    	cmd("Running $script script", [['./1' . $script . "entrez.pl -user $user -pass $pass -db $db"]]);
     }
 
     my $ncbipass = $self->user_input->{'ncbi_ftp_pass'}->{'response'};
@@ -39,8 +39,8 @@ override 'run_commands' => sub {
     cmd("Uploading NCBI files", [["perl uploadncbi.pl $ncbipass $version"]]);
     
     # Run hapmap and UCSC scripts
-    cmd("Running hapmap script", [["./1haprefseq.pl", $version]]);
-    cmd("Running UCSC script", [["./1ucscentity.pl", $version]]);
+    cmd("Running hapmap script", [["./1haprefseq.pl -user $user -pass $pass -db $db"]]);
+    cmd("Running UCSC script", [["./1ucscentity.pl -user $user -pass $pass -db $db"]]);
 };
     
 1;
