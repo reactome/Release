@@ -11,12 +11,12 @@ use strict;
 my $count =0;
 my $count1 =0;
 
-my $num = $ARGV[0];
+our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
+(@ARGV)  || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
+&GetOptions( "user:s", "host:s", "pass:s", "port:i", "db:s");
+$opt_db  || die "Need database name (-db).\n";
 
-my $db = 'test_reactome_' . $num;
-chomp $db;
-
-
+my ($num) = $opt_db =~ /(\d+)/;
 
 my $archive = 'archive/';
 my $out_put = $archive . 'ucsc_errorfile.txt';
@@ -50,16 +50,11 @@ my %hash;
 
 my $dbid;
 
-
-my ($user,$host,$pass) = ('authortool','localhost','**REMOVED**');
-
-#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','**REMOVED**');
-
 my $dba = GKB::DBAdaptor->new(
-     -dbname => $db,
-     -user   => $user,
-     -host   => $host, # host where mysqld is running
-     -pass   => $pass,
+     -dbname => $opt_db,
+     -user   => $opt_user,
+     -host   => $opt_host, # host where mysqld is running
+     -pass   => $opt_pass,
      -port   =>  3306
 );
 
