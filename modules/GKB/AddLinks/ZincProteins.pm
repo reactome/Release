@@ -1,14 +1,13 @@
 
 =head1 NAME
 
-GKB::AddLinks::Zinc
+GKB::AddLinks::ZincProteins
 
 =head1 SYNOPSIS
 
 =head1 DESCRIPTION
 
-
-Original code lifted by David Croft from the script add_ucsc_links.pl, probably from Imre.
+Adds ZINC linkers to reference peptides 
 
 =head1 SEE ALSO
 
@@ -26,10 +25,11 @@ disclaimers of warranty.
 
 =cut
 
-package GKB::AddLinks::Zinc;
+package GKB::AddLinks::ZincProteins;
 
 use GKB::Config;
 use GKB::AddLinks::Builder;
+use GKB::Zinc;
 use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 
@@ -53,8 +53,16 @@ sub new {
     $pkg->get_ok_field();
 
     my $self = $pkg->SUPER::new();
-
     return $self;
+}
+
+sub mapper {
+    my $self = shift;
+    my $dba = shift;
+    if ($dba) {
+        $self->{mapper} = GKB::Zinc->new($dba);
+    }
+    return $self->{mapper};
 }
 
 # Needed by subclasses to gain access to object variables defined in
@@ -65,6 +73,23 @@ sub get_ok_field {
     %ok_field = $pkg->SUPER::get_ok_field();
 
     return %ok_field;
+}
+
+
+sub filter_zinc_peptides {
+    my $self = shift;
+    my $peptides = shift;
+    my $mapper = $self->mapper();
+    my $proteins_to_keep = $mapper->fetch_proteins();
+
+    my @keep_peptides;
+    for my $pep (@$peptides) {
+	my $uniprot = $pep->Identifier->[0];
+	next unless $proteins_to_keep->{$uniprot};
+	print STDERR "filter_zinc_proteins: I am keeping $uniprot\n";
+	push @keep_peptides, $pep;
+    }
+    return \@keep_peptides;
 }
 
 sub buildPart {
@@ -78,8 +103,9 @@ sub buildPart {
     my $dba = $self->builder_params->refresh_dba();
     $dba->matching_instance_handler(
         new GKB::MatchingInstanceHandler::Simpler );
-
-    my $ref_seqs = $self->fetch_reference_peptide_sequences(1);
+    $self->mapper($dba);
+    my $seqs = $self->fetch_reference_peptide_sequences(1);
+    my $ref_seqs = $self->filter_zinc_peptides($seqs);
 
     my $attribute = 'crossReference';
     $self->set_instance_edit_note("${attribute}s inserted by $pkg");
@@ -88,16 +114,17 @@ sub buildPart {
     $dba->load_class_attribute_values_of_multiple_instances(
         'DatabaseIdentifier', 'identifier', $ref_seqs );
 
+
     my $zinc_ref_db =
-      $self->builder_params->reference_database->get_zinc_reference_database();
+      $self->builder_params->reference_database->get_zinc_target_reference_database();
 
     for my $ref_seq ( @{$ref_seqs} ) {
         print STDERR "$pkg.buildPart: i->Identifier="
           . $ref_seq->Identifier->[0] . "\n";
 
-    # Remove identifiers to make sure the mapping is up-to-date, keep others
-    # this isn't really necessary as long as the script is run on the slice only
-    # But a good thing to have if you need to run the script a second time.
+	# Remove identifiers to make sure the mapping is up-to-date, keep others
+	# this isn't really necessary as long as the script is run on the slice only
+	# But a good thing to have if you need to run the script a second time.
         $self->remove_typed_instances_from_attribute( $ref_seq, $attribute,
             $zinc_ref_db );
 

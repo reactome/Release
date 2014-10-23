@@ -176,10 +176,15 @@ my %reference_database_info_hash = (
         'URL'  => 'http://www.wormbase.org/',
         'AccessUrl' => 'http://www.wormbase.org/db/seq/sequence?name=###ID###;class=Gene_name'
     },
+    'ZINC_target' => {
+        'Name' => ['ZINC_target'],
+        'URL'  => 'http://zinc.docking.org/',
+        'AccessUrl' => ' http://zinc.docking.org/targets/###ID###'
+    },
     'ZINC' => {
         'Name' => ['ZINC'],
         'URL'  => 'http://zinc.docking.org/',
-        'AccessUrl' => ' http://zinc.docking.org/targets/###ID###'
+        'AccessUrl' => 'http://zinc.docking.org/substance/###ID###'
     },
 );
 $reference_database_info_hash{'RefSeqPeptide'} = $reference_database_info_hash{'RefSeq'};
@@ -882,11 +887,18 @@ sub get_pdb_reference_database {
     return $self->get_reference_database('PDB');
 }
 
-# Returns a ReferenceDatabase instance for ZINC
+# Returns a ReferenceDatabase instance for ZINC substance
 sub get_zinc_reference_database {
     my ($self) = @_;
 
     return $self->get_reference_database('ZINC');
+}
+
+# Returns a ReferenceDatabase instance for ZINC target
+sub get_zinc_target_reference_database {
+    my ($self) = @_;
+
+    return $self->get_reference_database('ZINC_target');
 }
 
 # Returns a ReferenceDatabase instance for PRO.
