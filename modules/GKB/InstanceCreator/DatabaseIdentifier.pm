@@ -377,7 +377,7 @@ sub get_pro_database_identifier {
         $self->reference_database->get_pro_reference_database(), $identifier );
 }
 
-# Gets a DatabaseIdentifier instance for ZINC.
+# Gets a DatabaseIdentifier instance for ZINC substance.
 #
 # Returns a DatabaseIdentifier instance.
 sub get_zinc_database_identifier {
@@ -387,6 +387,15 @@ sub get_zinc_database_identifier {
         $self->reference_database->get_zinc_reference_database(), $identifier );
 }
 
+# Gets a DatabaseIdentifier instance for ZINC target.
+#
+# Returns a DatabaseIdentifier instance.
+sub get_zinc_target_database_identifier {
+    my ( $self, $identifier ) = @_;
+
+    return $self->get_database_identifier(
+        $self->reference_database->get_zinc_target_reference_database(), $identifier );
+}
 
 # Gets a DatabaseIdentifier instance for Rhea.
 #
