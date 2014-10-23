@@ -104,7 +104,8 @@ my @resources = (
     'OrphanetToUniprotReferenceDNASequence',
     'DOCKBlasterToUniprotDatabaseIdentifier',
     'RHEAIdentifierToReactionlikeEvent',
-    'Zinc'
+    'ZincProteins',
+    'ZincMolecules'
 );
 
 my $resource;
