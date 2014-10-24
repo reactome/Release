@@ -43,14 +43,24 @@ $opt_pass ||= $GK_DB_PASS;
 $opt_port ||= $GK_DB_PORT;
 
 
-my $solr_url = "http://localhost:7080/solr";
-
 my $present_dir = getcwd();
-my $output = "$present_dir/ebeye.xml";
-chdir "$GK_ROOT_DIR/scripts/release/download_directory/search/indexer";
-system("mvn clean package -PSearch_Indexer-Local");
-system("mv target/Indexer-1.0-jar-with-dependencies.jar indexer.jar");
-system("java -jar -Xms5120M -Xmx10240M indexer.jar -d $opt_db -u $opt_user -p $opt_pass -s $solr_url -c src/main/resources/controlledvocabulary.csv -o $output -r $opt_r");
-system("gzip $output");
+
+chdir "$GK_ROOT_DIR/scripts/release/download_directory/analysis/Core";
+system("mvn clean package -PAnalysis-Core-Command-Line");
+system("mv target/tools-jar-with-dependencies.jar analysis_core.jar");
+my $analysis_core = "java -jar -Xms5120M -Xmx10240M analysis_core.jar";
+my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
+system("$analysis_core build $credentials -o $present_dir/analysis_v$opt_r.bin");
+
+foreach my $resource (qw/UniProt ChEBI Ensembl/) {
+    my $export = "$analysis_core export $credentials -i $present_dir/analysis_v$opt_r.bin";
+    system("$export -r $resource -o $present_dir/$resource\2Reactome.txt");
+    system("$export -r $resource -o $present_dir/$resource\2Reactome_All_Levels.txt -all");
+}
+
+my %hierarchy = (details => "ReactomePathways.txt", relationship => "ReactomePathwaysRelation.txt");
+while(my ($type, $output) = each %hierarchy) {
+    system("$analysis_core hierarchy -t $type -i $present_dir/analysis_v$opt_r.bin -o $present_dir/$output");
+}
 
 print "$0 has finished its job\n";
