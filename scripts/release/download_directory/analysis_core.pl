@@ -54,8 +54,8 @@ system("$analysis_core build $credentials -o $present_dir/analysis_v$opt_r.bin")
 
 foreach my $resource (qw/UniProt ChEBI Ensembl/) {
     my $export = "$analysis_core export $credentials -i $present_dir/analysis_v$opt_r.bin";
-    system("$export -r $resource -o $present_dir/$resource\2Reactome.txt");
-    system("$export -r $resource -o $present_dir/$resource\2Reactome_All_Levels.txt -all");
+    system("$export -r $resource -o $present_dir/$resource"."2Reactome.txt");
+    system("$export -r $resource -o $present_dir/$resource"."2Reactome_All_Levels.txt --all");
 }
 
 my %hierarchy = (details => "ReactomePathways.txt", relationship => "ReactomePathwaysRelation.txt");
