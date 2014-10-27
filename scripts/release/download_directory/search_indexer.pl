@@ -43,7 +43,7 @@ $opt_pass ||= $GK_DB_PASS;
 $opt_port ||= $GK_DB_PORT;
 
 
-my $solr_url = "http://localhost:7080/solr";
+my $solr_url = "http://reactomerelease.oicr.on.ca:7080/solr";
 
 my $present_dir = getcwd();
 my $output = "$present_dir/ebeye.xml";
@@ -51,6 +51,6 @@ chdir "$GK_ROOT_DIR/scripts/release/download_directory/search/indexer";
 system("mvn clean package -PSearch_Indexer-Local");
 system("mv target/Indexer-1.0-jar-with-dependencies.jar indexer.jar");
 system("java -jar -Xms5120M -Xmx10240M indexer.jar -d $opt_db -u $opt_user -p $opt_pass -s $solr_url -c src/main/resources/controlledvocabulary.csv -o $output -r $opt_r");
-system("gzip $output");
+system("gzip -f $output");
 
 print "$0 has finished its job\n";
