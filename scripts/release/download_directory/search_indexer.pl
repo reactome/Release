@@ -43,7 +43,7 @@ $opt_pass ||= $GK_DB_PASS;
 $opt_port ||= $GK_DB_PORT;
 
 
-my $solr_url = "http://reactomerelease.oicr.on.ca:7080/solr";
+my $solr_url = "http://reactomerelease.oicr.on.ca:7080/solr/reactome";
 
 my $present_dir = getcwd();
 my $output = "$present_dir/ebeye.xml";
