@@ -10,6 +10,13 @@ use Getopt::Long;
 use strict;
 use GKB::Utils;
 
+our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
+(@ARGV)  || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
+&GetOptions( "user:s", "host:s", "pass:s", "port:i", "db:s");
+$opt_db  || die "Need database name (-db).\n";
+
+my ($num) = $opt_db =~ /(\d+)/;
+
 my $count =0;
 
 my $tag1 = "http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=";
@@ -34,9 +41,6 @@ my %instructions = (-INSTRUCTIONS =>
 my %hash;
 
 my $dbid;
-
-my $num = $ARGV[0];
-chomp $num;
   
 my $out_put1 = 'protein_reactome'.$num.'.ft';
 
@@ -44,9 +48,6 @@ my $out_put1 = 'protein_reactome'.$num.'.ft';
 open (OUTPUT1, ">archive/$out_put1");
 
 #Eg. my $out_put1 = 'protein_reactome16.ft';
-
-my $db = "test_reactome_$num";
-chomp $db;
 
 my $out_put3 = 'prot_gene'.$num; #this file is needed for getting OMIM mapping
 #my $out_put3 = 'prot_gene16';
@@ -65,19 +66,12 @@ print OUTPUT1  "-" x  56,"\n";
 
 print OUTPUT1 "linkid:   0\n";
 
-my ($user,$host,$pass) = ('authortool','localhost','**REMOVED**');
-
- 
-#my ($db,$user,$host,$pass) = ('test_reactome_16','authortool','brie8','**REMOVED**'); 
-
-#my ($db,$user,$host,$pass) = ('gk_central','authortool','brie8','**REMOVED**');
-
 my $dba = GKB::DBAdaptor->new
     (
-     -dbname => $db,
-     -user   => $user,
-     -host   => $host, # host where mysqld is running
-     -pass   => $pass,
+     -dbname => $opt_db,
+     -user   => $opt_user,
+     -host   => $opt_host, # host where mysqld is running
+     -pass   => $opt_pass,
      -port   =>  3306
     );
 
