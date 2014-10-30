@@ -51,7 +51,8 @@
     <div class="grid_9"> 
             <div class="contentwrap">
             <div class="contenthead">
-            Tweets </div>
+
+            Tweets  </div>
             <div class="contentbody">
             
             <div class="announcement">
