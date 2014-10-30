@@ -358,6 +358,17 @@ my @cmds = (
      "cd -",
      "perl search_indexer.pl -release $release_nr $reactome_db_options",
      "mv ebeye.xml.gz $release_nr"
+    ],
+    
+    [
+     "Analysis Core",
+     1,
+     1,
+     "cd $GK_ROOT_DIR",
+     "git subtree pull --prefix scripts/release/download_directory/analysis --squash analysis master",
+     "cd -",
+     "perl analysis_core.pl -release $release_nr $reactome_db_options",
+     "mv *.txt $release_nr"
     ]
 );
 
