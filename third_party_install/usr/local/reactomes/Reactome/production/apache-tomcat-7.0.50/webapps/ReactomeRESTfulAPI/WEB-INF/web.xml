@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+           version="2.5">
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <!--Production-->
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+        <!--Production Fallback-->
+        <!--<param-value>/WEB-INF/applicationContext_LiveFallback.xml</param-value>-->
+        <!--Curator Site-->
+        <!--<param-value>/WEB-INF/applicationContext_Curator.xml</param-value>-->
+        <!--Dev Site-->
+        <!--<param-value>/WEB-INF/applicationContext_Dev.xml</param-value>-->
+        <!--Localhost-->
+        <!--<param-value>/WEB-INF/applicationContext_Local.xml</param-value>-->
+    </context-param>
+    <!-- Need to use false to avoid the unique webAppRootKey problem -->
+    <context-param>
+        <param-name>log4jExposeWebAppRoot</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    
+<!--     Comment out the following logging if http request logging if not needed     -->
+<!--     <context-param> -->
+<!--         <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name> -->
+<!--         <param-value>com.sun.jersey.api.container.filter.LoggingFilter</param-value> -->
+<!--     </context-param> -->
+<!--     <context-param> -->
+<!--         <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name> -->
+<!--         <param-value>com.sun.jersey.api.container.filter.LoggingFilter</param-value> -->
+<!--     </context-param> -->
+    
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>ReactomeRestAPI</servlet-name>
+        <servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+        
+        <!-- Comment out the following logging if http request logging if not needed -->    
+<!--         <init-param> -->
+<!--             <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name> -->
+<!--             <param-value>com.sun.jersey.api.container.filter.LoggingFilter</param-value> -->
+<!--         </init-param> -->
+<!--         <init-param> -->
+<!--             <param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name> -->
+<!--             <param-value>com.sun.jersey.api.container.filter.LoggingFilter</param-value> -->
+<!--         </init-param> -->
+<!--         <init-param> -->
+<!--             <param-name>com.sun.jersey.config.feature.logging.DisableEntitylogging</param-name> -->
+<!--             <param-value>true</param-value> -->
+<!--         </init-param> -->
+        
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>org.reactome.restfulapi</param-value>
+        </init-param>
+        <init-param>
+             <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+             <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReactomeRestAPI</servlet-name>
+        <url-pattern>/RESTfulWS/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>

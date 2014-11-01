@@ -6,6 +6,7 @@ Once reactome is installed in the path:
 
 The config files can be installed (as root)
 
+tar czvf config.tar.gz usr etc
 cd /
 tar zxvf /usr/local/reactome/Reactome/production/GKB/third_party_install/config.tar.gz 
 
