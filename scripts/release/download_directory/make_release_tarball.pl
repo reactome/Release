@@ -67,8 +67,8 @@ my @cmds = (
 
 
 my @cmds2 = (
-    qq(tar czf reactome.tar.gz reactome),
-    qq(cp reactome.tar.gz $rhome),
+    qq(tar czf ../reactome.tar.gz *),
+    qq(cp ../reactome.tar.gz $rhome),
     qq(cp $repo/third_party_install/install_reactome.sh $rhome),
 );
 
@@ -79,6 +79,9 @@ for my $cmd (@cmds) {
 }
 
 cleanse_solr_data();
+chdir 'reactome';
+
+print "CWD: ", `pwd`;
 
 for my $cmd (@cmds2) {
     print "$cmd\n";
@@ -106,6 +109,7 @@ sub cleanse_solr_data {
     while (my $path = <Solr/cores/reactome_v*>) {
 	if ($path !~ /reactome_v$release$/) {
 	    print STDERR "Removing old release $path\n"; 
+	    system "rm -fr $path";
 	}
     }
 }

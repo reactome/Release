@@ -129,7 +129,7 @@ sub buildPart {
             $zinc_ref_db );
 
         my $zinc_database_identifier = $self->builder_params->database_identifier
-          ->get_zinc_database_identifier( $ref_seq->Identifier->[0] );
+          ->get_zinc_target_database_identifier( $ref_seq->Identifier->[0] );
         $ref_seq->add_attribute_value( $attribute, $zinc_database_identifier );
         $dba->update_attribute( $ref_seq, $attribute );
         $ref_seq->add_attribute_value( 'modified', $self->instance_edit );
