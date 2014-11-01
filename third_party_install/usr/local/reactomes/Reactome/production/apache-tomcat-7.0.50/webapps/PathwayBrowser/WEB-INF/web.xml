@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <!-- Default page to serve -->
+    <welcome-file-list>
+        <welcome-file>PathwayBrowser.html</welcome-file>
+    </welcome-file-list>
+
+    <!-- RESTFul WS PROXY Configuration (ONLY USED IN DEV MODE) -->
+    <servlet>
+        <servlet-name>ReactomeRESTfulAPI</servlet-name>
+        <servlet-class>uk.ac.ebi.pride.web.util.servlet.proxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyHost</param-name>
+            <param-value>localhost</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPort</param-name>
+            <param-value>80</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPath</param-name>
+            <param-value>/ReactomeRESTfulAPI/RESTfulWS</param-value>
+        </init-param>
+        <!--<init-param>-->
+        <!--<param-name>maxFileUploadSize</param-name>-->
+        <!--<param-value></param-value>-->
+        <!--</init-param>-->
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReactomeRESTfulAPI</servlet-name>
+        <url-pattern>/ReactomeRESTfulAPI/RESTfulWS/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- RESTFul WS PROXY Configuration (ONLY USED IN DEV MODE) -->
+    <servlet>
+        <servlet-name>ReactomeAnalysis</servlet-name>
+        <servlet-class>uk.ac.ebi.pride.web.util.servlet.proxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyHost</param-name>
+            <param-value>localhost</param-value>
+            <!--<param-value>reactomedev.oicr.on.ca</param-value>-->
+        </init-param>
+        <init-param>
+            <param-name>proxyPort</param-name>
+            <param-value>8080</param-value>
+            <!--<param-value>7080</param-value>-->
+        </init-param>
+        <init-param>
+            <param-name>proxyPath</param-name>
+            <param-value>/</param-value>
+            <!--<param-value>/AnalysisService</param-value>-->
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReactomeAnalysis</servlet-name>
+        <url-pattern>/AnalysisService/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Reactome IMAGES (ONLY USED IN DEV MODE) -->
+    <servlet>
+        <servlet-name>FiguresProxy</servlet-name>
+        <servlet-class>uk.ac.ebi.pride.web.util.servlet.proxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyHost</param-name>
+            <param-value>www.reactome.org</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPort</param-name>
+            <param-value>8000</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPath</param-name>
+            <param-value>/figures</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FiguresProxy</servlet-name>
+        <url-pattern>/figures/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- chEBI PROXY Configuration -->
+    <servlet>
+        <servlet-name>ChEBIProxy</servlet-name>
+        <servlet-class>uk.ac.ebi.pride.web.util.servlet.proxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyHost</param-name>
+            <param-value>www.ebi.ac.uk</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPort</param-name>
+            <param-value>80</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPath</param-name>
+            <param-value>/webservices/chebi/2.0/test/</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChEBIProxy</servlet-name>
+        <url-pattern>/ebi/webservices/chebi/2.0/test/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Gene Expression Atlas PROXY Configuration -->
+    <servlet>
+        <servlet-name>GXAProxy</servlet-name>
+        <servlet-class>uk.ac.ebi.pride.web.util.servlet.proxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyHost</param-name>
+            <param-value>www.ebi.ac.uk</param-value>
+            <!--<param-value>wwwdev.ebi.ac.uk</param-value>-->
+        </init-param>
+        <init-param>
+            <param-name>proxyPort</param-name>
+            <param-value>80</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPath</param-name>
+            <param-value>/gxa</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GXAProxy</servlet-name>
+        <url-pattern>/gxa/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Rhea PROXY Configuration -->
+    <servlet>
+        <servlet-name>RheaProxy</servlet-name>
+        <servlet-class>uk.ac.ebi.pride.web.util.servlet.proxy.ProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyHost</param-name>
+            <param-value>www.ebi.ac.uk</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPort</param-name>
+            <param-value>80</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyPath</param-name>
+            <param-value>/rhea/rest/1.0/ws/reaction</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RheaProxy</servlet-name>
+        <url-pattern>/rhea/rest/1.0/ws/reaction/*</url-pattern>
+    </servlet-mapping>
+</web-app>
