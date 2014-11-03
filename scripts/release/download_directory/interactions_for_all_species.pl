@@ -18,6 +18,7 @@ use GKB::Utils;
 use GKB::Instance;
 use GKB::Config;
 use GKB::DBAdaptor;
+use Data::Dumper;
 use Getopt::Long;
 
 $GKB::Config::NO_SCHEMA_VALIDITY_CHECK = undef;
@@ -47,25 +48,24 @@ my $species = $dba->fetch_instance_by_remote_attribute
     (
      'Species',
      [
-      ['species:Pathway.representedPathway.PathwayDiagram','IS NOT NULL',[]],
+        ['species:Pathway.representedPathway:PathwayDiagram','IS NOT NULL',[]],
      ]
     );
-
+    
 my $related_species = $dba->fetch_instance_by_remote_attribute
     (
      'Species',
      [
-      ['relatedSpecies:Pathway.representedPathway.PathwayDiagram','IS NOT NULL',[]],
+      ['relatedSpecies:Pathway.representedPathway:PathwayDiagram','IS NOT NULL',[]],
      ]
     );
 
 foreach (@$related_species) {
-    next unless /influenza|immunodeficiency/;
-    
+    next unless $_->_displayName->[0] =~ /influenza|immunodeficiency/i;
+       
     push @$species, $_;
 }
 
-@{$species};
 # TODO: Probably we should get all species whose pathways have diagrams tather than FrontPage items.
 
 print "$0: species=";
@@ -98,12 +98,6 @@ my $db = $dba->db_name;
 foreach my $sp (@{$species}) {
     my $sp_name = $sp->displayName;
     my $tmp = lc($sp_name);
-
-#    # TODO: Delete this!
-#    if (!($tmp =~ /immun/) && !($tmp =~ /fluenza/)) {
-#        print STDERR "$0: Skipping species: $tmp\n";
-#        next;
-#    }
 
     print "$0: Processing species: $tmp\n";
 
