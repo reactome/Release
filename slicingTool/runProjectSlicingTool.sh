@@ -26,6 +26,8 @@ sleep 5
 
 screen -d -m java -Xmx8G -jar ProjectSlicingTool.jar
 
+sleep 3
+
 tail -f SlicingTool.log $LOG
 
 exit 0;
