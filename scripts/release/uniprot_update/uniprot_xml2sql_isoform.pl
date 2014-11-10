@@ -462,7 +462,7 @@ open( FD, ">./$update_dir/duplicated_db_id.txt" ) || die "Can't open duplicated 
 print "Deleting obsolete instances with no referers....\n";
 
 foreach my $sp_ac ( sort keys %reactome_gp ) {
-    if ( `grep -m 1 '$sp_ac' $trembl_file` ) {
+    if ( `grep -m 1 '$sp_ac' $update_dir/$trembl_file` ) {
         print FT "$sp_ac\n";
         delete( $reactome_gp{$sp_ac} );
     } else {
@@ -526,7 +526,7 @@ print "Preparing reports...\n";
 my %no_referrer = ();
 
 foreach ( sort keys %dup_db_id ) {
-    next if `grep -m 1 '$dup_db_id{$_}' $trembl_file`;
+    next if `grep -m 1 '$dup_db_id{$_}' $update_dir/$trembl_file`;
     print FD "$dup_db_id{$_}\t$_\n";
 }
 
