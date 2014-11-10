@@ -369,6 +369,14 @@ my @cmds = (
      "cd -",
      "perl analysis_core.pl -release $release_nr $reactome_db_options",
      "mv *.txt $release_nr"
+    ],
+    
+    [
+     "Pathway Summation Mapping file",
+     1,
+     1,
+     "perl pathway2summation.pl $reactome_db_options",
+     "mv pathway2summation.txt $release_nr"
     ]
 );
 
