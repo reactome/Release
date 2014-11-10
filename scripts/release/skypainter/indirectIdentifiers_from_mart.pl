@@ -103,7 +103,7 @@ foreach my $rpg_id (keys %accs) {
 		my $ids = $enst_to_ids{$enst};
 		delete $ids->{$rpg_id};
     
-		$i->add_attribute_value_if_necessary('otherIdentifier', keys %$ids);
+		$i->add_attribute_value_if_necessary('otherIdentifier', sort {fc($a) cmp fc($b)} keys %$ids);
 	    }
 	};
     }
