@@ -16,20 +16,38 @@ else
 fi
 
 echo "
-I am going to echo the output to the screen below
+Running ProjectSlicingTool...
+"
 
-Hit Control-C to exit when you are done...
+sleep 2
 
-Running ProjectSlicingTool..."
-
-sleep 5
+echo "
+ " > SlicingTool.log
+echo "
+ " > $LOG
 
 screen -d -m java -Xmx8G -jar ProjectSlicingTool.jar
 
-sleep 3
+tail -f SlicingTool.log $LOG 2>/dev/null &
 
-tail -f SlicingTool.log $LOG
+WAIT=1
+while [[ -n $WAIT ]] 
+do
+  sleep 30
+  DONE=$(grep 'Total time for slicing' SlicingTool.log | perl -pe 's/^.+Total/Total/')
+  if [[ -n $DONE ]] 
+  then
+    echo Finished slicing $DONE
+    WAIT=
+  fi
+done
 
+killall -9 tail >/dev/null 2>&1
+
+echo "
+
+All Done!
+"
 exit 0;
 
 
