@@ -91,6 +91,11 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	$dba->update_attribute($reference_molecule, "identifier");
 	$dba->update_attribute($reference_molecule, "name");
 	
+	my $display_name = "$chebi_name [ChEBI:$up_to_date_identifier]";
+	$reference_molecule->_displayName(undef);
+	$reference_molecule->_displayName($display_name);
+	$dba->update_attribute($reference_molecule, "_displayName");		
+	
 	$outdated_molecule_identifier_counter++;
 	
 }
