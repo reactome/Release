@@ -52,26 +52,56 @@ my %seen; # Prevents duplication in the file
 open(my $output, ">", "event_qa_$opt_db.out");
 	
 
-my $ar = $dba->fetch_instance(-CLASS => 'Pathway'); # Obtains a reference to the array of all Reactome pathways
+my $ar = $dba->fetch_instance(-CLASS => 'Event'); # Obtains a reference to the array of all Reactome events
 
-# Every pathway in reactome is processed
-foreach my $pathway (@{$ar}) {
-	foreach my $event ($pathway, @{get_events($pathway)}) {
-		next if $seen{$event->db_id}++;
-		
-		if ($event->species->[1] && !$event->reverse_attribute_value('inferredFrom')) {
-			report($event, $output, 'More than 1 species for event: ');
-			next;
+# Every event in reactome is processed
+foreach my $event (@{$ar}) {
+	next if $seen{$event->db_id}++;
+	
+	if ($event->species->[1] && !$event->reverse_attribute_value('inferredFrom')) {
+		report($event, $output, 'More than 1 species for event: ');
+		next;
+	}
+	
+	my $pathways = get_top_level_events($event);
+	if (@$pathways) {
+		foreach my $pathway (@$pathways) {
+			report($event, $output, 'Human pathway has non human event: ') if ($pathway->species->[0]->name->[0] eq "Homo sapiens" && $event->species->[0]->name->[0] ne "Homo sapiens");
 		}
-		report($event, $output, 'Human pathway has non human event: ') if ($pathway->species->[0]->name->[0] eq "Homo sapiens" && $event->species->[0]->name->[0] ne "Homo sapiens"); 
+	} else {
+		if ($event->precedingEvent->[0]) {
+			foreach my $precedingEvent (@{$event->precedingEvent}) {
+				report($event, $output, 'Human pathway has non human event: ') if ($precedingEvent->species->[0]->name->[0] eq "Homo sapiens" && $event->species->[0]->name->[0] ne "Homo sapiens");
+			}
+		} elsif ($event->reverse_attribute_value('regulator')) {
+			foreach my $regulation (@{$event->reverse_attribute_value('regulator')}) {
+				my $regulatedEntity = $regulation->regulatedEntity->[0];
+				report($event, $output, 'Human pathway has non human event: ') if ($regulatedEntity->species->[0]->name->[0] eq "Homo sapiens" && $event->species->[0]->name->[0] ne "Homo sapiens");
+			}
+		} else {
+			report($event, $output, 'Orphan event: ');
+		}
 	}
 }
 
 
-sub get_events {
-	my $event = shift;
-	return ($event->follow_class_attributes(-INSTRUCTIONS => {'Event' => {'attributes' =>[qw(hasEvent)]}},
+sub get_top_level_events {
+    my $event = shift;
+    return top_events($event->follow_class_attributes(-INSTRUCTIONS => {'Event' => {'reverse_attributes' =>[qw(hasEvent)]}},
 						      -OUT_CLASSES => ['Event']));
+}
+
+sub top_events {
+    my ($events) = @_;
+    my @out;
+    foreach my $e (@{$events}) {
+	@{$e->reverse_attribute_value('hasEvent')} && next; # If the event has a higher level event, it is not a top-level event and is skipped
+#	@{$e->reverse_attribute_value('hasMember')} && next;
+	push @out, $e; # All top-level events collected here
+    }
+    # Filter out reactions
+    @out = grep {$_->is_a('Pathway')} @out; 
+    return \@out; # Returns top-level pathways
 }
 
 sub report {

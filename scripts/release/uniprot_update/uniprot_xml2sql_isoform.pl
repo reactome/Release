@@ -64,8 +64,6 @@ if ($trembl_file =~ /\.gz$/)
 
 # Download sprot file
 my $sprot_file = "uniprot_sprot.xml";
-#my $return = system("wget -Nc --directory-prefix=$update_dir ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/$sprot_file.gz");
-#die "ERROR: Downloading of $sprot_file.gz failed\n" unless ($return == 0);
 my $return = system("gunzip -f $update_dir/$sprot_file.gz");
 die "ERROR: Unzipping of uniprot_sprot.xml failed\n" unless ($return == 0);
 
@@ -463,17 +461,8 @@ open( FD, ">./$update_dir/duplicated_db_id.txt" ) || die "Can't open duplicated 
 
 print "Deleting obsolete instances with no referers....\n";
 
-#save trembl entries - needed further down to identify non-updated entries
-open( TREMBL, "$update_dir/$trembl_file" ) || die "Can't open $update_dir/$trembl_file\n";
-my %trembl;
-while (<TREMBL>) {
-    chomp;
-    $trembl{$_}++;
-}
-close(TREMBL);
-
 foreach my $sp_ac ( sort keys %reactome_gp ) {
-    if ( defined $trembl{$sp_ac} ) {
+    if ( `grep -m 1 '$sp_ac' $update_dir/$trembl_file` ) {
         print FT "$sp_ac\n";
         delete( $reactome_gp{$sp_ac} );
     } else {
@@ -537,7 +526,7 @@ print "Preparing reports...\n";
 my %no_referrer = ();
 
 foreach ( sort keys %dup_db_id ) {
-    next if defined $trembl{ $dup_db_id{$_} };
+    next if `grep -m 1 '$dup_db_id{$_}' $update_dir/$trembl_file`;
     print FD "$dup_db_id{$_}\t$_\n";
 }
 
