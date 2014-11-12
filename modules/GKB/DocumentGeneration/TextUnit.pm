@@ -102,7 +102,7 @@ sub get_type {
     return $self->type;
 }
 
-# Sets the type (e.g. "section_header", "body_text_paragraph", "body_text", "bullit_text", "image", "eof", etc.)
+# Sets the type (e.g. "section_header", "body_text_paragraph", "body_text", "bullet_text", "image", "eof", etc.)
 sub set_type {
     my ($self, $type) = @_;
 
@@ -110,7 +110,7 @@ sub set_type {
 }
 
 # Gets the depth in the section heading hierarchy, or the
-# degree of indentation of a bullit point.  Starts at 0.
+# degree of indentation of a bullet point.  Starts at 0.
 sub get_depth {
     my ($self) = @_;
 
@@ -118,21 +118,21 @@ sub get_depth {
 }
 
 # Sets the depth in the section heading hierarchy, or the
-# degree of indentation of a bullit point.  Starts at 0.
+# degree of indentation of a bullet point.  Starts at 0.
 sub set_depth {
     my ($self, $depth) = @_;
 
     $self->depth($depth);
 }
 
-# Gets the number in the bullit list
+# Gets the number in the bullet list
 sub get_number {
     my ($self) = @_;
 
     return $self->number;
 }
 
-# Sets the number in the bullit list
+# Sets the number in the bullet list
 sub set_number {
     my ($self, $number) = @_;
 

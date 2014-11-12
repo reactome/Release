@@ -397,6 +397,17 @@ sub get_zinc_target_database_identifier {
         $self->reference_database->get_zinc_target_reference_database(), $identifier );
 }
 
+# Gets a DatabaseIdentifier instance for EFO
+#
+# Returns a DatabaseIdentifier instance. 
+sub get_efo_database_identifier {
+    my ( $self, $identifier ) = @_;
+
+    return $self->get_database_identifier(
+        $self->reference_database->get_efo_reference_database(), $identifier );
+}
+
+
 # Gets a DatabaseIdentifier instance for Rhea.
 #
 # Returns a DatabaseIdentifier instance.
