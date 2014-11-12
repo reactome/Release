@@ -365,36 +365,6 @@ sub get_preface {
     
     my $logger = get_logger(__PACKAGE__);
 
-#    # Pull the text out of the about.html file
-#    my $content = $self->get_about_html_content();
-#    my $text = "";
-#    my @lines = GKB::HTMLUtils->extract_lines_from_html($content, 'begin about', 'end about');
-#    my $line;
-#    foreach $line (@lines) {
-#	    $line = GKB::HTMLUtils->remove_html_tags($line);
-#	    $line = GKB::HTMLUtils->remove_white_padding($line);
-#	    $line .= ' ';
-#    	$text .= $line;
-#    }
-#    
-#    # Get rid of any spaces that got added at the beginning or end
-#	$text = GKB::HTMLUtils->remove_white_padding($text);
-#	
-#	# Tidy up commas and full-stops
-#    $text =~ s/ +,/,/g;
-#    $text =~ s/ +\././g;
-#    $text =~ s/,/, /g;
-#    $text =~ s/, +/, /g;
-#    $text =~ s/\./. /g;
-#    $text =~ s/\. +/.  /g;
-#    
-#    # Remove stuff that smells of HTML comments
-#    $text =~ s/^-->//;
-#    $text =~ s/<!--$//;
-#    
-#    # Pop a newline onto the end, otherwise it doesn't get treated
-#    # as a paragraph
-#    $text .= "\n";
     my $text = "REACTOME is an open-source, open access, manually curated and peer-reviewed pathway database. Pathway annotations are authored by expert biologists, in collaboration with Reactome editorial staff and cross-referenced to many bioinformatics databases. These include NCBI Entrez Gene, Ensembl and UniProt databases, the UCSC and HapMap Genome Browsers, the KEGG Compound and ChEBI small molecule databases, PubMed, and Gene Ontology.\n";
     
     $logger->info("get_preface: text=|$text|");
@@ -431,35 +401,6 @@ sub get_acknowledgements {
 		}
 		$text .= ".\n";
     }
-
-#    @lines = GKB::HTMLUtils->extract_lines_from_html($content, '<TH>Cold Spring Harbor Laboratory', 'TABLE');
-#    my @cshl_team = $self->get_members(\@lines);
-#    @lines = GKB::HTMLUtils->extract_lines_from_html($content, '<TH>European Bioinformatics Institute', 'TABLE');
-#    my @ebi_team = $self->get_members(\@lines);
-#    @lines = GKB::HTMLUtils->extract_lines_from_html($content, '<TH>New York University', 'TABLE');
-#    my @nyu_team = $self->get_members(\@lines);
-#    @lines = GKB::HTMLUtils->extract_lines_from_html($content, '<TH>Ontario Cancer Research Institute', 'TABLE');
-#    my @oicr_team = $self->get_members(\@lines);
-#    @lines = GKB::HTMLUtils->extract_lines_from_html($content, '<TH>Gene Ontology Consortium', 'TABLE');
-#    my @go_team = $self->get_members(\@lines);
-#    
-#    my @teams = ();
-#    push(@teams, @cshl_team);
-#    push(@teams, @ebi_team);
-#    push(@teams, @nyu_team);
-#    push(@teams, @oicr_team);
-#    push(@teams, @go_team);
-#    @teams = sort {$self->get_last_word($a) cmp $self->get_last_word($b)} @teams;
-#    my $team = "";
-#    my $member;
-#    foreach $member (@teams) {
-#    	if (!($team eq "")) {
-#    		$team .= ", ";
-#    	}
-#    	$team .= $member;
-#    }
-#
-#    $text .= "The Reactome project, and therefore the existence of this book, depends finally on the Reactome team members themselves: $team.\n";
 
     return $text;
 }
@@ -790,6 +731,11 @@ sub get_chapters_from_events_text_units {
 			next;
 		}
 		
+		# If we are reporting a disease pathway, skip normal pathways
+		if (!@{$event->disease} > 0 && $self->{diseased} && $event->is_a("Pathway")) {
+		    next;
+		}
+
 		# Only include reactions if the user wants them
 		if (!$event->is_a("ReactionlikeEvent") || $reaction_representation) {
 		    # Emit event
@@ -866,6 +812,11 @@ sub get_reviewers_report_introduction {
     my @text_units = ();
     my $text_unit;
 
+    my $disease = @{$event->disease} > 0;
+
+    # ignore normal pathways if this is a disease pathway
+    $self->{diseased}++;
+ 
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("section_header");
     $text_unit->set_contents("Introduction");
@@ -873,43 +824,113 @@ sub get_reviewers_report_introduction {
     push @text_units, $text_unit;
 
     my $instance_name = $self->get_instance_name($event);
-	my $text = "This report is intended for reviewers of the pathway \"$instance_name\".  It has been automatically generated.";
+    my $text = "This report is intended for reviewers of the pathway <font color=red>\"$instance_name\"</font>. It has been automatically generated.";
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("body_text_paragraph");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    $text = "Please Note:",
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("section_internal_header");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    $text = "non-ASCII characters (primarily in author names) are not displayed correctly in this document. We apologize for this inconvenience.";
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("bullet_text");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    $text = "Each reaction description in this report starts with a reaction diagram that shows the input and output molecules for that reaction, any catalysts and regulators, and that lists the reactions that immediately precede and follow it.";
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("bullet_text");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    $text = "The description of any human reaction that has been inferred from a reaction in another species is followed (in the text) by a description of the corresponding reaction in that other species. These are referred to as “Source” reactions in this document. A more detailed description of the human reaction can be found by following the hyperlink to the corresponding webpage.";
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("bullet_text");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    $text = "You may come across overlapping/redundant information in the text summaries of the events. We include this redundancy to accommodate users who are not reading the module through as a chapter but rather coming to the website to visit individual pages. Each summary is meant to provide some context. We realize that this is not optimal for the person who happens to be reading the module as a chapter, but we try to strike a balance. Any suggestions for improvement are welcome.";
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("bullet_text");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    $text = "Our reference list is not necessarily complete. For each reaction, we aim to provide at least one primary literature reference that demonstrates the occurrence of a given reaction in humans. We unfortunately do not have the resources to identify all relevant references, but we would be happy to cite any that you feel should be included.\n\n";
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("bullet_text");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+	
+    $text = "Review of text document";
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("section_internal_header");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    $text = "In your review, we would appreciate it if you could verify that the events that we describe (pathways and reactions) are annotated clearly and that the molecular details of the reactions are accurate. ";
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("body_text");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    $text = "Review of Website Pathway Browser";
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("section_internal_header");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    $text = <<END;
+A more detailed description of the pathway as well as a pathway diagram can be found on our website.
+We would appreciate your feedback on the content of the website and its navigability as well. A link to a short tutorial of the pathway browser
+can be found at the top of the web page. The zoomable pathway diagram is interactive. Text descriptions are revealed in the panel below
+the diagram under the overview tab. To view a text description, select a participating molecules or reaction node in the diagram. Clicking
+on an event in the hierarchy in the left panel will highlight the event(s) in the diagram and a text description will be displayed in the panel below.
+END
+;
+    $text =~ s/\n/ /g;
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("body_text");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+
+    # Only show this section if it is a disease event
+    if ($disease) {
+	$text = "<b>A note on Disease pathways:</b> Disease associated reactions and entities are highlighted in red. The ".
+	    "link below explains how the disease pathways are organized and how to navigate their diagrams.";
 	$text_unit = GKB::DocumentGeneration::TextUnit->new();
-	$text_unit->set_type("body_text");
+	$text_unit->set_type("body_text_paragraph");
 	$text_unit->set_contents($text);
 	push @text_units, $text_unit;
-	
-	$text = "Please note that non-ASCII characters (primarily in author names) are not displayed correctly in this document. We apologize for this inconvenience.";
-	$text_unit = GKB::DocumentGeneration::TextUnit->new();
-	$text_unit->set_type("body_text");
-	$text_unit->set_contents($text);
-	push @text_units, $text_unit;
-	
-	$text = "You may come across overlapping/redundant information in the text summaries of the events. The reason that we include this redundancy is to accommodate users that are not reading the module through as a chapter but rather coming to the website to visit individual pages. Each summary is meant to provide some context. We realize that this is not optimal for the person that happens to be reading the module as a chapter, but we try to strike a balance. Any suggestions for improvement are welcome!";
-	$text_unit = GKB::DocumentGeneration::TextUnit->new();
-	$text_unit->set_type("body_text");
-	$text_unit->set_contents($text);
-	push @text_units, $text_unit;
-	
-	$text = "Our reference list is not necessarily complete. For each reaction, we aim to provide at least one primary literature reference that demonstrates the occurrence of a given reaction in humans. We unfortunately do not have the resources to identify all relevant references, but we would be happy to cite any that you feel should be included.";
-	$text_unit = GKB::DocumentGeneration::TextUnit->new();
-	$text_unit->set_type("body_text");
-	$text_unit->set_contents($text);
-	push @text_units, $text_unit;
-	
-	$text = "Each reaction description is followed by a reaction diagram that shows the input and output molecules for that reaction and lists the reaction that immediately precedes it.  ";
-	$text_unit = GKB::DocumentGeneration::TextUnit->new();
-	$text_unit->set_type("body_text");
-	$text_unit->set_contents($text);
-	push @text_units, $text_unit;
-	
-	$text = "The description of any human reaction that has been inferred from a reaction in another species is followed (in the text) by a description of the corresponding reaction in that other species. At first glance, this may appear to be a duplication, but the primary literature reference and the molecular description are provided only for the reference species. A more detailed description of the human reaction can be found on the corresponding webpage.";
-	$text_unit = GKB::DocumentGeneration::TextUnit->new();
-	$text_unit->set_type("body_text");
-	$text_unit->set_contents($text);
-	push @text_units, $text_unit;
-	
-	return @text_units;
+	push @text_units, 
+	$self->hyperlink("Navigating Disease pathways", "http://wiki.reactome.org/index.php/Usersguide#Navigating_Disease_Pathway_Diagrams");
+    }
+
+    $text = 'A more detailed description the website and its features can be found in our Users Guide.';
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("body_text_paragraph");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    push @text_units, $self->hyperlink("Reactome User Guide","http://wiki.reactome.org/index.php/Usersguide");
+    
+    $text = qq(<b>\*Note that the \"Expression\" and \"Structure\" data are not available before pubic release as it is provided by external resources.</b>);
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("body_text_paragraph");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("vertical_space");
+    $text_unit->set_contents(2);
+    push @text_units, $text_unit;
+
+    return @text_units;
 }
 
 sub get_report_authors {
@@ -963,7 +984,7 @@ sub get_subevent_summary {
 		    $text_unit->set_contents(2);
 		    push @text_units, $text_unit;
 	
-		    # Create a bullited list of the sub-events that will subsequently
+		    # Create a bulleted list of the sub-events that will subsequently
 		    # be explored in depth.
 		    $text_unit = GKB::DocumentGeneration::TextUnit->new();
 		    $text_unit->set_type("section_internal_header");
@@ -979,7 +1000,7 @@ sub get_subevent_summary {
 		    $text_unit->set_contents(1);
 		    push @text_units, $text_unit;
 		
-		    my $bullit_text;
+		    my $bullet_text;
 		    foreach $event (@{$events}) {
 				if ($event->is_a("Pathway")) {
 				    $event_type = "Pathway";
@@ -1003,13 +1024,13 @@ sub get_subevent_summary {
 				    $event_name = "UNKNOWN";
 				}
 			    
-				$bullit_text = "  $event_type: $event_name";
+				$bullet_text = "  $event_type: $event_name";
 				if (!$event->is_a("ReactionlikeEvent") && !( GKB::Utils->is_pathway_with_content($event, $new_depth, $depth_limit, $include_images_flag) )) {
-				    $bullit_text .= " (no information currently available for this sub-pathway).";
+				    $bullet_text .= " (no information currently available for this sub-pathway).";
 				}
 				$text_unit = GKB::DocumentGeneration::TextUnit->new();
-				$text_unit->set_type("bullit_text");
-				$text_unit->set_contents($bullit_text);
+				$text_unit->set_type("bullet_text");
+				$text_unit->set_contents($bullet_text);
 				push @text_units, $text_unit;
 		    }
 		}
@@ -1085,50 +1106,55 @@ sub get_instance_text_units {
     my $instance_name = $self->get_instance_name($instance);
     my $instance_db_id = $instance->db_id();
 
-	my $instance_authors;
-	my $instance_editors;
-	my $instance_reviewers;
-	
-	my $event_type = lc($instance->class());
-	if ($instance->is_a("Event")) {
-		$event_type = "event";
-		if ($instance->is_a("ReactionlikeEvent")) {
-			$event_type = "reaction";
-		} elsif ($instance->is_a("Pathway")) {
-			$event_type = "pathway";
-		}
+    my $instance_authors;
+    my $instance_editors;
+    my $instance_reviewers;
+    
+    my $event_type = lc($instance->class());
+    if ($instance->is_a("Event")) {
+	$event_type = "event";
+	if ($instance->is_a("ReactionlikeEvent")) {
+	    $event_type = "reaction";
+	} elsif ($instance->is_a("Pathway")) {
+	    $event_type = "pathway";
 	}
+    }
 
     # Emit a header containing the instance name, to start the new section
+    my $disease = @{$instance->disease} > 0;
+    my $skip_pathway = $instance->is_a("Pathway") && !$disease && $self->{diseased};
+
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("section_header");
-    $text_unit->set_contents($new_section . "  " . $instance_name . " (" . $instance->class . ")");
+    if ($disease) {
+	$text_unit->set_contents('<font color="red">'.$new_section . "  " . $instance_name . " (" . $instance->class . ")" . '</font>');
+    }
+    else {
+	$text_unit->set_contents($new_section . "  " . $instance_name . " (" . $instance->class . ")");
+    }
     $text_unit->set_depth($depth);
     push @text_units, $text_unit;
 
-	if ($instance->is_a("ReactionlikeEvent")) {
-	    if ($reaction_representation==1) {
-			@text_units = (@text_units, $self->get_reaction_description_text_units($instance));
-		} elsif ($reaction_representation==2) {
-			@text_units = (@text_units, $self->get_reaction_diagram_text_units($instance));
-	    }
+    if ($instance->is_a("ReactionlikeEvent")) {
+	if ($reaction_representation==1) {
+	    @text_units = (@text_units, $self->get_reaction_description_text_units($instance));
+	} elsif ($reaction_representation==2) {
+	    @text_units = (@text_units, $self->get_reaction_diagram_text_units($instance));
 	}
+    }
 
-    # Emit a hyperlink to the Reactome page for the instance
-#    if ($instance->is_a("Pathway")) { # Hack for Lisa
-#        if (defined $self->hyperlink_base_url && defined $self->hyperlink_db) {
-#            $text_unit = GKB::DocumentGeneration::TextUnit->new();
-#            $text_unit->set_type("vertical_space");
-#            push @text_units, $text_unit;
-#            $text_unit = GKB::DocumentGeneration::TextUnit->new();
-#            $text_unit->set_type("hyperlink");
-#            $text_unit->set_contents("See web page for this $event_type");
-##            $text_unit->set_url($self->hyperlink_base_url . "/cgi%2Dbin/eventbrowser?DB=" . $self->hyperlink_db . "&ID=$instance_db_id");
-#            $text_unit->set_url($self->hyperlink_base_url . "/PathwayBrowser/#FOCUS_PATHWAY_ID=$instance_db_id");
-#            push @text_units, $text_unit;
-#        }
-#    }
-
+    if ($instance->is_a("Pathway")) { 
+        if (defined $self->hyperlink_base_url && defined $self->hyperlink_db) {
+            $text_unit = GKB::DocumentGeneration::TextUnit->new();
+            push @text_units, $text_unit;
+            $text_unit = GKB::DocumentGeneration::TextUnit->new();
+            $text_unit->set_type("hyperlink");
+            $text_unit->set_contents("See web page for this $event_type");
+            $text_unit->set_url($self->hyperlink_base_url . "/PathwayBrowser/#FOCUS_PATHWAY_ID=$instance_db_id");
+            push @text_units, $text_unit;
+        }
+    }
+    
     # If the instance has already been encountered
     # somewhere else, simply emit a reference to the appropriate
     # section, rather than printing out the content.
@@ -1205,6 +1231,20 @@ sub get_instance_text_units {
 
     return @text_units;
 }
+
+
+sub hyperlink {
+    my $self = shift;
+    my $msg  = shift;
+    my $url  = shift;
+
+    my $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("hyperlink");
+    $text_unit->set_contents($msg);
+    $text_unit->set_url($url);
+    return $text_unit;
+}
+
 
 sub get_instances_from_which_inferred() {
     my ($self, $instance, $event_type) = @_;
@@ -1573,7 +1613,7 @@ sub get_flanking_events {
 		    $text_unit->set_contents($flanking_event_text);
 		    push @text_units, $text_unit;
 		    
-		    my $bullit_text;
+		    my $bullet_text;
 		    foreach $flanking_event (@{$flanking_events_ref}) {
 			$flanking_event_type = "event";
 			if ($flanking_event->is_a("ReactionlikeEvent")) {
@@ -1587,14 +1627,14 @@ sub get_flanking_events {
 			    $flanking_event_name = $flanking_event->attribute_value("name")->[0];
 			}
 	
-			$bullit_text = "the $flanking_event_type $flanking_event_name";
+			$bullet_text = "the $flanking_event_type $flanking_event_name";
 			my $flanking_section = $instance_hash->{$flanking_event->db_id()};
 			if ($flanking_section) {
-			    $bullit_text .= " (section " . $instance_hash->{$flanking_event->db_id()} . ")";
+			    $bullet_text .= " (section " . $instance_hash->{$flanking_event->db_id()} . ")";
 			}
 			$text_unit = GKB::DocumentGeneration::TextUnit->new();
-			$text_unit->set_type("bullit_text");
-			$text_unit->set_contents($bullit_text);
+			$text_unit->set_type("bullet_text");
+			$text_unit->set_contents($bullet_text);
 			push @text_units, $text_unit;
 		    }
 		}

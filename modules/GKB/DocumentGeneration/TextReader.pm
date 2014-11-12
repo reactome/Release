@@ -220,7 +220,7 @@ sub get_next_text_units {
 	# from the lines, until nothing more can be extracted.
 	my @text_units = $self->get_header_text_units();
 	if (scalar(@text_units)<1) {
-		@text_units = $self->get_bullit_text_units();
+		@text_units = $self->get_bullet_text_units();
 		if (scalar(@text_units)<1) {
 			@text_units = $self->get_numbered_text_units();
 			if (scalar(@text_units)<1) {
@@ -297,21 +297,21 @@ sub get_header_text_units {
     return @text_units;
 }
 
-sub get_bullit_text_units {
+sub get_bullet_text_units {
     my ($self) = @_;
     
-	print STDERR "TextReader.get_bullit_text_units: entered\n";
+	print STDERR "TextReader.get_bullet_text_units: entered\n";
 
     my @text_units = ();
 	my $line_num;
 	my $line;
 	my $text;
 	for ($line_num=$self->line_num; $line_num<scalar(@{$self->lines}); $line_num++) {
-		print STDERR "TextReader.get_bullit_text_units: OUTER line_num=$line_num\n";
+		print STDERR "TextReader.get_bullet_text_units: OUTER line_num=$line_num\n";
 
 		$line = $self->lines->[$line_num];
 			
-		print STDERR "TextReader.get_bullit_text_units: OUTER line=$line\n";
+		print STDERR "TextReader.get_bullet_text_units: OUTER line=$line\n";
 		
 		# Ig-gnaw this line if it is blank
 		if ($line =~ /^\s*$/) {
@@ -323,20 +323,20 @@ sub get_bullit_text_units {
 			$text =~ s/^[\*\-]\s*//;
 			$line_num++;
 			for (; $line_num<scalar(@{$self->lines}); $line_num++) {
-				print STDERR "TextReader.get_bullit_text_units: INNER line_num=$line_num\n";
+				print STDERR "TextReader.get_bullet_text_units: INNER line_num=$line_num\n";
 
 				$line = $self->lines->[$line_num];
 					
-				print STDERR "TextReader.get_bullit_text_units: INNER line=$line\n";
+				print STDERR "TextReader.get_bullet_text_units: INNER line=$line\n";
 
 				if ($line =~ /^[\*\-]\s*/) {
-					# We just hit the next bullit line -
+					# We just hit the next bullet line -
 					# bomb out without incrementing line_num.
 #					$line_num--;
 					last;
 				}
 				if ($line =~ /^\s*$/) {
-					# Blank line - terminate bullit line -
+					# Blank line - terminate bullet line -
 					# bomb out without incrementing line_num.
 #					$line_num--;
 					last;
@@ -345,10 +345,10 @@ sub get_bullit_text_units {
 				$text .= " $line";
 			}
 			
-			print STDERR "TextReader.get_bullit_text_units: text=$text\n";
+			print STDERR "TextReader.get_bullet_text_units: text=$text\n";
 
 			my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-			$text_unit->set_type("bullit_text");
+			$text_unit->set_type("bullet_text");
 			$text_unit->set_contents($text);
 			push(@text_units, $text_unit);
 		} else {

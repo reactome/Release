@@ -44,12 +44,6 @@ Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::DocumentGeneration::GenerateText);
 
-## Make a note of local variable names
-#for my $attr
-#    (qw(
-#	rtf
-#	) ) { $ok_field{$attr}++; }
-
 sub AUTOLOAD {
     my $self = shift;
     my $attr = $AUTOLOAD;
@@ -536,7 +530,7 @@ sub translate_formatting {
     return @params;
 }
 
-sub generate_bullit_text {
+sub generate_bullet_text {
     my ($self, $text) = @_;
 
     my $rtf = $self->rtf;
@@ -546,10 +540,10 @@ sub generate_bullit_text {
     $rtf->paragraph(
 		    \'\f1',         # 'Font 1 (Courier)
 		    \"\\fs$font_size",
-		    \'\li200',      # 'Left indent
+		    \'\li500',      # 'Left indent
 		    \'\fi-200',     # 'Negative indent for 1st line
 		    \'\bullet',     # 'Emit a bullet point
-		    " $text\n");
+		    \" $text\n");
 }
 
 sub generate_numbered_text {
@@ -567,6 +561,7 @@ sub generate_numbered_text {
 		    " $number.",    #  line number
 		    " $text\n");
 }
+
 
 sub generate_hyperlink {
     my ($self, $text, $url) = @_;
@@ -604,6 +599,8 @@ sub generate_hyperlink {
 		    "\n");
 }
 
+
+
 sub colortableblue {
     my ($self, $text, $url) = @_;
 
@@ -616,9 +613,13 @@ sub colortableblue {
 		    \'\red0',
 		    \'\green0',
 		    \'\blue255;',
+                    \'\red255',
+                    \'\green0',
+                    \'\blue0;', 
 			\'}',			#'
 		;
 }
+
 
 # Treat the supplied text as a header.  Font size is adjusted
 # according to depth in event hierarchy, the deeper, the smaller.
@@ -631,8 +632,6 @@ sub colortableblue {
 # add header stylesheet info.
 sub generate_header {
     my ($self, $depth, $text) = @_;
-
-    my $rtf = $self->rtf;
 
     $self->generate_header_initial_whitespace($depth, $text);
 
@@ -647,9 +646,21 @@ sub generate_header {
     my $depth_param = "\\s$header_num";
     push @params, \$depth_param;
 
-    $rtf->paragraph(@params, $text);
-
-    $self->generate_vertical_space(1);
+    # make header red if required
+    my $rtf = $self->rtf;
+    unless ($text =~ /<font/) {
+	$rtf->paragraph(@params, $text);
+    }
+    else {
+	my $paragraph_rtf_string = '';
+	my $paragraph_rtf = RTF::Writer->new_to_string(\$paragraph_rtf_string);
+	$text =~ s/<\/?font.*?>//g;
+	print STDERR "TEXT $text\n";
+	$paragraph_rtf->paragraph(@params, $text);
+	my $marked_up_rtf_string = '{{\colortbl;\red0\green0\blue255;\red255\green0\blue0;}\cf1'. "\n$paragraph_rtf_string\n" . '}';
+	$rtf->print(\$marked_up_rtf_string);
+	$paragraph_rtf->close();
+    }
 }
 
 # Generate the formatting needed for a header, based on the depth
@@ -680,120 +691,127 @@ sub interpret_markup {
     
     my $logger = get_logger(__PACKAGE__);
 
-	my $rtf_string;
+    my $rtf_string;
     my $rtf;
     
-	# Break up text to extract potential markup
-	my $initial_backarrow_flag = 0;
-	if ($text =~ /^</) {
-		$initial_backarrow_flag = 1;
+    # Break up text to extract potential markup
+    my $initial_backarrow_flag = 0;
+    if ($text =~ /^</) {
+	$initial_backarrow_flag = 1;
+    }
+    my $final_arrow_flag = 0;
+    my @lines = split(/</, $text);
+    my @lines3 = ();
+    my $lines3_counter = 0;
+    foreach my $line (@lines) {
+	if ($initial_backarrow_flag) {
+	    $line = "<$line";
+	} else {
+	    $initial_backarrow_flag = 1;
 	}
-	my $final_arrow_flag = 0;
-	my @lines = split(/</, $text);
-	my @lines3 = ();
-	my $lines3_counter = 0;
-	foreach my $line (@lines) {
-		if ($initial_backarrow_flag) {
-			$line = "<$line";
-		} else {
-			$initial_backarrow_flag = 1;
-		}
-		$final_arrow_flag = 0;
-		if ($line =~ />$/) {
-			$final_arrow_flag = 1;
-		}
-		my @lines2 = split(/>/, $line);
-		foreach my $line2 (@lines2) {
-			$lines3[$lines3_counter] = "$line2>";
-			$lines3_counter++;
-		}
-		if (!$final_arrow_flag) {
-			$lines3[$lines3_counter-1] =~ s/>$//;
-		}
+	$final_arrow_flag = 0;
+	if ($line =~ />$/) {
+	    $final_arrow_flag = 1;
 	}
-	
-	# lines3 has lines containing either plain text or
-	# markup, not mixed.  We can now loop through it
-	# and substitute any RTF markup needed.
-	my $src;
-	my $width;
-	my $height;
-	my $new_text = '';
-	my $i;
-
-	foreach my $line3 (@lines3) {
-		if ($line3 =~ /^</) {
-			# We have markup
-			if ($line3 =~ /^<img /) {
-				# An embedded image
-				$line3 =~ /src="([^"]+)"/;
-				$src = $1;
-				
-				# Remove RTF-specific escape sequences
-				$src =~ s/\\_/-/g;
-				$src =~ s/\\'2e/./g; #'
-				
-				if (!(defined $src) || $src eq '') { #'
-				    $logger->warn("GenerateTextRTF.interpret_markup: WARNING - cannot find image source file, skipping to next line");
-				    next;
-				}
-				if (!(-e $src)) {
-				    $logger->warn("GenerateTextRTF.interpret_markup: WARNING - we cant see the file $src, skipping to next line");
-				    next;
-				}
-				
-				$line3 =~ /width="([^"]+)"/; #"
-				$width = $1;
-				$line3 =~ /height="([^"]+)"/; #"
-				$height = $1;
-
-				# Don't write to the RTF output stream, because we
-				# want to edit the RTF a bit first.
-				$rtf_string = '';
-				$rtf = RTF::Writer->new_to_string(\$rtf_string);
-#				$rtf->image_paragraph('filename' => $src, 'wgoal' => $width, 'wgoal' => $height);
-				$rtf->image_paragraph('filename' => $src);
-				
-				# Chuck out the first and last lines of the RTF
-				# string, they contain paragraph stuff
-				@lines = split(/\n/, $rtf_string);
-				$rtf_string = '';
-				for ($i=1; $i<scalar(@lines)-1; $i++) {
-					my $line = $lines[$i];
-					if (!($rtf_string eq '')) {
-						$rtf_string .= "\n";
-					}
-					$rtf_string .= $line;
-				}
-
-    			$new_text .= $rtf_string;
-				$rtf->close();
-
-				unlink($src); # don't need anymore
-			} elsif ($line3 =~ /^<b>$/) {
-				# Start bold
-				$new_text .= '{\b' . "\n";
-			} elsif ($line3 =~ /^<\/b>$/) {
-				# Stop bold
-				$new_text .= "\n" . '}' . "\n";
-			} elsif ($line3 =~ /^<i>$/) {
-				# Start italics
-				$new_text .= '{\i' . "\n";
-			} elsif ($line3 =~ /^<\/i>$/) {
-				# Stop italics
-				$new_text .= "\n" . '}' . "\n";
-			} else {
-				# unknown markup, or maybe not markup at all
-				$logger->info("GenerateTextRTF.interpret_markup: possible unknown markup, line3=$line3");
-				$new_text .= $line3;
-			}
-		} else {
-			# We have plain text
-			$new_text .= $line3;
-		}
+	my @lines2 = split(/>/, $line);
+	foreach my $line2 (@lines2) {
+	    $lines3[$lines3_counter] = "$line2>";
+	    $lines3_counter++;
 	}
-	
-	return $new_text;
+	if (!$final_arrow_flag) {
+	    $lines3[$lines3_counter-1] =~ s/>$//;
+	}
+    }
+    
+    # lines3 has lines containing either plain text or
+    # markup, not mixed.  We can now loop through it
+    # and substitute any RTF markup needed.
+    my $src;
+    my $width;
+    my $height;
+    my $new_text = '';
+    my $i;
+    
+    foreach my $line3 (@lines3) {
+	if ($line3 =~ /^</) {
+	    # We have markup
+	    if ($line3 =~ /^<img /) {
+		# An embedded image
+		$line3 =~ /src="([^"]+)"/;
+		$src = $1;
+		
+		# Remove RTF-specific escape sequences
+		$src =~ s/\\_/-/g;
+		$src =~ s/\\'2e/./g; #'
+		
+		if (!(defined $src) || $src eq '') { #'
+		    $logger->warn("GenerateTextRTF.interpret_markup: WARNING - cannot find image source file, skipping to next line");
+		    next;
+		}
+		if (!(-e $src)) {
+		    $logger->warn("GenerateTextRTF.interpret_markup: WARNING - we cant see the file $src, skipping to next line");
+		    next;
+		}
+		
+		$line3 =~ /width="([^"]+)"/; #"
+		$width = $1;
+		$line3 =~ /height="([^"]+)"/; #"
+		$height = $1;
+		
+		# Don't write to the RTF output stream, because we
+		# want to edit the RTF a bit first.
+		$rtf_string = '';
+		$rtf = RTF::Writer->new_to_string(\$rtf_string);
+		$rtf->image_paragraph('filename' => $src);
+		
+		# Chuck out the first and last lines of the RTF
+		# string, they contain paragraph stuff
+		@lines = split(/\n/, $rtf_string);
+		$rtf_string = '';
+		for ($i=1; $i<scalar(@lines)-1; $i++) {
+		    my $line = $lines[$i];
+		    if (!($rtf_string eq '')) {
+			$rtf_string .= "\n";
+		    }
+		    $rtf_string .= $line;
+		}
+		
+		$new_text .= $rtf_string;
+		$rtf->close();
+		
+		unlink($src); # don't need anymore
+	    } elsif ($line3 =~ /^<b>$/) {
+		# Start bold
+		$new_text .= '{\b' . "\n";
+	    } elsif ($line3 =~ /^<\/b>$/) {
+		# Stop bold
+		$new_text .= "\n" . '}' . "\n";
+	    } elsif ($line3 =~ /^<i>$/) {
+		# Start italics
+		$new_text .= '{\i' . "\n";
+	    } elsif ($line3 =~ /^<\/i>$/) {
+		# Stop italics
+		$new_text .= "\n" . '}' . "\n";
+	    } elsif ($line3 =~ /^<font/) {
+		my ($color) = $line3 =~ /color=["']?([a-z]+)/i;
+		if ($color && $color =~ /red|blue/) {
+		    $new_text .= '{\rtf1\ansi\deff0{\colortbl;\red0\green0\blue255;\red255\green0\blue0;}\cf1'
+		}
+	    } elsif ($line3 =~ /^<\/font/) {
+		$new_text .= '}';#'\cf1'."\n".'}';
+	    }
+	    else {
+		# unknown markup, or maybe not markup at all
+		$logger->info("GenerateTextRTF.interpret_markup: possible unknown markup, line3=$line3");
+		$new_text .= $line3;
+	    }
+	} else {
+	    # We have plain text
+	    $new_text .= $line3;
+	}
+    }
+    
+    return $new_text;
 }
 
 1;

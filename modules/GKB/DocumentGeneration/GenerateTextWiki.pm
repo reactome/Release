@@ -209,7 +209,7 @@ sub generate_paragraph {
     $self->set_first_page_flag(0);
 }
 
-sub generate_bullit_text {
+sub generate_bullet_text {
     my ($self, $text) = @_;
 
 	my $filehandle = $self->filehandle;
