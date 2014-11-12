@@ -732,7 +732,7 @@ sub get_chapters_from_events_text_units {
 		}
 		
 		# If we are reporting a disease pathway, skip normal pathways
-		if (!@{$event->disease} > 0 && $self->{diseased} && $event->is_a("Pathway")) {
+		if (!(@{$event->disease} > 0) && $self->{diseased} && $event->is_a("Pathway")) {
 		    next;
 		}
 
@@ -815,7 +815,7 @@ sub get_reviewers_report_introduction {
     my $disease = @{$event->disease} > 0;
 
     # ignore normal pathways if this is a disease pathway
-    $self->{diseased}++;
+    $self->{diseased}++ if $disease;
  
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("section_header");
