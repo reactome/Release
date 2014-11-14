@@ -186,6 +186,11 @@ my %reference_database_info_hash = (
         'URL'  => 'http://zinc.docking.org/',
         'AccessUrl' => 'http://zinc.docking.org/substance/###ID###'
     },
+    'EFO' => {
+        'Name' => ['EFO'],
+        'URL'  => 'http://www.ebi.ac.uk/efo/',
+        'AccessUrl' => 'https://www.google.com/#q=###ID###'
+    },
 );
 $reference_database_info_hash{'RefSeqPeptide'} = $reference_database_info_hash{'RefSeq'};
 $reference_database_info_hash{'RefSeqDNA'} = $reference_database_info_hash{'RefSeq'};
@@ -896,6 +901,13 @@ sub get_zinc_reference_database {
 
 # Returns a ReferenceDatabase instance for ZINC target
 sub get_zinc_target_reference_database {
+    my ($self) = @_;
+
+    return $self->get_reference_database('ZINC_target');
+}
+
+# Returns a ReferenceDatabase instance for EFO.
+sub get_efo_reference_database {
     my ($self) = @_;
 
     return $self->get_reference_database('ZINC_target');

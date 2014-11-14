@@ -119,6 +119,7 @@ for my $attr
     header_1_font_size
     header_2_font_size
     header_3_font_size
+    header_4_font_size
 	) ) { $ok_field{$attr}++; }
 
 sub AUTOLOAD {
@@ -153,14 +154,15 @@ sub get_ok_field {
 sub set_regular_text_font_size {
     my ($self, $regular_text_font_size) = @_;
     
-	$self->regular_text_font_size($regular_text_font_size);
-	$self->document_title_font_size($regular_text_font_size + 12);
-	$self->document_subject_font_size($regular_text_font_size +4);
-	$self->document_author_font_size($regular_text_font_size);
-	$self->header_0_font_size($regular_text_font_size + 8);
-	$self->header_1_font_size($regular_text_font_size + 6);
-	$self->header_2_font_size($regular_text_font_size + 4);
-	$self->header_3_font_size($regular_text_font_size + 2);
+    $self->regular_text_font_size($regular_text_font_size);
+    $self->document_title_font_size($regular_text_font_size + 12);
+    $self->document_subject_font_size($regular_text_font_size +4);
+    $self->document_author_font_size($regular_text_font_size);
+    $self->header_0_font_size($regular_text_font_size + 8);
+    $self->header_1_font_size($regular_text_font_size + 6);
+    $self->header_2_font_size($regular_text_font_size + 4);
+    $self->header_3_font_size($regular_text_font_size + 2);
+    $self->header_4_font_size($regular_text_font_size + 1);
 }
 
 # Set reader, the object that takes input and mangles it into a
@@ -743,12 +745,12 @@ sub generate_paragraph {
     $logger->error_die("GenerateText.generate_paragraph: ERROR - this method must be defined in the subclass");
 }
 
-sub generate_bullit_text {
+sub generate_bullet_text {
     my ($self, $text) = @_;
 
     my $logger = get_logger(__PACKAGE__);
 
-    $logger->error_die("GenerateText.generate_bullit_text: ERROR - this method must be defined in the subclass");
+    $logger->error_die("GenerateText.generate_bullet_text: ERROR - this method must be defined in the subclass");
 }
 
 sub generate_numbered_text {
@@ -785,7 +787,7 @@ sub generate_header_initial_whitespace {
 		    $self->generate_page_break(\%additional_formatting);
 		}
     } else {
-		$self->generate_vertical_space(2, \%additional_formatting);
+		$self->generate_vertical_space(1, \%additional_formatting);
     }
 }
 
@@ -877,7 +879,7 @@ sub generate_section_internal_header {
 
     my $new_page_count = $self->generate_paragraph($text, \%formatting);
 
-    $self->generate_vertical_space(1, \%formatting);
+    #$self->generate_vertical_space(1, \%formatting);
 
     return $new_page_count;
 }
@@ -917,13 +919,13 @@ sub calculate_header_font_size {
     my ($self, $depth) = @_;
 
     # Make font size depth-dependent
-    my $font_size = $self->header_3_font_size;
+    my $font_size = $self->header_4_font_size;
     if ($depth==0) {
-        $font_size = $self->header_0_font_size;
-    } elsif ($depth==1) {
         $font_size = $self->header_1_font_size;
-    } elsif ($depth==2) {
+    } elsif ($depth==1) {
         $font_size = $self->header_2_font_size;
+    } elsif ($depth==2) {
+        $font_size = $self->header_3_font_size;
     }
 
     return $font_size;
@@ -987,8 +989,8 @@ sub generate_text_unit {
 		$self->generate_body_text_paragraph($text_unit->get_contents(), \%formatting);
     } elsif ($text_unit->isa("body_text")) {
 		$self->generate_body_text($text_unit->get_contents());
-    } elsif ($text_unit->isa("bullit_text")) {
-		$self->generate_bullit_text($text_unit->get_contents());
+    } elsif ($text_unit->isa("bullet_text")) {
+		$self->generate_bullet_text($text_unit->get_contents());
     } elsif ($text_unit->isa("numbered_text")) {
 		$self->generate_numbered_text($text_unit->get_contents(), $text_unit->get_number());
     } elsif ($text_unit->isa("hyperlink")) {

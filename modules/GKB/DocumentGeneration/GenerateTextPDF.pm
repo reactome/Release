@@ -1074,7 +1074,7 @@ sub generate_text_block {
     return ($ypos, join(" ", @words))
 }
 
-sub generate_bullit_text {
+sub generate_bullet_text {
     my ($self, $text) = @_;
 
     my $original_position = $self->position;
@@ -1106,7 +1106,7 @@ sub generate_bullit_text {
     $text_block->text("*");
 }
 
-# TODO: this behaves exactly like generate_bullit_text, needs to
+# TODO: this behaves exactly like generate_bullet_text, needs to
 # be modified so that it inserts numbers instead!
 sub generate_numbered_text {
     my ($self, $text) = @_;
