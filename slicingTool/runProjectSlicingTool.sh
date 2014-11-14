@@ -33,7 +33,7 @@ echo "
 echo "
  " > $LOG
 
-screen -d -m java -Xmx8G -jar ProjectSlicingTool.jar
+nohup java -Xmx8G -jar ProjectSlicingTool.jar &
 
 tail -f SlicingTool.log $LOG 2>/dev/null &
 
