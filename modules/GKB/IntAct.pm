@@ -71,41 +71,29 @@ sub get_file {
     my $cwd = getcwd;
     chdir $dir;
 
-    $file = 'intact.txt';
-    if (-e $file) {
-	my $age = -M $file;
-	if ($age > 7) { # > a week old
-	    print STDERR "The file $file is too old ($age days), deleting\n"; 
-	    unlink $file or die $!;
-	    unlink 'intact.zip' or die $!;
-	    $file = undef;
-	}
+    my $url = 'ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.zip';
+    
+    $file = "intact.txt";
+    my $zip  = "intact.zip";
+    system "rm -f intact*";
+    
+    system "wget $url > /dev/null 2>&1";
+    
+    $logger->info("IntAct.get_file: NEW file=$file");
+    
+    if ( -e $zip) {
+	system "unzip $zip";
+	$self->file("$dir/$file");
+	$logger->info('file ' . `ls $file`);
+	$logger->info('zip' . `ls $zip`);
+	$logger->info("FILE " . $self->file);
+    } 
+    else {
+	$logger->error_die("IntAct.get_file: could not find $zip");
     }
+    
+    chdir $cwd;
 
-    unless ($file) {
-	my $url = 'ftp://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.zip';
-
-	$file = "intact.txt";
-	my $zip  = "intact.zip";
-	system "rm -f intact*";
-	    	
-	system "wget $url > /dev/null 2>&1";
-
-	$logger->info("IntAct.get_file: NEW file=$file");
-	    
-	if ( -e $zip) {
-	    system "unzip $zip";
-	    $self->file("$dir/$file");
-	    $logger->info('file ' . `ls $file`);
-	    $logger->info('zip' . `ls $zip`);
-	    $logger->info("FILE " . $self->file);
-	} 
-	else {
-	    $logger->error_die("IntAct.get_file: could not find $zip");
-	}
-
-	chdir $cwd;
-    }
     
     return "$dir/$file";
 }
@@ -138,26 +126,16 @@ sub find_intact_ids_for_uniprot_pair {
 
 sub get_interaction_data {
     my $self = shift;
-    my $db = $self->interaction_data;
+    my $db = $self->interaction_data();
     return $db if $db;
 
     my $file = $self->get_file();
     (my $db_file = $file) =~ s/txt$/db/;
+    (my $path = $db_file) =~ s!/[^/]+$!!;
+    
+    system "rm -f $path/*db";
 
-    if (-e $db_file) {
-	my $age = -M $file;
-	if ($age > 7) {# > a week old
-	    print STDERR "The file $file is too old ($age days), deleting\n";
-	    unlink $db_file;
-	}
-	else {
-	    $db = BerkeleyDB::Hash->new(-Filename => $db_file);
-	    $self->interaction_data($db);
-	    return $db;
-	}
-    }
-
-    $db = BerkeleyDB::Hash->new(-Filename => $db_file, -Flags => DB_CREATE);
+    $db = BerkeleyDB::Hash->new(-Filename => $db_file, -Flags => DB_CREATE) or die $!;
 
     open INT, "cut -f1,2,14 $file |";
     while (<INT>) {
@@ -176,6 +154,7 @@ sub get_interaction_data {
 	$db->db_put($id2,1);
     }
     close INT;
+    die "The db file is missing" unless $db;
 
     $self->interaction_data($db);
     return $db;
@@ -185,7 +164,7 @@ sub is_in_interaction {
     my $self = shift;
     my $rs   = shift;
     my $uniprot = $rs->identifier->[0] || return 0;
-    my $db = $self->get_interaction_data;
+    my $db = $self->get_interaction_data();
     my $ok;
     $db->db_get($uniprot,$ok);
     return $ok;
