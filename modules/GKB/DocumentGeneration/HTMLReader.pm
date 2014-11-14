@@ -253,20 +253,20 @@ sub get_next_text_units {
 			my @paragraph_text_units = $self->get_paragraph_text_units();
 			@text_units = (@text_units, @paragraph_text_units);
 		} elsif ($tag eq 'l1') {
-			print STDERR "HTMLReader.get_next_text_units: hee hee, L1 bullits!\n";
+			print STDERR "HTMLReader.get_next_text_units: hee hee, L1 bullets!\n";
 				
-			my @bullit_text_units = $self->get_l1_bullit_text_units($tag);
-			@text_units = (@text_units, @bullit_text_units);
+			my @bullet_text_units = $self->get_l1_bullet_text_units($tag);
+			@text_units = (@text_units, @bullet_text_units);
 		} elsif ($tag eq 'ol') {
-			print STDERR "HTMLReader.get_next_text_units: woo, ol bullits!\n";
+			print STDERR "HTMLReader.get_next_text_units: woo, ol bullets!\n";
 				
-			my @bullit_text_units = $self->get_ol_numbered_text_units(0);
-			@text_units = (@text_units, @bullit_text_units);
+			my @bullet_text_units = $self->get_ol_numbered_text_units(0);
+			@text_units = (@text_units, @bullet_text_units);
 		} elsif ($tag eq 'ul') {
-			print STDERR "HTMLReader.get_next_text_units: guffaw, ul bullits!\n";
+			print STDERR "HTMLReader.get_next_text_units: guffaw, ul bullets!\n";
 				
-			my @bullit_text_units = $self->get_ul_bullit_text_units(0);
-			@text_units = (@text_units, @bullit_text_units);
+			my @bullet_text_units = $self->get_ul_bullet_text_units(0);
+			@text_units = (@text_units, @bullet_text_units);
 		} elsif ($tag eq 'img') {
 			print STDERR "HTMLReader.get_next_text_units: heh, an image\n";
 				
@@ -405,10 +405,10 @@ sub get_a_text {
     return $text;
 }
 
-# See if we can pull one or more bullit points from the HTML.
+# See if we can pull one or more bullet points from the HTML.
 # Assume we hav an L1 tag.
 # Return an array of text units containing the information.
-sub get_l1_bullit_text_units {
+sub get_l1_bullet_text_units {
     my ($self, $tag) = @_;
     
     my @text_units = ();
@@ -416,12 +416,12 @@ sub get_l1_bullit_text_units {
     my $token;
     my $text = '';
 
-	# A type of listing - map on to bullit points
+	# A type of listing - map on to bullet points
 	while (defined($token = $parser->get_token)) {
 		if (ref $token) {
 			if ($token->[0] eq "br" || $token->[0] eq "/l1") {
 				my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-				$text_unit->set_type("bullit_text");
+				$text_unit->set_type("bullet_text");
 				$text = $self->clean_text($text);
 				# If we have only parsed white space, don't bother
 				# to emit anything.
@@ -518,47 +518,47 @@ sub get_ol_numbered_text_units {
 	return @text_units;
 }
 
-# See if we can pull one or more bullit points from the HTML.
+# See if we can pull one or more bullet points from the HTML.
 # Assume we hav a ul tag.
 # Return an array of text units containing the information.
-sub get_ul_bullit_text_units {
+sub get_ul_bullet_text_units {
     my ($self, $indentation) = @_;
     
-    print STDERR "HTMLReader.get_ul_bullit_text_units: entered, indentation=$indentation\n";
+    print STDERR "HTMLReader.get_ul_bullet_text_units: entered, indentation=$indentation\n";
     
     my @text_units = ();
     my $parser = $self->parser;
     my $token;
     my $text = '';
 	my $first_li_flag = 0;
-	# A type of listing - map on to bullit points
+	# A type of listing - map on to bullet points
 	while (defined($token = $parser->get_token)) {
 		if (ref $token) {
 			if ($token->[0] eq "ol") {
-				print STDERR "HTMLReader.get_ul_bullit_text_units: gosh, we have a nested ol!!!\n";
+				print STDERR "HTMLReader.get_ul_bullet_text_units: gosh, we have a nested ol!!!\n";
 				
 				my @ol_text_units = $self->get_ol_numbered_text_units($indentation + 1);
 				@text_units = (@text_units, @ol_text_units);
 			} elsif ($token->[0] eq "ul") {
-				print STDERR "HTMLReader.get_ul_bullit_text_units: gosh, we have a nested ul!!!\n";
+				print STDERR "HTMLReader.get_ul_bullet_text_units: gosh, we have a nested ul!!!\n";
 				
-				my @ul_text_units = $self->get_ul_bullit_text_units($indentation + 1);
+				my @ul_text_units = $self->get_ul_bullet_text_units($indentation + 1);
 				@text_units = (@text_units, @ul_text_units);
 			} elsif ($token->[0] eq "li") {
-				print STDERR "HTMLReader.get_ul_bullit_text_units: we have a li\n";
+				print STDERR "HTMLReader.get_ul_bullet_text_units: we have a li\n";
 				
 				if (!($text eq '')) {
-					print STDERR "HTMLReader.get_ul_bullit_text_units: noting text as bullit point\n";
+					print STDERR "HTMLReader.get_ul_bullet_text_units: noting text as bullet point\n";
 				
 					my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-					$text_unit->set_type("bullit_text");
+					$text_unit->set_type("bullet_text");
 					$text = $self->clean_text($text);
 					# If we have only parsed white space, don't bother
 					# to emit anything.
 					if ($text =~ /^\s*$/) {
 						$text_unit->set_type("empty");
 					} else {
-						print STDERR "HTMLReader.get_ul_bullit_text_units: text=$text\n";
+						print STDERR "HTMLReader.get_ul_bullet_text_units: text=$text\n";
 				
 						$text_unit->set_contents($text);
 						$text_unit->set_depth($indentation);
@@ -568,17 +568,17 @@ sub get_ul_bullit_text_units {
 				$first_li_flag = 1;
 				$text = '';
 			} elsif ($token->[0] eq "/li" || $token->[0] eq "/ul") {
-				print STDERR "HTMLReader.get_ul_bullit_text_units: we have a /li or /ul\n";
+				print STDERR "HTMLReader.get_ul_bullet_text_units: we have a /li or /ul\n";
 				
 				my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-				$text_unit->set_type("bullit_text");
+				$text_unit->set_type("bullet_text");
 				$text = $self->clean_text($text);
 				# If we have only parsed white space, don't bother
 				# to emit anything.
 				if ($text =~ /^\s*$/) {
 					$text_unit->set_type("empty");
 				} else {
-					print STDERR "HTMLReader.get_ul_bullit_text_units: text=$text\n";
+					print STDERR "HTMLReader.get_ul_bullet_text_units: text=$text\n";
 					
 					$text_unit->set_contents($text);
 					$text_unit->set_depth($indentation);
@@ -586,12 +586,12 @@ sub get_ul_bullit_text_units {
 				push(@text_units, $text_unit);
 				$text = '';
 				if ($token->[0] eq "/ul") {
-					print STDERR "HTMLReader.get_ul_bullit_text_units: well it was a /ul, so bomb out!\n";
+					print STDERR "HTMLReader.get_ul_bullet_text_units: well it was a /ul, so bomb out!\n";
 				
 					last;
 				}
 			} else {
-				print STDERR "HTMLReader.get_ul_bullit_text_units: unknown token: " . $token->[0] . ", ignoring\n";
+				print STDERR "HTMLReader.get_ul_bullet_text_units: unknown token: " . $token->[0] . ", ignoring\n";
 			}
 		} else {
 			if ($first_li_flag) {
