@@ -69,6 +69,35 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	$up_to_date_identifier =~ s/^CHEBI://;
 	
 #	print STDERR "$0: old identifier: $identifier, new identifier: $up_to_date_identifier\n";
+
+	if ($chebi_name) {
+		my @simple_entities = @{$reference_molecule->reverse_attribute_value('referenceEntity')};
+		foreach my $simple_entity (@simple_entities) {
+			my @names = @{$simple_entity->name};
+			
+			if (lc $names[0] eq lc $reference_molecule->name->[0]) {
+				my $index = get_index($chebi_name, \@names);
+				next if $index == 0;
+				splice @names, $index, 1 if $index != -1;
+				unshift @names, $chebi_name;
+			} else {
+				next if $names[1] && lc $names[1] eq lc $chebi_name && $names[2] && lc $names[2] eq lc $reference_molecule->name->[0];
+				
+				my $index = get_index($chebi_name, \@names);
+				splice @names, $index, 1 if $index != -1;
+				splice @names, 1, 0, $chebi_name; 
+				
+				$index = get_index($reference_molecule->name->[0], \@names);
+				splice @names, $index, 1 if $index != -1;
+				splice @names, 2, 0, $reference_molecule->name->[0]; 
+			}
+			
+			$simple_entity->name(undef);
+			$simple_entity->name(@names);
+			$dba->update_attribute($simple_entity, "name");
+			print 'Simple entity ' . $simple_entity->db_id . ':' . $simple_entity->_displayName->[0] . " names updated\n";
+		}
+	}
 	
 	if ($identifier eq $up_to_date_identifier && $reference_molecule->name->[0] eq $chebi_name) {
 		next;
@@ -102,3 +131,16 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 print OUT "$0: updated $outdated_molecule_identifier_counter of $molecule_identifier_counter ChEBI identifiers (" . (100 * $outdated_molecule_identifier_counter) / $molecule_identifier_counter . "%)\n";
 
 print OUT "$0 has finished its job\n";
+
+# Adapted from http://www.perlmonks.org/?node_id=75660 and
+# http://www.perlmonks.org/?node_id=998136
+sub get_index {
+	my $search = shift;
+	my $ar_ref = shift;
+	my @array = @$ar_ref;
+	$_=lc($_) for @array;
+		
+	my %index;
+	@index{@array} = (0..$#array);
+	return $index{lc($search)} // -1;
+}
