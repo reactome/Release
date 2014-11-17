@@ -2,15 +2,8 @@
 use strict;
 use warnings;
 
-# Make sure you don't have "competing" libraries...
-# for use @CSHL
 use lib "/usr/local/reactomes/Reactome/development/GKB/modules";
-# for use @HOME
-use lib "$ENV{HOME}/bioperl-1.0";
-use lib "$ENV{HOME}/GKB/modules";
-use lib "$ENV{HOME}/my_perl_stuff";
 
-use DBI;
 use GKB::DBAdaptor;
 use GKB::Utils;
 use Data::Dumper;
@@ -104,7 +97,7 @@ foreach my $rpg_id (keys %accs) {
 		my $ids = $enst_to_ids{$enst};
 		delete $ids->{$rpg_id};
     
-		$i->add_attribute_value_if_necessary('otherIdentifier', sort {fc($a) cmp fc($b)} keys %$ids);
+		$i->add_attribute_value_if_necessary('otherIdentifier', $enst, keys %$ids);
 	    }
 	};
     }
@@ -112,7 +105,11 @@ foreach my $rpg_id (keys %accs) {
 
 while (my ($acc,$ar) = each %accs) {
     foreach my $i (@{$ar}) {
-	print $acc, "\t", join(',',@{$i->OtherIdentifier}), "\n";
+	my @otherIdentifiers = sort {fc($a) cmp fc($b)} @{$i->OtherIdentifier};
+	$i->OtherIdentifier(undef);
+	$i->OtherIdentifier(@otherIdentifiers);
+	
+	print $acc, "\t", join(',',@otherIdentifiers), "\n";
 	$dba->update_attribute($i,'otherIdentifier');
     }
 }
