@@ -15,6 +15,7 @@ use GKB::DBAdaptor;
 use GKB::Utils;
 use Data::Dumper;
 use Getopt::Long;
+use Unicode::CaseFold;
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_sp);
 
