@@ -30,17 +30,6 @@ $cmd = qq(./indirectIdentifiers_for_all_species.pl @params);
 print "$cmd\n";
 system($cmd) == 0 or die "$cmd failed.";
 
-print "$0: about to createDatabase.pl\n";
-my $skypainter_db = $opt_db . '_dn';
-$cmd = qq(./createDatabase.pl model.pprj -host $opt_host -port $opt_port -pass $opt_pass -db $skypainter_db);
-print "$cmd\n";
-system($cmd) == 0 or die "$cmd failed.";
-
-print "$0: about to create_denormalised_identifier_db.pl\n";
-$cmd = qq(./create_denormalised_identifier_db.pl -from_host $opt_host -from_port $opt_port -from_pass $opt_pass -from_db $opt_db -to_host $opt_host -to_port $opt_port -to_pass $opt_pass -to_db $skypainter_db);
-print "$cmd\n";
-system($cmd) == 0 or die "$cmd failed.";
-
 # Precompute the background p-value distributions for some species (as specified the the script).
 # This way we can estimate the FDR.
 # Do 1000 iterations and use range 2 .. 100, i.e. we can estimate the FDR for effective set size
