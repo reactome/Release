@@ -25,7 +25,9 @@ has '+mail' => ( default => sub {
 
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
- 
+
+    require 'ensembl.lib';
+
     my $ensmbl_ver = get_ensembl_version();
     install_ensembl_api($self, $ensmbl_ver) unless ensembl_api_installed();
 
@@ -49,16 +51,6 @@ override 'run_commands' => sub {
 		);	 
     }
 };
-
-sub get_ensembl_version {
-    my $browser = LWP::UserAgent->new;
-    my $response = $browser->get("http://www.ensembl.org/index.html");
-    my $content = $response->content;
-    
-    my ($ensembl_version) = ($content =~ /release (\d+)/g)[-1];
-    
-    return ($ensembl_version - 1); #Subtract one to stay in sync with the Pan Compara database
-}
 
 sub install_ensembl_api {
     my ($self, $version) = @_;
