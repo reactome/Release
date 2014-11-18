@@ -5,8 +5,6 @@ use warnings;
 use autodie;
 use Getopt::Long;
 
-use Net::OpenSSH;
-
 # Author: Joel Weiser (joel.weiser@oicr.on.ca)
 # Created: February 2014
 # Purpose: Update the Reactome GKB configuration file to reference a new test_reactome_XX database and "last release" date
@@ -30,55 +28,14 @@ unless ($opt_host &&
 my $hostname = `hostname -f`;
 chomp $hostname;
 
-my $ssh;
-unless ($opt_host eq "localhost" || $opt_host eq $hostname) {
-	$ssh = Net::OpenSSH->new($opt_host);
-	$ssh->error and die $ssh->error;
-}
+my $ssh = ($opt_host eq "localhost" || $opt_host eq $hostname) ? 0 : 1;
 
-# Open current configuration file (via SSH pipe for remote host)
-my $current_config = "$opt_configpath/Config.pm";
-
-my ($current, $current_pid);
+my $secrets = "perl -pi -e \"s/GK_DB_NAME\\s*=\\s*'\\S+';/GK_DB_NAME  = 'test_reactome_$opt_version';/\" $opt_configpath/Secrets.pm"; # change the database name to test_reactome_xx
+my $config = "perl -pi -e \"s/LAST_RELEASE_DATE = \\d{8}/LAST_RELEASE_DATE = $opt_lastrelease/\" $opt_configpath/Config.pm"; # update the last release date
 if ($ssh) {
-	($current, $current_pid) = $ssh->pipe_out("cat $current_config") or die $!;
+	`ssh $opt_host "$secrets"`;
+	`ssh $opt_host "$config"`;
 } else {
-	open $current, "<", $current_config;
-}
-
-# Open new configuration file for writing (via SSH pipe for remote host)
-my $new_config = "$opt_configpath/ConfigNew.pm";
-
-my ($new, $new_pid);
-if ($ssh) {	
-	($new, $new_pid) = $ssh->pipe_in("cat >$new_config") or die $!;
-} else {
-	open $new, ">", $new_config;
-}
-    
-# Go through the current configuration line by line
-while (my $line = <$current>) {
-	# If the line contains it, change the database name to test_reactome_xx for the live site configuration file
-   	$line =~ s/(GK_DB_NAME = ).*/$1'test_reactome_$opt_version';/;
-    
-	# If the line contains it, update the last release date
-	$line =~ s/(LAST_RELEASE_DATE = )\d{8}/$1$opt_lastrelease/;
-        
-	# Print the line to the new configuration file
-	print $new $line;
-}
-    
-# Close both files/pipes
-close $current;
-close $new;
-
-my $archive = "mv $current_config $current_config.$opt_version"; # Archive the old configuration file
-my $rename = "mv $new_config $current_config; chgrp gkb $current_config; chmod 775 $current_config"; # Rename the new configuration file to config.pm
-
-if ($ssh) {
-	$ssh->system($archive) or die $ssh->error;
-	$ssh->system($rename) or die $ssh->error;	
-} else {
-	system($archive) == 0 or die $!;;
-	system($rename) == 0 or die $!;
+	`$secrets`;
+	`$config`;
 }
