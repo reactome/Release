@@ -25,7 +25,7 @@ override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
     
     my $config_file = "/usr/local/gkb/website/conf/httpd.conf";
-    my $fallback = $self->user_input->{'fallback'}->{'response'} =~ /^y/ ? 1 : 0;
+    my $fallback = $self->user_input->{'fallback'}->{'response'} =~ /^y/i ? 1 : 0;
     
     cmd("Rerouting requests", [["perl rerouterequests.pl $config_file $live_server $fallback"]]);    
     cmd("Restarting apache", [["echo $sudo | sudo -S /etc/init.d/apache2 restart"]], {"ssh" => $live_server});
