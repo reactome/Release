@@ -94,5 +94,6 @@ sub usage {
    db      database
    host    host (default localhost)
    port    port (default 3306)
+   dry_run analyze the db but don't change anything
 "
 }
