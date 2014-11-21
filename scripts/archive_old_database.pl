@@ -2,6 +2,10 @@
 use strict;
 use Getopt::Long;
 
+# A script to archive older databases on the NFS mount
+# Sheldon McKay sheldon.mckay@gmail.com
+
+
 use constant MYSQL   => '/var/lib/mysql';
 use constant ARCHIVE => '/nfs/reactome/reactome/archive/mysql';
 use constant DUMP    => '/nfs/reactome/reactome/archive/dumps';
