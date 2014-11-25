@@ -91,7 +91,6 @@ sub fetch_molecules {
 
     my $total = keys %zinc;
     print STDERR "I am dealing with a total of about $total ZINC IDS!\n";
-    sleep 10;
     return \%zinc;
 }
 

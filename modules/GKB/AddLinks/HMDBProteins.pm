@@ -1,13 +1,13 @@
 
 =head1 NAME
 
-GKB::AddLinks::EFODiseases
+GKB::AddLinks::HmdbProteins
 
 =head1 SYNOPSIS
 
 =head1 DESCRIPTION
 
-Adds EFO linkers to Diseases
+Adds HMDB linkers to ReferenceProteins having chebi-IDs
 
 =head1 SEE ALSO
 
@@ -25,11 +25,11 @@ disclaimers of warranty.
 
 =cut
 
-package GKB::AddLinks::EFO;
+package GKB::AddLinks::HMDBProteins;
 
 use GKB::Config;
 use GKB::AddLinks::Builder;
-use GKB::EFO;
+use GKB::HMDB;
 use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Data::Dumper;
@@ -61,7 +61,7 @@ sub mapper {
     my $self = shift;
     my $dba = shift;
     if ($dba) {
-	$self->{mapper} = GKB::EFO->new($dba);
+	$self->{mapper} = GKB::HMDB->new($dba);
     }
     return $self->{mapper};
 }
@@ -90,19 +90,19 @@ sub buildPart {
 
     my $mapper = $self->mapper($dba);
 
-    # A hash where the keys are EFO Ids and the values are GKInstances
-    my $diseases = $mapper->fetch_diseases();
+    # A hash where the keys are HMDB Ids and the values are GKInstances
+    my $proteins = $mapper->fetch_proteins();
 
     my $attribute = 'crossReference';
     $self->set_instance_edit_note("${attribute}s inserted by $pkg");
 
-    # get a unique list of Disease instances
+    # get a unique list of ReferenceProtein instances
     my %instances;
-    for my $group (values %$diseases) {
-	my @diseases = @$group;
-	for my $disease (@diseases) {
-	    next unless $disease && ref $disease;
-	    $instances{$disease->db_id} = $disease;
+    for my $group (values %$proteins) {
+	my @proteins = @$group;
+	for my $protein (@proteins) {
+	    next unless $protein && ref $protein;
+	    $instances{$protein->db_id} = $protein;
 	}
     }
     my $instances = [values %instances];
@@ -111,28 +111,29 @@ sub buildPart {
     $dba->load_class_attribute_values_of_multiple_instances(
         'DatabaseIdentifier', 'identifier', $instances );
 
-    my $efo_ref_db =
-      $self->builder_params->reference_database->get_efo_reference_database();
+    my $hmdb_ref_db =
+      $self->builder_params->reference_database->get_hmdb_protein_reference_database();
 
-    while (my ($efo,$diseases) = each %$diseases) {
-        print STDERR "$pkg.buildPart: i->Identifier=EFO:$efo\n";
+    while (my ($hmdb,$proteins) = each %$proteins) {
+        print STDERR "$pkg.buildPart: i->Identifier=HMDB:$hmdb\n";
 
-	for my $disease (@$diseases) { 
-	    $disease || next;
-	    print STDERR "\n\nI am working on Diseases ", $disease->db_id(), "\n\n";
+	for my $protein (@$proteins) { 
+	    $protein || next;
+	    print STDERR "\n\nI am working on ReferenceProtein ", $protein->db_id(), "\n\n";
+	    ## Careful! ReferenceProteins can be associated with > 1 HMDB ID.
 	    ## Only do this the first time the instance is encountered!
-	    unless ( $self->{seen}->{$disease->db_id()}++ ) {
-		$self->remove_typed_instances_from_attribute( $disease, $attribute,
-							      $efo_ref_db );
+	    unless ( $self->{seen}->{$protein->db_id()}++ ) {
+		$self->remove_typed_instances_from_attribute( $protein, $attribute,
+							      $hmdb_ref_db );
 	    }
 	    
-	    my $efo_database_identifier = $self->builder_params->database_identifier
-		->get_efo_database_identifier( $efo );
-	    $disease->add_attribute_value( $attribute, $efo_database_identifier );
-	    $dba->update_attribute( $disease, $attribute );
-	    $disease->add_attribute_value( 'modified', $self->instance_edit );
-	    $dba->update_attribute( $disease, 'modified' );
-	    $self->increment_insertion_stats_hash( $disease->db_id() );
+	    my $hmdb_database_identifier = $self->builder_params->database_identifier
+		->get_hmdb_protein_database_identifier( $hmdb );
+	    $protein->add_attribute_value( $attribute, $hmdb_database_identifier );
+	    $dba->update_attribute( $protein, $attribute );
+	    $protein->add_attribute_value( 'modified', $self->instance_edit );
+	    $dba->update_attribute( $protein, 'modified' );
+	    $self->increment_insertion_stats_hash( $protein->db_id() );
 	}
     }
 

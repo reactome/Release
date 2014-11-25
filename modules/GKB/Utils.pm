@@ -341,7 +341,7 @@ sub get_handle_to_ensembl_mart {
     require DBI;
     my ($db,$host,$port,$user,$pass) = @_;
     $host ||= 'martdb.ensembl.org';
-    $port ||= 3316;
+    $port ||= 5316;
     $user ||= 'anonymous';
     my ($dsn,$dbh,$stmt,$sth,$res);
     if ($db) {
