@@ -44,7 +44,7 @@ my %seen; # Prevents duplication in the file
 		
 my $class = "pathway";
 
-my $outfile = "$class\_2_summation.txt"; # Output file for website
+my $outfile = $class . "2summation.txt"; # Output file for website
 		
 # If creation of a filehandle is unsuccessful, the following error message
 # prints and the program terminates.
@@ -53,7 +53,7 @@ if (!open(FILE, ">$outfile")) {
 	exit(1);
 }
 			
-my $ar = $dba->fetch_instance(-CLASS => $class); # Obtains a reference to the array of all Reactome pathways
+my $ar = $dba->fetch_instance(-CLASS => ucfirst $class); # Obtains a reference to the array of all Reactome pathways
 my %processes;
 
 # Every pathway in reactome is processed

@@ -3,7 +3,7 @@ use strict;
 
 use lib "/usr/local/gkb/modules";
 
-use GKB::Secrets;
+use GKB::Config;
 use Data::Dumper;
 use Getopt::Long;
 
@@ -28,10 +28,19 @@ $opt_pass ||= $GK_DB_PASS;
 $opt_host ||= $GK_DB_HOST;
 
 if (-e $opt_source && $opt_source =~ /\.dump$/) {
-	print "Backing up database $opt_db if exists\n";
-	`mysqldump -u $opt_user -p$opt_pass -h $opt_host $opt_db > $opt_db.backup.dump`;
-	my $error = system("mysql -u $opt_user -p$opt_pass -h $opt_host -e 'drop database if exists $opt_db; create database $opt_db; use $opt_db; source $opt_source'");
-	print "Database $opt_db successfully restored\n" unless $error;
+	if (system("mysql -u $opt_user -p$opt_pass -h $opt_host -e 'use $opt_db' 2> /dev/null") == 0) {
+		print "Backing up database $opt_db\n";
+		`mysqldump -u $opt_user -p$opt_pass -h $opt_host $opt_db > $opt_db.backup.dump`;
+	}
+	
+	print "Restoring $opt_db database\n";
+	my $error = system("mysql -u $opt_user -p$opt_pass -h $opt_host -e 'drop database if exists $opt_db; create database $opt_db'");
+	die "Database $opt_db could not be created\n" if $error;
+	
+	$error = system("cat $opt_source | mysql -u $opt_user -p$opt_pass -h $opt_host $opt_db");
+	die "Database $opt_db could not be populated by $opt_source" if $error;
+	
+	print "Database $opt_db has been restored\n";
 } else {
-	die "$opt_source is not the correct format -- a .dump file is required\n";
+	die "$opt_source does not exist or is not the correct format -- a .dump file is required\n";
 }

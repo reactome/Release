@@ -203,7 +203,7 @@ my @cmds = (
      "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' ".
      "| sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz"
     ],
-
+    
     [
      "$species_file_stem.interactions.intact",
      1,
@@ -212,7 +212,7 @@ my @cmds = (
      "source_ids,source_st_ids,participating_protein_count,lit_refs,intact -headers title,table | ".
      "sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.intact.txt.gz"
     ],
-
+    
     [
      "$species_file_stem.mitab.interactions",
      1,
@@ -220,7 +220,7 @@ my @cmds = (
      "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -mitab | ".
      "gzip -c > $release_nr/$species_file_stem.mitab.interactions.txt.gz"
     ],
-
+    
     [
      "database_dumps",
      1,
@@ -231,14 +231,14 @@ my @cmds = (
      "mysqldump --opt $mysqldump_wordpress_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
      "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
     ],
-
+    
     [
      "release_tarball",
      1,
      1,
      "./make_release_tarball.pl $release_nr"
     ],
-
+    
     [
      "SBML_dumpers",
      1,
@@ -246,21 +246,21 @@ my @cmds = (
      "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' | gzip -c > $release_nr/$species_file_stem.sbml.gz",
      "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.2.sbml.gz",
     ],
-
+    
     [
      "interactions_for_all_species",
      1,
      1,
      "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options"
     ],
-
+    
     [
     "psicquic_indexers",
      1,
      1,
      "perl psicquic_indexers.pl -release $release_nr"
     ],
-
+    
     [
      "gene_association.reactome",
      1,
@@ -268,7 +268,7 @@ my @cmds = (
      "cp ../goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome ".
      "$release_nr/gene_association.reactome",
     ],
-
+    
     [
      "runDiagramDumper",
      1,
@@ -281,9 +281,9 @@ my @cmds = (
     "rm -f *.zip",
     "zip -r diagrams.pdf.zip PDF",
     "zip -r diagrams.png.zip PNG",
-    "mv *.zip ../download_directory/$release_nr",
+    "mv *.zip ../../download_directory/$release_nr",
     ],
-
+    
     [
      "fetch_and_print_values",
      1,
@@ -296,7 +296,7 @@ my @cmds = (
      qq(-class Complex $reactome_db_options -output 'stableIdentifier._displayName' -output ).
      qq('species.name[0]' -output _displayName > $release_nr/curated_complexes.stid.txt)
     ],
-
+    
     [
      "run_biopax",
      1,
@@ -316,14 +316,7 @@ my @cmds = (
     ],
     
     [
-     "generate_packaged_pathway_diagrams",
-     1,
-     2,
-    "./generate_packaged_pathway_diagrams.sh $diagram_dump_options"
-    ],
-    
-    [
-     "TheReactomeBook - pdf version",
+     "TheReactomeBookPDF",
      1,
      0,    
      "perl genbook_pdf.pl -depth 100 $reactome_db_options -stdout -react_rep 2 > TheReactomeBook.pdf",
@@ -333,9 +326,9 @@ my @cmds = (
     ],
     
     [
-     "TheReactomeBook - rtf version",
+     "TheReactomeBookRTF",
      1,
-     1,
+     0,
      "perl genbook_rtf.pl -depth 100 $reactome_db_options -split -react_rep 2",
      "zip -r TheReactomeBook.rtf.zip TheReactomeBook",
      "rm -rf TheReactomeBook",
@@ -350,29 +343,29 @@ my @cmds = (
     ],
     
     [
-     "Search Indexer",
+     "SearchIndexer",
      1,
      1,
      "cd $GK_ROOT_DIR",
      "git subtree pull --prefix scripts/release/download_directory/search --squash search master",
      "cd -",
-     "perl search_indexer.pl -release $release_nr $reactome_db_options",
+     "perl search_indexer.pl -r $release_nr $reactome_db_options",
      "mv ebeye.xml.gz $release_nr"
     ],
     
     [
-     "Analysis Core",
+     "AnalysisCore",
      1,
      1,
      "cd $GK_ROOT_DIR",
      "git subtree pull --prefix scripts/release/download_directory/analysis --squash analysis master",
      "cd -",
-     "perl analysis_core.pl -release $release_nr $reactome_db_options",
+     "perl analysis_core.pl -r $release_nr $reactome_db_options",
      "mv *.txt $release_nr"
     ],
     
     [
-     "Pathway Summation Mapping file",
+     "PathwaySummationMappingfile",
      1,
      1,
      "perl pathway2summation.pl $reactome_db_options",
