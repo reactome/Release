@@ -123,10 +123,10 @@ sub buildPart {
 	            next;
 	        }
 	        my $external_reference_source = $external_reference_object->{"Source"};
-	        if ($external_reference_source eq "REACTOME") {
+	        if ($external_reference_source eq "Reactome") {
 	            my $uniprot_id = $external_reference_object->{"Reference"}; # Assume UniProt ID
 	    	    push(@{$gene{$uniprot_id}}, $orphanet_gene_id);
-#	    	    print STDERR "OrphanetToUniprotReferenceDNASequence.buildPart: external_reference_id=$external_reference_id, uniprot_id=$uniprot_id\n";
+	    	    print STDERR "OrphanetToUniprotReferenceDNASequence.buildPart: external_reference_id=$external_reference_id, uniprot_id=$uniprot_id\n";
 	            last;
 	        }
 	    }
@@ -150,7 +150,7 @@ sub buildPart {
 	    }
 	    my @gene_ids = @{$gene_ids_ref};
 
-#		print STDERR "OrphanetToUniprotReferenceDNASequence.buildPart: gene ID count: " . scalar(@gene_ids) . "\n";
+		print STDERR "OrphanetToUniprotReferenceDNASequence.buildPart: gene ID count: " . scalar(@gene_ids) . "\n";
 		print STDERR "OrphanetToUniprotReferenceDNASequence.buildPart: reference_peptide_sequence->Identifier=$identifier; gene_ids=[";
 
 		# Remove Orphanet gene identifiers to make sure the mapping is up-to-date, keep others
