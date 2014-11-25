@@ -397,14 +397,23 @@ sub get_zinc_target_database_identifier {
         $self->reference_database->get_zinc_target_reference_database(), $identifier );
 }
 
-# Gets a DatabaseIdentifier instance for EFO
+# Gets a DatabaseIdentifier instance for HMDB metabolite
 #
 # Returns a DatabaseIdentifier instance. 
-sub get_efo_database_identifier {
+sub get_hmdb_metabolite_database_identifier {
     my ( $self, $identifier ) = @_;
 
     return $self->get_database_identifier(
-        $self->reference_database->get_efo_reference_database(), $identifier );
+        $self->reference_database->get_hmdb_metabolite_reference_database(), $identifier );
+}
+
+# Gets a DatabaseIdentifier instance for HMDB protein
+#
+# Returns a DatabaseIdentifier instance.
+sub get_hmdb_protein_database_identifier {
+    my ( $self, $identifier ) = @_;
+    return $self->get_database_identifier(
+        $self->reference_database->get_hmdb_protein_reference_database(), $identifier );
 }
 
 

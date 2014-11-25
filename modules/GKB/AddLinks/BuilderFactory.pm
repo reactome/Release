@@ -53,7 +53,8 @@ use GKB::AddLinks::WormbaseReferenceDNASequenceToReferencePeptideSequence;
 use GKB::AddLinks::RHEAIdentifierToReactionlikeEvent;
 use GKB::AddLinks::ZincProteins;
 use GKB::AddLinks::ZincMolecules;
-use GKB::AddLinks::EFO;
+use GKB::AddLinks::HMDBProteins;
+use GKB::AddLinks::HMDBMolecules;
 
 use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
@@ -63,9 +64,10 @@ use Bio::Root::Root;
 
 # Maps various name variants onto plausible Builder subclasses
 my %builder_map = (
-    'EFO' => 'GKB::AddLinks::EFO',
     'ZincProteins' => 'GKB::AddLinks::ZincProteins',
     'ZincMolecules' => 'GKB::AddLinks::ZincMolecules',
+    'HMDBProteins' => 'GKB::AddLinks::HMDBProteins',
+    'HMDBMolecules' => 'GKB::AddLinks::HMDBMolecules',
     'ENSGReferenceDNASequenceToReferencePeptideSequence' => 'GKB::AddLinks::ENSGReferenceDNASequenceToReferencePeptideSequence',
     'EnsemblGeneToUniprotReferencePeptideSequence' => 'GKB::AddLinks::EnsemblGeneToUniprotReferencePeptideSequence',
     'addEnsemblGene2swallSdi' => 'GKB::AddLinks::EnsemblGeneToUniprotReferencePeptideSequence',
