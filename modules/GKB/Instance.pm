@@ -246,8 +246,14 @@ sub add_attribute_value_if_necessary {
 	if ($self->is_multivalue_attribute($attribute)) {
 	    no strict 'refs';
 	    my %values;
-	    map {$values{$_}++} @{$self->{'attribute'}->{$attribute}};
-	    @vals = grep {! $values{$_}++} @vals;
+	    
+	    if ($self->is_instance_type_attribute($attribute)) {
+	      map {$values{$_->db_id}++} @{$self->{'attribute'}->{$attribute}};
+	      @vals = grep {! $values{$_->db_id}++} @vals;
+	    } else {
+	      map {$values{$_}++} @{$self->{'attribute'}->{$attribute}};
+	      @vals = grep {! $values{$_}++} @vals;
+	    }
 	    $self->add_attribute_value($attribute,@vals);
 	    use strict;
 	} else {
