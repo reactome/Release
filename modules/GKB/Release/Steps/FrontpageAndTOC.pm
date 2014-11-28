@@ -30,16 +30,17 @@ override 'run_commands' => sub {
     if ($gkbdir eq "gkbdev") {
     	cmd("Removing cached frontpage files",
     	    [
-    		["echo $sudo | sudo rm -rf $html/img-fp"] 
+    		["echo $sudo | sudo -S rm -rf $html/img-fp/$db"],
+		["echo $sudo | sudo -S rm $html/img-fp/$livedb"]
     	   ]
     	);
-	
-	
     
     	cmd("Creating table of contents",
     	    [
-    		["$website_dir/cgi-bin/toc DB=$db"],
+    		["mkdir -p $website_dir/html/img-fp"],
+		["$website_dir/cgi-bin/toc DB=$db"],
     		["$website_dir/cgi-bin/doi_toc DB=$db"],
+		["ln -s $website_dir/html/img-fp/$db $website_dir/html/img-fp/$livedb"],
     		["echo $sudo | sudo -S chown -R \${USER}:www-data $website_dir/html/img-fp/$db/toc"],
     		["echo $sudo | sudo -S chown -R \${USER}:www-data $website_dir/html/img-fp/$db/doi_toc"]
     	    ]
@@ -47,7 +48,7 @@ override 'run_commands' => sub {
     } elsif ($gkbdir eq "gkb") {
         cmd("Creating table of contents",
 	    [
-		["echo $sudo | sudo -S rm -rf $website_dir/html/img-fp/gk_current"],
+		["echo $sudo | sudo -S rm -rf $website_dir/html/img-fp/$livedb"],
         	["$website_dir/cgi-bin/toc DB=$livedb"],
             	["$website_dir/cgi-bin/doi_toc DB=$livedb"],
 		["echo $sudo | sudo -S chown -R \${USER}:www-data $website_dir/html/img-fp/$livedb/*toc"]
