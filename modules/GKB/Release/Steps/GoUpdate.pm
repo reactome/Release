@@ -26,16 +26,6 @@ override 'run_commands' => sub {
     cmd("Setting all GO files to have group permissions", [["echo $sudo | sudo -S chgrp gkb *"]]);
         
     cmd("Backing up database",[["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral > $gkcentral\_after_uniprot_update.dump"]]);
- 
-=head 
-    cmd("Updating from cvs",
-    	[
-    		["cvs up go_obo_update.pl"],
-    		["cvs up addEcNumber2Activity_update.pl"],
-    		["cvs up updateDisplayName.pl"]
- 		]
- 	);
-=cut
         
     my @args = ("-db", $gkcentral, "-host", $gkcentral_host, "-user", $user, "-pass", $pass);
     
