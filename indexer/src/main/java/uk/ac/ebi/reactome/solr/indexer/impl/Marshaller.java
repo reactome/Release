@@ -9,7 +9,6 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by flo on 5/28/14.
@@ -253,7 +252,7 @@ public class Marshaller {
 
     private void writeRef( String db, String id, String indent ) throws IOException {
         db = db.replaceAll( "/", "_" );
-        writer.write(indent + "<ref dbname=\"" + db + "\" dbkey=\"" + id + "\" />" + NEW_LINE);
+        writer.write(indent + "<ref dbname=\"" + db + "\" dbkey=\"" + StringEscapeUtils.escapeXml(id) + "\" />" + NEW_LINE);
     }
 
     private void writeField( String name, String text, String indent ) throws IOException {
