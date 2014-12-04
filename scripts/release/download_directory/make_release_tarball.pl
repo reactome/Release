@@ -38,7 +38,8 @@ my $unwanted_webapps = join(' ',(
 "reactome/apache-tomcat/webapps/AnalysisService_Antonio"
 ));
 
-print "My working directory is ", `pwd`;
+chomp(my $cwd = `pwd`);
+print "My working directory is $cwd\n";
 
 my @cmds = (
     qq(git clone https://github.com/reactome/Release.git),

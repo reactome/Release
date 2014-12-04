@@ -37,20 +37,23 @@ my $usage = "Usage: $0 -db db_name -user db_user -host db_host -pass db_pass -po
 $opt_db || die $usage;
 $opt_r || die $usage;
 	
-$opt_host ||= $GK_DB_HOST;
-$opt_user ||= $GK_DB_USER;
-$opt_pass ||= $GK_DB_PASS;
-$opt_port ||= $GK_DB_PORT;
+$opt_host ||= $GKB::Config::GK_DB_HOST;
+$opt_user ||= $GKB::Config::GK_DB_USER;
+$opt_pass ||= $GKB::Config::GK_DB_PASS;
+$opt_port ||= $GKB::Config::GK_DB_PORT;
 
 
-my $solr_url = "http://reactomerelease.oicr.on.ca:7080/solr/reactome";
+my $solr_url  = "http://reactomerelease.oicr.on.ca:7080/solr/reactome";
+my $solr_user = $GKB::Config::GK_SOLR_USER;
+my $solr_pass = $GKB::Config::GK_SOLR_PASS;
 
 my $present_dir = getcwd();
 my $output = "$present_dir/ebeye.xml";
 chdir "$GK_ROOT_DIR/scripts/release/download_directory/search/indexer";
-system("mvn clean package -PSearch_Indexer-Local");
-system("mv target/Indexer-1.0-jar-with-dependencies.jar indexer.jar");
-system("java -jar -Xms5120M -Xmx10240M indexer.jar -d $opt_db -u $opt_user -p $opt_pass -s $solr_url -c src/main/resources/controlledvocabulary.csv -o $output -r $opt_r");
+system("mvn clean package");
+system("ln -sf target/Indexer-1.0-jar-with-dependencies.jar indexer.jar");
+system("java -jar -Xms5120M -Xmx10240M indexer.jar -d $opt_db -u $opt_user -p $opt_pass -s $solr_url ".
+       "-c src/main/resources/controlledvocabulary.csv -o $output -r $opt_r");
 system("gzip -f $output");
 
 print "$0 has finished its job\n";
