@@ -81,10 +81,10 @@ $GK_DB_PASS  = $GKB::Secrets::GK_DB_PASS;
 $GK_DB_NAME  = $GKB::Secrets::GK_DB_NAME;
 $GK_IDB_NAME = $GKB::Secrets::GK_IDB_NAME;
 $GK_DB_PORT  = $GKB::Secrets::GK_DB_PORT;
-$GK_ORPHAN_PASS = $GKB::Secrets::GK_ORPHAN_USER;
+$GK_ORPHAN_USER = $GKB::Secrets::GK_ORPHAN_USER;
 $GK_ORPHAN_PASS = $GKB::Secrets::GK_ORPHAN_PASS;
-$GK_SOLR_USER   = $GKB::Secrets::GK_SOLR_PASS;
-$GK_SOLR_PASS   = $GKB::Secrets::GK_SOLR_USER;
+$GK_SOLR_USER   = $GKB::Secrets::GK_SOLR_USER;
+$GK_SOLR_PASS   = $GKB::Secrets::GK_SOLR_PASS;
 
 # Name of the OS user running the web server
 ##################################################################################
