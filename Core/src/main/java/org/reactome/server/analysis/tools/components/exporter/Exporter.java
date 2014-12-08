@@ -1,7 +1,8 @@
 package org.reactome.server.analysis.tools.components.exporter;
 
 import org.gk.persistence.MySQLAdaptor;
-import org.reactome.core.controller.APIControllerHelper;
+import org.reactome.core.controller.DatabaseObjectHelper;
+import org.reactome.core.factory.DatabaseObjectFactory;
 import org.reactome.core.model.Pathway;
 import org.reactome.core.model.Species;
 import org.reactome.server.analysis.core.data.AnalysisData;
@@ -30,7 +31,7 @@ public class Exporter {
     private AnalysisData analysisData;
 
     @Autowired
-    private APIControllerHelper helper;
+    private DatabaseObjectHelper helper;
 
     class Selection {
         final static String pbUrl = "http://www.reactome.org/PathwayBrowser/#";
@@ -66,9 +67,9 @@ public class Exporter {
         }
 
         public String generateLink(String resource) {
-            Pathway pathway = (Pathway) helper.getDetailedView("Pathway", pathwayId);
-            Species species = (Species) helper.getDetailedView("Species", pathway.getSpecies().get(0).getAvailableIdentifier());
-            Pathway subpathway = subpathwayId!=null? (Pathway) helper.getDetailedView("Pathway", subpathwayId) : null;
+            Pathway pathway = DatabaseObjectFactory.getDatabaseObject(Long.valueOf(pathwayId));
+            Species species = DatabaseObjectFactory.getDatabaseObject(pathway.getSpecies().get(0).getDbId());
+            Pathway subpathway = subpathwayId!=null? (Pathway) DatabaseObjectFactory.getDatabaseObject(Long.valueOf(subpathwayId)) : null;
 
             //Resource based Identifier
             StringBuilder sb = new StringBuilder(resource);

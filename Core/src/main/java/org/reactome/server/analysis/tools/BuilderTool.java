@@ -3,6 +3,8 @@ package org.reactome.server.analysis.tools;
 import com.martiansoftware.jsap.*;
 import org.apache.log4j.Logger;
 import org.gk.persistence.MySQLAdaptor;
+import org.reactome.core.controller.GKInstance2ModelObject;
+import org.reactome.core.factory.DatabaseObjectFactory;
 import org.reactome.server.Main;
 import org.reactome.server.analysis.tools.components.filter.AnalysisBuilder;
 import org.reactome.server.analysis.util.FileUtil;
@@ -39,15 +41,16 @@ public class BuilderTool {
         JSAPResult config = jsap.parse(args);
         if( jsap.messagePrinted() ) System.exit( 1 );
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
-
-
         MySQLAdaptor dba = new MySQLAdaptor(
                 config.getString("host"),
                 config.getString("database"),
                 config.getString("username"),
                 config.getString("password")
         );
+
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
+        GKInstance2ModelObject converter = context.getBean(GKInstance2ModelObject.class);
+        DatabaseObjectFactory.initializeFactory(dba, converter);
 
         String fileName = config.getString("output");
         FileUtil.checkFileName(fileName);
