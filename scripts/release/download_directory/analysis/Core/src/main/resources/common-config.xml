@@ -13,14 +13,14 @@
     </bean>
 
     <bean id="postMapperFactory" class="org.reactome.core.controller.ReactomeModelPostMapperFactory">
-        <property name="configuration" value="ReactomePostMapperConfigration.xml"/>
+        <property name="configuration" value="ReactomePostMapperConfiguration.xml"/>
     </bean>
 
-    <bean id="converter" class="org.reactome.core.controller.ReactomeToRESTfulAPIConverter">
+    <bean id="converter" class="org.reactome.core.controller.GKInstance2ModelObject">
         <property name="postMapperFactory" ref="postMapperFactory"/>
     </bean>
 
-    <bean id="helper" class="org.reactome.core.controller.APIControllerHelper">
+    <bean id="helper" class="org.reactome.core.controller.DatabaseObjectHelper">
         <property name="converter" ref="converter"/>
         <property name="outputdir" value="${restful.tmp}"/>
     </bean>

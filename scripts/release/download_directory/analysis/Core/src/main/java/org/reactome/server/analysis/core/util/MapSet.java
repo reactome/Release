@@ -13,9 +13,7 @@ public class MapSet<S,T> implements Serializable {
 
     public void add(S identifier, T elem){
         Set<T> aux = getOrCreate(identifier);
-        if(!aux.contains(elem)){
-            aux.add(elem);
-        }
+        aux.add(elem);
     }
 
     public void add(S identifier, Set<T> set){
@@ -39,10 +37,8 @@ public class MapSet<S,T> implements Serializable {
     }
 
     private Set<T> getOrCreate(S identifier){
-        Set<T> set;
-        if(map.containsKey(identifier)){
-            set = map.get(identifier);
-        }else{
+        Set<T> set = map.get(identifier);
+        if(set==null){
             set = new HashSet<T>();
             map.put(identifier, set);
         }
