@@ -1192,12 +1192,6 @@ sub get_instance_text_units {
 			@text_units = (@text_units, $self->get_instance_diagram_text_units($instance));
 		}
 	
-		# If this is a disease reaction, then there may well be a corresponding
-		# "normal" reaction.  Get this, if available.
-		if ($instance->is_valid_attribute("normalReaction") && (defined $instance->normalReaction) && scalar(@{$instance->normalReaction})>0) {
-			@text_units = (@text_units, $self->get_associated_normal_reaction($instance, $event_type));
-		}
-		
 		# Literature references
 		my @instance_references = GKB::Utils->get_event_literature_references($instance);
 		if (scalar(@instance_references)>0) {
@@ -1214,6 +1208,13 @@ sub get_instance_text_units {
 		    }
 		}
 		
+                 # If this is a disease reaction, then there may well be a corresponding
+                 ##"normal" reaction.  Get this, if available.
+		 if ($instance->is_valid_attribute("normalReaction") && (defined $instance->normalReaction) && scalar(@{$instance->normalReaction})>0) {
+		     @text_units = (@text_units, $self->get_associated_normal_reaction($instance, $event_type));
+		 }
+		
+
 		# The event in another species that this one was inferred
 		# from, if such a thing exists
 		if ($instance->is_valid_attribute("inferredFrom") && (defined $instance->inferredFrom) && scalar(@{$instance->inferredFrom})>0) {
@@ -1315,6 +1316,11 @@ sub get_associated_normal_reaction() {
     my @text_units = ();
     my $text_unit;
 
+    # Use plural where appropriate
+    if (@{$instance->normalReaction} > 1) {
+	$event_type .= 's';
+    }
+
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("section_internal_header");
     $text_unit->set_contents("Normal $event_type");
@@ -1334,7 +1340,7 @@ sub get_associated_normal_reaction() {
         my $normal_event_name = $self->get_instance_name($normal_event);
         $text_unit = GKB::DocumentGeneration::TextUnit->new();
         $text_unit->set_type("body_text_paragraph");
-        $text_unit->set_contents($normal_event_name);
+        $text_unit->set_contents("<b>$normal_event_name</b>");
         push @text_units, $text_unit;
     
         $space_text_unit = GKB::DocumentGeneration::TextUnit->new();
@@ -1344,18 +1350,9 @@ sub get_associated_normal_reaction() {
     
         my @inferred_from_descriptive_text_units = $self->get_descriptive_text_units_from_instance($normal_event, 1);
         if (scalar(@inferred_from_descriptive_text_units)>0 && (defined $inferred_from_descriptive_text_units[0])) {
-            $text_unit = GKB::DocumentGeneration::TextUnit->new();
-            $text_unit->set_type("body_text_paragraph");
-            $text_unit->set_contents("Summary:");
-            push @text_units, $text_unit;
-    
-            $space_text_unit = GKB::DocumentGeneration::TextUnit->new();
-            $space_text_unit->set_type("vertical_space");
-            $space_text_unit->set_contents(1);
-            push @text_units, $space_text_unit;
-    
             push(@text_units, @inferred_from_descriptive_text_units);
         }
+	push @text_units, $space_text_unit;
     }
 
     return @text_units;
@@ -1366,17 +1363,17 @@ sub get_regulation_text_units_from_reaction() {
 
     my @text_units = ();
     my $text_unit;
-
-	my @regulation_text_units = $self->get_regulation_text_units_from_instance($instance);
-	if (scalar(@regulation_text_units) > 0) {
-		$text_unit = GKB::DocumentGeneration::TextUnit->new();
-		$text_unit->set_type("section_internal_header");
-		$text_unit->set_contents("Regulators of this Reaction");
-		push @text_units, $text_unit;
-		
-		@text_units = (@text_units, @regulation_text_units);
-	}
-				
+    
+    my @regulation_text_units = $self->get_regulation_text_units_from_instance($instance);
+    if (scalar(@regulation_text_units) > 0) {
+	$text_unit = GKB::DocumentGeneration::TextUnit->new();
+	$text_unit->set_type("section_internal_header");
+	$text_unit->set_contents("Regulators of this Reaction");
+	push @text_units, $text_unit;
+	
+	@text_units = (@text_units, @regulation_text_units);
+    }
+    
     return @text_units;
 }
 
@@ -1511,54 +1508,55 @@ sub get_descriptive_text_units_from_instance() {
 	return @text_units;
     }
 
-	my $text = GKB::Utils->get_pathway_text($instance);
-	if ($text) {
-		# Translate various exotic formats to plain ASCII
-		$text =~ s/\x91/`/g; #` Taken from "demoroniser" source
-		$text =~ s/\x92/'/g; #' Taken from "demoroniser" source
-		$text =~ s/\x93/"/g; #" Taken from "demoroniser" source
-		$text =~ s/\x94/"/g; #" Taken from "demoroniser" source
-		$text =~ s/&#8216;/`/g;#` Taken from "demoroniser" source
-		$text =~ s/&#8217;/'/g;#' Taken from "demoroniser" source
-		$text =~ s/&#8219;/`/g;#` Taken from "demoroniser" source
-		$text =~ s/&#8220;/"/g;#" Taken from "demoroniser" source
-		$text =~ s/&#8221;/"/g;#" Taken from "demoroniser" source
-		$text =~ s/&#8222;/"/g;#" Taken from "demoroniser" source
-		$text =~ s/&#8223;/"/g;#" Taken from "demoroniser" source
+    my $text = GKB::Utils->get_pathway_text($instance);
+    if ($text) {
+	# Translate various exotic formats to plain ASCII
+	$text =~ s/\x91/`/g; #` Taken from "demoroniser" source
+	$text =~ s/\x92/'/g; #' Taken from "demoroniser" source
+	$text =~ s/\x93/"/g; #" Taken from "demoroniser" source
+	$text =~ s/\x94/"/g; #" Taken from "demoroniser" source
+	$text =~ s/&#8216;/`/g;#` Taken from "demoroniser" source
+	$text =~ s/&#8217;/'/g;#' Taken from "demoroniser" source
+	$text =~ s/&#8219;/`/g;#` Taken from "demoroniser" source
+	$text =~ s/&#8220;/"/g;#" Taken from "demoroniser" source
+	$text =~ s/&#8221;/"/g;#" Taken from "demoroniser" source
+	$text =~ s/&#8222;/"/g;#" Taken from "demoroniser" source
+	$text =~ s/&#8223;/"/g;#" Taken from "demoroniser" source
 	
-		$text =~ s/\xE2\x80\x9C/"/g;; #" found using hexedit
-		$text =~ s/\xE2\x80\x9D/"/g;; #" found using hexedit
-
-		# Try to do something sensible with HTML tags
-		$text =~ s/<br>/__LINEBREAK__/ig;
-		$text =~ s/<br[^0-9a-zA-Z]/__LINEBREAK__/ig; # to cope with somebody forgetting the closing >
-		$text =~ s/<\/*p>/__LINEBREAK__/ig;
-		$text =~ s/<[a-zA-Z]+>/ /g;
+	$text =~ s/\xE2\x80\x9C/"/g;; #" found using hexedit
+	$text =~ s/\xE2\x80\x9D/"/g;; #" found using hexedit
+	
+	# Try to do something sensible with HTML tags
+	$text =~ s/<br>/__LINEBREAK__/ig;
+	$text =~ s/<br[^0-9a-zA-Z]/__LINEBREAK__/ig; # to cope with somebody forgetting the closing >
+	$text =~ s/<\/*p>/__LINEBREAK__/ig;
+	$text =~ s/<[a-zA-Z]+>/ /g;
 	
 #		$text_unit = GKB::DocumentGeneration::TextUnit->new();
 #		$text_unit->set_type("section_internal_header");
 #		$text_unit->set_contents("Description");
 #		push @text_units, $text_unit;
-    	my $space_text_unit = GKB::DocumentGeneration::TextUnit->new();
-    	$space_text_unit->set_type("vertical_space");
-    	$space_text_unit->set_contents(1);
-    	push @text_units, $space_text_unit;
+#    	my $space_text_unit = GKB::DocumentGeneration::TextUnit->new();
+#    	$space_text_unit->set_type("vertical_space");
+#    	$space_text_unit->set_contents(1);
+#    	push @text_units, $space_text_unit;
 	
-		my @text_blocks = split(/__LINEBREAK__/, $text);
-		foreach my $text_block (@text_blocks) {
-			$text_unit = GKB::DocumentGeneration::TextUnit->new();
-			$text_unit->set_type("body_text");
-			if (defined $use_italics) {
-		            $text_block =~ s/<\/*i>//ig;
-			    $text_unit->set_contents("<i>$text_block</i>");
-			} else {
-			    $text_unit->set_contents($text_block);
-			}
-			push @text_units, $text_unit;
-		}
+	my @text_blocks = split(/__LINEBREAK__/, $text);
+	#unshift @text_blocks, '<b>Summary:</b>';
+	foreach my $text_block (@text_blocks) {
+	    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+	    $text_unit->set_type("body_text_paragraph");
+	    if (defined $use_italics) {
+		$text_block =~ s/<\/*i>//ig;
+		$text_unit->set_contents($text_block);
+	    } else {
+		$text_unit->set_contents($text_block);
+	    }
+	    push @text_units, $text_unit;
 	}
-	
-	return @text_units;
+    }
+    
+    return @text_units;
 }
 
 # Generates the text units for predecessor or successor events.
