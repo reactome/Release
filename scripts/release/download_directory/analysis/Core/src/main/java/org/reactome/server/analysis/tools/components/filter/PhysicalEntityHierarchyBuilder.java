@@ -4,8 +4,7 @@ import org.apache.log4j.Logger;
 import org.gk.model.GKInstance;
 import org.gk.model.ReactomeJavaConstants;
 import org.gk.persistence.MySQLAdaptor;
-import org.reactome.core.controller.ReactomeToRESTfulAPIConverter;
-import org.reactome.core.mapper.PhysicalEntityMapper;
+import org.reactome.core.factory.DatabaseObjectFactory;
 import org.reactome.core.model.*;
 import org.reactome.server.analysis.core.model.*;
 import org.reactome.server.analysis.core.model.resource.MainResource;
@@ -14,7 +13,6 @@ import org.reactome.server.analysis.core.model.resource.ResourceFactory;
 import org.reactome.server.analysis.core.util.MapSet;
 import org.reactome.server.analysis.core.util.Pair;
 import org.reactome.server.analysis.tools.BuilderTool;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -31,12 +29,7 @@ public class PhysicalEntityHierarchyBuilder {
     private static Logger logger = Logger.getLogger(PhysicalEntityHierarchyBuilder.class.getName());
 
 
-    @Autowired
-    private ReactomeToRESTfulAPIConverter converter;
-
     private MySQLAdaptor dba;
-
-    private PhysicalEntityMapper mapper;
 
     //The buffer is used in building time to avoid querying/decomposition of those previously processed
     private Map<Long, PhysicalEntityNode> physicalEntityBuffer = new HashMap<Long, PhysicalEntityNode>();
@@ -47,9 +40,6 @@ public class PhysicalEntityHierarchyBuilder {
     private PhysicalEntityGraph physicalEntityGraph;
 
     public PhysicalEntityHierarchyBuilder() {
-        this.mapper = new PhysicalEntityMapper();
-        this.mapper.setClassName(ReactomeJavaConstants.PhysicalEntity);
-
         this.identifiersMap = new IdentifiersMap();
         this.physicalEntityGraph = new PhysicalEntityGraph();
     }
@@ -114,21 +104,11 @@ public class PhysicalEntityHierarchyBuilder {
             e.printStackTrace();
             return null;
         }
-        //2nd -> create the corresponding PhysicalEntityObject
-        PhysicalEntity physicalEntity;
-        try {
-            physicalEntity = (PhysicalEntity) this.converter.convert(instance);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        //3rd -> use the mapper to fill the cross-references that will be used later on
-        try {
-            this.mapper.fillCrossReferences(instance, physicalEntity, this.converter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //4th -> figure out the species of the physical entity
+
+        //2nd -> create the corresponding PhysicalEntityObject with all its details
+        PhysicalEntity physicalEntity = DatabaseObjectFactory.getDatabaseObject(instance).loadDetails();
+
+        //3rd -> figure out the species of the physical entity
         SpeciesNode species = null;
         if(instance.getSchemClass().isValidAttribute(ReactomeJavaConstants.species)){
             try {
@@ -146,7 +126,8 @@ public class PhysicalEntityHierarchyBuilder {
                 }
             }
         }
-        //5th -> set the node for the main identifier
+
+        //4th -> set the node for the main identifier
         PhysicalEntityNode node = this.getPhysicalEntityNode(physicalEntityId, species, physicalEntity.getCrossReference());
         if(node!=null){
             MapSet<Resource, String> resourceIdentifiers = this.getResourceIdentifiers(physicalEntity);
@@ -168,13 +149,8 @@ public class PhysicalEntityHierarchyBuilder {
                 }
             }
         }
-        // To avoid future decompositions and cycles
+        // To avoid future deconstructions and cycles
         this.physicalEntityBuffer.put(node.getId(), node);
-//        try {
-//            this.setOrthologous(node, physicalEntity.getInferredTo());
-//        } catch (Exception e) {
-//            logger.error(String.format("Could not set the orthology for %d", node.getId()), e);
-//        }
         return node;
     }
 

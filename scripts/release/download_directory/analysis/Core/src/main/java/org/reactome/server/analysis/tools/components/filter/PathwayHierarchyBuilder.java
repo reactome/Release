@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.gk.model.GKInstance;
 import org.gk.model.ReactomeJavaConstants;
 import org.gk.persistence.MySQLAdaptor;
-import org.reactome.core.controller.APIControllerHelper;
+import org.reactome.core.controller.DatabaseObjectHelper;
 import org.reactome.core.model.Species;
 import org.reactome.server.analysis.core.model.PathwayHierarchy;
 import org.reactome.server.analysis.core.model.PathwayNode;
@@ -25,7 +25,7 @@ public class PathwayHierarchyBuilder {
     private static Logger logger = Logger.getLogger(PathwayHierarchyBuilder.class.getName());
 
     @Autowired
-    private APIControllerHelper helper;
+    private DatabaseObjectHelper helper;
 
     //Keeps the set of species identifiers used as main species in reactome
     private Set<Long> mainSpecies;
