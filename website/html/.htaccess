@@ -10,3 +10,5 @@ RewriteRule . /index.php [L]
 
 # END WordPress
 
+
+SetEnv no-gzip
