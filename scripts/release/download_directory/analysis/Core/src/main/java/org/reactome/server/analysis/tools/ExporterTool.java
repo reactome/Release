@@ -2,6 +2,8 @@ package org.reactome.server.analysis.tools;
 
 import com.martiansoftware.jsap.*;
 import org.gk.persistence.MySQLAdaptor;
+import org.reactome.core.controller.GKInstance2ModelObject;
+import org.reactome.core.factory.DatabaseObjectFactory;
 import org.reactome.server.Main;
 import org.reactome.server.analysis.core.data.AnalysisData;
 import org.reactome.server.analysis.core.model.resource.ResourceFactory;
@@ -56,6 +58,8 @@ public class ExporterTool {
         FileUtil.checkFileName(fileName);
 
         ApplicationContext context = new ClassPathXmlApplicationContext("spring-config.xml");
+        GKInstance2ModelObject converter = context.getBean(GKInstance2ModelObject.class);
+        DatabaseObjectFactory.initializeFactory(dba, converter);
 
         String resource = config.getString("resource");
         ResourceFactory.MAIN mainResource = ResourceFactory.getMainResource(resource);
