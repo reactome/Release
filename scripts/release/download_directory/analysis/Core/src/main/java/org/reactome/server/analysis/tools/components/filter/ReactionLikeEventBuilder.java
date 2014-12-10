@@ -3,18 +3,14 @@ package org.reactome.server.analysis.tools.components.filter;
 import org.gk.model.GKInstance;
 import org.gk.model.ReactomeJavaConstants;
 import org.gk.persistence.MySQLAdaptor;
-import org.reactome.core.controller.ReactomeToRESTfulAPIConverter;
+import org.reactome.core.factory.DatabaseObjectFactory;
 import org.reactome.core.mapper.EventMapper;
-import org.reactome.core.model.CatalystActivity;
-import org.reactome.core.model.DatabaseObject;
-import org.reactome.core.model.PhysicalEntity;
-import org.reactome.core.model.ReactionlikeEvent;
+import org.reactome.core.model.*;
 import org.reactome.server.analysis.core.model.AnalysisReaction;
 import org.reactome.server.analysis.core.model.EntityPathwayReactionMap;
 import org.reactome.server.analysis.core.model.PathwayNode;
 import org.reactome.server.analysis.core.util.MapSet;
 import org.reactome.server.analysis.tools.BuilderTool;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -24,8 +20,6 @@ import java.util.*;
  */
 @Component
 public class ReactionLikeEventBuilder {
-    @Autowired
-    private ReactomeToRESTfulAPIConverter converter;
 
     private EntityPathwayReactionMap entityPathwayReaction = new EntityPathwayReactionMap();
 
@@ -60,7 +54,7 @@ public class ReactionLikeEventBuilder {
             if(!inst.getSchemClass().isa(ReactomeJavaConstants.ReactionlikeEvent)){
                 continue;
             }
-            ReactionlikeEvent reactionLikeEvent = this.convert(inst, mapper);
+            ReactionlikeEvent reactionLikeEvent = DatabaseObjectFactory.getDatabaseObject(inst).loadDetails();
             if(reactionLikeEvent==null) continue;
             //referrers will contain only those that are "reachable" in the pathway location map
             //NOTE: It means that the orphan reactionLikeEvent are removed at this point
@@ -82,62 +76,6 @@ public class ReactionLikeEventBuilder {
 
     public EntityPathwayReactionMap getEntityPathwayReaction() {
         return this.entityPathwayReaction;
-    }
-
-    /**
-     * Converts the GKInstance containing a ReactionlikeEvent to a proper object with the needed
-     * data filled in. Calling to detailedView method instead is not a good idea because no all
-     * the data filled in with that method is used, so this method uses the mapper and calls only
-     * one of the fetching methods in it (the one that fills the regulations). So there is not time
-     * spent to retrieve data that is not gonna be used
-     *
-     * @param inst the GKInstance representing the reactionlikeEvent
-     * @param mapper the mapper used to fill in the necessary data
-     * @return the corresponding object with the required data in this algorithm
-     */
-    private ReactionlikeEvent convert(GKInstance inst, EventMapper mapper){
-        if(!inst.getSchemClass().isa(ReactomeJavaConstants.ReactionlikeEvent)){
-            return null;
-        }
-
-        ReactionlikeEvent reactionLikeEvent;
-        try {
-            reactionLikeEvent = (ReactionlikeEvent) converter.convert(inst);
-        }catch (ClassNotFoundException e){
-            System.err.println(e.getMessage());
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        try {
-            mapper.fetchRegulations(inst, reactionLikeEvent, converter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        //The CatalystActivities objects exist but we need to fill in the content because the following
-        //algorithm uses the PhysicalEntity contained in them. For that the easiest way is to retrieve
-        //the list of GKInstances and later or create the model objects containing the information, so
-        //that list can be set as the the new CatalystActivities in the ReactionlikeEvent object
-        List<?> catalystActivities = null;
-        try {
-            catalystActivities = inst.getAttributeValuesList(ReactomeJavaConstants.catalystActivity);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(catalystActivities!=null){
-            List<CatalystActivity> aux = new LinkedList<CatalystActivity>();
-            for (Object catalystActivity : catalystActivities) {
-                try {
-                    aux.add((CatalystActivity) converter.convert((GKInstance) catalystActivity));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            reactionLikeEvent.setCatalystActivity(aux);
-        }
-        return reactionLikeEvent;
     }
 
     /**
@@ -172,9 +110,25 @@ public class ReactionLikeEventBuilder {
             }
         }
         //CATALYST ACTIVITIES
-        for (CatalystActivity catalystActivity : reactionlikeEvent.getCatalystActivity()) {
-            if(catalystActivity!=null && catalystActivity.getPhysicalEntity()!=null){
-                pes.add(catalystActivity.getPhysicalEntity());
+        if(reactionlikeEvent.getCatalystActivity()!=null) {
+            for (CatalystActivity catalystActivity : reactionlikeEvent.getCatalystActivity()) {
+                if (catalystActivity != null){
+                    catalystActivity.load();
+                    if(catalystActivity.getPhysicalEntity() != null) {
+                        pes.add(catalystActivity.getPhysicalEntity());
+                    }
+                }
+            }
+        }
+        //ENTITY FUNCTIONAL STATUS
+        if(reactionlikeEvent.getEntityFunctionalStatus()!=null){
+            for (EntityFunctionalStatus efs : reactionlikeEvent.getEntityFunctionalStatus()) {
+                if(efs!=null) {
+                    efs.load();
+                    if (efs.getPhysicalEntity() != null) {
+                        pes.add(efs.getPhysicalEntity());
+                    }
+                }
             }
         }
 

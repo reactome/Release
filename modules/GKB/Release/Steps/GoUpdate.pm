@@ -32,8 +32,8 @@ override 'run_commands' => sub {
     cmd("Running GO obsolete update script",[["perl go_obo_update.pl @args > go.out 2> go.err"]]);
     cmd("Running EC number update script",[["perl addEcNumber2Activity_update.pl @args < ec2go"]]);
     
-    foreach my $class ("MolecularFunction", "BiologicalProcess", "CellularComponent") {
-        cmd("Updating $class display names",[["perl updateDisplayName.pl @args -class GO_$class"]]);
+    foreach my $class ("GO_MolecularFunction", "GO_BiologicalProcess", "GO_CellularComponent", "PhysicalEntity", "CatalystActivity") {
+        cmd("Updating $class display names",[["perl updateDisplayName.pl @args -class $class"]]);
     }
 };
 
