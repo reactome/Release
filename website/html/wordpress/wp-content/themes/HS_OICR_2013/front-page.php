@@ -56,7 +56,9 @@
             <div class="contentbody">
             
             <div class="announcement">
+
             <a href="/version-51-released/"> Current Version: Reactome V51 
+
             <!--This is a placeholder for static announcements. For example, downtime due to server maintenance, or some other important announcement-->
             </div><!--close annoucement-->
 
