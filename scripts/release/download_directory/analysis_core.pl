@@ -19,6 +19,10 @@ use GKB::Config;
 use autodie;
 use Cwd;
 use Getopt::Long;
+use common::sense;
+
+use constant TEMP => '/usr/local/reactomes/Reactome/production/AnalysisService/temp';
+
 
 $GKB::Config::NO_SCHEMA_VALIDITY_CHECK = undef;
 
@@ -62,5 +66,9 @@ my %hierarchy = (details => "ReactomePathways.txt", relationship => "ReactomePat
 while(my ($type, $output) = each %hierarchy) {
     system("$analysis_core hierarchy -t $type -i $present_dir/analysis_v$opt_r.bin -o $present_dir/$output");
 }
+
+my $tempfiles = TEMP.'/*';
+say "Removing analysis temp files...";
+system "rm -f $tempfiles";
 
 print "$0 has finished its job\n";
