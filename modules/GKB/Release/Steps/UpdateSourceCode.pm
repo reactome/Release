@@ -25,15 +25,10 @@ override 'run_commands' => sub {
     
         
     # The command is run on the live server when $gkbdir is gkb
-    my $ssh_server = ($gkbdir eq "gkb") ? $live_server : undef;
+    my $ssh_server = ($gkbdir eq "gkb") ? $live_server : '';
+    my $git_repo = '/usr/local/gkb';
    
-    cmd("Updating source code from git",[
-                                         ["git stash"],
-                                         ["git pull"],
-                                         ["git stash pop"]
-                                        ],
-	{'ssh' => $ssh_server}
-    );
+    cmd("Updating source code from git",[["perl git_update.pl $git_repo $ssh_server"]]);
 };
 
 1;
