@@ -33,7 +33,8 @@ my $ssh = ($opt_host eq "localhost" || $opt_host eq $hostname) ? 0 : 1;
 my $secrets = "perl -pi -e \"s/GK_DB_NAME\\s*=\\s*'\\S+';/GK_DB_NAME  = 'test_reactome_$opt_version';/\" $opt_configpath/Secrets.pm"; # change the database name to test_reactome_xx
 my $config = "perl -pi -e \"s/LAST_RELEASE_DATE = \\d{8}/LAST_RELEASE_DATE = $opt_lastrelease/\" $opt_configpath/Config.pm"; # update the last release date
 if ($ssh) {
-	`ssh $opt_host "$secrets"`;
+	$config =~ s/"/\\"/g;
+
 	`ssh $opt_host "$config"`;
 } else {
 	`$secrets`;
