@@ -1187,7 +1187,6 @@ sub get_instance_text_units {
 		my $text_unit = GKB::DocumentGeneration::TextUnit->new();
 		$text_unit->set_type("vertical_space");
 		$text_unit->set_contents(1);
-		
 	
 		my @descriptive_text_units = $self->get_descriptive_text_units_from_instance($instance);
 		push @text_units, $text_unit, @descriptive_text_units;
