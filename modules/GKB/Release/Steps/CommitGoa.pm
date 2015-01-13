@@ -25,7 +25,7 @@ override 'run_commands' => sub {
     
     my $host = $self->host;
     
-    my $go_submission = "$release/goa_prepare/GO_submission/gene-associations/submission/gene_association.reactome";
+    my $go_submission = "$release/goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome";
     cmd("Committing gene association file to GO SVN",
     	[
     	    ["gzip -f $go_submission"],
