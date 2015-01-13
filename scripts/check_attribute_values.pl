@@ -1,10 +1,23 @@
 #!/usr/local/bin/perl  -w
 
-use lib "$ENV{HOME}/bioperl-1.0";
-use lib "$ENV{HOME}/GKB/modules";
+BEGIN {
+    my ($path) = $0 =~ /^(\S+)$/;
+    my @a = split('/',$path);
+    pop @a;
+    if (@a && !$a[0]) {
+        $#a = $#a - 2;
+    } else {
+        push @a, ('..');
+    }
+    push @a, 'modules';
+    my $libpath = join('/', @a);
+    unshift (@INC, $libpath);
+}
+
 use GKB::DBAdaptor;
 use Data::Dumper;
 use Getopt::Long;
+use common::sense;
 use strict;
 
 @ARGV || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -class class -fix\n";
@@ -43,10 +56,14 @@ while (my $i = shift @{$ar}) {
     $i->inflate;
     my $needs_update;
     foreach my $att (grep {$i->is_instance_type_attribute($_)} $i->list_set_attributes) {
+	next unless $att =~ /species/i;
 	my (@valid,@invalid);
 	map {$i->is_attribute_allowed_class_instance($att,$_) ? push @valid, $_ : push @invalid, $_} @{$i->attribute_value($att)};
 	if (@invalid) {
 	    @valid ? $i->attribute_value($att,@valid) : $i->attribute_value($att,undef);
+	    foreach (@valid) {
+                print join("\t",$i->extended_displayName,$att,$_->extended_displayName), "\n";
+            }
 	    $needs_update = 1;
 	    foreach (@invalid) {
 		print join("\t",$i->extended_displayName,$att,$_->extended_displayName), "\n";

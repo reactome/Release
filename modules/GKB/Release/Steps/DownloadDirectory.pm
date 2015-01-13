@@ -52,6 +52,14 @@ override 'run_commands' => sub {
              ["ssh $live_server 'cd $analysis_dir;rm analysis.bin; ln -s $analysis_binary analysis.bin'"]
             ]
         );
+	
+	my $solr_dir = '/usr/local/reactomes/Reactome/production/Solr';
+        cmd("Copying solr index from $host",
+            [
+             ["ssh $live_server 'rm -r $solr_dir'"],
+             ["scp -rp $solr_dir $live_server:$solr_dir"]
+            ]
+        );
     }
 
     
