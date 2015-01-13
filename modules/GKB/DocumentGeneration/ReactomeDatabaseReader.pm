@@ -1183,9 +1183,13 @@ sub get_instance_text_units {
 		$self->get_literature_refs(\@text_units, $instance_authors, "Authors");
 		$self->get_literature_refs(\@text_units, $instance_editors, "Editors");
 		$self->get_literature_refs(\@text_units, $instance_reviewers, "Reviewers");
+
+		my $text_unit = GKB::DocumentGeneration::TextUnit->new();
+		$text_unit->set_type("vertical_space");
+		$text_unit->set_contents(1);
 	
 		my @descriptive_text_units = $self->get_descriptive_text_units_from_instance($instance);
-		push @text_units, @descriptive_text_units;
+		push @text_units, $text_unit, @descriptive_text_units;
 	
 		# Diagram
 		if ($include_images_flag) {
