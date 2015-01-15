@@ -61,36 +61,29 @@ my $curated_dba = GKB::DBAdaptor->new
      -DEBUG => $opt_debug
     );
 
-my $released_RGPs = $release_dba->fetch_instance_by_remote_attribute('ReferenceGeneProduct', [['referenceDatabase.name', '=', ['UniProt']]]);
+my $released_EWASs = $release_dba->fetch_instance(-CLASS => 'EntityWithAccessionedSequence');
 
 my %released;
-foreach my $rgp (@{$released_RGPs}) {
-    next unless $rgp->identifier->[0];
-    my $uniprot_id = $rgp->variantIdentifier->[0] ? $rgp->variantIdentifier->[0] : $rgp->identifier->[0];
-    $released{$uniprot_id} = scalar grep {$_->is_a('EntityWithAccessionedSequence')} @{$release_dba->fetch_referer_by_instance($rgp)};
+foreach my $ewas (@{$released_EWASs}) {
+    next unless $ewas->stableIdentifier->[0];
+    my $stable_id = $ewas->stableIdentifier->[0]->identifier->[0];
+    $released{$stable_id}++;
 }
 
-my $curated_RGPs = $curated_dba->fetch_instance_by_remote_attribute('ReferenceGeneProduct', [['referenceDatabase.name', '=', ['UniProt']]]);
+my $curated_EWASs = $curated_dba->fetch_instance(-CLASS => 'EntityWithAccessionedSequence');
 
 (my $outfile = $0) =~ s/pl$/txt/;
 open my $out, '>', $outfile;
-foreach my $rgp (@{$curated_RGPs}) {
-    next unless $rgp->species->[0];
-    next unless $rgp->species->[0]->name->[0] =~ /Homo sapiens/;
-    next unless $rgp->identifier->[0];
-    my $uniprot_id = $rgp->variantIdentifier->[0] ? $rgp->variantIdentifier->[0] : $rgp->identifier->[0];
-
-    my @curated_EWASs = grep {$_->is_a('EntityWithAccessionedSequence')} @{$curated_dba->fetch_referer_by_instance($rgp)};
-    if ($released{$uniprot_id}) {
-	my $unreleased = scalar @curated_EWASs - $released{$uniprot_id};
-	print $out "$uniprot_id has $unreleased unreleased EWASs\n" if $unreleased;
-    } else {
-	foreach my $ewas (@curated_EWASs) {
-	    print $out $ewas->db_id . "\t" . $ewas->name->[0];
-	    print $out "\t" . $ewas->created->[0]->author->[0]->displayName . " " . $ewas->created->[0]->dateTime->[0] if $ewas->created->[0] && $ewas->created->[0]->author->[0];
-	    print $out "\t" . $ewas->modified->[-1]->author->[0]->displayName . " " . $ewas->modified->[-1]->dateTime->[0] if $ewas->modified->[-1] && $ewas->modified->[-1]->author->[0];
-	    print $out "\n";
-	}
-    }
+foreach my $ewas (@{$curated_EWASs}) {
+    next unless $ewas->species->[0];
+    next unless $ewas->species->[0]->name->[0] =~ /Homo sapiens/;
+    next unless $ewas->stableIdentifier->[0];
+    my $stable_id = $ewas->stableIdentifier->[0]->identifier->[0];
+    next if $released{$stable_id};
+    
+    print $out $ewas->db_id . "\t" . $ewas->name->[0];
+    print $out "\t" . $ewas->created->[0]->author->[0]->displayName . " " . $ewas->created->[0]->dateTime->[0] if $ewas->created->[0] && $ewas->created->[0]->author->[0];
+    print $out "\t" . $ewas->modified->[-1]->author->[0]->displayName . " " . $ewas->modified->[-1]->dateTime->[0] if $ewas->modified->[-1] && $ewas->modified->[-1]->author->[0];
+    print $out "\n";
 }
 close $out;
