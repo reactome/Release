@@ -848,7 +848,7 @@ sub get_reviewers_report_introduction {
     $text_unit->set_contents($text);
     push @text_units, $text_unit;
 
-    $text = "The description of any human reaction that has been inferred from a reaction in another species is followed (in the text) by a description of the corresponding reaction in that other species. These are referred to as “Source” reactions in this document. A more detailed description of the human reaction can be found by following the hyperlink to the corresponding webpage.";
+    $text = "The description of any human reaction that has been inferred from a reaction in another species is followed (in the text) by a description of the corresponding reaction in that other species. These are referred to as \"Source\" reactions in this document. A more detailed description of the human reaction can be found by following the hyperlink to the corresponding webpage.";
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("bullet_text");
     $text_unit->set_contents($text);
