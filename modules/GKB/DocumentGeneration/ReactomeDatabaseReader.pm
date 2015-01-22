@@ -919,7 +919,7 @@ END
 
     push @text_units, $self->hyperlink("Reactome User Guide","http://wiki.reactome.org/index.php/Usersguide");
     
-    $text = qq(<b>\*Note that the \"Expression\" and \"Structure\" data are not available before pubic release as it is provided by external resources.</b>);
+    $text = qq(<b>\*Note that the \"Expression\" and \"Structure\" data are not available before public release as it is provided by external resources.</b>);
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("body_text_paragraph");
     $text_unit->set_contents($text);
