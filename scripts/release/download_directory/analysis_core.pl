@@ -56,7 +56,7 @@ my $analysis_core = "java -jar -Xms5120M -Xmx10240M analysis_core.jar";
 my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
 system("$analysis_core build $credentials -o $present_dir/analysis_v$opt_r.bin");
 
-foreach my $resource (qw/UniProt ChEBI Ensembl/) {
+foreach my $resource (qw/UniProt ChEBI Ensembl miRBase/) {
     my $export = "$analysis_core export $credentials -i $present_dir/analysis_v$opt_r.bin";
     system("$export -r $resource -o $present_dir/$resource"."2Reactome.txt");
     system("$export -r $resource -o $present_dir/$resource"."2Reactome_All_Levels.txt --all");
