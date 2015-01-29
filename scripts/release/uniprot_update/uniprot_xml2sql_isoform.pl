@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 #This script updates the Uniprot ReferencePeptideSequences in Reactome. Uniprot entries (swissprot section) are imported/updated in Reactome if they are assigned to one of the species specified in @species.
 #The script checks for existing entries and updates them.
@@ -31,7 +32,7 @@ use GKB::DBAdaptor;
 use GKB::Utils_esther;
 use Data::Dumper;
 use Getopt::Long;
-use strict;
+use Time::Piece;
 
 our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db, $opt_, $opt_species );
 (@ARGV)  || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
@@ -63,9 +64,15 @@ if ($trembl_file =~ /\.gz$/)
 }
 
 # Download sprot file
-my $sprot_file = "uniprot_sprot.xml";
-my $return = system("gunzip -f $update_dir/$sprot_file.gz");
-die "ERROR: Unzipping of uniprot_sprot.xml failed\n" unless ($return == 0);
+@temp = split(/\n/, `ls -1tr $update_dir/uniprot_sprot.xml*`);	# look for file in the update directory
+(my $sprot_file = pop @temp) =~ s/^$update_dir\///;				# use the latest in case there are multiple files with the same prefix
+die "Can't find $update_dir/uniprot_sprot.xml.gz\n" unless ($sprot_file);
+
+if ($sprot_file =~ /\.gz$/)
+{
+	system("gunzip -f $update_dir/$sprot_file");
+	$sprot_file =~ s/\.gz$//;
+}
 
 # Prepare to update InstanceEdit
 # To be replaced by name and initials of a user who runs the update
@@ -156,7 +163,6 @@ print "Number of UniProt instances in Reactome: $total_db\t"
 
 open( UP, "$update_dir/$sprot_file" )  || die "Can't open uniprot_sprot.xml\n";
 open REPORT, ">$update_dir/uniprot_report";
-print REPORT "Db ids of changed referenceGeneProducts:\n";
 # Parse the xml file....
 
 local $/ = "\<\/entry\>\n";
@@ -268,20 +274,48 @@ while (<UP>) {
         }
         print "\n";
     }
-
-	my %values = (
-		'SecondaryIdentifier' => \@ac,
-		'Description' => $desc,
-		'sequenceLength' => $lngth,
-		'Species' => $species_instance,
-		'checksum' => $checksum,
-		'name' => $name,
-		'GeneName' => \@gene_name,
-		'Comment' => $cc,
-		'Keyword' => \@kw 
-	);
-
-
+    
+    my @chains;
+    while (/\<feature.*?type=\"initiator methionine\"(.*?)\<\/feature\>/gms) {
+	my $feature = $1;
+	
+	my $position;
+	if ($feature =~ /\<location\>\n\s+<position position=\"(\d+)\"/ms) {
+		$position = $1;
+	}
+	
+	push @chains, "initiator methionine:$position";
+    } 
+    
+    while (/\<feature.*?type=\"(chain|peptide|propeptide|signal peptide|transit peptide)\"(.*?)\<\/feature\>/gms) {
+	my $type = $1;
+	my $feature = $2;
+	
+	my $begin = '';
+	if ($feature =~ /<begin position=\"(\d+)\"/ms) {
+	    $begin = $1; 	
+	}
+	
+	my $end = '';
+	if ($feature =~ /<end position=\"(\d+)\"/ms) {
+	    $end = $1;
+	}
+		
+	push @chains, "$type:$begin-$end";
+    }
+    
+    my %values = (
+	'SecondaryIdentifier' => \@ac,
+	'Description' => $desc,
+	'sequenceLength' => $lngth,
+	'Species' => $species_instance,
+	'checksum' => $checksum,
+	'name' => $name,
+	'GeneName' => \@gene_name,
+	'Comment' => $cc,
+	'Keyword' => \@kw,
+	'Chain' => \@chains
+    );
 
     if ( not defined $reactome_gp{$ac} ) {   #new UniProt instance if not exists
         $new_sp++;
@@ -802,15 +836,17 @@ sub updateinstance {
 		$i->isSequenceChanged("false");
 	} else {
 		$i->isSequenceChanged("true");
-		print REPORT $i->db_id . "\n";
+		print REPORT $i->db_id . " sequence has changed\n";
 	}
 	
 	foreach my $value (keys %values) {
 		my $new = $values{$value};
-					
+			
 		next unless $new;
-		next if ($value eq 'Species' && same_species($new, $i));
-		next if ($value ne 'Species' && $new ~~ $i->$value);
+		next if ($value eq 'Species' && same_species($new, $i->Species->[0]));
+		next if ($value ne 'Species' && has_value($i,$value) && $new ~~ $i->$value);
+		
+		update_chain_log($i, $new) if $value eq 'Chain';
 		
 		if (ref $new eq 'ARRAY') {
 			$i->$value(@$new);
@@ -833,6 +869,59 @@ sub same_species {
 	
 	return unless ($new_species && $new_species->name->[0] && $current_species && $current_species->name->[0]);
 	return $new_species->name->[0] eq $current_species->name->[0];
+}
+
+sub has_value {
+	my $i = shift;
+	my $value = shift;
+	
+	if($i->$value) {
+		return !ref $i->$value ||
+			(ref $i->$value eq 'ARRAY' && @{$i->$value}) ||
+			(ref $i->$value eq 'HASH' && keys %{$i->$value});
+	}
+	
+	return;
+	
+}
+
+sub update_chain_log {
+	my $i = shift;
+	my $new_chains = shift;
+	my @old_chains = @{$i->Chain};
+	
+	my $t = localtime;
+	my $date = $t->day . ' ' . $t->fullmonth . ' ' . $t->mday . ' ' . $t->year;
+	
+	my $reference_gene_product = $i->db_id;
+	$reference_gene_product .= " - ". $i->name->[0] if $i->name;
+	$reference_gene_product .= " (" . $i->species->[0]->name->[0] . ")" if $i->species->[0];
+	
+	foreach my $old_chain (@old_chains) {
+		unless ($old_chain ~~ @{$new_chains}) {
+			my $log_entry = "$old_chain removed on $date";
+			print REPORT $log_entry . " for $reference_gene_product\n";
+			
+			my $log = $i->_chainChangeLog->[0] ?
+				  $i->_chainChangeLog->[0] . ';' . $log_entry :
+				  $log_entry;
+			$i->add_attribute_value('_chainChangeLog', $log);
+			print "old chain removed for " . $i->db_id . "\n";
+		}
+	}
+	
+	foreach my $new_chain (@{$new_chains}) {		
+		unless ($new_chain ~~ @old_chains) {
+			my $log_entry = "$new_chain added on $date";
+			print REPORT $log_entry . " for $reference_gene_product\n";
+			
+			my $log = $i->_chainChangeLog->[0] ?
+				  $i->_chainChangeLog->[0] . ';' . $log_entry :
+				  $log_entry;
+			$i->add_attribute_value('_chainChangeLog', $log);
+			print "new chain added for " . $i->db_id . "\n";
+		}
+	}
 }
 
 sub get_skip_list {
