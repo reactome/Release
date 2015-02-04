@@ -34,6 +34,8 @@ use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
 use GKB::Config;
 use GKB::Utils;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -114,6 +116,8 @@ sub extract_identifier_and_version_from_string {
 sub set_identifier_database_dba {
 	my ($self, $identifier_database_dba) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	if (defined $identifier_database_dba) {
 		$self->identifier_database_dba($identifier_database_dba);
 		
@@ -136,7 +140,7 @@ sub set_identifier_database_dba {
 			$self->reactome_release_table_name($reactome_release_table_name);
 			$self->reactome_release_column_name($reactome_release_column_name);
 		} else {
-			print STDERR "StableIdentifiers.set_identifier_database_dba: WARNING - could not find table names ReactomeRelease or Release, this might not be a stable identifier database!\n";
+			$logger->warn("could not find table names ReactomeRelease or Release, this might not be a stable identifier database!\n");
 			$self->identifier_database_dba(undef);
 		}
 	} else {
@@ -151,6 +155,8 @@ sub set_identifier_database_dba {
 sub get_identifier_database_dba {
 	my ($self) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	# Get cached version, if available
 	if (defined $self->identifier_database_dba) {
 		return $self->identifier_database_dba;
@@ -160,7 +166,7 @@ sub get_identifier_database_dba {
 	# in the Config.pm file, and if not, return nothing.
 	my $identifier_database_db_name = $GKB::Config::GK_IDB_NAME;
 	if (!$identifier_database_db_name) {
-		print STDERR "StableIdentifier.get_identifier_database_dba: no identifier database name!  Maybe you need to add GK_IDB_NAME to config.pm?\n";
+		$logger->warn("no identifier database name!  Maybe you need to add GK_IDB_NAME to config.pm?\n");
 		return undef;
 	}
 	
@@ -203,8 +209,10 @@ sub get_current_release_dba {
 sub get_dba_from_db_name {
 	my ($self, $db_name) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	if (!(defined $db_name)) {
-		print STDERR "StableIdentifiers.get_dba_from_db_name: WARNING - db_name is undef!!\n";
+		$logger->warn("db_name is undef!!\n");
 		return undef;
 	}
 	
@@ -225,7 +233,7 @@ sub get_dba_from_db_name {
 		};
 		
 		if (!(defined $dba)) {
-			print STDERR "StableIdentifiers.get_dba_from_db_name: WARNING - not able to create a new DBAdaptor for db_name=$db_name\n";
+			$logger->warn("not able to create a new DBAdaptor for db_name=$db_name\n");
 		}
 	}
 	
@@ -237,8 +245,10 @@ sub get_dba_from_db_name {
 sub get_db_name_from_release_num {
 	my ($self, $num, $project) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	if (!(defined $num)) {
-		print STDERR "StableIdentifiers.get_db_name_from_release_num: WARNING - supplied value for num is undef!!!\n";
+		$logger->warn("StableIdentifiers.get_db_name_from_release_num: WARNING - supplied value for num is undef!!!\n");
 		return undef;
 	}
 	
@@ -301,6 +311,8 @@ sub close_all_dbas {
 sub get_current_instance {
 	my ($self, $stable_identifier, $identifier, $version) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	# If a cached instance already exists, don't generate it again
 	my $current_release_instance = $self->current_release_instance;
 	if ($current_release_instance) {
@@ -315,7 +327,7 @@ sub get_current_instance {
 	if (defined $current_release_dba) {
 		$self->current_release_dba($current_release_dba);
 	} else {
-		print STDERR "StableIdentifier.get_current_instance: could not get a dba for identifier=$identifier!!\n";
+		$logger->warn("could not get a dba for identifier=$identifier!!\n");
 		return undef;
 	}
 	
@@ -324,7 +336,7 @@ sub get_current_instance {
 		[['stableIdentifier.identifier','=',[$identifier]]]);
 	
 	if (!$instances || !($instances =~ /ARRAY/) || scalar(@{$instances})<1) {
-		print STDERR "StableIdentifier.get_current_instance: WARNING - could not find a SatabaseObject for identifier=$identifier\n";
+		$logger->warn("could not find a DatabaseObject for identifier=$identifier\n");
 	}
 		
 	$current_release_instance = $self->get_attribute_val_from_list($instances);
@@ -342,35 +354,37 @@ sub get_current_instance {
 sub get_release_dba {
 	my ($self, $stable_identifier, $identifier_version) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	if (!(defined $stable_identifier)) {
-		print STDERR "StableIdentifiers.get_release_dba: WARNING - stable_identifier is undef!!\n";
+		$logger->warn("stable_identifier is undef!!\n");
 		return undef;
 	}
 	
 	my $stable_identifier_version = $self->get_stable_identifier_version($stable_identifier, $identifier_version);
 	if (!(defined $stable_identifier_version)) {
-		print STDERR "StableIdentifiers.get_release_dba: WARNING - no stable_identifier_version could be found!!\n";
-		print STDERR "	stable_identifier=$stable_identifier\n";
+		$logger->warn("no stable_identifier_version could be found!!\n");
+		$logger->info("stable_identifier=$stable_identifier\n");
 		if (defined $identifier_version) {
-			print STDERR "	identifier_version=$identifier_version\n";
+			$logger->warn("	identifier_version=$identifier_version\n");
 		}
 	}
 	
 	my $release = $self->get_max_release_from_stable_identifier_version_instance($stable_identifier_version);
 	if (!(defined $release)) {
-		print STDERR "StableIdentifiers.get_release_dba: WARNING - no release could be found!!\n";
-		print STDERR "		stable_identifier=$stable_identifier\n";
+		$logger->warn("no release could be found!!\n");
+		$logger->info("stable_identifier=$stable_identifier\n");
 		if (defined $identifier_version) {
-			print STDERR "		identifier_version=$identifier_version\n";
+			$logger->warn("identifier_version=$identifier_version\n");
 		}
-		print STDERR "		stable_identifier_version=$stable_identifier_version\n";
+		$logger->info("stable_identifier_version=$stable_identifier_version\n");
 		return undef;
 	}
 	
 	my $release_db_name = $self->get_db_name_from_release($release);
 	
 	if (!(defined $release_db_name)) {
-		print STDERR "StableIdentifiers.get_release_dba: WARNING - could not find a release database name for stable_identifier=$stable_identifier, stable_identifier=$stable_identifier\n";
+		$logger->warn("could not find a release database name for stable_identifier=$stable_identifier, stable_identifier=$stable_identifier\n");
 		return;
 	}
 	
@@ -386,26 +400,28 @@ sub get_release_dba {
 sub get_current_instance_name {
 	my ($self, $stable_identifier, $identifier, $version) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	if (!(defined $stable_identifier)) {
-		print STDERR "StableIdentifier.get_current_instance_name: WARNING - stable_identifier is undef!!\n";
+		$logger->warn("stable_identifier is undef!!\n");
 #		return '';
 	}
 	if (!(defined $identifier)) {
-		print STDERR "StableIdentifier.get_current_instance_name: WARNING - identifier is undef!!\n";
+		$logger->warn("identifier is undef!!\n");
 #		return '';
 	}
 	
 	my $instance = $self->get_current_instance($stable_identifier, $identifier, $version);
 	
 	if (!$instance) {
-		print STDERR "StableIdentifier.get_current_instance_name: could not find instance with identifier=$identifier!!\n";
+		$logger->warn("could not find instance with identifier=$identifier!!\n");
 		return '';
 	}
 
 	my $display_name = $instance->displayName;
 	
 	if (!(defined $display_name)) {
-		print STDERR "StableIdentifier.get_current_instance_name: WARNING - no display name for instance with ientifier=$identifier\n";
+		$logger->warn("no display name for instance with ientifier=$identifier\n");
 		return '';
 	}
 	
@@ -415,6 +431,8 @@ sub get_current_instance_name {
 # Gets stable ID and version for instance currently being displayed on the page
 sub get_current_identifier_and_version {
 	my ($self) = @_;
+	
+	my $logger = get_logger(__PACKAGE__);
 	
 	my $identifier = undef;
 	my $version = undef;
@@ -461,19 +479,19 @@ sub get_current_identifier_and_version {
 	}
 		
 	if (!(defined $current_release_instance)) {
-		print STDERR "StableIdentifiers.get_current_identifier_and_version: WARNING - could not get current instance\n";
+		$logger->warn("could not get current instance\n");
 		return @identifier_and_version;
 	}
 		
 	# Get the stableIdentifier attribute from the instance
 	if (!$current_release_instance->is_valid_attribute('stableIdentifier')) {
-		print STDERR "StableIdentifiers.get_current_identifier_and_version: WARNING - stableIdentifier is not a valid attribute for instance with DB_ID: " . $current_release_instance->db_id() . "\n";
+		$logger->warn("stableIdentifier is not a valid attribute for instance with DB_ID: " . $current_release_instance->db_id() . "\n");
 		if (defined $db_id) {
-			print STDERR "StableIdentifiers.get_current_identifier_and_version: (db_id=$db_id)\n";
+			$logger->info("(db_id=$db_id)\n");
 		}
 		my $db_name = $self->cgi->param('DB');
 		if (defined $db_name) {
-			print STDERR "StableIdentifiers.get_current_identifier_and_version: (db_name=$db_name)\n";
+			$logger->info("(db_name=$db_name)\n");
 		}
 		# Just for fun, let's see if we can get the information from the identifier database!!
 		# (Ha,ah ha ha hah!!)
@@ -481,28 +499,28 @@ sub get_current_identifier_and_version {
 			my $release_num = $self->get_release_num_from_db_name($db_name);
 			my $stable_identifiers = $self->get_stable_identifiers_from_release_db_id($release_num, $db_id);
 			if (scalar(@{$stable_identifiers})<1) {
-				print STDERR "StableIdentifiers.get_current_identifier_and_version: gloink, can't find any StableIdentifier instances for DB_ID $db_id in release $release_num!\n";
+				$logger->warn("can't find any StableIdentifier instances for DB_ID $db_id in release $release_num!\n");
 			} elsif (scalar(@{$stable_identifiers})>1) {
-				print STDERR "StableIdentifiers.get_current_identifier_and_version: gadzooks, there are " . scalar(@{$stable_identifiers}) . " instances for DB_ID $db_id in release $release_num!!\n";
+				$logger->warn("there are " . scalar(@{$stable_identifiers}) . " instances for DB_ID $db_id in release $release_num!!\n");
 			} else {
 				$identifier = $stable_identifiers->[0]->identifierString->[0];
 				if (defined $stable_identifiers->[0]->identifierString && scalar(@{$stable_identifiers->[0]->identifierString})>0) {
-					print STDERR "StableIdentifiers.get_current_identifier_and_version: HAH!!  identifier=$identifier\n";
+					$logger->info("identifier=$identifier\n");
 				} else {
-					print STDERR "StableIdentifiers.get_current_identifier_and_version: blurgh, identifierString is empty!!\n";
+					$logger->warn("identifierString is empty!!\n");
 				}
 			}
 		}
 		return @identifier_and_version;
 	}
 	if (!(defined $current_release_instance->stableIdentifier) || scalar(@{$current_release_instance->stableIdentifier})<1) {
-		print STDERR "StableIdentifiers.get_current_identifier_and_version: WARNING - instance has empty stableIdentifier attribute for instance with DB_ID: " . $current_release_instance->db_id() . "\n";
+		$logger->warn("instance has empty stableIdentifier attribute for instance with DB_ID: " . $current_release_instance->db_id() . "\n");
 		if (defined $db_id) {
-			print STDERR "StableIdentifiers.get_current_identifier_and_version: (db_id=$db_id)\n";
+			$logger->info("(db_id=$db_id)\n");
 		}
 		my $db_name = $self->cgi->param('DB');
 		if (defined $db_name) {
-			print STDERR "StableIdentifiers.get_current_identifier_and_version: (db_name=$db_name)\n";
+			$logger->info("(db_name=$db_name)\n");
 		}
 		# Just for fun, let's see if we can get the information from the identifier database!!
 		# (Ha,ah ha ha hah!!)
@@ -510,15 +528,15 @@ sub get_current_identifier_and_version {
 			my $release_num = $self->get_release_num_from_db_name($db_name);
 			my $stable_identifiers = $self->get_stable_identifiers_from_release_db_id($release_num, $db_id);
 			if (scalar(@{$stable_identifiers})<1) {
-				print STDERR "StableIdentifiers.get_current_identifier_and_version: gloink, can't find any StableIdentifier instances for DB_ID $db_id in release $release_num!\n";
+				$logger->warn("can't find any StableIdentifier instances for DB_ID $db_id in release $release_num!\n");
 			} elsif (scalar(@{$stable_identifiers})>1) {
-				print STDERR "StableIdentifiers.get_current_identifier_and_version: gadzooks, there are " . scalar(@{$stable_identifiers}) . " instances for DB_ID $db_id in release $release_num!!\n";
+				$logger->warn("there are " . scalar(@{$stable_identifiers}) . " instances for DB_ID $db_id in release $release_num!!\n");
 			} else {
 				$identifier = $stable_identifiers->[0]->identifierString->[0];
 				if (defined $stable_identifiers->[0]->identifierString && scalar(@{$stable_identifiers->[0]->identifierString})>0) {
-					print STDERR "StableIdentifiers.get_current_identifier_and_version: HAH!!  identifier=$identifier\n";
+					$logger->info("identifier=$identifier\n");
 				} else {
-					print STDERR "StableIdentifiers.get_current_identifier_and_version: blurgh, identifierString is empty!!\n";
+					$logger->warn("identifierString is empty!!\n");
 				}
 			}
 		}
@@ -539,31 +557,35 @@ sub get_current_identifier_and_version {
 # corresponding to a DB_ID in a given release.  Generally speaking, there
 # should only be zero or one instance in the returned Set.
 sub get_stable_identifiers_from_release_db_id {
-	my ($self, $release_num, $db_id) = @_;
+    my ($self, $release_num, $db_id) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
 
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!$identifier_database_dba) {
-    	print STDERR "StableIdentifiers.get_stable_identifiers_from_release_db_id: WARNING - no DBA available!!\n";
+    	$logger->warn("no DBA available!!\n");
     	return undef;
     }
 	    
     # First, find the release associated with the given release number
     my $release_db_id = $self->get_release_db_id_from_num($release_num);
     if (!(defined $release_db_id)) {
-            print STDERR "StableIdentifiers.get_stable_identifiers_from_release_db_id: WARNING - we have no releases for release_num=$release_num, PROJECT_NAME=$PROJECT_NAME!!\n";
-            return undef;
+        $logger->warn("we have no releases for release_num=$release_num, PROJECT_NAME=$PROJECT_NAME!!\n");
+        return undef;
     }
 
     my $release_remote_attribute = 'stableIdentifierVersion.releaseIds.' . $self->reactome_release_column_name;
 #    my $release_num_remote_attribute = 'stableIdentifierVersion.releaseIds.' . $self->reactome_release_column_name . '.num';
 #    my $project_name_remote_attribute = 'stableIdentifierVersion.releaseIds.' . $self->reactome_release_column_name . '.project.name';
-	my $stable_identifiers = $identifier_database_dba->fetch_instance_by_remote_attribute(
+    my $stable_identifiers = $identifier_database_dba->fetch_instance_by_remote_attribute(
 		'StableIdentifier',
-		[['stableIdentifierVersion.releaseIds.instanceDB_ID','=',[$db_id]],
-		 [$release_remote_attribute,'=',[$release_db_id]]
-#		 [$project_name_remote_attribute,'=',[$PROJECT_NAME]],
-#		 [$release_num_remote_attribute,'=',[$release_num]]
-		 ]);
+		[
+		    ['stableIdentifierVersion.releaseIds.instanceDB_ID','=',[$db_id]],
+		    [$release_remote_attribute,'=',[$release_db_id]]
+#			[$project_name_remote_attribute,'=',[$PROJECT_NAME]],
+#			[$release_num_remote_attribute,'=',[$release_num]]
+		]
+	);
 	
 	return $stable_identifiers;
 }
@@ -573,19 +595,21 @@ sub get_stable_identifiers_from_release_db_id {
 # Returns undef if the identifier cannot be found there.
 sub get_stable_identifier_from_identifier_most_recent_release {
 	my ($self, $identifier) = @_;
+	
+	my $logger = get_logger(__PACKAGE__);
 
 	my $most_recent_release_num = $self->get_most_recent_release_num();
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!$identifier_database_dba) {
-    	print STDERR "StableIdentifiers.get_stable_identifier_from_identifier_most_recent_release: WARNING - no DBA available!!\n";
+    	$logger->warn("no DBA available!!\n");
     	return undef;
     }
     
     # First, find the release associated with the given release number
     my $release_db_id = $self->get_release_db_id_from_num($most_recent_release_num);
     if (!(defined $release_db_id)) {
-            print STDERR "StableIdentifiers.get_stable_identifier_from_identifier_most_recent_release: WARNING - we have no releases for release_num=$most_recent_release_num, PROJECT_NAME=$PROJECT_NAME!!\n";
-            return undef;
+        $logger->warn("we have no releases for release_num=$most_recent_release_num, PROJECT_NAME=$PROJECT_NAME!!\n");
+        return undef;
     }
 
     my $release_remote_attribute = 'stableIdentifierVersion.releaseIds.' . $self->reactome_release_column_name;
@@ -593,11 +617,13 @@ sub get_stable_identifier_from_identifier_most_recent_release {
 #    my $project_name_remote_attribute = 'stableIdentifierVersion.releaseIds.' . $self->reactome_release_column_name . '.project.name';
 	my $stable_identifiers = $identifier_database_dba->fetch_instance_by_remote_attribute(
 		'StableIdentifier',
-		[['identifierString','=',[$identifier]],
-		 [$release_remote_attribute,'=',[$release_db_id]],
-#		 [$project_name_remote_attribute,'=',[$PROJECT_NAME]],
-#		 [$release_num_remote_attribute,'=',[$most_recent_release_num]]
-		]);
+		[
+			['identifierString','=',[$identifier]],
+			[$release_remote_attribute,'=',[$release_db_id]],
+#			[$project_name_remote_attribute,'=',[$PROJECT_NAME]],
+#			[$release_num_remote_attribute,'=',[$most_recent_release_num]]
+		]
+	);
 	my $stable_identifier = $self->get_attribute_val_from_list($stable_identifiers);
 	
 	return $stable_identifier;
@@ -645,15 +671,20 @@ sub get_identifier_and_version_in_most_recent_release {
 sub get_stable_identifier {
 	my ($self, $identifier) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!$identifier_database_dba) {
-    	print STDERR "StableIdentifiers.get_stable_identifier: WARNING - no DBA available!!\n";
+    	$logger->warn("no DBA available!!\n");
     	return undef;
     }
     
 	my $stable_identifiers = $identifier_database_dba->fetch_instance_by_remote_attribute(
 		'StableIdentifier',
-		[['identifierString','=',[$identifier]]]);
+		[
+			['identifierString','=',[$identifier]]
+		]
+	);
 	my $stable_identifier = $self->get_attribute_val_from_list($stable_identifiers);
 
 	return $stable_identifier;
@@ -671,41 +702,51 @@ sub get_stable_identifier {
 sub get_stable_identifier_from_release_db_id {
 	my ($self, $db_id, $release_num) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!$identifier_database_dba) {
-    	print STDERR "StableIdentifiers.get_stable_identifier_from_release_db_id: WARNING - no DBA available!!\n";
+    	$logger->warn("no DBA available!!\n");
     	return undef;
     }
 
     # First, find the release associated with the given release number
     my $release_db_id = $self->get_release_db_id_from_num($release_num);
     if (!(defined $release_db_id)) {
-            print STDERR "StableIdentifiers.get_stable_identifier_from_release_db_id: WARNING - we have no releases for release_num=$release_num, PROJECT_NAME=$PROJECT_NAME!!\n";
-            return undef;
+        $logger->warn("we have no releases for release_num=$release_num, PROJECT_NAME=$PROJECT_NAME!!\n");
+        return undef;
     }
 
 	my $stable_identifiers = [];
 	if (defined $release_num) {
 		my $release_ids = $identifier_database_dba->fetch_instance_by_remote_attribute(
 			'ReleaseId',
-			[['instanceDB_ID','=',[$db_id]],
-			['release','=',[$release_db_id]],
-#			['release.project.name','=',[$PROJECT_NAME]],
-#			['release.num','=',[$release_num]]
-			]);
+			[
+				['instanceDB_ID','=',[$db_id]],
+				['release','=',[$release_db_id]],
+#				['release.project.name','=',[$PROJECT_NAME]],
+#				['release.num','=',[$release_num]]
+			]
+		);
 		my $release_id;
 		my $release_id_stable_identifiers;
 		foreach $release_id (@{$release_ids}) {
 			$release_id_stable_identifiers = $identifier_database_dba->fetch_instance_by_remote_attribute(
 				'StableIdentifier',
-				[['stableIdentifierVersion.releaseIds.DB_ID','=',[$release_id->db_id()]]]);
+				[
+					['stableIdentifierVersion.releaseIds.DB_ID','=',[$release_id->db_id()]]
+				]
+			);
 			
 			push(@{$stable_identifiers}, @{$release_id_stable_identifiers});
 		}
 	} else {
 		$stable_identifiers = $identifier_database_dba->fetch_instance_by_remote_attribute(
 			'StableIdentifier',
-			[['stableIdentifierVersion.releaseIds.instanceDB_ID','=',[$db_id]]]);
+			[
+				['stableIdentifierVersion.releaseIds.instanceDB_ID','=',[$db_id]]
+			]
+		);
 	}
 
 	return $stable_identifiers;
@@ -718,33 +759,41 @@ sub get_stable_identifier_from_release_db_id {
 sub get_stable_identifier_with_db_id_but_not_in_release {
 	my ($self, $db_id, $release_num) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!$identifier_database_dba) {
-    	print STDERR "StableIdentifiers.get_stable_identifier_with_db_id_but_not_in_release: WARNING - no DBA available!!\n";
+    	$logger->warn("no DBA available!!\n");
     	return undef;
     }
 
     # First, find the release associated with the given release number
     my $release_db_id = $self->get_release_db_id_from_num($release_num);
     if (!(defined $release_db_id)) {
-            print STDERR "StableIdentifiers.get_stable_identifier_with_db_id_but_not_in_release: WARNING - we have no releases for release_num=$release_num, PROJECT_NAME=$PROJECT_NAME!!\n";
-            return undef;
+        $logger->warn("we have no releases for release_num=$release_num, PROJECT_NAME=$PROJECT_NAME!!\n");
+        return undef;
     }
 
 	my $release_ids = $identifier_database_dba->fetch_instance_by_remote_attribute(
 		'ReleaseId',
-		[['instanceDB_ID','=',[$db_id]],
-		['release','=',[$release_db_id]],
-#		['release.project.name','=',[$PROJECT_NAME]]
-#		['release.num','!=',[$release_num]]
-		]);
+		[
+			['instanceDB_ID','=',[$db_id]],
+			['release','=',[$release_db_id]],
+#			['release.project.name','=',[$PROJECT_NAME]]
+#			['release.num','!=',[$release_num]]
+		]
+	);
+	
 	my $release_id;
 	my $stable_identifiers = [];
 	my $release_id_stable_identifiers;
 	foreach $release_id (@{$release_ids}) {
 		$release_id_stable_identifiers = $identifier_database_dba->fetch_instance_by_remote_attribute(
 			'StableIdentifier',
-			[['stableIdentifierVersion.releaseIds.DB_ID','=',[$release_id->db_id()]]]);
+			[
+				['stableIdentifierVersion.releaseIds.DB_ID','=',[$release_id->db_id()]]
+			]
+		);
 		
 		push(@{$stable_identifiers}, @{$release_id_stable_identifiers});
 	}
@@ -837,6 +886,8 @@ sub get_db_ids_from_stable_identifier {
 sub get_release_id_from_release_db_id {
 	my ($self, $db_id, $release_num) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!$identifier_database_dba) {
     	return undef;
@@ -845,18 +896,19 @@ sub get_release_id_from_release_db_id {
     # First, find the release associated with the given release number
     my $release_db_id = $self->get_release_db_id_from_num($release_num);
     if (!(defined $release_db_id)) {
-            print STDERR "StableIdentifiers.get_release_id_from_release_db_id: WARNING - we have no releases for release_num=$release_num, PROJECT_NAME=$PROJECT_NAME!!\n";
-            return undef;
+        $logger->warn("we have no releases for release_num=$release_num, PROJECT_NAME=$PROJECT_NAME!!\n");
+        return undef;
     }
 
 	my $release_ids = $identifier_database_dba->fetch_instance_by_remote_attribute(
 		'ReleaseId',
 		[
-		 ['instanceDB_ID','=',[$db_id]],
-		 ['release','=',[$release_db_id]],
-#		 ['release.project.name','=',[$PROJECT_NAME]],
-#		 ['release.num','=',[$release_num]]
-		]);
+			['instanceDB_ID','=',[$db_id]],
+			['release','=',[$release_db_id]],
+#			['release.project.name','=',[$PROJECT_NAME]],
+#			['release.num','=',[$release_num]]
+		]
+	);
 
 	return $release_ids;
 }
@@ -873,6 +925,8 @@ sub get_max_version_num_from_stable_identifier {
 sub get_max_stable_identifier_version_from_stable_identifier {
 	my ($self, $stable_identifier) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!$identifier_database_dba) {
     	return undef;
@@ -882,7 +936,7 @@ sub get_max_stable_identifier_version_from_stable_identifier {
 	my $stable_identifier_versions = $stable_identifier->stableIdentifierVersion;
 	
 	if (!(defined $stable_identifier_versions) || !(scalar($stable_identifier_versions) =~ /ARRAY/) || scalar(@{$stable_identifier_versions})<1) {
-		print STDERR "StableIdentifiers.get_max_stable_identifier_version_from_stable_identifier: WARNING - no versions for this StableIdentifier instance!!\n";
+		$logger->warn("no versions for this StableIdentifier instance!!\n");
 		return undef;
 	}
 	
@@ -904,10 +958,12 @@ sub get_max_stable_identifier_version_from_stable_identifier {
 sub get_given_stable_identifier_version_from_stable_identifier {
 	my ($self, $stable_identifier, $version) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	my $max_identifier_version = (-1);
 
 	if (!(defined $version) || $version eq "") {
-		print STDERR "StableIdentifiers.get_stable_identifier_version: WARNING - no version given!!\n";
+		$logger->warn("no version given!!\n");
 		return $max_identifier_version;
 	}
 	
@@ -920,7 +976,7 @@ sub get_given_stable_identifier_version_from_stable_identifier {
 	my $stable_identifier_versions = $stable_identifier->stableIdentifierVersion;
 	
 	if (!$stable_identifier_versions || !(scalar($stable_identifier_versions) =~ /ARRAY/) || scalar(@{$stable_identifier_versions})<1) {
-		print STDERR "StableIdentifiers.get_stable_identifier_version: WARNING - no versions for this StableIdentifier instance!!\n";
+		$logger->warn("no versions for this StableIdentifier instance!!\n");
 		return $max_identifier_version;
 	}
 	
@@ -946,8 +1002,10 @@ sub get_given_stable_identifier_version_from_stable_identifier {
 sub get_changes_from_stable_identifier {
 	my ($self, $stable_identifier, $release_num) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	if (!(defined $release_num) || $release_num eq "") {
-		print STDERR "StableIdentifiers.get_changes_from_stable_identifier: WARNING - no release number given!!\n";
+		$logger->warn("no release number given!!\n");
 		return undef;
 	}
 	
@@ -960,7 +1018,7 @@ sub get_changes_from_stable_identifier {
 	my $stable_identifier_versions = $stable_identifier->stableIdentifierVersion;
 	
 	if (!$stable_identifier_versions || !(scalar($stable_identifier_versions) =~ /ARRAY/) || scalar(@{$stable_identifier_versions})<1) {
-		print STDERR "StableIdentifiers.get_changes_from_stable_identifier: WARNING - no versions for this StableIdentifier instance!!\n";
+		$logger->warn("no versions for this StableIdentifier instance!!\n");
 		return undef;
 	}
 	
@@ -1074,25 +1132,27 @@ sub get_att_value_from_identifier_database_instance {
 sub get_max_release_id_from_stable_identifier_version_instance {
 	my ($self, $stable_identifier_version) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	if (!(defined $stable_identifier_version)) {
-		print STDERR "StableIdentifiers.get_max_release_id_from_stable_identifier_version_instance: stable_identifier_version is undef!!\n";
+		$logger->warn("stable_identifier_version is undef!!\n");
     	return undef;
 	}
 	
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!(defined $identifier_database_dba)) {
-		print STDERR "StableIdentifiers.get_max_release_id_from_stable_identifier_version_instance: WARNING - identifier database DBA cannot be found!!\n";
+		$logger->warn("identifier database DBA cannot be found!!\n");
     	return undef;
     }
     
 	# Find highest numbered release ID
 	my $releaseIds = $stable_identifier_version->releaseIds;
 	if (!(defined $releaseIds)) {
-		print STDERR "StableIdentifiers.get_max_release_id_from_stable_identifier_version_instance: releaseIds is undef!!\n";
+		$logger->warn("releaseIds is undef!!\n");
     	return undef;
 	}
 	if (scalar(@{$releaseIds})<1) {
-		print STDERR "StableIdentifiers.get_max_release_id_from_stable_identifier_version_instance: releaseIds is empty!!\n";
+		$logger->warn("releaseIds is empty!!\n");
     	return undef;
 	}
 	
@@ -1105,25 +1165,25 @@ sub get_max_release_id_from_stable_identifier_version_instance {
 	my $num;
 	my $reactome_release_column_name = $self->reactome_release_column_name;
 	if (!(defined $reactome_release_column_name)) {
-		print STDERR "StableIdentifiers.get_max_release_id_from_stable_identifier_version_instance: WARNING - reactome_release_column_name is undef!!\n";
+		$logger->warn("reactome_release_column_name is undef!!\n");
     	return undef;
 	}
 		
 	foreach $releaseId (@{$releaseIds}) {
 		if (!(defined $releaseId)) {
-			print STDERR "StableIdentifiers.get_max_release_id_from_stable_identifier_version_instance: WARNING - releaseId is undef!!\n";
+			$logger->warn("releaseId is undef!!\n");
 			next;
 		}
 		
 		$release = $self->get_att_value_from_identifier_database_instance($releaseId, $reactome_release_column_name);
 		if (!(defined $release)) {
-			print STDERR "StableIdentifiers.get_max_release_id_from_stable_identifier_version_instance: WARNING - release is undef!!\n";
+			$logger->warn("release is undef!!\n");
 			next;
 		}
 		
 		$num = $self->get_att_value_from_identifier_database_instance($release, 'num');
 		if (!(defined $num)) {
-			print STDERR "StableIdentifiers.get_max_release_id_from_stable_identifier_version_instance: WARNING - num is undef!!\n";
+			$logger->warn("num is undef!!\n");
 			next;
 		}
 		
@@ -1142,9 +1202,11 @@ sub get_max_release_id_from_stable_identifier_version_instance {
 sub get_max_release_from_stable_identifier_version_instance {
 	my ($self, $stable_identifier_version) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!$identifier_database_dba) {
-		print STDERR "StableIdentifiers.get_max_release_from_stable_identifier_version_instance: WARNING - identifier database DBA cannot be found!!\n";
+		$logger->warn("identifier database DBA cannot be found!!\n");
     	return undef;
     }
     
@@ -1163,9 +1225,11 @@ sub get_max_release_from_stable_identifier_version_instance {
 sub get_release_from_db_name {
     my ($self, $db_name) = @_;
     
+	my $logger = get_logger(__PACKAGE__);
+	
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!$identifier_database_dba) {
-		print STDERR "StableIdentifiers.get_release_from_db_name: WARNING - identifier database DBA cannot be found!!\n";
+		$logger->warn("identifier database DBA cannot be found!!\n");
     	return undef;
     }
     
@@ -1190,9 +1254,11 @@ sub get_release_from_db_name {
 sub get_release_from_num {
     my ($self, $num, $project) = @_;
     
+	my $logger = get_logger(__PACKAGE__);
+	
     my $identifier_database_dba = $self->get_identifier_database_dba();
     if (!$identifier_database_dba) {
-		print STDERR "StableIdentifiers.get_release_from_num: WARNING - identifier database DBA cannot be found!!\n";
+		$logger->warn("identifier database DBA cannot be found!!\n");
     	return undef;
     }
     my $project_name = $PROJECT_NAME;
@@ -1267,8 +1333,10 @@ sub is_old_release {
 sub is_identifier_version_in_release_num {
     my ($self, $identifier, $version, $release_num) = @_;
     
+	my $logger = get_logger(__PACKAGE__);
+	
     if (!(defined $identifier) || !(defined $release_num)) {
-    	print STDERR "StableIdentifiers.is_identifier_version_in_release_num: WARNING - identifier or release_num is undefined!\n";
+    	$logger->warn("identifier or release_num is undefined!\n");
     	return 0;
     }
     
@@ -1285,8 +1353,8 @@ sub is_identifier_version_in_release_num {
     # First, find the release associated with the given release number
     my $release_db_id = $self->get_release_db_id_from_num($release_num);
     if (!(defined $release_db_id)) {
-            print STDERR "StableIdentifiers.is_identifier_version_in_release_num: WARNING - we have no releases for release_num=$release_num, PROJECT_NAME=$PROJECT_NAME!!\n";
-            return 0;
+        $logger->warn("we have no releases for release_num=$release_num, PROJECT_NAME=$PROJECT_NAME!!\n");
+        return 0;
     }
 
     if (defined $version) {
@@ -1320,28 +1388,30 @@ sub is_identifier_version_in_release_num {
 sub fetch_instance_by_identifier_in_release_database {
     my ($self, $identifier, $release_num) = @_;
     
+	my $logger = get_logger(__PACKAGE__);
+	
     my $instance = undef;
 
     if (!(defined $identifier)) {
-    	print STDERR "StableIdentifiers.fetch_instance_by_identifier_in_release_database: identifier is undef, aborting!!\n";
+		$logger->warn("identifier is undef, aborting!!\n");
     	return $instance;
     }
     if (!(defined $release_num)) {
-    	print STDERR "StableIdentifiers.fetch_instance_by_identifier_in_release_database: release_num is undef, aborting!!\n";
+    	$logger->warn("release_num is undef, aborting!!\n");
     	return $instance;
     }
     
 	my $release_db_name = $self->get_db_name_from_release_num($release_num);
 	
 	if (!(defined $release_db_name)) {
-		print STDERR "StableIdentifiers.fetch_instance_by_identifier_in_release_database: WARNING - could not find a release database name for release_num=$release_num\n";
+		$logger->warn("could not find a release database name for release_num=$release_num\n");
 		return $instance;
 	}
 	
 	my $release_dba = $self->get_dba_from_db_name($release_db_name);
 
 	if (!$release_dba) {
-		print STDERR "StableIdentifiers.fetch_instance_by_identifier_in_release_database: WARNING - could not find a release database name for release_db_name=$release_db_name\n";
+		$logger->warn("could not find a release database name for release_db_name=$release_db_name\n");
 		return $instance;
 	}
 	
@@ -1895,6 +1965,8 @@ sub is_identifier_existant_in_most_recent_release {
 # false.  If everything went OK, it will return true.
 sub increment_most_recent_stable_identifier {
 	my ($self) = @_;
+	
+	my $logger = get_logger(__PACKAGE__);
 
 	my $state = $self->get_state();
 		
@@ -1910,7 +1982,7 @@ sub increment_most_recent_stable_identifier {
 	# State instance
 	if (!(defined $state)) {
 		
-		print STDERR "Hoppsa, state not defined!!\n";
+		$logger->info("Hoppsa, state not defined!!\n");
 		
 		$state = GKB::Instance->new(-ONTOLOGY => $dba->ontology, -CLASS => 'State');
 		$state->inflated(1);
@@ -1936,14 +2008,14 @@ sub increment_most_recent_stable_identifier {
 		}
 	}
 	if (!(defined $most_recent_stable_identifier)) {
-		print STDERR "StableIdentifiers.increment_most_recent_stable_identifier: stableIdentifierInstanceis null!!\n";
+		$logger->warn("stableIdentifierInstanceis null!!\n");
 		return 0;
 	} else {
 		if (defined $most_recent_stable_identifier->numericalStub && scalar(@{$most_recent_stable_identifier->numericalStub})>0) {
 			$numerical_stub = $most_recent_stable_identifier->numericalStub->[0];
 			$numerical_stub++;
 		} else {
-			print STDERR "StableIdentifiers.increment_most_recent_stable_identifier: numericalStub is null!!\n";
+			$logger->warn("numericalStub is null!!\n");
 			return 0;
 		}
 	}
@@ -1956,7 +2028,7 @@ sub increment_most_recent_stable_identifier {
 	my @time_data = localtime(time());
 	$most_recent_stable_identifier->dateTime(GKB::Utils::dateTime_to_string([$time_data[5], $time_data[4], $time_data[3], $time_data[2], $time_data[1], $time_data[0]]));
 	$dba->store($most_recent_stable_identifier);
-	print STDERR "IGNORE WARNING: \"StableIdentifier w/o identifier....\", this is erroneously produced by NamedInstance->set_displayName\n\n";
+	$logger->warn("IGNORE WARNING: \"StableIdentifier w/o identifier....\", this is erroneously produced by NamedInstance->set_displayName\n\n");
 	
 	# Overwrite the existing StableIdentifier instance with
 	# the new one in the "most recent" instance.
@@ -1964,7 +2036,7 @@ sub increment_most_recent_stable_identifier {
 
 	# Save the change to the DB
 	
-	print STDERR "Updating state\n";
+	$logger->info("Updating state\n");
 	
 	$dba->update_attribute($state, "mostRecentStableIdentifier");
 		
@@ -1972,9 +2044,11 @@ sub increment_most_recent_stable_identifier {
 }
 	
 # Gets the State instance (of which there
-# should be eith 0 or 1 occurrence in the database).
+# should be either 0 or 1 occurrence in the database).
 sub get_state {
 	my ($self) = @_;
+
+	my $logger = get_logger(__PACKAGE__);
 
 	my $state = undef;
 		
@@ -1986,7 +2060,7 @@ sub get_state {
 	my $states = $dba->fetch_instance(-CLASS => "State");
 	if (scalar(@{$states})>0) {
 		if (scalar(@{$states})>1) {
-			print STDERR "IdentifierDatabase.getState: WARNING - more than one State object found in database - using first one!\n";
+			$logger->warn("more than one State object found in database - using first one!\n");
 		}
 		$state = $states->[0];
 	}

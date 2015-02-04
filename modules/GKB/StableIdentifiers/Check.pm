@@ -37,12 +37,14 @@ disclaimers of warranty.
 =cut
 
 package GKB::StableIdentifiers::Check;
+use strict;
 
 use Data::Dumper;
-use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
 use GKB::Config;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -130,7 +132,7 @@ sub find_version_number_gaps {
 sub find_version_number_gap_list_for_stable_identifier {
 	my ($self, $stable_identifier) = @_;
 	
-	
+	my $logger = get_logger(__PACKAGE__);	
 	
 	# This is here for debug purposes only
 	my $identifier = $stable_identifier->identifierString->[0];
@@ -145,20 +147,20 @@ sub find_version_number_gap_list_for_stable_identifier {
 		
 		if ($identifier eq "REACT_1882") {
 			if (defined $last_version) {
-				print STDERR "Check.find_version_number_gap_list_for_stable_identifier: last_version=$last_version\n";
+				$logger->info("last_version=$last_version\n");
 			}
-			print STDERR "Check.find_version_number_gap_list_for_stable_identifier: version=$version\n";
+			$logger->info("version=$version\n");
 		}
 		
 		
 		if (defined $last_version && $version > $last_version + 1) {
 			if ($identifier eq "REACT_1882") {
-				print STDERR "Check.find_version_number_gap_list_for_stable_identifier: creating non-contiguous version pair\n";
+				$logger->info("creating non-contiguous version pair\n");
 			}
 			
 			my @non_contiguous_versions = ($last_version, $version);
 			if ($identifier eq "REACT_1882") {
-				print STDERR "Check.find_version_number_gap_list_for_stable_identifier: non_contiguous_versions[0]=" . $non_contiguous_versions[0] . ", non_contiguous_versions[1]=" . $non_contiguous_versions[1] . "\n";
+				$logger->info("non_contiguous_versions[0]=" . $non_contiguous_versions[0] . ", non_contiguous_versions[1]=" . $non_contiguous_versions[1] . "\n");
 			}
 			push(@version_number_gap_list, \@non_contiguous_versions);
 		}
@@ -166,7 +168,7 @@ sub find_version_number_gap_list_for_stable_identifier {
 	}
 	
 	if ($identifier eq "REACT_1882") {
-		print STDERR "Check.find_version_number_gap_list_for_stable_identifier: scalar(version_number_gap_list)=" . scalar(@version_number_gap_list) . "\n";
+		$logger->info("scalar(version_number_gap_list)=" . scalar(@version_number_gap_list) . "\n");
 	}
 	
 	return @version_number_gap_list;
@@ -189,6 +191,8 @@ sub find_version_number_gap_list_for_stable_identifier {
 sub find_release_number_gaps {
 	my ($self, $correction_flag) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	my %release_number_gaps = ();
     
     my $identifier_database_dba = $self->stable_identifiers->get_identifier_database_dba();
@@ -210,7 +214,7 @@ sub find_release_number_gaps {
 			next;
 		}
 		
-		print STDERR "Check.find_release_number_gaps: #### dealing with identifier=$identifier\n";
+		$logger->info("#### dealing with identifier=$identifier\n");
 	
 		my @release_number_gap_list = $self->find_release_number_gap_list_for_stable_identifier($stable_identifier, $correction_flag);
 		$release_number_gaps{$identifier} = \@release_number_gap_list;
@@ -221,6 +225,7 @@ sub find_release_number_gaps {
 
 sub find_release_number_gap_list_for_stable_identifier {
 	my ($self, $stable_identifier, $correction_flag) = @_;
+	my $logger = get_logger(__PACKAGE__);
 	
 	my @release_number_gap_list = ();
 
@@ -255,12 +260,12 @@ sub find_release_number_gap_list_for_stable_identifier {
 			my $release_num = $self->stable_identifiers->get_att_value_from_identifier_database_instance($release, 'num');
 			
 			if ($identifier eq "REACT_1882") {
-				print STDERR "Check.find_release_number_gap_list_for_stable_identifier: UNSORTED release_num=$release_num\n";
+				$logger->info("UNSORTED release_num=$release_num\n");
 			}
 
 			if (!(defined $release_num)) {
 				# This shouldn't happen
-				print STDERR "Check.find_release_number_gap_list_for_stable_identifier: missing release number in release!!\n";
+				$logger->error("missing release number in release!!\n");
 				next;
 			}
 			
@@ -270,37 +275,37 @@ sub find_release_number_gap_list_for_stable_identifier {
 	}
 	
 	if ($identifier eq "REACT_1882") {
-		print STDERR "Check.find_release_number_gap_list_for_stable_identifier: BEFORE release num count=" . scalar(@release_nums) . "\n";
-		print STDERR "Check.find_release_number_gap_list_for_stable_identifier: BEFORE release_nums=@release_nums\n";
+		$logger->info("BEFORE release num count=" . scalar(@release_nums) . "\n");
+		$logger->info("BEFORE release_nums=@release_nums\n");
 	}
 
 	@release_nums = sort {$a <=> $b} @release_nums;
 		
 	if ($identifier eq "REACT_1882") {
-		print STDERR "Check.find_release_number_gap_list_for_stable_identifier: AFTER release num count=" . scalar(@release_nums) . "\n";
-		print STDERR "Check.find_release_number_gap_list_for_stable_identifier: AFTER release_nums=@release_nums\n";
+		$logger->info("AFTER release num count=" . scalar(@release_nums) . "\n");
+		$logger->info("AFTER release_nums=@release_nums\n");
 	}
 
 	my $reactome_release_column_name = $self->stable_identifiers->reactome_release_column_name;
 	foreach my $release_num (@release_nums) {
 		if ($identifier eq "REACT_1882") {
 			if (defined $last_release_num) {
-				print STDERR "Check.find_release_number_gap_list_for_stable_identifier: last_release_num=$last_release_num\n";
+				$logger->info("last_release_num=$last_release_num\n");
 			}
-			print STDERR "Check.find_release_number_gap_list_for_stable_identifier: SORTED release_num=$release_num\n";
+			$logger->info("SORTED release_num=$release_num\n");
 		}
 			
 			
 		if (defined $last_release_num && $release_num > $last_release_num + 1) {
 			if ($identifier eq "REACT_1882") {
-				print STDERR "Check.find_release_number_gap_list_for_stable_identifier: creating non-contiguous release pair\n";
+				$logger->info("creating non-contiguous release pair\n");
 			}
 				
 			my @present_in_release = ();
 			for ($i=$last_release_num + 1; $i<$release_num; $i++) {
 				if ($self->stable_identifiers->is_identifier_in_release_database($identifier, $i)) {
 					if ($identifier eq "REACT_1882") {
-						print STDERR "Check.find_release_number_gap_list_for_stable_identifier: i=$i\n";
+						$logger->info("i=$i\n");
 					}
 					push(@present_in_release, $i);
 					
@@ -313,7 +318,7 @@ sub find_release_number_gap_list_for_stable_identifier {
 							my $release_stable_identifier = $instance->stableIdentifier->[0];
 							my $release_version = $release_stable_identifier->identifierVersion->[0];
 							
-							print STDERR "Check.find_release_number_gap_list_for_stable_identifier: release_version=$release_version\n";
+							$logger->info("release_version=$release_version\n");
 							
 							# Check to see if the version already
 							# exists and create it if not.
@@ -336,7 +341,7 @@ sub find_release_number_gap_list_for_stable_identifier {
 								$repaired_stable_identifier_version->identifierVersion($release_version);
 								$repaired_stable_identifier_version->creationComment("Inserted to repair damaged identifier database");
 								
-								print STDERR "Check.find_release_number_gap_list_for_stable_identifier: repaired_stable_identifier_version=$repaired_stable_identifier_version\n";
+								$logger->info("repaired_stable_identifier_version=$repaired_stable_identifier_version\n");
 								
 								$identifier_database_dba->store($repaired_stable_identifier_version);
 								$stable_identifier->add_attribute_value("stableIdentifierVersion", $repaired_stable_identifier_version);
@@ -354,7 +359,7 @@ sub find_release_number_gap_list_for_stable_identifier {
 							$release_id->$reactome_release_column_name($release);
 							$release_id->instanceDB_ID($db_id);
 								
-							print STDERR "Check.find_release_number_gap_list_for_stable_identifier: release_id=$release_id\n";
+							$logger->info("release_id=$release_id\n");
 								
 							$identifier_database_dba->store($release_id);
 							$repaired_stable_identifier_version->add_attribute_value("releaseIds", $release_id);
@@ -367,7 +372,7 @@ sub find_release_number_gap_list_for_stable_identifier {
 				
 			my @non_contiguous_releases = ($last_release_num, $release_num, \@present_in_release);
 			if ($identifier eq "REACT_1882") {
-				print STDERR "Check.find_release_number_gap_list_for_stable_identifier: non_contiguous_releases[0]=" . $non_contiguous_releases[0] . ", non_contiguous_releases[1]=" . $non_contiguous_releases[1] . "\n";
+				$logger->info("non_contiguous_releases[0]=" . $non_contiguous_releases[0] . ", non_contiguous_releases[1]=" . $non_contiguous_releases[1] . "\n");
 			}
 			push(@release_number_gap_list, \@non_contiguous_releases);
 		}
@@ -376,7 +381,7 @@ sub find_release_number_gap_list_for_stable_identifier {
 	}
 	
 	if ($identifier eq "REACT_1882") {
-		print STDERR "Check.find_release_number_gap_list_for_stable_identifier: scalar(release_number_gap_list)=" . scalar(@release_number_gap_list) . "\n";
+		$logger->info("scalar(release_number_gap_list)=" . scalar(@release_number_gap_list) . "\n");
 	}
 	
 	return @release_number_gap_list;
@@ -465,23 +470,25 @@ sub find_orphan_release_ids {
 sub generate_stable_identifiers_hashes {
 	my ($self, $release_num, $project) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	if (defined $self->release_stable_identifier_to_version_hash && defined $self->stable_identifier_hash && defined $self->release_database_dba) {
 		# No need to repeat this task if we already have the hashes
 		return;
 	}
 	
     if (!(defined $release_num)) {
-    	print STDERR "Check.generate_stable_identifiers_hashes: WARNING - release_num is not defined, aborting!\n";
+    	$logger->warn("release_num is not defined, aborting!\n");
     	return;
     }
     my $identifier_database_dba = $self->stable_identifiers->get_identifier_database_dba();
     if (!(defined $identifier_database_dba)) {
-    	print STDERR "Check.generate_stable_identifiers_hashes: WARNING - could not create an identifier database DBA\n";
+    	$logger->warn("could not create an identifier database DBA\n");
     	return;
     }
     my $release_database_name = $self->stable_identifiers->get_db_name_from_release_num($release_num, $project);
     if (!(defined $release_database_name)) {
-    	print STDERR "Check.generate_stable_identifiers_hashes: WARNING - no release database found corresponding to release_num=$release_num!\n";
+    	$logger->warn("no release database found corresponding to release_num=$release_num!\n");
     	return;
     }
     my $slice_database_name = $release_database_name;
@@ -493,7 +500,7 @@ sub generate_stable_identifiers_hashes {
     	$release_database_dba = $self->stable_identifiers->get_dba_from_db_name($release_database_name);
     }
     if (!(defined $release_database_dba)) {
-    	print STDERR "Check.generate_stable_identifiers_hashes: WARNING - could not create a release DBA for release number $release_num\n";
+    	$logger->warn("could not create a release DBA for release number $release_num\n");
     	return;
     }
 
@@ -560,6 +567,8 @@ sub find_stable_identifiers_only_in_release {
 sub find_version_incompatibility_with_release {
 	my ($self, $fix, $release_num, $project) = @_;
 	
+	my $logger = get_logger(__PACKAGE__);
+	
 	my @stable_ids = ();
 		
 	$self->generate_stable_identifiers_hashes($release_num, $project);
@@ -610,14 +619,14 @@ sub find_version_incompatibility_with_release {
 					# the current release to the corresponding StableIdentifier
 					# instance in the release database.
 					if ($fix) {
-						print STDERR "Check.find_version_incompatibility_with_release: about to fix release database for $stable_identifier_string, release version=$stable_identifier_version_string, stable ID database version=" . $stable_identifier_version->identifierVersion->[0] . "\n";
+						$logger->info("about to fix release database for $stable_identifier_string, release version=$stable_identifier_version_string, stable ID database version=" . $stable_identifier_version->identifierVersion->[0] . "\n");
 						
 						$release_stable_identifiers = $release_database_dba->fetch_instance(-CLASS => "StableIdentifier", -QUERY => [['identifier', [$stable_identifier_string],0]]);
 						my $release_stable_identifier = $release_stable_identifiers->[0];
 						$release_database_dba->inflate_instance($release_stable_identifier);
-						print STDERR "Check.find_version_incompatibility_with_release: original version=" . $release_stable_identifier->identifierVersion->[0] . "\n";
+						$logger->info("original version=" . $release_stable_identifier->identifierVersion->[0] . "\n");
 						$release_stable_identifier->identifierVersion($stable_identifier_version->identifierVersion->[0]);
-						print STDERR "Check.find_version_incompatibility_with_release: NEW version=" . $release_stable_identifier->identifierVersion->[0] . "\n";
+						$logger->info("NEW version=" . $release_stable_identifier->identifierVersion->[0] . "\n");
 						
 						$release_database_dba->update($release_stable_identifier, "identifierVersion");
 					}
@@ -632,6 +641,8 @@ sub find_version_incompatibility_with_release {
 
 sub find_stable_ids_not_in_dois {
 	my ($self, $fix, $release_num, $project) = @_;
+	
+	my $logger = get_logger(__PACKAGE__);
 	
 	$self->generate_stable_identifiers_hashes($release_num, $project);
 		
@@ -651,7 +662,7 @@ sub find_stable_ids_not_in_dois {
 		if ($instance->is_valid_attribute("doi")) {
 			$stable_identifier_instances = $instance->stableIdentifier;
 			if (scalar(@{$stable_identifier_instances})<1) {
-				print STDERR "Instance " .  $instance->db_id() . " does not have a corresponding stable identifier!!!\n";
+				$logger->error("Instance " .  $instance->db_id() . " does not have a corresponding stable identifier!!!\n");
 				# Should never happen!!
 				next;
 			}
