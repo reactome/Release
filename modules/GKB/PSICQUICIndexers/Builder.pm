@@ -120,7 +120,7 @@ sub buildPart {
 	
 	my $logger = get_logger(__PACKAGE__);
 	
-	$logger->info("Builder.buildPart: entered");
+	$logger->info("entered");
 	
 	$self->timer->start($self->timer_message);
 	
@@ -171,19 +171,19 @@ sub get_current_download_dir {
 	my $gkb_root_dir = $self->builder_params->get_gkb_root_dir();
 	
 	if (!(defined $release_num)) {
-	    $logger->warn("Builder.get_current_download_dir: WARNING - release number is undef");
+	    $logger->warn("release number is undef");
 	    $self->termination_status("release number is undef");
 	    return undef;		
 	}
 	if (!(defined $gkb_root_dir)) {
-	    $logger->warn("Builder.get_current_download_dir: WARNING - GKB directory is undef");
+	    $logger->warn("GKB directory is undef");
 	    $self->termination_status("GKB directory is undef");
 	    return undef;		
 	}
 
 	my $current_download_dir = "$gkb_root_dir/website/html/download/$release_num";
 	if (!(-e $current_download_dir)) {
-	    $logger->warn("Builder.get_current_download_dir: WARNING - missing directory: $current_download_dir");
+	    $logger->warn("missing directory: $current_download_dir");
 	    $self->termination_status("missing directory: $current_download_dir");
 	    return undef;		
 	}
@@ -209,7 +209,7 @@ sub create_index_path {
     if (!(-e $indexes_path)) {
 	$status = system("mkdir $indexes_path");
 	if ($status != 0) {
-	    $logger->warn("Builder.create_index_path: WARNING - could not make directory $indexes_path");
+	    $logger->warn("could not make directory $indexes_path");
 	    $self->termination_status("could not make directory $indexes_path");
 	    return undef;					
 	}
@@ -219,7 +219,7 @@ sub create_index_path {
     if (!(-e $index_path)) {
 	$status = system("mkdir $index_path");
 	if ($status != 0) {
-	    $logger->warn("Builder.create_index_path: WARNING - could not make directory $index_path");
+	    $logger->warn("could not make directory $index_path");
 	    $self->termination_status("could not make directory $index_path");
 	    return undef;					
 	}
@@ -235,7 +235,7 @@ sub get_mitab_path {
 
     my $logger = get_logger(__PACKAGE__);
 
-    $logger->error_die("Builder.get_mitab_path: this subroutine must be explicitly defined in the inheriting class");
+    $logger->error_die("this subroutine must be explicitly defined in the inheriting class");
 }
 
 sub create_mitab_path {
@@ -249,7 +249,7 @@ sub create_mitab_path {
     
     my $mitab_path = $self->get_mitab_path();
 
-    $logger->info("Builder.create_mitab_path: INITIAL mitab_path=$mitab_path");
+    $logger->info("INITIAL mitab_path=$mitab_path");
 
     my $command;
     my $status;
@@ -262,13 +262,13 @@ sub create_mitab_path {
     }
     if (defined $gzipped_mitab_path) {
 	if (!(-e $gzipped_mitab_path)) {
-	    $logger->warn("Builder.create_mitab_path: WARNING - missing gzipped MITAB file: $gzipped_mitab_path");
+	    $logger->warn("missing gzipped MITAB file: $gzipped_mitab_path");
 	    $self->termination_status("missing gzipped MITAB file: $gzipped_mitab_path");
 	    return undef;		
 	}
 	$status = system("gunzip $gzipped_mitab_path");
 	if ($status != 0) {
-	    $logger->warn("Builder.create_mitab_path: WARNING - could not unzip $gzipped_mitab_path");
+	    $logger->warn("could not unzip $gzipped_mitab_path");
 	    $self->termination_status("could not unzip $gzipped_mitab_path");
 	    return undef;					
 	}
@@ -276,19 +276,19 @@ sub create_mitab_path {
     }
 	
     if (!(-e $mitab_path)) {
-	$logger->warn("Builder.create_mitab_path: WARNING - missing MITAB file: $mitab_path");
+	$logger->warn("missing MITAB file: $mitab_path");
     	$self->termination_status("missing MITAB file: $mitab_path");
     	return undef;		
     }
     if (-s $mitab_path == 0) {
-    	$logger->warn("Builder.create_mitab_path: WARNING - zero length MITAB file: $mitab_path");
+    	$logger->warn("zero length MITAB file: $mitab_path");
     	$self->termination_status("zero length MITAB file: $mitab_path");
     	return undef;		
     }
 
     $self->mitab_path($mitab_path);
 
-    $logger->info("Builder.create_mitab_path: FINAL mitab_path=$mitab_path");
+    $logger->info("FINAL mitab_path=$mitab_path");
 
     return $mitab_path;
 }
@@ -307,20 +307,20 @@ sub build_indexes {
 	my $cd_command = "cd $index_path";
 	my $checkout_command = "svn checkout https://psicquic.googlecode.com/svn/trunk/psicquic-webservice";
 	my $command = "$cd_command; $checkout_command";
-	$logger->info("Builder.build_indexes: checkout, $command=$command");
+	$logger->info("checkout, $command=$command");
 	$status = system($command);
 	if ($status != 0) {
-	    $logger->warn("Builder.build_indexes: WARNING - could not run Subversion checkout");
+	    $logger->warn("could not run Subversion checkout");
 	    $self->termination_status("could not run Subversion checkout");
 	}
 	
 	# Do the indexing
 	my $compile_command = "mvn -e clean compile -P createIndex -D psicquic.index=$index_path -D mitabFile=$mitab_path -D hasHeader=true";
 	$command = "$cd_command/psicquic-webservice; $compile_command";
-	$logger->info("Builder.build_indexes: indexing, $command=$command");
+	$logger->info("indexing, $command=$command");
 	$status = system($command);
 	if ($status != 0) {
-	    $logger->warn("Builder.build_indexes: WARNING - could not run Maven compile");
+	    $logger->warn("could not run Maven compile");
 	    $self->termination_status("could not run Maven compile");
 	}
 	
@@ -328,20 +328,20 @@ sub build_indexes {
 	    # Create a WAR file, this is a nice-to-have rather than being really essential.
 	    my $package_command = "mvn clean package -D psicquic.index=$index_path";
 	    $command = "$cd_command/psicquic-webservice; $package_command";
-	    $logger->info("Builder.build_indexes: packaging, $command=$command");
+	    $logger->info("packaging, $command=$command");
 	    $status = system($command);
 	    if ($status != 0) {
-		$logger->warn("Builder.build_indexes: WARNING - could not run Maven packaging");
+		$logger->warn("could not run Maven packaging");
 		$self->termination_status("could not run Maven packaging");
 	    }
 	} else {
 	    # Get rid of the code, we don't need it anymore
 	    my $delete_command = "rm -rf psicquic-webservice";
 	    $command = "$cd_command; $delete_command";
-	    $logger->info("Builder.build_indexes: deleting, $command=$command");
+	    $logger->info("deleting, $command=$command");
 	    $status = system($command);
 	    if ($status != 0) {
-		$logger->warn("Builder.build_indexes: WARNING - could not delete psicquic-webservice");
+		$logger->warn("could not delete psicquic-webservice");
 		$self->termination_status("could not delete psicquic-webservice");
 	    }
 	}
@@ -349,10 +349,10 @@ sub build_indexes {
 	# Compress everything.
 	my $compress_command = "tar zcvf " . $self->index_dir_name . ".tgz " . $self->index_dir_name;
 	$command = "$cd_command/..; $compress_command";
-	$logger->info("Builder.build_indexes: compressing, $command=$command");
+	$logger->info("compressing, $command=$command");
 	$status = system($command);
 	if ($status != 0) {
-	    $logger->warn("Builder.build_indexes: WARNING - could not compress " . $self->index_dir_name);
+	    $logger->warn("could not compress " . $self->index_dir_name);
 	    $self->termination_status("could not compress " . $self->index_dir_name);
 	    return;
 	}
@@ -360,10 +360,10 @@ sub build_indexes {
 	# Delete original indexes etc.
 	my $rm_command = "rm -rf " . $self->index_dir_name;
 	$command = "$cd_command/..; $rm_command";
-	$logger->info("Builder.build_indexes: delete, $command=$command");
+	$logger->info("xes: delete, $command=$command");
 	$status = system($command);
 	if ($status != 0) {
-	    $logger->warn("Builder.build_indexes: WARNING - could not delete " . $self->index_dir_name);
+	    $logger->warn("could not delete " . $self->index_dir_name);
 	    $self->termination_status("could not delete " . $self->index_dir_name);
 	    return;
 	}
@@ -378,7 +378,7 @@ sub clean_up {
     if (defined $self->gzipped_mitab_path) {
 	$status = system("gzip " . $self->mitab_path);
 	if ($status != 0) {
-	    $logger->warn("ReactomeBuilder.buildPart: WARNING - could not gzip " . $self->mitab_path);
+	    $logger->warn("could not gzip " . $self->mitab_path);
 	    $self->termination_status("could not gzip " . $self->mitab_path);
 	}
     }

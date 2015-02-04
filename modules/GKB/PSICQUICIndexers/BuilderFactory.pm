@@ -81,7 +81,7 @@ sub construct {
     my $logger = get_logger(__PACKAGE__);
 
     if (!(defined $name)) {
-	$logger->warn("BuilderFactory.construct: WARNING - name is undef, aborting!");
+	$logger->warn("name is undef, aborting!");
 	return undef;
     }
 
@@ -89,18 +89,18 @@ sub construct {
     my $class = $builder_map{$name};
     eval {
 	if (defined $class) {
-	    $logger->info("BuilderFactory.construct: class=$class");
+	    $logger->info("class=$class");
 	    $builder = $class->new();
 	} else {
 	    # Assume a valid class name has been specified and keep fingers crossed
 	    $builder = $name->new();
 	}
 	
-	$logger->info("BuilderFactory.construct: successfully created an object for $name");
+	$logger->info("successfully created an object for $name");
     };
 
     if (!(defined $builder)) {
-	$logger->warn("BuilderFactory.construct: WARNING - could not find a Builder subclass corresponding to $name");
+	$logger->warn("could not find a Builder subclass corresponding to $name");
     }
 
     return $builder;
