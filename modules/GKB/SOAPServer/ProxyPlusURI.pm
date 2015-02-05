@@ -33,13 +33,15 @@ disclaimers of warranty.
 =cut
 
 package GKB::SOAPServer::ProxyPlusURI;
+use strict;
 
 use SOAP::Lite;
 use GKB::Config;
 use Data::Dumper;
-use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use GKB::SOAPServer::Base;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::SOAPServer::Base);
 
@@ -56,65 +58,67 @@ sub AUTOLOAD {
 sub new {
     my($pkg, $proxy, $uri) = @_;
 
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	$pkg->get_ok_field();
- 	
-   	my $self = $pkg->SUPER::new();
-   	
-	$self->soap(undef);
-	$self->proxy($proxy);
-	$self->uri($uri);
-	$self->call_arg_type('string');
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    $pkg->get_ok_field();
 
-   	$self->restart();
- 	
+    my $self = $pkg->SUPER::new();
+
+    $self->soap(undef);
+    $self->proxy($proxy);
+    $self->uri($uri);
+    $self->call_arg_type('string');
+
+    $self->restart();
+
     return $self;
 }
 
 # Needed by subclasses to gain access to class variables defined in
 # this class.
 sub get_ok_field {
-	my ($pkg) = @_;
-	
-	%ok_field = $pkg->SUPER::get_ok_field();
-	$ok_field{"soap"}++;
-	$ok_field{"proxy"}++;
-	$ok_field{"uri"}++;
-	$ok_field{"call_arg_type"}++;
+    my ($pkg) = @_;
 
-	return %ok_field;
+    %ok_field = $pkg->SUPER::get_ok_field();
+    $ok_field{"soap"}++;
+    $ok_field{"proxy"}++;
+    $ok_field{"uri"}++;
+    $ok_field{"call_arg_type"}++;
+
+    return %ok_field;
 }
 
 # Connects to the SOAP service.
 sub restart {
-	my ($self) = @_;
-	
-	my $proxy = $self->proxy;
-	if (!(defined $proxy)) {
-		print STDERR "ProxyPlusURI.restart: WARNING - no proxy defined, aborting\n";
-		return;
-	}
-	
-	my $uri = $self->uri;
-	if (!(defined $uri)) {
-		print STDERR "ProxyPlusURI.restart: WARNING - no URI defined, aborting\n";
-		return;
-	}
+    my ($self) = @_;
 
-   	my $soap = $self->get_soap($proxy, $uri);
-	my $start_service_counter = 0;
-	while (!(defined $soap) && $start_service_counter<10) {
-		sleep(10);
-		$soap = $self->get_soap($proxy, $uri);
-		$start_service_counter++;
-	}
- 	if (!(defined $soap)) {
-		print STDERR "ProxyPlusURI.restart: WARNING - cannot create a new SOAP connection, giving up!\n";
-		return;
-	}
-   	
-   	$self->soap($soap);
+    my $logger = get_logger(__PACKAGE__);
+
+    my $proxy = $self->proxy;
+    if (!(defined $proxy)) {
+    	$logger->warn("no proxy defined, aborting\n");
+    	return;
+    }
+
+    my $uri = $self->uri;
+    if (!(defined $uri)) {
+    	$logger->warn("no URI defined, aborting\n");
+    	return;
+    }
+
+    my $soap = $self->get_soap($proxy, $uri);
+    my $start_service_counter = 0;
+    while (!(defined $soap) && $start_service_counter<10) {
+    	sleep(10);
+    	$soap = $self->get_soap($proxy, $uri);
+    	$start_service_counter++;
+    }
+    if (!(defined $soap)) {
+    	$logger->warn("cannot create a new SOAP connection, giving up!\n");
+    	return;
+    }
+
+    $self->soap($soap);
 }
 
 # Calls the named method on a list of arguments.  @args
@@ -141,70 +145,72 @@ sub restart {
 # and can be anything from a simple string to a complex
 # nesting of references to arrays and hashes.
 sub call {
-	my ($self, $method, @args) = @_;
-	
-	my $output = undef;
-	
-	my $soap = $self->soap;
- 	if (!(defined $soap)) {
-		print STDERR "ProxyPlusURI.call: WARNING - cannot create a new SOAP connection, aborting\n";
-		return $output;
-	}
-	
-	my @remote_args = ();
-	my $arg;
-	foreach $arg (@args) {
-		my $remote_arg = SOAP::Data->type($self->call_arg_type);
-		$remote_arg->name($arg->[0]);
-		$remote_arg->value($arg->[1]);
-		push(@remote_args, $remote_arg);
-	}
-	
-	my $return = undef;
-	my $error = 1;
-	eval {
-		$return = $soap->$method(@remote_args);
-		$error = 0;
-	};
-	if (!(defined $return)) {
-		# Restart web services if something went wrong.
-		$self->restart();
-		eval {
-			$return = $soap->$method(@remote_args);
-			$error = 0;
-		};
-	}
-	
-	if (defined $return) {
-		if ($return->fault) {
-			print STDERR "ProxyPlusURI.call: WARNING - fault, code=" . $return->faultcode . ", string=" . $return->faultstring . "\n";
-		} else {
-			my $result = $return->result();
-			if (defined $result) {
-				my @paramsout = $return->paramsout();
-				if (scalar(@paramsout)<1) {
-					@paramsout = ($result);
-				}
-				$output = \@paramsout;
-			} else {
-#				print STDERR "ProxyPlusURI.call: WARNING - result is undef!!\n";
-			}
-		}
-	} else {
-		if ($error) {
-			print STDERR "ProxyPlusURI.call: WARNING - fatal error occurred during SOAP call\n";
-		}
-	}
+    my ($self, $method, @args) = @_;
 
-	return $output;
+    my $logger = get_logger(__PACKAGE__);
+
+    my $output = undef;
+
+    my $soap = $self->soap;
+    if (!(defined $soap)) {
+    	$logger->warn("cannot create a new SOAP connection, aborting\n");
+    	return $output;
+    }
+
+    my @remote_args = ();
+    my $arg;
+    foreach $arg (@args) {
+    	my $remote_arg = SOAP::Data->type($self->call_arg_type);
+    	$remote_arg->name($arg->[0]);
+    	$remote_arg->value($arg->[1]);
+    	push(@remote_args, $remote_arg);
+    }
+
+    my $return = undef;
+    my $error = 1;
+    eval {
+    	$return = $soap->$method(@remote_args);
+    	$error = 0;
+    };
+    if (!(defined $return)) {
+    	# Restart web services if something went wrong.
+    	$self->restart();
+    	eval {
+    	    $return = $soap->$method(@remote_args);
+	    $error = 0;
+	};
+    }
+
+    if (defined $return) {
+	if ($return->fault) {
+	    $logger->warn("fault, code=" . $return->faultcode . ", string=" . $return->faultstring . "\n");
+	} else {
+	    my $result = $return->result();
+	    if (defined $result) {
+		my @paramsout = $return->paramsout();
+		if (scalar(@paramsout)<1) {
+		    @paramsout = ($result);
+		}
+		$output = \@paramsout;
+	    } else {
+#		$logger->warn("result is undef!!\n");
+	    }
+	}
+    } else {
+	if ($error) {
+	    $logger->warn("fatal error occurred during SOAP call\n");
+	}
+    }
+
+    return $output;
 }
 
 sub get_soap {
-	my ($self, $proxy, $uri) = @_;
-	
-	my $soap = SOAP::Lite->new('uri' => $uri, 'proxy' => $proxy);
-	
-	return $soap;
+    my ($self, $proxy, $uri) = @_;
+    
+    my $soap = SOAP::Lite->new('uri' => $uri, 'proxy' => $proxy);
+    
+    return $soap;
 }
 
 1;
