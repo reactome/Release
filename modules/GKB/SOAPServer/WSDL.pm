@@ -33,12 +33,14 @@ disclaimers of warranty.
 =cut
 
 package GKB::SOAPServer::WSDL;
+use strict;
 
 use SOAP::Lite;
 use GKB::Config;
-use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use GKB::SOAPServer::Base;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::SOAPServer::Base);
 
@@ -55,63 +57,65 @@ sub AUTOLOAD {
 sub new {
     my($pkg, $wsdl) = @_;
 
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	$pkg->get_ok_field();
- 	
-   	my $self = $pkg->SUPER::new();
-   	
-   	$self->wsdl($wsdl);
-   	$self->consecutive_connect_failure_count(0);
-   	$self->restart();
-   	
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    $pkg->get_ok_field();
+
+    my $self = $pkg->SUPER::new();
+
+    $self->wsdl($wsdl);
+    $self->consecutive_connect_failure_count(0);
+    $self->restart();
+
     return $self;
 }
 
 # Needed by subclasses to gain access to class variables defined in
 # this base class.
 sub get_ok_field {
-	my ($pkg) = @_;
-	
-	%ok_field = $pkg->SUPER::get_ok_field();
-	$ok_field{"wsdl"}++;
- 	$ok_field{"service"}++;
- 	$ok_field{"consecutive_connect_failure_count"}++;
+    my ($pkg) = @_;
 
-	return %ok_field;
+    %ok_field = $pkg->SUPER::get_ok_field();
+    $ok_field{"wsdl"}++;
+    $ok_field{"service"}++;
+    $ok_field{"consecutive_connect_failure_count"}++;
+
+    return %ok_field;
 }
 
 # Connects to the SOAP service.
 sub restart {
-	my ($self) = @_;
-	
-	my $service = undef;
+    my ($self) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
+
+    my $service = undef;
+    eval {
+	$service = SOAP::Lite->service($self->wsdl);
+    };
+    
+    if (!(defined $service) && $self->consecutive_connect_failure_count>5) {
+	$logger->warn("too many connect failures, giving up!!\n");
+	return;
+    }
+
+    my $start_service_counter = 0;
+    while (!(defined $service) && $start_service_counter<10) {
+	sleep(10);
 	eval {
-		$service = SOAP::Lite->service($self->wsdl);
+	    $service = SOAP::Lite->service($self->wsdl);
 	};
-	
-	if (!(defined $service) && $self->consecutive_connect_failure_count>5) {
-		print STDERR "WSDL.restart: WARNING - too many connect failures, giving up!!\n";
-		return;
-	}
-	
-	my $start_service_counter = 0;
-	while (!(defined $service) && $start_service_counter<10) {
-		sleep(10);
-		eval {
-			$service = SOAP::Lite->service($self->wsdl);
-		};
-		$start_service_counter++;
-	}
-	if (defined $service) {
-		$self->consecutive_connect_failure_count(0);
-	} else {
-		print STDERR "WSDL.restart: WARNING - could not establish a connection to " . $self->wsdl . ", giving up!!\n";
-		$self->consecutive_connect_failure_count++;
-		return;
-	}
-	
-	$self->service($service);
+	$start_service_counter++;
+    }
+    if (defined $service) {
+	$self->consecutive_connect_failure_count(0);
+    } else {
+	$logger->warn("could not establish a connection to " . $self->wsdl . ", giving up!!\n");
+	$self->consecutive_connect_failure_count++;
+	return;
+    }
+
+    $self->service($service);
 }
 
 # Calls the named method on a list of arguments.  The order
@@ -122,22 +126,22 @@ sub restart {
 # but will normally be either a string or a reference to
 # an array.
 sub call {
-	my ($self, $method, @args) = @_;
-	
-	my $service = $self->service;
-	my $output = undef;
-	eval {
-		$output = $service->$method(@args);
+    my ($self, $method, @args) = @_;
+
+    my $service = $self->service;
+    my $output = undef;
+    eval {
+    	$output = $service->$method(@args);
+    };
+    if (!(defined $output)) {
+    	# Restart web services if something went wrong.
+    	$self->restart();
+    	eval {
+	    $output = $service->$method(@args);
 	};
-	if (!(defined $output)) {
-		# Restart web services if something went wrong.
-		$self->restart();
-		eval {
-			$output = $service->$method(@args);
-		};
-	}
-	
-	return $output;
+    }
+
+    return $output;
 }
 
 1;

@@ -29,13 +29,15 @@ disclaimers of warranty.
 =cut
 
 package GKB::SOAPServer::ChEBI;
+use strict;
 
 use GKB::Config;
 use Data::Dumper;
 #use SOAP::Data;
-use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use GKB::SOAPServer::ProxyPlusURI;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::SOAPServer::ProxyPlusURI);
 
@@ -56,116 +58,122 @@ sub AUTOLOAD {
 sub new {
     my($pkg) = @_;
 
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	%ok_field = $pkg->SUPER::get_ok_field();
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    %ok_field = $pkg->SUPER::get_ok_field();
 
-   	my $self = $pkg->SUPER::new($proxy, $uri);
-   	
+    my $self = $pkg->SUPER::new($proxy, $uri);
+
     return $self;
 }
 
 # Looks to see if there is a ChEBI entity with the given identifier,
 # returns it if available.
 sub getCompleteEntity {
-	my ($self, $identifier) = @_;
-	
-	print STDERR "ChEBI.getCompleteEntity: identifier=|$identifier|\n";
+    my ($self, $identifier) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->info("identifier=|$identifier|\n");
 
 #	my $params = ['chebiId', "CHEBI:$identifier"];
 #	
 #	return $self->call("getCompleteEntity", $params);
 
-	# Setup method and parameters
-	my $method = SOAP::Data->name('getCompleteEntity')->attr({xmlns => $uri});
-	my @params = ( SOAP::Data->name(chebiId => "CHEBI:$identifier"));
+    # Setup method and parameters
+    my $method = SOAP::Data->name('getCompleteEntity')->attr({xmlns => $uri});
+    my @params = ( SOAP::Data->name(chebiId => "CHEBI:$identifier"));
 	
-	# Call method
-	my $som = $self->soap->call($method => @params);
-	
-	
-#	print STDERR "ChEBI.getCompleteEntity: som=" . Dumper($som) . "\n";
+    # Call method
+    my $som = $self->soap->call($method => @params);
 
-	# Retrieve for example all ChEBI identifiers for the ontology parents
-	my @stuff = $som->valueof('//chebiId');
-	
-	print STDERR "ChEBI.getCompleteEntity: amount of stuff=" . scalar(@stuff) . "\n";
-	print STDERR "ChEBI.getCompleteEntity: stuff=|@stuff|\n";
 
-	return \@stuff;
+#	$logger->info("ChEBI.getCompleteEntity: som=" . Dumper($som) . "\n");
+
+    # Retrieve for example all ChEBI identifiers for the ontology parents
+    my @stuff = $som->valueof('//chebiId');
+    
+    $logger->info("amount of stuff=" . scalar(@stuff) . "\n");
+    $logger->info("stuff=|@stuff|\n");
+ 
+    return \@stuff;
 }
 
 # Looks to see if there is a ChEBI entity with the given identifier,
 # returns it if available.
 sub getLiteEntity {
-	my ($self, $identifier) = @_;
-	
-	# Setup method and parameters
-	my $method = SOAP::Data->name('getLiteEntity')->attr({xmlns => $uri});
+    my ($self, $identifier) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+
+    # Setup method and parameters
+    my $method = SOAP::Data->name('getLiteEntity')->attr({xmlns => $uri});
 #	my @params = (SOAP::Data->name(chebiId => "CHEBI:$identifier"));
 #	my @params = (SOAP::Data->name(search => "CHEBI:44819"),
 #				  SOAP::Data->name(searchCategory => "CHEBI ID"),
 ##				  SOAP::Data->name(maximumResults => "200"),
 ##				  SOAP::Data->name(Stars => "ALL"),
 #				 );
-my @params = ( SOAP::Data->name(search => 'group'),
-SOAP::Data->name(searchCategory => 'CHEBI NAME'));
-	
-	# Call method
-	my $som = $self->soap->call($method => @params);
-	
-	print STDERR "ChEBI.getLiteEntity: som=" . Dumper($som) . "\n";
+    my @params = ( SOAP::Data->name(search => 'group'),
+    SOAP::Data->name(searchCategory => 'CHEBI NAME'));
+    
+    # Call method
+    my $som = $self->soap->call($method => @params);
 
-	# Retrieve for example all ChEBI identifiers for the ontology parents
-	my @stuff = $som->valueof('//ListElement//chebiId');
-	
-	print STDERR "ChEBI.getLiteEntity: amount of stuff=" . scalar(@stuff) . "\n";
-	print STDERR "ChEBI.getLiteEntity: stuff=|@stuff|\n";
+    $logger->info("som=" . Dumper($som) . "\n");
 
-	return \@stuff;
+    # Retrieve for example all ChEBI identifiers for the ontology parents
+    my @stuff = $som->valueof('//ListElement//chebiId');
+
+    $logger->info("amount of stuff=" . scalar(@stuff) . "\n");
+    $logger->info("stuff=|@stuff|\n");
+
+    return \@stuff;
 }
 
 
 # Looks to see if there are ChEBI entities with the given (possibly
 # outdated) identifier, returns their IDs if available.
 sub get_up_to_date_identifier_and_name {
-	my ($self, $identifier) = @_;
-	
-#	print STDERR "ChEBI.getUpToDateIdentifiers: identifier=|$identifier|\n";
+    my ($self, $identifier) = @_;
 
-	# Setup method and parameters
-	my $method = SOAP::Data->name('getCompleteEntity')->attr({xmlns => $uri});
-	my @params = ( SOAP::Data->name(chebiId => "CHEBI:$identifier"));
-	
-	# Call method
-	my $som = $self->soap->call($method => @params);
-	
-	
-#	print STDERR "ChEBI.getCompleteEntity: som=" . Dumper($som) . "\n";
+    my $logger = get_logger(__PACKAGE__);
+    
+#	$logger->info("ChEBI.getUpToDateIdentifiers: identifier=|$identifier|\n");
 
-	# Retrieve ChEBI ID(s)
-	my @stuff = $som->valueof('//chebiId');
+    # Setup method and parameters
+    my $method = SOAP::Data->name('getCompleteEntity')->attr({xmlns => $uri});
+    my @params = ( SOAP::Data->name(chebiId => "CHEBI:$identifier"));
 	
-#	print STDERR "ChEBI.getCompleteEntity: ChEBI IDs: @stuff\n";
+    # Call method
+    my $som = $self->soap->call($method => @params);
 
-	# Assume that the first identifier in the list is the actual compound,
-	# and everything else comes higher up in the ChEBI ontology
-	my $up_to_date_identifier = undef;
-	if (scalar(@stuff) > 0) {
-		$up_to_date_identifier = $stuff[0];
-	}
 
-	# Retrieve ChEBI name
-	@stuff = $som->valueof('//chebiAsciiName');
-	
-	# Assume that the first identifier in the list is the actual compound,
-	# and everything else comes higher up in the ChEBI ontology
-	my $chebi_name = undef;
-	if (scalar(@stuff) > 0) {
-		$chebi_name = $stuff[0];
-	}
+#	$logger->info("som=" . Dumper($som) . "\n");
 
-	return ($up_to_date_identifier, $chebi_name);
+    # Retrieve ChEBI ID(s)
+    my @stuff = $som->valueof('//chebiId');
+
+#	$logger->info("ChEBI IDs: @stuff\n");
+
+    # Assume that the first identifier in the list is the actual compound,
+    # and everything else comes higher up in the ChEBI ontology
+    my $up_to_date_identifier = undef;
+    if (scalar(@stuff) > 0) {
+    	$up_to_date_identifier = $stuff[0];
+    }
+
+    # Retrieve ChEBI name
+    @stuff = $som->valueof('//chebiAsciiName');
+
+    # Assume that the first identifier in the list is the actual compound,
+    # and everything else comes higher up in the ChEBI ontology
+    my $chebi_name = undef;
+    if (scalar(@stuff) > 0) {
+    	$chebi_name = $stuff[0];
+    }
+
+    return ($up_to_date_identifier, $chebi_name);
 }
 1;
 
