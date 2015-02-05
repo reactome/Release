@@ -360,7 +360,7 @@ sub build_indexes {
 	# Delete original indexes etc.
 	my $rm_command = "rm -rf " . $self->index_dir_name;
 	$command = "$cd_command/..; $rm_command";
-	$logger->info("xes: delete, $command=$command");
+	$logger->info("delete, $command=$command");
 	$status = system($command);
 	if ($status != 0) {
 	    $logger->warn("could not delete " . $self->index_dir_name);
