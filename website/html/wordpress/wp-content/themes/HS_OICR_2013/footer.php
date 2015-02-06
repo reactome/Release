@@ -20,7 +20,6 @@
 </div><!--close container 24-->
 
   <!-- Next scripts are for the search -->
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="/content/resources/js/jquery.autocomplete.min.js"></script>
     <script type="text/javascript" src="/content/resources/js/reactome.search.footer.js"></script>    
   <!-- Previous scripts are for the search -->
