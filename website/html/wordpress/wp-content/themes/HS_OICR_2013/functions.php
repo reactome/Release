@@ -31,3 +31,15 @@ add_action('get_header', 'my_filter_head');
 	}
 	add_action( 'init', 'register_my_menus' );
 ?>
+<?php
+//Making jQuery Google API
+function modify_jquery() {
+	if (!is_admin()) {
+		// comment out the next two lines to load the local copy of jQuery
+		wp_deregister_script('jquery');
+		wp_register_script('jquery', 'http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js', false, '1.11.2');
+		wp_enqueue_script('jquery');
+	}
+}
+add_action('init', 'modify_jquery');
+?>
