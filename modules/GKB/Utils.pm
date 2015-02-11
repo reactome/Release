@@ -39,6 +39,8 @@ use Getopt::Long qw(:config pass_through);
 use GKB::Ontology;
 use GKB::Config;
 use GKB::DBAdaptor;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 sub find_default_InstanceEdit {
     my ($ar) = @_;
@@ -441,8 +443,10 @@ sub get_editors_recursively {
 sub get_event_release_status {
     my ($event,$last_release_date) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     if (!(defined $last_release_date)) {
-    	print STDERR "Utils.get_event_release_status: WARNING - last_release_date is undef!\n";
+    	$logger->warn("last_release_date is undef!\n");
     	return undef;
     }
 
@@ -844,25 +848,27 @@ sub get_literature_references {
 # pathway (the diagram).
 sub find_image_file {
     my ($self, $pathway) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
     unless ($pathway) {
-#		print STDERR "find_image_file: WARNING - pathway is null!!!\n";
-		return "";
+#	print STDERR "find_image_file: WARNING - pathway is null!!!\n";
+	return "";
     }
 
     # Lets see if there is an image associated with this pathway
     my $figure = $pathway->attribute_value("figure")->[0];
     my $image_file = "";
     if ($figure) {
-		# find the file associated with the figure
-		$image_file = $figure->attribute_value("url")->[0];
-		if (defined $image_file) {
-		    my $images_dir = $GK_TMP_IMG_DIR;
-		    $images_dir =~ s/html\/img-tmp/images/;
+	# find the file associated with the figure
+	$image_file = $figure->attribute_value("url")->[0];
+	if (defined $image_file) {
+	    my $images_dir = $GK_TMP_IMG_DIR;
+	    $images_dir =~ s/html\/img-tmp/images/;
 	
-		    $image_file =~ s/\/figures/$images_dir/;
-		} else {
-	        print STDERR "find_image_file: WARNING - crikey, no image file!!\n";
+	    $image_file =~ s/\/figures/$images_dir/;
+	} else {
+	    $logger->warn("crikey, no image file!!\n");
         }
     } else {
 #        print STDERR "find_image_file: WARNING - for the current pathway, we have no figure.\n";
