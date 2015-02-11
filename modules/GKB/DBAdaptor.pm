@@ -318,7 +318,10 @@ use Storable qw(nfreeze thaw);
 use Bio::Root::Root;
 use DBI;
 use Data::Dumper;
-use GKB::Config qw($NO_SCHEMA_VALIDITY_CHECK);
+use GKB::Config;
+#qw($NO_SCHEMA_VALIDITY_CHECK);
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -2245,6 +2248,8 @@ sub delete_instance_from_referers {
 sub _insert__deleted {
     my ($self, $deleted_db_id, $replacement_db_id, $reason, $comment) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     # If no DB_ID has been assigned yet, don't bother to
     # make a note of this deletion.
     if (!(defined $deleted_db_id)) {
@@ -2256,8 +2261,8 @@ sub _insert__deleted {
     my $ar = $self->fetch_instance_by_attribute("_Deleted", $query);
 	my $_deleted = $ar->[0];
 	if (scalar(@{$ar})>0) {
-		print STDERR "DBAdaptor._insert__deleted: _Deleted instance for DB_ID $deleted_db_id exists already!!\n";
-		return;
+	    $logger->warn("_Deleted instance for DB_ID $deleted_db_id exists already!!\n");
+	    return;
 	}
 	
     # Only keep track of  instances of certain classes; ignore
@@ -2265,7 +2270,7 @@ sub _insert__deleted {
     $ar = $self->fetch_instance_by_db_id($deleted_db_id);
     my $deleted = $ar->[0];
     if (!(defined $deleted)) {
-    	print STDERR "DBAdaptor._insert__deleted: WARNING - cannot find an instance with the DB_ID: $deleted_db_id\n";
+    	$logger->warn("cannot find an instance with the DB_ID: $deleted_db_id\n");
     	return;
     }
     my $deleted_class = $deleted->class();
@@ -2316,12 +2321,12 @@ sub _insert__deleted {
 	    if (defined $replacement) {
 	    	$replacement_class = $replacement->class();
 	    	if (!$self->ontology->is_class_attribute_allowed_class("_Deleted", "replacementInstances", $replacement_class)) {
-	    		print STDERR "DBAdaptor._insert__deleted: WARNING - the replacement class $replacement_class is not one of the classes that are normally tracked during deletion";
+	    	    $logger->warn("the replacement class $replacement_class is not one of the classes that are normally tracked during deletion");
 	    	}
 	    	
 	    	$_deleted->attribute_value("replacementInstances", $replacement);
 	    } else {
-	    	print STDERR "DBAdaptor._insert__deleted: WARNING - cannot find replacement instance with the DB_ID: $replacement_db_id\n";
+	    	$logger->warn("cannot find replacement instance with the DB_ID: $replacement_db_id\n");
 	    }
     }
     
