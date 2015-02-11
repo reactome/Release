@@ -58,7 +58,7 @@ sub create_tree {
     my $d = $self->js_dtree_var_name;
     my (@roots,%h);
     foreach my $instance (values %leafevents) {
-	printf STDERR "%s\n", $instance->extended_displayName;
+	printf "%s\n", $instance->extended_displayName;
 	my $ar = $instance->follow_class_attributes
 	    (-INSTRUCTIONS => {
 		'Event' => {'reverse_attributes' => [qw(hasComponent hasMember hasSpecialisedForm hasEvent)]}

@@ -16,6 +16,8 @@ use GKB::Utils::InstructionLibrary;
 use GKB::DTreeMaker::EntityHierarchy::Downwards;
 use GKB::DTreeMaker::EntityHierarchy::ComponentsAndRepeatedUnits::Downwards;
 use GKB::DTreeMaker::EventHierarchy;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::Instance);
 
@@ -894,17 +896,19 @@ sub html_table {
 sub html_table2 {
     my ($self,$no_reverse_attributes) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     if ($self->db_id == 194550) {
-    print STDERR "\nPrettyInstance.html_table2: entered, DB_ID=" . $self->db_id() . "\n";
+	$logger->info("entered, DB_ID=" . $self->db_id() . "\n");
     }
 
     $self->debug && print join("\t", (caller(0))[3], $self,  $self->id_string), "\n";
     my $out =  qq(\n<TABLE cellspacing="0" CLASS="instancebrowser" WIDTH="$HTML_PAGE_WIDTH">\n) .
-	$self->class_and_id_as_row;
+    $self->class_and_id_as_row;
     foreach my $attribute (sort {lc($a) cmp lc($b)} $self->inflated ? $self->list_set_attributes : $self->list_valid_attributes) {
 	next if ($attribute eq 'DB_ID' or $attribute eq '_class' or $attribute eq '_html');
 	if ($self->db_id == 194550) {
-	print STDERR "PrettyInstance.html_table2: attribute=$attribute\n";
+	    $logger->info("attribute=$attribute\n");
 	}
 
 	if ($self->is_recursive_attribute($attribute)) {
@@ -912,20 +916,21 @@ sub html_table2 {
 	    my $str = $self->_make_tree_html(undef,undef,[$attribute],undef,{},{},$max_depth,0,1);
 
 	    if ($self->db_id == 194550) {
-	    print STDERR "PrettyInstance.html_table2: recursive attribute\n";
-	    if (defined $str) {
-	        print STDERR "PrettyInstance.html_table2: str=$str\n";
-	    } else {
-	        print STDERR "PrettyInstance.html_table2: str not defined!\n";
+		$logger->info("recursive attribute\n");
+		if (defined $str) {
+		    $logger->info("str=$str\n");
+		} else {
+		    $logger->info("str not defined!\n");
+		}
+		if (defined $self->attribute_value($attribute)) {
+		    $logger->info("attribute element count: " . scalar(@{$self->attribute_value($attribute)}) . "\n");
+		} else {
+		    $logger->info("attribute values undefined!\n");
+		}
 	    }
-	    if (defined $self->attribute_value($attribute)) {
-	        print STDERR "PrettyInstance.html_table2: attribute element count: " . scalar(@{$self->attribute_value($attribute)}) . "\n";
-	    } else {
-	        print STDERR "PrettyInstance.html_table2: attribute values undefined!\n";
-	    }
-	    }
+	    
 	    if (!$str && defined $self->attribute_value($attribute) && scalar(@{$self->attribute_value($attribute)})>0) {
-	        print STDERR "PrettyInstance.html_table2: ERROR!\n";
+	        $logger->error("ERROR!\n");
 	        $str = "ERROR: valid values do exist for this attribute, but tree HTML could not be generated!";
 #	        $str = "<UL CLASS=\"attributes\">ERROR: valid values do exist for this attribute, but could not generate tree HTML</UL>";
 	        $str .= ".  Values: ";
@@ -938,7 +943,7 @@ sub html_table2 {
 	    $out .= qq(<TR><TH><A NAME="$ {attribute}Anchor">$attribute</A></TH><TD>$str</TD></TR>\n);
 	} else {
 	    if ($self->db_id == 194550) {
-	    print STDERR "PrettyInstance.html_table2: non-recursive attribute\n";
+		"non-recursive attribute\n";
 	    }
 
 #	    my @values = map {(ref($_)) ? $self->prettyfy_instance($_)->hyperlinked_extended_displayName : $_} 
@@ -1021,14 +1026,16 @@ sub _view_switch_html {
 sub _view_stable_link {
     my $self = shift;
 
-    print STDERR "PrettyInstance._view_stable_link: entered\n";
+    my $logger = get_logger(__PACKAGE__);
     
-	my $wu = $self->webutils;
+    $logger->info("entered\n");
+    
+    my $wu = $self->webutils;
     if (!(defined $wu)) {
     	return '';
     }
     
-	# Don't insert a link if no stable ID is available
+    # Don't insert a link if no stable ID is available
     if (!($self->is_valid_attribute('stableIdentifier'))) {
     	return '';
     }
@@ -1037,30 +1044,30 @@ sub _view_stable_link {
     	return '';
     }
     
-	my $stable_identifier = $self->stableIdentifier->[0];
+    my $stable_identifier = $self->stableIdentifier->[0];
     if (!$stable_identifier) {
     	return '';
     }
 	
-	if (!$stable_identifier->is_valid_attribute('identifier')) {
-		print STDERR "Could not extract identifier from StableIdentifier instance\n";
-		return '';
-	}
-	my $identifier = $stable_identifier->identifier->[0];
+    if (!$stable_identifier->is_valid_attribute('identifier')) {
+	$logger->error("Could not extract identifier from StableIdentifier instance\n");
+	return '';
+    }
+    my $identifier = $stable_identifier->identifier->[0];
 	
 #	my $version = undef;
 #	if ($stable_identifier->is_valid_attribute('identifierVersion')) {
 #		$version = $stable_identifier->identifierVersion->[0];
 #	}
 	
-	my $style = "font-weight: bold; text-decoration: underline;";
-	my $link = $wu->link_to_eventbrowser_st_id($style, $identifier, '', '', 'Stable link for this page', '');
-	my $cgi = $self->cgi;
-	my $format = GKB::WebUtils::get_format($cgi);
-	if (defined $format && $format eq 'elv') {
-		$link = $identifier;
-	}
-		
+    my $style = "font-weight: bold; text-decoration: underline;";
+    my $link = $wu->link_to_eventbrowser_st_id($style, $identifier, '', '', 'Stable link for this page', '');
+    my $cgi = $self->cgi;
+    my $format = GKB::WebUtils::get_format($cgi);
+    if (defined $format && $format eq 'elv') {
+    	$link = $identifier;
+    }
+
     my $stable_link = "<P>$link</P>\n";
     
     return $stable_link;
@@ -1869,6 +1876,8 @@ use strict;
 use GKB::Config;
 
 use Data::Dumper;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::PrettyInstance);    
 
@@ -2184,11 +2193,14 @@ sub _orthologous_and_inferredFrom {
 
 sub _normal_reaction {
     my $self = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my $out = '';
-    print STDERR "PrettyInstance._normal_reaction: entered\n";
+    $logger->info("entered\n");
     if ($self->is_valid_attribute("normalReaction") && (defined $self->normalReaction) && scalar(@{$self->normalReaction})>0) {
         $out .= $self->attribute_value_as_1row('Normal reaction', ['normalReaction']);
-        print STDERR "PrettyInstance._normal_reaction: found a normal reaction\n";
+        $logger->info("found a normal reaction\n");
     }
     return $out;
 } 

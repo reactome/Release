@@ -33,6 +33,8 @@ use strict;
 use Bio::Root::Root;
 #use Fcntl qw(O_RDONLY O_WRONLY O_CREAT);
 use GKB::Config;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -55,6 +57,8 @@ sub new {
 sub read_file {
     my ($self, $file_name) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     my $content = "";
 
     if (!(-e $file_name)) {
@@ -63,8 +67,8 @@ sub read_file {
 
     unless (open(READ_FILE, "<$file_name")) {
  #   unless (sysopen(READ_FILE, $file_name, O_RDONLY)) {
-		print STDERR "FileUtils.read_file: WARNING - problem reading file $file_name\n";
-		return $content;
+	$logger->error("problem reading file $file_name\n");
+	return $content;
     }
 
     while (<READ_FILE>) {
@@ -79,14 +83,16 @@ sub read_file {
 # Uses untainting to get round perl -T flag, watch out!
 sub write_file {
     my ($self, $file_name, $content) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
-	# Untainting trick to get around -T limitations
-	$file_name =~ /^(.*)$/;
-	my $safe_file_name = $1;
-	
+    # Untainting trick to get around -T limitations
+    $file_name =~ /^(.*)$/;
+    my $safe_file_name = $1;
+
     unless (open(WRITE_FILE, ">$safe_file_name")) {
-		print STDERR "FileUtils.write_file: WARNING - problem opening file $safe_file_name for writing\n";
-		return ;
+	$logger->error("problem opening file $safe_file_name for writing\n");
+	return ;
     }
 
     print WRITE_FILE $content;
@@ -104,16 +110,18 @@ sub empty_file {
 # Runs a command within "open" and returns the command's output.
 sub run_command {
     my ($self, $command) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
     my $content = "";
 
     unless (open(READ_FILE, "$command  2>&1 |")) {
- 		print STDERR "FileUtils.run_command: WARNING - problem executing command $command\n";
-		return $content;
+ 	$logger->error("problem executing command $command\n");
+	return $content;
     }
 
     while (<READ_FILE>) {
-		$content .= $_;
+	$content .= $_;
     }
 
     close(READ_FILE);
@@ -131,8 +139,10 @@ sub run_command {
 sub print_image {
     my ($self, $image, $filename, $png_flag) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     if (!(defined $image)) {
-    	print STDERR "FileUtils.print_image: WARNING - image is undef, skipping!\n";
+    	$logger->error("image is undef, skipping!\n");
     	return undef;
     }
     
@@ -153,20 +163,21 @@ sub print_image {
     	my $image_print_ok = 0;
     	eval {
     	    if ($png_flag) {
-				print REACTOMEIMAGE $image->png;
+		print REACTOMEIMAGE $image->png;
     	    } else {
-				print REACTOMEIMAGE $image->jpeg;
+		print REACTOMEIMAGE $image->jpeg;
     	    }
     	    $image_print_ok = 1;
     	};
-		close(REACTOMEIMAGE);
-    	if ($image_print_ok == 0) {
-    	    print STDERR "FileUtils.print_image: WARNING - could not print image file $image_file, you probably need to reconfigure libgd or the GD Perl package to recognize this image type.\n";
+	close(REACTOMEIMAGE);
+    	
+	if ($image_print_ok == 0) {
+    	    $logger->error("could not print image file $image_file, you probably need to reconfigure libgd or the GD Perl package to recognize this image type.\n");
     	    return undef;
     	}
-		return $image_file;
+	return $image_file;
     } else {
-		print STDERR "FileUtils.print_image: WARNING - cant open $image_file\n";
+	$logger->error("cant open $image_file\n");
     }
 
     return undef;
