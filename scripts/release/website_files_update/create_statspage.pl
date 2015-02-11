@@ -261,28 +261,27 @@ if (!open (OUTPUT1,">$out1")) {
 print OUTPUT1 <<HTML;
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-<title>Stats</title>
-<link rel="stylesheet" type="text/css" href="/stylesheet.css" />
-</head>
-<body>
-<!--#include virtual="/cgi-bin/navigation_bar" -->
-<table    WIDTH="100%" CLASS="contents">
-<tr>
-<td CLASS="summation">
-<h1 CLASS="frontpage">Reactome Statistics (Version $version)</h1>
-<!-- Start of the stats table  -->
-<table border="0" width="90%" CELLPADDING="0" CELLSPACING="0" CLASS="classbrowser">
-<td valign="top" align="center">
-<table class="class attributes">
-<tr height="40">
-<th><b>Species</b>
-</td>
-<th><b>PROTEINS</b></th>
-<th><b>COMPLEXES</b></th>
-<th><b>REACTIONS</b></th>
-<th><b>PATHWAYS</b></th>
+    <head>
+	<title>Stats</title>
+	<link rel="stylesheet" type="text/css" href="/stylesheet.css" />
+    </head>
 
+    <body>
+	<!--#include virtual="/cgi-bin/navigation_bar" -->
+	<h1 class="frontpage">Reactome Statistics (Version $version)</h1>
+	    
+	<!-- Start of the stats table  -->
+	<table border="0" width="90%" cellpadding="0" cellspacing="0" class="classbrowser">
+	    <td valign="top" align="center">
+		<table class="class attributes">
+		    <tr height="40">
+			<th><b>Species</b></th>
+			<th><b>PROTEINS</b></th>
+			<th><b>COMPLEXES</b></th>
+			<th><b>REACTIONS</b></th>
+			<th><b>PATHWAYS</b></th>
+		    </tr>
+		    
 HTML
  
 my $own = "\"own\"";
@@ -291,18 +290,45 @@ my $center = "\"center\"";
 print $output."\n";
 	
 foreach my $row (@rows) {
-	my ($zero, $one, $two, $three, $four) = split ("\t", $row);
-	
-	chomp $zero;
-	chomp $one;
-	chomp $two;
-	chomp $three;
-	chomp $four;
-			  
-	print  OUTPUT1 "<tr height=18 class =$own>\n<td heigth=25 class=$own>$zero</td>\n\t<td class=$own align=$center>$one</td>\n\t<td class=$own align=$center>$two</td>\n\t<td class=$own align=$center>$three</td>\n\t<td class=$own align=$center>$four</td>\n\t</tr>\n\n";
+    my ($zero, $one, $two, $three, $four) = split ("\t", $row);
+
+    chomp $zero;
+    chomp $one;
+    chomp $two;
+    chomp $three;
+    chomp $four;
+  
+    print OUTPUT1 <<HTML;	
+		    <tr height="18" class=$own>
+			<td height="25" class=$own>$zero</td>
+			<td class=$own align=$center>$one</td>
+			<td class=$own align=$center>$two</td>
+			<td class=$own align=$center>$three</td>
+			<td class=$own align=$center>$four</td>
+		    </tr>
+		    
+HTML
+
 }
 
-print OUTPUT1 '</table><!-- Close the stat table --><td valign="top" align="justify"><IMG height="400" title="" src="stats.png"><BR><BR><BR></tr>   </td></TABLE> <!-- Close the page table --></table><br><DIV STYLE="font-size:9pt;text-align:left;color:black;padding-top:10px;width=40%">*Reactome annotates to protein isoforms when this information is available.<br>The total number of curated human proteins including isoforms is '. $all_human .'.<p></DIV><!--#include virtual="/cgi-bin/footer" --></BODY></HTML>'."\n";
+print OUTPUT1 <<HTML;
+		</table><!-- Close the stat table -->
+	    </td>    
+	    <td valign="top" align="justify">
+		<img height="400" title="" src="stats.png"><br /><br /><br />
+	    </td>
+	</table> <!-- Close the page table --><br />
+
+	<div style="font-size:9pt;text-align:left;color:black;padding-top:10px;width=40%">
+	    *Reactome annotates to protein isoforms when this information is available.<br />
+	    The total number of curated human proteins including isoforms is $all_human
+	</div>
+
+	<!--#include virtual="/cgi-bin/footer" -->
+    </body>
+</html>
+
+HTML
 
 close(OUTPUT1);
 
