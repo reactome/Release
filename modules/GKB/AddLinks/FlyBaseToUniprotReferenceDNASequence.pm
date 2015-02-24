@@ -29,12 +29,16 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::FlyBaseToUniprotReferenceDNASequence;
+use strict;
 
 use GKB::Config;
 use GKB::AddLinks::Builder;
 use Data::Dumper;
 use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 
 @ISA = qw(GKB::AddLinks::Builder);
@@ -52,203 +56,207 @@ sub AUTOLOAD {
 sub new {
     my($pkg) = @_;
 
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	$pkg->get_ok_field();
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    $pkg->get_ok_field();
 
-   	my $self = $pkg->SUPER::new();
-   	
+    my $self = $pkg->SUPER::new();
+
     return $self;
 }
 
 # Needed by subclasses to gain access to object variables defined in
 # this class.
 sub get_ok_field {
-	my ($pkg) = @_;
-	
-	%ok_field = $pkg->SUPER::get_ok_field();
+    my ($pkg) = @_;
 
-	return %ok_field;
+    %ok_field = $pkg->SUPER::get_ok_field();
+
+    return %ok_field;
 }
 
 sub buildPart {
-	my ($self) = @_;
-	
-	print STDERR "\n\nFlyBaseToUniprotReferenceDNASequence.buildPart: entered\n";
-	$self->class_name("FlyBaseToUniprotReferenceDNASequence");
-	
-	$self->timer->start($self->timer_message);
-	my $dba = $self->builder_params->refresh_dba();
+    my ($self) = @_;
 
-	# Get file from FlyBase mapping genes to proteins
-	my $mapping_file = $self->get_mapping_file();
-	
-	if (!(defined $mapping_file)) {
-		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING - mapping file is undef\n";
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->info("entered\n");
+    $self->class_name("FlyBaseToUniprotReferenceDNASequence");
+
+    $self->timer->start($self->timer_message);
+    my $dba = $self->builder_params->refresh_dba();
+
+    # Get file from FlyBase mapping genes to proteins
+    my $mapping_file = $self->get_mapping_file();
+    
+    if (!(defined $mapping_file)) {
+	$logger->error("mapping file is undef\n");
     	$self->termination_status("mapping file is undef");
     	return;		
-	}
-	print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: mapping_file=$mapping_file\n";
-	if (!(-e $mapping_file)) {
-		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING - missing mapping file\n";
+    }
+    
+    $logger->info("mapping_file=$mapping_file\n");
+    
+    if (!(-e $mapping_file)) {
+	$logger->error("missing mapping file\n"
     	$self->termination_status("missing mapping file");
     	return;		
-	}
-	if (-s $mapping_file == 0) {
-		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING - mapping file has zero length\n";
+    }
+    if (-s $mapping_file == 0) {
+	$logger->error("mapping file has zero length\n");
     	$self->termination_status("mapping file has zero length");
     	return;		
-	}
-	
-	if (!open(FILE, $mapping_file)) {
-		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING - could not open mapping file: $mapping_file\n";
+    }
+
+    if (!open(FILE, $mapping_file)) {
+	$logger->error("could not open mapping file: $mapping_file\n");
     	$self->termination_status("could not open mapping file: $mapping_file");
     	return;
     }
-	# Create a hash mapping UniProt IDs (keys) onto FlyBase IDs (values)
-	# TODO: it might be more efficient to create a hash of the UniProt
-	# IDs known to Reactome and then loop over the FlyBase IDs instead.
-	my %gene;
-	my $uniprot_id;
-	my $i;
+
+    # Create a hash mapping UniProt IDs (keys) onto FlyBase IDs (values)
+    # TODO: it might be more efficient to create a hash of the UniProt
+    # IDs known to Reactome and then loop over the FlyBase IDs instead.
+    my %gene;
+    my $uniprot_id;
+    my $i;
     my @cells;
     while (<FILE>) {
     	@cells = split(/\t/, $_);
 	    if (scalar(@cells) < 5) {
 	    	next;
 	    }
-		$uniprot_id = $cells[4];
+	    $uniprot_id = $cells[4];
 	    if (!(defined $uniprot_id) || $uniprot_id eq '' || $uniprot_id =~ /^[ \t\n]+$/) {
-		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: cant extract UniProt ID from line from file=" . $_ . "\n";
+		$logger->warn("cant extract UniProt ID from line from file=" . $_ . "\n");
 	    } else {
 		$uniprot_id =~ s/\n+$//;
-		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: uniprot_id=|$uniprot_id|\n";
+		$logger->info("uniprot_id=|$uniprot_id|\n");
 	    	push(@{$gene{$uniprot_id}}, $cells[1]);
 	    }
 	}
     close(FILE);
 	
-	# Diagnostics
-	my @keys = keys(%gene);
-	my @values = values(%gene);
-	print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: keys(gene)=@keys\n";
-	print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart:";
-	foreach my $value (@values) {
-		my @value_list = @{$value};
-		print STDERR "[@value_list], ";
-	}
-	print STDERR "\n";
-	
-	my $attribute = 'referenceGene';
-	$self->set_instance_edit_note("${attribute}s inserted by FlyBaseToUniprotReferenceDNASequence");
-	
-	# Retrieve all UniProt entries from Reactome
-	my $reference_peptide_sequences = $self->fetch_reference_peptide_sequences(1);
+    # Diagnostics
+    my @keys = keys(%gene);
+    my @values = values(%gene);
+    $logger->info("keys(gene)=@keys\n");
+    foreach my $value (@values) {
+	my @value_list = @{$value};
+	$logger->info("[@value_list],");
+    }
+    
+    my $attribute = 'referenceGene';
+    $self->set_instance_edit_note("${attribute}s inserted by FlyBaseToUniprotReferenceDNASequence");
+    
+    # Retrieve all UniProt entries from Reactome
+    my $reference_peptide_sequences = $self->fetch_reference_peptide_sequences(1);
 
-	my $gene_db = $self->builder_params->reference_database->get_flybase_reference_database();
-	my $reference_peptide_sequence;
-	my $identifier;
-	foreach $reference_peptide_sequence (@{$reference_peptide_sequences}) {
-	    $reference_peptide_sequence->inflate;
-	    $identifier = $reference_peptide_sequence->Identifier->[0];
-#	    if (!(defined $identifier)) {
-#	    	print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING - UniProt instance with DB_ID=" .  $reference_peptide_sequence->db_id() . " doesn't have an identifier.\n";
+    my $gene_db = $self->builder_params->reference_database->get_flybase_reference_database();
+    my $reference_peptide_sequence;
+    my $identifier;
+    foreach $reference_peptide_sequence (@{$reference_peptide_sequences}) {
+	$reference_peptide_sequence->inflate;
+	$identifier = $reference_peptide_sequence->Identifier->[0];
+#	if (!(defined $identifier)) {
+#		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING - UniProt instance with DB_ID=" .  $reference_peptide_sequence->db_id() . " doesn't have an identifier.\n";
 #	    	next;
-#	    }
+#	}
 
-		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: reference_peptide_sequence->Identifier=$identifier; gene_ids=[";
+	$logger->info("reference_peptide_sequence->Identifier=$identifier; gene_ids=");
 
-		# Remove FlyBase gene identifiers to make sure the mapping is up-to-date, keep others
-		# this isn't really necessary as long as the script is run on the slice only
-		# But a good thing to have if you need to run the script a second time.
-	    $self->remove_typed_instances_from_attribute($reference_peptide_sequence, $attribute, $gene_db);
-	    
-		#create ReferenceDNASequence for FlyBase gene id
-	    foreach my $gene_id (@{$gene{$identifier}}) {
-			print STDERR "$gene_id,";
-			my $rds = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_peptide_sequence->Species, $gene_db, $gene_id);
-			$self->check_for_identical_instances($rds);
-			$reference_peptide_sequence->add_attribute_value($attribute, $rds);
-			$self->increment_insertion_stats_hash($reference_peptide_sequence->db_id);
-	    }
-		print STDERR "]\n";
+	# Remove FlyBase gene identifiers to make sure the mapping is up-to-date, keep others
+	# this isn't really necessary as long as the script is run on the slice only
+	# But a good thing to have if you need to run the script a second time.
+	$self->remove_typed_instances_from_attribute($reference_peptide_sequence, $attribute, $gene_db);
 
-	    $reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
-	    $dba->update_attribute($reference_peptide_sequence, $attribute);
+	#create ReferenceDNASequence for FlyBase gene id
+	foreach my $gene_id (@{$gene{$identifier}}) {
+	    $logger->info("$gene_id,");
+	    my $rds = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_peptide_sequence->Species, $gene_db, $gene_id);
+	    $self->check_for_identical_instances($rds);
+	    $reference_peptide_sequence->add_attribute_value($attribute, $rds);
+	    $self->increment_insertion_stats_hash($reference_peptide_sequence->db_id);
 	}
-	
-	$self->print_insertion_stats_hash();
-	
-	$self->timer->stop($self->timer_message);
-	$self->timer->print();
+
+	$reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
+	$dba->update_attribute($reference_peptide_sequence, $attribute);
+    }
+
+    $self->print_insertion_stats_hash();
+
+    $self->timer->stop($self->timer_message);
+    $self->timer->print();
 }
 
 # Get file from data provider website mapping genes to proteins
 sub get_mapping_file {
     my ($self) = @_;
 
-	my $cmd;
-	my $tmp_dir = $self->get_tmp_dir();
-	my $filename = "fbgn_NAseq_Uniprot_fb.tsv";
-	my $wildcard_filename = "fbgn_NAseq_Uniprot_fb_*.tsv";
-	my $path = "$tmp_dir/$filename";
-	my $mapping_file = $self->comments_free_filename($path);
-	my $compressed_path = "$path.gz";
-	my $old_compressed_path = "$compressed_path.old";
-	if (-e $path) {
-		unlink($path);
+    my $logger = get_logger(__PACKAGE__);
+
+    my $cmd;
+    my $tmp_dir = $self->get_tmp_dir();
+    my $filename = "fbgn_NAseq_Uniprot_fb.tsv";
+    my $wildcard_filename = "fbgn_NAseq_Uniprot_fb_*.tsv";
+    my $path = "$tmp_dir/$filename";
+    my $mapping_file = $self->comments_free_filename($path);
+    my $compressed_path = "$path.gz";
+    my $old_compressed_path = "$compressed_path.old";
+    if (-e $path) {
+	unlink($path);
+    }
+
+    # If the file is outdated, move it to a backup location - we
+    # might need it again later.
+    if ((-e $compressed_path) && int(-M $compressed_path) > 14) {
+	$logger->info("$compressed_path is older than 14 days\n");
+	if ( -s $compressed_path > 0 ) {
+	    $logger->info("$compressed_path is not empty\n");
+	    $cmd = "mv $compressed_path $old_compressed_path";
+	    if (system($cmd) != 0) {
+		$logger->warn("$cmd failed\n");
+	    }
 	}
-	
-	# If the file is outdated, move it to a backup location - we
-	# might need it again later.
-	if ((-e $compressed_path) && int(-M $compressed_path) > 14) {
-		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: $compressed_path is older than 14 days\n";
-		if ( -s $compressed_path > 0 ) {
-			print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: $compressed_path is not empty\n";
-			$cmd = "mv $compressed_path $old_compressed_path";
-			if (system($cmd) != 0) {
-				print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING: $cmd failed\n";
-			}
-		}
-	}
-	
-	if (!(-e $compressed_path) || (-s $compressed_path == 0)) {
-		# Get file from FlyBase mapping genes to proteins, if there
-		# is no pre-existing file less than two weeks old.
-#		$cmd = "wget -t 5 -P $tmp_dir http://flybase.org/static_pages/downloads/FB2008_10/genes/$filename.gz";
-#		$cmd = "wget -t 5 -P $tmp_dir -O $filename.gz ftp://flybase.org/releases/current/precomputed_files/genes/$wildcard_filename.gz";
-		$cmd = "wget -t 5 -O $compressed_path ftp://flybase.org/releases/current/precomputed_files/genes/$wildcard_filename.gz";
-		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: cmd=$cmd\n";
+    }
+
+    if (!(-e $compressed_path) || (-s $compressed_path == 0)) {
+	# Get file from FlyBase mapping genes to proteins, if there
+	# is no pre-existing file less than two weeks old.
+#	$cmd = "wget -t 5 -P $tmp_dir http://flybase.org/static_pages/downloads/FB2008_10/genes/$filename.gz";
+#	$cmd = "wget -t 5 -P $tmp_dir -O $filename.gz ftp://flybase.org/releases/current/precomputed_files/genes/$wildcard_filename.gz";
+	$cmd = "wget -t 5 -O $compressed_path ftp://flybase.org/releases/current/precomputed_files/genes/$wildcard_filename.gz";
+	$logger->info("cmd=$cmd\n");
+	if (system($cmd) != 0) {
+	    $logger->warn("$cmd failed\n");
+	    if ((-e $old_compressed_path)) {
+		$logger->info("using $compressed_path.old instead\n");
+		my $cmd = "mv $compressed_path.old $compressed_path";
 		if (system($cmd) != 0) {
-			print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING: $cmd failed\n";
-			if ((-e $old_compressed_path)) {
-				print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: using $compressed_path.old instead\n";
-				my $cmd = "mv $compressed_path.old $compressed_path";
-				if (system($cmd) != 0) {
-					print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING: $cmd failed\n";
-				}
-			} else {
-				print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: $old_compressed_path does not exist, giving up completely\n";
-				# If there is no pre-existing file on the disk, then
-				# give up completely.
-				return undef;
-			}
+		    $logger->warn("$cmd failed\n");
 		}
-		$cmd = "touch $compressed_path";
-		if (system($cmd) != 0) {
-			print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING: $cmd failed\n";
-		}
-	}
-	
-	gunzip($compressed_path => $path);
-	if (!(-e $path)) {
-		print STDERR "FlyBaseToUniprotReferenceDNASequence.buildPart: WARNING: $path does not exist!\n";
+	    } else {
+		$logger->error("$old_compressed_path does not exist, giving up completely\n");
+		# If there is no pre-existing file on the disk, then
+		# give up completely.
 		return undef;
+	    }
 	}
-	
-	$mapping_file = $self->remove_comments_from_file($path);
-	
-	return $mapping_file;
+	$cmd = "touch $compressed_path";
+	if (system($cmd) != 0) {
+	    $logger->error("$cmd failed\n");
+	}
+    }
+
+    gunzip($compressed_path => $path);
+    if (!(-e $path)) {
+	$logger->error("$path does not exist!\n");
+	return undef;
+    }
+
+    $mapping_file = $self->remove_comments_from_file($path);
+
+    return $mapping_file;
 }
 
 # Takes the named file and removes any initial empty or comment lines.
@@ -258,30 +266,32 @@ sub get_mapping_file {
 sub remove_comments_from_file {
     my ($self, $path) = @_;
 
-	my $comment_free_path = $self->comments_free_filename($path);
+    my $logger = get_logger(__PACKAGE__);
+
+    my $comment_free_path = $self->comments_free_filename($path);
     unless (open(READ_FILE, "<$path")) {
- 		print STDERR "remove_comments_from_file: WARNING - problem opening file $path\n";
-		$self->termination_status("problem opening file $path");
-		return $comment_free_path;
+ 	$logger->error("problem opening file $path\n");
+	$self->termination_status("problem opening file $path");
+	return $comment_free_path;
     }
     unless (open(WRITE_FILE, ">$comment_free_path")) {
-		print STDERR "remove_comments_from_file: WARNING - problem opening file $comment_free_path for writing\n";
-		$self->termination_status("problem opening file $comment_free_path for writing, nonlethal if previous copy exists");
-		return $comment_free_path;
+	$logger->error("problem opening file $comment_free_path for writing\n");
+	$self->termination_status("problem opening file $comment_free_path for writing, nonlethal if previous copy exists");
+	return $comment_free_path;
     }
 
-	my $line;
+    my $line;
     while (<READ_FILE>) {
     	$line = $_;
     	if ($line =~ /^#/) {
-    		# Ignore comments
-    		next;
+    	    # Ignore comments
+    	    next;
     	}
     	if ($line =~ /^\n*$/) {
-    		# Ignore empty lines
-    		next;
+    	    # Ignore empty lines
+    	    next;
     	}
-	    print WRITE_FILE $line;
+	print WRITE_FILE $line;
     }
 
     close(READ_FILE);
@@ -293,7 +303,7 @@ sub remove_comments_from_file {
 sub comments_free_filename {
     my ($self, $file_name) = @_;
 
-	return "$file_name.nc";
+    return "$file_name.nc";
 }
 
 1;

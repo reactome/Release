@@ -26,11 +26,15 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::HMDBMolecules;
+use strict;
 
 use GKB::Config;
 use GKB::AddLinks::Builder;
 use GKB::HMDB;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Data::Dumper;
 
@@ -81,12 +85,13 @@ sub buildPart {
 
     my $pkg = __PACKAGE__;
 
-    print STDERR "\n\n$pkg.buildPart: entered\n";
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->info("entered\n");
 
     $self->timer->start( $self->timer_message );
     my $dba = $self->builder_params->refresh_dba();
-    $dba->matching_instance_handler(
-        new GKB::MatchingInstanceHandler::Simpler );
+    $dba->matching_instance_handler(new GKB::MatchingInstanceHandler::Simpler );
 
     my $mapper = $self->mapper($dba);
 
@@ -115,12 +120,11 @@ sub buildPart {
       $self->builder_params->reference_database->get_hmdb_metabolite_reference_database();
 
     while (my ($hmdb,$molecules) = each %$molecules) {
-        print STDERR "$pkg.buildPart: i->Identifier=HMDB:$hmdb\n";
+        $logger->info("i->Identifier=HMDB:$hmdb\n");
 	
-
 	for my $molecule (@$molecules) { 
 	    $molecule || next;
-	    print STDERR "\n\nI am working on ReferenceMolecule ", $molecule->db_id(), "\n\n";
+	    $logger->info("I am working on ReferenceMolecule " . $molecule->db_id());
 	    ## Careful! ReferenceMolecules can be associated with > 1 HMDB ID.
 	    ## Only do this the first time the instance is encountered!
 	    unless ( $self->{seen}->{$molecule->db_id()}++ ) {

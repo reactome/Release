@@ -26,11 +26,15 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::ZincMolecules;
+use strict;
 
 use GKB::Config;
 use GKB::AddLinks::Builder;
 use GKB::Zinc;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Data::Dumper;
 
@@ -81,12 +85,13 @@ sub buildPart {
 
     my $pkg = __PACKAGE__;
 
-    print STDERR "\n\n$pkg.buildPart: entered\n";
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->info("entered\n");
 
     $self->timer->start( $self->timer_message );
     my $dba = $self->builder_params->refresh_dba();
-    $dba->matching_instance_handler(
-        new GKB::MatchingInstanceHandler::Simpler );
+    $dba->matching_instance_handler(new GKB::MatchingInstanceHandler::Simpler );
 
     my $mapper = $self->mapper($dba);
 
@@ -115,9 +120,8 @@ sub buildPart {
       $self->builder_params->reference_database->get_zinc_reference_database();
 
     while (my ($zinc,$molecules) = each %$molecules) {
-        print STDERR "$pkg.buildPart: i->Identifier=ZINC:$zinc\n";
+        $logger->info("i->Identifier=ZINC:$zinc\n");
 	
-
 	for my $molecule (@$molecules) { 
 	    $molecule || next;
 	    print STDERR "\n\nI am working on ReferenceMolecule ", $molecule->db_id(), "\n\n";
