@@ -27,11 +27,13 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::BioGPSGeneToUniprotReferenceDNASequence;
+use strict;
 
 use GKB::Config;
 use GKB::AddLinks::GeneToUniprotReferenceDNASequence;
-use strict;
 use vars qw(@ISA $AUTOLOAD %ok_field);
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::AddLinks::GeneToUniprotReferenceDNASequence);
 
@@ -48,42 +50,44 @@ sub AUTOLOAD {
 sub new {
     my($pkg) = @_;
 
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	$pkg->get_ok_field();
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    $pkg->get_ok_field();
 
-   	my $self = $pkg->SUPER::new();
-   	
+    my $self = $pkg->SUPER::new();
+
     return $self;
 }
 
 # Needed by subclasses to gain access to object variables defined in
 # this class.
 sub get_ok_field {
-	my ($pkg) = @_;
-	
-	%ok_field = $pkg->SUPER::get_ok_field();
+    my ($pkg) = @_;
+    
+    %ok_field = $pkg->SUPER::get_ok_field();
 
-	return %ok_field;
+    return %ok_field;
 }
 
 sub buildPart {
-	my ($self) = @_;
-	
-	print STDERR "\n\nBioGPSGeneToUniprotReferenceDNASequence.buildPart: entered\n";
-	
-	my $biogps_gene_reference_database = $self->builder_params->reference_database->get_biogps_gene_reference_database();
+    my ($self) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->info("entered\n");
+    
+    my $biogps_gene_reference_database = $self->builder_params->reference_database->get_biogps_gene_reference_database();
 
-	print STDERR "BioGPSGeneToUniprotReferenceDNASequence.buildPart: biogps_gene_reference_database=$biogps_gene_reference_database\n";
-	print STDERR "BioGPSGeneToUniprotReferenceDNASequence.buildPart: running self->target_gene_reference_database\n";
+    $logger->info("biogps_gene_reference_database=$biogps_gene_reference_database\n");
+    $logger->info("running self->target_gene_reference_database\n");
 
-	$self->target_gene_reference_database($biogps_gene_reference_database);
-	
-	print STDERR "BioGPSGeneToUniprotReferenceDNASequence.buildPart: running self->SUPER::buildPart\n";
+    $self->target_gene_reference_database($biogps_gene_reference_database);
+    
+    $logger->info("running self->SUPER::buildPart\n");
 
-	$self->SUPER::buildPart();
+    $self->SUPER::buildPart();
 
-	print STDERR "BioGPSGeneToUniprotReferenceDNASequence.buildPart: done\n";
+    $logger->info("done\n");
 }
 
 1;
