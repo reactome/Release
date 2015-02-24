@@ -1,6 +1,6 @@
 sub get_ensembl_version {
     my $browser = LWP::UserAgent->new;
-    my $response = $browser->get("http://www.ensembl.org/index.html");
+    my $response = $browser->get("http://uswest.ensembl.org/index.html");
     my $content = $response->content;
     
     my ($ensembl_version) = ($content =~ /release (\d+)/g)[-1];
