@@ -29,6 +29,13 @@ $opt_release_pass ||= $GKB::Config::GK_DB_PASS;
 $opt_release_port ||= $GKB::Config::GK_DB_PORT;
 $opt_release_db ||= $GKB::Config::GK_DB_NAME;
 
+if ($opt_release_db eq $GKB::Config::GK_DB_NAME) {
+    print "Enter name of release database (leave blank for default of $opt_release_db):";
+    my $release_db = <STDIN>;
+    chomp $release_db;
+    $opt_release_db = $release_db if $release_db;
+}
+
 my $release_dba = GKB::DBAdaptor->new
     (
      -dbname => $opt_release_db,
