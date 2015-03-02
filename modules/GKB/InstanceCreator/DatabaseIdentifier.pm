@@ -37,10 +37,15 @@ disclaimers of warranty.
 =cut
 
 package GKB::InstanceCreator::DatabaseIdentifier;
+use strict;
 
+use GKB::Config;
 use GKB::DBAdaptor;
 use GKB::InstanceCreator::ReferenceDatabase;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
 
