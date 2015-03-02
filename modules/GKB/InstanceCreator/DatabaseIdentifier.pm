@@ -117,14 +117,14 @@ sub set_miscellaneous {
 sub get_database_identifier {
     my ( $self, $reference_database, $identifier, $use_existing ) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     if ( !( defined $reference_database ) ) {
-        print STDERR
-"DatabaseIdentifier.get_database_identifier: reference_database not defined!\n";
+        $logger->error("reference_database not defined!\n");
         return undef;
     }
     if ( !( defined $identifier ) ) {
-        print STDERR
-"DatabaseIdentifier.get_database_identifier: identifier not defined!\n";
+        $logger->error("identifier not defined!\n");
         return undef;
     }
 
