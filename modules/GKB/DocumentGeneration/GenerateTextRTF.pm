@@ -124,7 +124,7 @@ sub split_op_file_into_smaller_files {
     
     my $logger = get_logger(__PACKAGE__);
     
-    $logger->info("split_op_file_into_smaller_files: entered");
+    $logger->info("entered");
 
     my $output_file_name = $self->get_output_file_name();
     # Add an appropriate extension, if it doesn't already exist
@@ -323,9 +323,9 @@ sub generate_stylesheet {
     push @params, \'{\widctlpar\adjustright \fs20\cgrid \snext0 Normal;}'; #'
     
     for (my $i=1; $i<=$depth_limit; $i++) {
-		my $param = '{\s' . $i . '\sb240\sa60\keepn\widctlpar\adjustright \b\f1\fs32\cgrid \sbasedon0 \snext0 heading ' . $i . ';}';
+	my $param = '{\s' . $i . '\sb240\sa60\keepn\widctlpar\adjustright \b\f1\fs32\cgrid \sbasedon0 \snext0 heading ' . $i . ';}';
 	
-		push @params, \$param;
+	push @params, \$param;
     }
 
     push @params, \'{\*\cs10 \additive Default Paragraph Font;}'; #'
@@ -344,7 +344,7 @@ sub generate_image_from_file_basic {
     my ($self, $image_file) = @_;
     
     my $rtf = $self->rtf;
-	$rtf->image_paragraph('filename' => $image_file);
+    $rtf->image_paragraph('filename' => $image_file);
 }
 
 # Emit a paragraph containing the supplied image file
@@ -354,7 +354,7 @@ sub generate_image {
     my $logger = get_logger(__PACKAGE__);
 
     if (!(defined $image)) {
-        $logger->warn("GenerateTextRTF.generate_image: WARNING - no image!!");
+        $logger->warn("no image!!");
 	return;
     }
 
@@ -362,7 +362,7 @@ sub generate_image {
     my $image_file_name = GKB::FileUtils->print_image($image, undef, 1);
 
     if (!(defined $image_file_name)) {
-        $logger->warn("GenerateTextRTF.generate_image: WARNING - cant do anything with image, skipping");
+        $logger->warn("cant do anything with image, skipping");
         return;
     }
     
@@ -444,9 +444,9 @@ sub generate_paragraph {
     };
     if (!$paragraph_printed_ok) {
         if (defined $text) {
-            $logger->warn("GenerateTextRTF.generate_paragraph: WARNING - serious problem printing paragraph, params=" . Dumper(@params) . ", text=|$text|");
+            $logger->warn("serious problem printing paragraph, params=" . Dumper(@params) . ", text=|$text|");
         } else {
-            $logger->warn("GenerateTextRTF.generate_paragraph: WARNING - serious problem printing paragraph, params=" . Dumper(@params) . ", text=undef");
+            $logger->warn("serious problem printing paragraph, params=" . Dumper(@params) . ", text=undef");
         }
     }
 
@@ -510,7 +510,7 @@ sub translate_formatting {
 	    } elsif ($formatting->{$format_key} eq "center") {
 		$param_ref = \'\qc'; #'
 	    } else {
-		$logger->warn("translate_formatting: WARNING - format value=" . $formatting->{$format_key} . " not recognised, skipping!");
+		$logger->warn("format value=" . $formatting->{$format_key} . " not recognised, skipping!");
 		next;
 	    }
 	} elsif ($format_key eq "bind_next_para") {
@@ -520,7 +520,7 @@ sub translate_formatting {
 	    # Set mysterious command that magically makes things work
 	    $param_ref = \'\tx0\ls11'; #'
 	} else {
-	    $logger->warn("translate_formatting: WARNING - format_key=$format_key not recognised, skipping!");
+	    $logger->warn("format_key=$format_key not recognised, skipping!");
 	    next;
 	}
 
@@ -633,6 +633,8 @@ sub colortableblue {
 sub generate_header {
     my ($self, $depth, $text) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     $self->generate_header_initial_whitespace($depth, $text);
 
     my %formatting = $self->header_formatting($depth);
@@ -655,7 +657,7 @@ sub generate_header {
 	my $paragraph_rtf_string = '';
 	my $paragraph_rtf = RTF::Writer->new_to_string(\$paragraph_rtf_string);
 	$text =~ s/<\/?font.*?>//g;
-	print STDERR "TEXT $text\n";
+	$logger->info("TEXT $text\n");
 	$paragraph_rtf->paragraph(@params, $text);
 	my $marked_up_rtf_string = '{{\colortbl;\red0\green0\blue255;\red255\green0\blue0;}\cf1'. "\n$paragraph_rtf_string\n" . '}';
 	$rtf->print(\$marked_up_rtf_string);
@@ -745,11 +747,11 @@ sub interpret_markup {
 		$src =~ s/\\'2e/./g; #'
 		
 		if (!(defined $src) || $src eq '') { #'
-		    $logger->warn("GenerateTextRTF.interpret_markup: WARNING - cannot find image source file, skipping to next line");
+		    $logger->warn("cannot find image source file, skipping to next line");
 		    next;
 		}
 		if (!(-e $src)) {
-		    $logger->warn("GenerateTextRTF.interpret_markup: WARNING - we cant see the file $src, skipping to next line");
+		    $logger->warn("we cant see the file $src, skipping to next line");
 		    next;
 		}
 		
@@ -802,7 +804,7 @@ sub interpret_markup {
 	    }
 	    else {
 		# unknown markup, or maybe not markup at all
-		$logger->info("GenerateTextRTF.interpret_markup: possible unknown markup, line3=$line3");
+		$logger->info("possible unknown markup, line3=$line3");
 		$new_text .= $line3;
 	    }
 	} else {

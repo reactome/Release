@@ -82,7 +82,7 @@ sub new {
     
     my $logger = get_logger(__PACKAGE__);
     
-    $logger->info("Reader.new: setting initial depth_offset");
+    $logger->info("setting initial depth_offset");
     
     my $depth_offset = 0;
     $self->depth_offset($depth_offset);
@@ -178,7 +178,7 @@ sub get_next_text_unit {
 
     my $logger = get_logger(__PACKAGE__);
 
-    $logger->error_die("get_next_text_unit: this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 # Invent new section number.  If previous section number was null/empty,
@@ -344,7 +344,7 @@ sub get_image_markup {
 
     my $markup = '';
     if (!(defined $src)) {
-    	$logger->warn("get_next_text_unit: image source file not defined!");
+    	$logger->warn("image source file not defined!");
     } else {
  	$markup = "<img src=\"$src\"";
  	if (defined $width) {
