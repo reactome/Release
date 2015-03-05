@@ -699,7 +699,7 @@ sub get_names {
         @names = ($name);
     }
 
-    $logger->info("ReferenceDatabase.get_names: 3 names=@names\n");
+    $logger->info("3 names=@names\n");
 
     return @names;
 }
