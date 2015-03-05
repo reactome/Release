@@ -67,34 +67,34 @@ sub AUTOLOAD {
 sub new {
     my($pkg, @args) = @_;
     
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	$pkg->get_ok_field();
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    $pkg->get_ok_field();
 
-   	my $self = $pkg->SUPER::new();
+    my $self = $pkg->SUPER::new();
 }
 
 # Needed by subclasses to gain access to class variables defined in
 # this base class.
 sub get_ok_field {
-	my ($pkg) = @_;
-	
-	%ok_field = $pkg->SUPER::get_ok_field();
-	$ok_field{"pdf"}++;
-	$ok_field{"sheet_size"}++;
-	$ok_field{"paragraph_size"}++;
-	$ok_field{"margins"}++;
-	$ok_field{"page"}++;
-	$ok_field{"pg_num"}++;
-	$ok_field{"pnum_mode"}++;
-	$ok_field{"position"}++;
-	$ok_field{"image_file_names"}++;
-	$ok_field{"header"}++;
-	$ok_field{"hdr_position"}++;
-	$ok_field{"numbering_of_header"}++;
-	$ok_field{"toc_pg_nm"}++;
+    my ($pkg) = @_;
 
-	return %ok_field;
+    %ok_field = $pkg->SUPER::get_ok_field();
+    $ok_field{"pdf"}++;
+    $ok_field{"sheet_size"}++;
+    $ok_field{"paragraph_size"}++;
+    $ok_field{"margins"}++;
+    $ok_field{"page"}++;
+    $ok_field{"pg_num"}++;
+    $ok_field{"pnum_mode"}++;
+    $ok_field{"position"}++;
+    $ok_field{"image_file_names"}++;
+    $ok_field{"header"}++;
+    $ok_field{"hdr_position"}++;
+    $ok_field{"numbering_of_header"}++;
+    $ok_field{"toc_pg_nm"}++;
+
+    return %ok_field;
 }
 
 # Get the stored current page, if there is one, otherwise create a fresh one.
@@ -122,7 +122,7 @@ sub open_stream {
     # If the user wants to dump to a stream, dump first to a
     # temporary file...
     if (defined $stream) {
-		my $filename = rand() * 1000 . $$;
+	my $filename = rand() * 1000 . $$;
     	$self->open_filename($filename);
     }
 }
@@ -131,11 +131,11 @@ sub open_stream {
 sub open_filename {
     my ($self, $filename) = @_;
 
-	$output_file_name = $filename;
-	
+    $output_file_name = $filename;
+    
     # Add an appropriate extension, if it doesn't already exist
     unless ($output_file_name =~ /\.pdf$/i) {
-		$output_file_name .= ".pdf";
+	$output_file_name .= ".pdf";
     }
 
     my $pdf = PDF::API2->new(-file => $output_file_name);
@@ -166,15 +166,15 @@ sub close {
     # of the temporary file
     my $output_file_stream = $self->get_output_file_stream();
     if ($output_file_stream) {
-		if (CORE::open(TEMPFILE, "<$output_file_name")) {
-		    while (<TEMPFILE>) {
-				print $output_file_stream $_;
-		    }
-		    CORE::close(TEMPFILE);
-		}
+	if (CORE::open(TEMPFILE, "<$output_file_name")) {
+	    while (<TEMPFILE>) {
+		print $output_file_stream $_;
+	    }
+	    CORE::close(TEMPFILE);
+	}
 	
-		# Get rid of temporary o/p file
-		unlink($output_file_name);
+	# Get rid of temporary o/p file
+	unlink($output_file_name);
     }
 }
 
@@ -258,7 +258,7 @@ sub generate_toc {
 
     my $logger = get_logger(__PACKAGE__);
 
-    $logger->warn("GenerateTextPDF.generate_toc: WARNING - this subroutine should never be used during PDF generation!!");
+    $logger->error("this subroutine should never be used during PDF generation!!");
 }
 
 # Get the Helvatica Latin font.  If it has already been got before,
@@ -277,8 +277,8 @@ sub get_font_helvetica_latin {
     }
 
     if (!(defined $font_helvetica_latin_hash{$font_name})) {
-		my $pdf = $self->pdf;
-		$font_helvetica_latin_hash{$font_name} = $pdf->corefont($font_name, -encoding => 'latin1');
+	my $pdf = $self->pdf;
+	$font_helvetica_latin_hash{$font_name} = $pdf->corefont($font_name, -encoding => 'latin1');
     }
 
     return $font_helvetica_latin_hash{$font_name};
@@ -437,7 +437,7 @@ sub generate_image {
     my $logger = get_logger(__PACKAGE__);
 
     if (!(defined $image)) {
-        $logger->warn("GenerateTextPDF.generate_image: WARNING - no image!!");
+        $logger->warn("no image!!");
 	return;
     }
 
@@ -445,7 +445,7 @@ sub generate_image {
     my $image_file_name = GKB::FileUtils->print_image($image, undef, 1);
 
     if (!(defined $image_file_name)) {
-        $logger->warn("GenerateTextPDF.generate_image: WARNING - no image file name!!");
+        $logger->warn("no image file name!!");
         return;
     }
 
@@ -483,7 +483,7 @@ sub generate_image {
 	}
 	
 	if ($new_position[1] < $margins->[1]) {
-	    $logger->warn("GenerateTextPDF.generate_image: WARNING - image is still flopping over edge of page!!!");
+	    $logger->warn("image is still flopping over edge of page!!!");
 	}
 	
 	my $pdf_ok = 0;
@@ -498,7 +498,7 @@ sub generate_image {
 		} elsif ($image_file_name =~ /\.jpg/i || $image_file_name =~ /\.jpeg/i) {
 			$image_file=$pdf->image_jpeg($image_file_name);
 		} else {
-			$logger->warn("GenerateTextPDF.generate_image: WARNING - unknown image type for image_file_name=$image_file_name");
+			$logger->warn("unknown image type for image_file_name=$image_file_name");
 		}
 	
 		if (defined $image_file) {
@@ -508,9 +508,8 @@ sub generate_image {
 	}; # eval
 	
 	if ($pdf_ok == 0) {
-	    $logger->warn("GenerateTextPDF.generate_image: WARNING - problem occured while trying to insert image into PDF");
+	    $logger->warn("problem occured while trying to insert image into PDF");
 	}
-	
 	
 	# Save file name for later deletion - the file needs
 	# to stay in existence until after the PDF document
@@ -544,7 +543,7 @@ sub generate_vector_graphics_from_file {
     # Open the file containing the vector graphics to be imported
     my $vg_pdf = PDF::API2->open($filename);
     unless ($vg_pdf) {
-	$logger->warn("GenerateTextPDF.generate_vector_graphics_from_file: WARNING - could not open file to read PDF!!");
+	$logger->warn("could not open file to read PDF!!");
 	return 0;
     }
 
@@ -554,7 +553,7 @@ sub generate_vector_graphics_from_file {
     # that the file will only have one page anyway.
     my $form = $pdf->importPageIntoForm($vg_pdf, 1);
     unless ($form) {
-	$logger->warn("GenerateTextPDF.generate_vector_graphics_from_file: WARNING - form is null!!");
+	$logger->warn("form is null!!");
 	return 0;
     }
 
@@ -593,7 +592,7 @@ sub generate_vector_graphics_from_file {
     }
 
     if ($new_position[1] < $margins->[1]) {
-	$logger->warn("GenerateTextPDF.generate_vector_graphics_from_file: WARNING - image is still flopping over edge of page!!!");
+	$logger->warn("image is still flopping over edge of page!!!");
     }
 
     my $gfx = $page->gfx;
@@ -667,7 +666,7 @@ sub find_scale_to_fit_image_to_page {
     }
 
     if ($reactome_scale * $height > $paragraph_size->[1]) {
-	$logger->warn("GenerateTextPDF.scale_image_to_fit_page: WARNING - new image height=" . $reactome_scale * $height . " is bigger than paragraph height=" . $paragraph_size->[1]);
+	$logger->warn("new image height=" . $reactome_scale * $height . " is bigger than paragraph height=" . $paragraph_size->[1]);
     }
 
     return $reactome_scale;
@@ -677,36 +676,36 @@ sub generate_page_break {
     my ($self) = @_;
     my %additional_formatting = ();
     if (scalar(@_) > 1) {
-		my $ref_formatting =  $_[1];
-		%additional_formatting = %{$ref_formatting};
+	my $ref_formatting =  $_[1];
+	%additional_formatting = %{$ref_formatting};
     }
 
     # An explicitly defined text block is assumed to be a dummy, and
     # should therefore not be allowed to cause a change to the PDF
     # o/p stream
     unless ($additional_formatting{"text_block"}) {
-		my $pdf = $self->pdf;
-		my $sheet_size = $self->sheet_size;
+	my $pdf = $self->pdf;
+	my $sheet_size = $self->sheet_size;
 	
-		my $pg_num = $self->pg_num;
-		my $pnum_mode = $self->pnum_mode;
+	my $pg_num = $self->pg_num;
+	my $pnum_mode = $self->pnum_mode;
 	
-		# Bump up the page count
-		$pg_num ++;
-		$self->pg_num($pg_num);
+	# Bump up the page count
+	$pg_num ++;
+	$self->pg_num($pg_num);
 	
-		my $page;
-		if ($pnum_mode) {
-		    # gets new page based on current page number
-		    $page = $pdf->page($pg_num);
-		} else {
-		    $self->finish_page(); # write out original page
-		    $page = $pdf->page; 
-		}
+	my $page;
+	if ($pnum_mode) {
+	    # gets new page based on current page number
+	    $page = $pdf->page($pg_num);
+	} else {
+	    $self->finish_page(); # write out original page
+	    $page = $pdf->page; 
+	}
 	
-		$page->mediabox($sheet_size->[0], $sheet_size->[1]);
+	$page->mediabox($sheet_size->[0], $sheet_size->[1]);
 	
-		$self->page($page);
+	$self->page($page);
     }
 
     $self->position($self->top_left_corner());
@@ -791,7 +790,7 @@ sub generate_paragraph {
 	    $right_indent = $formatting->{$format_key};
 	} elsif ($format_key eq "first_line_indent") {
 	    # Set first line extra left indent
-	    $logger->warn("GenerateTextPDF.generate_paragraph: WARNING - do not know how to set first line extra indent");
+	    $logger->warn("do not know how to set first line extra indent");
 	} elsif ($format_key eq "justify") {
 	    # Set the justification
 	    $justify = $formatting->{$format_key};
@@ -814,7 +813,7 @@ sub generate_paragraph {
 	    # Sets text block - only understood by PDF
 	    $text_block = $formatting->{$format_key};
 	} else {
-	    $logger->warn("GenerateTextPDF.generate_paragraph: WARNING - format_key=$format_key not recognised, skipping!");
+	    $logger->warn("format_key=$format_key not recognised, skipping!");
 	    next;
 	}
     }
@@ -855,9 +854,9 @@ sub generate_paragraph {
     # parameters
     my $imported_text_block_flag = 0;
     if ($text_block) {
-		$imported_text_block_flag = 1;
+	$imported_text_block_flag = 1;
     } else {
-		$text_block = $page->text;
+	$text_block = $page->text;
     }
     $text_block->fillcolor($foreground_color);
     $text_block->font($font, $font_size);
@@ -867,7 +866,7 @@ sub generate_paragraph {
     # paragraph.
     my %options = (-align => $justify, -lead  => $lead);
     if ($underline_distance > 0) {
-		$options{"-underline"} = $underline_distance;
+	$options{"-underline"} = $underline_distance;
     }
 
     # Determine width and depth needed by generate_text_block, taking
@@ -915,31 +914,31 @@ sub generate_paragraph {
     # add a bit of vertical space and store the new position.
     my $new_page_count = 0;
     if ($overflow_text && $recursion_depth < $max_recursion_depth) {
-		# Start new paragraph on a fresh page, if:
-		#
-		# 1) the output goes to a live PDF stream, and
-		# 2) the $no_page_break has not been set
-		if ($imported_text_block_flag || $no_page_break) {
-		    $self->position($self->top_left_corner());
-		} else {
-		    $self->generate_page_break();
-		}
+	# Start new paragraph on a fresh page, if:
+	#
+    	# 1) the output goes to a live PDF stream, and
+	# 2) the $no_page_break has not been set
+	if ($imported_text_block_flag || $no_page_break) {
+	    $self->position($self->top_left_corner());
+	} else {
+	    $self->generate_page_break();
+	}
 	
-		# Now go do that paragraph!
-		$new_page_count = $self->generate_paragraph($overflow_text, $formatting, $recursion_depth) + 1;
+	# Now go do that paragraph!
+	$new_page_count = $self->generate_paragraph($overflow_text, $formatting, $recursion_depth) + 1;
     } else {
-		# Calculate a new position, based on the actual final y position
-		# returned by generate_text_block
-		my @new_position = ($position->[0], $ypos);
+	# Calculate a new position, based on the actual final y position
+	# returned by generate_text_block
+	my @new_position = ($position->[0], $ypos);
 	
-		# Advance y position by a newline, acts as paragraph separator
-		my $y = $new_position[1] - $lead;
-		if ($y > 0 && !$no_separation) {
-		    $new_position[1] = $y;
-		}
+	# Advance y position by a newline, acts as paragraph separator
+	my $y = $new_position[1] - $lead;
+	if ($y > 0 && !$no_separation) {
+	    $new_position[1] = $y;
+	}
 	
-		# Stash new position
-		$self->position(\@new_position);
+	# Stash new position
+	$self->position(\@new_position);
     }
 
     $self->set_first_page_flag(0);
@@ -1129,7 +1128,6 @@ sub generate_numbered_text {
     if ($page != $original_page) {
 	# New page got thrown
 	$position = $self->top_left_corner()
-	
     }
 
     my $text_block = $page->text;
@@ -1153,8 +1151,8 @@ sub generate_header {
     my ($self, $depth, $text) = @_;
     my %additional_formatting = ();
     if (scalar(@_) > 3) {
-		my $ref_formatting =  $_[3];
-		%additional_formatting = %{$ref_formatting};
+	my $ref_formatting =  $_[3];
+	%additional_formatting = %{$ref_formatting};
     }
 
     my $new_page_count = $self->SUPER::generate_header($depth, $text, \%additional_formatting);
@@ -1163,13 +1161,13 @@ sub generate_header {
     # create the TOC later...but only do it if we are emiting to
     # a live PDF stream.
     unless ($additional_formatting{"text_block"}) {
-		my $numbering_of_header = $self->numbering_of_header;
-		my $numbering_of_header_element;
-		$numbering_of_header_element->[0] = $self->pg_num;
-		$numbering_of_header_element->[1] = $depth;
-		$numbering_of_header_element->[2] = $text;
-		push @{$numbering_of_header}, $numbering_of_header_element;
-		$self->numbering_of_header($numbering_of_header);
+	my $numbering_of_header = $self->numbering_of_header;
+	my $numbering_of_header_element;
+	$numbering_of_header_element->[0] = $self->pg_num;
+	$numbering_of_header_element->[1] = $depth;
+	$numbering_of_header_element->[2] = $text;
+	push @{$numbering_of_header}, $numbering_of_header_element;
+	$self->numbering_of_header($numbering_of_header);
     }
 
     return $new_page_count;
@@ -1197,8 +1195,8 @@ sub finish_page {
     my $page = $self->page;
 
     if ($pdf && $page) {
-#		$pdf->finishobjects($page);
-		$self->destroy_page($page);
+#	$pdf->finishobjects($page);
+	$self->destroy_page($page);
     }
 }
 
@@ -1209,7 +1207,7 @@ sub destroy_page {
     my ($self, $page) = @_;
 
     if (!$page) {
-		return;
+	return;
     }
 
     $page->{' stream'}=undef;
