@@ -74,6 +74,8 @@ sub get_ok_field {
 sub buildPart {
     my ($self) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     $self->class_name("PDBToReferencePeptideSequence");
 
     $logger->info("entered\n");

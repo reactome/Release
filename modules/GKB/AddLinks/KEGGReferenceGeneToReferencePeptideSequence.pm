@@ -572,7 +572,7 @@ sub fetch_content_from_url {
 
                 $content = $response->content;
             } else {
-                $logger->error("GET request failed for url=$url\n");
+                $logger->warn("GET request failed for url=$url\n");
             }
         } else {
             $logger->error("no response!\n");
