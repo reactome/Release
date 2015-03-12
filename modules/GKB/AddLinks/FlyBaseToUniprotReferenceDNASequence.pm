@@ -98,7 +98,7 @@ sub buildPart {
     $logger->info("mapping_file=$mapping_file\n");
     
     if (!(-e $mapping_file)) {
-	$logger->error("missing mapping file\n"
+	$logger->error("missing mapping file\n");
     	$self->termination_status("missing mapping file");
     	return;		
     }
