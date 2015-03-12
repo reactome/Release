@@ -113,7 +113,7 @@ foreach my $rgp (@{$curated_RGPs}) {
 		$report_ewas = 0;
 	    } else {
 		if ($same_display_name) {
-		    report_mismatch($curated_ewas, 'database identfiers', $mismatch);
+		    report_mismatch($curated_ewas, 'database identifiers', $mismatch);
 		    $report_ewas = 0;
 		}
 		
