@@ -198,69 +198,70 @@ sub insert_xrefs {
 	    foreach my $acc (keys(%{$output_id_hash})) {
 	        foreach my $i (@{$accs->{$species}->{uc($acc)}}) {
 		    if (!$overwrite_old_xrefs && $self->exists_typed_instances_from_attribute($i, $attribute, $reference_database)) {
-	    	    # Don't insert any genes if there are some there
-		    # already.
-		    next;
-		}
-		foreach my $id (@{$output_id_hash->{$acc}}) {
-		    # Generally speaking, there will only be one
-		    # ReferencePeptideSequence instance associated
-		    # with a given accession, so this loop will only
-		    # be entered once.
-		    if ($attribute eq 'referenceGene') {
-			$value = $self->builder_params->miscellaneous->get_reference_dna_sequence($i->species, $reference_database, $id);
-		    } elsif ($attribute eq 'referenceTranscript') {
-			if ($species eq "Homo sapiens") {
-			    $value = $self->builder_params->miscellaneous->get_reference_rna_sequence($reference_database, $hapmap_reference_database, $id);
+			# Don't insert any genes if there are some there
+			# already.
+			next;
+		    }
+		    foreach my $id (@{$output_id_hash->{$acc}}) {
+			# Generally speaking, there will only be one
+			# ReferencePeptideSequence instance associated
+			# with a given accession, so this loop will only
+			# be entered once.
+			if ($attribute eq 'referenceGene') {
+			    $value = $self->builder_params->miscellaneous->get_reference_dna_sequence($i->species, $reference_database, $id);
+			} elsif ($attribute eq 'referenceTranscript') {
+			    if ($species eq "Homo sapiens") {
+			        $value = $self->builder_params->miscellaneous->get_reference_rna_sequence($reference_database, $hapmap_reference_database, $id);
+			    }
+			} else {
+			    $value = $self->builder_params->database_identifier->get_database_identifier($reference_database, $id);
 			}
-		    } else {
-			$value = $self->builder_params->database_identifier->get_database_identifier($reference_database, $id);
-		    }
-		    if ($i->add_attribute_value_if_necessary($attribute, $value)) {
-			$logger->info("inserting $id from ENSP for $acc\n");
-			$self->increment_insertion_stats_hash($i->db_id);
-			$id_hash{$id}++;
+			if ($i->add_attribute_value_if_necessary($attribute, $value)) {
+			    $logger->info("inserting $id from ENSP for $acc\n");
+			    $self->increment_insertion_stats_hash($i->db_id);
+			    $id_hash{$id}++;
+			}
 		    }
 		}
 	    }
 	}
-    }
-    if (!$output_id_hash_defined_flag) {
-	#if (!(defined $self->termination_status)) {
-	#	$self->termination_status("no xrefs for species: ");
-	#}
-	#$self->termination_status($self->termination_status . "$species, ");
-	$logger->warn("No xrefs for species $species");
-	next;
-    }
-    
-    # Update to database.
-    while (my ($acc,$ar) = each %{$accs->{$species}}) {
-	foreach my $i (@{$ar}) {
-	    $logger->info("for protein $acc adding following to database: \t" . join(',',map {$_->displayName} @{$i->$attribute}));
-#	if (scalar(@{$i->$attribute})>0 && $i->$attribute->[0]) {
-	    if ($i && $self->insertion_stats_hash->{$i->db_id}) {
-		$i->add_attribute_value('modified', $self->instance_edit);
-		$dba->update_attribute($i, 'modified');
-		$dba->update_attribute($i, $attribute);
-		$species_hit_count_hash{$species}++;
-	    }
-#	}
+	if (!$output_id_hash_defined_flag) {
+	    #if (!(defined $self->termination_status)) {
+	    #	$self->termination_status("no xrefs for species: ");
+	    #}
+	    #$self->termination_status($self->termination_status . "$species, ");
+	    $logger->warn("No xrefs for species $species");
+	    next;
 	}
-    }
-	
-    # Summary diagnostics
-    $logger->info("proteins for which references have been found, per species:\n");
-    foreach $species (sort(keys(%species_hit_count_hash))) {
-	$logger->info("$species: " . $species_hit_count_hash{$species} . "\n");
-    }
-
-    $self->print_insertion_stats_hash();
-
-    $logger->info("number of unique IDs inserted: " . scalar(keys(%id_hash)) . "\n");
     
-    $self->timer->stop($self->timer_message);
-    $self->timer->print();
+	# Update to database.
+	while (my ($acc,$ar) = each %{$accs->{$species}}) {
+	    foreach my $i (@{$ar}) {
+	        $logger->info("for protein $acc adding following to database: \t" . join(',',map {$_->displayName} @{$i->$attribute}));
+#		if (scalar(@{$i->$attribute})>0 && $i->$attribute->[0]) {
+	        if ($i && $self->insertion_stats_hash->{$i->db_id}) {
+		    $i->add_attribute_value('modified', $self->instance_edit);
+		    $dba->update_attribute($i, 'modified');
+		    $dba->update_attribute($i, $attribute);
+		    $species_hit_count_hash{$species}++;
+	        }
+#		}
+	    }
+	}
+	
+	# Summary diagnostics
+	$logger->info("proteins for which references have been found, per species:\n");
+	foreach $species (sort(keys(%species_hit_count_hash))) {
+	    $logger->info("$species: " . $species_hit_count_hash{$species} . "\n");
+	}
+
+	$self->print_insertion_stats_hash();
+
+	$logger->info("number of unique IDs inserted: " . scalar(keys(%id_hash)) . "\n");
+    
+	$self->timer->stop($self->timer_message);
+	$self->timer->print();
+    }
 }
 
 1;
