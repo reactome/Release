@@ -40,7 +40,7 @@ override 'run_commands' => sub {
     
     cmd("Building GWT javascript and deploying GWT servlets",[["echo $sudo | sudo -S perl create_gwt3.pl $options -url $url"]], {"ssh" => $ssh});
     
-    cmd("Generating static tables for analysis tools", [["./generate_static_table.sh -db $db > generate_static_table.out.$version"]]) if ($gkbdir eq "gkbdev");
+    cmd("Generating static tables for analysis tools", [["./generate_static_table.sh -db $db > generate_static_table.$version.out"]]) if ($gkbdir eq "gkbdev");
 };
 
 1;

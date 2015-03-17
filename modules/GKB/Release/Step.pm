@@ -63,6 +63,7 @@ sub run {
 	chdir $self->directory;
 	set_environment($self->host);
 	$self->run_commands($self->gkb);
+	archive_files($self->name, $version);
 }
 
 sub set_user_input_and_passwords {

@@ -20,7 +20,7 @@ use base 'Exporter';
 # Purpose: A module to automate release reactome data -- each step is a subroutine.
 
 #Exports all subroutines
-our @EXPORT = qw/cvs set_environment mailnow prompt getpass cmd releaselog replace_gkb_alias_in_dir/;
+our @EXPORT = qw/cvs set_environment archive_files mailnow prompt getpass cmd releaselog replace_gkb_alias_in_dir/;
 
 sub cvs {
 	my $usr = shift || $user;
@@ -42,6 +42,18 @@ sub set_environment {
     umask 0002;
     `mv ~/GKB ~/GKB_$user` if (-e "~/GKB");
     #`ln -sf /usr/local/$gkb ~/GKB` if (-e "/home/$user"); 
+}
+
+sub archive_files {
+	my $step = shift;
+	my $version = shift;
+	
+	my $step_archive = "/nfs/reactome/reactome/archive/release/$step";
+	my $step_version_archive = "$step_archive/$version";
+	
+	`mkdir -p $step_version_archive`;
+	`mv --backup=numbered $_ $step_version_archive 2>/dev/null` foreach qw/*.dump *.err *.log *.out/;
+	symlink $step_archive, 'archive' unless 'archive'; 
 }
 
 # Mail sent when some steps completed
