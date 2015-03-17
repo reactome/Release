@@ -34,8 +34,8 @@ has 'name' => (
 	isa => 'Str',
 	lazy => 1,
 	default => sub {
-		my $name = $0;
-		$name =~ s/.pm//;
+		my $self = shift;
+		my ($name) = $self->directory =~ /.*\/(.*)/;
 		return $name;
 	}
 );
@@ -59,6 +59,9 @@ has 'mail' => (
 
 sub run {
 	my $self = shift;
+	
+	#$self->directory =~ /.*\/(.*)/;
+	#$self->name($1);
 	
 	chdir $self->directory;
 	set_environment($self->host);
