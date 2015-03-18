@@ -134,7 +134,11 @@ public class PhysicalEntityHierarchyBuilder {
             for (Resource resource : resourceIdentifiers.keySet()) {
                 for (String identifier : resourceIdentifiers.getElements(resource)) {
                     //create the corresponding entries in the RADIX TREE for all the (identifier, resource, node)
-                    this.identifiersMap.add(identifier, resource, node);
+                    if(identifier!=null) {
+                        this.identifiersMap.add(identifier, resource, node);
+                    }else{
+                        logger.error("Identifier not found for " + node.getId());
+                    }
                 }
             }
         }else{
@@ -158,7 +162,11 @@ public class PhysicalEntityHierarchyBuilder {
         Set<PhysicalEntity> contained = new HashSet<PhysicalEntity>();
         if(physicalEntity instanceof Complex){
             Complex complex = (Complex) physicalEntity;
-            contained.addAll(complex.getHasComponent());
+            if(complex.getHasComponent()!=null) {
+                contained.addAll(complex.getHasComponent());
+            }else{
+                logger.error("Complex with not components: " + complex.getDbId());
+            }
         }else if(physicalEntity instanceof EntitySet){
             EntitySet entitySet = (EntitySet) physicalEntity;
             if(entitySet.getHasMember()!=null){
@@ -230,9 +238,13 @@ public class PhysicalEntityHierarchyBuilder {
             GKInstance instance = dba.fetchInstance(databaseIdentifier.getDbId());
             if(instance.getSchemClass().isValidAttribute(ReactomeJavaConstants.referenceDatabase)){
                 GKInstance referenceDatabase = (GKInstance) instance.getAttributeValue(ReactomeJavaConstants.referenceDatabase);
-                String r = referenceDatabase.getDisplayName();
-                if(r!=null){
-                    resource = ResourceFactory.getResource(r);
+                if(referenceDatabase!=null) {
+                    String r = referenceDatabase.getDisplayName();
+                    if (r != null) {
+                        resource = ResourceFactory.getResource(r);
+                    }else{
+                        logger.error("DatabaseIdentifier " + databaseIdentifier.getAvailableIdentifier() + " >> No displayName" );
+                    }
                 }
             }
 
@@ -254,6 +266,11 @@ public class PhysicalEntityHierarchyBuilder {
                 String rscAux = "#" + resource.getName(); //fake resource
                 resource = ResourceFactory.getResource(rscAux);
                 List<String> aux = new LinkedList<String>();
+                if(instance.getSchemClass().isValidAttribute(ReactomeJavaConstants.secondaryIdentifier)){
+                    for (Object identifier : instance.getAttributeValuesList(ReactomeJavaConstants.secondaryIdentifier)) {
+                        aux.add((String) identifier);
+                    }
+                }
                 if(instance.getSchemClass().isValidAttribute(ReactomeJavaConstants.otherIdentifier)){
                     for (Object identifier : instance.getAttributeValuesList(ReactomeJavaConstants.otherIdentifier)) {
                         aux.add((String) identifier);
