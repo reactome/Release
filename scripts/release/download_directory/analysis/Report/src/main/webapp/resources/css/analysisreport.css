@@ -1,0 +1,55 @@
+#analysis-charts-view {
+    float: left;
+    width: 80%;
+    height: 100%;
+
+}
+
+#analysis-charts-control {
+    float: right;
+    width: 20%;
+}
+
+#analysis-charts-control select{
+    width: auto;
+    height: auto;
+
+}
+
+#analysis-charts {
+    width: 100%;
+    height: 100%;
+}
+
+
+#analysis-charts-control > table, tbody, th, td  {
+    border: none;
+}
+
+#analysis-charts-control select  {
+    width: 100%;
+}
+
+.head {
+    margin-top: 4%;
+    width: 80%;
+}
+
+.head h2 {
+    font-size: 130%;;
+}
+
+.head p {
+    font-size: 90%;;
+}
+
+.info td {
+
+}
+.info_name h2 {
+    font-size: 100%;
+}
+
+.info_result h2 {
+    font-size: 100%;
+}
