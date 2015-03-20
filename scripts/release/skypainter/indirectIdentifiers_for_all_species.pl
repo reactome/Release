@@ -47,9 +47,11 @@ my $dba = GKB::DBAdaptor->new
 my @species = $dba->species_for_ref_dbs('ENSEMBL','UniProt');
 print STDERR "My species:\n",Dumper \@species;
 
-my @cmds = (qq(./retrieve_indirectIdentifiers_from_mart.pl @params),
+my @cmds = (
+	    qq(./retrieve_indirectIdentifiers_from_mart.pl @params),
 	    qq(./indirectIdentifiers_from_mart.pl @params),
-	    qq(./gene_names_from_mart.pl @params));
+	    qq(./gene_names_from_mart.pl @params)
+	    );
 
 foreach my $sp (@species) {
     foreach my $cmd (@cmds) {
