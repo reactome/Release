@@ -29,7 +29,7 @@ override 'run_commands' => sub {
         		["tar -zcvf test_reactome_$prevver.tgz test_reactome_$prevver"],
         		["rm -rf test_reactome_$prevver"],
 		        ["mysqldump --opt -u$user -p$pass $db > $dumpdir/$db\_before_pathway_diagram.dump"],
-        		["sh /usr/local/gkbdev/WebELVTool/runWebELVTool.sh reactomedev $db $user $pass 3306 $self->directory 349401 > runWebELVTool.out.$version"]
+        		["sh /usr/local/gkbdev/WebELVTool/runWebELVTool.sh reactomedev $db $user $pass 3306 $self->directory 349401 > runWebELVTool.$version.out"]
         	]
         );
     } elsif ($gkbdir eq "gkb_prod") {

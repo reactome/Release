@@ -27,10 +27,14 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::DbSNPGeneToUniprotReferenceDNASequence;
+use strict;
 
 use GKB::Config;
 use GKB::AddLinks::GeneToUniprotReferenceDNASequence;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 
 @ISA = qw(GKB::AddLinks::GeneToUniprotReferenceDNASequence);
@@ -48,34 +52,36 @@ sub AUTOLOAD {
 sub new {
     my($pkg) = @_;
 
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	$pkg->get_ok_field();
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    $pkg->get_ok_field();
 
-   	my $self = $pkg->SUPER::new();
-   	
+    my $self = $pkg->SUPER::new();
+
     return $self;
 }
 
 # Needed by subclasses to gain access to object variables defined in
 # this class.
 sub get_ok_field {
-	my ($pkg) = @_;
-	
-	%ok_field = $pkg->SUPER::get_ok_field();
+    my ($pkg) = @_;
 
-	return %ok_field;
+    %ok_field = $pkg->SUPER::get_ok_field();
+
+    return %ok_field;
 }
 
 sub buildPart {
-	my ($self) = @_;
-	
-	print STDERR "\n\nDbSNPGeneToUniprotReferenceDNASequence.buildPart: entered\n";
-	
-	my $dbsnp_gene_reference_database = $self->builder_params->reference_database->get_dbsnp_gene_reference_database();
-	$self->target_gene_reference_database($dbsnp_gene_reference_database);
-	
-	$self->SUPER::buildPart();
+    my ($self) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->info("entered\n");
+    
+    my $dbsnp_gene_reference_database = $self->builder_params->reference_database->get_dbsnp_gene_reference_database();
+    $self->target_gene_reference_database($dbsnp_gene_reference_database);
+
+    $self->SUPER::buildPart();
 }
 
 1;

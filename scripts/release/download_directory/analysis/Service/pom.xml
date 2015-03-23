@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.reactome.server.tools</groupId>
             <artifactId>analysis-core</artifactId>
-            <version>1.3.7</version>
+            <version>1.4.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>

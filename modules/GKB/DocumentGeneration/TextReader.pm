@@ -40,6 +40,8 @@ use GKB::DocumentGeneration::TextUnit;
 use GKB::DocumentGeneration::Reader;
 use Storable qw(nstore retrieve);
 use Data::Dumper;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::DocumentGeneration::Reader);
 
@@ -96,11 +98,11 @@ sub init_from_url {
     my ($self, $url) = @_;
     
     # Try to extract a root URL from the URL supplied.
-	my $html_root = $url;
-	$html_root =~ s/[^\/]+$//;
-	$self->html_root($html_root);
+    my $html_root = $url;
+    $html_root =~ s/[^\/]+$//;
+    $self->html_root($html_root);
 
-	# Retrieve the HTML from the URL
+    # Retrieve the HTML from the URL
     my $content = $self->fetch_content_from_url($url);
     
     $self->init_from_string($content);
@@ -109,6 +111,8 @@ sub init_from_url {
 sub init_from_string {
     my ($self, $content) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     $self->content($content);
     
     # Break text into lines
@@ -116,7 +120,7 @@ sub init_from_string {
     my $line_count = scalar(@lines);
     my $line_num = 0;
     
-    print STDERR "TextReader.init_from_string: line_count=$line_count\n";
+    $logger->info("line_count=$line_count\n");
     
     $self->lines(\@lines);
     $self->line_count($line_count);    
@@ -128,21 +132,23 @@ sub fetch_content_from_url {
     my ($self, $url) = @_;
     my $content = undef;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     if (defined $url) {
-	    my $ua = LWP::UserAgent->new();
+	my $ua = LWP::UserAgent->new();
 	
-	    my $response = $ua->get($url);
-	    if(defined $response) {
-	    	if ($response->is_success) {
-	    		$content = $response->content;
-	    	} else {
-	    		print STDERR "TextReader.fetch_content_from_url: GET request failed for url=$url\n";
-	    	}
+	my $response = $ua->get($url);
+	if(defined $response) {
+	    if ($response->is_success) {
+	    	$content = $response->content;
 	    } else {
-	    	print STDERR "TextReader.fetch_content_from_url: no response!\n";
+	    	$logger->warn("GET request failed for url=$url\n");
 	    }
+	} else {
+	    $logger->warn("no response!\n");
+	}
     } else {
-    	print STDERR "TextReader.fetch_content_from_url: you need to supply a URL!\n";
+    	$logger->warn("you need to supply a URL!\n");
     }
     
     return $content;
@@ -155,53 +161,55 @@ sub fetch_content_from_url {
 sub get_next_text_unit {
     my ($self, $depth, $depth_limit) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my @text_units = @{$self->text_units};
     if (scalar(@text_units)<1) {
     	@text_units = $self->get_next_text_units();
     	my $initial_header = $self->get_initial_header();
     	if (defined $initial_header) {
-    		# Add on an initial header, if necessary
-    		my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-			$text_unit->set_type("section_header");
-			$text_unit->set_depth($self->get_depth_offset() + 1);
-			$text_unit->set_contents($initial_header);
-			unshift(@text_units, $text_unit);
-			$self->initial_header(undef);
+    	    # Add on an initial header, if necessary
+    	    my $text_unit = GKB::DocumentGeneration::TextUnit->new();
+	    $text_unit->set_type("section_header");
+	    $text_unit->set_depth($self->get_depth_offset() + 1);
+	    $text_unit->set_contents($initial_header);
+	    unshift(@text_units, $text_unit);
+	    $self->initial_header(undef);
     	}
     	my $chapter_header = $self->get_chapter_header();
     	if (defined $chapter_header) {
-    		# Add on an initial header, if necessary
-    		my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-			$text_unit->set_type("section_header");
-			$text_unit->set_depth($self->get_depth_offset());
-			$text_unit->set_contents($chapter_header);
-			unshift(@text_units, $text_unit);
-			$self->chapter_header(undef);
-			$self->add_depth_offset(1);
+    	    # Add on an initial header, if necessary
+    	    my $text_unit = GKB::DocumentGeneration::TextUnit->new();
+	    $text_unit->set_type("section_header");
+	    $text_unit->set_depth($self->get_depth_offset());
+	    $text_unit->set_contents($chapter_header);
+	    unshift(@text_units, $text_unit);
+	    $self->chapter_header(undef);
+	    $self->add_depth_offset(1);
     	}
     }
     
 #    print STDERR "TextReader.get_next_text_unit: text_units=\n" . Dumper(@text_units) . "\n";
     
     my $text_unit;
-	if (scalar(@text_units)<1) {
-		# We didn't find anything, guess that's the end of
-		# the road for us.
-		$text_unit = GKB::DocumentGeneration::TextUnit->new();
-		$text_unit->set_type("eof");
-	} else {
+    if (scalar(@text_units)<1) {
+	# We didn't find anything, guess that's the end of
+	# the road for us.
+	$text_unit = GKB::DocumentGeneration::TextUnit->new();
+	$text_unit->set_type("eof");
+    } else {
     	$text_unit = shift(@text_units);
-	}
+    }
     
 #    print STDERR "TextReader.get_next_text_unit: text_unit=\n" . Dumper($text_unit) . "\n";
     
     $self->text_units(\@text_units);
     
     if (!(defined $text_unit)) {
-    	print STDERR "TextReader.get_next_text_unit: oh grot, test_unit is undef!!!\n";
+    	$logger->warn("oh grot, test_unit is undef!!!\n");
     }
     
-    print STDERR "TextReader.get_next_text_unit: text_unit type=" . $text_unit->get_type() . "\n";
+    $logger->info("TextReader.get_next_text_unit: text_unit type=" . $text_unit->get_type() . "\n");
     
     return $text_unit;
 }
@@ -213,357 +221,369 @@ sub get_next_text_unit {
 sub get_next_text_units {
     my ($self) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my $text;
-	print STDERR "\n\nTextReader.get_next_text_unit: lets go\n";
-	
-	# Try to parse various different kinds of text unit
-	# from the lines, until nothing more can be extracted.
-	my @text_units = $self->get_header_text_units();
+    $logger->info("lets go\n");
+    
+    # Try to parse various different kinds of text unit
+    # from the lines, until nothing more can be extracted.
+    my @text_units = $self->get_header_text_units();
+    if (scalar(@text_units)<1) {
+	@text_units = $self->get_bullet_text_units();
 	if (scalar(@text_units)<1) {
-		@text_units = $self->get_bullet_text_units();
+	    @text_units = $self->get_numbered_text_units();
+	    if (scalar(@text_units)<1) {
+		@text_units = $self->get_diagram_text_units();
 		if (scalar(@text_units)<1) {
-			@text_units = $self->get_numbered_text_units();
-			if (scalar(@text_units)<1) {
-				@text_units = $self->get_diagram_text_units();
-				if (scalar(@text_units)<1) {
-					@text_units = $self->get_paragraph_text_units();
-				}
-			}
+		    @text_units = $self->get_paragraph_text_units();
 		}
+	    }
 	}
-	
-	# Forget about everything we just parsed if the emit_flag
-	# isn't set.  This flag allows us to delay the emitting
-	# of text units until we have reacted a preselected point
-	# in the source document.
-	if (!($self->emit_flag)) {
-		my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-		$text_unit->set_type("empty");
-		@text_units = ($text_unit);
-	}
-	
+    }
+
+    # Forget about everything we just parsed if the emit_flag
+    # isn't set.  This flag allows us to delay the emitting
+    # of text units until we have reacted a preselected point
+    # in the source document.
+    if (!($self->emit_flag)) {
+	my $text_unit = GKB::DocumentGeneration::TextUnit->new();
+	$text_unit->set_type("empty");
+	@text_units = ($text_unit);
+    }
+
     return @text_units;
 }
 
 sub get_header_text_units {
     my ($self) = @_;
     
-	print STDERR "TextReader.get_header_text_units: entered\n";
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->info("entered\n");
 
     my @text_units = ();
-	my $line_num = $self->line_num;
-	if (($line_num + 1)<$self->line_count) {
-		my $last_line = $self->lines->[$line_num ];
-		my $line = $self->lines->[$line_num+1];
-		
-		# Are we dealing with a header?
-		if (defined $last_line && $line =~ /[\-_=]+/ && $line =~ /^[\-_= ]+$/) {
-			my $header_line = $last_line;
-			$header_line =~ s/ //g;
-			my $undeline_line = $line;
-			$undeline_line =~ s/ //g;
-			# It could be that everything, including spaces
-			# is underlined, or perhaps only the words are
-			# underlined.
-			if (length($last_line) == length($line) || length($header_line) == length($undeline_line)) {
-				my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-				my $stop_header = $self->get_stop_header();
-				if (defined $stop_header && $last_line =~ /$stop_header/) {
-					# Special mechanism that allows generation
-					# of text units to be halted when a given
-					# header has been encountered.
-					$text_unit->set_type("eof");
-					push(@text_units, $text_unit);
-				} else {
-					my $start_header = $self->get_start_header();
-					if (defined $start_header && $last_line =~ /$start_header/) {
-						# Special mechanism that allows generation
-						# of text units to be started when a given
-						# header has been encountered.
-						@text_units = ();
-						$self->emit_flag(1);
-					}
-					$text_unit->set_type("section_header");
-					$text_unit->set_depth($self->get_depth_offset());
-					$text_unit->set_contents($last_line);
-					push(@text_units, $text_unit);
-				}
-				
-				$self->line_num($self->line_num + 2);
-			}
-		}
-	}
+    my $line_num = $self->line_num;
+    if (($line_num + 1)<$self->line_count) {
+	my $last_line = $self->lines->[$line_num ];
+	my $line = $self->lines->[$line_num+1];
 	
+	# Are we dealing with a header?
+	if (defined $last_line && $line =~ /[\-_=]+/ && $line =~ /^[\-_= ]+$/) {
+	    my $header_line = $last_line;
+	    $header_line =~ s/ //g;
+	    my $undeline_line = $line;
+	    $undeline_line =~ s/ //g;
+	    # It could be that everything, including spaces
+	    # is underlined, or perhaps only the words are
+	    # underlined.
+	    if (length($last_line) == length($line) || length($header_line) == length($undeline_line)) {
+		my $text_unit = GKB::DocumentGeneration::TextUnit->new();
+		my $stop_header = $self->get_stop_header();
+		if (defined $stop_header && $last_line =~ /$stop_header/) {
+		    # Special mechanism that allows generation
+		    # of text units to be halted when a given
+		    # header has been encountered.
+		    $text_unit->set_type("eof");
+		    push(@text_units, $text_unit);
+		} else {
+		    my $start_header = $self->get_start_header();
+		    if (defined $start_header && $last_line =~ /$start_header/) {
+			# Special mechanism that allows generation
+			# of text units to be started when a given
+			# header has been encountered.
+			@text_units = ();
+			$self->emit_flag(1);
+		    }
+		    $text_unit->set_type("section_header");
+		    $text_unit->set_depth($self->get_depth_offset());
+		    $text_unit->set_contents($last_line);
+		    push(@text_units, $text_unit);
+		}
+		
+		$self->line_num($self->line_num + 2);
+	    }
+	}
+    }
+
     return @text_units;
 }
 
 sub get_bullet_text_units {
     my ($self) = @_;
     
-	print STDERR "TextReader.get_bullet_text_units: entered\n";
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->info("entered\n");
 
     my @text_units = ();
-	my $line_num;
-	my $line;
-	my $text;
-	for ($line_num=$self->line_num; $line_num<scalar(@{$self->lines}); $line_num++) {
-		print STDERR "TextReader.get_bullet_text_units: OUTER line_num=$line_num\n";
+    my $line_num;
+    my $line;
+    my $text;
+    for ($line_num=$self->line_num; $line_num<scalar(@{$self->lines}); $line_num++) {
+	$logger->info("OUTER line_num=$line_num\n");
+
+	$line = $self->lines->[$line_num];
+	
+	$logger->info("OUTER line=$line\n");
+	
+	# Ig-gnaw this line if it is blank
+	if ($line =~ /^\s*$/) {
+	    next;
+	}
+
+	if ($line =~ /^[\*\-]\s*/) {
+	    $text = $line;
+	    $text =~ s/^[\*\-]\s*//;
+	    $line_num++;
+	    for (; $line_num<scalar(@{$self->lines}); $line_num++) {
+		$logger->info("INNER line_num=$line_num\n");
 
 		$line = $self->lines->[$line_num];
-			
-		print STDERR "TextReader.get_bullet_text_units: OUTER line=$line\n";
 		
-		# Ig-gnaw this line if it is blank
-		if ($line =~ /^\s*$/) {
-			next;
-		}
+		$logger->info("INNER line=$line\n");
 
 		if ($line =~ /^[\*\-]\s*/) {
-			$text = $line;
-			$text =~ s/^[\*\-]\s*//;
-			$line_num++;
-			for (; $line_num<scalar(@{$self->lines}); $line_num++) {
-				print STDERR "TextReader.get_bullet_text_units: INNER line_num=$line_num\n";
-
-				$line = $self->lines->[$line_num];
-					
-				print STDERR "TextReader.get_bullet_text_units: INNER line=$line\n";
-
-				if ($line =~ /^[\*\-]\s*/) {
-					# We just hit the next bullet line -
-					# bomb out without incrementing line_num.
-#					$line_num--;
-					last;
-				}
-				if ($line =~ /^\s*$/) {
-					# Blank line - terminate bullet line -
-					# bomb out without incrementing line_num.
-#					$line_num--;
-					last;
-				}
-				
-				$text .= " $line";
-			}
-			
-			print STDERR "TextReader.get_bullet_text_units: text=$text\n";
-
-			my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-			$text_unit->set_type("bullet_text");
-			$text_unit->set_contents($text);
-			push(@text_units, $text_unit);
-		} else {
-			last;
+		    # We just hit the next bullet line -
+		    # bomb out without incrementing line_num.
+#			$line_num--;
+			    last;
 		}
-	}
-	
-	if (scalar(@text_units)>1) {
-		$self->line_num($line_num + 1);
+		if ($line =~ /^\s*$/) {
+		    # Blank line - terminate bullet line -
+		    # bomb out without incrementing line_num.
+#			$line_num--;
+		    last;
+		}
+		
+		$text .= " $line";
+	    }
+	    
+	    $logger->info("text=$text\n");
+
+	    my $text_unit = GKB::DocumentGeneration::TextUnit->new();
+	    $text_unit->set_type("bullet_text");
+	    $text_unit->set_contents($text);
+	    push(@text_units, $text_unit);
 	} else {
-		# Don't consider a single line with a number in front
-		# of it to be part of a numbered list.
-		@text_units = ();
+	    last;
 	}
-	
+    }
+    
+    if (scalar(@text_units)>1) {
+	$self->line_num($line_num + 1);
+    } else {
+	# Don't consider a single line with a number in front
+	# of it to be part of a numbered list.
+	@text_units = ();
+    }
+
     return @text_units;
 }
 
 sub get_numbered_text_units {
     my ($self) = @_;
     
-	print STDERR "TextReader.get_numbered_text_units: entered\n";
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->info("entered\n");
 
     my @text_units = ();
-	my $line_num;
-	my $line;
-	my $text;
-	my $number;
-	for ($line_num=$self->line_num; $line_num<scalar(@{$self->lines}); $line_num++) {
-		print STDERR "TextReader.get_numbered_text_units: OUTER line_num=$line_num\n";
+    my $line_num;
+    my $line;
+    my $text;
+    my $number;
+    for ($line_num=$self->line_num; $line_num<scalar(@{$self->lines}); $line_num++) {
+	$logger->info("OUTER line_num=$line_num\n");
+
+	$line = $self->lines->[$line_num];
+	
+	$logger->info("OUTER line=$line\n");
+
+	# Ig-gnaw this line if it is blank
+	if ($line =~ /^\s*$/) {
+	    next;
+	}
+
+	if ($line =~ /^([0-9]{1,2})\.{0,1}\s+/) {
+	    $number = $1;
+
+	    $logger->info("number=$number\n");
+
+	    $text = $line;
+	    $text =~ s/^[0-9]{1,2}\.{0,1}\s+//;
+	    $line_num++;
+	    for (; $line_num<scalar(@{$self->lines}); $line_num++) {
+		$logger->info("INNER line_num=$line_num\n");
 
 		$line = $self->lines->[$line_num];
-			
-		print STDERR "TextReader.get_numbered_text_units: OUTER line=$line\n";
-
-		# Ig-gnaw this line if it is blank
+		
+		if ($line =~ /^[0-9]{1,2}\.{0,1}\s+/) {
+		    # We just hit the next numbered line -
+		    # bomb out without incrementing line_num.
+		    last;
+		}
 		if ($line =~ /^\s*$/) {
-			next;
+		    # Blank line - terminate numbered line -
+		    # bomb out without incrementing line_num.
+		    last;
 		}
+		
+		$text .= " $line";
+	    }
+	    
+	    $logger->info("text=$text\n");
 
-		if ($line =~ /^([0-9]{1,2})\.{0,1}\s+/) {
-			$number = $1;
-
-			print STDERR "TextReader.get_numbered_text_units: number=$number\n";
-
-			$text = $line;
-			$text =~ s/^[0-9]{1,2}\.{0,1}\s+//;
-			$line_num++;
-			for (; $line_num<scalar(@{$self->lines}); $line_num++) {
-				print STDERR "TextReader.get_numbered_text_units: INNER line_num=$line_num\n";
-
-				$line = $self->lines->[$line_num];
-					
-				if ($line =~ /^[0-9]{1,2}\.{0,1}\s+/) {
-					# We just hit the next numbered line -
-					# bomb out without incrementing line_num.
-					last;
-				}
-				if ($line =~ /^\s*$/) {
-					# Blank line - terminate numbered line -
-					# bomb out without incrementing line_num.
-					last;
-				}
-				
-				$text .= " $line";
-			}
-			
-			print STDERR "TextReader.get_numbered_text_units: text=$text\n";
-
-			my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-			$text_unit->set_type("numbered_text");
-			$text_unit->set_number($number);
-			$text_unit->set_contents($text);
-			push(@text_units, $text_unit);
-		} else {
-			last;
-		}
-	}
-	
-	if (scalar(@text_units)>1) {
-		$self->line_num($line_num + 1);
+	    my $text_unit = GKB::DocumentGeneration::TextUnit->new();
+	    $text_unit->set_type("numbered_text");
+	    $text_unit->set_number($number);
+	    $text_unit->set_contents($text);
+	    push(@text_units, $text_unit);
 	} else {
-		# Don't consider a single line with a number in front
-		# of it to be part of a numbered list.
-		@text_units = ();
+	    last;
 	}
-	
+    }
+    
+    if (scalar(@text_units)>1) {
+	$self->line_num($line_num + 1);
+    } else {
+	# Don't consider a single line with a number in front
+	# of it to be part of a numbered list.
+	@text_units = ();
+    }
+
     return @text_units;
 }
 
 sub get_diagram_text_units {
     my ($self) = @_;
     
-	print STDERR "TextReader.get_diagram_text_units: entered\n";
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->info("entered\n");
 
     my @text_units = ();
-	my $line_num;
-	my $line;
-	my $i;
-	my $lookahead_line_count = 2;
-	for ($line_num=$self->line_num; $line_num<scalar(@{$self->lines}); $line_num++) {
-		print STDERR "TextReader.get_diagram_text_units: OUTER line_num=$line_num\n";
+    my $line_num;
+    my $line;
+    my $i;
+    my $lookahead_line_count = 2;
+    for ($line_num=$self->line_num; $line_num<scalar(@{$self->lines}); $line_num++) {
+	$logger->info("OUTER line_num=$line_num\n");
+
+	$line = $self->lines->[$line_num];
+	
+	$logger->info("OUTER line=$line\n");
+
+	if ($line =~ /\|/ || $line =~ /--/) { # "strong" criterion for diagram line
+	    my $text_unit = GKB::DocumentGeneration::TextUnit->new();
+	    $text_unit->set_type("body_text_paragraph");
+	    $text_unit->set_contents($line);
+	    push(@text_units, $text_unit);
+	    
+	    $line_num++;
+	    for ($i=0; $line_num<scalar(@{$self->lines}) && $i<$lookahead_line_count; $line_num++,$i++) {
+		$logger->info("INNER line_num=$line_num\n");
 
 		$line = $self->lines->[$line_num];
-			
-		print STDERR "TextReader.get_diagram_text_units: OUTER line=$line\n";
-
-		if ($line =~ /\|/ || $line =~ /--/) { # "strong" criterion for diagram line
-			my $text_unit = GKB::DocumentGeneration::TextUnit->new();
-			$text_unit->set_type("body_text_paragraph");
-			$text_unit->set_contents($line);
-			push(@text_units, $text_unit);
-			
-			$line_num++;
-			for ($i=0; $line_num<scalar(@{$self->lines}) && $i<$lookahead_line_count; $line_num++,$i++) {
-				print STDERR "TextReader.get_diagram_text_units: INNER line_num=$line_num\n";
-
-				$line = $self->lines->[$line_num];
-					
-				print STDERR "TextReader.get_diagram_text_units: INNER line=$line\n";
-
-				if ($line =~ /\|/ || $line =~ /--/) {
-					# We just hit the next "strong" line -
-					# reset without incrementing line_num.
-					$line_num--;
-					last;
-				}
-				if (!($line =~ /[\-|]/)) {
-					# Non-diagram line - terminate diagram.
-					$line_num--;
-					last;
-				}
-				
-				my $text_unit2 = GKB::DocumentGeneration::TextUnit->new();
-				$text_unit2->set_type("body_text_paragraph");
-				$text_unit2->set_contents($line);
-				push(@text_units, $text_unit2);
-			}
-		} else {
-			last;
-		}
-	}
-	
-	if (scalar(@text_units)>1) {
-		my $text_unit2 = GKB::DocumentGeneration::TextUnit->new();
-		$text_unit2->set_type("vertical_space");
-		$text_unit2->set_contents(1);
-		push(@text_units, $text_unit2);
 		
-		$self->line_num($line_num + 1);
+		$logger->info("INNER line=$line\n");
+
+		if ($line =~ /\|/ || $line =~ /--/) {
+		    # We just hit the next "strong" line -
+		    # reset without incrementing line_num.
+		    $line_num--;
+		    last;
+		}
+		if (!($line =~ /[\-|]/)) {
+		    # Non-diagram line - terminate diagram.
+		    $line_num--;
+		    last;
+		}
+		
+		my $text_unit2 = GKB::DocumentGeneration::TextUnit->new();
+		$text_unit2->set_type("body_text_paragraph");
+		$text_unit2->set_contents($line);
+		push(@text_units, $text_unit2);
+	    }
 	} else {
-		# Don't consider a single line to be part of a diagram.
-		@text_units = ();
+	    last;
 	}
+    }
+    
+    if (scalar(@text_units)>1) {
+	my $text_unit2 = GKB::DocumentGeneration::TextUnit->new();
+	$text_unit2->set_type("vertical_space");
+	$text_unit2->set_contents(1);
+	push(@text_units, $text_unit2);
 	
+	$self->line_num($line_num + 1);
+    } else {
+	# Don't consider a single line to be part of a diagram.
+	@text_units = ();
+    }
+
     return @text_units;
 }
 
 sub get_paragraph_text_units {
     my ($self) = @_;
     
- 	print STDERR "TextReader.get_paragraph_text_units: entered\n";
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->info("entered\n");
 
     my @text_units = ();
-	my $line_num = undef;
-	my $line;
-	my $text = '';
-	for ($line_num=$self->line_num; $line_num<scalar(@{$self->lines}); $line_num++) {
-		print STDERR "TextReader.get_paragraph_text_units: line_num=$line_num\n";
-		
-		$line = $self->lines->[$line_num];
-			
-		print STDERR "TextReader.get_paragraph_text_units: line=$line\n";
-		
-		if (!($text eq '')) {
-			$text .= ' ';
-		}
-		$text .= $line;
-		
-		if ($line =~ /^\s*$/ || $line =~ /:$/) {
-			# Blank line - terminate paragraph -
-			# bomb out, incrementing line_num.
-			$line_num++;
-			last;
-		}
-	}
+    my $line_num = undef;
+    my $line;
+    my $text = '';
+    for ($line_num=$self->line_num; $line_num<scalar(@{$self->lines}); $line_num++) {
+	$logger->info("line_num=$line_num\n");
 	
-	$text = $self->clean_text($text);
-			
- 	print STDERR "TextReader.get_paragraph_text_units: line_num=$line_num, self->line_num=|" . $self->line_num . "|\n";
- 	print STDERR "TextReader.get_paragraph_text_units: text=|$text|\n";
+	$line = $self->lines->[$line_num];
+	
+	$logger->info("line=$line\n");
+	
+	if (!($text eq '')) {
+	    $text .= ' ';
+	}
+	$text .= $line;
+	
+	if ($line =~ /^\s*$/ || $line =~ /:$/) {
+	    # Blank line - terminate paragraph -
+	    # bomb out, incrementing line_num.
+	    $line_num++;
+	    last;
+	}
+    }
+    
+    $text = $self->clean_text($text);
+    
+    $logger->info("line_num=$line_num, self->line_num=|" . $self->line_num . "|\n");
+    $logger->info("text=|$text|\n");
 
-	if (defined $line_num && $self->line_num < $line_num) {
-		my $text_unit1 = GKB::DocumentGeneration::TextUnit->new();
-		if ($text eq '') {
-			print STDERR "TextReader.get_paragraph_text_units: inserting empty, because only blank lines were found\n";
-			
-			$text_unit1->set_type("empty");
-			push(@text_units, $text_unit1);
-		} else {
-			print STDERR "TextReader.get_paragraph_text_units: ahhhh, a REAL paragraph!!\n";
-			
-			$text_unit1->set_type("body_text_paragraph");
-			$text_unit1->set_contents($text);
-			push(@text_units, $text_unit1);
-			
-			my $text_unit2 = GKB::DocumentGeneration::TextUnit->new();
-			$text_unit2->set_type("vertical_space");
-			$text_unit2->set_contents(1);
-			push(@text_units, $text_unit2);
-		}
-		
-		$self->line_num($line_num);
+    if (defined $line_num && $self->line_num < $line_num) {
+	my $text_unit1 = GKB::DocumentGeneration::TextUnit->new();
+	if ($text eq '') {
+	    $logger->info("inserting empty, because only blank lines were found\n");
+	    
+	    $text_unit1->set_type("empty");
+	    push(@text_units, $text_unit1);
+	} else {
+	    $logger->info("ahhhh, a REAL paragraph!!\n");
+	    
+	    $text_unit1->set_type("body_text_paragraph");
+	    $text_unit1->set_contents($text);
+	    push(@text_units, $text_unit1);
+	    
+	    my $text_unit2 = GKB::DocumentGeneration::TextUnit->new();
+	    $text_unit2->set_type("vertical_space");
+	    $text_unit2->set_contents(1);
+	    push(@text_units, $text_unit2);
 	}
 	
+	$self->line_num($line_num);
+    }
+
     return @text_units;
 }
 

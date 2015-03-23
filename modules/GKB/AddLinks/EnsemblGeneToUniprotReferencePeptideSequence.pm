@@ -30,10 +30,15 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::EnsemblGeneToUniprotReferencePeptideSequence;
+use strict;
 
 use GKB::AddLinks::Builder;
 use GKB::SOAPServer::PICR;
-use strict;
+use GKB::Config;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 
 @ISA = qw(GKB::AddLinks::Builder);
@@ -51,15 +56,14 @@ sub AUTOLOAD {
 sub new {
     my($pkg) = @_;
 
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	$pkg->get_ok_field();
- 	
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    $pkg->get_ok_field();
 
-   	my $self = $pkg->SUPER::new();
-   	
+    my $self = $pkg->SUPER::new();
+
     my %species_database = ();
-   	$self->species_database(\%species_database);
+    $self->species_database(\%species_database);
 
     return $self;
 }
@@ -67,131 +71,132 @@ sub new {
 # Needed by subclasses to gain access to object variables defined in
 # this class.
 sub get_ok_field {
-	my ($pkg) = @_;
-	
-	%ok_field = $pkg->SUPER::get_ok_field();
-	$ok_field{"species_database"}++;
-	$ok_field{"mapper"}++;
+    my ($pkg) = @_;
 
-	return %ok_field;
+    %ok_field = $pkg->SUPER::get_ok_field();
+    $ok_field{"species_database"}++;
+    $ok_field{"mapper"}++;
+
+    return %ok_field;
 }
 
 sub clear_variables {
     my ($self) = @_;
     
-	$self->SUPER::clear_variables();
-	
-	$self->species_database(undef);
-	$self->mapper(undef);
+    $self->SUPER::clear_variables();
+
+    $self->species_database(undef);
+    $self->mapper(undef);
 }
 
 sub buildPart {
-	my ($self) = @_;
-	
-	print STDERR "\n\nEnsemblGeneToUniprotReferencePeptideSequence.buildPart: entered\n";
-	
-	$self->timer->start($self->timer_message);
-	my $dba = $self->builder_params->refresh_dba();
-	
-	my $limiting_species = $self->builder_params->get_species_name();
+    my ($self) = @_;
 
-	# Retrieve all UniProt entries from Reactome
-	my $reference_peptide_sequences = $self->fetch_reference_peptide_sequences(1);
-	
-	my %species_hit_count_hash = ();
-	my $attribute = 'referenceGene';
-	$self->set_instance_edit_note("${attribute}s inserted by EnsemblGeneToUniprotReferencePeptideSequence");
-	
-	# Create a hash of ReferencePeptideSequence instances, keyed by
-	# species and UniProt identifier
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->info("entered\n");
+
+    $self->timer->start($self->timer_message);
+    my $dba = $self->builder_params->refresh_dba();
+
+    my $limiting_species = $self->builder_params->get_species_name();
+
+    # Retrieve all UniProt entries from Reactome
+    my $reference_peptide_sequences = $self->fetch_reference_peptide_sequences(1);
+
+    my %species_hit_count_hash = ();
+    my $attribute = 'referenceGene';
+    $self->set_instance_edit_note("${attribute}s inserted by EnsemblGeneToUniprotReferencePeptideSequence");
+
+    # Create a hash of ReferencePeptideSequence instances, keyed by
+    # species and UniProt identifier
 #	my $accs = $self->create_reference_peptide_sequence_hash($reference_peptide_sequences);
-	my $accs = $self->create_reference_peptide_sequence_hash_variant_ids($reference_peptide_sequences);
-	
-	# Loop over all of the species discovered and do a mass-conversion of
-	# all identifiers for each.
-	my %need_to_update = ();
-	my @input_ids;
-	my $output_id_hash;
-	my $reference_database;
-	my $species;
-	foreach $species (keys(%{$accs})) {
-		if (defined $limiting_species && !($species eq $limiting_species)) {
-			next;
-		}
-		
-		print STDERR "EnsemblGeneToUniprotReferencePeptideSequence.buildPart: dealing with species: $species\n";
-		
-	    $reference_database = $self->get_ensembldb($species);
-	    if ($reference_database eq 'none') {
-			print STDERR "EnsemblGeneToUniprotReferencePeptideSequence.buildPart: WARNING - $species is not an ensembl species\n";
-			next;
-	    }
+    my $accs = $self->create_reference_peptide_sequence_hash_variant_ids($reference_peptide_sequences);
 
-		# Put this inside the loop, because the reference DB is species-dependent
-		# for ENSEMBL!
-		$self->remove_typed_instances_from_reference_peptide_sequence_hash($accs, $attribute, $reference_database, $species);
-
-		@input_ids = keys(%{$accs->{$species}});
-		$output_id_hash = $self->builder_params->identifier_mapper->convert_list('UniProt', \@input_ids, 'ENSEMBL', $species);
-		if (!(defined $output_id_hash)) {
-			next;
-		}
-		foreach my $acc (keys(%{$output_id_hash})) {
-			foreach my $id (@{$output_id_hash->{$acc}}) {
-			    foreach my $i (@{$accs->{$species}->{uc($acc)}}) {
-			    	# Generally speaking, there will only be one
-			    	# ReferencePeptideSequence instance associated
-			    	# with a given accession, so this loop will only
-			    	# be entered once.
-					if ($i->add_attribute_value_if_necessary($attribute, $self->builder_params->miscellaneous->get_reference_dna_sequence($i->species, $reference_database, $id))) {
-				    	$need_to_update{$i->db_id}++;
-						$self->increment_insertion_stats_hash($i->db_id);
-					}
-			    }
-			}
-		}
+    # Loop over all of the species discovered and do a mass-conversion of
+    # all identifiers for each.
+    my %need_to_update = ();
+    my @input_ids;
+    my $output_id_hash;
+    my $reference_database;
+    my $species;
+    foreach $species (keys(%{$accs})) {
+    	if (defined $limiting_species && !($species eq $limiting_species)) {
+	    next;
+	}
 	
-		# Update to database.
-		while (my ($acc,$ar) = each %{$accs->{$species}}) {
-		    foreach my $i (@{$ar}) {
-				if ($need_to_update{$i->db_id}) {
-				    print STDERR "EnsemblGeneToUniprotReferencePeptideSequence.buildPart: $acc\t", join(',',map {$_->identifier->[0]} @{$i->referenceGene}), "\n";
-				    $i->add_attribute_value('modified', $self->instance_edit);
-				    $dba->update_attribute($i, 'modified');
-				    $dba->update_attribute($i, $attribute);
-				    $species_hit_count_hash{$species}++;
-				}
+	$logger->info("dealing with species: $species\n");
+	$reference_database = $self->get_ensembldb($species);
+	if ($reference_database eq 'none') {
+	    $logger->warn("$species is not an ensembl species\n");
+	    next;
+	}
+
+	# Put this inside the loop, because the reference DB is species-dependent
+	# for ENSEMBL!
+	$self->remove_typed_instances_from_reference_peptide_sequence_hash($accs, $attribute, $reference_database, $species);
+
+	@input_ids = keys(%{$accs->{$species}});
+	$output_id_hash = $self->builder_params->identifier_mapper->convert_list('UniProt', \@input_ids, 'ENSEMBL', $species);
+	if (!(defined $output_id_hash)) {
+	    next;
+	}
+	foreach my $acc (keys(%{$output_id_hash})) {
+	    foreach my $id (@{$output_id_hash->{$acc}}) {
+		foreach my $i (@{$accs->{$species}->{uc($acc)}}) {
+		    # Generally speaking, there will only be one
+		    # ReferencePeptideSequence instance associated
+		    # with a given accession, so this loop will only
+		    # be entered once.
+		    if ($i->add_attribute_value_if_necessary($attribute, $self->builder_params->miscellaneous->get_reference_dna_sequence($i->species, $reference_database, $id))) {
+			$need_to_update{$i->db_id}++;
+			$self->increment_insertion_stats_hash($i->db_id);
 		    }
+	        }
+	    }
+	}
+	
+	# Update to database.
+	while (my ($acc,$ar) = each %{$accs->{$species}}) {
+	    foreach my $i (@{$ar}) {
+		if ($need_to_update{$i->db_id}) {
+		    $logger->info("$acc\t" . join(',',map {$_->identifier->[0]} @{$i->referenceGene}) . "\n");
+		    $i->add_attribute_value('modified', $self->instance_edit);
+		    $dba->update_attribute($i, 'modified');
+		    $dba->update_attribute($i, $attribute);
+		    $species_hit_count_hash{$species}++;
 		}
+	    }
 	}
+    }
 	
-	# Summary diagnostics
-	print STDERR "RefseqReferenceDatabaseToReferencePeptideSequence.buildPart: proteins for which references have been found, per species:\n";
-	foreach $species (sort(keys(%species_hit_count_hash))) {
-		print STDERR "\t$species: " . $species_hit_count_hash{$species} . "\n";
-	}
+    # Summary diagnostics
+    $logger->info("proteins for which references have been found, per species:\n");
+    foreach $species (sort(keys(%species_hit_count_hash))) {
+	$logger->info("$species: " . $species_hit_count_hash{$species} . "\n");
+    }
 	
-	$self->print_insertion_stats_hash();
-	
-	$self->timer->stop($self->timer_message);
-	$self->timer->print();
+    $self->print_insertion_stats_hash();
+
+    $self->timer->stop($self->timer_message);
+    $self->timer->print();
 }
 
 # Returns an ENSEMBL ReferenceDatabase object for the species $spec.
 # If the species is not known, return the string 'none'.
 sub get_ensembldb {
-	my ($self, $spec) = @_;
-	
-	my $species_database = $self->species_database;
-	
+    my ($self, $spec) = @_;
+
+    my $species_database = $self->species_database;
+
     $species_database->{$spec} && return $species_database->{$spec};
     
     # Exclude 'strange' species names not found in ensembl anyway.
     if (!($spec =~ /^\w+\s+\w+$/)) {
-		return 'none';
+	return 'none';
     }
 
-	# Get/make ensembldb
+    # Get/make ensembldb
     my $species = $spec;
     $species =~ s/(\w+) (\w+)/$1\_$2/; #needed for Ensembl URL
 
