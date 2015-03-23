@@ -71,9 +71,9 @@ foreach my $identifier (get_identifiers($sp_mart_name)) {
     close $fh;
 }
 
-if ($sp_mart_name eq 'hsapiens') {
-    `curl --data-urlencode query\@affy_huex_query.xml http://www.ensembl.org/biomart/martservice/results -o output/hsapiens_affy_huex_1_0_st_v2`;
-}
+#if ($sp_mart_name eq 'hsapiens') {
+#    `curl --data-urlencode query\@affy_huex_query.xml http://www.ensembl.org/biomart/martservice/results -o output/hsapiens_affy_huex_1_0_st_v2`;
+#}
 
 sub update_registry_file {
     my $registry_file = shift;
@@ -89,6 +89,8 @@ sub update_registry_file {
     my $update = $version != $2;
     `echo '$contents' > $registry_file` if $update;
     `rm -r *[Cc]ached*/` if $update;
+    
+    return $update;
 }
 
 sub get_identifiers {

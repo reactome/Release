@@ -1,7 +1,6 @@
 package GKB::WebUtils;
-
-
 use strict;
+
 use vars qw(@ISA $AUTOLOAD %ok_field %VALID_COMPARISON_OPERATOR @SIMPLE_QUERY_FORM_CLASSES %SIMPLE_QUERY_FORM_FORBIDDEN_ATTRIBUTES $FORMAT_POPULAR_SEARCH_ENGINE_FLAG);
 use Bio::Root::Root;
 use CGI;
@@ -25,6 +24,9 @@ use GKB::StableIdentifiers;
 use GKB::SearchUtils;
 use GKB::NavigationBar::Model;
 use GKB::NavigationBar::View;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(Bio::Root::Root);
 
@@ -1265,6 +1267,9 @@ sub print_view {
 
 sub build_pathway_browser_url {
     my ($self, $instance) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my $db = $self->cgi->param('DB');
 
     my $db_id = $instance->db_id();
@@ -1332,7 +1337,7 @@ sub build_pathway_browser_url {
     my $url = "/PathwayBrowser/#$db_element$species_db_id_element$focus_pathway_db_id_element$db_id_element$other_args";
     $url =~ s/\&$//;
 
-    print STDERR "url=$url\n";
+    $logger->info("url=$url\n");
 
     return $url;
 }
@@ -1357,8 +1362,10 @@ sub is_in_diagram {
 sub has_diagram {
     my ($self, $db, $instance) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     if (!(defined $instance)) {
-    	print STDERR "WebUtils.has_diagram: WARNING - instance is undef!!\n";
+    	$logger->warn("instance is undef!!\n");
     	return 0;
     }
     
@@ -1377,8 +1384,10 @@ sub has_diagram {
 sub has_diagram_instance {
     my ($self, $instance) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     if (!(defined $instance)) {
-    	print STDERR "WebUtils.has_diagram_instance: WARNING - instance is undef!!\n";
+    	$logger->warn("instance is undef!!\n");
     	return 0;
     }
 
@@ -1417,26 +1426,28 @@ sub has_diagram_instance {
 sub has_diagram_on_disk {
     my ($self, $db, $instance) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     if (!(defined $instance)) {
-    	print STDERR "WebUtils.has_diagram_on_disk: WARNING - instance is undef!!\n";
+    	$logger->warn("instance is undef!!\n");
     	return 0;
     }
 
-	my $focus_pathway_db_id = $instance->db_id();
-	if (!(defined $focus_pathway_db_id)) {
-    	print STDERR "WebUtils.has_diagram_on_disk: WARNING - supplied instance has no DB_ID!\n";
-		return 0;
-	}
-	
-	my $focus_species_db_id = $self->get_focus_species_db_id_from_instance($instance);
-	
-	if (defined $GK_ROOT_DIR && !($GK_ROOT_DIR eq "") && defined $db && !($db eq "") && defined $focus_species_db_id && !($focus_species_db_id eq "") && defined $focus_pathway_db_id && !($focus_pathway_db_id eq "")) {
-		my $pathway_diagram_db = $db;
-		my $static_files_dir = "$GK_ROOT_DIR/website/html/entitylevelview/pathway_diagram_statics/$pathway_diagram_db/$focus_species_db_id/$focus_pathway_db_id";
-		if (-e $static_files_dir) {
-			return 1;
-		}
-	}
+    my $focus_pathway_db_id = $instance->db_id();
+    if (!(defined $focus_pathway_db_id)) {
+    	$logger->warn("supplied instance has no DB_ID!\n");
+	return 0;
+    }
+    
+    my $focus_species_db_id = $self->get_focus_species_db_id_from_instance($instance);
+    
+    if (defined $GK_ROOT_DIR && !($GK_ROOT_DIR eq "") && defined $db && !($db eq "") && defined $focus_species_db_id && !($focus_species_db_id eq "") && defined $focus_pathway_db_id && !($focus_pathway_db_id eq "")) {
+	my $pathway_diagram_db = $db;
+	my $static_files_dir = "$GK_ROOT_DIR/website/html/entitylevelview/pathway_diagram_statics/$pathway_diagram_db/$focus_species_db_id/$focus_pathway_db_id";
+	if (-e $static_files_dir) {
+	    return 1;
+	}	
+    }
 
     return 0;
 }
@@ -1444,21 +1455,21 @@ sub has_diagram_on_disk {
 sub get_focus_species_db_id_from_instance {
     my ($self, $instance) = @_;
     
-	# This could be a rather dodgy heuristic in cases where there is more than one species.
-	my $focus_species_db_id = undef;
-	foreach my $species (@{$instance->species}) {
-		if ($species->name->[0] eq "Homo sapiens") {
-			$focus_species_db_id = $species->db_id();
-			last;
-		}
+    # This could be a rather dodgy heuristic in cases where there is more than one species.
+    my $focus_species_db_id = undef;
+    foreach my $species (@{$instance->species}) {
+    	if ($species->name->[0] eq "Homo sapiens") {
+    	    $focus_species_db_id = $species->db_id();
+	    last;
 	}
-	if (!(defined $focus_species_db_id)) {
-		if ($instance->is_valid_attribute("species") && scalar(@{$instance->species}) > 0) {
-			$focus_species_db_id = $instance->species->[0]->db_id();
-		}
+    }
+    if (!(defined $focus_species_db_id)) {
+	if ($instance->is_valid_attribute("species") && scalar(@{$instance->species}) > 0) {
+	    $focus_species_db_id = $instance->species->[0]->db_id();
 	}
-	
-	return $focus_species_db_id;
+    }
+    
+    return $focus_species_db_id;
 }
 
 sub find_top_level_pathway_db_id {
@@ -1498,12 +1509,12 @@ sub find_db_id_of_deepest_pathway_with_diagram {
     my ($self, $instance) = @_;
     
     my $deepest_pathway = $self->find_deepest_pathway_with_diagram($instance);
-	my $db_id = undef;
-	if (defined $deepest_pathway) {
-		$db_id = $deepest_pathway->db_id();
-	}
-	
-	return $db_id;
+    my $db_id = undef;
+    if (defined $deepest_pathway) {
+	$db_id = $deepest_pathway->db_id();
+    }
+
+    return $db_id;
 }
 
 sub find_deepest_pathway_with_diagram {
@@ -1823,48 +1834,50 @@ sub onclick_for_eventbrowser_st_id {
 sub release_warning {
     my $self = shift;
     
-	my $release_warning = '';
-	if (defined $WARNING && !($WARNING eq '')) {
-		$release_warning = $WARNING;
-	}
-	if (defined $self) {
-		# Only run this chunk of code in non-static mode, otherwise
-		# it will break.
-		my $cgi = $self->cgi;
-		if (!(defined $cgi)) {
-    		print STDERR "WebUtils.release_warning: WARNING - CGI in not defined!!\n";
-    		return $release_warning;
-		}
-		
-		my $url = $cgi->url();
-		
-		if (!$url || !($url =~ /control_panel_st_id/ || $url =~ /bookmarker_st_id/)) {
-			my $current_release_db_name = $cgi->param('DB');
-	
-			# Gives access to a whole bunch of methods for dealing with
-			# previous releases and stable identifiers.
-			my $si = GKB::StableIdentifiers->new($cgi);
-		
-			if ($si->is_known_release_name($current_release_db_name)) {
-				my $most_recent_release_db_name = $si->get_most_recent_release_db_name();
-				my $return_page = "frontpage?DB=$most_recent_release_db_name";
-				if (!($current_release_db_name eq $most_recent_release_db_name)) {
-					my ($identifier, $version) = $si->get_identifier_and_version_in_most_recent_release();
-					if ($identifier) {
-						$return_page = "eventbrowser_st_id?ST_ID=$identifier";
-					}
-					my $current_release_num = $si->get_release_num_from_db_name($current_release_db_name);
-					$release_warning .= 
-					qq{<DIV STYLE="font-size:9pt;font-weight:bold;text-align:center;color:red;padding-top:10px;">
-					The currently displayed page is from release $current_release_num.  To return to the most
-					recent release, click <A HREF="$return_page">here</A>.</DIV>\n};
-				}
-			}
-			$si->close_all_dbas();
-		}
+    my $logger = get_logger(__PACKAGE__);
+    
+    my $release_warning = '';
+    if (defined $WARNING && !($WARNING eq '')) {
+    	$release_warning = $WARNING;
+    }
+    if (defined $self) {
+    	# Only run this chunk of code in non-static mode, otherwise
+    	# it will break.
+    	my $cgi = $self->cgi;
+    	if (!(defined $cgi)) {
+	    $logger->warn("CGI in not defined!!\n");
+    	    return $release_warning;
 	}
 	
-	return $release_warning;
+	my $url = $cgi->url();
+	
+	if (!$url || !($url =~ /control_panel_st_id/ || $url =~ /bookmarker_st_id/)) {
+	    my $current_release_db_name = $cgi->param('DB');
+	
+	    # Gives access to a whole bunch of methods for dealing with
+	    # previous releases and stable identifiers.
+	    my $si = GKB::StableIdentifiers->new($cgi);
+	
+	    if ($si->is_known_release_name($current_release_db_name)) {
+	        my $most_recent_release_db_name = $si->get_most_recent_release_db_name();
+	        my $return_page = "frontpage?DB=$most_recent_release_db_name";
+	        if (!($current_release_db_name eq $most_recent_release_db_name)) {
+		    my ($identifier, $version) = $si->get_identifier_and_version_in_most_recent_release();
+		    if ($identifier) {
+		        $return_page = "eventbrowser_st_id?ST_ID=$identifier";
+		    }
+		    my $current_release_num = $si->get_release_num_from_db_name($current_release_db_name);
+		    $release_warning .= 
+		    qq{<DIV STYLE="font-size:9pt;font-weight:bold;text-align:center;color:red;padding-top:10px;">
+		    The currently displayed page is from release $current_release_num.  To return to the most
+		    recent release, click <A HREF="$return_page">here</A>.</DIV>\n};
+		}
+	    }
+	    $si->close_all_dbas();
+	}
+    }	
+    
+    return $release_warning;
 }
     
 ## Supplies any warning messages that should be presented to
@@ -2056,12 +2069,14 @@ sub print_pathway_size_table {
 sub find_pathways_with_fewer_reactions {
     my ($self, $pathway, $reaction_limit, $pathways) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     if (!(defined $pathway)) {
-    	print STDERR "WebUtils.find_pathways_with_fewer_reactions: pathway is null!\n";
+    	$logger->warn("pathway is null!\n");
     	return;
     }
     if (!($pathway->is_a('Pathway'))) {
-    	print STDERR "WebUtils.find_pathways_with_fewer_reactions: you must supply a Pathway instance; you have supplied an instance of type: " . $pathway->class() . "\n";
+    	$logger->warn("you must supply a Pathway instance; you have supplied an instance of type: " . $pathway->class() . "\n");
     	return;
     }
     if (!(defined $pathways)) {
@@ -2088,12 +2103,14 @@ sub find_pathways_with_fewer_reactions {
 sub find_pathways_with_fewer_entities {
     my ($self, $pathway, $entity_limit, $pathways) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     if (!(defined $pathway)) {
-    	print STDERR "WebUtils.find_pathways_with_fewer_entities: pathway is null!\n";
+    	$logger->warn("pathway is null!\n");
     	return;
     }
     if (!($pathway->is_a('Pathway'))) {
-    	print STDERR "WebUtils.find_pathways_with_fewer_entities: you must supply a Pathway instance; you have supplied an instance of type: " . $pathway->class() . "\n";
+    	$logger->warn("you must supply a Pathway instance; you have supplied an instance of type: " . $pathway->class() . "\n");
     	return;
     }
     if (!(defined $pathways)) {
@@ -2695,9 +2712,12 @@ sub create_protege_project {
 
 sub create_protege_project_wo_orthologues {
     my ($self,$basename,$ar) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my $instances = $self->dba->fetch_instance_by_attribute($self->dba->ontology->root_class,
 							    [[$DB_ID_NAME, $ar]]);
-    print STDERR $instances->[0]->extended_displayName, "\n";
+    $logger->info($instances->[0]->extended_displayName, "\n");
     my $ca = GKB::ClipsAdaptor->new(
 	-ONTOLOGY => $self->dba->ontology,
 	-EXCLUDE_CLASS_ATTRIBUTES => {
@@ -3803,185 +3823,189 @@ __HERE__
 # for an example of what these look like).  Returns an array of CGI compliant
 # meta objects, that can be directly implanted into CGI->start_html(-head => [...])
 sub meta_tag_builder {
-	my ($self, $meta_tag_array) = @_;
-	
-	my @cgi_meta_descriptors = ();
-	if (!(defined $meta_tag_array)) {
-		return @cgi_meta_descriptors;
+    my ($self, $meta_tag_array) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    my @cgi_meta_descriptors = ();
+    if (!(defined $meta_tag_array)) {
+    	return @cgi_meta_descriptors;
+    }
+    
+    my $cgi = $self->cgi;
+    if (!(defined $cgi)) {
+    	return @cgi_meta_descriptors;
+    }
+    
+    foreach my $meta_descriptor_pair (@{$meta_tag_array}) {
+    	if (!(defined $meta_descriptor_pair)) {
+    	    $logger->warn("META tag description pair is undefined, skipping!!\n");
+    	    next;
+    	}
+	if (scalar(@{$meta_descriptor_pair}) != 2) {
+	    $logger->warn("malformed META tag description pair, contains " . scalar(@{$meta_descriptor_pair}) . " elements, expected 2, skipping!!\n");
+	    next;
 	}
+	my $name = $meta_descriptor_pair->[0];
+	my $content = $meta_descriptor_pair->[1];
+	my $cgi_meta_descriptor = $cgi->meta({'name'=>$name, 'content'=>$content});
 	
-	my $cgi = $self->cgi;
-	if (!(defined $cgi)) {
-		return @cgi_meta_descriptors;
-	}
-	
-	foreach my $meta_descriptor_pair (@{$meta_tag_array}) {
-		if (!(defined $meta_descriptor_pair)) {
-			print STDERR "WebUtils.meta_tag_builder: META tag description pairis undefined, skipping!!\n";
-			next;
-		}
-		if (scalar(@{$meta_descriptor_pair}) != 2) {
-			print STDERR "WebUtils.meta_tag_builder: malformed META tag description pair, contains " . scalar(@{$meta_descriptor_pair}) . " elements, expected 2, skipping!!\n";
-			next;
-		}
-		my $name = $meta_descriptor_pair->[0];
-		my $content = $meta_descriptor_pair->[1];
-		my $cgi_meta_descriptor = $cgi->meta({'name'=>$name, 'content'=>$content});
-		
-		push(@cgi_meta_descriptors, $cgi_meta_descriptor);
-	}
-	
-	return @cgi_meta_descriptors;
+	push(@cgi_meta_descriptors, $cgi_meta_descriptor);
+    }
+
+    return @cgi_meta_descriptors;
 }
 
 # Creates an array of CGI compliant
 # meta objects, that can be directly implanted into CGI->start_html(-head => [...])
 # for the instance with the given DB_ID.
 sub instance_meta_tag_builder {
-	my ($self, $db_id) = @_;
-	
-	my @cgi_meta_descriptors = ();
-	if (!(defined $db_id)) {
-		return @cgi_meta_descriptors;
-	}
-	
-	my $cgi = $self->cgi;
-	my $dba = $self->dba;
-	if (!(defined $cgi) || !(defined $dba)) {
-		return @cgi_meta_descriptors;
-	}
-	
-	my $instances = $dba->fetch_instance_by_db_id($db_id);
-	if (scalar(@{$instances}) == 0) {
-		return @cgi_meta_descriptors;
-	}
-	my $instance = $instances->[0];
-	if (!(defined $instance)) {
-		return @cgi_meta_descriptors;
-	}
-	
-	my $description_cgi_meta_descriptor = $cgi->meta({'name'=>"description", 'content'=>$instance->displayName()});
-	push(@cgi_meta_descriptors, $description_cgi_meta_descriptor);
-	
-	# Get the keywords from the appropriate attribute, if it exists.
-	if ($instance->is_valid_attribute("keywords")) {
-		my $keywordss = $instance->attribute_value("keywords");
-		if (scalar(@{$keywordss}) > 0) {
-			my $keywords = $keywordss->[0];
-			if (defined $keywords && !($keywords eq "")) {
-				my $keywords_cgi_meta_descriptor = $cgi->meta({'name'=>"keywords", 'content'=>$keywords});
-				push(@cgi_meta_descriptors, $keywords_cgi_meta_descriptor);
-			}
-		}
-	}
+    my ($self, $db_id) = @_;
+    
+    my @cgi_meta_descriptors = ();
+    if (!(defined $db_id)) {
+	return @cgi_meta_descriptors;
+    }
 
-	# Only allow crawlers to index this instance if it is an Event.
-	# Don't allow crawlers to index non-human events
-	if (!($instance->is_a("Event")) || scalar(@{$instance->inferredFrom})>0) {
-		my $robots_noindex_meta_descriptor = $cgi->meta({'name'=>"robots", 'content'=>'noindex,nofollow'});
-		push(@cgi_meta_descriptors, $robots_noindex_meta_descriptor);
+    my $cgi = $self->cgi;
+    my $dba = $self->dba;
+    if (!(defined $cgi) || !(defined $dba)) {
+	return @cgi_meta_descriptors;
+    }
+    
+    my $instances = $dba->fetch_instance_by_db_id($db_id);
+    if (scalar(@{$instances}) == 0) {
+	return @cgi_meta_descriptors;
+    }
+    my $instance = $instances->[0];
+    if (!(defined $instance)) {
+	return @cgi_meta_descriptors;
+    }
+    
+    my $description_cgi_meta_descriptor = $cgi->meta({'name'=>"description", 'content'=>$instance->displayName()});
+    push(@cgi_meta_descriptors, $description_cgi_meta_descriptor);
+    
+    # Get the keywords from the appropriate attribute, if it exists.
+    if ($instance->is_valid_attribute("keywords")) {
+	my $keywordss = $instance->attribute_value("keywords");
+	if (scalar(@{$keywordss}) > 0) {
+	    my $keywords = $keywordss->[0];
+	    if (defined $keywords && !($keywords eq "")) {
+		my $keywords_cgi_meta_descriptor = $cgi->meta({'name'=>"keywords", 'content'=>$keywords});
+		push(@cgi_meta_descriptors, $keywords_cgi_meta_descriptor);
+	    }
 	}
-	
+    }
+
+    # Only allow crawlers to index this instance if it is an Event.
+    # Don't allow crawlers to index non-human events
+    if (!($instance->is_a("Event")) || scalar(@{$instance->inferredFrom})>0) {
+	my $robots_noindex_meta_descriptor = $cgi->meta({'name'=>"robots", 'content'=>'noindex,nofollow'});
+	push(@cgi_meta_descriptors, $robots_noindex_meta_descriptor);
+    }
+    
 #	# Emergency hack to stop search engines from indexing eventbrowser pages
 #	my $robots_noindex_meta_descriptor = $cgi->meta({'name'=>"robots", 'content'=>'noindex,nofollow'});
 #	push(@cgi_meta_descriptors, $robots_noindex_meta_descriptor);
 
-	return @cgi_meta_descriptors;
+    return @cgi_meta_descriptors;
 }
 
 # Check to see if it is OK for a caller to access the current web page.
 # If it is OK, then return undef.  If it is not OK, return a string
 # containing HTML that can be printed to provide a warning.
 sub forbid_page_access {
-	my ($self) = @_;
-	
-	my $dba = $self->dba;
-	if (!(defined $self->cgi) || !(defined $dba)) {
-		return "Cannot access page data or database\n";
-	}
-	
-	# Get the number of open database connections.  This uses the MySQL
-	# "status" command; use the number of "threads".
-	my ($sth,$res) = $dba->execute("show status like 'Threads_connected'");
-	my $connections = $sth->fetchall_arrayref->[0]->[1];
-	if (!(defined $connections)) {
-		$connections = 1;
-	}
-	
-	my $error_message = "Sorry, there is a temporary technical problem (too many database connections: $connections), please refresh this page again in a few minutes.";
-	my $out = qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Internal error</FONT></h1>\n);
-	$out .= qq(<PRE>\n\n\n$error_message\n\n</PRE>\n);
-		
-	if ($connections > 145) {
-		# We are getting close to the default upper limit of 150 database
-		# connections in MySQL, don't allow any more.
-		print STDERR "WebUtils.forbid_page_access: connections=$connections, forbidding server=" . $self->cgi->remote_host() . "\n";
-		return $out;
-	} elsif ($connections > 120 && $self->remote_host_isa_search_indexer()) {
-		# A lot of database connections have now been used up, so stop crawlers
-		# from accessing this web page.  Allow normal users to do what they
-		# want.
-		print STDERR "WebUtils.forbid_page_access: connections=$connections, forbidding crawler=" . $self->cgi->remote_host() . "\n";
-		return $out;
-	} elsif ($connections > 50 && $self->remote_host_isa_search_indexer()) {
-		# There are still enough database connections to serve crawlers, but it looks
-		# like a lot have been used already, so put in a delay to slow the crawler
-		# down.
-		print STDERR "WebUtils.forbid_page_access: connections=$connections, delaying crawler=" . $self->cgi->remote_host() . "\n";
-		sleep(5);
-	}
-	
-	# The "everything is fine" return value
-	return undef;
+    my ($self) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+
+    my $dba = $self->dba;
+    if (!(defined $self->cgi) || !(defined $dba)) {
+	return "Cannot access page data or database\n";
+    }
+    
+    # Get the number of open database connections.  This uses the MySQL
+    # "status" command; use the number of "threads".
+    my ($sth,$res) = $dba->execute("show status like 'Threads_connected'");
+    my $connections = $sth->fetchall_arrayref->[0]->[1];
+    if (!(defined $connections)) {
+	$connections = 1;
+    }
+
+    my $error_message = "Sorry, there is a temporary technical problem (too many database connections: $connections), please refresh this page again in a few minutes.";
+    my $out = qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Internal error</FONT></h1>\n);
+    $out .= qq(<PRE>\n\n\n$error_message\n\n</PRE>\n);
+    
+    if ($connections > 145) {
+	# We are getting close to the default upper limit of 150 database
+	# connections in MySQL, don't allow any more.
+	$logger->warn("WebUtils.forbid_page_access: connections=$connections, forbidding server=" . $self->cgi->remote_host() . "\n");
+	return $out;
+    } elsif ($connections > 120 && $self->remote_host_isa_search_indexer()) {
+	# A lot of database connections have now been used up, so stop crawlers
+	# from accessing this web page.  Allow normal users to do what they
+	# want.
+	$logger->warn("WebUtils.forbid_page_access: connections=$connections, forbidding crawler=" . $self->cgi->remote_host() . "\n");
+	return $out;
+    } elsif ($connections > 50 && $self->remote_host_isa_search_indexer()) {
+	# There are still enough database connections to serve crawlers, but it looks
+	# like a lot have been used already, so put in a delay to slow the crawler
+	# down.
+	$logger->warn("WebUtils.forbid_page_access: connections=$connections, delaying crawler=" . $self->cgi->remote_host() . "\n");
+	sleep(5);
+    }
+
+    # The "everything is fine" return value
+    return undef;
 }
 
 sub remote_host_isa_search_indexer {
-	my ($self) = @_;
-	
-	my $cgi = $self->cgi;
-	my $remote_host = $cgi->remote_host();
+    my ($self) = @_;
+    
+    my $cgi = $self->cgi;
+    my $remote_host = $cgi->remote_host();
 
-	# Google
-	if	($remote_host =~ /google/i || $remote_host =~ /^66.249.6[56]/) {
-		return 1;
-	}
-	
-	# MSN
-	if	($remote_host =~ /msn/i || $remote_host =~ /^65.5[45]/) {
-		return 1;
-	}
-	
-	# Yahoo
-	if	($remote_host =~ /slurp/i || $remote_host =~ /yahoo/i || $remote_host =~ /inktomi/i) {
-		return 1;
-	}
-	
-	# Altavista
-	if	($remote_host =~ /scooter/i || $remote_host =~ /alta-*vista/i) {
-		return 1;
-	}
-	
-	# Excite
-	if	($remote_host =~ /excite/i) {
-		return 1;
-	}
-	
-	# Lycos
-	if	($remote_host =~ /lycos/i) {
-		return 1;
-	}
-	
-	# Dotnet
-	if	($remote_host =~ /dotnetdotcom/i) {
-		return 1;
-	}
-	
-	# PHONOSCOPE
-	if	($remote_host =~ /PHONOSCOPE/i || $remote_host =~ /^72.20.139/) {
-		return 1;
-	}
-	
-	return 0;
+    # Google
+    if	($remote_host =~ /google/i || $remote_host =~ /^66.249.6[56]/) {
+    	return 1;
+    }
+    
+    # MSN
+    if	($remote_host =~ /msn/i || $remote_host =~ /^65.5[45]/) {
+    	return 1;
+    }
+    
+    # Yahoo
+    if	($remote_host =~ /slurp/i || $remote_host =~ /yahoo/i || $remote_host =~ /inktomi/i) {
+    	return 1;
+    }
+    
+    # Altavista
+    if	($remote_host =~ /scooter/i || $remote_host =~ /alta-*vista/i) {
+    	return 1;
+    }
+    
+    # Excite
+    if	($remote_host =~ /excite/i) {
+    	return 1;
+    }
+    
+    # Lycos
+    if	($remote_host =~ /lycos/i) {
+    	return 1;
+    }
+
+    # Dotnet
+    if	($remote_host =~ /dotnetdotcom/i) {
+	return 1;
+    }
+
+    # PHONOSCOPE
+    if ($remote_host =~ /PHONOSCOPE/i || $remote_host =~ /^72.20.139/) {
+	return 1;
+    }
+
+    return 0;
 }
 
 1;

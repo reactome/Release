@@ -37,12 +37,17 @@ disclaimers of warranty.
 =cut
 
 package GKB::InstanceCreator::ReferenceDatabase;
+use strict;
 
+use GKB::Config;
 use GKB::Config_Orthomcl;    # source for species 3 letter code mapping
 use GKB::DBAdaptor;
 use GKB::InstanceCreator::Miscellaneous;
 use GKB::SOAPServer::MIRIAM;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
 
@@ -309,49 +314,41 @@ sub is_multiple_species_database {
 sub get_reference_database {
     my ( $self, $name, $species ) = @_;
 
-    print STDERR "ReferenceDatabase.get_reference_database: name=$name\n";
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->info("name=$name\n");
 
     my $dba = $self->dba;
 
     my $reference_database = undef;
     if ( defined $species && $self->is_multiple_species_database($name) ) {
-        print STDERR
-          "ReferenceDatabase.get_reference_database: species=$species\n";
-
+        $logger->info("species=$species\n");
+        
         $species =~ s/ /_/g;
-
+        
         if ( !( $name =~ /$species/ ) ) {
-
+            
            # See if there is a already species-specific version of this database
             my $species_specific_name = "$name\_$species";
-            print STDERR
-"ReferenceDatabase.get_reference_database: searching for preexisting ReferenceDatabase for $species_specific_name\n";
+            $logger->info("searching for preexisting ReferenceDatabase for $species_specific_name\n");
             $reference_database = $self->get_predefined_reference_database($species_specific_name);
             if ( defined $reference_database ) {
-                print STDERR
-"ReferenceDatabase.get_reference_database: found preexisting ReferenceDatabase for $species_specific_name\n";
-                $self->rearrange_reference_database_names( $reference_database,
-                    $name );
+                $logger->info("found preexisting ReferenceDatabase for $species_specific_name\n");
+                $self->rearrange_reference_database_names( $reference_database,$name );
                 return $reference_database;
             }
-            print STDERR
-"ReferenceDatabase.get_reference_database: searching for preexisting ReferenceDatabase for $species_specific_name\_GENE\n";
-            $reference_database = $self->get_predefined_reference_database(
-                "$species_specific_name\_GENE");
+            $logger->info("searching for preexisting ReferenceDatabase for $species_specific_name\_GENE\n");
+            $reference_database = $self->get_predefined_reference_database("$species_specific_name\_GENE");
             if ( defined $reference_database ) {
-                print STDERR
-"ReferenceDatabase.get_reference_database: found preexisting ReferenceDatabase for $species_specific_name\_GENE\n";
-                $self->rearrange_reference_database_names( $reference_database,
-                    $name );
+                $logger->info("found preexisting ReferenceDatabase for $species_specific_name\_GENE\n");
+                $self->rearrange_reference_database_names( $reference_database,$name );
                 return $reference_database;
             }
         }
     }
     else {
-
-        print STDERR
-"ReferenceDatabase.get_reference_database: no species-specific database found, look for regular database\n";
-
+        $logger->info("no species-specific database found, look for regular database\n");
+        
         $reference_database = $self->get_predefined_reference_database($name);
         if ( defined $reference_database ) {
             $self->rearrange_reference_database_names( $reference_database,
@@ -360,8 +357,7 @@ sub get_reference_database {
         }
     }
 
-    print STDERR
-      "ReferenceDatabase.get_reference_database: create brand new database\n";
+    $logger->info("create brand new database\n");
 
     # Create a new ReferenceDatabase class entry
     # if one does not already exist
@@ -469,6 +465,8 @@ sub rearrange_reference_database_names {
 sub get_url {
     my ( $self, $name, $species ) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     if ( !( defined $species ) || $species eq '' ) {
         $species = 'Homo_sapiens';
     }
@@ -506,14 +504,12 @@ sub get_url {
                 $url =~ s/###SP3###/$species3/g;
             }
             else {
-                print STDERR
-"ReferenceDatabase.get_url: WARNING - species3 is undef for $species!!\n";
+                $logger->warn("species3 is undef for $species!!\n");
             }
         }
     }
     else {
-        print STDERR
-"ReferenceDatabase.get_url: WARNING - Could not find URL for service $name\n";
+        $logger->warn("Could not find URL for service $name\n");
     }
 
     return $url;
@@ -530,6 +526,8 @@ sub get_url {
 # cases, this is not significant, but ENSEMBL likes to have it.
 sub get_access_url {
     my ( $self, $name, $species ) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
 
     if ( !( defined $species ) || $species eq '' ) {
         $species = 'Homo_sapiens';
@@ -568,14 +566,12 @@ sub get_access_url {
                 $access_url =~ s/###SP3###/$species3/g;
             }
             else {
-                print STDERR
-"ReferenceDatabase.get_access_url: WARNING - species3 is undef for $species!!\n";
+                $logger->warn("species3 is undef for $species!!\n");
             }
         }
     }
     else {
-        print STDERR
-"ReferenceDatabase.get_access_url: WARNING - Could not find access URL for service $name\n";
+        $logger->warn("Could not find access URL for service $name\n");
     }
 
     return $access_url;
@@ -629,7 +625,9 @@ sub generate_3_letter_species_code {
 sub get_names {
     my ( $self, $name, $species ) = @_;
 
-    print STDERR "ReferenceDatabase.get_names: name=$name\n";
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->info("name=$name\n");
 
     my @names = ();
 
@@ -645,10 +643,10 @@ sub get_names {
                 push( @names, $local_name );
             }
         }
-        print STDERR "ReferenceDatabase.get_names: MIRIAM names=@names\n";
+        $logger->info("MIRIAM names=@names\n");
     }
 
-    print STDERR "ReferenceDatabase.get_names: Use hard-coded information\n";
+    $logger->info("Use hard-coded information\n");
 
     # Use hard-coded information if MIRIAM knows nothing about the service.
     my $hard_coded_names = $reference_database_info_hash{$name}->{'Name'};
@@ -674,12 +672,11 @@ sub get_names {
     }
 
     if ( scalar(@names) == 0 ) {
-        print STDERR
-"ReferenceDatabase.get_names: Could not find alternative names for service $name\n";
+        $logger->info("Could not find alternative names for service $name\n");
         @names = ();
     }
 
-    print STDERR "ReferenceDatabase.get_names: 1 names=@names\n";
+    $logger->info("1 names=@names\n");
 
     if (   $self->is_multiple_species_database($name)
         && defined $species
@@ -691,19 +688,18 @@ sub get_names {
             $species_specific_name = "$species_specific_name\_GENE";
         }
 
-        print STDERR
-"ReferenceDatabase.get_names: species_specific_name=$species_specific_name\n";
+        $logger->info("species_specific_name=$species_specific_name\n");
 
         $self->prepend_new_name_if_necessary( \@names, $species_specific_name );
     }
 
-    print STDERR "ReferenceDatabase.get_names: 2 names=@names\n";
+    $logger->info("2 names=@names\n");
 
     if ( scalar(@names) < 1 ) {
         @names = ($name);
     }
 
-    print STDERR "ReferenceDatabase.get_names: 3 names=@names\n";
+    $logger->info("3 names=@names\n");
 
     return @names;
 }
@@ -772,13 +768,14 @@ sub get_ec_reference_database {
 # species - name for a species, Default: Homo_sapiens (human)
 sub get_ensembl_reference_database {
     my ( $self, $species ) = @_;
-
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     if ( !( defined $species ) || $species eq '' ) {
         $species = 'Homo_sapiens';
     }
 
-    print STDERR
-      "ReferenceDatabase.get_ensembl_reference_database: species=$species\n";
+    $logger->info("species=$species\n");
 
     my $reference_database = $self->get_reference_database( "ENSEMBL", $species );
 

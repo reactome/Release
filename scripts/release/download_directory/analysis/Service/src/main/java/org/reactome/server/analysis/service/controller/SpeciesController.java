@@ -33,7 +33,7 @@ public class SpeciesController {
                                               @RequestParam(required = false) String sortBy,
                                                @ApiParam(name = "order", value = "specifies the order", required = false, defaultValue = "ASC", allowableValues = "ASC,DESC")
                                               @RequestParam(required = false) String order,
-                                               @ApiParam(name = "resource", value = "the resource to sort", required = false, defaultValue = "TOTAL", allowableValues = "TOTAL,UNIPROT,ENSEMBL,CHEBI,NCBI_PROTEIN,EMBL,COMPOUND")
+                                               @ApiParam(name = "resource", value = "the resource to sort", required = false, defaultValue = "TOTAL", allowableValues = "TOTAL,UNIPROT,ENSEMBL,CHEBI,MIRBASE,NCBI_PROTEIN,EMBL,COMPOUND")
                                               @RequestParam(required = false, defaultValue = "TOTAL") String resource) {
         Long from = SpeciesNodeFactory.getHumanNode().getSpeciesID(); //For the time being let's do only human ;)
         return controller.compareSpecies(from, species).getResultSummary(sortBy, order, resource, pageSize, page);

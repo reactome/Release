@@ -50,17 +50,16 @@ public class PathwayHierarchyBuilder {
             this.hierarchies.put(speciesNode, pathwayHierarchy);
             try{
                 for (GKInstance instance : this.helper.getFrontPageItems(species.getDisplayName())) {
-                    if(!this.isValidSpecies(speciesNode, instance)){
-                        continue; //Please read documentation of isValidSpecies method
+                    if(this.isValidSpecies(speciesNode, instance)){ //Please read documentation of isValidSpecies method
+                        String stId = this.getStableIdentifier(instance);
+                        boolean hasDiagram = this.getHasDiagram(instance);
+                        PathwayNode node = pathwayHierarchy.addFrontpageItem(stId, instance.getDBID(), instance.getDisplayName(), hasDiagram);
+                        this.pathwayLocation.add(instance.getDBID(), node);
+                        if (BuilderTool.VERBOSE) {
+                            System.out.print("."); // Indicates progress
+                        }
+                        this.fillBranch(speciesNode, node, instance);
                     }
-                    String stId =  this.getStableIdentifier(instance);
-                    boolean hasDiagram = this.getHasDiagram(instance);
-                    PathwayNode node = pathwayHierarchy.addFrontpageItem(stId, instance.getDBID(), instance.getDisplayName(), hasDiagram);
-                    this.pathwayLocation.add(instance.getDBID(), node);
-                    if(BuilderTool.VERBOSE) {
-                        System.out.print("."); // Indicates progress
-                    }
-                    this.fillBranch(speciesNode, node, instance);
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -77,18 +76,17 @@ public class PathwayHierarchyBuilder {
                 List<?> children = inst.getAttributeValuesList(ReactomeJavaConstants.hasEvent);
                 for (Object obj : children) {
                     GKInstance instance = (GKInstance) obj;
-                    if(!this.isValidSpecies(speciesNode, instance)){
-                        continue; //Please read documentation of isValidSpecies method
-                    }
-                    if(instance.getSchemClass().isa(ReactomeJavaConstants.Pathway)){
-                        String stId = this.getStableIdentifier(instance);
-                        boolean hasDiagram = this.getHasDiagram(instance);
-                        PathwayNode aux = node.addChild(stId, instance.getDBID(), instance.getDisplayName(), hasDiagram);
-                        this.pathwayLocation.add(instance.getDBID(), aux);
-                        this.fillBranch(speciesNode, aux, instance);
-                    }else{
-                        //if the pathways has other events than pathways means it is a lower level pathway candidate
-                        node.setLowerLevelPathway(true);
+                    if(this.isValidSpecies(speciesNode, instance)){ //Please read documentation of isValidSpecies method
+                        if(instance.getSchemClass().isa(ReactomeJavaConstants.Pathway)){
+                            String stId = this.getStableIdentifier(instance);
+                            boolean hasDiagram = this.getHasDiagram(instance);
+                            PathwayNode aux = node.addChild(stId, instance.getDBID(), instance.getDisplayName(), hasDiagram);
+                            this.pathwayLocation.add(instance.getDBID(), aux);
+                            this.fillBranch(speciesNode, aux, instance);
+                        }else{
+                            //if the pathways has other events than pathways means it is a lower level pathway candidate
+                            node.setLowerLevelPathway(true);
+                        }
                     }
                 }
             }
@@ -108,7 +106,12 @@ public class PathwayHierarchyBuilder {
 
     private GKInstance getSpecies(GKInstance instance) throws Exception {
         if(instance.getSchemClass().isValidAttribute(ReactomeJavaConstants.species)){
-            return (GKInstance) instance.getAttributeValuesList(ReactomeJavaConstants.species).get(0);
+            List species = instance.getAttributeValuesList(ReactomeJavaConstants.species);
+            if(species!=null && !species.isEmpty()) {
+                return (GKInstance) instance.getAttributeValuesList(ReactomeJavaConstants.species).get(0);
+            }else{
+                logger.error("[" + instance.getDBID() + "] " + instance.getDisplayName() + " >> Species expected and not found");
+            }
         }
         return null;
     }
@@ -146,6 +149,7 @@ public class PathwayHierarchyBuilder {
      */
     private boolean isValidSpecies(SpeciesNode speciesNode, GKInstance event) throws Exception {
         GKInstance species = this.getSpecies(event);
+        if(species==null) return false;
         if(speciesNode.getSpeciesID().equals(species.getDBID())){
             return true;
         }else if(this.mainSpecies.contains(species.getDBID())){
