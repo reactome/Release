@@ -49,9 +49,10 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::Director;
+use strict;
 
 use GKB::AddLinks::BuilderFactory;
-use strict;
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
 
@@ -91,9 +92,9 @@ sub new {
 # Sets the BuilderParams object that will be used to pass parameters
 # from a Director object to individual Builder objects.
 sub set_builder_params {
-	my ($self, $builder_params) = @_;
-	
-	$self->builder_params($builder_params);
+    my ($self, $builder_params) = @_;
+
+    $self->builder_params($builder_params);
 }
 
 sub add_builder {
@@ -124,7 +125,7 @@ sub construct {
     # Loop over the builders a second time and report their
     # exit status
     my $defined_termination_status_count = 0;
-    print STDERR "\n\n\n";
+
     foreach $builder (@{$self->builders}) {
     	$builder->print_termination_status();
     	if (defined $builder->termination_status) {

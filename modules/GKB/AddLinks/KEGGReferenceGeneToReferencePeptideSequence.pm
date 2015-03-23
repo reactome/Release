@@ -32,11 +32,15 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::KEGGReferenceGeneToReferencePeptideSequence;
+use strict;
 
 use GKB::Config;
 use GKB::AddLinks::Builder;
 use GKB::HTMLUtils;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use Data::Dumper;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 
@@ -57,12 +61,12 @@ sub AUTOLOAD {
 sub new {
     my($pkg) = @_;
 
-       # Get class variables from superclass and define any new ones
-       # specific to this class.
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
     $pkg->get_ok_field();
 
-       my $self = $pkg->SUPER::new();
-       
+    my $self = $pkg->SUPER::new();
+
     return $self;
 }
 
@@ -85,7 +89,9 @@ sub clear_variables {
 sub buildPart {
     my ($self) = @_;
     
-    print STDERR "\n\nKEGGReferenceGeneToReferencePeptideSequence.buildPart: entered\n";
+    my $logger = get_logger(__PACKAGE__);
+    
+    $logger->info("entered\n");
     $self->class_name("KEGGReferenceGeneToReferencePeptideSequence");
     
     $self->timer->start($self->timer_message);
@@ -106,7 +112,7 @@ sub buildPart {
     my $species;
     foreach my $reference_peptide_sequence (@{$reference_peptide_sequences}) {
         if (!(defined $reference_peptide_sequence->species->[0])) {
-            print STDERR "KEGGReferenceGeneToReferencePeptideSequence.buildPart: WARNING - No species supplied for DB_ID " . $reference_peptide_sequence->db_id() . "\n";
+            $logger->warn("No species supplied for DB_ID " . $reference_peptide_sequence->db_id() . "\n");
             next;
         }
         
@@ -137,9 +143,7 @@ sub buildPart {
 
     $self->print_insertion_stats_hash();
     
-    print STDERR "\n";
-    print STDERR "KEGGReferenceGeneToReferencePeptideSequence.insert_xrefs: number of unique IDs inserted: " . scalar(keys(%id_hash)) . "\n";
-    print STDERR "\n";
+    $logger->info("number of unique IDs inserted: " . scalar(keys(%id_hash)) . "\n");
 
     $self->timer->stop($self->timer_message);
     $self->timer->print();
@@ -148,6 +152,8 @@ sub buildPart {
 # No return value.
 sub process_accumulated_reference_peptide_sequences_chunk {
     my ($self, $reference_peptide_sequences_chunk) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
     
     if (scalar(@{$reference_peptide_sequences_chunk})<1) {
         # Nothing to process
@@ -175,7 +181,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
     # on the associated KEGG gene IDs, in tab-delimited format.
     my $output = $self->bconv($query_string);
     if ($output eq '') {
-        print STDERR "KEGGReferenceGeneToReferencePeptideSequence.process_accumulated_reference_peptide_sequences_chunk: WARNING - output is empty!!\n";
+        $logger->warn("output is empty!!\n");
         return;
     }
     
@@ -191,7 +197,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
     foreach $line (@lines) {
         @cols = split(/\t/, $line);
         if (scalar(@cols)<2) {
-            print STDERR "KEGGReferenceGeneToReferencePeptideSequence.process_accumulated_reference_peptide_sequences_chunk: WARNING - expected 2 cols, got " . scalar(@cols) . ", line=$line, skipping\n";
+            $logger->warn("expected 2 cols, got " . scalar(@cols) . ", line=$line, skipping\n");
             next;
         }
         
@@ -230,7 +236,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         chomp($reference_peptide_sequence_identifier);
 
         if (!( defined $reference_peptide_sequence_identifier ) || $reference_peptide_sequence_identifier eq '') {
-            print STDERR "KEGGReferenceGeneToReferencePeptideSequence.process_accumulated_reference_peptide_sequences_chunk: WARNING - no identifier for ReferenceProteinSequence DB_ID=" . $reference_peptide_sequence->db_id() . "\n";
+            $logger->warn("no identifier for ReferenceProteinSequence DB_ID=" . $reference_peptide_sequence->db_id() . "\n");
             next;
         }
 
@@ -250,11 +256,11 @@ sub process_accumulated_reference_peptide_sequences_chunk {
             if (defined $kegg_gene_id && !($kegg_gene_id eq '')) {
                 $kegg_entry = $self->bget("hsa:$kegg_gene_id"); # TODO: this will only fetch human genes
             } else {
-                print STDERR "KEGGReferenceGeneToReferencePeptideSequence.process_accumulated_reference_peptide_sequences_chunk: WARNING - kegg_gene_id is not defined or is empty, skipping\n";
+                $logger->warn("kegg_gene_id is not defined or is empty, skipping\n");
                 next;
             }
             if (!(defined $kegg_entry)) {
-                print STDERR "KEGGReferenceGeneToReferencePeptideSequence.process_accumulated_reference_peptide_sequences_chunk: WARNING - Possible problem when trying to get kegg_entry, skipping\n";
+                $logger->warn("Possible problem when trying to get kegg_entry, skipping\n");
                 next;
             }
 
@@ -307,11 +313,11 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         }
 
         if (scalar(@reference_genes)<1) {
-            print STDERR "KEGGReferenceGeneToReferencePeptideSequence.process_accumulated_reference_peptide_sequences_chunk: WARNING - No genes are associated with UniProt ID $reference_peptide_sequence_identifier\n";
+            $logger->warn("No genes are associated with UniProt ID $reference_peptide_sequence_identifier\n");
             next;
         }
         
-        print STDERR "KEGGReferenceGeneToReferencePeptideSequence.process_accumulated_reference_peptide_sequences_chunk: " . $reference_peptide_sequence->identifier->[0] . "\t", join(',',map {$_->identifier->[0]} @reference_genes), "\n";
+        $logger->info($reference_peptide_sequence->identifier->[0] . "\t", join(',',map {$_->identifier->[0]} @reference_genes), "\n");
 
         # Remove original KEGG gene identifiers to make sure the mapping is
         # up-to-date, keep non-KEGG reference genes.
@@ -353,6 +359,8 @@ sub process_accumulated_reference_peptide_sequences_chunk {
 sub get_KEGG_ReferenceDNASequence {
     my ($self, $kegg_id, $kegg_name, $cross_references, $species) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     my $dba = $self->builder_params->get_dba();
     my $underline_species = undef;
     if (defined $species && scalar@{$species}>0) {
@@ -365,7 +373,7 @@ sub get_KEGG_ReferenceDNASequence {
         $underline_species =~ s/ +/_/g;
 #        print STDERR "KEGGReferenceGeneToReferencePeptideSequence.get_KEGG_ReferenceDNASequence: underline_species=$underline_species for kegg_id=$kegg_id\n";
     } else {
-        print STDERR "KEGGReferenceGeneToReferencePeptideSequence.get_KEGG_ReferenceDNASequence: WARNING - species is undef for kegg_id=$kegg_id!!!\n";
+        $logger->warn("species is undef for kegg_id=$kegg_id!!!\n");
     }
     my $reference_database_kegg = $self->builder_params->reference_database->get_kegg_reference_database($underline_species);
 
@@ -422,8 +430,7 @@ sub get_KEGG_ReferenceDNASequence {
                     push(@new_cross_references, $cross_reference);
                 }
             } else {
-                print STDERR "KEGGReferenceGeneToReferencePeptideSequence.get_KEGG_ReferenceDNASequence: WARNING - no referenceDatabase for this xref!!\n";
-        
+                $logger->warn("no referenceDatabase for this xref!!\n");
                 push(@new_cross_references, $cross_reference);
             }
         }
@@ -433,7 +440,6 @@ sub get_KEGG_ReferenceDNASequence {
         push(@new_cross_references, $cross_reference);
     }
         
-            
     if (scalar(@new_cross_references)>0) {
         # Null out pre-existing cross references and replace with the
         # list just harvested.
@@ -467,6 +473,8 @@ sub extract_kegg_name {
 sub extract_ec_numbers {
     my ($self, $line) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+    
     my $kegg_name = GKB::HTMLUtils->remove_html_tags($line);
     my @ec_num_arr = [];
     if ($kegg_name =~ /[\[\(]EC:/) {
@@ -493,7 +501,7 @@ sub extract_ec_numbers {
         }
         for (my $i=0; $i<$ec_count; $i++) {
             $ec_num_arr[$i] = $incorrect_ec_num_arr[$i];
-            print STDERR "KEGGReferenceGeneToReferencePeptideSequence.extract_ec_numbers: ec_num_arr[$i]=" . $ec_num_arr[$i] . "\n";
+            $logger->info("ec_num_arr[$i]=" . $ec_num_arr[$i] . "\n");
         }
     }
 
@@ -504,10 +512,12 @@ sub extract_ec_numbers {
 sub add_enzymes {
     my ($self, $enzymes, $ec_num_arr) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     for (my $j = 0; $j < scalar(@{$ec_num_arr}); $j++) {
         my $ec_num = $ec_num_arr->[$j];
         if (scalar($ec_num) =~ /ARRAY/) {
-            print STDERR "KEGGReferenceGeneToReferencePeptideSequence.add_enzymes: scalar(ec_num)=" . scalar($ec_num) . "\n";
+            $logger->info("scalar(ec_num)=" . scalar($ec_num) . "\n");
             next;
         }
         my $database_identifier = $self->builder_params->database_identifier->get_ec_database_identifier($ec_num);
@@ -549,6 +559,8 @@ sub bconv {
 sub fetch_content_from_url {
     my ($self, $url) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     my $content = undef;
     if (defined $url) {
         my $ua = LWP::UserAgent->new();
@@ -556,17 +568,17 @@ sub fetch_content_from_url {
         my $response = $ua->get($url);
         if(defined $response) {
             if ($response->is_success) {
-                print STDERR "KEGGReferenceGeneToReferencePeptideSequence.fetch_content_from_url: Ah-ha, we have SUCCESS!!!\n";
+                $logger->info("Ah-ha, we have SUCCESS!!!\n");
 
                 $content = $response->content;
             } else {
-                print STDERR "HTMLReader.fetch_content_from_url: GET request failed for url=$url\n";
+                $logger->warn("GET request failed for url=$url\n");
             }
         } else {
-            print STDERR "HTMLReader.fetch_content_from_url: no response!\n";
+            $logger->error("no response!\n");
         }
     } else {
-        print STDERR "HTMLReader.fetch_content_from_url: you need to supply a URL!\n";
+        $logger->error("you need to supply a URL!\n");
     }
     
     return $content;

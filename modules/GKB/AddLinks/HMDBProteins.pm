@@ -26,11 +26,15 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::HMDBProteins;
+use strict;
 
 use GKB::Config;
 use GKB::AddLinks::Builder;
 use GKB::HMDB;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Data::Dumper;
 
@@ -79,9 +83,11 @@ sub get_ok_field {
 sub buildPart {
     my $self = shift;
 
+    my $logger = get_logger(__PACKAGE__);
+    
     my $pkg = __PACKAGE__;
 
-    print STDERR "\n\n$pkg.buildPart: entered\n";
+    $logger->info("entered\n");
 
     $self->timer->start( $self->timer_message );
     my $dba = $self->builder_params->refresh_dba();
@@ -115,11 +121,11 @@ sub buildPart {
       $self->builder_params->reference_database->get_hmdb_protein_reference_database();
 
     while (my ($hmdb,$proteins) = each %$proteins) {
-        print STDERR "$pkg.buildPart: i->Identifier=HMDB:$hmdb\n";
+        $logger->info("i->Identifier=HMDB:$hmdb\n");
 
 	for my $protein (@$proteins) { 
 	    $protein || next;
-	    print STDERR "\n\nI am working on ReferenceProtein ", $protein->db_id(), "\n\n";
+	    $logger->info("I am working on ReferenceProtein " . $protein->db_id());
 	    ## Careful! ReferenceProteins can be associated with > 1 HMDB ID.
 	    ## Only do this the first time the instance is encountered!
 	    unless ( $self->{seen}->{$protein->db_id()}++ ) {

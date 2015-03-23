@@ -22,6 +22,7 @@ BEGIN {
 use Getopt::Long;
 use strict;
 use GKB::Config;
+use Data::Dumper;
 use Cwd;
 
 use constant EXE  => './add_links_to_single_resource.pl';
@@ -83,30 +84,17 @@ if (defined $opt_edb && !($opt_edb eq '')) {
 	$reactome_db_options .= " -edb $opt_edb";
 }
 
+my @resources;
 
-my @resources = (
-    'ENSGReferenceDNASequenceToReferencePeptideSequence',
-    'EntrezGeneToUniprotReferenceDNASequence',
-    'BioGPSGeneToUniprotReferenceDNASequence',
-    'CTDGeneToUniprotReferenceDNASequence',
-    'DbSNPGeneToUniprotReferenceDNASequence',
-    'PROToReferencePeptideSequence',
-    'GenecardsReferenceDatabaseToReferencePeptideSequence',
-    'PDBToReferencePeptideSequence',
-    'OmimReferenceDNASequenceToReferencePeptideSequence',
-    'UCSCReferenceDatabaseToReferencePeptideSequence',
-    'RefseqReferenceDatabaseToReferencePeptideSequence',
-    'RefseqReferenceRNASequenceToReferencePeptideSequence',
-    'KEGGReferenceGeneToReferencePeptideSequence',
-    'IntActDatabaseIdentifierToComplexOrReactionlikeEvent',
-    'BioModelsEventToDatabaseIdentifier',
-    'FlyBaseToUniprotReferenceDNASequence',
-    'OrphanetToUniprotReferenceDNASequence',
-    'DOCKBlasterToUniprotDatabaseIdentifier',
-    'RHEAIdentifierToReactionlikeEvent',
-    'ZincProteins',
-    'ZincMolecules'
-);
+
+# use an external config file for linkers -- easier to debug
+# and hard-coding data into scripts is not good practice anyway
+open CONF, "./add_links.conf" or die "Could not open resource config $!";
+while (<CONF>) {
+    next if /^#/; #skips comments
+    chomp;
+    push @resources, $_;
+}
 
 my $resource;
 my $cmd;

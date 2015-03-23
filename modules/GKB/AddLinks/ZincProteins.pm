@@ -26,11 +26,15 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::ZincProteins;
+use strict;
 
 use GKB::Config;
 use GKB::AddLinks::Builder;
 use GKB::Zinc;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 
 @ISA = qw(GKB::AddLinks::Builder);
@@ -79,6 +83,9 @@ sub get_ok_field {
 sub filter_zinc_peptides {
     my $self = shift;
     my $peptides = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my $mapper = $self->mapper();
     my $proteins_to_keep = $mapper->fetch_proteins();
 
@@ -86,7 +93,7 @@ sub filter_zinc_peptides {
     for my $pep (@$peptides) {
 	my $uniprot = $pep->Identifier->[0];
 	next unless $proteins_to_keep->{$uniprot};
-	print STDERR "filter_zinc_proteins: I am keeping $uniprot\n";
+	$logger->info("I am keeping $uniprot\n");
 	push @keep_peptides, $pep;
     }
     return \@keep_peptides;
@@ -97,12 +104,13 @@ sub buildPart {
 
     my $pkg = __PACKAGE__;
 
-    print STDERR "\n\n$pkg.buildPart: entered\n";
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->info("entered\n");
 
     $self->timer->start( $self->timer_message );
     my $dba = $self->builder_params->refresh_dba();
-    $dba->matching_instance_handler(
-        new GKB::MatchingInstanceHandler::Simpler );
+    $dba->matching_instance_handler(new GKB::MatchingInstanceHandler::Simpler );
     $self->mapper($dba);
     my $seqs = $self->fetch_reference_peptide_sequences(1);
     my $ref_seqs = $self->filter_zinc_peptides($seqs);
@@ -119,8 +127,7 @@ sub buildPart {
       $self->builder_params->reference_database->get_zinc_target_reference_database();
 
     for my $ref_seq ( @{$ref_seqs} ) {
-        print STDERR "$pkg.buildPart: i->Identifier="
-          . $ref_seq->Identifier->[0] . "\n";
+        $logger->info("i->Identifier=" . $ref_seq->Identifier->[0] . "\n");
 
 	# Remove identifiers to make sure the mapping is up-to-date, keep others
 	# this isn't really necessary as long as the script is run on the slice only

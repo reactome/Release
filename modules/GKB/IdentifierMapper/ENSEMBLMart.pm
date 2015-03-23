@@ -162,7 +162,7 @@ sub check_ensembl_mart_table_existence {
     if ($@) {
 	if ($@ !~ /doesn\'t exist/) {
 	    $logger->warn("$table exists produces unknown response\n");
-	    "dollars at=" . $@ . "\n";
+	    $logger->warn("dollars at=" . $@ . "\n");
 	    $self->mart_up(0);
 	}
     } else {
