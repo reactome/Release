@@ -29,6 +29,13 @@ $opt_release_pass ||= $GKB::Config::GK_DB_PASS;
 $opt_release_port ||= $GKB::Config::GK_DB_PORT;
 $opt_release_db ||= $GKB::Config::GK_DB_NAME;
 
+if ($opt_release_db eq $GKB::Config::GK_DB_NAME) {
+    print "Enter name of release database (leave blank for default of $opt_release_db):";
+    my $release_db = <STDIN>;
+    chomp $release_db;
+    $opt_release_db = $release_db if $release_db;
+}
+
 my $release_dba = GKB::DBAdaptor->new
     (
      -dbname => $opt_release_db,
@@ -48,7 +55,7 @@ $opt_curated_user ||= $GKB::Config::GK_DB_USER;
 $opt_curated_pass ||= $GKB::Config::GK_DB_PASS;
 $opt_curated_port ||= $GKB::Config::GK_DB_PORT;
 $opt_curated_db ||= 'gk_central';
-$opt_curated_host = 'reactomecurator.oicr.on.ca';
+$opt_curated_host ||= 'reactomecurator.oicr.on.ca';
 
 my $curated_dba = GKB::DBAdaptor->new
     (
@@ -61,19 +68,31 @@ my $curated_dba = GKB::DBAdaptor->new
      -DEBUG => $opt_debug
     );
 
+print "Obtaining reference gene products referencing UniProt from release database...\n";
 my $released_RGPs = $release_dba->fetch_instance_by_remote_attribute('ReferenceGeneProduct', [['referenceDatabase.name', '=', ['UniProt']]]);
+print "UniProt reference gene products obtained\n";
 
+print "Obtaining released EWASs for " . scalar @{$released_RGPs} . " UniProt instances...\n";
 my %released;
 foreach my $rgp (@{$released_RGPs}) {
     next unless $rgp->identifier->[0];
     my $uniprot_id = $rgp->variantIdentifier->[0] ? $rgp->variantIdentifier->[0] : $rgp->identifier->[0];
-    $released{$uniprot_id} = scalar grep {$_->is_a('EntityWithAccessionedSequence')} @{$release_dba->fetch_referer_by_instance($rgp)};
+    my @released_EWASs = grep {$_->is_a('EntityWithAccessionedSequence')} @{$release_dba->fetch_referer_by_instance($rgp)};
+    $released{$uniprot_id} = \@released_EWASs;
 }
+print "Released EWASs obtained\n";
 
+print "Obtaining reference gene products referencing UniProt from curation database...\n";
 my $curated_RGPs = $curated_dba->fetch_instance_by_remote_attribute('ReferenceGeneProduct', [['referenceDatabase.name', '=', ['UniProt']]]);
+print "UniProt reference gene products obtained\n";
 
 (my $outfile = $0) =~ s/pl$/txt/;
 open my $out, '>', $outfile;
+print $out "DB Id\tName\tCreated\tLast Modified\n";
+
+open my $mismatch, '>', 'mismatched_ewas_db_id_or_display_name.txt';
+
+print "Comparing curated and released EWASs (referring to obtained reference gene products) to find unreleased EWASs\n";
 foreach my $rgp (@{$curated_RGPs}) {
     next unless $rgp->species->[0];
     next unless $rgp->species->[0]->name->[0] =~ /Homo sapiens/;
@@ -81,16 +100,56 @@ foreach my $rgp (@{$curated_RGPs}) {
     my $uniprot_id = $rgp->variantIdentifier->[0] ? $rgp->variantIdentifier->[0] : $rgp->identifier->[0];
 
     my @curated_EWASs = grep {$_->is_a('EntityWithAccessionedSequence')} @{$curated_dba->fetch_referer_by_instance($rgp)};
-    if ($released{$uniprot_id}) {
-	my $unreleased = scalar @curated_EWASs - $released{$uniprot_id};
-	print $out "$uniprot_id has $unreleased unreleased EWASs\n" if $unreleased;
-    } else {
-	foreach my $ewas (@curated_EWASs) {
-	    print $out $ewas->db_id . "\t" . $ewas->name->[0];
-	    print $out "\t" . $ewas->created->[0]->author->[0]->displayName . " " . $ewas->created->[0]->dateTime->[0] if $ewas->created->[0] && $ewas->created->[0]->author->[0];
-	    print $out "\t" . $ewas->modified->[-1]->author->[0]->displayName . " " . $ewas->modified->[-1]->dateTime->[0] if $ewas->modified->[-1] && $ewas->modified->[-1]->author->[0];
-	    print $out "\n";
+    
+    foreach my $curated_ewas (@curated_EWASs) {
+	my $report_ewas = 1;
+	
+	my @released_EWASs = exists $released{$uniprot_id} ? @{$released{$uniprot_id}} : ();
+	foreach my $released_ewas (@released_EWASs) {
+	    my $same_display_name = $curated_ewas->displayName eq $released_ewas->displayName;
+	    my $same_db_id = $curated_ewas->db_id == $released_ewas->db_id;
+	    
+	    if ($same_display_name && $same_db_id) {
+		$report_ewas = 0;
+	    } else {
+		if ($same_display_name) {
+		    report_mismatch($curated_ewas, 'database identifiers', $mismatch);
+		    $report_ewas = 0;
+		}
+		
+		if ($same_db_id) {
+		    report_mismatch($curated_ewas, 'display names', $mismatch);
+		    $report_ewas = 0;
+		}
+	    }
 	}
+	
+	report_unreleased_ewas($curated_ewas, $out) if $report_ewas;
     }
 }
+close $mismatch;
 close $out;
+
+print "$0 has finished its job\n";
+
+
+sub report_unreleased_ewas {    
+    my $ewas = shift;
+    my $fh = shift;
+    
+    print $fh $ewas->db_id . "\t" . $ewas->name->[0];
+    print $fh "\t";
+    print $fh $ewas->created->[0]->author->[0]->displayName . " " . $ewas->created->[0]->dateTime->[0] if $ewas->created->[0] && $ewas->created->[0]->author->[0];
+    print $fh "\t";
+    print $fh $ewas->modified->[-1]->author->[0]->displayName . " " . $ewas->modified->[-1]->dateTime->[0] if $ewas->modified->[-1] && $ewas->modified->[-1]->author->[0];
+    print $fh "\n";
+}
+
+sub report_mismatch {
+    my $ewas = shift;
+    my $type = shift;
+    my $fh = shift;
+    
+    print $fh $ewas->db_id . " " . $ewas->name->[0];
+    print $fh " in curated database has mismatched $type in release database\n";
+}

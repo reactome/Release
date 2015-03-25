@@ -44,7 +44,7 @@ use GKB::SOAPServer::WSDL;
 
 @ISA = qw(GKB::SOAPServer::WSDL);
 
-my $wsdl = "http://www.ebi.ac.uk/compneur-srv/miriamws-main/MiriamWebServices?wsdl";
+my $wsdl = "http://www.ebi.ac.uk/miriamws/main/MiriamWebServices?wsdl";
 
 sub AUTOLOAD {
     my $self = shift;

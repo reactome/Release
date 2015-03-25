@@ -13,13 +13,13 @@ GKB=/usr/local/gkbdev
 ensembl_dir=$GKB/modules/ensembl_api
 
 #do a cvs update of the Ensembl code
-export CVSROOT=:pserver:cvsuser:CVSUSER@cvs.sanger.ac.uk:2401/cvsroot/ensembl
-cvs -d $CVSROOT login
 cd $ensembl_dir/ensembl
-cvs -q update -d -P -r branch-ensembl-$ensembl_release
+git checkout release/$ensembl_release
+cd ..
+
 cd $ensembl_dir/ensembl-compara
-cvs -q update -d -P -r branch-ensembl-$ensembl_release
-cvs -d $CVSROOT logout
+git checkout release/$ensembl_release
+cd ..
 
 #run orthopair scripts, separately for pancompara species only (=default) and for core species only
 orthopairs=$GKB/scripts/release/orthopairs

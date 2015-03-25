@@ -96,7 +96,7 @@ sub set_registry {
     # Need Pan Compara if not a core species
     if (!$core) {	
 	push @dbs, { 
-	    -host => 'mysql.ebi.ac.uk',
+	    -host => 'mysql-eg-publicsql.ebi.ac.uk',
 	    -user => 'anonymous',
 	    -port => 4157,
 	    -DB_VERSION => $ensembl_db_ver
