@@ -37,10 +37,15 @@ disclaimers of warranty.
 =cut
 
 package GKB::InstanceCreator::DatabaseIdentifier;
+use strict;
 
+use GKB::Config;
 use GKB::DBAdaptor;
 use GKB::InstanceCreator::ReferenceDatabase;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
 
@@ -117,14 +122,14 @@ sub set_miscellaneous {
 sub get_database_identifier {
     my ( $self, $reference_database, $identifier, $use_existing ) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     if ( !( defined $reference_database ) ) {
-        print STDERR
-"DatabaseIdentifier.get_database_identifier: reference_database not defined!\n";
+        $logger->error("reference_database not defined!\n");
         return undef;
     }
     if ( !( defined $identifier ) ) {
-        print STDERR
-"DatabaseIdentifier.get_database_identifier: identifier not defined!\n";
+        $logger->error("identifier not defined!\n");
         return undef;
     }
 

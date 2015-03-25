@@ -255,9 +255,9 @@ public class GeneralAttributeEnricher extends Enricher{
             url += "&amp;ID=" + id;
         }
         if(!path.isEmpty()) {
-            url += "&amp;PATH=" + path;
+            url += "&amp;PATH=" + getRightPath(diagram, path);
         }
-        url = url.replaceAll(diagram + "[^"+ diagram + "]*$", "");
+//        url = url.replaceAll(diagram + "[^"+ diagram + "]*$", "");
         if (!diagram.isEmpty()) {
             tree.setUrl(url);
         }
@@ -278,5 +278,14 @@ public class GeneralAttributeEnricher extends Enricher{
 
         }
         return tree;
+    }
+
+    private String getRightPath(String diagram, String path){
+        try{
+            path = path.substring(0, path.lastIndexOf(diagram));
+        }catch (StringIndexOutOfBoundsException ex){
+            //Nothing here
+        }
+        return (path.endsWith(",")) ? path.substring(0, path.length()-1) : path;
     }
 }

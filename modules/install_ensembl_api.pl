@@ -14,12 +14,12 @@ mkdir $dir unless (-e $dir);
 chdir $dir;
 
 print "Installing BioPerl\n";
-`cvs -d :pserver:cvs:cvs\@code.open-bio.org:/home/repository/bioperl login`;
-`cvs -d :pserver:cvs\@code.open-bio.org:/home/repository/bioperl checkout -r bioperl-release-1-2-3 bioperl-live`;
+`git clone https://github.com/bioperl/bioperl-live.git`;
 
 my $version = $ARGV[0];
 print "Installing version $version of Ensembl Core and Ensembl Compara Perl APIs\n";
-`cvs -d :pserver:cvsuser:CVSUSER\@cvs.sanger.ac.uk:/cvsroot/ensembl login`;
-`cvs -d :pserver:cvsuser\@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-$version ensembl`;
-`cvs -d :pserver:cvsuser\@cvs.sanger.ac.uk:/cvsroot/ensembl checkout -r branch-ensembl-$version ensembl-compara`;
+`git clone https://github.com/Ensembl/ensembl.git`;
+`cd ensembl;git checkout release/$version;cd ..`;
+`git clone https://github.com/Ensembl/ensembl-compara.git`;
+`cd ensembl-compara;git checkout release/$version;cd ..`;
 

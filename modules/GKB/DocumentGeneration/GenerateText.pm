@@ -146,7 +146,7 @@ sub new {
 # Needed by subclasses to gain access to class variables defined in
 # this class.
 sub get_ok_field {
-	return %ok_field;
+    return %ok_field;
 }
 
 # Globally sets all font sizes relative to the given "regular"
@@ -190,28 +190,28 @@ sub set_params {
     my ($self, $params) = @_;
 
     if (exists($params->{"output_file_name"})) {
-		$output_file_name = $params->{"output_file_name"};
+	$output_file_name = $params->{"output_file_name"};
     }
     if (exists($params->{"output_file_stream"})) {
-		$output_file_stream = $params->{"output_file_stream"};
+	$output_file_stream = $params->{"output_file_stream"};
     }
     if (exists($params->{"include_images_flag"})) {
-		$include_images_flag = $params->{"include_images_flag"};
+	$include_images_flag = $params->{"include_images_flag"};
     }
     if (exists($params->{"depth_limit"})) {
-		$depth_limit = $params->{"depth_limit"};
+	$depth_limit = $params->{"depth_limit"};
     }
     if (exists($params->{"toc_depth"})) {
-		$toc_depth = $params->{"toc_depth"};
+	$toc_depth = $params->{"toc_depth"};
     }
     if (exists($params->{"sheet_size"})) {
-		@sheet_size = $params->{"sheet_size"};
+	@sheet_size = $params->{"sheet_size"};
     }
     if (exists($params->{"margins"})) {
-		@margins = $params->{"margins"};
+	@margins = $params->{"margins"};
     }
     if (exists($params->{"split_flag"}) && $params->{"split_flag"}) {
-		$split_into_files_flag = 1;
+	$split_into_files_flag = 1;
     }
 }
 
@@ -277,36 +277,36 @@ sub open {
     my $logger = get_logger(__PACKAGE__);
     
     my $output_file_stream = $self->get_output_file_stream();
-	if (defined $output_file_stream) {
-		$self->open_stream($output_file_stream);
-	} else {
-	    my $filename = $self->get_output_file_name();
-	    if ($self->get_split_into_files_flag() && $split_into_files_counter == 0) {
-		    if (!(defined $qualifier)) {
-		    	$qualifier = 0;
-		    }
-		    
-		    # Create/use a directory to put all the split files into
-		    if (-e $filename && !(-d $filename)) {
-			$logger->warn("GenerateText.open: WARNING - $filename exists but is not a directory");
-		    } elsif (!(-e $filename) && !(mkdir $filename)) {
-			$logger->warn("GenerateText.open: WARNING - could not create directory $filename");
-		    } else {
-			$filename =~ s/\/+$//;
-			$filename .= "/";
-			$self->set_output_file_name($filename);
-		    }
+    if (defined $output_file_stream) {
+	$self->open_stream($output_file_stream);
+    } else {
+	my $filename = $self->get_output_file_name();
+	if ($self->get_split_into_files_flag() && $split_into_files_counter == 0) {
+	    if (!(defined $qualifier)) {
+		$qualifier = 0;
 	    }
-	    if (defined $qualifier) {
-	    	if ($self->get_split_into_files_flag()) {
-	    		$filename .= $qualifier;
-	    	} else {
-	    		$filename .= ".$qualifier";
-	    	}
+	    
+	    # Create/use a directory to put all the split files into
+	    if (-e $filename && !(-d $filename)) {
+		$logger->warn("$filename exists but is not a directory");
+	    } elsif (!(-e $filename) && !(mkdir $filename)) {
+		$logger->warn("could not create directory $filename");
+	    } else {
+		$filename =~ s/\/+$//;
+		$filename .= "/";
+		$self->set_output_file_name($filename);
 	    }
-	
-	    $self->open_filename($filename);
 	}
+	if (defined $qualifier) {
+	    if ($self->get_split_into_files_flag()) {
+	    	$filename .= $qualifier;
+	    } else {
+	    	$filename .= ".$qualifier";
+	    }
+	}
+	
+	$self->open_filename($filename);
+    }
 }
 
 # Open stream to RTF file
@@ -315,7 +315,7 @@ sub open_stream {
 
     my $logger = get_logger(__PACKAGE__);
     
-    $logger->error_die("GenerateText.open_stream: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 # Open stream to named output file.
@@ -324,7 +324,7 @@ sub open_filename {
 
     my $logger = get_logger(__PACKAGE__);
     
-    $logger->error_die("GenerateText.open_filename: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 # Close stream to currently open output file
@@ -333,7 +333,7 @@ sub close {
     
     my $logger = get_logger(__PACKAGE__);
 
-    $logger->error_die("GenerateText.close: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 # Document meta-data
@@ -342,7 +342,7 @@ sub generate_prolog {
 
     my $logger = get_logger(__PACKAGE__);
     
-    $logger->error_die("GenerateText.generate_prolog: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 sub generate_page_numbering {
@@ -350,7 +350,7 @@ sub generate_page_numbering {
     
     my $logger = get_logger(__PACKAGE__);
 
-    $logger->error_die("GenerateText.generate_page_numbering: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 # Emits a page containing the table of contents
@@ -371,7 +371,7 @@ sub generate_toc {
     
     my $logger = get_logger(__PACKAGE__);
 
-    $logger->error_die("GenerateText.generate_toc: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 # Emit the image contained in the supplied file.  If the $delete_flag
@@ -386,7 +386,7 @@ sub generate_image_from_file {
     my $detainted_image_file = $1;
     
     if (!(-e $detainted_image_file)) {
-    	$logger->warn("GenerateText.generate_image_from_file: WARNING - detainted_image_file=$detainted_image_file does not exist!!");
+    	$logger->warn("detainted_image_file=$detainted_image_file does not exist!!");
     	return;
     }
 
@@ -399,14 +399,14 @@ sub generate_image_from_file {
     	$detainted_image_file =~ /([^\/]+)\.[a-zA-Z]*$/;
     	my $filename = $1;
     	
-		$self->generate_image($image, $filename);
+	$self->generate_image($image, $filename);
     } else {
-		$self->generate_image_from_file_basic($detainted_image_file);
+	$self->generate_image_from_file_basic($detainted_image_file);
     }
-		
-	if ($delete_flag) {
-		unlink($detainted_image_file);
-	}
+    
+    if ($delete_flag) {
+	unlink($detainted_image_file);
+    }
 }
 
 # Emit the image contained in the supplied file.  If the $delete_flag
@@ -421,7 +421,7 @@ sub generate_image_from_file_basic {
     my ($self, $image_file) = @_;
     
     my $logger = get_logger(__PACKAGE__);
-    $logger->warn("GenerateText.generate_image_from_file_basic: WARNING - could not generate image for $image_file");
+    $logger->warn("could not generate image for $image_file");
 }
 
 # Emit the image contained in the supplied GD::Image argument.
@@ -432,7 +432,7 @@ sub generate_image {
     my ($self, $image, $filename) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    $logger->error_die("GenerateText.generate_image: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 # Given a file containing a diagram as vector graphics, emit
@@ -455,12 +455,12 @@ sub generate_vertical_space {
     
     my %additional_formatting = ();
     if (scalar(@_) > 3) {
-		my $ref_formatting =  $_[3];
-		%additional_formatting = %{$ref_formatting};
+	my $ref_formatting =  $_[3];
+	%additional_formatting = %{$ref_formatting};
     }
 
     for (my $i=0; $i<$lines; $i++) {
-		$self->generate_body_text_paragraph("", \%additional_formatting);
+	$self->generate_body_text_paragraph("", \%additional_formatting);
     }
 }
 
@@ -469,7 +469,7 @@ sub generate_page_break {
 
     my $logger = get_logger(__PACKAGE__);
     
-    $logger->error_die("GenerateText.generate_page_break: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 # Generates an entire book for you, dont cost nothing, cant
@@ -497,9 +497,9 @@ sub generate_book {
 
     $self->generate_title_page($author, $company, $title, $subject, $copyright_conditions);
 
-	if (!$split_into_files_flag) {
+    if (!$split_into_files_flag) {
     	$self->generate_toc_page($toc_depth);
-	}
+    }
 
     $self->generate_preface($preface);
 
@@ -516,76 +516,76 @@ sub generate_title_page {
 
     my %formatting;
 
-	if ($book_flag) {
-	    $self->generate_vertical_space(4);
+    if ($book_flag) {
+        $self->generate_vertical_space(4);
+    }
+    if (defined $title && !($title eq '')) {
+        $self->generate_title($title, \%formatting);
+    }
+    
+    if ($book_flag) {
+        $self->generate_vertical_space(1);
+    }
+    if (defined $subject && !($subject eq '')) {
+        %formatting = (
+	    'voodoo' =>  "true",
+	    'bold' =>  "true",
+    	    'italic' =>  "true",
+    	    'font' =>  font,
+    	    'justify' =>  "center",
+    	    'font_size' =>  $self->document_subject_font_size,
+    	);
+	$self->generate_paragraph($subject, \%formatting);
+    }
+    
+    if ($book_flag) {
+        $self->generate_vertical_space(16);
+    }
+    if (defined $author && !($author eq '')) {
+        %formatting = (
+    	    'voodoo' =>  "true",
+    	    'font' =>  font,
+    	    'justify' =>  "center",
+    	    'font_size' =>  $self->document_author_font_size,
+    	    'left_indent' =>  50,
+    	    'right_indent' =>  50,
+    	);
+        $self->generate_paragraph($author, \%formatting);
+    }
+    
+    if ($book_flag) {
+        my $vspace = 17;
+        if (length($author) > 120) {
+	    $vspace -= length($author) / 60;
+	    if ($vspace < 3) {
+		$vspace = 3;
+	    }
 	}
-	if (defined $title && !($title eq '')) {
-	    $self->generate_title($title, \%formatting);
-	}
-	
+	$self->generate_vertical_space($vspace);
+    }
+    if (defined $company && !($company eq '')) {
+        %formatting = (
+	    'voodoo' =>  "true",
+	    'bold' =>  "true",
+	    'font' =>  font,
+	    'justify' =>  "center",
+	    'font_size' =>  $self->regular_text_font_size,
+	);
+	$self->generate_paragraph($company, \%formatting);
+    }
+
+    if (defined $conditions && !($conditions eq '')) {
 	if ($book_flag) {
 	    $self->generate_vertical_space(1);
 	}
-	if (defined $subject && !($subject eq '')) {
-	    %formatting = (
-			   'voodoo' =>  "true",
-			   'bold' =>  "true",
-			   'italic' =>  "true",
-			   'font' =>  font,
-			   'justify' =>  "center",
-			   'font_size' =>  $self->document_subject_font_size,
-			   );
-	    $self->generate_paragraph($subject, \%formatting);
-	}
-	
-	if ($book_flag) {
-	    $self->generate_vertical_space(16);
-	}
-	if (defined $author && !($author eq '')) {
-	    %formatting = (
-			   'voodoo' =>  "true",
-			   'font' =>  font,
-			   'justify' =>  "center",
-			   'font_size' =>  $self->document_author_font_size,
-			   'left_indent' =>  50,
-			   'right_indent' =>  50,
-			   );
-	    $self->generate_paragraph($author, \%formatting);
-	}
-	
-	if ($book_flag) {
-	    my $vspace = 17;
-	    if (length($author) > 120) {
-			$vspace -= length($author) / 60;
-			if ($vspace < 3) {
-			    $vspace = 3;
-			}
-	    }
-	    $self->generate_vertical_space($vspace);
-	}
-	if (defined $company && !($company eq '')) {
-	    %formatting = (
-			   'voodoo' =>  "true",
-			   'bold' =>  "true",
-			   'font' =>  font,
-			   'justify' =>  "center",
-			   'font_size' =>  $self->regular_text_font_size,
-			   );
-	    $self->generate_paragraph($company, \%formatting);
-	}
-
-    if (defined $conditions && !($conditions eq '')) {
-		if ($book_flag) {
-			$self->generate_vertical_space(1);
-		}
-		%formatting = (
-			      'font' =>  font,
-			      'justify' =>  "center",
-			      'font_size' =>  $self->regular_text_font_size,
-			      'left_indent' =>  50,
-			      'right_indent' =>  50,
-			      );
-		$self->generate_paragraph($conditions, \%formatting);
+	%formatting = (
+	    'font' =>  font,
+	    'justify' =>  "center",
+	    'font_size' =>  $self->regular_text_font_size,
+	    'left_indent' =>  50,
+	    'right_indent' =>  50,
+	);
+	$self->generate_paragraph($conditions, \%formatting);
     }
 }
 
@@ -606,10 +606,10 @@ sub generate_copyright_page {
     if ($isbn) {
 	$text = $isbn;
 	%formatting = (
-		       'font' =>  font,
-		       'justify' =>  "center",
-		       'font_size' =>  $self->regular_text_font_size,
-		       );
+	    'font' =>  font,
+	    'justify' =>  "center",
+	    'font_size' =>  $self->regular_text_font_size,
+	);
 	$self->generate_paragraph($text, \%formatting);
     }
 
@@ -618,12 +618,12 @@ sub generate_copyright_page {
     if ($conditions) {
 	$text = $conditions;
 	%formatting = (
-		      'font' =>  font,
-		      'justify' =>  "center",
-		      'font_size' =>  $self->regular_text_font_size,
-		      'left_indent' =>  50,
-		      'right_indent' =>  50,
-		      );
+	    'font' =>  font,
+	    'justify' =>  "center",
+	    'font_size' =>  $self->regular_text_font_size,
+	    'left_indent' =>  50,
+	    'right_indent' =>  50,
+	);
 	$self->generate_paragraph($text, \%formatting);
     }
 }
@@ -742,7 +742,7 @@ sub generate_paragraph {
 
     my $logger = get_logger(__PACKAGE__);
     
-    $logger->error_die("GenerateText.generate_paragraph: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 sub generate_bullet_text {
@@ -750,7 +750,7 @@ sub generate_bullet_text {
 
     my $logger = get_logger(__PACKAGE__);
 
-    $logger->error_die("GenerateText.generate_bullet_text: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 sub generate_numbered_text {
@@ -758,7 +758,7 @@ sub generate_numbered_text {
 
     my $logger = get_logger(__PACKAGE__);
 
-    $logger->error_die("GenerateText.generate_numbered_text: ERROR - this method must be defined in the subclass");
+    $logger->error_die("this method must be defined in the subclass");
 }
 
 # You should overwrite this in your implementation.  Default behavior
@@ -783,11 +783,11 @@ sub generate_header_initial_whitespace {
     }
 
     if ($depth==0) {
-		if ($book_flag && !$first_page_flag) {
-		    $self->generate_page_break(\%additional_formatting);
-		}
+	if ($book_flag && !$first_page_flag) {
+	    $self->generate_page_break(\%additional_formatting);
+	}
     } else {
-		$self->generate_vertical_space(1, \%additional_formatting);
+	$self->generate_vertical_space(1, \%additional_formatting);
     }
 }
 
@@ -800,27 +800,27 @@ sub generate_title {
     my ($self, $text) = @_;
     my %additional_formatting = ();
     if (scalar(@_) > 2) {
-		my $ref_formatting =  $_[2];
-		%additional_formatting = %{$ref_formatting};
+	my $ref_formatting =  $_[2];
+	%additional_formatting = %{$ref_formatting};
     }
 
-	my %formatting = (
-		'voodoo' =>  "true",
-		'bind_next_para' =>  "true",
-		'bold' =>  "true",
-		'font' =>  font,
-		'justify' =>  "center",
-		'font_size' =>  $self->document_title_font_size,
-		);
+    my %formatting = (
+	'voodoo' =>  "true",
+	'bind_next_para' =>  "true",
+	'bold' =>  "true",
+	'font' =>  font,
+	'justify' =>  "center",
+	'font_size' =>  $self->document_title_font_size,
+    );
 
     # Add any additional formatting that might have comve via an argument.
     foreach my $key (keys(%additional_formatting )) {
-		$formatting{$key} = $additional_formatting{$key};
+	$formatting{$key} = $additional_formatting{$key};
     }
 
     my $new_page_count = $self->generate_paragraph($text, \%formatting);
 
-	$additional_formatting{'font_size'} = $self->regular_text_font_size + 4;
+    $additional_formatting{'font_size'} = $self->regular_text_font_size + 4;
     $self->generate_vertical_space(1, \%additional_formatting);
 
     return $new_page_count;
@@ -837,8 +837,8 @@ sub generate_header {
     my ($self, $depth, $text) = @_;
     my %additional_formatting = ();
     if (scalar(@_) > 3) {
-		my $ref_formatting =  $_[3];
-		%additional_formatting = %{$ref_formatting};
+	my $ref_formatting =  $_[3];
+	%additional_formatting = %{$ref_formatting};
     }
 
     $self->generate_header_initial_whitespace($depth, $text, \%additional_formatting);
@@ -848,7 +848,7 @@ sub generate_header {
 
     # Add any additional formatting that might have comve via an argument.
     foreach my $key (keys(%additional_formatting )) {
-		$formatting{$key} = $additional_formatting{$key};
+	$formatting{$key} = $additional_formatting{$key};
     }
 
     my $new_page_count = $self->generate_paragraph($text, \%formatting);
@@ -897,12 +897,12 @@ sub header_formatting {
 
     my $font_size = $self->calculate_header_font_size($depth);
     my %formatting = (
-		      'voodoo' =>  "true",
-		      'bind_next_para' =>  "true",
-		      'bold' =>  "true",
-		      'font' =>  font,
-		      'font_size' =>  $font_size,
-		      );
+	'voodoo' =>  "true",
+	'bind_next_para' =>  "true",
+	'bold' =>  "true",
+	'font' =>  font,
+	'font_size' =>  $font_size,
+    );
 
     return %formatting;
 }
@@ -941,27 +941,27 @@ sub generate_chapters {
     
     my $text_unit;
     while (1) {
-		$text_unit = $reader->get_next_text_unit(0, $self->get_depth_limit(), $self->get_include_images_flag());
-		
-		if (!(defined $text_unit)) {
-		    $logger->warn("GenerateText.generate_chapters: yikes, text_unit is undef!!");
-		}
+	$text_unit = $reader->get_next_text_unit(0, $self->get_depth_limit(), $self->get_include_images_flag());
+	
+	if (!(defined $text_unit)) {
+	    $logger->warn("yikes, text_unit is undef!!");
+	}
 
-		if ($text_unit->isa("eof")) {
-		    last;
-		}
-		
-		# Use page breaks to determine where to split the document into
-		# chapters, if this is required by the user.
-		if ($split_into_files_flag && $text_unit->isa("section_header") && $text_unit->get_depth() == 0 && $book_flag) {
-		    $self->close();
-		    $split_into_files_counter++;
-		    $self->open($split_into_files_counter);
-		    $self->generate_prolog();
-		    $self->generate_page_numbering();
-		}
-		
-		$self->generate_text_unit($text_unit);
+	if ($text_unit->isa("eof")) {
+	    last;
+	}
+	
+	# Use page breaks to determine where to split the document into
+	# chapters, if this is required by the user.
+	if ($split_into_files_flag && $text_unit->isa("section_header") && $text_unit->get_depth() == 0 && $book_flag) {
+	    $self->close();
+	    $split_into_files_counter++;
+	    $self->open($split_into_files_counter);
+	    $self->generate_prolog();
+	    $self->generate_page_numbering();
+	}
+	
+	$self->generate_text_unit($text_unit);
     }
 }
 
@@ -974,54 +974,54 @@ sub generate_text_unit {
     
     # Decide how to emit the text unit, depending on its type
     if ($text_unit->isa("section_header")) {
-		$self->generate_header($text_unit->get_depth(), $text_unit->get_contents());
+	$self->generate_header($text_unit->get_depth(), $text_unit->get_contents());
     } elsif ($text_unit->isa("section_title")) {
-		$self->generate_title($text_unit->get_contents());
+	$self->generate_title($text_unit->get_contents());
     } elsif ($text_unit->isa("section_internal_header")) {
-		$self->generate_section_internal_header($text_unit->get_contents());
+	$self->generate_section_internal_header($text_unit->get_contents());
     } elsif ($text_unit->isa("body_text_paragraph")) {
-		$self->generate_body_text_paragraph($text_unit->get_contents());
+	$self->generate_body_text_paragraph($text_unit->get_contents());
     } elsif ($text_unit->isa("body_text_paragraph_binding")) {
-		my %formatting = ('bind_next_para' =>  "true");
-		$self->generate_body_text_paragraph($text_unit->get_contents(), \%formatting);
+	my %formatting = ('bind_next_para' =>  "true");
+	$self->generate_body_text_paragraph($text_unit->get_contents(), \%formatting);
     } elsif ($text_unit->isa("centered_paragraph")) {
-		my %formatting = ('justify' =>  "center");
-		$self->generate_body_text_paragraph($text_unit->get_contents(), \%formatting);
+	my %formatting = ('justify' =>  "center");
+	$self->generate_body_text_paragraph($text_unit->get_contents(), \%formatting);
     } elsif ($text_unit->isa("body_text")) {
-		$self->generate_body_text($text_unit->get_contents());
+	$self->generate_body_text($text_unit->get_contents());
     } elsif ($text_unit->isa("bullet_text")) {
-		$self->generate_bullet_text($text_unit->get_contents());
+	$self->generate_bullet_text($text_unit->get_contents());
     } elsif ($text_unit->isa("numbered_text")) {
-		$self->generate_numbered_text($text_unit->get_contents(), $text_unit->get_number());
+	$self->generate_numbered_text($text_unit->get_contents(), $text_unit->get_number());
     } elsif ($text_unit->isa("hyperlink")) {
-		$self->generate_hyperlink($text_unit->get_contents(), $text_unit->get_url());
+	$self->generate_hyperlink($text_unit->get_contents(), $text_unit->get_url());
     } elsif ($text_unit->isa("vertical_space")) {
-		$self->generate_vertical_space($text_unit->get_contents());
+	$self->generate_vertical_space($text_unit->get_contents());
     } elsif ($text_unit->isa("image_file_name")) {
-		my $contents = $text_unit->get_contents();
-		$self->generate_image_from_file($contents->[0], $contents->[1]);
+	my $contents = $text_unit->get_contents();
+	$self->generate_image_from_file($contents->[0], $contents->[1]);
     } elsif ($text_unit->isa("image")) {
-		$self->generate_image($text_unit->get_contents());
+	$self->generate_image($text_unit->get_contents());
     } elsif ($text_unit->isa("vector_graphics_file_name")) {
-		$self->generate_vector_graphics_from_file($text_unit->get_contents());
+	$self->generate_vector_graphics_from_file($text_unit->get_contents());
     } elsif ($text_unit->isa("image_or_vector_graphics_file_name")) {
-		# Try to generate an image from vector graphics first,
-		# and if it doesn't work, resort to a regular image.
-		# This is a kludge to get around the fact that I
-		# know how to generate vector graphics for PDF but
-		# not for RTF.  In this case, "contents" is an array
-		# with two members, the first member is the name of
-		# a file containing vector graphics, the second is
-		# a file containing an image.
-		my $contents = $text_unit->get_contents();
-		unless ($self->generate_vector_graphics_from_file($contents->[0])) {
-		    $self->generate_image_from_file($contents->[1], 0);
-		}
+	# Try to generate an image from vector graphics first,
+	# and if it doesn't work, resort to a regular image.
+	# This is a kludge to get around the fact that I
+	# know how to generate vector graphics for PDF but
+	# not for RTF.  In this case, "contents" is an array
+	# with two members, the first member is the name of
+	# a file containing vector graphics, the second is
+	# a file containing an image.
+	my $contents = $text_unit->get_contents();
+	unless ($self->generate_vector_graphics_from_file($contents->[0])) {
+	    $self->generate_image_from_file($contents->[1], 0);
+	}
     } elsif ($text_unit->isa("empty") || $text_unit->isa("eof")) {
     	# Nothing to do, yahoo!!
-    	$logger->info("GenerateText.generate_text_unit: doing nothing, how relaxing");
+    	$logger->info("doing nothing, how relaxing");
     } else {
-	$logger->warn("GenerateText.generate_text_unit: WARNING -strewf mate, never erd of a " . $text_unit->get_type() . " before, cant print that, more than me jobs worf");
+	$logger->warn("strewf mate, never erd of a " . $text_unit->get_type() . " before, cant print that, more than me jobs worf");
     }
 
     # Let's see if we can free up some memory
@@ -1055,81 +1055,81 @@ sub interpret_markup {
     
     my $logger = get_logger(__PACKAGE__);
 
-	my $rtf_string;
+    my $rtf_string;
     my $rtf;
     
-	# Break up text to extract potential markup
-	my $initial_backarrow_flag = 0;
-	if ($text =~ /^</) {
-		$initial_backarrow_flag = 1;
+    # Break up text to extract potential markup
+    my $initial_backarrow_flag = 0;
+    if ($text =~ /^</) {
+	$initial_backarrow_flag = 1;
+    }
+    my $final_arrow_flag = 0;
+    my @lines = split(/</, $text);
+    my @lines3 = ();
+    my $lines3_counter = 0;
+    foreach my $line (@lines) {
+	if ($line eq "") {
+	    next;
 	}
-	my $final_arrow_flag = 0;
-	my @lines = split(/</, $text);
-	my @lines3 = ();
-	my $lines3_counter = 0;
-	foreach my $line (@lines) {
-		if ($line eq "") {
-		    next;
-		}
-		if ($initial_backarrow_flag) {
-			$line = "<$line";
-		} else {
-			$initial_backarrow_flag = 1;
-		}
-		$final_arrow_flag = 0;
-		if ($line =~ />$/) {
-			$final_arrow_flag = 1;
-		}
-		my @lines2 = split(/>/, $line);
-		foreach my $line2 (@lines2) {
-			$lines3[$lines3_counter] = "$line2>";
-			$lines3_counter++;
-		}
-		if (!$final_arrow_flag) {
-			$lines3[$lines3_counter-1] =~ s/>$//;
-		}
+	if ($initial_backarrow_flag) {
+	    $line = "<$line";
+	} else {
+	    $initial_backarrow_flag = 1;
 	}
-	
-	# lines3 has lines containing either plain text or
-	# markup, not mixed.  We can now loop through it
-	# and substitute any RTF markup needed.
-	my $new_text = '';
-	foreach my $line3 (@lines3) {
-		if ($line3 =~ /^</) {
-			# We have markup
-			if ($line3 =~ /^<img/) {
-				$line3 =~ s/^<img[^>]*>//;
-    			$new_text .= $line3; # Remove image markup
-			} elsif ($line3 =~ /^<b>$/) {
-				# Start bold
-				$new_text .= ""; # Do nothing
-			} elsif ($line3 =~ /^<\/b>$/) {
-				# Stop bold
-				$new_text .= ""; # Do nothing
-			} elsif ($line3 =~ /^<i>$/) {
-				# Start italics
-				$new_text .= ""; # Do nothing
-			} elsif ($line3 =~ /^<\/i>$/) {
-				# Stop italics
-				$new_text .= ""; # Do nothing
-			} elsif ($line3 =~ /^<td>$/i) {
-				# Start table cell
-				$new_text .= ""; # Do nothing
-			} elsif ($line3 =~ /^<\/td>$/i) {
-				# Stop table cell
-				$new_text .= ""; # Do nothing
-			} else {
-				# unknown markup, or maybe not markup at all
-				$logger->info("GenerateText.interpret_markup: possible unknown markup, line3=$line3, text=$text");
-				$new_text .= ""; # Do nothing
-			}
-		} else {
-			# We have plain text
-			$new_text .= $line3;
-		}
+	$final_arrow_flag = 0;
+	if ($line =~ />$/) {
+	    $final_arrow_flag = 1;
 	}
-	
-	return $new_text;
+	my @lines2 = split(/>/, $line);
+	foreach my $line2 (@lines2) {
+	    $lines3[$lines3_counter] = "$line2>";
+	    $lines3_counter++;
+	}
+	if (!$final_arrow_flag) {
+	    $lines3[$lines3_counter-1] =~ s/>$//;
+	}
+    }
+    
+    # lines3 has lines containing either plain text or
+    # markup, not mixed.  We can now loop through it
+    # and substitute any RTF markup needed.
+    my $new_text = '';
+    foreach my $line3 (@lines3) {
+	if ($line3 =~ /^</) {
+	    # We have markup
+	    if ($line3 =~ /^<img/) {
+		$line3 =~ s/^<img[^>]*>//;
+    		$new_text .= $line3; # Remove image markup
+	    } elsif ($line3 =~ /^<b>$/) {
+		# Start bold
+		$new_text .= ""; # Do nothing
+	    } elsif ($line3 =~ /^<\/b>$/) {
+		# Stop bold
+		$new_text .= ""; # Do nothing
+	    } elsif ($line3 =~ /^<i>$/) {
+		# Start italics
+		$new_text .= ""; # Do nothing
+	    } elsif ($line3 =~ /^<\/i>$/) {
+		# Stop italics
+		$new_text .= ""; # Do nothing
+	    } elsif ($line3 =~ /^<td>$/i) {
+		# Start table cell
+		$new_text .= ""; # Do nothing
+	    } elsif ($line3 =~ /^<\/td>$/i) {
+		# Stop table cell
+		$new_text .= ""; # Do nothing
+	    } else {
+		# unknown markup, or maybe not markup at all
+		$logger->info("possible unknown markup, line3=$line3, text=$text");
+		$new_text .= ""; # Do nothing
+	    }
+	} else {
+	    # We have plain text
+	    $new_text .= $line3;
+	}
+    }
+    
+    return $new_text;
 }
 
 1;

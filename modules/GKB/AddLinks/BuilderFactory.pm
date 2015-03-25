@@ -56,7 +56,10 @@ use GKB::AddLinks::ZincMolecules;
 use GKB::AddLinks::HMDBProteins;
 use GKB::AddLinks::HMDBMolecules;
 
-use strict;
+use GKB::Config;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
 
@@ -144,9 +147,10 @@ sub new {
 sub construct {
     my ( $self, $name ) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     if ( !( defined $name ) ) {
-        print STDERR
-          "BuilderFactory.construct: WARNING - name is undef, aborting!\n";
+        $logger->error("name is undef, aborting!\n");
         return undef;
     }
 
@@ -154,7 +158,7 @@ sub construct {
     my $class   = $builder_map{$name};
     eval {
         if ( defined $class ) {
-            print STDERR "BuilderFactory.construct: class=$class\n";
+            $logger->info("class=$class\n");
             $builder = $class->new();
         }
         else {
@@ -162,13 +166,11 @@ sub construct {
             $builder = $name->new();
         }
 
-        print STDERR
-"BuilderFactory.construct: successfully created an object for $name\n";
+        $logger->info("successfully created an object for $name\n");
     };
 
     if ( !( defined $builder ) ) {
-        print STDERR
-"BuilderFactory.construct: WARNING - could not find a Builder subclass corresponding to $name\n";
+        $logger->error("could not find a Builder subclass corresponding to $name\n");
     }
 
     return $builder;

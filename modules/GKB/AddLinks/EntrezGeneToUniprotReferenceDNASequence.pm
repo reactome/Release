@@ -27,10 +27,14 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::EntrezGeneToUniprotReferenceDNASequence;
+use strict;
 
 use GKB::Config;
 use GKB::AddLinks::IdentifierMappedReferenceDNASequenceToReferencePeptideSequence;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 
 @ISA = qw(GKB::AddLinks::IdentifierMappedReferenceDNASequenceToReferencePeptideSequence);
@@ -48,34 +52,36 @@ sub AUTOLOAD {
 sub new {
     my($pkg) = @_;
 
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	$pkg->get_ok_field();
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    $pkg->get_ok_field();
 
-   	my $self = $pkg->SUPER::new();
-   	
+    my $self = $pkg->SUPER::new();
+
     return $self;
 }
 
 # Needed by subclasses to gain access to object variables defined in
 # this class.
 sub get_ok_field {
-	my ($pkg) = @_;
-	
-	%ok_field = $pkg->SUPER::get_ok_field();
+    my ($pkg) = @_;
 
-	return %ok_field;
+    %ok_field = $pkg->SUPER::get_ok_field();
+
+    return %ok_field;
 }
 
 # New code uses ENSEMBL Mart to do the job - much faster.
 sub buildPart {
-	my ($self) = @_;
-	
-	$self->class_name("EntrezGeneToUniprotReferenceDNASequence");
-	
-	print STDERR "\n\n" . $self->class_name . ".buildPart: entered\n";
-	
-	$self->insert_xrefs('referenceGene', 'Entrez Gene', 1);
+    my ($self) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
+
+    $self->class_name("EntrezGeneToUniprotReferenceDNASequence");
+
+    $logger->info("entered\n");
+
+    $self->insert_xrefs('referenceGene', 'Entrez Gene', 1);
 }
 
 # This subroutine extracts uniprot - entrez gene pairs from the gene2accession file from NCBI.
@@ -90,132 +96,134 @@ sub buildPart {
 #
 # Original code lifted from the script addEntrezLinks.pl, probably from Esther.
 sub old_buildPart {
-	my ($self) = @_;
-	
-	print STDERR "\n\nEntrezGeneToUniprotReferenceDNASequence.buildPart: entered\n";
-	
-	$self->timer->start($self->timer_message);
-	my $dba = $self->builder_params->refresh_dba();
+    my ($self) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
-	my $reference_peptide_sequences = $self->fetch_reference_peptide_sequences(0);
-	my $reference_database = $self->builder_params->reference_database->get_entrez_gene_reference_database();
-	
-	my @attributes = ['referenceGene', 'otherIdentifier'];
-	$self->set_instance_edit_note("@attributes inserted by EntrezGeneToUniprotReferenceDNASequence");
-	
-	# Create a hash, mapping protein IDs onto arrays of
-	# ReferencePeptideSequence instances.
-	my $reference_peptide_sequence;
-	my $identifier;
-	my %reference_peptide_sequence_hash = ();
-	foreach $reference_peptide_sequence (@{$reference_peptide_sequences}) {
-	    $reference_peptide_sequence->inflate();
-	    $identifier = $reference_peptide_sequence->Identifier->[0];
-	    if (!(defined $identifier)) {
-	    	print STDERR "EntrezGeneToUniprotReferenceDNASequence.run: WARNING - UniProt instance with DB_ID=" .  $reference_peptide_sequence->db_id() . " doesn't have an identifier.\n";
-	    	next;
-	    }
-	    
-		# Remove entrez gene identifiers to make sure the mapping is up-to-date, keep others
-		# this isn't really necessary as long as the script is run on the slice only
-		# But a good thing to have if you need to run the script a second time.
-	    foreach my $attribute (@attributes) {
-	        $self->remove_typed_instances_from_attribute($reference_peptide_sequence, $attribute, $reference_database);
-	    }
-	    
-	    # Assume that this ReferencePeptideSequence is going to get
-	    # changed, even if we don't know that for sure.
-	    # TODO: it would be good to keep track of which RPSs *really*
-	    # get changed, and only set the modified slot for those.
-	    $reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
-	    $dba->update_attribute($reference_peptide_sequence, 'modified');
+    $logger->info("entered\n");
 
-		push(@{$reference_peptide_sequence_hash{$identifier}}, $reference_peptide_sequence);
+    $self->timer->start($self->timer_message);
+    my $dba = $self->builder_params->refresh_dba();
+
+    my $reference_peptide_sequences = $self->fetch_reference_peptide_sequences(0);
+    my $reference_database = $self->builder_params->reference_database->get_entrez_gene_reference_database();
+
+    my @attributes = ['referenceGene', 'otherIdentifier'];
+    $self->set_instance_edit_note("@attributes inserted by EntrezGeneToUniprotReferenceDNASequence");
+
+    # Create a hash, mapping protein IDs onto arrays of
+    # ReferencePeptideSequence instances.
+    my $reference_peptide_sequence;
+    my $identifier;
+    my %reference_peptide_sequence_hash = ();
+    foreach $reference_peptide_sequence (@{$reference_peptide_sequences}) {
+	$reference_peptide_sequence->inflate();
+	$identifier = $reference_peptide_sequence->Identifier->[0];
+	if (!(defined $identifier)) {
+	    $logger->warn("UniProt instance with DB_ID=" .  $reference_peptide_sequence->db_id() . " doesn't have an identifier.\n");
+	    next;
+	}
+	
+	# Remove entrez gene identifiers to make sure the mapping is up-to-date, keep others
+	# this isn't really necessary as long as the script is run on the slice only
+	# But a good thing to have if you need to run the script a second time.
+	foreach my $attribute (@attributes) {
+	    $self->remove_typed_instances_from_attribute($reference_peptide_sequence, $attribute, $reference_database);
 	}
 
-	my $tmp_dir = $self->get_tmp_dir();
-	my $compressed_filename = "$tmp_dir/gene2accession.gz";
-	
-	print STDERR "EntrezGeneToUniprotReferenceDNASequence.buildPart: compressed_filename$compressed_filename\n";
-	print STDERR "EntrezGeneToUniprotReferenceDNASequence.buildPart: int(-M compressed_filename)=" . int(-M $compressed_filename) . "\n";
-	
-	if (!(-e $compressed_filename) || int(-M $compressed_filename) > 14) {
-		# Get file from Entrez mapping genes to proteins, if there
-		# is no pre-existing file less than two weeks old.
-		unlink($compressed_filename);
-		my $cmd = "wget -P $tmp_dir --passive-ftp ftp://ftp.ncbi.nih.gov/gene/DATA/gene2accession.gz";
-		if (system($cmd) != 0) {
-			print STDERR "EntrezGeneToUniprotReferenceDNASequence.buildPart: $cmd failed: $!";
-			return;
-		}
+	# Assume that this ReferencePeptideSequence is going to get
+	# changed, even if we don't know that for sure.
+	# TODO: it would be good to keep track of which RPSs *really*
+	# get changed, and only set the modified slot for those.
+	$reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
+	$dba->update_attribute($reference_peptide_sequence, 'modified');
+
+	push(@{$reference_peptide_sequence_hash{$identifier}}, $reference_peptide_sequence);
+    }
+
+    my $tmp_dir = $self->get_tmp_dir();
+    my $compressed_filename = "$tmp_dir/gene2accession.gz";
+
+    $logger->info("compressed_filename$compressed_filename\n");
+    $logger->info("int(-M compressed_filename)=" . int(-M $compressed_filename) . "\n");
+
+    if (!(-e $compressed_filename) || int(-M $compressed_filename) > 14) {
+	# Get file from Entrez mapping genes to proteins, if there
+	# is no pre-existing file less than two weeks old.
+	unlink($compressed_filename);
+	my $cmd = "wget -P $tmp_dir --passive-ftp ftp://ftp.ncbi.nih.gov/gene/DATA/gene2accession.gz";
+	if (system($cmd) != 0) {
+	    $logger->error("$cmd failed: $!");
+	    return;
 	}
+    }
+
+    $logger->info("reading from ID map file\n");
+    
+    if (!(-e $compressed_filename)) {
+	$logger->error("$compressed_filename does not exist, maybe there was a problem downloading it from the NCBI?\n");
+	return;
+    }
+    if (!open (IN, "gunzip -c $compressed_filename|")) {
+	$logger->error("could not unzip $compressed_filename, aborting!!\n");
+	return;
+    }
+    # Loop over the entire contents of the Entrez dump file and check
+    # each protein ID to see if it corresponds to anything known to
+    # Reactome.
+    my $line_num = 0;
+    while (<IN>) {
+	chomp;
 	
-	print STDERR "EntrezGeneToUniprotReferenceDNASequence.buildPart: reading from ID map file\n";
-	
-	if (!(-e $compressed_filename)) {
-		print STDERR "EntrezGeneToUniprotReferenceDNASequence.buildPart: WARNING - $compressed_filename does not exist, maybe there was a problem downloading it from the NCBI?\n";
-		return;
+	if ($_ =~ /^#/) {
+	    # Skip comment lines
+	    next;
 	}
-	if (!open (IN, "gunzip -c $compressed_filename|")) {
-		print STDERR "EntrezGeneToUniprotReferenceDNASequence.buildPart: WARNING - could not unzip $compressed_filename, aborting!!\n";
-		return;
+	my ($tax, $gene, $c, $d, $e, $prot) = split(/\t/, $_);
+	if (!(defined $prot)) {
+	    # Skip dodgy lines, but warn user
+	    $logger->warn("current line from gene2accession seems to have no prot field\n");
+	    $logger->warn("line=" . $_ . "\n");
+	    $logger->warn("skipping to next line\n");
+	    next;
 	}
-	# Loop over the entire contents of the Entrez dump file and check
-	# each protein ID to see if it corresponds to anything known to
-	# Reactome.
-	my $line_num = 0;
-	while (<IN>) {
-	    chomp;
-	    
-	    if ($_ =~ /^#/) {
-	    	# Skip comment lines
-	    	next;
-	    }
-	    my ($tax, $gene, $c, $d, $e, $prot) = split(/\t/, $_);
-	    if (!(defined $prot)) {
-	    	# Skip dodgy lines, but warn user
-	    	print STDERR "EntrezGeneToUniprotReferenceDNASequence.run: WARNING - current line from gene2accession seems to have no prot field\n";
-	    	print STDERR "EntrezGeneToUniprotReferenceDNASequence.run: line=" . $_ . "\n";
-	    	print STDERR "EntrezGeneToUniprotReferenceDNASequence.run: skipping to next line\n";
-	    	next;
-	    }
-	    chomp($prot);
-	    $prot =~ s/\.\d+$//;
-	    if ($prot eq '-') {
-	    	# Lines that don't have an associated protein ID
-	    	# are no use for mapping purposes, so ignore.
-	    	next;
-	    }
-	    
-	    my $reference_peptide_sequence_list = $reference_peptide_sequence_hash{$prot};
-	    if (defined $reference_peptide_sequence_list) {
-	    	foreach my $reference_peptide_sequence (@{$reference_peptide_sequence_list}) {
-	    		print STDERR "EntrezGeneToUniprotReferenceDNASequence.run: inserting gene into hash, line_num=$line_num, prot=|$prot|, gene=$gene\n";
-				my $rds = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_peptide_sequence->Species, $reference_database, $gene);
-				$self->check_for_identical_instances($rds);
-				foreach my $attribute (@attributes) {
-				    $reference_peptide_sequence->add_attribute_value($attribute, $rds);
-				}
-				
-				$self->increment_insertion_stats_hash($reference_peptide_sequence->db_id);
-	    	}
+	chomp($prot);
+	$prot =~ s/\.\d+$//;
+	if ($prot eq '-') {
+	    # Lines that don't have an associated protein ID
+	    # are no use for mapping purposes, so ignore.
+	    next;
+	}
+    
+	my $reference_peptide_sequence_list = $reference_peptide_sequence_hash{$prot};
+	if (defined $reference_peptide_sequence_list) {
+	    foreach my $reference_peptide_sequence (@{$reference_peptide_sequence_list}) {
+	    	$logger->info("inserting gene into hash, line_num=$line_num, prot=|$prot|, gene=$gene\n");
+		my $rds = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_peptide_sequence->Species, $reference_database, $gene);
+		$self->check_for_identical_instances($rds);
+		foreach my $attribute (@attributes) {
+		    $reference_peptide_sequence->add_attribute_value($attribute, $rds);
 		}
 		
-	    $line_num++;
-	}
-	close(IN);
-	
-	# Make sure the newly inserted genes also get put into the database.
-	foreach $reference_peptide_sequence (@{$reference_peptide_sequences}) {
-		foreach my $attribute (@attributes) {
-		    $dba->update_attribute($reference_peptide_sequence, $attribute);
-		}
+		$self->increment_insertion_stats_hash($reference_peptide_sequence->db_id);
+	    }
 	}
 	
-	$self->print_insertion_stats_hash();
-	
-	$self->timer->stop($self->timer_message);
-	$self->timer->print();
+	$line_num++;
+    }
+    close(IN);
+
+    # Make sure the newly inserted genes also get put into the database.
+    foreach $reference_peptide_sequence (@{$reference_peptide_sequences}) {
+	foreach my $attribute (@attributes) {
+	    $dba->update_attribute($reference_peptide_sequence, $attribute);
+	}
+    }
+    
+    $self->print_insertion_stats_hash();
+
+    $self->timer->stop($self->timer_message);
+    $self->timer->print();
 }
 
 1;

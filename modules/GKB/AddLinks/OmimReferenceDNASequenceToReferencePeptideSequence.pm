@@ -33,10 +33,14 @@ disclaimers of warranty.
 =cut
 
 package GKB::AddLinks::OmimReferenceDNASequenceToReferencePeptideSequence;
+use strict;
 
 use GKB::Config;
 use GKB::AddLinks::IdentifierMappedReferenceDNASequenceToReferencePeptideSequence;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 
 @ISA = qw(GKB::AddLinks::IdentifierMappedReferenceDNASequenceToReferencePeptideSequence);
@@ -54,33 +58,35 @@ sub AUTOLOAD {
 sub new {
     my($pkg) = @_;
 
-   	# Get class variables from superclass and define any new ones
-   	# specific to this class.
-	$pkg->get_ok_field();
+    # Get class variables from superclass and define any new ones
+    # specific to this class.
+    $pkg->get_ok_field();
 
-   	my $self = $pkg->SUPER::new();
-   	
+    my $self = $pkg->SUPER::new();
+
     return $self;
 }
 
 # Needed by subclasses to gain access to object variables defined in
 # this class.
 sub get_ok_field {
-	my ($pkg) = @_;
-	
-	%ok_field = $pkg->SUPER::get_ok_field();
+    my ($pkg) = @_;
 
-	return %ok_field;
+    %ok_field = $pkg->SUPER::get_ok_field();
+
+    return %ok_field;
 }
 
 sub buildPart {
-	my ($self) = @_;
-	
-	$self->class_name("OmimReferenceDNASequenceToReferencePeptideSequence");
-	
-	print STDERR "\n\n" . $self->class_name . ".buildPart: entered\n";
-	
-	$self->insert_xrefs('referenceGene', 'OMIM', 1);
+    my ($self) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+
+    $self->class_name("OmimReferenceDNASequenceToReferencePeptideSequence");
+
+    $logger->info("entered\n");
+
+    $self->insert_xrefs('referenceGene', 'OMIM', 1);
 }
 
 1;
