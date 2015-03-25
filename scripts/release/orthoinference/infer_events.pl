@@ -172,9 +172,10 @@ my $count_inferred_leaves = 0;
 
 #exclude selected pathways from inference
 my @list;
-foreach my $pwy_id (162906, 168254) {  #human-viral pathways
+foreach my $pwy_id (162906, 168254, 977225) {  #human-viral pathways, amyloids
     push @list, get_reaction_ids($pwy_id);  #inference is done on reaction level, therefore extract all downstream reactions and store them in @list.
 }
+push @list, (1222512, 1222662, 1222376, 1222516, 1222353, 1222342, 1222384, 1222491); # normal reactions in disease context to be excluded 
 #define reactions to be considered for inference (by default all ReactionlikeEvents)
     my $reaction_ar;
     if (@ARGV) { #list of event ids, for which downstream reactions should be inferred - NOTE : make sure these events are from the source species
@@ -217,6 +218,7 @@ foreach my $rxn (@{$reaction_ar}) {
 #exclude some events based on a number of criteria
     next if grep {$rxn->db_id == $_} @list; #list of ids to be excluded
     next if $rxn->Species->[1]; #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway    
+    next if $rxn->disease->[0]; # skip disease reactions
     if (is_chimeric($rxn)) {
         print "infer_events: skipping chimeric reaction DB_ID=" . $rxn->db_id . "\n";
         next;

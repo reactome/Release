@@ -65,12 +65,12 @@ sub new {
     my ($type, $contents) = @args;
 
     if (defined $type) {
-	$logger->info("TextUnit->new: type=$type");
+	$logger->info("type=$type");
 
     	$self->type($type);
     }
     if (defined $contents) {
-	$logger->info("TextUnit->new: contents=$contents");
+	$logger->info("contents=$contents");
 
 	$self->contents($contents);
     }

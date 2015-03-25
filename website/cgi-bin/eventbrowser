@@ -117,10 +117,15 @@ eval {
     	);
     }
 	
-	if ( @$instances == 1 && $instances->[0]->class =~ /Pathway|Reaction|Complex/ ){ 
-		my $url = $WU->build_pathway_browser_url($instances->[0]);
-		print $WU->form_redirect($url);
-	} else {
+    if ( @$instances == 1 && $instances->[0]->class =~ /Pathway|Reaction|Complex/ ){ 
+	my $url = $WU->build_pathway_browser_url($instances->[0]);
+	print $WU->form_redirect($url);
+    }
+    elsif (my $name = $instances->[0]->displayName) {
+	$name = "/content/query?q='$name'";
+	print qq(<script type="text/javascript">window.location.href="$name"</script>);
+    }
+    else {
 	    @{$instances} && print_toolbar($instances);
 	
 		# Top navigation box

@@ -42,6 +42,9 @@ use GKB::DocumentGeneration::Reader;
 use Storable qw(nstore retrieve);
 use Data::Dumper;
 
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 @ISA = qw(GKB::DocumentGeneration::Reader);
 
 # List the object variables here, so that they can be checked
@@ -102,11 +105,13 @@ sub get_next_text_unit {
 sub read_tokens {
     my ($self) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my $tokenizer = $self->tokenizer;
 
     my ($token_type, $argument, $parameter) = $tokenizer->get_token();
 
-    print STDERR "RTFReader.get_next_text_unit: token_type=$token_type, argument=$argument, parameter=$parameter\n";
+    $logger->info("token_type=$token_type, argument=$argument, parameter=$parameter\n");
 
     my $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("empty");
@@ -121,18 +126,18 @@ sub read_tokens {
         my $is_header = $self->is_header;
         my $is_paragraph = $self->is_paragraph;
         if ($is_header) {
-            print STDERR "RTFReader.get_next_text_unit: we have a header, header_level=" . $self->header_level . "\n";
+            $logger->info("we have a header, header_level=" . $self->header_level . "\n");
             $text_unit->set_type("section_header");
             $text_unit->set_depth($self->header_level + 1);
             $text_unit->set_contents($argument);
             $self->is_header(0);
             $self->is_paragraph(0);
         } elsif ($is_paragraph) {
-            print STDERR "RTFReader.get_next_text_unit: we have a body_text_paragraph\n";
+            $logger->info("we have a body_text_paragraph\n");
             $text_unit->set_type("body_text_paragraph");
             $text_unit->set_contents($argument);
         } else {
-            print STDERR "RTFReader.get_next_text_unit: we have an unknown, continuing to parse\n";
+            $logger->warn("we have an unknown, continuing to parse\n");
             # Unknown text token type - carry on parsing
             $text_unit = $self->read_tokens();
         }

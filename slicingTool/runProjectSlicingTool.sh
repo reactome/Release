@@ -58,11 +58,11 @@ mysqldump -u$USER -p$PASS ${DB} | perl -pe 's/InnoDB/MyISAM/' | mysql -u$USER -p
 mysqldump -u$USER -p$PASS ${DB}_myisam | perl -pe 's/InnoDB/MyISAM/' | mysql -u$USER -p$PASS $DB
 mysql  -u$USER -p$PASS -e "drop database ${DB}_myisam"
 
-echo "
-Now installing the slice database
-"
+#echo "
+#Now installing the slice database
+#"
 
-/usr/local/gkb/scripts/install_slice_db.pl $DB
+#/usr/local/gkb/scripts/install_slice_db.pl $DB
 
 echo "
 

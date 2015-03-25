@@ -70,7 +70,7 @@ while(my $resource = readdir($dir)) {
 	$enst_to_ids{$transcript}{$id}++ if $id;
 	$enst_to_ids{$transcript}{$gene}++ if $gene;
 	$enst_to_ids{$transcript}{$protein}++ if $protein;
-	push @{$uniprot_to_ensp{$id}}, $protein if $resource =~ /sptrembl|swissprot_accession/ && $id;
+	push @{$uniprot_to_ensp{$id}}, $protein if $resource =~ /sptrembl|swissprot/ && $id;
     }
     close $resource_file;
 }

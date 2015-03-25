@@ -33,6 +33,11 @@ use CGI 'url';
 use Bio::Root::Root;
 use Data::Dumper;
 
+use GKB::Config;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+
 # Use our RESTful API to grab a list of small molecules and ChEBI IDs
 use constant MOLECULES => '/ReactomeRESTfulAPI/RESTfulWS/getReferenceMolecules';
 
@@ -59,6 +64,9 @@ sub dba {
 
 sub fetch_molecules {
     my $self = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my $host = url(-base => 1);
     my $url = $host . MOLECULES;
     my $chebi2zinc = $self->map_chebi_to_zinc();
@@ -90,7 +98,7 @@ sub fetch_molecules {
     }
 
     my $total = keys %zinc;
-    print STDERR "I am dealing with a total of about $total ZINC IDS!\n";
+    $logger->info("I am dealing with a total of about $total ZINC IDS!\n");
     return \%zinc;
 }
 

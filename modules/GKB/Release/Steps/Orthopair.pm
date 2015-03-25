@@ -62,7 +62,7 @@ sub install_ensembl_api {
 
 sub ensembl_api_installed {
     my $ensembl_api_dir = $gkbmodules . "/ensembl_api/";
-    my @subdirectories = qw/bioperl-1.2.3 ensembl ensembl-compara/;
+    my @subdirectories = qw/bioperl-live ensembl ensembl-compara/;
     
     foreach my $subdirectory (map {$ensembl_api_dir . $_} @subdirectories) {
 	return 0 unless (-d $subdirectory);
