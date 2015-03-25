@@ -27,8 +27,9 @@ override 'run_commands' => sub {
 
     cmd("Clearing search cache",
 	[
-	    ["rm -f $html_dir/img-tmp/query_store_gk_current* *.rtf *.pdf"]
-	]);
+	    ["ssh $live_server 'rm -f $html_dir/img-tmp/query_store_gk_current* *.rtf *.pdf'"]
+	]
+    );
 };
   
 1;
