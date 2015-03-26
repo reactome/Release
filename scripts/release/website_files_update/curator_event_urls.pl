@@ -33,7 +33,7 @@ my $ar = $dba->fetch_instance(-CLASS => 'Event'); # Obtains a reference to the a
 open my $out, '>', $outfile;
 print $out join("\t", ('Db Id', 'Human Event Name', 'Url')) . "\n";
 
-# Every pathway in reactome is processed
+# Every event in reactome is processed
 foreach my $event (@{$ar}) {
 	next unless $event->species->[0] &&
 		    $event->species->[0]->name->[0] =~ /Homo sapiens/i;
