@@ -29,7 +29,7 @@ override 'run_commands' => sub {
     cmd("Committing gene association file to GO SVN",
     	[
     	    ["gzip -f $go_submission"],
-    	    ["svn commit -m \"Reactome release $version\" $go_submission"]
+    	    ["svn commit -m \"Reactome release $version\" $go_submission.gz"]
     	]
     );
 	
