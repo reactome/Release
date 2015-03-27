@@ -45,10 +45,19 @@ my $id_file = $ARGV[0];
 my @events_from_file;
 
 if ($id_file) {
+    `dos2unix $id_file`;
     open my $in, '<', $id_file;
     while(my $id = <$in>) {
 	chomp $id;
-	push @events_from_file, $dba->fetch_instance_by_db_id($id)->[0];
+	next unless $id =~ /^\d+$/;
+	
+	my $instance = $dba->fetch_instance_by_db_id($id)->[0];
+	unless ($instance && $instance->is_a('Event')) {
+	    print "$id is not an event -- skipping\n";
+	    next;
+	}
+	
+	push @events_from_file, $instance;
     }
     close $in;
 }
@@ -61,7 +70,7 @@ open my $out, '>', $outfile;
 print $out join("\t", ('Db Id', 'Human Event Name', 'Url')) . "\n";
 
 # Each event is processed and output is sent to file
-foreach my $event (@events) {
+foreach my $event (@events) {    
     next unless $event->species->[0] &&
 		$event->species->[0]->name->[0] =~ /Homo sapiens/i;
 
