@@ -16,6 +16,21 @@ use autodie;
 use Data::Dumper;
 use Getopt::Long;
 
+if ($ARGV[0] && $ARGV[0] =~ /-h(elp)?$/) {
+    print <<END;
+Usage: perl $0 [input file]
+
+An optional input file can be specified containing a list of human event
+database identifiers for which pathway browser links should be output.
+
+The file must have one numeric database identifier per line.
+
+Without a specified file, links will be output for all human event database identifiers.
+
+END
+    exit;
+}
+
 my $outfile = "curator_event_urls.txt"; # Output file for website
 
 my $dba = GKB::DBAdaptor->new
@@ -26,24 +41,36 @@ my $dba = GKB::DBAdaptor->new
      -dbname => 'gk_central'
      );
 
+my $id_file = $ARGV[0];
+my @events_from_file;
+
+if ($id_file) {
+    open my $in, '<', $id_file;
+    while(my $id = <$in>) {
+	chomp $id;
+	push @events_from_file, $dba->fetch_instance_by_db_id($id)->[0];
+    }
+    close $in;
+}
+
 my %seen; # Prevents duplication in the file
 
-my $ar = $dba->fetch_instance(-CLASS => 'Event'); # Obtains a reference to the array of all Reactome events
+my @events = @events_from_file ? @events_from_file : @{$dba->fetch_instance(-CLASS => 'Event')}; # Reactome events to be processed
 
 open my $out, '>', $outfile;
 print $out join("\t", ('Db Id', 'Human Event Name', 'Url')) . "\n";
 
-# Every event in reactome is processed
-foreach my $event (@{$ar}) {
-	next unless $event->species->[0] &&
-		    $event->species->[0]->name->[0] =~ /Homo sapiens/i;
-	
-	my $db_id = $event->db_id;
-	my $name = $event->name->[0];
-	my $url = 'http://reactomecurator.oicr.on.ca/PathwayBrowser/#' . $db_id;
-	
-	next if $seen{$db_id}++;
-	
-	print $out join("\t", ($db_id, $name, $url)) . "\n";
+# Each event is processed and output is sent to file
+foreach my $event (@events) {
+    next unless $event->species->[0] &&
+		$event->species->[0]->name->[0] =~ /Homo sapiens/i;
+
+    my $db_id = $event->db_id;
+    my $name = $event->name->[0];
+    my $url = 'http://reactomecurator.oicr.on.ca/PathwayBrowser/#' . $db_id;
+
+    next if $seen{$db_id}++;
+
+    print $out join("\t", ($db_id, $name, $url)) . "\n";
 }
 close $out;
