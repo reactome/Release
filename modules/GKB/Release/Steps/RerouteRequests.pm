@@ -28,7 +28,7 @@ override 'run_commands' => sub {
     my $fallback = $self->user_input->{'fallback'}->{'response'} =~ /^y/i ? 1 : 0;
     
     cmd("Rerouting requests", [["perl rerouterequests.pl $config_file $live_server $fallback"]]);    
-    cmd("Restarting apache", [["echo $sudo | sudo -S /etc/init.d/apache2 restart"]], {"ssh" => $live_server});
+    cmd("Restarting apache", [["ssh -t $live_server 'echo $sudo | sudo -S /etc/init.d/apache2 restart'"]]);
 };
   
 1;
