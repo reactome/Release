@@ -1143,14 +1143,23 @@ sub get_instance_text_units {
 	}
     }
 
-    if ($instance->is_a("Pathway")) { 
+    if ($instance->is_a("Pathway") || $instance->is_a("ReactionlikeEvent")) { 
         if (defined $self->hyperlink_base_url && defined $self->hyperlink_db) {
             $text_unit = GKB::DocumentGeneration::TextUnit->new();
             push @text_units, $text_unit;
             $text_unit = GKB::DocumentGeneration::TextUnit->new();
             $text_unit->set_type("hyperlink");
             $text_unit->set_contents("See web page for this $event_type");
-            $text_unit->set_url($self->hyperlink_base_url . "/PathwayBrowser/#FOCUS_PATHWAY_ID=$instance_db_id");
+	    
+	    my $url = $self->hyperlink_base_url;
+	    if ($instance->is_a("Pathway")) {
+		$url .= "/PathwayBrowser/#FOCUS_PATHWAY_ID=$instance_db_id";
+	    }
+	    else {
+		$url .= "/content/detail/$instance_db_id";
+	    }
+
+            $text_unit->set_url($url);
             push @text_units, $text_unit;
         }
     }
