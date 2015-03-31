@@ -23,7 +23,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
     
-    cmd("Restarting tomcat", [["echo $sudo | sudo -S /etc/rc5.d/S90tomcat5.5 restart"]], {"ssh" => $live_server});
+    cmd("Restarting tomcat", [["ssh $live_server 'echo $sudo | sudo -S /etc/init.d/tomcat7 restart'"]]);
 };
     
 1;
