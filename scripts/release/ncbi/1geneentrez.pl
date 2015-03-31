@@ -1,4 +1,6 @@
 #!/usr/local/bin/perl  -w
+use strict;
+
 #this script is meant for the new format given by NCBI
 
 use lib '/usr/local/gkbdev/modules';
@@ -8,7 +10,6 @@ use GKB::ClipsAdaptor;
 use GKB::DBAdaptor;
 use Data::Dumper;
 use Getopt::Long;
-use strict;
 use GKB::Utils;
 
 our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
@@ -45,11 +46,10 @@ open (OUTPUT2, ">archive/$output2");
 my $db="test_reactome_$num";
 
 chomp $db;		
-		
 
 
-my $entity_base_url = "http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&amp;ID=";
-my $event_base_url = "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=";
+my $entity_base_url = "http://www.reactome.org/content/query?q=UniProt:";
+my $event_base_url = "http://www.reactome.org/PathwayBrowser/#";
 
 my $entity_url = "&entity.base.url";
 my $event_url = "&event.base.url";
@@ -189,8 +189,8 @@ my $event = "Reactome Event:";
 print OUTPUT2 "<?xml version=\"1.0\"?>\n<!DOCTYPE LinkSet PUBLIC \"-//NLM//DTD LinkOut 1.0//EN\"\n";
 print OUTPUT2 "\"http://www.ncbi.nlm.nih.gov/entrez/linkout/doc/LinkOut.dtd\"\n\[\n";
 
-print OUTPUT2	"\t<!ENTITY entity.base.url\n\"http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&amp;ID=\">\n\t<!ENTITY event.base.url\n";
-print OUTPUT2 "\"http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=\">\n\]>\n";
+print OUTPUT2	"\t<!ENTITY entity.base.url\n\"$entity_base_url\">\n\t<!ENTITY event.base.url\n";
+print OUTPUT2 "\"$event_base_url\">\n\]>\n";
 
 
 $sdis = $dba->fetch_instance(-CLASS => $protein_class,
@@ -300,7 +300,7 @@ foreach $sdi (@{$sdis}) {
 	 }
       }
    }else{
-      print OUTPUT  "http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&amp;ID=",$sdi->Identifier->[0]."\n".$sdi->extended_displayName . " participates in Event(s) but no top Pathway can be found, i.e. there seem to be a pathway which contains or is an instance of itself.\n";
+      print OUTPUT "$entity_base_url",$sdi->Identifier->[0]."\n".$sdi->extended_displayName . " participates in Event(s) but no top Pathway can be found, i.e. there seem to be a pathway which contains or is an instance of itself.\n";
       $count++;
    }	
 }

@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 use lib '/usr/local/gkbdev/modules';
 use lib "$ENV{HOME}/bioperl-1.0";
@@ -7,7 +8,6 @@ use GKB::ClipsAdaptor;
 use GKB::DBAdaptor;
 use Data::Dumper;
 use Getopt::Long;
-use strict;
 use GKB::Utils;
 
 our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
@@ -19,10 +19,8 @@ my ($num) = $opt_db =~ /(\d+)/;
 
 my $count =0;
 
-my $tag1 = "http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=";
-my $tag ="http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&ID=";
-
- 
+my $tag1 = "http://www.reactome.org/content/query?q=UniProt:";
+my $tag ="http://www.reactome.org/PathwayBrowser/#";
 
 
 my @out_classes = ('Event');

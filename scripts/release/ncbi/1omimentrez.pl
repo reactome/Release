@@ -52,7 +52,7 @@ open (FH1,"<$in1");
 open (FH2,"<$in2");
 
 
-my $tag = "\t"."http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=";
+my $tag = "\t"."http://www.reactome.org/content/query?q=UniProt:";
 
 my $X;
  
