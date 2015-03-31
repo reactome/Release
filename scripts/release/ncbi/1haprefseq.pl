@@ -26,6 +26,9 @@ my $output2 = 'archive/hapmap_reactome'.$num."\.txt";
 open (OUTPUT, ">$output1"); # Error file
 open (OUTPUT2, ">$output2"); # Output file
 
+my $entity_base_url = "http://www.reactome.org/content/query?q=UniProt:";
+my $event_base_url = "http://www.reactome.org/PathwayBrowser/#";
+
 my $dba = GKB::DBAdaptor->new
     (
      -dbname => $opt_db,
@@ -88,7 +91,7 @@ foreach my $sdi(@{$uni}){
          }
       } 	      
    }else{ # Error msg and error count increased if no events found for the rgp
-      print OUTPUT  "http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=",$sdi->Identifier->[0]."\n".$sdi->extended_displayName . " participates in Event(s) but no top Pathway can be found, i.e. there seem to be a pathway which contains or is an instance of itself.\n";
+      print OUTPUT "$entity_base_url",$sdi->Identifier->[0]."\n".$sdi->extended_displayName . " participates in Event(s) but no top Pathway can be found, i.e. there seem to be a pathway which contains or is an instance of itself.\n";
       $count++;
    }
 }
