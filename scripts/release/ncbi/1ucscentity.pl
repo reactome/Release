@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 use lib '/usr/local/gkb/modules';
 use lib "$ENV{HOME}/bioperl-1.0";
@@ -7,7 +8,7 @@ use GKB::ClipsAdaptor;
 use GKB::DBAdaptor;
 use Data::Dumper;
 use Getopt::Long;
-use strict;
+
 my $count =0;
 my $count1 =0;
 
@@ -17,6 +18,9 @@ our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
 $opt_db  || die "Need database name (-db).\n";
 
 my ($num) = $opt_db =~ /(\d+)/;
+
+my $entity_base_url = "http://www.reactome.org/content/query?q=UniProt:";
+my $event_base_url = "http://www.reactome.org/PathwayBrowser/#";
 
 my $archive = 'archive/';
 my $out_put = $archive . 'ucsc_errorfile.txt';
@@ -31,19 +35,16 @@ open (OUTPUT2, ">$out_put2");
 
 open (OUTPUT3, ">$out_put3");
 
-print OUTPUT2  "URL for events: ". "http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&ID=\n\n";
+print OUTPUT2  "URL for events: $event_base_url\n\n";
 
-print OUTPUT2  "Reactome Entity\tEvent DB_ID\tEvent_name\n\n";
+print OUTPUT2  "Reactome Entity\tEvent ST_ID\tEvent_name\n\n";
 
-print OUTPUT3 "URL for entity_identifier: "."http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID="."\n\n";
- 
-print OUTPUT3 "URL for entity_db_id: "."http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&ID="."\n\n";
+print OUTPUT3 "URL for entity_identifier: $entity_base_url\n\n";
 
-print OUTPUT3  "Reactome Entity\tEntity DB_ID\n\n";
+print OUTPUT3  "Reactome Entity\n\n";
 
 
 my @out_classes = ('Event');
-
 
 
 my %hash;
@@ -85,7 +86,7 @@ foreach (@{$gp}){
    
    if ($sp =~ /Homo|Rattus|Mus/){
       push (@input,$gp->[$s]->Identifier->[0]."\n");      
-      print OUTPUT3 $gp->[$s]->identifier->[0]."\t".$gp->[$s]->db_id."\n";
+      print OUTPUT3 $gp->[$s]->identifier->[0]."\t". get_stable_identifier($gp->[$s])."\n";
    }else{
       $xy++;
    }
@@ -103,7 +104,7 @@ my $sdi;
 my $sdis;
 my $entity = "Reactome Entity:";
 my $event = "Reactome Event:";
-my $tag2 = "Reactome DB_ID:";
+my $tag2 = "Reactome ST_ID:";
 
 foreach (@input) { s/\s//g;}
 
@@ -156,11 +157,11 @@ foreach $sdi (@{$sdis}) {
 	 	
 	    fix_name($str);
 
-	    print OUTPUT2  $sdi->Identifier->[0]."\t";
+	    print OUTPUT2 $sdi->Identifier->[0]."\t";
 	 	
-	    print OUTPUT2 $ar->[0]->db_id."\t";
+	    print OUTPUT2 get_stable_identifier($ar->[0])."\t";
 		 
-	    print OUTPUT2  "$str\n";
+	    print OUTPUT2 "$str\n";
 	   	
 	   	
 		 
@@ -175,12 +176,11 @@ foreach $sdi (@{$sdis}) {
 		 
 	       fix_name($str);
 
-	       print OUTPUT2  $sdi->Identifier->[0]."\t";
-		 
+	       print OUTPUT2 $sdi->Identifier->[0]."\t";
 	 
-	       print OUTPUT2  $ar->[$p]->db_id."\t"; 
+	       print OUTPUT2 get_stable_identifier($ar->[$p])."\t"; 
 		
-	       print OUTPUT2  "$str\n";
+	       print OUTPUT2 "$str\n";
 		 
 	        
 	       $p++; 
@@ -190,7 +190,6 @@ foreach $sdi (@{$sdis}) {
       }
 		
 	 
-		
       if(@pathways){
          @{$ar} = @pathways;
          if (@{$ar} == 1) {
@@ -198,11 +197,9 @@ foreach $sdi (@{$sdis}) {
    	       
 	    fix_name($str);
    
-   
-		 
 	    print OUTPUT2  $sdi->Identifier->[0]."\t";
 	 	
-	    print OUTPUT2 $ar->[0]->db_id."\t";
+	    print OUTPUT2 get_stable_identifier($ar->[0])."\t";
 	 	 
 	    print OUTPUT2  "$str\n";
 	 	 
@@ -216,22 +213,19 @@ foreach $sdi (@{$sdis}) {
 	    		
 	       fix_name($str);
 	 			
-	 		   	
-	       print OUTPUT2  $sdi->Identifier->[0]."\t";
+	       print OUTPUT2 $sdi->Identifier->[0]."\t";
 	 	 
-	 		   	
-	       print OUTPUT2  $ar->[$p]->db_id."\t"; 
+	       print OUTPUT2 get_stable_identifier($ar->[$p])."\t"; 
 	  	
-	       print OUTPUT2  "$str\n";
-			    
-	 		    
+	       print OUTPUT2 "$str\n";
+		  
 	       $p++;		     
 	    }	
 	 }	    	
       }
       $count1++;
    }else{
-      print OUTPUT  "http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=",$sdi->Identifier->[0]."\n".$sdi->extended_displayName . " participates in Event(s) but no top Pathway can be found, i.e. there seem to be a pathway which contains or is an instance of itself.\n";
+      print OUTPUT "$entity_base_url",$sdi->Identifier->[0]."\n".$sdi->extended_displayName . " participates in Event(s) but no top Pathway can be found, i.e. there seem to be a pathway which contains or is an instance of itself.\n";
       $count++;
    }
 }	
@@ -282,4 +276,12 @@ sub fix_name{
    }
  
    return $str;
+}
+
+sub get_stable_identifier {
+   my $instance = shift;
+   
+   return '' unless $instance && $instance->stableIdentifier->[0];
+   
+   return $instance->stableIdentifier->[0]->identifier->[0];
 }
