@@ -182,7 +182,7 @@ $USER_GUIDE_URL = "$WIKI_URL/Usersguide";
 $LOG_DIR = "$GK_ROOT_DIR/logs";
 
 $WORDPRESS_ROOT_URL = 'http://reactome.oicr.on.ca/static_wordpress';
-$DATA_MODEL_URL = "$WORDPRESS_ROOT_URL/data-model";
+$DATA_MODEL_URL = "http://www.reactome.org/pages/documentation/data-model";
 
 # This is where you can modify the default naviagtion
 # bar menus for your site.  If you are happy with
