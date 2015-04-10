@@ -2,13 +2,14 @@
 
 1) get log info for Aug 2014 - present 
 
-    grep REST /usr/local/gkb/website/logs/extended_log | grep Diagram | grep PathwayBrowser > ~/pathway_log/    
+    grep REST /usr/local/gkb/website/logs/extended_log | grep Diagram | grep PathwayBrowser   
 
 * <b>NOTE: some ad hoc filtering (grep, head, tail) to use only dates from Aug-April</b>
 
 2) get older (pre Aug, 2014) log info from archive
 
-    grep REST /nfs/reactome/reactome/archive/old_reactome_backup/Reactome/website_3_0/GKB/website/logs/extended_log | grep Diagram | grep PathwayBrowser    
+    grep REST /nfs/reactome/reactome/archive/old_reactome_backup/Reactome/website_3_0/GKB/website/logs/extended_log \
+    | grep Diagram | grep PathwayBrowser    
 
 * <b>NOTE: some ad hoc filtering (grep, head, tail) to get only April 2014 - July 2014</b>
 
