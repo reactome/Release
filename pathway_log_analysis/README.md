@@ -1,4 +1,4 @@
-#2015 pre-SAB Log analysis: where data in last_year.txt came from
+#2015 pre-SAB Log analysis
 
 1) get log info for Aug 2014 - present 
 
