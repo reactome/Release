@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 # Make sure you don't have "competing" libraries...
 # for use @CSHL
@@ -9,9 +10,12 @@ use lib "$ENV{HOME}/GKB/modules";
 
 use GKB::Instance;
 use GKB::DBAdaptor;
+
+use autodie;
 use Data::Dumper;
 use Getopt::Long;
-use strict;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug);
 
@@ -31,7 +35,7 @@ my $dba = GKB::DBAdaptor->new
      -dbname => $opt_db,
      -DEBUG => $opt_debug
      );
-open(FILE, ">deleted_unused_pe_$opt_db\.txt");
+open(my $file, ">", "deleted_unused_pe_$opt_db\.txt");
 my $MAX_RECURSION_DEPTH = 50;
 my %test;
 my $ar = $dba->fetch_instance(-CLASS => 'PhysicalEntity');
@@ -39,31 +43,34 @@ my ($total, $deleted);
 foreach my $i (@{$ar}) {
     next if ($i->is_a('SimpleEntity') || $i->is_a('OtherEntity'));#they don't have species and are not created by the ortho script
     $total++;
-#    print "____________________________________________\n";
     my $test = check_for_referers($i, 0);
     next if $test;
     $deleted++;
-    print FILE $i->extended_displayName, "\n";
+    print $file $i->extended_displayName, "\n";
     $dba->delete_by_db_id($i->db_id);
 }
-print FILE $total, " PhysicalEntities,", $deleted, " have been deleted.\n";
+print $file $total, " PhysicalEntities,", $deleted, " have been deleted.\n";
 
-close(FILE);
+close($file);
 
 sub check_for_referers {
     my ($i, $recursion_depth) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     if ($recursion_depth == $MAX_RECURSION_DEPTH) {
-    	print "Recursion depth limit exceeded for " . $i->_displayName->[0] . ", bailing out\n";
+    	$logger->warn("Recursion depth limit exceeded for " . $i->_displayName->[0] . ", bailing out\n");
     	$test{$i} = 1;
     	return 1;
     }
-    print $i->extended_displayName, "\n";
+    
+    $logger->info($i->extended_displayName . "\n");
     $test{$i} && return $test{$i};
     my $rr = $dba->fetch_referer_by_instance($i);
     foreach my $r (@{$rr}) {
-	print "\t", $r->extended_displayName, "\n";
+	$logger->info("\t" . $r->extended_displayName . "\n");
 	if ($r->is_a('PhysicalEntity') || $r->is_a('CatalystActivity')) { #these may have been created during the run of the ortho script even as they may not have been used by any reaction
-	    print "********* recursion_depth=$recursion_depth\t";
+	    $logger->info("********* recursion_depth=$recursion_depth\t");
 	    $test{$r} = check_for_referers($r, $recursion_depth + 1);
 	    next unless $test{$r};
 	}

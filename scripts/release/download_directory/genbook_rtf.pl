@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 # Make sure you don't have "competing" libraries...
 # for use @CSHL
@@ -9,9 +10,11 @@ use lib "$ENV{HOME}/GKB/modules";
 use lib "$ENV{HOME}/my_perl_stuff";
 
 use Getopt::Long;
-use strict;
 use GKB::DocumentGeneration::GenerateTextRTF;
 use GKB::DocumentGeneration::ReactomeDatabaseReader;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
 @ARGV || die <<__END__;
 

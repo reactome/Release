@@ -1,11 +1,11 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 use lib "$ENV{HOME}/bioperl-1.0";
 use lib "$ENV{HOME}/GKB/modules";
 use GKB::Utils;
 use GKB::DBAdaptor;
 use Getopt::Long;
-use strict;
 
 our($opt_host,$opt_db,$opt_pass,$opt_port,$opt_debug,$opt_user,$opt_class,$opt_query,@opt_output);
 
