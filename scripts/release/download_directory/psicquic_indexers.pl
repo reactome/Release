@@ -1,11 +1,14 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 # Creates indexes for the various PSICQUIC servers, and puts them into a place
 # where they will be accessible to the site hosting the servers for pick up.
 
 use Getopt::Long;
-use strict;
 use GKB::Config;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
 our($opt_release);
 
@@ -33,13 +36,12 @@ my $psicquic_indexers_to_single_resource = "psicquic_indexers_to_single_resource
 	#}
 #}
 if (!(-e $psicquic_indexers_to_single_resource)) {
-    print STDERR "$0: ERROR - file $psicquic_indexers_to_single_resource does not exist!\n";
-    exit(1);
+    $logger->error_die("file $psicquic_indexers_to_single_resource does not exist!\n");
 }
 
 my @resources = (
-	'ReactomeBuilder',
-	'ReactomeFIBuilder',
+    'ReactomeBuilder',
+    'ReactomeFIBuilder',
 );
 
 # Farm each build out to a separate script, rather than running them all in one
@@ -48,12 +50,12 @@ my $resource;
 my $cmd;
 foreach $resource (@resources) {
     if (!(defined $resource) || $resource eq '') {
-    	print STDERR "$0: WARNING - missing resource value!\n";
+    	$logger->error("missing resource value!\n");
     	next;
     }
     $cmd = "perl $psicquic_indexers_to_single_resource -release $opt_release -gk_root $gk_root_dir -builder $resource";
     if (system($cmd) != 0) {
-    	print STDERR "$0: WARNING - something went wrong while executing '$cmd'!!\n";
+    	$logger->error("something went wrong while executing '$cmd'!!\n");
     }
 }
 

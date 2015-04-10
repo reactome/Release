@@ -5,6 +5,10 @@ use constant TARD => '/tmp/tarball';
 use constant BASE => '/usr/local/reactomes/Reactome/production';
 use constant MAXAGE => 2;
 
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
+
 my $dir_for_tarball = TARD;
 system "rm -fr $dir_for_tarball" if -d $dir_for_tarball;
 
@@ -39,7 +43,7 @@ my $unwanted_webapps = join(' ',(
 ));
 
 chomp(my $cwd = `pwd`);
-print "My working directory is $cwd\n";
+$logger->info("My working directory is $cwd\n");
 
 my @cmds = (
     qq(git clone https://github.com/reactome/Release.git),
@@ -74,42 +78,49 @@ my @cmds2 = (
 );
 
 for my $cmd (@cmds) {
-    print "$cmd\n";
-    system($cmd) == 0 or die "Something wrong with '$cmd'\n";
+    my $logger = get_logger(__PACKAGE__);
+    $logger->info("$cmd\n");
+    system($cmd) == 0 or $logger->error("Something wrong with '$cmd'\n");
     sleep 1;
 }
 
 cleanse_solr_data();
 chdir 'reactome';
 
-print "CWD: ", `pwd`;
+$logger->info("CWD: ", `pwd`);
 
 for my $cmd (@cmds2) {
     print "$cmd\n";
-    system($cmd) == 0 or die "Something wrong with '$cmd'\n";
+    system($cmd) == 0 or $logger->error_die("Something wrong with '$cmd'\n");
     sleep 1;
 }
 
 sub check_analysis_data {
     my $base = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
     my $data = "$base/AnalysisService/input/analysis_v$release.bin";
     unless (-e $data) {
-	die "$data does not exist!  Make sure that you update the AnalysisService data before proceeding\n";
+	$logger->error_die("$data does not exist!  Make sure that you update the AnalysisService data before proceeding\n");
     }
 }
 
 sub check_solr_data {
     my $base = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
     my $data = "$base/Solr/cores/reactome_v$release";
     unless (-e $data) {
-        die "$data does not exist!  Make sure that you update the Solr data before proceeding\n";
+        $logger->error_die("$data does not exist!  Make sure that you update the Solr data before proceeding\n");
     }
 }
 
 sub cleanse_solr_data {
+    my $logger = get_logger(__PACKAGE__);
+    
     while (my $path = <Solr/cores/reactome_v*>) {
 	if ($path !~ /reactome_v$release$/) {
-	    print STDERR "Removing old release $path\n"; 
+	    $logger->info("Removing old release $path\n");
 	    system "rm -fr $path";
 	}
     }

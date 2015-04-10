@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 # Given, as a minimum, a database name, this script will
 # insert links from Reactome to other databases, such
@@ -20,10 +21,13 @@ BEGIN {
 }
 
 use Getopt::Long;
-use strict;
 use GKB::Config;
 use Data::Dumper;
 use Cwd;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
 use constant EXE  => './add_links_to_single_resource.pl';
 use constant LOG  => 'logs';
@@ -35,53 +39,53 @@ my $pid;
 # Parse commandline
 my $usage = "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -edb ENSEMBL_db -db_ids 'id1,id2,..'\n";
 &GetOptions("user:s", "host:s", "pass:s", "port:i", "db=s", "debug", "test", "db_ids:s");
-$opt_db || die $usage;
+$opt_db || $logger->error_die($usage);
 
 
 my $gk_root_dir = $GK_ROOT_DIR;
 my $pwd = &Cwd::cwd();
 
 unless ($pwd =~ m!/scripts/release/add_links$! && -d '../../../modules') {
-    die "Current working directory is $pwd:\n",
-    "Please run this script from $gk_root_dir/scripts/release/add_links.\n"; 
+    $logger->error_die("Current working directory is $pwd:\n" .
+    "Please run this script from $gk_root_dir/scripts/release/add_links.\n");
 }
 
 my $exe = EXE;
 
 if (!(defined $opt_host) || $opt_host eq '') {
-	$opt_host = $GK_DB_HOST;
+    $opt_host = $GK_DB_HOST;
 }
 if (!(defined $opt_user) || $opt_user eq '') {
-	$opt_user = $GK_DB_USER;
+    $opt_user = $GK_DB_USER;
 }
 if (!(defined $opt_pass) || $opt_pass eq '') {
-	$opt_pass = $GK_DB_PASS;
+    $opt_pass = $GK_DB_PASS;
 }
 if (!(defined $opt_port) || $opt_port eq '') {
-	$opt_port = $GK_DB_PORT;
+    $opt_port = $GK_DB_PORT;
 }
 
 # Pre-create the command line options associated with database access
 my $reactome_db_options = "-db $opt_db";
 if (defined $opt_host && !($opt_host eq '')) {
-	$reactome_db_options .= " -host $opt_host";
+    $reactome_db_options .= " -host $opt_host";
 }
 if (defined $opt_user && !($opt_user eq '')) {
-	$reactome_db_options .= " -user $opt_user";
+    $reactome_db_options .= " -user $opt_user";
 }
 if (defined $opt_pass && !($opt_pass eq '')) {
-	# Put a backslash in front of characters that have special meaning to the shell
-	my $pass = $opt_pass;
-	if ($pass =~ /\$/) {
-		$pass =~ s/\$/\\\$/g;
-	}
-	$reactome_db_options .= " -pass $pass";
+    # Put a backslash in front of characters that have special meaning to the shell
+    my $pass = $opt_pass;
+    if ($pass =~ /\$/) {
+	$pass =~ s/\$/\\\$/g;
+    }
+    $reactome_db_options .= " -pass $pass";
 }
 if (defined $opt_port && !($opt_port eq '')) {
-	$reactome_db_options .= " -port $opt_port";
+    $reactome_db_options .= " -port $opt_port";
 }
 if (defined $opt_edb && !($opt_edb eq '')) {
-	$reactome_db_options .= " -edb $opt_edb";
+    $reactome_db_options .= " -edb $opt_edb";
 }
 
 my @resources;
@@ -89,7 +93,7 @@ my @resources;
 
 # use an external config file for linkers -- easier to debug
 # and hard-coding data into scripts is not good practice anyway
-open CONF, "./add_links.conf" or die "Could not open resource config $!";
+open CONF, "./add_links.conf" or $logger->error_die("Could not open resource config $!");
 while (<CONF>) {
     next if /^#/; #skips comments
     chomp;
@@ -104,7 +108,7 @@ mkdir LOG unless -d LOG;
 
 foreach $resource (@resources) {
     if (!(defined $resource) || $resource eq '') {
-    	print STDERR "$0: WARNING - missing resource value!\n";
+    	$logger->warn("missing resource value!\n");
     	next;
     }
 
@@ -123,31 +127,35 @@ if (-e RLOG) {
 
 if (@failed) {
     my $failed = @failed;
-    print STDERR "$0: $failed linkers failed to run to completion, please check the diagnostic output!\n",
+    $logger->error("$failed linkers failed to run to completion, please check the diagnostic output!\n");
     my %failed = map { $_ => 1 } @failed;
-    print "The following resources failed:\n", join("\n", (sort keys %failed)), "\n";
+    $logger->error("The following resources failed: " . join("\t", (sort keys %failed)));
 }
 if (@passed) {
     my %passed = map { $_ => 1 } @passed;
-    print "The following resources passed:\n", join("\n", (sort keys %passed)), "\n";
+    $logger->info("The following resources passed: " . join("\t", (sort keys %passed)));
 }
 
-print STDERR "$0 has finished its job\n";
+$logger->info("$0 has finished its job\n");
 
 sub run {
     my $exe  = shift;
     my $args = shift;
     my $resource = shift;
 
-    print "Running $exe $args\n";
+    my $logger = get_logger(__PACKAGE__);
+
+    $logger->info("Running $exe $args\n");
     _run($exe,$resource,$args);
 }
 
 sub _run {
     my ($exe,$resource,$args) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+
     chomp(my $timestamp = `date`);
-    print STDERR "$timestamp Starting $args\n";
+    $logger->info("$timestamp Starting $args\n");
 
     my $retval = system "$exe $args > ".LOG."/$resource.out 2>&1";
 
