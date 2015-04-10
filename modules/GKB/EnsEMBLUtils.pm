@@ -8,7 +8,7 @@ use constant GKB_MODULES => '/usr/local/gkb/modules';
 use parent 'Exporter';
 
 our @EXPORT_OK = qw/get_version get_ensembl_genome_version install_ensembl_api ensembl_api_installed/;
-my %EXPORT_TAGS = (all => [qw/get_version get_ensembl_genome_version install_ensembl_api ensembl_api_installed/],);
+our %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
 sub get_version {
     my $url = 'http://rest.ensembl.org/info/software?';
