@@ -1,0 +1,183 @@
+7708,Homo sapiens,1640170,Cell Cycle
+7646,Homo sapiens,1430728,Metabolism
+7275,Homo sapiens,162582,Signal Transduction
+6316,Homo sapiens,1643685,Disease
+6111,Homo sapiens,168256,Immune System
+5122,Homo sapiens,74160,Gene Expression
+4217,Homo sapiens,73894,DNA Repair
+4000,Homo sapiens,1474244,Extracellular matrix organization
+3538,Homo sapiens,1266738,Developmental Biology
+3343,Homo sapiens,2262752,Cellular responses to stress
+3137,Homo sapiens,109582,Hemostasis
+3128,Homo sapiens,392499,Metabolism of proteins
+3078,Homo sapiens,1500931,Cell-Cell communication
+3073,Homo sapiens,400253,Circadian Clock
+2552,Homo sapiens,382551,Transmembrane transport of small molecules
+2489,Homo sapiens,112316,Neuronal System
+2386,Homo sapiens,397014,Muscle contraction
+2185,Homo sapiens,4839726,Chromatin organization
+2074,Homo sapiens,69306,DNA Replication
+1103,Homo sapiens,1852241,Organelle biogenesis and maintenance
+1034,Homo sapiens,1474165,Reproduction
+873,Homo sapiens,5357801,Programmed Cell Death
+243,Mus musculus,5334727,Mus musculus biological processes
+61,Homo sapiens,5653656,Vesicle-mediated transport
+46,Gallus gallus,2422406,Innate Immune System
+46,Gallus gallus,1660598,Metabolism
+30,Mus musculus,5991156,Immune System
+26,Mus musculus,5990980,Cell Cycle
+21,Gallus gallus,1670466,DNA replication and repair
+20,Mus musculus,5991071,Signal Transduction
+20,Mus musculus,5991037,Gene Expression
+14,Mus musculus,5991024,Metabolism
+13,Mus musculus,5991949,Disease
+11,Arabidopsis thaliana,6350530,Gene Expression
+10,Arabidopsis thaliana,6350599,Signal Transduction
+9,Arabidopsis thaliana,6350490,Cell Cycle
+9,Mus musculus,5991171,Muscle contraction
+8,Drosophila melanogaster,6322673,Signal Transduction
+8,Mus musculus,5991935,Circadian Clock
+8,Mus musculus,5991780,Cell-Cell communication
+7,Rattus norvegicus,6051589,Signal Transduction
+7,Mus musculus,5991053,Neuronal System
+7,Mus musculus,5991012,Cellular responses to stress
+6,Arabidopsis thaliana,6350517,Metabolism
+6,Danio rerio,6272477,Gene Expression
+6,Mus musculus,5991300,Developmental Biology
+5,Rattus norvegicus,6051542,Metabolism
+5,Mus musculus,5991654,Vesicle-mediated transport
+4,Arabidopsis thaliana,6350574,Metabolism of proteins
+4,Drosophila melanogaster,6322589,Gene Expression
+4,Danio rerio,6272511,Signal Transduction
+4,Danio rerio,6272493,Neuronal System
+4,Danio rerio,6272464,Metabolism
+4,Danio rerio,6272452,Cellular responses to stress
+4,Gallus gallus,6096039,Immune System
+4,Rattus norvegicus,6052448,Circadian Clock
+4,Mus musculus,5992314,Chromatin organization
+4,Mus musculus,5991130,Programmed Cell Death
+4,Caenorhabditis elegans,5751589,Signal Transduction
+4,Saccharomyces cerevisiae,5719402,Cell Cycle
+3,Oryza sativa,6378526,Cellular responses to stress
+3,Oryza sativa,6378455,DNA Replication
+3,Oryza sativa,6378454,Cell Cycle
+3,Arabidopsis thaliana,6350795,Programmed Cell Death
+3,Arabidopsis thaliana,6350622,Immune System
+3,Arabidopsis thaliana,6350558,Cellular responses to stress
+3,Drosophila melanogaster,6322687,Immune System
+3,Drosophila melanogaster,6322576,Metabolism
+3,Danio rerio,6272841,Hemostasis
+3,Rattus norvegicus,6051675,Immune System
+3,Rattus norvegicus,6051555,Gene Expression
+3,Rattus norvegicus,6051498,Cell Cycle
+3,Mus musculus,5991100,Metabolism of proteins
+3,Mus musculus,5991041,Transmembrane transport of small molecules
+3,Bos taurus,5869509,Metabolism of proteins
+3,Bos taurus,5869435,Metabolism
+3,Sus scrofa,5811714,Muscle contraction
+3,Caenorhabditis elegans,5751490,Metabolism
+3,Caenorhabditis elegans,5751463,DNA Replication
+2,Oryza sativa,6379185,Chromatin organization
+2,Oryza sativa,6378567,DNA Repair
+2,Oryza sativa,6378542,Metabolism of proteins
+2,Oryza sativa,6378498,Gene Expression
+2,Oryza sativa,6378485,Metabolism
+2,Arabidopsis thaliana,6350798,Hemostasis
+2,Drosophila melanogaster,6323300,Circadian Clock
+2,Danio rerio,6273245,Cell-Cell communication
+2,Danio rerio,6272732,Developmental Biology
+2,Danio rerio,6272536,Metabolism of proteins
+2,Danio rerio,6272481,Transmembrane transport of small molecules
+2,Gallus gallus,6096054,Muscle contraction
+2,Gallus gallus,6095961,Cellular responses to stress
+2,Gallus gallus,6095869,Cell Cycle
+2,Rattus norvegicus,6051559,Transmembrane transport of small molecules
+2,Mus musculus,5991411,Hemostasis
+2,Bos taurus,5870351,Disease
+2,Bos taurus,5869815,Hemostasis
+2,Bos taurus,5869567,Immune System
+2,Bos taurus,5869448,Gene Expression
+2,Caenorhabditis elegans,5751724,Developmental Biology
+2,Saccharomyces cerevisiae,5719584,Immune System
+2,Saccharomyces cerevisiae,5719443,Gene Expression
+2,Schizosaccharomyces pombe,5709043,Metabolism
+2,Plasmodium falciparum,5699373,Hemostasis
+2,Plasmodium falciparum,5699277,Signal Transduction
+2,Plasmodium falciparum,5699220,Metabolism
+2,Dictyostelium discoideum,5695090,Developmental Biology
+1,Oryza sativa,6378694,Developmental Biology
+1,Oryza sativa,6378572,Signal Transduction
+1,Arabidopsis thaliana,6351234,Organelle biogenesis and maintenance
+1,Arabidopsis thaliana,6351044,Disease
+1,Arabidopsis thaliana,6350938,Vesicle-mediated transport
+1,Arabidopsis thaliana,6350727,Developmental Biology
+1,Arabidopsis thaliana,6350637,Muscle contraction
+1,Arabidopsis thaliana,6350546,Neuronal System
+1,Arabidopsis thaliana,6350534,Transmembrane transport of small molecules
+1,Drosophila melanogaster,6323241,Cell-Cell communication
+1,Drosophila melanogaster,6323184,Extracellular matrix organization
+1,Drosophila melanogaster,6323085,Vesicle-mediated transport
+1,Drosophila melanogaster,6322912,Hemostasis
+1,Drosophila melanogaster,6322817,Developmental Biology
+1,Drosophila melanogaster,6322593,Transmembrane transport of small molecules
+1,Danio rerio,6273713,Chromatin organization
+1,Danio rerio,6273601,Organelle biogenesis and maintenance
+1,Danio rerio,6273352,Disease
+1,Danio rerio,6273339,Circadian Clock
+1,Danio rerio,6273068,Vesicle-mediated transport
+1,Danio rerio,6272844,Extracellular matrix organization
+1,Danio rerio,6272610,Muscle contraction
+1,Danio rerio,6272595,Immune System
+1,Danio rerio,6272567,Programmed Cell Death
+1,Danio rerio,6272561,DNA Repair
+1,Danio rerio,6272421,DNA Replication
+1,Xenopus tropicalis,6196054,Cell-Cell communication
+1,Xenopus tropicalis,6195875,Vesicle-mediated transport
+1,Xenopus tropicalis,6195263,Metabolism
+1,Xenopus tropicalis,6195219,Cell Cycle
+1,Gallus gallus,6096679,Cell-Cell communication
+1,Gallus gallus,6095923,Gene Expression
+1,Gallus gallus,6095905,Metabolism
+1,Rattus norvegicus,6052461,Disease
+1,Rattus norvegicus,6051815,Developmental Biology
+1,Rattus norvegicus,6051690,Muscle contraction
+1,Mus musculus,5992162,Reproduction
+1,Mus musculus,5991414,Extracellular matrix organization
+1,Mus musculus,5990981,DNA Replication
+1,Canis familiaris,5932058,Disease
+1,Canis familiaris,5931765,Vesicle-mediated transport
+1,Canis familiaris,5931278,Immune System
+1,Bos taurus,5870338,Circadian Clock
+1,Bos taurus,5869819,Extracellular matrix organization
+1,Bos taurus,5869482,Signal Transduction
+1,Bos taurus,5869391,Cell Cycle
+1,Sus scrofa,5812296,Cell-Cell communication
+1,Sus scrofa,5811566,Metabolism
+1,Sus scrofa,5811557,Cellular responses to stress
+1,Sus scrofa,5811525,Cell Cycle
+1,Caenorhabditis elegans,5752480,Organelle biogenesis and maintenance
+1,Caenorhabditis elegans,5752314,Reproduction
+1,Caenorhabditis elegans,5752042,Extracellular matrix organization
+1,Caenorhabditis elegans,5751807,Programmed Cell Death
+1,Caenorhabditis elegans,5751503,Gene Expression
+1,Caenorhabditis elegans,5751462,Cell Cycle
+1,Saccharomyces cerevisiae,5719895,Disease
+1,Saccharomyces cerevisiae,5719685,Programmed Cell Death
+1,Saccharomyces cerevisiae,5719447,Transmembrane transport of small molecules
+1,Saccharomyces cerevisiae,5719403,DNA Replication
+1,Schizosaccharomyces pombe,5709495,Disease
+1,Schizosaccharomyces pombe,5709401,Vesicle-mediated transport
+1,Schizosaccharomyces pombe,5709113,DNA Repair
+1,Schizosaccharomyces pombe,5709095,Metabolism of proteins
+1,Schizosaccharomyces pombe,5709060,Transmembrane transport of small molecules
+1,Plasmodium falciparum,5699634,Organelle biogenesis and maintenance
+1,Plasmodium falciparum,5699509,Neuronal System
+1,Plasmodium falciparum,5699498,Disease
+1,Plasmodium falciparum,5699446,Developmental Biology
+1,Plasmodium falciparum,5699306,Muscle contraction
+1,Plasmodium falciparum,5699291,Immune System
+1,Plasmodium falciparum,5699260,Metabolism of proteins
+1,Plasmodium falciparum,5699231,Transmembrane transport of small molecules
+1,Dictyostelium discoideum,5695458,Disease
+1,Dictyostelium discoideum,5695162,Transmembrane transport of small molecules
+1,Dictyostelium discoideum,5694890,Gene Expression
