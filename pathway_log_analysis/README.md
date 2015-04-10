@@ -24,15 +24,15 @@
 
     cut -f2 hit_counts.txt | sort -u > unique_hits.txt    
 
-5) pathway information (also filtering out non-pathway hits)
+6) pathway information (also filtering out non-pathway hits)
 
     ./pathway_info.pl username password unique_hits.txt > pathway_info.txt
 
-6) flattened pathway hierarchy for all species seen in log
+7) flattened pathway hierarchy for all species seen in log
 
     cut -f2 pathway_info.txt | sort -u | ./flatten_pathway_hierarchy.pl > pathway_hierarchy.txt
 
-7) generate reports
+8) generate reports
  
     ./analyze_pathway_hits.pl
     
