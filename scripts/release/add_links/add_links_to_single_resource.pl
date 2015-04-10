@@ -26,16 +26,15 @@ use GKB::AddLinks::BuilderParams;
 use GKB::IdentifierMapper::ENSEMBLMart;
 use GKB::IdentifierMapper::PICR;
 
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_edb,$opt_db_ids,$opt_res);
+our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_db_ids,$opt_res);
 
 # Parse commandline
-my $usage = "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -edb ENSEMBL_db -db_ids 'id1,id2,..' -res resource\n";
+my $usage = "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -db_ids 'id1,id2,..' -res resource\n";
 &GetOptions("user:s", "host:s", "pass:s", "port:i", "db=s", "debug", "test", "db_ids:s", "res:s");
 $opt_db || die $usage;
 $opt_res || die $usage;
 
 my $identifier_mapper = GKB::IdentifierMapper::ENSEMBLMart->new();
-$identifier_mapper->set_ensembl_mart_params($opt_edb);
 #my $identifier_mapper = GKB::IdentifierMapper::PICR->new();
 
 my $builder_params = GKB::AddLinks::BuilderParams->new();

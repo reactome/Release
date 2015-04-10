@@ -77,12 +77,11 @@ if ($TEST_MODE) {
 our %hosts = (
     $release_server => "gkbdev",
     $dev_server => "gkbdev",
-    $live_server => "gkb_prod",
+    $live_server => "gkb",
    
     "gkbdev" => $release_server,
-    "gkb_prod" => $live_server,
-    "gkb_test" => $live_server,
-
+    "gkb" => $live_server,
+    
     # Alternate servers    
     "brie8.cshl.edu" => "gkbdev",
     "reactomeclean.oicr.on.ca" => "gkbdev" 

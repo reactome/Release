@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 #This script should be run over a release database as it requires stable identifiers to be present
 
@@ -18,7 +19,10 @@ use GKB::DBAdaptor;
 use GKB::Utils;
 use Data::Dumper;
 use Getopt::Long;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
 # Database connection
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_date, $opt_debug);
@@ -49,7 +53,7 @@ my $outfile = $class . "2summation.txt"; # Output file for website
 # If creation of a filehandle is unsuccessful, the following error message
 # prints and the program terminates.
 if (!open(FILE, ">$outfile")) {
-	print STDERR "$0: could not open file $outfile\n";
+	$logger->error_die("$0: could not open file $outfile\n");
 	exit(1);
 }
 			
