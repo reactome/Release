@@ -105,15 +105,13 @@ JSON \
 PDF::API2
 
 echo -e "\nDownloading the reactome software..."
-mkdir /usr/local/reactomes
-mkdir /usr/local/reactomes/Reactome
-cd /usr/local/reactomes/Reactome
+mkdir -p /usr/local/reactomes/Reactome/production
+cd /usr/local/reactomes/Reactome/production
 rm -f reactome.tar.gz
 wget http://www.reactome.org/download/current/reactome.tar.gz
 
 echo -e "\nUnpacking the software..."
 tar zxf reactome.tar.gz
-mv reactome production
 rm -f /usr/local/gkb
 rm -f reactome.tar.gz
 cd /usr/local
