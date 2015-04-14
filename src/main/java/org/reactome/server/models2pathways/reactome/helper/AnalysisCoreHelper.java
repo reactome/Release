@@ -78,7 +78,7 @@ public class AnalysisCoreHelper {
                 if (pathway.isLlp() && pathway.getEntities().getFdr() <= customFDR) {
                     try {
                         if (Objects.equals(pathway.getSpecies().getDbId(), SpeciesHelper.getInstance().getSpecieByBioMdSpecieId(bioModel.getSpecie().getBioMdId()).getReactId())
-                                && ((double) pathway.getEntities().getFound() / (double) pathway.getEntities().getTotal()) >= reactionCoverage) {
+                                && ((double) pathway.getReactions().getFound() / (double) pathway.getReactions().getTotal()) >= reactionCoverage) {
                             reliablePathways.add(pathway);
                         }
                     } catch (NullPointerException e) {
