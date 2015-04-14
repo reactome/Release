@@ -28,18 +28,20 @@ sub redirect_requests_in_configuration_file {
     foreach (@config_file_contents) {
         if (/(Redirect \/ http:\/\/reactomerelease.oicr.on.ca\/)/) {
            if ($fallback) {
-               s/^#//;
+               s/^\s*#/  /;
            } else {
-               s/(.+)/#$1/;    
+               s/(.+)/#$1/ unless /\s*#/;    
            }        
         }
         $new_config_file_contents .= $_ . "\n";
     }
     
     if ($remote_server) {
-	`ssh $remote_server 'cat $new_config_file_contents > $config_file'`;
+	$new_config_file_contents =~ s/\\/\\\\/g;
+	$new_config_file_contents =~ s/"/\\"/g;
+	`ssh $remote_server "echo '$new_config_file_contents' > $config_file"`;
     } else {
-        `cat $new_config_file_contents > $config_file`;
+        `echo '$new_config_file_contents' > $config_file`;
     }
 }
 
@@ -47,7 +49,7 @@ sub get_configuration_file_contents {
     my $config_file = shift;
     my $remote_server = shift;
     
-    my $contents = $remote_server ? `ssh $remote_server 'cat $config_file'` : `cat $config_file'`;
+    my $contents = $remote_server ? `ssh $remote_server 'cat $config_file'` : `cat $config_file`;
     
     return split /\n/, $contents ;
 }

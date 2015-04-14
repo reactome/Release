@@ -21,6 +21,10 @@ use Cwd;
 use Getopt::Long;
 use common::sense;
 
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
+
 use constant TEMP => '/usr/local/reactomes/Reactome/production/AnalysisService/temp';
 
 
@@ -68,7 +72,7 @@ while(my ($type, $output) = each %hierarchy) {
 }
 
 my $tempfiles = TEMP.'/*';
-say "Removing analysis temp files...";
+$logger->info("Removing analysis temp files...");
 system "rm -f $tempfiles";
 
-print "$0 has finished its job\n";
+$logger->info("$0 has finished its job\n");

@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 # This is just an extract from another script, create_download_directory.pl. Since
 # otherIdentifier attribute is used for reactome to biosystems dump, but this attribute
@@ -20,10 +21,15 @@ BEGIN {
 
 use GKB::Config;
 use GKB::DBAdaptor;
-use strict;
 use Cwd;
 use Getopt::Long;
 use DBI;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
+
+
 $GKB::Config::NO_SCHEMA_VALIDITY_CHECK = undef;
 
 our($opt_host,$opt_db,$opt_pass,$opt_port,$opt_debug,$opt_user,$opt_r,$opt_sp);
@@ -102,14 +108,14 @@ my $broken_command_counter = 0;
 foreach my $cmd (@cmds) {
     print "cmd=$cmd\n";
     if (system($cmd) != 0) {
-    	print STDERR "WARNING - something went wrong while executing '$cmd'!!\n";
+    	$logger->error("something went wrong while executing '$cmd'!!\n");
     	$broken_command_counter++;
     }
 }
 
 if ($broken_command_counter > 0) {
-    print STDERR "$broken_command_counter commands failed, please check the above printout to diagnose the problems\n";
+    $logger->error("$broken_command_counter commands failed, please check the above printout to diagnose the problems\n");
 }
 
-print "create_reactome2biosystems.pl has finished its job\n";
+$logger->info("create_reactome2biosystems.pl has finished its job\n");
 

@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 # Checks for repeated stable identifiers and other things
 # that could indicate problems with the stable identifier
@@ -19,13 +20,19 @@ use lib "/usr/local/gkb/modules";
 # for use @HOME
 use lib "$ENV{HOME}/bioperl-1.0";
 use lib "$ENV{HOME}/GKB/modules";
+
+use GKB::Config;
 use GKB::Instance;
 use GKB::DBAdaptor;
 use GKB::StableIdentifiers;
 use GKB::StableIdentifiers::Check;
+
 use Data::Dumper;
 use Getopt::Long;
-use strict;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__):
 
 # Command line options have been deliberately chosen so that they
 # are identical to IDGenerationCommandLine.java.
@@ -67,60 +74,60 @@ if ($opt_rel) {
 # Look for repeating stable IDs
 @stable_identifiers = $check->find_duplicated_stable_identifiers($opt_fix);
 if (scalar(@stable_identifiers)>0) {
-	print STDERR "The following " . scalar(@stable_identifiers) . " stable IDs are duplicated for $opt_idbname:\n";
+	$logger->error("The following " . scalar(@stable_identifiers) . " stable IDs are duplicated for $opt_idbname:\n");
 	
 	foreach $stable_identifier (@stable_identifiers) {
-		print STDERR "    $stable_identifier";
+		$logger->error("$stable_identifier");
 	}
 } else {
-	print STDERR "No stable IDs are duplicated for $opt_idbname\n";
+	$logger->info("No stable IDs are duplicated for $opt_idbname\n");
 }
 
 # Look for stable IDs that are present in the release but not in the
 # stable ID database
 @stable_identifiers = $check->find_stable_identifiers_only_in_release($opt_fix, $opt_crnum, $opt_project);
 if (scalar(@stable_identifiers)>0) {
-	print STDERR "The following " . scalar(@stable_identifiers) . " stable IDs are only in the release $opt_crnum:\n";
+	$logger->error("The following " . scalar(@stable_identifiers) . " stable IDs are only in the release $opt_crnum:\n")
 	
 	foreach $stable_identifier (@stable_identifiers) {
-		print STDERR "    $stable_identifier";
+		$logger->error("$stable_identifier");
 	}
 } else {
-	print STDERR "All stable IDs in release $opt_crnum are also in $opt_idbname\n";
+	$logger->info("All stable IDs in release $opt_crnum are also in $opt_idbname\n");
 }
 
 # Look for stable IDs that are present both in the release and in the
 # stable ID database but with different version numbers
 @stable_identifiers = $check->find_version_incompatibility_with_release($opt_fix, $opt_crnum, $opt_project);
 if (scalar(@stable_identifiers)>0) {
-	print STDERR "The following " . scalar(@stable_identifiers) . " stable IDs in release $opt_crnum have different versions to those in $opt_idbname:\n";
+	$logger->error("The following " . scalar(@stable_identifiers) . " stable IDs in release $opt_crnum have different versions to those in $opt_idbname:\n");
 	
 	foreach $stable_identifier (@stable_identifiers) {
-		print STDERR "    $stable_identifier";
+		$logger->error("$stable_identifier");
 	}
 } else {
-	print STDERR "All versions in release $opt_crnum are consistent with $opt_idbname\n";
+	$logger->info("All versions in release $opt_crnum are consistent with $opt_idbname\n");
 }
 
 # Look into the stable ID database and find ReleaseId instances which
 # have no associated StableIdentifierVersions.
 my @orphan_release_ids = $check->find_orphan_release_ids();
 if (scalar(@orphan_release_ids)>0) {
-	print STDERR scalar(@orphan_release_ids) . " ReleaseId instances in $opt_idbname are orphans\n";
+	$logger->error(scalar(@orphan_release_ids) . " ReleaseId instances in $opt_idbname are orphans\n");
 } else {
-	print STDERR "$opt_idbname contains no orphan ReleaseId instances\n";
+	$logger->info("$opt_idbname contains no orphan ReleaseId instances\n");
 }
 
 # See if DOIs are consistent with stable IDs
 my @stable_ids_not_in_dois = $check->find_stable_ids_not_in_dois($opt_fix, $opt_crnum, $opt_project);
 if (scalar(@stable_ids_not_in_dois)>0) {
-	print STDERR "The following " . scalar(@stable_ids_not_in_dois) . " stable IDs in release $opt_crnum have no correspondence with associated DOIs:\n";
+	$logger->error("The following " . scalar(@stable_ids_not_in_dois) . " stable IDs in release $opt_crnum have no correspondence with associated DOIs:\n");
 	
 	foreach $stable_identifier (@stable_ids_not_in_dois) {
-		print STDERR "    $stable_identifier";
+		$logger->error("$stable_identifier");
 	}
 } else {
-	print STDERR "All release $opt_crnum database DOIs contain the corresponding stable IDs\n";
+	$logger->info("All release $opt_crnum database DOIs contain the corresponding stable IDs\n");
 }
 
 #my %version_number_gaps = $check->find_version_number_gaps();

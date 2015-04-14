@@ -3,6 +3,8 @@ package GKB::Release::Steps::Orthopair;
 use GKB::Release::Config;
 use GKB::Release::Utils;
 
+use GKB::EnsEMBLMartUtils qw/get_version install_ensembl_api ensembl_api_installed/;
+
 use autodie;
 use LWP::UserAgent;
 
@@ -26,9 +28,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
-    require 'ensembl.lib';
-
-    my $ensmbl_ver = get_ensembl_version();
+    my $ensmbl_ver = get_version();
     install_ensembl_api($self, $ensmbl_ver) unless ensembl_api_installed();
 
     mkdir $version unless (-d $version); 
@@ -51,26 +51,6 @@ override 'run_commands' => sub {
 		);	 
     }
 };
-
-sub install_ensembl_api {
-    my ($self, $version) = @_;
-    
-    chdir $gkbmodules;
-    `perl install_ensembl_api.pl $version`;
-    chdir $self->directory;
-}
-
-sub ensembl_api_installed {
-    my $ensembl_api_dir = $gkbmodules . "/ensembl_api/";
-    my @subdirectories = qw/bioperl-live ensembl ensembl-compara/;
-    
-    foreach my $subdirectory (map {$ensembl_api_dir . $_} @subdirectories) {
-	return 0 unless (-d $subdirectory);
-    }
-    
-    return 1;
-}
-
 
 sub files_okay {
      # ecol, mtub, saur no longer included due to the absence of bacterial databases in EnsEMBL BioMart

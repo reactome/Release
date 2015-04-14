@@ -19,6 +19,7 @@ $NO_SCHEMA_VALIDITY_CHECK = 0;
 
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
 my %event_instructions = 
 (
@@ -165,7 +166,7 @@ sub get_formatted_date_string {
     my $logger = get_logger(__PACKAGE__);
     
     if (!(defined $in)) {
-        $logger->warn("create_EB-eye_dump.get_formatted_date_string: input is undef!!");
+        $logger->warn("input is undef!!");
         return "00-00-0000";
     }
     my ($yyyy,$mm,$dd) = $in =~ /^(\d{4})-?(\d{2})-?(\d{2})/;
@@ -180,12 +181,12 @@ sub get_db_connection {
     my $dba = GKB::Utils::get_db_connection();
     my $release_num = shift @ARGV;
     $release_num || die "Need release number\n";
-    $logger->info("get_db_connection: release_num=$release_num");
+    $logger->info("release_num=$release_num");
     my $release = $dba->fetch_instance_by_attribute('ReactomeRelease',[['num',[$release_num]]])->[0] || die "No release with number $release_num\n";
     my $release_date = get_formatted_date_string($release->DateTime->[0]);
-    $logger->info("get_db_connection: release_date=$release_date");
+    $logger->info("release_date=$release_date");
     my $db_name = $release->releaseDbParams->[0]->DbName->[0];
-    $logger->info("get_db_connection: db_name=$db_name");
+    $logger->info("db_name=$db_name");
     $dba->instance_cache->clean;
     $dba->execute("USE $db_name");
     $dba->fetch_schema;

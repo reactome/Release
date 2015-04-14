@@ -22,6 +22,10 @@ use Cwd;
 use Getopt::Long;
 use DBI;
 
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
+
 $GKB::Config::NO_SCHEMA_VALIDITY_CHECK = undef;
 
 our($opt_host,$opt_db,$opt_pass,$opt_port,$opt_debug,$opt_user,$opt_r,$opt_sp);
@@ -87,7 +91,7 @@ eval {
 	     );
 };
 if ($@) {
-    die "Problems connecting to db:\n$@\n";
+    $logger->error("Problems connecting to db:\n$@\n");
 }
 
 # Pre-create the command line options associated with database access
@@ -187,9 +191,9 @@ if (!(defined $opt_sp) || $opt_sp eq '') {
 my $species_file_stem = lc($opt_sp);
 $species_file_stem =~ s/ +/_/g;
 
-print "mysqldump_db_options=$mysqldump_db_options\n";
-print "reactome_db_options=$reactome_db_options\n";
-print "opt_sp=$opt_sp\n";
+$logger->info("mysqldump_db_options=$mysqldump_db_options\n");
+$logger->info("reactome_db_options=$reactome_db_options\n");
+$logger->info("opt_sp=$opt_sp\n");
 
 # For logging purposes, code groups will be reported in an array:
 # [label, STDERR[BOOL], STDOUT[BOOL], command(s)[may be a list of commands]]
@@ -197,9 +201,23 @@ print "opt_sp=$opt_sp\n";
 # log files foo_script.err, foo_script.out
 my @cmds = (
     [
+     "SearchIndexer",
+     1,
+     1,
+#     "cd $GK_ROOT_DIR",
+#     "git stash",
+#     "git subtree pull --prefix scripts/release/download_directory/search --squash search master",
+#     "git stash pop",
+#     "cd -",
+     "perl search_indexer.pl -r $release_nr $reactome_db_options",
+     "mv ebeye.xml.gz $release_nr"
+    ]
+    );
+my @foobarcmds = (
+    [
      "$species_file_stem.interactions.stid", 
      1, 
-     0, # set to 0 if STDOUT is redirected in command
+     0,  set to 0 if STDOUT is redirected in command
      "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' ".
      "| sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz"
     ],
@@ -230,13 +248,6 @@ my @cmds = (
      "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
      "mysqldump --opt $mysqldump_wordpress_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
      "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
-    ],
-    
-    [
-     "release_tarball",
-     1,
-     1,
-     "./make_release_tarball.pl $release_nr"
     ],
     
     [
@@ -369,6 +380,14 @@ my @cmds = (
     ],
     
     [
+     "release_tarball",
+     1,
+     1,
+     "./make_release_tarball.pl $release_nr"
+    ],
+    
+    
+    [
      "PathwaySummationMappingfile",
      1,
      1,
@@ -384,15 +403,17 @@ foreach my $cmd (@cmds) {
 }
 
 if ($broken_command_counter > 0) {
-    print STDERR "$broken_command_counter commands failed, please check the above printout to diagnose the problems\n";
+    $logger->error("$broken_command_counter commands failed, please check the above printout to diagnose the problems\n");
 }
 
-print "create_download_directory.pl has finished its job\n";
+$logger->info("create_download_directory.pl has finished its job\n");
 
 sub run {
     my $cmd = shift;
     my ($label,$stderr,$stdout,@commands) = @$cmd;
     my $redirect = '';
+    
+    my $logger = get_logger(__PACKAGE__);
 
     my $log = "${label}.out"  if $stdout;
     my $elog = "${label}.err" if $stderr;
@@ -402,27 +423,27 @@ sub run {
     $redirect = ">> $log" if $log;
     $redirect .= " 2>> $elog" if $elog;
 
-    print STDERR "\nExecuting task $label\n";
+    $logger->info("Executing task $label")
     my $not_good = 0;
 
     # create the list of commands with individual logging 
     my $command = join(';', map {"$_ $redirect"} @commands);
 		       
-    print STDERR "Executing: ", hide_password($command), "\n";
+    $logger->info("Executing: " . hide_password($command) . "\n")
 
     my $retval = system $command; 
     if ($retval) {
-	print STDERR "WARNING - something went wrong while executing '" . hide_password($command) . " ($!)'!!\n";
+	$logger->error("something went wrong while executing '" . hide_password($command) . " ($!)'!!\n");
 	$not_good++;
     }
     else {
-	print STDERR "Success!\n";
+	$logger->info("Success!\n");
     }
 
     if ($log || $elog) {
 	my $files = $log && $elog ? 'files are' : 'file is';
 	$files .= $log && $elog ? " $log and $elog." : $log ? " $log." : " $elog.";
-	print STDERR "The log $files\n"; 
+	$logger->info("The log $files\n");
     }
 
     return $not_good;
