@@ -1,4 +1,6 @@
-## workflow for counting hits to AnalysisService and converting count to a file formatted for joyofdata.de
+## AnalysisService heat map
+
+This is the workflow for counting hits to AnalysisService and converting count to a file formatted for joyofdata.de
 
 First run this:
 
