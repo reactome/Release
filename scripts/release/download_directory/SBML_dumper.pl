@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl -w
+use strict;
 
 use lib "/usr/local/gkb/modules";
 # for use @HOME
@@ -6,7 +7,6 @@ use lib "/tmp/libs/bioperl-1.0";
 use lib "/tmp/libs/GKB/modules";
 use lib "/tmp/libs/my_perl_stuff";
 
-use strict;
 use GKB::DBAdaptor;
 use Data::Dumper;
 use Getopt::Long;

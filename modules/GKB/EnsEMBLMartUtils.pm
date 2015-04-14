@@ -12,10 +12,13 @@ use BioMart::Initializer;
 use BioMart::Query;
 use BioMart::QueryRunner;
 
+use GKB::EnsEMBLUtils qw/:all/;
 use parent 'GKB::EnsEMBLUtils';
 
-our @EXPORT_OK = qw/get_query get_query_runner update_registry_file get_identifiers get_version get_ensembl_genome_version/;
-my %EXPORT_TAGS = (all => [qw/get_query get_query_runner update_registry_file get_identifiers get_version get_ensembl_genome_version/],
+our @EXPORT_OK = qw/get_query get_query_runner update_registry_file get_identifiers/;
+push @EXPORT_OK, @GKB::EnsEMBLUtils::EXPORT_OK;
+
+our %EXPORT_TAGS = (all => [@EXPORT_OK],
                    query => [qw/get_query get_query_runner/]);
 
 sub get_query {

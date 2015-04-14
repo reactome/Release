@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl -w
+use strict;
 
 #This script should be run over a release database as it requires stable identifiers to be present
 #This script produces a tab delimited file for submission to goa - including Reactome annotations for cellular components, molecular function and biological process.
@@ -16,7 +17,6 @@ use GKB::DBAdaptor;
 use GKB::Utils;
 use Data::Dumper;
 use Getopt::Long;
-use strict;
 
 # Database connection
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_date, $opt_debug);

@@ -484,7 +484,7 @@ ROW:foreach my $row (@rows) {
 		$date = $date{$row};
     }
     
-    print FILE $row."\t".$date."\t".$assigned_by."\t".$complex."\n";  #the date has to be added after the check, otherwise duplicate entries are created simply due to different modification dates
+    print FILE $row."\t".$date."\t".$assigned_by."\t".$complex."\t\n";  #the date has to be added after the check, otherwise duplicate entries are created simply due to different modification dates
 }
 
 print "Lines in check file: ", $count1;

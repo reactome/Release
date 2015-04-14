@@ -1,11 +1,15 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 use lib "/usr/local/gkb/modules";
+
+use GKB::Config;
 use GKB::DBAdaptor;
 use GKB::Utils_esther;
+
+use autodie;
 use Data::Dumper;
 use Getopt::Long;
-use strict;
 
 @ARGV || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -class class";
 
@@ -25,9 +29,9 @@ $opt_db || die "Need database name (-db).\n";
 my $dba = GKB::DBAdaptor->new
     (
      -dbname => $opt_db,
-     -user   => $opt_user,
+     -user   => $opt_user || $GKB::Config::GK_DB_USER,
      -host   => $opt_host,
-     -pass   => $opt_pass,
+     -pass   => $opt_pass || $GKB::Config::GK_DB_PASS,
      -port   => $opt_port,
      -driver => 'mysql',
      -DEBUG => $opt_debug
@@ -43,9 +47,22 @@ my $instance_edit = GKB::Utils_esther::create_instance_edit( $dba, $surname, $in
 
 my $ar = $dba->fetch_instance(-CLASS => 'PhysicalEntity');
 
+open(my $gee_fh, '>', 'GEEsWithoutReferenceEntities.txt');
+(my $outfile = $0) =~ s/pl$/txt/;
+open(my $out_fh, '>', $outfile);
 foreach my $pe (@{$ar}) {
-    print $pe->db_id . "\t" . $pe->name->[0] . "\t" . get_systematic_name($pe) . "\n";
+    next if $pe->is_a('SimpleEntity') || $pe->is_a('OtherEntity');
+    next unless $pe->species->[0] && $pe->species->[0]->name->[0] =~ /homo sapiens/i;
+    
+    if ($pe->is_a('GenomeEncodedEntity') && !$pe->referenceEntity->[0]) {
+	print $gee_fh $pe->db_id . "\t" . $pe->name->[0] . "\n";
+	next;
+    } 
+    
+    print $out_fh $pe->db_id . "\t" . $pe->name->[0] . "\t" . get_systematic_name($pe) . "\n";
 }
+close $gee_fh;
+close $out_fh;
 
 sub get_systematic_name {
     my $pe = shift;
