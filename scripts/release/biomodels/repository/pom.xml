@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.reactome.server</groupId>
-    <artifactId>models2pathways</artifactId>
+    <groupId>org.reactome.server.tools</groupId>
+    <artifactId>m2p-core</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
@@ -109,7 +109,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>org.reactome.server.models2pathways.core.entrypoint.Models2Pathways</mainClass>
+                    <mainClass>org.reactome.server.core.models2pathways.core.entrypoint.Models2Pathways</mainClass>
                 </configuration>
             </plugin>
             <plugin>
