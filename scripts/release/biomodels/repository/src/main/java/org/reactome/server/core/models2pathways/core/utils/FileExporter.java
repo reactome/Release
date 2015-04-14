@@ -39,8 +39,7 @@ public class FileExporter {
 
     public static void addRow(PathwaySummary pathwaySummary, BioModel bioModel) {
         try {
-            fileWriter.write(pathwaySummary.getDbId() + TAB +
-                    bioModel.getBioMdId() + TAB +
+            fileWriter.write(bioModel.getBioMdId() + TAB +
                     pathwaySummary.getStId() + TAB +
                     bioModel.getName() + NEW_LINE);
             fileWriter.flush();
