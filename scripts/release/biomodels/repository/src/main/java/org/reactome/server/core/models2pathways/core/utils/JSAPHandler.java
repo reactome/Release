@@ -39,13 +39,13 @@ public class JSAPHandler {
                 .setStringParser(JSAP.DOUBLE_PARSER)
                 .setRequired(false)
                 .setShortFlag('c')
-                .setDefault(String.valueOf(0.5))
+                .setDefault(String.valueOf(0.6))
                 .setLongFlag("coverage");
         opt4.setHelp("minimum pathway reaction coverage");
 
         FlaggedOption opt5 = new FlaggedOption("biomodels")
                 .setStringParser(JSAP.STRING_PARSER)
-                .setRequired(false)
+                .setRequired(true)
                 .setShortFlag('b')
                 .setLongFlag("biomodels");
         opt5.setHelp("Path to folder of BioModels files. ALTERNATIVE TO BioModels-Webservice!");

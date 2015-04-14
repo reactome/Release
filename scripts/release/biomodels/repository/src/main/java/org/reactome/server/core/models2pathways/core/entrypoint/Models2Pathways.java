@@ -1,6 +1,8 @@
 package org.reactome.server.core.models2pathways.core.entrypoint;
 
 import com.martiansoftware.jsap.JSAPResult;
+import org.reactome.server.analysis.core.data.HierarchiesDataContainer;
+import org.reactome.server.analysis.core.model.HierarchiesData;
 import org.reactome.server.core.models2pathways.biomodels.model.BioModel;
 import org.reactome.server.core.models2pathways.core.Consumer;
 import org.reactome.server.core.models2pathways.core.Producer;
@@ -24,12 +26,13 @@ import java.util.logging.Logger;
 public class Models2Pathways {
     final static Logger logger = Logger.getLogger(Models2Pathways.class.getName());
 
-    final static int BLOCKING_QUEUE_SIZE = 3;
+    final static int BLOCKING_QUEUE_SIZE = 10;
 
     private static Thread PRODUCER;
 
     public static void main(String[] args) {
         logger.info("Process has been started");
+        //HierarchiesDataContainer.POOL_SIZE = 10;
         //Set up all given arguments.
         JSAPResult jsapResult = JSAPHandler.ArgumentHandler(args);
         FileExporter.setLocationPath(jsapResult.getString("output"));
