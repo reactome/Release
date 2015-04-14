@@ -28,7 +28,7 @@ my @options = (
 	['UpdateGkCurrent', GKB_DEV_ALIAS, "-populate gk_current database with new release content"],
 	['FrontpageAndTOC', GKB_DEV_ALIAS, "-create frontpage images and cached toc file"],
 	['DownloadDirectory', GKB_DEV_ALIAS, "-update the download directory"],
-    	['RerouteRequests', GKB_LIVE_ALIAS, "-reroute website to port 8000"],
+    	['RerouteRequests', GKB_LIVE_ALIAS, "-reroute website to reactomerelease"],
     	['UpdateSourceCode', GKB_LIVE_ALIAS, "-update source code"],
     	['DownloadDirectory', GKB_LIVE_ALIAS, "-update download directory"],
     	['CopyOverDatabases', GKB_LIVE_ALIAS, "-copy over databases"],

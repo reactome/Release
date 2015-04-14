@@ -1,0 +1,4 @@
+archive
+*.sh
+*.err 
+*.log
