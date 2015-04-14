@@ -315,17 +315,17 @@ foreach my $obs_id ( sort keys %obsolete ) {
         my $sz    = 0;
         my $ref   = $dba->fetch_referer_by_instance($sdi);
 
-		foreach my $go_ref ( @{$ref} ) {
-        	$go_ref->inflate();
+	foreach my $go_ref ( @{$ref} ) {
+            $go_ref->inflate();
             my $dbr = $go_ref->referenceDatabase->[0]; 
             if (!$dbr || $dbr->db_id != 1 ) {
                 $sz = 1;
             }
         }
         if ( $sz == 0 ) {
-	    	print FR "";
-	    	print FR "\|GO:$obs_id\n";
-	    	print FR "\|\-\n";
+	    print FR "";
+	    print FR "\|GO:$obs_id\n";
+	    print FR "\|\-\n";
 	    
             print "Deleting $db_id...\n";
             $dba->delete_by_db_id($db_id);

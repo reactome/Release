@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl
+use strict;
 
 # Make sure you don't have "competing" libraries...
 # for use @CSHL
@@ -11,7 +12,9 @@ use GKB::DBAdaptor;
 use GKB::Utils;
 use Data::Dumper;
 use Getopt::Long;
-use strict;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_outputdir,$opt_debug);
 

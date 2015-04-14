@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl -w
+use strict;
 
 # I think it's more user-friendly if the user will not have to practise any
 # symlink tricks. Hence the BEGIN block. If the location of the script or
@@ -13,13 +14,16 @@ BEGIN {
     $ENV{PATH} = "$libpath/scripts:$libpath/scripts/release:" . $ENV{PATH};
 }
 
-use strict;
 use GKB::Utils;
 use GKB::Instance;
 use GKB::Config;
 use GKB::DBAdaptor;
 use Data::Dumper;
 use Getopt::Long;
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
+
 
 $GKB::Config::NO_SCHEMA_VALIDITY_CHECK = undef;
 
@@ -99,11 +103,11 @@ foreach my $sp (@{$species}) {
     my $sp_name = $sp->displayName;
     my $tmp = lc($sp_name);
 
-    print "$0: Processing species: $tmp\n";
+    $logger->info("$0: Processing species: $tmp\n");
 
     $tmp =~ s/\s+/_/g;
     my $cmd = "perl report_interactions.pl $reactome_db_options -sp '$sp_name' | sort | uniq | gzip -c > $opt_outputdir/$tmp.interactions.txt.gz";
     print "$cmd\n";
-    system($cmd) == 0 or print "$cmd failed.\n";
+    system($cmd) == 0 or $logger->error("$cmd failed.\n");
 }
 

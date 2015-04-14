@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl -w
+use strict;
 
 #This script infers reactions from one species to another based on a file of homologue pairs. The implementation at present is based on the Ensembl compara orthologue mapping, but the script can easily be adapted by adding a method returning the homologue hash. The orthopair file for the Ensembl compara system can be prepared by running the script  prepare_orthopair_files.pl under GKB/scripts/compara.
 #After the reactions have been inferred, the higher-level event hierarchy is also created based on the from-species.
@@ -14,19 +15,26 @@
 
 use lib "$ENV{HOME}/bioperl-1.0";
 use lib "$ENV{HOME}/GKB/modules";
+
 use GKB::DBAdaptor;
 use GKB::Instance;
 use GKB::Utils_esther;
 use GKB::Utils;
+use GKB::Config;
 use GKB::Config_Species;
+
+use autodie;
 use Data::Dumper;
 use Getopt::Long;
 use DBI;
-use strict;
 
-print "infer_events: starting\n";
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
-@ARGV || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -r reactome_release -from from_species_name(e.g. hsa) -sp to_species_name(e.g.dme) -filt second_taxon_filter -thr threshold_for_complex";
+$logger->info("starting\n");
+
+@ARGV || $logger->error_die("Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -r reactome_release -from from_species_name(e.g. hsa) -sp to_species_name(e.g.dme) -filt second_taxon_filter -thr threshold_for_complex");
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp, $opt_filt, $opt_thr, $opt_debug);
 
@@ -43,12 +51,12 @@ our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp,
 	    "debug",
 	    );
 
-$opt_db || die "Need database name (-db).\n";
-$opt_r || die "Need Reactome release number, e.g. -r 32\n";
-$opt_sp || die "Need species (-sp), e.g. mmus.\n";
-$opt_from || ($opt_from = 'hsap');
+$opt_db || $logger->error_die("Need database name (-db).\n");
+$opt_r || $logger->error_die("Need Reactome release number, e.g. -r 32\n");
+$opt_sp || $logger->error_die("Need species (-sp), e.g. mmus.\n");
+$opt_from ||= 'hsap';
 
-print "infer_events: opt_db=$opt_db\n";
+$logger->info("opt_db=$opt_db\n");
 
 #connection to Reactome
 my $dba = GKB::DBAdaptor->new
@@ -64,7 +72,7 @@ my $dba = GKB::DBAdaptor->new
 
 my $protein_class = &GKB::Utils::get_reference_protein_class($dba); #determines whether the database is in the pre-March09 schema with ReferencePeptideSequence, or in the new one with ReferenceGeneProduct and ReferenceIsoform
 
-print "infer_events: protein_class=$protein_class\n";
+$logger->info("protein_class=$protein_class\n");
 
 ######################################################################
 #These variables should be edited according to the method employed
@@ -96,14 +104,14 @@ my %ensg = %{$hr_ensg};
 
 #prepare relevant ReferenceDatabases (UniProt as default, Ensembl db as specified in Species_Config.pm)
 my $uni_db = $dba->fetch_instance_by_attribute('ReferenceDatabase', [['name', ['UniProt'],0]])->[0];
-print "infer_events: UniProt ReferenceDatabase.extended_displayName=" . $uni_db->extended_displayName . "\n";
+$logger->info("UniProt ReferenceDatabase.extended_displayName=" . $uni_db->extended_displayName . "\n");
 
 my $ens_db = create_instance('ReferenceDatabase');
 $ens_db->Name('Ensembl', "ENSEMBL_$species_info{$opt_sp}->{'name'}->[0]\_PROTEIN");
 $ens_db->Url($species_info{$opt_sp}->{'refdb'}->{'url'});
 $ens_db->AccessUrl($species_info{$opt_sp}->{'refdb'}->{'access'});
 $ens_db = check_for_identical_instances($ens_db);
-print "infer_events: ENSEMBL ReferenceDatabase.extended_displayName=" . $ens_db->extended_displayName . "\n";
+$logger->info("ENSEMBL ReferenceDatabase.extended_displayName=" . $ens_db->extended_displayName . "\n");
 
 my $ensg_db = create_instance('ReferenceDatabase');
 $ensg_db->Name('ENSEMBL', "ENSEMBL_$species_info{$opt_sp}->{'name'}->[0]\_GENE");
@@ -121,7 +129,7 @@ if ($species_info{$opt_sp}->{'alt_refdb'}) {
     $alt_refdb = check_for_identical_instances($alt_refdb);
 }
 
-print "infer_events: about to prepare static instances\n";
+$logger->info("about to prepare static instances\n");
 
 #prepare 'static' instances
 #Summation used for all newly created or modified instances during orthology inference
@@ -141,7 +149,7 @@ $evidence_type = check_for_identical_instances($evidence_type);
 my $taxon = create_instance('Species');
 $taxon->Name(@{$species_info{$opt_sp}->{'name'}});
 $taxon = check_for_identical_instances($taxon);
-print "infer_events: taxon=" . $taxon->extended_displayName . "\n";
+$logger->info("taxon=" . $taxon->extended_displayName . "\n");
 
 #get instance for *from* Taxon
 my $source_species = $dba->fetch_instance(-CLASS => 'Species',
@@ -149,10 +157,10 @@ my $source_species = $dba->fetch_instance(-CLASS => 'Species',
 						      -VALUE => [$species_info{$opt_from}->{'name'}->[0]]}
 						     ]
 					  )->[0];
-print "infer_events.pl: dba=$dba\n";
-print "infer_events.pl: opt_from=$opt_from\n";
+$logger->info("dba=$dba\n");
+$logger->info("opt_from=$opt_from\n");
 
-$source_species || die ("infer_events: can't find source species instance for $species_info{$opt_from}->{'name'}->[0], aborting!\n");
+$source_species || $logger->error_die("can't find source species instance for $species_info{$opt_from}->{'name'}->[0], aborting!\n");
 
 
 ##################
@@ -213,14 +221,14 @@ foreach my $attribute ("compartment", "species", "referenceEntity") {
 
 #start looping over all events to be considered for inference
 foreach my $rxn (@{$reaction_ar}) {
-	print "infer_events: considering reaction DB_ID=" . $rxn->db_id . "\n";
+    $logger->info("considering reaction DB_ID=" . $rxn->db_id . "\n");
 
 #exclude some events based on a number of criteria
     next if grep {$rxn->db_id == $_} @list; #list of ids to be excluded
     next if $rxn->Species->[1]; #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway    
     next if $rxn->disease->[0]; # skip disease reactions
     if (is_chimeric($rxn)) {
-        print "infer_events: skipping chimeric reaction DB_ID=" . $rxn->db_id . "\n";
+        $logger->info("skipping chimeric reaction DB_ID=" . $rxn->db_id . "\n");
         next;
     }
     next if ($rxn->is_a('ReactionlikeEvent') && $rxn->reverse_attribute_value('hasMember')->[0]); #Reactions under hasMember are basically covered by the higher-level event, including them would be a duplication
@@ -237,13 +245,13 @@ foreach my $rxn (@{$reaction_ar}) {
 #'orthologousEvent' slot filled in - should maybe addressed by a 'filler script'
 #(this is now available in QA_collection.pm)
     my @tmp = grep {$_->Species->[0]->db_id == $taxon->db_id && !(is_chimeric($_))} (@{$rxn->OrthologousEvent}, @{$rxn->InferredFrom});
-	print "infer_events: scalar(tmp)=" . scalar(@tmp) . "\n";
+    $logger->info("scalar(tmp)=" . scalar(@tmp) . "\n");
     if ($tmp[0]) { #the event exists in the other species, need not be inferred but should be kept for the step when the event hierarchy is created, so that it can be fit in at the appropriate position in the event hierarchy
 	$inferred_event{$rxn} = $tmp[0]; #disregards multiple events here..., the first event is taken into the hash to allow building the event structure further down
 	push @all_human_events, $rxn;
 	next;
     }
-    print "infer_events: infer event for reaction=" . $rxn->extended_displayName . "\n";
+    $logger->info("infer event for reaction=" . $rxn->extended_displayName . "\n");
     infer_event($rxn);
 }
 
@@ -253,13 +261,13 @@ foreach (@all_human_events){
     next if $seen{$_}++;
     create_orthologous_generic_event($_);
 }
-print "\n";
+
 #fill pathways and blackboxevents with their components in the same order as in human
 my %seen3;
 foreach my $hum_pathway (@all_human_events){
     next if $seen3{$hum_pathway}++;
     next unless $hum_pathway->is_valid_attribute('hasEvent'); #This should happen for both Pathways and BlackBoxEvents
-   print "infer_events: filling pathway name=" . $hum_pathway->extended_displayName . "\n";
+    $logger->info("filling pathway name=" . $hum_pathway->extended_displayName . "\n");
     my @pathway_comps;
     foreach my $path_comp (@{$hum_pathway->HasEvent}) {
 	#print STDERR $path_comp->extended_displayName, "\n";
@@ -272,10 +280,10 @@ foreach my $hum_pathway (@all_human_events){
     	$inferred_event{$hum_pathway}->add_attribute_value_if_necessary('hasEvent', @pathway_comps);
     	$dba->update_attribute($inferred_event{$hum_pathway}, 'hasEvent');
     } else {
-    	print "WARNING - ". $hum_pathway->extended_displayName. " and ". $inferred_event{$hum_pathway}->extended_displayName . " (likely connected via manual inference) have different classes.\n";
+    	$logger->info($hum_pathway->extended_displayName. " and ". $inferred_event{$hum_pathway}->extended_displayName . " (likely connected via manual inference) have different classes.\n");;
     }
 }
-print "infer_events: inferring preceding events.....\n";
+$logger->info("inferring preceding events.....\n");
 infer_preceding_events(@all_human_events);
 #finally mark all human events with orthologous events as modified
 my %seen4;
@@ -307,7 +315,7 @@ close(REGULATOR);
 close(INF);
 close(ELI);
 
-print "infer_events: end\n";
+$logger->info("end\n");
 
 #creates and returns an instance of a given class, ready to be used and with the appropriate InstanceEdit in the 'created' slot
 sub create_instance {
@@ -363,8 +371,11 @@ sub is_chimeric {
 #This method reads an orthopair file (in the format 'from_species tab to_species(=list separated by space)'), and returns a hash reference 'homologue'.
 sub read_orthology {
     my ($file) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my %homologue;
-    print "infer_events.read_orthology: Now reading orthology mapping file: ", $file, "\n";
+    $logger->info("Now reading orthology mapping file: $file\n");
     if (open(READ_ORTHOPAIR, $file)) {
 	    while (<READ_ORTHOPAIR>) {
 		my %seen_to;
@@ -377,7 +388,7 @@ sub read_orthology {
 	    }
 	    close(READ_ORTHOPAIR);
     } else {
-    	print "Could not open file: $file\n";
+    	$logger->error("Could not open file: $file\n");
     }
     return \%homologue;
 }
@@ -385,8 +396,11 @@ sub read_orthology {
 #This method reads the gene-protein mapping file for the target species (tab delimited, multiple protein ids separated by space), and returns a hash reference 'ensg'.
 sub read_ensg_mapping {
     my ($file) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my %ensg;
-    print "infer_events.read_ensg_mapping: Now reading ensg mapping file: ", $file, "\n";
+    $logger->info("Now reading ensg mapping file: $file\n");
     if (open(READ, $file)) {
 	    while (<READ>) {
 	        my ($ensg, $protein_ids) = split/\t/, $_;
@@ -398,7 +412,7 @@ sub read_ensg_mapping {
 	    }
 	    close(READ);
     } else {
-    	print"Could not open file: $file\n";
+    	$logger->error("Could not open file: $file\n");
     }
     return \%ensg;
 }
@@ -481,6 +495,9 @@ sub infer_members {
 #returns the incoming instance itself if 'species' is not a valid attribute - except for the situation where the compartment needs to change to 'intracellular' when the target species is a bacteria
 sub orthologous_entity {
     my ($i, $override) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     if ($i->is_valid_attribute('species')) {
         unless ($orthologous_entity{$i}) {
 	    my $inf_ent;
@@ -499,7 +516,7 @@ sub orthologous_entity {
 		# TODO: somebody needs to look into this.
 		$inf_ent = $i;
 	    } else {
-		die "Unknown PhysicalEntity class: " . $i->class . ", instance name: " . $i->extended_displayName . "\n";
+		$logger->error_die("Unknown PhysicalEntity class: " . $i->class . ", instance name: " . $i->extended_displayName . "\n");
 	    }
 	    $override && return $inf_ent; #should not be assigned to $orthologous_entity, otherwise this will be taken as orthologous entity even when the source species entity comes in again without override being set
             $orthologous_entity{$i} = $inf_ent;
@@ -557,6 +574,9 @@ sub new_inferred_instance {
 #returns an event instance if inference successful, undef if unsuccessful. However, if the incoming reaction does not contain any EntityWithAccessionedSequence, it returns 1. In this case the event is not counted as an eligible event.
 sub infer_event {
     my ($event) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     $inferred_event{$event} && return $inferred_event{$event};
     my $inf_e = new_inferred_instance($event);
 =head #was used when event names contained e.g. species info, should be resolved now... (?)
