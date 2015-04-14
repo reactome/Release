@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl  -w
+use strict;
 
 # Copies instances hierarchically from a source Reactome
 # database to a target Reactome database.  The names of
@@ -14,18 +15,14 @@
 # -dbt tdb			Target Reactome database
 # -db_ids			Pathways to be copied
 
-# Make sure you don't have "competing" libraries...
-# for use @CSHL
 use lib "/usr/local/gkb/modules";
-# for use @HOME
-use lib "$ENV{HOME}/bioperl-1.0";
-use lib "$ENV{HOME}/GKB/modules";
+
 use GKB::Instance;
 use GKB::DBAdaptor;
 use GKB::StableIdentifiers;
+
 use Data::Dumper;
 use Getopt::Long;
-use strict;
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_sdb,$opt_tdb,$opt_db_ids,$opt_debug);
 
