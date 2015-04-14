@@ -1,0 +1,2947 @@
+1059683	Homo sapiens	Interleukin-6 signaling	
+109581	Homo sapiens	Apoptosis	
+109582	Homo sapiens	Hemostasis	
+109606	Homo sapiens	Intrinsic Pathway for Apoptosis	
+109607	Homo sapiens	Extrinsic Pathway	
+109869	Homo sapiens	RAF/MAP kinase cascade	
+111885	Homo sapiens	Opioid Signalling	
+112307	Homo sapiens	Transmission across Electrical Synapses 	
+112308	Homo sapiens	Depolarization of the Presynaptic Terminal Triggers the Opening of Calcium Channels	
+112310	Homo sapiens	Neurotransmitter Release Cycle	
+112311	Homo sapiens	Neurotransmitter Clearance In The Synaptic Cleft	
+112313	Homo sapiens	Neurotransmitter uptake and Metabolism In Glial Cells	
+112314	Homo sapiens	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	
+112315	Homo sapiens	Transmission across Chemical Synapses	
+112316	Homo sapiens	Neuronal System	
+114508	Homo sapiens	Effects of PIP2 hydrolysis	
+114604	Homo sapiens	GPVI-mediated activation cascade	
+1169408	Homo sapiens	ISG15 antiviral mechanism	
+1169410	Homo sapiens	Antiviral mechanism by IFN-stimulated genes	
+1170546	Homo sapiens	Prolactin receptor signaling	
+1181150	Homo sapiens	Signaling by NODAL	
+1187000	Homo sapiens	Fertilization	
+1221632	Homo sapiens	Meiotic synapsis	
+1221633	Mus musculus	Meiotic Synapsis	
+1222352	Homo sapiens	Latent infection of Homo sapiens with Mycobacterium tuberculosis	
+1226099	Homo sapiens	Signaling by FGFR in disease	
+1227887	Gallus gallus	RLR (RIG-like receptor) mediated induction of IFN alpha/beta	
+1227986	Homo sapiens	Signaling by ERBB2	
+1234174	Homo sapiens	Regulation of Hypoxia-inducible Factor (HIF) by oxygen	
+1236394	Homo sapiens	Signaling by ERBB4	
+1237044	Homo sapiens	Erythrocytes take up carbon dioxide and release oxygen	
+1247673	Homo sapiens	Erythrocytes take up oxygen and release carbon dioxide	
+1257604	Homo sapiens	PIP3 activates AKT signaling	
+1266695	Homo sapiens	Interleukin-7 signaling	
+1266738	Homo sapiens	Developmental Biology	
+1268020	Homo sapiens	Mitochondrial protein import	
+1280215	Homo sapiens	Cytokine Signaling in Immune system	
+1280218	Homo sapiens	Adaptive Immune System	
+1296071	Homo sapiens	Potassium Channels	
+1362409	Homo sapiens	Mitochondrial iron-sulfur cluster biogenesis	
+1368071	Homo sapiens	NR1D1 (REV-ERBA) represses gene expression	
+1368082	Homo sapiens	RORA activates gene expression	
+1368092	Mus musculus	Rora activates gene expression	
+1368108	Homo sapiens	BMAL1:CLOCK;NPAS2 activates circadian gene expression	
+1368110	Mus musculus	Bmal1:Clock;Npas2 activates circadian gene expression	
+140534	Homo sapiens	Ligand-dependent caspase activation	
+140877	Homo sapiens	Formation of Fibrin Clot (Clotting Cascade)	
+1428517	Homo sapiens	The citric acid (TCA) cycle and respiratory electron transport	
+1430728	Homo sapiens	Metabolism	
+1433557	Homo sapiens	Signaling by SCF-KIT	
+1442490	Homo sapiens	Collagen degradation	
+1445148	Homo sapiens	Translocation of GLUT4 to the plasma membrane	
+1461973	Homo sapiens	Defensins	
+1474165	Homo sapiens	Reproduction	
+1474228	Homo sapiens	Degradation of the extracellular matrix	
+1474244	Homo sapiens	Extracellular matrix organization	
+1474290	Homo sapiens	Collagen formation	
+1475029	Homo sapiens	Reversible hydration of carbon dioxide	
+1480926	Homo sapiens	O2/CO2 exchange in erythrocytes	
+1483206	Homo sapiens	Glycerophospholipid biosynthesis	
+1483249	Homo sapiens	Inositol phosphate metabolism	
+1483255	Homo sapiens	PI Metabolism	
+1483257	Homo sapiens	Phospholipid metabolism	
+1489509	Homo sapiens	DAG and IP3 signaling	
+1500620	Homo sapiens	Meiosis	
+1500931	Homo sapiens	Cell-Cell communication	
+1502540	Homo sapiens	Signaling by Activin	
+156580	Homo sapiens	Phase II conjugation	
+1566948	Homo sapiens	Elastic fibre formation	
+156842	Homo sapiens	Eukaryotic Translation Elongation	
+157118	Homo sapiens	Signaling by NOTCH	
+157579	Homo sapiens	Telomere Maintenance	
+157858	Homo sapiens	Gap junction trafficking and regulation	
+15869	Homo sapiens	Metabolism of nucleotides	
+1592230	Homo sapiens	Mitochondrial biogenesis	
+1592389	Homo sapiens	Activation of Matrix Metalloproteinases	
+162582	Homo sapiens	Signal Transduction	
+162587	Homo sapiens	HIV Life Cycle	
+162906	Homo sapiens	HIV Infection	
+162909	Homo sapiens	Host Interactions of HIV factors	
+1630316	Homo sapiens	Glycosaminoglycan metabolism	
+163125	Homo sapiens	Post-translational modification: synthesis of GPI-anchored proteins	
+163200	Homo sapiens	Respiratory electron transport; ATP synthesis by chemiosmotic coupling; and heat production by uncoupling proteins.	
+163685	Homo sapiens	Integration of energy metabolism	
+163841	Homo sapiens	Gamma carboxylation; hypusine formation and arylsulfatase activation	
+1640170	Homo sapiens	Cell Cycle	
+1643685	Homo sapiens	Disease	
+1643713	Homo sapiens	Signaling by EGFR in Cancer	
+1650814	Homo sapiens	Collagen biosynthesis and modifying enzymes	
+1655829	Homo sapiens	Regulation of cholesterol biosynthesis by SREBP (SREBF)	
+166058	Homo sapiens	MyD88:Mal cascade initiated on plasma membrane	
+1660598	Gallus gallus	Metabolism	
+166166	Homo sapiens	MyD88-independent TLR3/TLR4 cascade 	
+166520	Homo sapiens	Signalling by NGF	
+166658	Homo sapiens	Complement cascade	
+1670466	Gallus gallus	DNA replication and repair	
+1679131	Homo sapiens	Trafficking and processing of endosomal TLR	
+168164	Homo sapiens	Toll Like Receptor 3 (TLR3) Cascade	
+168249	Homo sapiens	Innate Immune System	
+168253	Homo sapiens	Host Interactions with Influenza Factors	
+168254	Homo sapiens	Influenza Infection	
+168255	Homo sapiens	Influenza Life Cycle	
+168256	Homo sapiens	Immune System	
+168643	Homo sapiens	Nucleotide-binding domain; leucine rich repeat containing receptor (NLR) signaling pathways	
+168799	Homo sapiens	Neurotoxicity of clostridium toxins	
+168898	Homo sapiens	Toll-Like Receptors Cascades	
+168928	Homo sapiens	RIG-I/MDA5 mediated induction of IFN-alpha/beta pathways	
+169911	Homo sapiens	Regulation of Apoptosis	
+170834	Homo sapiens	Signaling by TGF-beta Receptor Complex	
+174143	Homo sapiens	APC/C-mediated degradation of cell cycle proteins	
+177929	Homo sapiens	Signaling by EGFR	
+1799339	Homo sapiens	SRP-dependent cotranslational protein targeting to membrane	
+1834949	Homo sapiens	Cytosolic sensors of pathogen-associated DNA 	
+1852241	Homo sapiens	Organelle biogenesis and maintenance	
+186712	Homo sapiens	Regulation of beta-cell development	
+186797	Homo sapiens	Signaling by PDGF	
+187037	Homo sapiens	NGF signalling via TRKA from the plasma membrane	
+189200	Homo sapiens	Hexose transport	
+189445	Homo sapiens	Metabolism of porphyrins	
+190236	Homo sapiens	Signaling by FGFR	
+1912422	Homo sapiens	Pre-NOTCH Expression and Processing	
+191273	Homo sapiens	Cholesterol biosynthesis	
+194068	Homo sapiens	Bile acid and bile salt metabolism	
+194138	Homo sapiens	Signaling by VEGF	
+194315	Homo sapiens	Signaling by Rho GTPases	
+194441	Homo sapiens	Metabolism of non-coding RNA	
+195253	Homo sapiens	Degradation of beta-catenin by the destruction complex	
+195258	Homo sapiens	RHO GTPase Effectors	
+195721	Homo sapiens	Signaling by Wnt	
+196071	Homo sapiens	Metabolism of steroid hormones and vitamin D	
+196849	Homo sapiens	Metabolism of water-soluble vitamins and cofactors	
+196854	Homo sapiens	Metabolism of vitamins and cofactors	
+1980143	Homo sapiens	Signaling by NOTCH1	
+1980145	Homo sapiens	Signaling by NOTCH2	
+1980148	Homo sapiens	Signaling by NOTCH3	
+1980150	Homo sapiens	Signaling by NOTCH4	
+198933	Homo sapiens	Immunoregulatory interactions between a Lymphoid and a non-Lymphoid cell	
+199977	Homo sapiens	ER to Golgi Transport	
+199991	Homo sapiens	Membrane Trafficking	
+201451	Homo sapiens	Signaling by BMP	
+201681	Homo sapiens	TCF dependent signaling in response to WNT	
+202131	Homo sapiens	Metabolism of nitric oxide	
+2022090	Homo sapiens	Assembly of collagen fibrils and other multimeric structures	
+2022377	Homo sapiens	Metabolism of Angiotensinogen to Angiotensins	
+202403	Homo sapiens	TCR signaling	
+202733	Homo sapiens	Cell surface interactions at the vascular wall	
+2028269	Homo sapiens	Signaling by Hippo	
+2029480	Homo sapiens	Fcgamma receptor (FCGR) dependent phagocytosis	
+2032785	Homo sapiens	YAP1- and WWTR1 (TAZ)-stimulated gene expression	
+2046104	Homo sapiens	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	
+209952	Homo sapiens	Peptide hormone biosynthesis	
+211000	Homo sapiens	Regulatory RNA pathways	
+211859	Homo sapiens	Biological oxidations	
+211945	Homo sapiens	Phase 1 - Functionalization of compounds	
+212165	Homo sapiens	Epigenetic regulation of gene expression	
+212300	Homo sapiens	PRC2 methylates histones and DNA	
+212436	Homo sapiens	Generic Transcription Pathway	
+2132285	Gallus gallus	Complement Cascade	
+2132295	Homo sapiens	MHC class II antigen presentation	
+2142753	Homo sapiens	Arachidonic acid metabolism	
+2142789	Homo sapiens	Ubiquinol biosynthesis	
+2160456	Homo sapiens	Phenylketonuria	
+216083	Homo sapiens	Integrin cell surface interactions	
+2161522	Homo sapiens	Abacavir transport and metabolism	
+2172127	Homo sapiens	DAP12 interactions	
+2173782	Homo sapiens	Binding and Uptake of Ligands by Scavenger Receptors	
+2173793	Homo sapiens	Transcriptional activity of SMAD2/SMAD3:SMAD4 heterotrimer	
+2187338	Homo sapiens	Visual phototransduction	
+2206280	Homo sapiens	MPS IX - Natowicz syndrome	
+2206281	Homo sapiens	Mucopolysaccharidoses	
+2206282	Homo sapiens	MPS IIIB - Sanfilippo syndrome B	
+2206285	Homo sapiens	MPS VI - Maroteaux-Lamy syndrome	
+2206290	Homo sapiens	MPS IV - Morquio syndrome A	
+2206291	Homo sapiens	MPS IIIC - Sanfilippo syndrome C	
+2206292	Homo sapiens	MPS VII - Sly syndrome	
+2206296	Homo sapiens	MPS II - Hunter syndrome	
+2206302	Homo sapiens	MPS I - Hurler syndrome	
+2206305	Homo sapiens	MPS IIID - Sanfilippo syndrome D	
+2206307	Homo sapiens	MPS IIIA - Sanfilippo syndrome A	
+2206308	Homo sapiens	MPS IV - Morquio syndrome B	
+2219528	Homo sapiens	PI3K/AKT Signaling in Cancer	
+2219530	Homo sapiens	Constitutive Signaling by Aberrant PI3K in Cancer	
+2262749	Homo sapiens	Cellular response to hypoxia	
+2262752	Homo sapiens	Cellular responses to stress	
+2404192	Homo sapiens	Signaling by Type 1 Insulin-like Growth Factor 1 Receptor (IGF1R)	
+2422406	Gallus gallus	Innate Immune System	
+2426168	Homo sapiens	Activation of gene expression by SREBF (SREBP)	
+2454202	Homo sapiens	Fc epsilon receptor (FCERI) signaling	
+2474795	Homo sapiens	Diseases associated with visual transduction	
+2555396	Homo sapiens	Mitotic Metaphase and Anaphase	
+2559580	Homo sapiens	Oxidative Stress Induced Senescence	
+2559582	Homo sapiens	Senescence-Associated Secretory Phenotype (SASP)	
+2559583	Homo sapiens	Cellular Senescence	
+2559585	Homo sapiens	Oncogene Induced Senescence	
+2559586	Homo sapiens	DNA Damage/Telomere Stress Induced Senescence	
+2564830	Homo sapiens	Cytosolic iron-sulfur cluster assembly	
+2586551	Mus musculus	Signaling by Leptin	
+2586552	Homo sapiens	Signaling by Leptin	
+2644602	Homo sapiens	Signaling by NOTCH1 PEST Domain Mutants in Cancer	
+2644603	Homo sapiens	Signaling by NOTCH1 in Cancer	
+2644605	Homo sapiens	FBXW7 Mutants and NOTCH1 in Cancer	
+264876	Homo sapiens	Insulin processing	
+2660825	Homo sapiens	Signaling by NOTCH1 t(7;9)(NOTCH1:M1580_K2555) Translocation Mutant	
+2682334	Homo sapiens	EPH-Ephrin signaling	
+2691230	Homo sapiens	Signaling by NOTCH1 HD Domain Mutants in Cancer	
+2892245	Homo sapiens	POU5F1 (OCT4); SOX2; NANOG repress genes related to differentiation	
+2892247	Homo sapiens	POU5F1 (OCT4); SOX2; NANOG activate genes related to proliferation	
+2894858	Homo sapiens	Signaling by NOTCH1 HD+PEST Domain Mutants in Cancer	
+2978092	Homo sapiens	Abnormal conversion of 2-oxoglutarate to 2-hydroxyglutarate	
+2980736	Homo sapiens	Peptide hormone metabolism	
+2990846	Homo sapiens	SUMOylation	
+3000170	Homo sapiens	Syndecan interactions	
+3108214	Homo sapiens	SUMOylation of DNA damage response and repair proteins	
+3108232	Homo sapiens	SUMO E3 ligases SUMOylate target proteins	
+3229121	Homo sapiens	Glycogen storage diseases	
+3238698	Homo sapiens	WNT ligand biogenesis and trafficking	
+3247509	Homo sapiens	Chromatin modifying enzymes	
+3296469	Homo sapiens	Defects in cobalamin (B12) metabolism	
+3296482	Homo sapiens	Defects in vitamin and cofactor metabolism	
+3299685	Homo sapiens	Detoxification of Reactive Oxygen Species	
+3304347	Homo sapiens	Loss of Function of SMAD4 in Cancer	
+3304349	Homo sapiens	Loss of Function of SMAD2/3 in Cancer	
+3304351	Homo sapiens	Signaling by TGF-beta Receptor Complex in Cancer	
+3304356	Homo sapiens	SMAD2/3 Phosphorylation Motif Mutants in Cancer	
+3311021	Homo sapiens	SMAD4 MH2 Domain Mutants in Cancer	
+3315487	Homo sapiens	SMAD2/3 MH2 Domain Mutants in Cancer	
+3323169	Homo sapiens	Defects in biotin (Btn) metabolism	
+3359454	Homo sapiens	Defective TCN2 causes hereditary megaloblastic anemia	
+3359457	Homo sapiens	Defective GIF causes intrinsic factor deficiency	
+3359458	Homo sapiens	Defective LMBRD1 causes methylmalonic aciduria and homocystinuria type cblF	
+3359462	Homo sapiens	Defective AMN causes hereditary megaloblastic anemia 1	
+3359463	Homo sapiens	Defective CUBN causes hereditary megaloblastic anemia 1	
+3359467	Homo sapiens	Defective MTRR causes methylmalonic aciduria and homocystinuria type cblE	
+3359469	Homo sapiens	Defective MTR causes methylmalonic aciduria and homocystinuria type cblG	
+3359471	Homo sapiens	Defective MMAB causes methylmalonic aciduria type cblB	
+3359473	Homo sapiens	Defective MMADHC causes methylmalonic aciduria and homocystinuria type cblD	
+3359474	Homo sapiens	Defective MMACHC causes methylmalonic aciduria and homocystinuria type cblC	
+3359475	Homo sapiens	Defective MMAA causes methylmalonic aciduria type cblA	
+3359478	Homo sapiens	Defective MUT causes methylmalonic aciduria mut type	
+3359485	Homo sapiens	Defective CD320 causes methylmalonic aciduria	
+3371556	Homo sapiens	Cellular response to heat stress	
+3371598	Homo sapiens	Defective BTD causes biotidinase deficiency	
+3371599	Homo sapiens	Defective HLCS causes multiple carboxylase deficiency	
+353098	Gallus gallus	Carbohydrate metabolism	
+353377	Gallus gallus	DNA repair	
+354192	Homo sapiens	Integrin alphaIIb beta3 signaling	
+3560782	Homo sapiens	Diseases associated with glycosaminoglycan metabolism	
+3560783	Homo sapiens	Defective B4GALT7 causes EDS; progeroid type	
+3560792	Homo sapiens	Defective SLC26A2 causes chondrodysplasias	
+3560796	Homo sapiens	Defective PAPSS2 causes SEMD-PA	
+3560801	Homo sapiens	Defective B3GAT3 causes JDSSDHD	
+3595172	Homo sapiens	Defective CHST3 causes SEDCJD	
+3595174	Homo sapiens	Defective CHST14 causes EDS; musculocontractural type	
+3595177	Homo sapiens	Defective CHSY1 causes TPBS	
+3642278	Homo sapiens	Loss of Function of TGFBR2 in Cancer	
+3642279	Homo sapiens	TGFBR2 MSI Frameshift Mutants in Cancer	
+3645790	Homo sapiens	TGFBR2 Kinase Domain Mutants in Cancer	
+3656225	Homo sapiens	Defective CHST6 causes MCDC1	
+3656237	Homo sapiens	Defective EXT2 causes exostoses 2	
+3656244	Homo sapiens	Defective B4GALT1 causes B4GALT1-CDG (CDG-2d)	
+3656253	Homo sapiens	Defective EXT1 causes exostoses 1; TRPS2 and CHDS	
+3656532	Homo sapiens	TGFBR1 KD Mutants in Cancer	
+3656534	Homo sapiens	Loss of Function of TGFBR1 in Cancer	
+3656535	Homo sapiens	TGFBR1 LBD Mutants in Cancer	
+3700989	Homo sapiens	Transcriptional Regulation by TP53	
+372442	Gallus gallus	Lipid metabolism	
+372568	Gallus gallus	Amino acid metabolism	
+372790	Homo sapiens	Signaling by GPCR	
+372987	Gallus gallus	The tricarboxylic acid cycle	
+373752	Homo sapiens	Netrin-1 signaling	
+373753	Homo sapiens	Nephrin interactions	
+373755	Homo sapiens	Semaphorin interactions	
+373760	Homo sapiens	L1CAM interactions	
+373920	Gallus gallus	Pyruvate metabolism	
+375165	Homo sapiens	NCAM signaling for neurite out-growth	
+376172	Homo sapiens	DSCAM interactions	
+376176	Homo sapiens	Signaling by Robo receptor	
+3781860	Homo sapiens	Diseases associated with N-glycosylation of proteins	
+3781865	Homo sapiens	Diseases of glycosylation	
+3785653	Homo sapiens	Myoclonic epilepsy of Lafora	
+379724	Homo sapiens	tRNA Aminoacylation	
+380972	Homo sapiens	Energy dependent regulation of mTOR by LKB1-AMPK	
+380994	Homo sapiens	ATF4 activates genes	
+381038	Homo sapiens	XBP1(S) activates chaperone genes	
+381119	Homo sapiens	Unfolded Protein Response (UPR)	
+381183	Homo sapiens	ATF6-alpha activates chaperone genes	
+381340	Homo sapiens	Transcriptional regulation of white adipocyte differentiation	
+381426	Homo sapiens	Regulation of Insulin-like Growth Factor (IGF) transport and uptake by Insulin-like Growth Factor Binding Proteins (IGFBPs)	
+382551	Homo sapiens	Transmembrane transport of small molecules	
+382556	Homo sapiens	ABC-family proteins mediated transport	
+3858494	Homo sapiens	beta-catenin independent WNT signaling	
+388396	Homo sapiens	GPCR downstream signaling	
+388841	Homo sapiens	Costimulation by the CD28 family	
+390918	Homo sapiens	Peroxisomal lipid metabolism	
+391160	Homo sapiens	Signal regulatory protein (SIRP) family interactions	
+391251	Homo sapiens	Protein folding	
+392499	Homo sapiens	Metabolism of proteins	
+392517	Homo sapiens	Rap1 signalling	
+392518	Homo sapiens	Signal amplification	
+397014	Homo sapiens	Muscle contraction	
+400206	Homo sapiens	Regulation of lipid metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)	
+400253	Homo sapiens	Circadian Clock	
+400508	Homo sapiens	Incretin synthesis; secretion; and inactivation	
+4085001	Homo sapiens	Sialic acid metabolism	
+418124	Gallus gallus	Telomere maintenance	
+418346	Homo sapiens	Platelet homeostasis	
+418889	Homo sapiens	Ligand-independent caspase activation via DCC	
+419470	Gallus gallus	Nucleotide metabolism	
+419524	Homo sapiens	Fanconi Anemia pathway	
+421984	Gallus gallus	Heme metabolism	
+422085	Homo sapiens	Synthesis; secretion; and deacylation of Ghrelin	
+422475	Homo sapiens	Axon guidance	
+425366	Homo sapiens	Transport of glucose and other sugars; bile salts and organic acids; metal ions and amine compounds	
+425393	Homo sapiens	Transport of inorganic cations/anions and amino acids/oligopeptides	
+425397	Homo sapiens	Transport of vitamins; nucleosides; and related molecules	
+425407	Homo sapiens	SLC-mediated transmembrane transport	
+427359	Homo sapiens	SIRT1 negatively regulates rRNA Expression	
+427413	Homo sapiens	NoRC negatively regulates rRNA expression	
+428157	Homo sapiens	Sphingolipid metabolism	
+428359	Homo sapiens	Insulin-like Growth Factor-2 mRNA Binding Proteins (IGF2BPs/IMPs/VICKZs) bind RNA	
+429914	Homo sapiens	Deadenylation-dependent mRNA decay	
+430116	Homo sapiens	GP1b-IX-V activation signalling	
+432030	Homo sapiens	Transport of glycerol from adipocytes to the liver by Aquaporins	
+432040	Homo sapiens	Vasopressin regulates renal water homeostasis via Aquaporins	
+432047	Homo sapiens	Passive transport by Aquaporins	
+433584	Gallus gallus	Sphingolipid metabolism	
+437987	Gallus gallus	Toll-like receptors (TLR) cascades	
+442533	Mus musculus	Transcriptional Regulation of Adipocyte Differentiation in 3T3-L1 Pre-adipocytes	
+445717	Homo sapiens	Aquaporin-mediated transport	
+445989	Homo sapiens	TAK1 activates NFkB by phosphorylation and activation of IKKs complex	
+446203	Homo sapiens	Asparagine N-linked glycosylation	
+446652	Homo sapiens	Interleukin-1 signaling	
+446728	Homo sapiens	Cell junction organization	
+448706	Homo sapiens	Interleukin-1 processing	
+449147	Homo sapiens	Signaling by Interleukins	
+450282	Homo sapiens	MAPK targets/ Nuclear events mediated by MAP kinases	
+450294	Homo sapiens	MAP kinase activation in TLR cascade	
+450531	Homo sapiens	Regulation of mRNA stability by proteins that bind AU-rich elements	
+451927	Homo sapiens	Interleukin-2 signaling	
+452723	Homo sapiens	Transcriptional regulation of pluripotent stem cells	
+453274	Homo sapiens	Mitotic G2-G2/M phases	
+453276	Homo sapiens	Regulation of mitotic cell cycle	
+453279	Homo sapiens	Mitotic G1-G1/S phases	
+4549349	Homo sapiens	Defective ALG2 causes ALG2-CDG (CDG-1i)	
+4549356	Homo sapiens	Defective DPAGT1 causes DPAGT1-CDG (CDG-1j) and CMSTA2	
+4549380	Homo sapiens	Defective ALG1 causes ALG1-CDG (CDG-1k)	
+4551295	Homo sapiens	Defective ALG11 causes ALG11-CDG (CDG-1p)	
+456926	Homo sapiens	Thrombin signalling through proteinase activated receptors (PARs)	
+4570571	Homo sapiens	Defective RFT1 causes RFT1-CDG (CDG-1n)	
+4687000	Homo sapiens	Defective MPDU1 causes MPDU1-CDG (CDG-1f)	
+4720454	Homo sapiens	Defective ALG9 causes ALG9-CDG (CDG-1l)	
+4720475	Homo sapiens	Defective ALG3 causes ALG3-CDG (CDG-1d)	
+4720489	Homo sapiens	Defective ALG12 causes ALG12-CDG (CDG-1g)	
+4724289	Homo sapiens	Defective ALG6 causes ALG6-CDG (CDG-1c)	
+4724325	Homo sapiens	Defective ALG8 causes ALG8-CDG (CDG-1h)	
+4791275	Homo sapiens	Signaling by WNT in cancer	
+4793950	Homo sapiens	Defective MAN1B1 causes MRT15	
+4793952	Homo sapiens	Defective MGAT2 causes MGAT2-CDG (CDG-2a)	
+4793953	Homo sapiens	Defective B4GALT1 causes B4GALT1-CDG (CDG-2d)	
+4793954	Homo sapiens	Defective MOGS causes MOGS-CDG (CDG-2b)	
+4839726	Homo sapiens	Chromatin organization	
+4839735	Homo sapiens	AXIN mutants destabilize the destruction complex; activating WNT signaling	
+4839743	Homo sapiens	phosphorylation site mutants of CTNNB1 are not targeted to the proteasome by the destruction complex	
+4839744	Homo sapiens	truncated APC mutants destabilize the destruction complex	
+4839748	Homo sapiens	AMER1 mutants destabilize the destruction complex	
+500792	Homo sapiens	GPCR ligand binding	
+504046	Homo sapiens	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	
+508751	Mus musculus	Circadian Clock	
+512988	Homo sapiens	Interleukin-3; 5 and GM-CSF signaling	
+5173105	Homo sapiens	O-linked glycosylation	
+5210891	Homo sapiens	Uptake and function of anthrax toxins	
+5218859	Homo sapiens	Regulated Necrosis	
+5221030	Homo sapiens	TET1;2;3 and TDG demethylate DNA	
+5223345	Homo sapiens	Miscellaneous transport and binding events	
+5250941	Homo sapiens	Negative epigenetic regulation of rRNA expression	
+525793	Homo sapiens	Myogenesis	
+5260271	Homo sapiens	Diseases of Immune System	
+5334118	Homo sapiens	DNA methylation	
+5334727	Mus musculus	Mus musculus biological processes	
+5336415	Homo sapiens	Uptake and function of diphtheria toxin	
+5339562	Homo sapiens	Uptake and actions of bacterial toxins	
+5339700	Homo sapiens	TCF7L2 mutants don't bind CTBP	
+5339716	Homo sapiens	misspliced GSK3beta mutants stabilize beta-catenin	
+5339717	Homo sapiens	misspliced LRP5 mutants have enhanced beta-catenin-dependent signaling	
+5340573	Homo sapiens	WNT ligand secretion is abrogated by the PORCN inhibitor LGK974	
+5340588	Homo sapiens	RNF mutants show enhanced WNT signaling and proliferation	
+5347620	Dictyostelium discoideum	Cell Cycle; Mitotic	1
+5347621	Dictyostelium discoideum	Cell Cycle	1
+5347628	Dictyostelium discoideum	Synthesis of DNA	1
+5347629	Dictyostelium discoideum	S Phase	1
+5347632	Dictyostelium discoideum	Mitotic G1-G1/S phases	1
+5347650	Dictyostelium discoideum	Metabolism	1
+5347657	Dictyostelium discoideum	Phase II conjugation	1
+5347664	Dictyostelium discoideum	Metabolism of amino acids and derivatives	1
+5347677	Dictyostelium discoideum	The citric acid (TCA) cycle and respiratory electron transport	1
+5347683	Dictyostelium discoideum	Metabolism of water-soluble vitamins and cofactors	1
+5347709	Dictyostelium discoideum	Detoxification of Reactive Oxygen Species	1
+5347716	Dictyostelium discoideum	Gene Expression	1
+5347739	Dictyostelium discoideum	DNA Repair	1
+5347744	Dictyostelium discoideum	Base Excision Repair	1
+5347754	Dictyostelium discoideum	Signal Transduction	1
+5347766	Dictyostelium discoideum	Signaling by EGFR	1
+5347773	Dictyostelium discoideum	Immune System	1
+5347791	Dictyostelium discoideum	Processing of Capped Intron-Containing Pre-mRNA	1
+5347800	Dictyostelium discoideum	Double-Strand Break Repair	1
+5347811	Dictyostelium discoideum	Glycerophospholipid biosynthesis	1
+5347868	Dictyostelium discoideum	Developmental Biology	1
+5347884	Dictyostelium discoideum	Toll-Like Receptors Cascades	1
+5347936	Dictyostelium discoideum	Apoptosis	1
+5347938	Dictyostelium discoideum	GPCR downstream signaling	1
+5347950	Dictyostelium discoideum	M Phase	1
+5347967	Dictyostelium discoideum	Asparagine N-linked glycosylation	1
+5348002	Dictyostelium discoideum	Transmembrane transport of small molecules	1
+5348017	Dictyostelium discoideum	Cholesterol biosynthesis	1
+5348023	Dictyostelium discoideum	Metabolism of steroid hormones and vitamin D	1
+5348043	Dictyostelium discoideum	Membrane Trafficking	1
+5348067	Dictyostelium discoideum	Apoptotic execution  phase	1
+5348094	Dictyostelium discoideum	ABC-family proteins mediated transport	1
+5348127	Dictyostelium discoideum	GPCR ligand binding	1
+5348130	Dictyostelium discoideum	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+5348135	Dictyostelium discoideum	Effects of PIP2 hydrolysis	1
+5348216	Dictyostelium discoideum	GABA synthesis; release; reuptake and degradation	1
+5348298	Dictyostelium discoideum	Inositol phosphate metabolism	1
+5348325	Dictyostelium discoideum	PIP3 activates AKT signaling	1
+5353281	Plasmodium falciparum	Cell Cycle	1
+5353282	Plasmodium falciparum	DNA Replication	1
+5353288	Plasmodium falciparum	Mitotic G1-G1/S phases	1
+5353300	Plasmodium falciparum	Metabolism of carbohydrates	1
+5353301	Plasmodium falciparum	Metabolism	1
+5353304	Plasmodium falciparum	Disease	1
+5353309	Plasmodium falciparum	Transmembrane transport of small molecules	1
+5353315	Plasmodium falciparum	Metabolism of amino acids and derivatives	1
+5353320	Plasmodium falciparum	The citric acid (TCA) cycle and respiratory electron transport	1
+5353324	Plasmodium falciparum	Detoxification of Reactive Oxygen Species	1
+5353325	Plasmodium falciparum	Cellular responses to stress	1
+5353328	Plasmodium falciparum	Biological oxidations	1
+5353332	Plasmodium falciparum	Translation	1
+5353333	Plasmodium falciparum	Gene Expression	1
+5353334	Plasmodium falciparum	Metabolism of proteins	1
+5353348	Plasmodium falciparum	Metabolism of lipids and lipoproteins	1
+5353353	Plasmodium falciparum	Signal Transduction	1
+5353357	Plasmodium falciparum	DNA Repair	1
+5353369	Plasmodium falciparum	Glycerophospholipid biosynthesis	1
+5353370	Plasmodium falciparum	Phospholipid metabolism	1
+5353395	Plasmodium falciparum	Intrinsic Pathway for Apoptosis	1
+5353396	Plasmodium falciparum	Apoptosis	1
+5353416	Plasmodium falciparum	Integration of energy metabolism	1
+5353422	Plasmodium falciparum	Phase II conjugation	1
+5353428	Plasmodium falciparum	Telomere Maintenance	1
+5353429	Plasmodium falciparum	Chromosome Maintenance	1
+5353435	Plasmodium falciparum	Metabolism of porphyrins	1
+5353438	Plasmodium falciparum	Metabolism of steroid hormones and vitamin D	1
+5353470	Plasmodium falciparum	Membrane Trafficking	1
+5353474	Plasmodium falciparum	ER to Golgi Transport	1
+5353476	Plasmodium falciparum	Asparagine N-linked glycosylation	1
+5353481	Plasmodium falciparum	Developmental Biology	1
+5353491	Plasmodium falciparum	Hemostasis	1
+5353511	Plasmodium falciparum	Sphingolipid metabolism	1
+5353525	Plasmodium falciparum	Transmission across Chemical Synapses	1
+5353526	Plasmodium falciparum	Neuronal System	1
+5353537	Plasmodium falciparum	Passive transport by Aquaporins	1
+5353540	Plasmodium falciparum	Circadian Clock	1
+5353563	Plasmodium falciparum	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5353570	Plasmodium falciparum	ABC-family proteins mediated transport	1
+5353582	Plasmodium falciparum	PI Metabolism	1
+5353596	Plasmodium falciparum	Inositol phosphate metabolism	1
+5353612	Plasmodium falciparum	Ubiquinol biosynthesis	1
+5353614	Plasmodium falciparum	Mitochondrial iron-sulfur cluster biogenesis	1
+5353620	Plasmodium falciparum	Cytosolic iron-sulfur cluster assembly	1
+535734	Homo sapiens	Fatty acid; triacylglycerol; and ketone body metabolism	
+5357609	Homo sapiens	Glycogen storage disease type II (GAA)	
+5357769	Homo sapiens	Caspase activation via extrinsic apoptotic signalig pathway	
+5357801	Homo sapiens	Programmed Cell Death	
+5358346	Homo sapiens	Hedgehog ligand biogenesis	
+5358351	Homo sapiens	Signaling by Hedgehog	
+5358508	Homo sapiens	Mismatch Repair	
+5358747	Homo sapiens	S33 mutants of beta-catenin aren't phosphorylated	
+5358749	Homo sapiens	S37 mutants of beta-catenin aren't phosphorylated	
+5358751	Homo sapiens	S45 mutants of beta-catenin aren't phosphorylated	
+5358752	Homo sapiens	T41 mutants of beta-catenin aren't phosphorylated	
+5361291	Schizosaccharomyces pombe	Cell Cycle; Mitotic	1
+5361292	Schizosaccharomyces pombe	Cell Cycle	1
+5361293	Schizosaccharomyces pombe	DNA Replication	1
+5361296	Schizosaccharomyces pombe	Regulation of DNA replication	1
+5361299	Schizosaccharomyces pombe	Synthesis of DNA	1
+5361317	Schizosaccharomyces pombe	Cell Cycle Checkpoints	1
+5361324	Schizosaccharomyces pombe	Metabolism of carbohydrates	1
+5361325	Schizosaccharomyces pombe	Metabolism	1
+5361327	Schizosaccharomyces pombe	Glycogen storage diseases	1
+5361328	Schizosaccharomyces pombe	Disease	1
+5361336	Schizosaccharomyces pombe	The citric acid (TCA) cycle and respiratory electron transport	1
+5361341	Schizosaccharomyces pombe	Neurotransmitter uptake and Metabolism In Glial Cells	1
+5361351	Schizosaccharomyces pombe	Metabolism of nucleotides	1
+5361352	Schizosaccharomyces pombe	Detoxification of Reactive Oxygen Species	1
+5361353	Schizosaccharomyces pombe	Cellular responses to stress	1
+5361365	Schizosaccharomyces pombe	Metabolism of proteins	1
+5361385	Schizosaccharomyces pombe	Metabolism of lipids and lipoproteins	1
+5361389	Schizosaccharomyces pombe	DNA Repair	1
+5361400	Schizosaccharomyces pombe	Signal Transduction	1
+5361401	Schizosaccharomyces pombe	DAG and IP3 signaling	1
+5361415	Schizosaccharomyces pombe	Signaling by ERBB2	1
+5361494	Schizosaccharomyces pombe	Developmental Biology	1
+5361497	Schizosaccharomyces pombe	Cytokine Signaling in Immune system	1
+5361560	Schizosaccharomyces pombe	Intrinsic Pathway for Apoptosis	1
+5361561	Schizosaccharomyces pombe	Apoptosis	1
+5361582	Schizosaccharomyces pombe	Telomere Maintenance	1
+5361583	Schizosaccharomyces pombe	Chromosome Maintenance	1
+5361587	Schizosaccharomyces pombe	Lipid digestion; mobilization; and transport	1
+5361605	Schizosaccharomyces pombe	APC/C-mediated degradation of cell cycle proteins	1
+5361606	Schizosaccharomyces pombe	Regulation of mitotic cell cycle	1
+5361638	Schizosaccharomyces pombe	Cholesterol biosynthesis	1
+5361660	Schizosaccharomyces pombe	Metabolism of water-soluble vitamins and cofactors	1
+5361686	Schizosaccharomyces pombe	PIP3 activates AKT signaling	1
+5361693	Schizosaccharomyces pombe	PI3K/AKT Signaling in Cancer	1
+5361706	Schizosaccharomyces pombe	Membrane Trafficking	1
+5361710	Schizosaccharomyces pombe	Metabolism of nitric oxide	1
+5361721	Schizosaccharomyces pombe	Apoptotic execution  phase	1
+5361732	Schizosaccharomyces pombe	Neurotransmitter Clearance In The Synaptic Cleft	1
+5361739	Schizosaccharomyces pombe	ABC-family proteins mediated transport	1
+5361740	Schizosaccharomyces pombe	Transmembrane transport of small molecules	1
+5361788	Schizosaccharomyces pombe	Oxidative Stress Induced Senescence	1
+5361809	Schizosaccharomyces pombe	GABA synthesis; release; reuptake and degradation	1
+5361811	Schizosaccharomyces pombe	Meiotic recombination	1
+5361812	Schizosaccharomyces pombe	Meiosis	1
+5361836	Schizosaccharomyces pombe	Mitochondrial iron-sulfur cluster biogenesis	1
+5361854	Schizosaccharomyces pombe	Regulation of cholesterol biosynthesis by SREBP (SREBF)	1
+5361858	Schizosaccharomyces pombe	PI Metabolism	1
+5361875	Schizosaccharomyces pombe	Inositol phosphate metabolism	1
+5361879	Schizosaccharomyces pombe	Abnormal metabolism in phenylketonuria	1
+5361885	Schizosaccharomyces pombe	Mitotic Prophase	1
+5361896	Schizosaccharomyces pombe	Cytosolic iron-sulfur cluster assembly	1
+5361911	Schizosaccharomyces pombe	Cellular response to heat stress	1
+5362517	Homo sapiens	Signaling by Retinoic Acid	
+5362768	Homo sapiens	Hh mutants that don't undergo autocatalytic processing are degraded by ERAD	
+5368287	Homo sapiens	Mitochondrial translation	
+5369280	Saccharomyces cerevisiae	M/G1 Transition	1
+5369281	Saccharomyces cerevisiae	Cell Cycle; Mitotic	1
+5369282	Saccharomyces cerevisiae	Cell Cycle	1
+5369283	Saccharomyces cerevisiae	DNA Replication	1
+5369286	Saccharomyces cerevisiae	Regulation of DNA replication	1
+5369288	Saccharomyces cerevisiae	Synthesis of DNA	1
+5369289	Saccharomyces cerevisiae	S Phase	1
+5369292	Saccharomyces cerevisiae	Mitotic G1-G1/S phases	1
+5369305	Saccharomyces cerevisiae	Cell Cycle Checkpoints	1
+5369312	Saccharomyces cerevisiae	Metabolism of carbohydrates	1
+5369313	Saccharomyces cerevisiae	Metabolism	1
+5369316	Saccharomyces cerevisiae	Disease	1
+5369323	Saccharomyces cerevisiae	Metabolism of amino acids and derivatives	1
+5369326	Saccharomyces cerevisiae	Neurotransmitter uptake and Metabolism In Glial Cells	1
+5369328	Saccharomyces cerevisiae	Neuronal System	1
+5369335	Saccharomyces cerevisiae	The citric acid (TCA) cycle and respiratory electron transport	1
+5369339	Saccharomyces cerevisiae	Metabolism of nucleotides	1
+5369340	Saccharomyces cerevisiae	Detoxification of Reactive Oxygen Species	1
+5369341	Saccharomyces cerevisiae	Cellular responses to stress	1
+5369344	Saccharomyces cerevisiae	Biological oxidations	1
+5369347	Saccharomyces cerevisiae	tRNA Aminoacylation	1
+5369348	Saccharomyces cerevisiae	Gene Expression	1
+5369352	Saccharomyces cerevisiae	Eukaryotic Translation Initiation	1
+5369353	Saccharomyces cerevisiae	Translation	1
+5369354	Saccharomyces cerevisiae	Metabolism of proteins	1
+5369367	Saccharomyces cerevisiae	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	1
+5369371	Saccharomyces cerevisiae	DNA Damage Reversal	1
+5369372	Saccharomyces cerevisiae	DNA Repair	1
+5369375	Saccharomyces cerevisiae	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5369376	Saccharomyces cerevisiae	Metabolism of lipids and lipoproteins	1
+5369379	Saccharomyces cerevisiae	Nucleotide Excision Repair	1
+5369385	Saccharomyces cerevisiae	Signaling by Insulin receptor	1
+5369386	Saccharomyces cerevisiae	Signal Transduction	1
+5369394	Saccharomyces cerevisiae	Double-Strand Break Repair	1
+5369404	Saccharomyces cerevisiae	RNA Polymerase II Transcription	1
+5369409	Saccharomyces cerevisiae	Glycerophospholipid biosynthesis	1
+5369410	Saccharomyces cerevisiae	Phospholipid metabolism	1
+5369415	Saccharomyces cerevisiae	mRNA Capping	1
+5369427	Saccharomyces cerevisiae	Transmembrane transport of small molecules	1
+5369436	Saccharomyces cerevisiae	Signaling by Type 1 Insulin-like Growth Factor 1 Receptor (IGF1R)	1
+5369439	Saccharomyces cerevisiae	RAF/MAP kinase cascade	1
+5369447	Saccharomyces cerevisiae	Signalling by NGF	1
+5369452	Saccharomyces cerevisiae	Signaling by EGFR	1
+5369456	Saccharomyces cerevisiae	Signaling by PDGF	1
+5369460	Saccharomyces cerevisiae	Signaling by FGFR	1
+5369464	Saccharomyces cerevisiae	Developmental Biology	1
+5369467	Saccharomyces cerevisiae	Cytokine Signaling in Immune system	1
+5369468	Saccharomyces cerevisiae	Immune System	1
+5369470	Saccharomyces cerevisiae	Signaling by GPCR	1
+5369479	Saccharomyces cerevisiae	Innate Immune System	1
+5369482	Saccharomyces cerevisiae	Fc epsilon receptor (FCERI) signaling	1
+5369513	Saccharomyces cerevisiae	Base Excision Repair	1
+5369520	Saccharomyces cerevisiae	DNA Damage Bypass	1
+5369547	Saccharomyces cerevisiae	Intrinsic Pathway for Apoptosis	1
+5369548	Saccharomyces cerevisiae	Apoptosis	1
+5369549	Saccharomyces cerevisiae	Response to elevated platelet cytosolic Ca2+	1
+5369550	Saccharomyces cerevisiae	Platelet activation; signaling and aggregation	1
+5369551	Saccharomyces cerevisiae	Hemostasis	1
+5369554	Saccharomyces cerevisiae	Eukaryotic Translation Termination	1
+5369557	Saccharomyces cerevisiae	Mitotic G2-G2/M phases	1
+5369561	Saccharomyces cerevisiae	Eukaryotic Translation Elongation	1
+5369563	Saccharomyces cerevisiae	Bile acid and bile salt metabolism	1
+5369569	Saccharomyces cerevisiae	Telomere Maintenance	1
+5369570	Saccharomyces cerevisiae	Chromosome Maintenance	1
+5369572	Saccharomyces cerevisiae	Respiratory electron transport; ATP synthesis by chemiosmotic coupling; and heat production by uncoupling proteins.	1
+5369574	Saccharomyces cerevisiae	Lipid digestion; mobilization; and transport	1
+5369576	Saccharomyces cerevisiae	Integration of energy metabolism	1
+5369589	Saccharomyces cerevisiae	APC/C-mediated degradation of cell cycle proteins	1
+5369593	Saccharomyces cerevisiae	Phase II conjugation	1
+5369594	Saccharomyces cerevisiae	Glycosaminoglycan metabolism	1
+5369596	Saccharomyces cerevisiae	Mucopolysaccharidoses	1
+5369618	Saccharomyces cerevisiae	Metabolism of porphyrins	1
+5369619	Saccharomyces cerevisiae	Cholesterol biosynthesis	1
+5369623	Saccharomyces cerevisiae	Asparagine N-linked glycosylation	1
+5369627	Saccharomyces cerevisiae	Metabolism of steroid hormones and vitamin D	1
+5369638	Saccharomyces cerevisiae	Signaling by Rho GTPases	1
+5369641	Saccharomyces cerevisiae	Metabolism of water-soluble vitamins and cofactors	1
+5369642	Saccharomyces cerevisiae	Metabolism of vitamins and cofactors	1
+5369667	Saccharomyces cerevisiae	Costimulation by the CD28 family	1
+5369668	Saccharomyces cerevisiae	Adaptive Immune System	1
+5369674	Saccharomyces cerevisiae	Signaling by the B Cell Receptor (BCR)	1
+5369677	Saccharomyces cerevisiae	PI3K/AKT Signaling in Cancer	1
+5369682	Saccharomyces cerevisiae	GPCR downstream signaling	1
+5369688	Saccharomyces cerevisiae	Membrane Trafficking	1
+5369690	Saccharomyces cerevisiae	TCR signaling	1
+5369694	Saccharomyces cerevisiae	ER to Golgi Transport	1
+5369699	Saccharomyces cerevisiae	Apoptotic execution  phase	1
+5369701	Saccharomyces cerevisiae	Regulation of Apoptosis	1
+5369704	Saccharomyces cerevisiae	ABC-family proteins mediated transport	1
+5369706	Saccharomyces cerevisiae	Arachidonic acid metabolism	1
+5369716	Saccharomyces cerevisiae	Energy dependent regulation of mTOR by LKB1-AMPK	1
+5369718	Saccharomyces cerevisiae	Unfolded Protein Response (UPR)	1
+5369719	Saccharomyces cerevisiae	Transcriptional regulation of white adipocyte differentiation	1
+5369722	Saccharomyces cerevisiae	Peroxisomal lipid metabolism	1
+5369743	Saccharomyces cerevisiae	Sphingolipid metabolism	1
+5369765	Saccharomyces cerevisiae	Oxidative Stress Induced Senescence	1
+5369766	Saccharomyces cerevisiae	Cellular Senescence	1
+5369776	Saccharomyces cerevisiae	Circadian Clock	1
+5369780	Saccharomyces cerevisiae	Nucleotide-binding domain; leucine rich repeat containing receptor (NLR) signaling pathways	1
+5369781	Saccharomyces cerevisiae	Advanced glycosylation endproduct receptor signaling	1
+5369788	Saccharomyces cerevisiae	Neurotransmitter Release Cycle	1
+5369789	Saccharomyces cerevisiae	Meiotic recombination	1
+5369790	Saccharomyces cerevisiae	Meiosis	1
+5369793	Saccharomyces cerevisiae	Iron uptake and transport	1
+5369803	Saccharomyces cerevisiae	Class I MHC mediated antigen processing & presentation	1
+5369808	Saccharomyces cerevisiae	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5369813	Saccharomyces cerevisiae	O2/CO2 exchange in erythrocytes	1
+5369815	Saccharomyces cerevisiae	Erythrocytes take up oxygen and release carbon dioxide	1
+5369817	Saccharomyces cerevisiae	Mitochondrial protein import	1
+5369818	Saccharomyces cerevisiae	Mitochondrial iron-sulfur cluster biogenesis	1
+5369821	Saccharomyces cerevisiae	Metabolism of nitric oxide	1
+5369841	Saccharomyces cerevisiae	Regulation of cholesterol biosynthesis by SREBP (SREBF)	1
+5369843	Saccharomyces cerevisiae	Regulation of lipid metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)	1
+5369850	Saccharomyces cerevisiae	XBP1(S) activates chaperone genes	1
+5369853	Saccharomyces cerevisiae	SRP-dependent cotranslational protein targeting to membrane	1
+5369858	Saccharomyces cerevisiae	Inositol phosphate metabolism	1
+5369863	Saccharomyces cerevisiae	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	1
+5369868	Saccharomyces cerevisiae	Abacavir transport and metabolism	1
+5369871	Saccharomyces cerevisiae	Ubiquinol biosynthesis	1
+5369876	Saccharomyces cerevisiae	Mitotic Prophase	1
+5369880	Saccharomyces cerevisiae	Diseases associated with visual transduction	1
+5369882	Saccharomyces cerevisiae	Visual phototransduction	1
+5369885	Saccharomyces cerevisiae	Mitotic Metaphase and Anaphase	1
+5369887	Saccharomyces cerevisiae	Mitotic Prometaphase	1
+5369888	Saccharomyces cerevisiae	Cytosolic iron-sulfur cluster assembly	1
+5369901	Saccharomyces cerevisiae	Cellular response to heat stress	1
+5369904	Saccharomyces cerevisiae	beta-catenin independent WNT signaling	1
+5387390	Homo sapiens	Hh mutants abrogate ligand secretion	
+5388317	Caenorhabditis elegans	M/G1 Transition	1
+5388318	Caenorhabditis elegans	Cell Cycle; Mitotic	1
+5388319	Caenorhabditis elegans	Cell Cycle	1
+5388320	Caenorhabditis elegans	DNA Replication	1
+5388323	Caenorhabditis elegans	Regulation of DNA replication	1
+5388325	Caenorhabditis elegans	Synthesis of DNA	1
+5388326	Caenorhabditis elegans	S Phase	1
+5388329	Caenorhabditis elegans	Mitotic G1-G1/S phases	1
+5388343	Caenorhabditis elegans	Cell Cycle Checkpoints	1
+5388348	Caenorhabditis elegans	Metabolism of carbohydrates	1
+5388349	Caenorhabditis elegans	Metabolism	1
+5388352	Caenorhabditis elegans	Disease	1
+5388362	Caenorhabditis elegans	SLC-mediated transmembrane transport	1
+5388363	Caenorhabditis elegans	Transmembrane transport of small molecules	1
+5388369	Caenorhabditis elegans	The citric acid (TCA) cycle and respiratory electron transport	1
+5388374	Caenorhabditis elegans	Neurotransmitter uptake and Metabolism In Glial Cells	1
+5388376	Caenorhabditis elegans	Neuronal System	1
+5388384	Caenorhabditis elegans	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5388385	Caenorhabditis elegans	Metabolism of lipids and lipoproteins	1
+5388387	Caenorhabditis elegans	Metabolism of water-soluble vitamins and cofactors	1
+5388388	Caenorhabditis elegans	Metabolism of vitamins and cofactors	1
+5388390	Caenorhabditis elegans	Defects in cobalamin (B12) metabolism	1
+5388391	Caenorhabditis elegans	Defects in vitamin and cofactor metabolism	1
+5388408	Caenorhabditis elegans	Abnormal metabolism in phenylketonuria	1
+5388412	Caenorhabditis elegans	Metabolism of nucleotides	1
+5388413	Caenorhabditis elegans	Detoxification of Reactive Oxygen Species	1
+5388414	Caenorhabditis elegans	Cellular responses to stress	1
+5388419	Caenorhabditis elegans	tRNA Aminoacylation	1
+5388420	Caenorhabditis elegans	Gene Expression	1
+5388426	Caenorhabditis elegans	Eukaryotic Translation Initiation	1
+5388427	Caenorhabditis elegans	Translation	1
+5388428	Caenorhabditis elegans	Metabolism of proteins	1
+5388444	Caenorhabditis elegans	DNA Damage Reversal	1
+5388445	Caenorhabditis elegans	DNA Repair	1
+5388454	Caenorhabditis elegans	Visual phototransduction	1
+5388455	Caenorhabditis elegans	Signal Transduction	1
+5388456	Caenorhabditis elegans	Diseases associated with visual transduction	1
+5388465	Caenorhabditis elegans	Signaling by GPCR	1
+5388466	Caenorhabditis elegans	DAG and IP3 signaling	1
+5388469	Caenorhabditis elegans	Signalling by NGF	1
+5388471	Caenorhabditis elegans	Signaling by PDGF	1
+5388474	Caenorhabditis elegans	Signaling by FGFR	1
+5388475	Caenorhabditis elegans	Signaling by FGFR in disease	1
+5388477	Caenorhabditis elegans	Signaling by EGFR	1
+5388478	Caenorhabditis elegans	Signaling by EGFR in Cancer	1
+5388480	Caenorhabditis elegans	Signaling by ERBB2	1
+5388483	Caenorhabditis elegans	Innate Immune System	1
+5388484	Caenorhabditis elegans	Immune System	1
+5388486	Caenorhabditis elegans	Muscle contraction	1
+5388488	Caenorhabditis elegans	Signaling by the B Cell Receptor (BCR)	1
+5388489	Caenorhabditis elegans	Adaptive Immune System	1
+5388491	Caenorhabditis elegans	Fc epsilon receptor (FCERI) signaling	1
+5388493	Caenorhabditis elegans	Signaling by Insulin receptor	1
+5388499	Caenorhabditis elegans	Signaling by Type 1 Insulin-like Growth Factor 1 Receptor (IGF1R)	1
+5388525	Caenorhabditis elegans	Glycerophospholipid biosynthesis	1
+5388560	Caenorhabditis elegans	RAF/MAP kinase cascade	1
+5388570	Caenorhabditis elegans	Developmental Biology	1
+5388572	Caenorhabditis elegans	Signaling by Interleukins	1
+5388573	Caenorhabditis elegans	Cytokine Signaling in Immune system	1
+5388577	Caenorhabditis elegans	Signaling by ERBB4	1
+5388578	Caenorhabditis elegans	Signaling by SCF-KIT	1
+5388580	Caenorhabditis elegans	Signaling by Leptin	1
+5388586	Caenorhabditis elegans	Toll-Like Receptors Cascades	1
+5388598	Caenorhabditis elegans	MyD88 cascade initiated on plasma membrane	1
+5388612	Caenorhabditis elegans	Base Excision Repair	1
+5388616	Caenorhabditis elegans	DNA Damage Bypass	1
+5388648	Caenorhabditis elegans	Intrinsic Pathway for Apoptosis	1
+5388649	Caenorhabditis elegans	Apoptosis	1
+5388652	Caenorhabditis elegans	Response to elevated platelet cytosolic Ca2+	1
+5388653	Caenorhabditis elegans	Platelet activation; signaling and aggregation	1
+5388654	Caenorhabditis elegans	Hemostasis	1
+5388657	Caenorhabditis elegans	Eukaryotic Translation Termination	1
+5388658	Caenorhabditis elegans	Mitotic Telophase/Cytokinesis	1
+5388659	Caenorhabditis elegans	M Phase	1
+5388664	Caenorhabditis elegans	Dissolution of Fibrin Clot	1
+5388672	Caenorhabditis elegans	Mitotic G2-G2/M phases	1
+5388675	Caenorhabditis elegans	Post-translational protein modification	1
+5388679	Caenorhabditis elegans	Lipid digestion; mobilization; and transport	1
+5388690	Caenorhabditis elegans	Oxidative Stress Induced Senescence	1
+5388691	Caenorhabditis elegans	Cellular Senescence	1
+5388700	Caenorhabditis elegans	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+5388705	Caenorhabditis elegans	APC/C-mediated degradation of cell cycle proteins	1
+5388706	Caenorhabditis elegans	Regulation of mitotic cell cycle	1
+5388717	Caenorhabditis elegans	Mucopolysaccharidoses	1
+5388723	Caenorhabditis elegans	MPS II - Hunter syndrome	1
+5388732	Caenorhabditis elegans	Chromosome Maintenance	1
+5388737	Caenorhabditis elegans	Transport of glucose and other sugars; bile salts and organic acids; metal ions and amine compounds	1
+5388745	Caenorhabditis elegans	Asparagine N-linked glycosylation	1
+5388756	Caenorhabditis elegans	Signaling by Rho GTPases	1
+5388770	Caenorhabditis elegans	PIP3 activates AKT signaling	1
+5388777	Caenorhabditis elegans	PI3K/AKT Signaling in Cancer	1
+5388779	Caenorhabditis elegans	GPVI-mediated activation cascade	1
+5388789	Caenorhabditis elegans	Senescence-Associated Secretory Phenotype (SASP)	1
+5388797	Caenorhabditis elegans	Membrane Trafficking	1
+5388800	Caenorhabditis elegans	Energy dependent regulation of mTOR by LKB1-AMPK	1
+5388801	Caenorhabditis elegans	Signaling by BMP	1
+5388803	Caenorhabditis elegans	TCR signaling	1
+5388809	Caenorhabditis elegans	ER to Golgi Transport	1
+5388820	Caenorhabditis elegans	Regulation of beta-cell development	1
+5388826	Caenorhabditis elegans	Apoptotic execution  phase	1
+5388828	Caenorhabditis elegans	Regulation of Apoptosis	1
+5388833	Caenorhabditis elegans	Neurotransmitter Release Cycle	1
+5388837	Caenorhabditis elegans	Insulin processing	1
+5388838	Caenorhabditis elegans	Peptide hormone metabolism	1
+5388843	Caenorhabditis elegans	ABC-family proteins mediated transport	1
+5388854	Caenorhabditis elegans	Transport of inorganic cations/anions and amino acids/oligopeptides	1
+5388855	Caenorhabditis elegans	Integrin alphaIIb beta3 signaling	1
+5388856	Caenorhabditis elegans	Platelet Aggregation (Plug Formation)	1
+5388859	Caenorhabditis elegans	Neurotransmitter Clearance In The Synaptic Cleft	1
+5388866	Caenorhabditis elegans	Netrin-1 signaling	1
+5388869	Caenorhabditis elegans	Cell-Cell communication	1
+5388881	Caenorhabditis elegans	Unfolded Protein Response (UPR)	1
+5388893	Caenorhabditis elegans	Protein folding	1
+5388908	Caenorhabditis elegans	Effects of PIP2 hydrolysis	1
+5388913	Caenorhabditis elegans	Semaphorin interactions	1
+5388917	Caenorhabditis elegans	Circadian Clock	1
+5388920	Caenorhabditis elegans	Platelet homeostasis	1
+5388922	Caenorhabditis elegans	Ion channel transport	1
+5388936	Caenorhabditis elegans	Sphingolipid metabolism	1
+5388953	Caenorhabditis elegans	Iron uptake and transport	1
+5388974	Caenorhabditis elegans	Interleukin-1 processing	1
+5388981	Caenorhabditis elegans	Growth hormone receptor signaling	1
+5388992	Caenorhabditis elegans	Transcriptional regulation of white adipocyte differentiation	1
+5388994	Caenorhabditis elegans	Regulation of lipid metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)	1
+5389007	Caenorhabditis elegans	Transcriptional activity of SMAD2/SMAD3:SMAD4 heterotrimer	1
+5389008	Caenorhabditis elegans	Signaling by TGF-beta Receptor Complex	1
+5389011	Caenorhabditis elegans	Signaling by TGF-beta Receptor Complex in Cancer	1
+5389012	Caenorhabditis elegans	SMAD4 MH2 Domain Mutants in Cancer	1
+5389013	Caenorhabditis elegans	Loss of Function of SMAD4 in Cancer	1
+5389023	Caenorhabditis elegans	Factors involved in megakaryocyte development and platelet production	1
+5389030	Caenorhabditis elegans	Meiosis	1
+5389047	Caenorhabditis elegans	Amyloids	1
+5389050	Caenorhabditis elegans	Class I MHC mediated antigen processing & presentation	1
+5389055	Caenorhabditis elegans	Signaling by NODAL	1
+5389067	Caenorhabditis elegans	Mitochondrial protein import	1
+5389070	Caenorhabditis elegans	Potassium Channels	1
+5389083	Caenorhabditis elegans	Reversible hydration of carbon dioxide	1
+5389114	Caenorhabditis elegans	ATF6-alpha activates chaperone genes	1
+5389123	Caenorhabditis elegans	Inositol phosphate metabolism	1
+5389131	Caenorhabditis elegans	Collagen biosynthesis and modifying enzymes	1
+5389133	Caenorhabditis elegans	Extracellular matrix organization	1
+5389136	Caenorhabditis elegans	Signaling by Hippo	1
+5389143	Caenorhabditis elegans	MHC class II antigen presentation	1
+5389148	Caenorhabditis elegans	Ubiquinol biosynthesis	1
+5389153	Caenorhabditis elegans	Binding and Uptake of Ligands by Scavenger Receptors	1
+5389175	Caenorhabditis elegans	Reproduction	1
+5389180	Caenorhabditis elegans	beta-catenin independent WNT signaling	1
+5389181	Caenorhabditis elegans	Signaling by Wnt	1
+5389191	Caenorhabditis elegans	Metabolism of porphyrins	1
+5389195	Caenorhabditis elegans	WNT ligand biogenesis and trafficking	1
+5423646	Homo sapiens	Aflatoxin activation and detoxification	
+5441312	Sus scrofa	Cell Cycle; Mitotic	1
+5441313	Sus scrofa	Cell Cycle	1
+5441314	Sus scrofa	DNA Replication	1
+5441322	Sus scrofa	Mitotic G1-G1/S phases	1
+5441326	Sus scrofa	Synthesis of DNA	1
+5441343	Sus scrofa	Cell Cycle Checkpoints	1
+5441344	Sus scrofa	DNA Damage/Telomere Stress Induced Senescence	1
+5441345	Sus scrofa	Cellular Senescence	1
+5441346	Sus scrofa	Cellular responses to stress	1
+5441352	Sus scrofa	Oxidative Stress Induced Senescence	1
+5441356	Sus scrofa	Metabolism of carbohydrates	1
+5441357	Sus scrofa	Metabolism	1
+5441360	Sus scrofa	Disease	1
+5441365	Sus scrofa	Biological oxidations	1
+5441370	Sus scrofa	Hexose transport	1
+5441371	Sus scrofa	SLC-mediated transmembrane transport	1
+5441372	Sus scrofa	Transmembrane transport of small molecules	1
+5441377	Sus scrofa	The citric acid (TCA) cycle and respiratory electron transport	1
+5441379	Sus scrofa	Metabolism of amino acids and derivatives	1
+5441384	Sus scrofa	Neuronal System	1
+5441395	Sus scrofa	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5441396	Sus scrofa	Metabolism of lipids and lipoproteins	1
+5441399	Sus scrofa	Metabolism of vitamins and cofactors	1
+5441402	Sus scrofa	Defects in vitamin and cofactor metabolism	1
+5441415	Sus scrofa	Defective BTD causes biotidinase deficiency	1
+5441416	Sus scrofa	Defects in biotin (Btn) metabolism	1
+5441420	Sus scrofa	Extrinsic Pathway for Apoptosis	1
+5441421	Sus scrofa	Apoptosis	1
+5441428	Sus scrofa	Metabolism of nucleotides	1
+5441429	Sus scrofa	Detoxification of Reactive Oxygen Species	1
+5441431	Sus scrofa	Phase 1 - Functionalization of compounds	1
+5441434	Sus scrofa	tRNA Aminoacylation	1
+5441435	Sus scrofa	Gene Expression	1
+5441445	Sus scrofa	Translation	1
+5441446	Sus scrofa	Metabolism of proteins	1
+5441459	Sus scrofa	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	1
+5441466	Sus scrofa	DNA Repair	1
+5441483	Sus scrofa	Visual phototransduction	1
+5441484	Sus scrofa	Signal Transduction	1
+5441495	Sus scrofa	Signaling by GPCR	1
+5441496	Sus scrofa	DAG and IP3 signaling	1
+5441499	Sus scrofa	Signalling by NGF	1
+5441501	Sus scrofa	Signaling by PDGF	1
+5441504	Sus scrofa	Signaling by FGFR	1
+5441505	Sus scrofa	Signaling by FGFR in disease	1
+5441507	Sus scrofa	Signaling by EGFR	1
+5441510	Sus scrofa	Signaling by ERBB2	1
+5441512	Sus scrofa	DAP12 interactions	1
+5441513	Sus scrofa	Innate Immune System	1
+5441514	Sus scrofa	Immune System	1
+5441516	Sus scrofa	Muscle contraction	1
+5441521	Sus scrofa	Fc epsilon receptor (FCERI) signaling	1
+5441523	Sus scrofa	Signaling by Insulin receptor	1
+5441530	Sus scrofa	Signaling by Type 1 Insulin-like Growth Factor 1 Receptor (IGF1R)	1
+5441567	Sus scrofa	Peroxisomal lipid metabolism	1
+5441588	Sus scrofa	Arachidonic acid metabolism	1
+5441613	Sus scrofa	Transport of vitamins; nucleosides; and related molecules	1
+5441616	Sus scrofa	RAF/MAP kinase cascade	1
+5441625	Sus scrofa	Axon guidance	1
+5441626	Sus scrofa	Developmental Biology	1
+5441627	Sus scrofa	Interleukin-2 signaling	1
+5441630	Sus scrofa	Gastrin-CREB signalling pathway via PKC and MAPK	1
+5441633	Sus scrofa	Signaling by ERBB4	1
+5441634	Sus scrofa	Signaling by SCF-KIT	1
+5441636	Sus scrofa	Signaling by Leptin	1
+5441643	Sus scrofa	MAP kinase activation in TLR cascade	1
+5441647	Sus scrofa	Toll-Like Receptors Cascades	1
+5441664	Sus scrofa	L1CAM interactions	1
+5441694	Sus scrofa	Organelle biogenesis and maintenance	1
+5441699	Sus scrofa	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+5441706	Sus scrofa	Integration of energy metabolism	1
+5441707	Sus scrofa	Regulation of water balance by renal Aquaporins	1
+5441722	Sus scrofa	Intrinsic Pathway for Apoptosis	1
+5441727	Sus scrofa	GPCR downstream signaling	1
+5441729	Sus scrofa	Platelet activation; signaling and aggregation	1
+5441730	Sus scrofa	Hemostasis	1
+5441733	Sus scrofa	Extracellular matrix organization	1
+5441734	Sus scrofa	GPVI-mediated activation cascade	1
+5441752	Sus scrofa	Cell surface interactions at the vascular wall	1
+5441757	Sus scrofa	Neurotransmitter Clearance In The Synaptic Cleft	1
+5441777	Sus scrofa	Eukaryotic Translation Elongation	1
+5441780	Sus scrofa	Signaling by NOTCH	1
+5441793	Sus scrofa	Metabolism of porphyrins	1
+5441802	Sus scrofa	PTM: gamma carboxylation; hypusine formation and arylsulfatase activation	1
+5441813	Sus scrofa	Asparagine N-linked glycosylation	1
+5441821	Sus scrofa	Chromosome Maintenance	1
+5441823	Sus scrofa	Respiratory electron transport; ATP synthesis by chemiosmotic coupling; and heat production by uncoupling proteins.	1
+5441851	Sus scrofa	Complement cascade	1
+5441869	Sus scrofa	Interleukin-1 signaling	1
+5441875	Sus scrofa	beta-catenin independent WNT signaling	1
+5441876	Sus scrofa	Signaling by Wnt	1
+5441888	Sus scrofa	Signaling by NODAL	1
+5441889	Sus scrofa	Signaling by Activin	1
+5441891	Sus scrofa	Signaling by TGF-beta Receptor Complex	1
+5441905	Sus scrofa	Transcriptional activity of SMAD2/SMAD3:SMAD4 heterotrimer	1
+5441966	Sus scrofa	Transport of glucose and other sugars; bile salts and organic acids; metal ions and amine compounds	1
+5441988	Sus scrofa	Membrane Trafficking	1
+5442027	Sus scrofa	Signaling by VEGF	1
+5442029	Sus scrofa	Signaling by Rho GTPases	1
+5442030	Sus scrofa	Degradation of beta-catenin by the destruction complex	1
+5442048	Sus scrofa	PIP3 activates AKT signaling	1
+5442060	Sus scrofa	Signaling by BMP	1
+5442062	Sus scrofa	Apoptotic execution  phase	1
+5442065	Sus scrofa	TCF dependent signaling in response to WNT	1
+5442068	Sus scrofa	GPCR ligand binding	1
+5442073	Sus scrofa	Metabolism of nitric oxide	1
+5442075	Sus scrofa	TCR signaling	1
+5442104	Sus scrofa	Signal regulatory protein (SIRP) family interactions	1
+5442105	Sus scrofa	Cell-Cell communication	1
+5442106	Sus scrofa	Platelet Adhesion to exposed collagen	1
+5442123	Sus scrofa	Regulation of Apoptosis	1
+5442149	Sus scrofa	Transport of inorganic cations/anions and amino acids/oligopeptides	1
+5442153	Sus scrofa	GABA synthesis; release; reuptake and degradation	1
+5442154	Sus scrofa	Integrin alphaIIb beta3 signaling	1
+5442155	Sus scrofa	Platelet Aggregation (Plug Formation)	1
+5442169	Sus scrofa	Nephrin interactions	1
+5442178	Sus scrofa	Myogenesis	1
+5442184	Sus scrofa	DSCAM interactions	1
+5442206	Sus scrofa	Transcriptional regulation of white adipocyte differentiation	1
+5442263	Sus scrofa	Circadian Clock	1
+5442274	Sus scrofa	Ion channel transport	1
+5442282	Sus scrofa	Cell junction organization	1
+5442300	Sus scrofa	SIRT1 negatively regulates rRNA Expression	1
+5442307	Sus scrofa	Sphingolipid metabolism	1
+5442315	Sus scrofa	Deadenylation-dependent mRNA decay	1
+5442349	Sus scrofa	Interleukin-1 processing	1
+5442350	Sus scrofa	Interleukin-7 signaling	1
+5442354	Sus scrofa	Regulation of mRNA stability by proteins that bind AU-rich elements	1
+5442366	Sus scrofa	Transcriptional regulation of pluripotent stem cells	1
+5442369	Sus scrofa	ATF4 activates genes	1
+5442378	Sus scrofa	Regulation of lipid metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)	1
+5442394	Sus scrofa	Interferon gamma signaling	1
+5442395	Sus scrofa	Interferon Signaling	1
+5442407	Sus scrofa	Interferon alpha/beta signaling	1
+5442410	Sus scrofa	Meiosis	1
+5442441	Sus scrofa	Prolactin receptor signaling	1
+5442458	Sus scrofa	Cellular response to hypoxia	1
+5442467	Sus scrofa	O2/CO2 exchange in erythrocytes	1
+5442468	Sus scrofa	Reversible hydration of carbon dioxide	1
+5442483	Sus scrofa	Fertilization	1
+5442484	Sus scrofa	Reproduction	1
+5442494	Sus scrofa	Mitochondrial iron-sulfur cluster biogenesis	1
+5442497	Sus scrofa	Degradation of the extracellular matrix	1
+5442534	Sus scrofa	Regulation of cholesterol biosynthesis by SREBP (SREBF)	1
+5442542	Sus scrofa	XBP1(S) activates chaperone genes	1
+5442551	Sus scrofa	Inositol phosphate metabolism	1
+5442558	Sus scrofa	Signaling by NOTCH1	1
+5442560	Sus scrofa	Signaling by NOTCH1 in Cancer	1
+5442566	Sus scrofa	Pre-NOTCH Expression and Processing	1
+5442578	Sus scrofa	Signaling by Hippo	1
+5442593	Sus scrofa	Abacavir transport and metabolism	1
+5442606	Sus scrofa	Binding and Uptake of Ligands by Scavenger Receptors	1
+5442632	Sus scrofa	Cytosolic iron-sulfur cluster assembly	1
+5442648	Sus scrofa	WNT ligand biogenesis and trafficking	1
+5442653	Sus scrofa	Chromatin modifying enzymes	1
+5442654	Sus scrofa	Chromatin organization	1
+5442657	Sus scrofa	Cellular response to heat stress	1
+5467333	Homo sapiens	APC truncation mutants are not K63 polyubiquitinated	
+5467337	Homo sapiens	APC truncation mutants have impaired AXIN binding	
+5467340	Homo sapiens	AXIN missense mutants destabilize the destruction complex	
+5467343	Homo sapiens	deletions in the AMER1 gene destabilize the destruction complex	
+5467345	Homo sapiens	deletions in the AXIN genes in hepatocellular carcinoma result in elevated WNT signaling	
+5467348	Homo sapiens	truncations of AMER1 destabilize the destruction complex	
+5493427	Bos taurus	Cell Cycle; Mitotic	1
+5493428	Bos taurus	Cell Cycle	1
+5493429	Bos taurus	DNA Replication	1
+5493432	Bos taurus	Regulation of DNA replication	1
+5493437	Bos taurus	S Phase	1
+5493440	Bos taurus	Mitotic G1-G1/S phases	1
+5493456	Bos taurus	Cell Cycle Checkpoints	1
+5493459	Bos taurus	Cellular responses to stress	1
+5493470	Bos taurus	Metabolism of carbohydrates	1
+5493471	Bos taurus	Metabolism	1
+5493473	Bos taurus	Glycogen storage diseases	1
+5493474	Bos taurus	Disease	1
+5493479	Bos taurus	Biological oxidations	1
+5493486	Bos taurus	Transmembrane transport of small molecules	1
+5493491	Bos taurus	The citric acid (TCA) cycle and respiratory electron transport	1
+5493493	Bos taurus	Metabolism of amino acids and derivatives	1
+5493498	Bos taurus	Neuronal System	1
+5493500	Bos taurus	Neurotransmitter Release Cycle	1
+5493508	Bos taurus	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5493509	Bos taurus	Metabolism of lipids and lipoproteins	1
+5493512	Bos taurus	Metabolism of vitamins and cofactors	1
+5493515	Bos taurus	Defects in vitamin and cofactor metabolism	1
+5493533	Bos taurus	Extrinsic Pathway for Apoptosis	1
+5493534	Bos taurus	Apoptosis	1
+5493536	Bos taurus	Abnormal metabolism in phenylketonuria	1
+5493541	Bos taurus	Metabolism of nucleotides	1
+5493547	Bos taurus	tRNA Aminoacylation	1
+5493548	Bos taurus	Gene Expression	1
+5493549	Bos taurus	Processing of Capped Intron-Containing Pre-mRNA	1
+5493563	Bos taurus	Metabolism of proteins	1
+5493577	Bos taurus	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	1
+5493588	Bos taurus	DNA Repair	1
+5493598	Bos taurus	Visual phototransduction	1
+5493599	Bos taurus	Signal Transduction	1
+5493600	Bos taurus	Diseases associated with visual transduction	1
+5493616	Bos taurus	Signaling by PDGF	1
+5493620	Bos taurus	Signaling by FGFR in disease	1
+5493622	Bos taurus	Signaling by EGFR	1
+5493623	Bos taurus	Signaling by EGFR in Cancer	1
+5493628	Bos taurus	Innate Immune System	1
+5493629	Bos taurus	Immune System	1
+5493631	Bos taurus	Muscle contraction	1
+5493633	Bos taurus	Signaling by the B Cell Receptor (BCR)	1
+5493634	Bos taurus	Adaptive Immune System	1
+5493638	Bos taurus	Signaling by Insulin receptor	1
+5493683	Bos taurus	Peroxisomal lipid metabolism	1
+5493716	Bos taurus	Processing of Capped Intronless Pre-mRNA	1
+5493730	Bos taurus	Transport of vitamins; nucleosides; and related molecules	1
+5493741	Bos taurus	NCAM signaling for neurite out-growth	1
+5493743	Bos taurus	Developmental Biology	1
+5493744	Bos taurus	Interleukin-2 signaling	1
+5493746	Bos taurus	Cytokine Signaling in Immune system	1
+5493753	Bos taurus	Signaling by Leptin	1
+5493764	Bos taurus	Toll-Like Receptors Cascades	1
+5493842	Bos taurus	Intrinsic Pathway for Apoptosis	1
+5493854	Bos taurus	Hemostasis	1
+5493855	Bos taurus	Response to elevated platelet cytosolic Ca2+	1
+5493857	Bos taurus	Extracellular matrix organization	1
+5493867	Bos taurus	Platelet homeostasis	1
+5493876	Bos taurus	Formation of Fibrin Clot (Clotting Cascade)	1
+5493882	Bos taurus	Neurotransmitter Clearance In The Synaptic Cleft	1
+5493899	Bos taurus	Mitotic G2-G2/M phases	1
+5493901	Bos taurus	Eukaryotic Translation Elongation	1
+5493907	Bos taurus	Signaling by NOTCH1 in Cancer	1
+5493924	Bos taurus	Metabolism of porphyrins	1
+5493945	Bos taurus	Asparagine N-linked glycosylation	1
+5493951	Bos taurus	Telomere Maintenance	1
+5493954	Bos taurus	Respiratory electron transport; ATP synthesis by chemiosmotic coupling; and heat production by uncoupling proteins.	1
+5493960	Bos taurus	Lipid digestion; mobilization; and transport	1
+5493964	Bos taurus	GPCR ligand binding	1
+5493997	Bos taurus	Cytosolic sensors of pathogen-associated DNA 	1
+5494002	Bos taurus	Interleukin-1 signaling	1
+5494025	Bos taurus	Signaling by TGF-beta Receptor Complex in Cancer	1
+5494066	Bos taurus	Glycosaminoglycan metabolism	1
+5494068	Bos taurus	Mucopolysaccharidoses	1
+5494075	Bos taurus	MPS I - Hurler syndrome	1
+5494094	Bos taurus	Senescence-Associated Secretory Phenotype (SASP)	1
+5494102	Bos taurus	Transport of glucose and other sugars; bile salts and organic acids; metal ions and amine compounds	1
+5494144	Bos taurus	Metabolism of steroid hormones and vitamin D	1
+5494168	Bos taurus	Signaling by VEGF	1
+5494186	Bos taurus	PIP3 activates AKT signaling	1
+5494190	Bos taurus	PI3K/AKT Signaling in Cancer	1
+5494193	Bos taurus	Interleukin-3; 5 and GM-CSF signaling	1
+5494202	Bos taurus	Immunoregulatory interactions between a Lymphoid and a non-Lymphoid cell	1
+5494214	Bos taurus	Apoptotic execution  phase	1
+5494224	Bos taurus	TCR signaling	1
+5494251	Bos taurus	Signal regulatory protein (SIRP) family interactions	1
+5494252	Bos taurus	Cell-Cell communication	1
+5494269	Bos taurus	Regulation of Apoptosis	1
+5494288	Bos taurus	ABC-family proteins mediated transport	1
+5494299	Bos taurus	GABA synthesis; release; reuptake and degradation	1
+5494303	Bos taurus	Rap1 signalling	1
+5494311	Bos taurus	Nephrin interactions	1
+5494352	Bos taurus	Transcriptional regulation of white adipocyte differentiation	1
+5494371	Bos taurus	Protein folding	1
+5494407	Bos taurus	Regulation of lipid metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)	1
+5494408	Bos taurus	Circadian Clock	1
+5494419	Bos taurus	Ion channel transport	1
+5494421	Bos taurus	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5494427	Bos taurus	Cell junction organization	1
+5494445	Bos taurus	SIRT1 negatively regulates rRNA Expression	1
+5494463	Bos taurus	GP1b-IX-V activation signalling	1
+5494497	Bos taurus	Regulation of mRNA stability by proteins that bind AU-rich elements	1
+5494506	Bos taurus	Growth hormone receptor signaling	1
+5494521	Bos taurus	Nucleosome assembly	1
+5494536	Bos taurus	Interferon gamma signaling	1
+5494537	Bos taurus	Interferon Signaling	1
+5494545	Bos taurus	Abnormal conversion of 2-oxoglutarate to 2-hydroxyglutarate	1
+5494551	Bos taurus	Meiosis	1
+5494582	Bos taurus	Amyloids	1
+5494584	Bos taurus	Prolactin receptor signaling	1
+5494601	Bos taurus	Regulation of Hypoxia-inducible Factor (HIF) by oxygen	1
+5494602	Bos taurus	Cellular response to hypoxia	1
+5494627	Bos taurus	Fertilization	1
+5494628	Bos taurus	Reproduction	1
+5494641	Bos taurus	Collagen degradation	1
+5494642	Bos taurus	Degradation of the extracellular matrix	1
+5494643	Bos taurus	Defensins	1
+5494646	Bos taurus	Assembly of collagen fibrils and other multimeric structures	1
+5494647	Bos taurus	Collagen formation	1
+5494674	Bos taurus	Collagen biosynthesis and modifying enzymes	1
+5494746	Bos taurus	Binding and Uptake of Ligands by Scavenger Receptors	1
+5545619	Homo sapiens	XAV939 inhibits tankyrase; stabilizing AXIN	
+5550453	Canis familiaris	Cell Cycle	1
+5550483	Canis familiaris	Cell Cycle Checkpoints	1
+5550486	Canis familiaris	Cellular responses to stress	1
+5550495	Canis familiaris	Metabolism of carbohydrates	1
+5550496	Canis familiaris	Metabolism	1
+5550499	Canis familiaris	Disease	1
+5550509	Canis familiaris	Hexose transport	1
+5550534	Canis familiaris	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5550559	Canis familiaris	Extrinsic Pathway for Apoptosis	1
+5550560	Canis familiaris	Apoptosis	1
+5550562	Canis familiaris	Abnormal metabolism in phenylketonuria	1
+5550569	Canis familiaris	Detoxification of Reactive Oxygen Species	1
+5550572	Canis familiaris	Phase 1 - Functionalization of compounds	1
+5550576	Canis familiaris	Gene Expression	1
+5550605	Canis familiaris	DNA Repair	1
+5550614	Canis familiaris	Nucleotide Excision Repair	1
+5550621	Canis familiaris	Signal Transduction	1
+5550635	Canis familiaris	Signalling by NGF	1
+5550637	Canis familiaris	Signaling by PDGF	1
+5550640	Canis familiaris	Signaling by FGFR	1
+5550641	Canis familiaris	Signaling by FGFR in disease	1
+5550646	Canis familiaris	Signaling by ERBB2	1
+5550649	Canis familiaris	Innate Immune System	1
+5550650	Canis familiaris	Immune System	1
+5550652	Canis familiaris	Muscle contraction	1
+5550655	Canis familiaris	Adaptive Immune System	1
+5550657	Canis familiaris	Fc epsilon receptor (FCERI) signaling	1
+5550709	Canis familiaris	Phospholipid metabolism	1
+5550770	Canis familiaris	Cytokine Signaling in Immune system	1
+5550775	Canis familiaris	Signaling by SCF-KIT	1
+5550788	Canis familiaris	Toll-Like Receptors Cascades	1
+5550835	Canis familiaris	Mitochondrial biogenesis	1
+5550841	Canis familiaris	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+5550864	Canis familiaris	Intrinsic Pathway for Apoptosis	1
+5550874	Canis familiaris	Integrin cell surface interactions	1
+5550875	Canis familiaris	Extracellular matrix organization	1
+5550901	Canis familiaris	Neurotransmitter Clearance In The Synaptic Cleft	1
+5550923	Canis familiaris	Signaling by NOTCH1 in Cancer	1
+5550945	Canis familiaris	PTM: gamma carboxylation; hypusine formation and arylsulfatase activation	1
+5550966	Canis familiaris	Respiratory electron transport; ATP synthesis by chemiosmotic coupling; and heat production by uncoupling proteins.	1
+5550976	Canis familiaris	GPCR ligand binding	1
+5550995	Canis familiaris	Complement cascade	1
+5551000	Canis familiaris	Fcgamma receptor (FCGR) dependent phagocytosis	1
+5551013	Canis familiaris	Nucleotide-binding domain; leucine rich repeat containing receptor (NLR) signaling pathways	1
+5551021	Canis familiaris	Signaling by Wnt	1
+5551034	Canis familiaris	Signaling by Activin	1
+5551036	Canis familiaris	Signaling by TGF-beta Receptor Complex	1
+5551037	Canis familiaris	SMAD2/3 Phosphorylation Motif Mutants in Cancer	1
+5551118	Canis familiaris	Metabolism of porphyrins	1
+5551137	Canis familiaris	Membrane Trafficking	1
+5551196	Canis familiaris	Costimulation by the CD28 family	1
+5551197	Canis familiaris	PIP3 activates AKT signaling	1
+5551201	Canis familiaris	PI3K/AKT Signaling in Cancer	1
+5551213	Canis familiaris	Immunoregulatory interactions between a Lymphoid and a non-Lymphoid cell	1
+5551222	Canis familiaris	Signaling by BMP	1
+5551224	Canis familiaris	Apoptotic execution  phase	1
+5551235	Canis familiaris	TCR signaling	1
+5551249	Canis familiaris	ER to Golgi Transport	1
+5551264	Canis familiaris	Cell-Cell communication	1
+5551272	Canis familiaris	Regulation of beta-cell development	1
+5551281	Canis familiaris	Regulation of Apoptosis	1
+5551420	Canis familiaris	Circadian Clock	1
+5551460	Canis familiaris	SIRT1 negatively regulates rRNA Expression	1
+5551520	Canis familiaris	Growth hormone receptor signaling	1
+5551549	Canis familiaris	Interferon gamma signaling	1
+5551550	Canis familiaris	Interferon Signaling	1
+5551561	Canis familiaris	Interferon alpha/beta signaling	1
+5551593	Canis familiaris	Prolactin receptor signaling	1
+5551596	Canis familiaris	Amyloids	1
+5551599	Canis familiaris	Class I MHC mediated antigen processing & presentation	1
+5551638	Canis familiaris	Reproduction	1
+5551651	Canis familiaris	Collagen degradation	1
+5551709	Canis familiaris	Inositol phosphate metabolism	1
+5551756	Canis familiaris	Binding and Uptake of Ligands by Scavenger Receptors	1
+5551803	Canis familiaris	Chromatin organization	1
+556833	Homo sapiens	Metabolism of lipids and lipoproteins	
+5578995	Homo sapiens	Defective TPMT causes Thiopurine S-methyltransferase deficiency (TPMT deficiency)	
+5578996	Homo sapiens	Defective CYP27A1 causes Cerebrotendinous xanthomatosis (CTX)	
+5578997	Homo sapiens	Defective AHCY causes Hypermethioninemia with S-adenosylhomocysteine hydrolase deficiency (HMAHCHD)	
+5578998	Homo sapiens	Defective OPLAH causes 5-oxoprolinase deficiency (OPLAHD)	
+5578999	Homo sapiens	Defective GCLC causes Hemolytic anemia due to gamma-glutamylcysteine synthetase deficiency (HAGGSD)	
+5579000	Homo sapiens	Defective CYP1B1 causes Glaucoma	
+5579002	Homo sapiens	Defective UGT1A1 causes hyperbilirubinemia	
+5579004	Homo sapiens	Defective CYP26C1 causes Focal facial dermal dysplasia 4 (FFDD4)	
+5579005	Homo sapiens	Defective CYP4F22 causes Ichthyosis; congenital; autosomal recessive 5 (ARCI5)	
+5579006	Homo sapiens	Defective GSS causes Glutathione synthetase deficiency (GSS deficiency)	
+5579007	Homo sapiens	Defective ACY1 causes encephalopathy	
+5579009	Homo sapiens	Defective CYP11B2 causes Corticosterone methyloxidase 1 deficiency (CMO-1 deficiency)	
+5579010	Homo sapiens	Defective CYP24A1 causes Hypercalcemia; infantile (HCAI)	
+5579011	Homo sapiens	Defective CYP2U1 causes Spastic paraplegia 56; autosomal recessive (SPG56)	
+5579012	Homo sapiens	Defective MAOA causes Brunner syndrome (BRUNS)	
+5579013	Homo sapiens	Defective CYP7B1 causes Spastic paraplegia 5A; autosomal recessive (SPG5A) and Congenital bile acid synthesis defect 3 (CBAS3)	
+5579014	Homo sapiens	Defective CYP27B1 causes Rickets vitamin D-dependent 1A (VDDR1A)	
+5579015	Homo sapiens	Defective CYP26B1 causes Radiohumeral fusions with other skeletal and craniofacial anomalies (RHFCA)	
+5579016	Homo sapiens	Defective UGT1A4 causes hyperbilirubinemia	
+5579017	Homo sapiens	Defective CYP11B1 causes Adrenal hyperplasia 4 (AH4)	
+5579019	Homo sapiens	Defective FMO3 causes Trimethylaminuria (TMAU)	
+5579020	Homo sapiens	Defective SLC35D1 causes Schneckenbecken dysplasia (SCHBCKD)	
+5579021	Homo sapiens	Defective CYP21A2 causes Adrenal hyperplasia 3 (AH3)	
+5579022	Homo sapiens	Defective GGT1 causes Glutathionuria (GLUTH)	
+5579024	Homo sapiens	Defective MAT1A causes Methionine adenosyltransferase deficiency (MATD)	
+5579026	Homo sapiens	Defective CYP11A1 causes Adrenal insufficiency; congenital; with 46;XY sex reversal (AICSR)	
+5579027	Homo sapiens	Defective CYP2R1 causes Rickets vitamin D-dependent 1B (VDDR1B)	
+5579028	Homo sapiens	Defective CYP17A1 causes Adrenal hyperplasia 5 (AH5)	
+5579029	Homo sapiens	Metabolic disorders of biological oxidation enzymes	
+5579030	Homo sapiens	Defective CYP19A1 causes Aromatase excess syndrome (AEXS)	
+5579031	Homo sapiens	Defective ACTH causes Obesity and Pro-opiomelanocortinin deficiency (POMCD)	
+5579032	Homo sapiens	Defective TBXAS1 causes Ghosal hematodiaphyseal dysplasia (GHDD)	
+5592261	Dictyostelium discoideum	Cell Cycle	1
+5592262	Dictyostelium discoideum	DNA Replication	1
+5592269	Dictyostelium discoideum	S Phase	1
+5592272	Dictyostelium discoideum	Mitotic G1-G1/S phases	1
+5592286	Dictyostelium discoideum	Cell Cycle Checkpoints	1
+5592290	Dictyostelium discoideum	Metabolism of carbohydrates	1
+5592291	Dictyostelium discoideum	Metabolism	1
+5592293	Dictyostelium discoideum	Glycogen storage diseases	1
+5592294	Dictyostelium discoideum	Disease	1
+5592306	Dictyostelium discoideum	Transmembrane transport of small molecules	1
+5592310	Dictyostelium discoideum	Metabolism of amino acids and derivatives	1
+5592315	Dictyostelium discoideum	Neuronal System	1
+5592326	Dictyostelium discoideum	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5592327	Dictyostelium discoideum	Metabolism of lipids and lipoproteins	1
+5592329	Dictyostelium discoideum	Metabolism of water-soluble vitamins and cofactors	1
+5592330	Dictyostelium discoideum	Metabolism of vitamins and cofactors	1
+5592339	Dictyostelium discoideum	Defective MTR causes methylmalonic aciduria and homocystinuria type cblG	1
+5592348	Dictyostelium discoideum	Defective HLCS causes multiple carboxylase deficiency	1
+5592350	Dictyostelium discoideum	Abnormal metabolism in phenylketonuria	1
+5592355	Dictyostelium discoideum	Metabolism of nucleotides	1
+5592356	Dictyostelium discoideum	Detoxification of Reactive Oxygen Species	1
+5592357	Dictyostelium discoideum	Cellular responses to stress	1
+5592360	Dictyostelium discoideum	tRNA Aminoacylation	1
+5592361	Dictyostelium discoideum	Gene Expression	1
+5592364	Dictyostelium discoideum	Processing of Capped Intron-Containing Pre-mRNA	1
+5592367	Dictyostelium discoideum	Eukaryotic Translation Initiation	1
+5592369	Dictyostelium discoideum	Metabolism of proteins	1
+5592383	Dictyostelium discoideum	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	1
+5592388	Dictyostelium discoideum	DNA Repair	1
+5592394	Dictyostelium discoideum	Base Excision Repair	1
+5592397	Dictyostelium discoideum	Nucleotide Excision Repair	1
+5592405	Dictyostelium discoideum	Opioid Signalling	1
+5592407	Dictyostelium discoideum	Signal Transduction	1
+5592408	Dictyostelium discoideum	DAG and IP3 signaling	1
+5592410	Dictyostelium discoideum	NGF signalling via TRKA from the plasma membrane	1
+5592411	Dictyostelium discoideum	Signalling by NGF	1
+5592413	Dictyostelium discoideum	Signaling by PDGF	1
+5592416	Dictyostelium discoideum	Signaling by FGFR	1
+5592417	Dictyostelium discoideum	Signaling by FGFR in disease	1
+5592419	Dictyostelium discoideum	Signaling by EGFR	1
+5592420	Dictyostelium discoideum	Signaling by EGFR in Cancer	1
+5592426	Dictyostelium discoideum	Immune System	1
+5592428	Dictyostelium discoideum	Muscle contraction	1
+5592430	Dictyostelium discoideum	Signaling by the B Cell Receptor (BCR)	1
+5592431	Dictyostelium discoideum	Adaptive Immune System	1
+5592433	Dictyostelium discoideum	Fc epsilon receptor (FCERI) signaling	1
+5592438	Dictyostelium discoideum	Signaling by Insulin receptor	1
+5592449	Dictyostelium discoideum	Double-Strand Break Repair	1
+5592458	Dictyostelium discoideum	RNA Polymerase II Transcription	1
+5592464	Dictyostelium discoideum	Glycerophospholipid biosynthesis	1
+5592471	Dictyostelium discoideum	mRNA Capping	1
+5592480	Dictyostelium discoideum	Processing of Capped Intronless Pre-mRNA	1
+5592486	Dictyostelium discoideum	mRNA Editing	1
+5592498	Dictyostelium discoideum	Signaling by Type 1 Insulin-like Growth Factor 1 Receptor (IGF1R)	1
+5592501	Dictyostelium discoideum	RAF/MAP kinase cascade	1
+5592516	Dictyostelium discoideum	Axon guidance	1
+5592517	Dictyostelium discoideum	Developmental Biology	1
+5592521	Dictyostelium discoideum	Gastrin-CREB signalling pathway via PKC and MAPK	1
+5592529	Dictyostelium discoideum	MAP kinase activation in TLR cascade	1
+5592533	Dictyostelium discoideum	Toll-Like Receptors Cascades	1
+5592545	Dictyostelium discoideum	MyD88 cascade initiated on plasma membrane	1
+5592550	Dictyostelium discoideum	L1CAM interactions	1
+5592576	Dictyostelium discoideum	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+5592581	Dictyostelium discoideum	Integration of energy metabolism	1
+5592596	Dictyostelium discoideum	Intrinsic Pathway for Apoptosis	1
+5592597	Dictyostelium discoideum	Apoptosis	1
+5592600	Dictyostelium discoideum	GPCR downstream signaling	1
+5592603	Dictyostelium discoideum	Hemostasis	1
+5592606	Dictyostelium discoideum	Phase 1 - Functionalization of compounds	1
+5592620	Dictyostelium discoideum	APC/C-mediated degradation of cell cycle proteins	1
+5592622	Dictyostelium discoideum	Eukaryotic Translation Termination	1
+5592627	Dictyostelium discoideum	Mitotic G2-G2/M phases	1
+5592631	Dictyostelium discoideum	Eukaryotic Translation Elongation	1
+5592645	Dictyostelium discoideum	Asparagine N-linked glycosylation	1
+5592648	Dictyostelium discoideum	Telomere Maintenance	1
+5592651	Dictyostelium discoideum	Respiratory electron transport; ATP synthesis by chemiosmotic coupling; and heat production by uncoupling proteins.	1
+5592673	Dictyostelium discoideum	Oxidative Stress Induced Senescence	1
+5592699	Dictyostelium discoideum	Transport of vitamins; nucleosides; and related molecules	1
+5592704	Dictyostelium discoideum	Glycosaminoglycan metabolism	1
+5592706	Dictyostelium discoideum	Mucopolysaccharidoses	1
+5592730	Dictyostelium discoideum	Transport of glucose and other sugars; bile salts and organic acids; metal ions and amine compounds	1
+5592733	Dictyostelium discoideum	Cholesterol biosynthesis	1
+5592736	Dictyostelium discoideum	Bile acid and bile salt metabolism	1
+5592739	Dictyostelium discoideum	Metabolism of steroid hormones and vitamin D	1
+5592752	Dictyostelium discoideum	Signaling by Rho GTPases	1
+5592763	Dictyostelium discoideum	PIP3 activates AKT signaling	1
+5592770	Dictyostelium discoideum	PI3K/AKT Signaling in Cancer	1
+5592778	Dictyostelium discoideum	MAPK targets/ Nuclear events mediated by MAP kinases	1
+5592780	Dictyostelium discoideum	Senescence-Associated Secretory Phenotype (SASP)	1
+5592787	Dictyostelium discoideum	Membrane Trafficking	1
+5592790	Dictyostelium discoideum	Metabolism of nitric oxide	1
+5592796	Dictyostelium discoideum	Regulatory RNA pathways	1
+5592798	Dictyostelium discoideum	ER to Golgi Transport	1
+5592809	Dictyostelium discoideum	Regulation of beta-cell development	1
+5592816	Dictyostelium discoideum	Arachidonic acid metabolism	1
+5592822	Dictyostelium discoideum	ABC-family proteins mediated transport	1
+5592830	Dictyostelium discoideum	Response to elevated platelet cytosolic Ca2+	1
+5592831	Dictyostelium discoideum	Integrin alphaIIb beta3 signaling	1
+5592833	Dictyostelium discoideum	Rap1 signalling	1
+5592836	Dictyostelium discoideum	Transport of inorganic cations/anions and amino acids/oligopeptides	1
+5592852	Dictyostelium discoideum	Peroxisomal lipid metabolism	1
+5592859	Dictyostelium discoideum	Protein folding	1
+5592870	Dictyostelium discoideum	Semaphorin interactions	1
+5592877	Dictyostelium discoideum	Platelet homeostasis	1
+5592882	Dictyostelium discoideum	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5592886	Dictyostelium discoideum	GPCR ligand binding	1
+5592894	Dictyostelium discoideum	Sphingolipid metabolism	1
+5592896	Dictyostelium discoideum	Signal amplification	1
+5592904	Dictyostelium discoideum	Cell junction organization	1
+5592905	Dictyostelium discoideum	Cell-Cell communication	1
+5592908	Dictyostelium discoideum	Iron uptake and transport	1
+5592924	Dictyostelium discoideum	Myogenesis	1
+5592937	Dictyostelium discoideum	Circadian Clock	1
+5592938	Dictyostelium discoideum	Transcriptional regulation of white adipocyte differentiation	1
+5592948	Dictyostelium discoideum	Nucleotide-binding domain; leucine rich repeat containing receptor (NLR) signaling pathways	1
+5592950	Dictyostelium discoideum	Factors involved in megakaryocyte development and platelet production	1
+5592952	Dictyostelium discoideum	Abnormal conversion of 2-oxoglutarate to 2-hydroxyglutarate	1
+5592954	Dictyostelium discoideum	GABA synthesis; release; reuptake and degradation	1
+5592969	Dictyostelium discoideum	Class I MHC mediated antigen processing & presentation	1
+5592973	Dictyostelium discoideum	ISG15 antiviral mechanism	1
+5592988	Dictyostelium discoideum	Mitochondrial iron-sulfur cluster biogenesis	1
+5592991	Dictyostelium discoideum	Translocation of GLUT4 to the plasma membrane	1
+5593010	Dictyostelium discoideum	Activation of gene expression by SREBF (SREBP)	1
+5593015	Dictyostelium discoideum	PI Metabolism	1
+5593021	Dictyostelium discoideum	XBP1(S) activates chaperone genes	1
+5593022	Dictyostelium discoideum	ATF6-alpha activates chaperone genes	1
+5593027	Dictyostelium discoideum	SRP-dependent cotranslational protein targeting to membrane	1
+5593032	Dictyostelium discoideum	Inositol phosphate metabolism	1
+5593037	Dictyostelium discoideum	Cytosolic sensors of pathogen-associated DNA 	1
+5593039	Dictyostelium discoideum	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	1
+5593041	Dictyostelium discoideum	Elastic fibre formation	1
+5593042	Dictyostelium discoideum	Extracellular matrix organization	1
+5593045	Dictyostelium discoideum	Abacavir transport and metabolism	1
+5593055	Dictyostelium discoideum	Mitotic Prophase	1
+5593062	Dictyostelium discoideum	Visual phototransduction	1
+5593065	Dictyostelium discoideum	Mitotic Prometaphase	1
+5593075	Dictyostelium discoideum	Reproduction	1
+5593076	Dictyostelium discoideum	Cytosolic iron-sulfur cluster assembly	1
+5593080	Dictyostelium discoideum	beta-catenin independent WNT signaling	1
+5593081	Dictyostelium discoideum	Signaling by Wnt	1
+5593084	Dictyostelium discoideum	SUMOylation	1
+5593092	Dictyostelium discoideum	Chromatin modifying enzymes	1
+5593093	Dictyostelium discoideum	Chromatin organization	1
+5593096	Dictyostelium discoideum	Cellular response to heat stress	1
+5596652	Plasmodium falciparum	M/G1 Transition	1
+5596653	Plasmodium falciparum	Cell Cycle; Mitotic	1
+5596654	Plasmodium falciparum	Cell Cycle	1
+5596655	Plasmodium falciparum	DNA Replication	1
+5596658	Plasmodium falciparum	Regulation of DNA replication	1
+5596660	Plasmodium falciparum	Synthesis of DNA	1
+5596661	Plasmodium falciparum	S Phase	1
+5596664	Plasmodium falciparum	Mitotic G1-G1/S phases	1
+5596676	Plasmodium falciparum	Metabolism of carbohydrates	1
+5596677	Plasmodium falciparum	Metabolism	1
+5596680	Plasmodium falciparum	Disease	1
+5596684	Plasmodium falciparum	Hexose transport	1
+5596686	Plasmodium falciparum	Transmembrane transport of small molecules	1
+5596693	Plasmodium falciparum	The citric acid (TCA) cycle and respiratory electron transport	1
+5596695	Plasmodium falciparum	Metabolism of amino acids and derivatives	1
+5596703	Plasmodium falciparum	Metabolism of nucleotides	1
+5596704	Plasmodium falciparum	Detoxification of Reactive Oxygen Species	1
+5596705	Plasmodium falciparum	Cellular responses to stress	1
+5596708	Plasmodium falciparum	tRNA Aminoacylation	1
+5596709	Plasmodium falciparum	Gene Expression	1
+5596712	Plasmodium falciparum	Eukaryotic Translation Initiation	1
+5596714	Plasmodium falciparum	Metabolism of proteins	1
+5596727	Plasmodium falciparum	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5596728	Plasmodium falciparum	Metabolism of lipids and lipoproteins	1
+5596735	Plasmodium falciparum	Opioid Signalling	1
+5596738	Plasmodium falciparum	DAG and IP3 signaling	1
+5596746	Plasmodium falciparum	Signaling by FGFR	1
+5596747	Plasmodium falciparum	Signaling by FGFR in disease	1
+5596749	Plasmodium falciparum	Signaling by EGFR	1
+5596750	Plasmodium falciparum	Signaling by EGFR in Cancer	1
+5596752	Plasmodium falciparum	Signaling by ERBB2	1
+5596756	Plasmodium falciparum	Immune System	1
+5596758	Plasmodium falciparum	Muscle contraction	1
+5596761	Plasmodium falciparum	Adaptive Immune System	1
+5596763	Plasmodium falciparum	Fc epsilon receptor (FCERI) signaling	1
+5596768	Plasmodium falciparum	Signaling by Insulin receptor	1
+5596771	Plasmodium falciparum	Nucleotide Excision Repair	1
+5596772	Plasmodium falciparum	DNA Repair	1
+5596775	Plasmodium falciparum	Processing of Capped Intron-Containing Pre-mRNA	1
+5596780	Plasmodium falciparum	Double-Strand Break Repair	1
+5596786	Plasmodium falciparum	Glycerophospholipid biosynthesis	1
+5596792	Plasmodium falciparum	RAF/MAP kinase cascade	1
+5596798	Plasmodium falciparum	Signaling by Type 1 Insulin-like Growth Factor 1 Receptor (IGF1R)	1
+5596814	Plasmodium falciparum	Developmental Biology	1
+5596815	Plasmodium falciparum	Interleukin-2 signaling	1
+5596817	Plasmodium falciparum	Cytokine Signaling in Immune system	1
+5596818	Plasmodium falciparum	Gastrin-CREB signalling pathway via PKC and MAPK	1
+5596833	Plasmodium falciparum	Base Excision Repair	1
+5596842	Plasmodium falciparum	RNA Polymerase II Transcription	1
+5596847	Plasmodium falciparum	Intrinsic Pathway for Apoptosis	1
+5596848	Plasmodium falciparum	Apoptosis	1
+5596849	Plasmodium falciparum	GPVI-mediated activation cascade	1
+5596850	Plasmodium falciparum	Platelet activation; signaling and aggregation	1
+5596851	Plasmodium falciparum	Hemostasis	1
+5596853	Plasmodium falciparum	Eukaryotic Translation Termination	1
+5596857	Plasmodium falciparum	Eukaryotic Translation Elongation	1
+5596859	Plasmodium falciparum	Post-translational modification: synthesis of GPI-anchored proteins	1
+5596862	Plasmodium falciparum	Integration of energy metabolism	1
+5596866	Plasmodium falciparum	Fcgamma receptor (FCGR) dependent phagocytosis	1
+5596870	Plasmodium falciparum	Phase II conjugation	1
+5596871	Plasmodium falciparum	Biological oxidations	1
+5596878	Plasmodium falciparum	Telomere Maintenance	1
+5596879	Plasmodium falciparum	Chromosome Maintenance	1
+5596882	Plasmodium falciparum	Metabolism of porphyrins	1
+5596883	Plasmodium falciparum	Cholesterol biosynthesis	1
+5596885	Plasmodium falciparum	Metabolism of steroid hormones and vitamin D	1
+5596889	Plasmodium falciparum	Metabolism of water-soluble vitamins and cofactors	1
+5596890	Plasmodium falciparum	Metabolism of vitamins and cofactors	1
+5596904	Plasmodium falciparum	Defective MUT causes methylmalonic aciduria mut type	1
+5596907	Plasmodium falciparum	Defects in biotin (Btn) metabolism	1
+5596914	Plasmodium falciparum	PIP3 activates AKT signaling	1
+5596921	Plasmodium falciparum	PI3K/AKT Signaling in Cancer	1
+5596926	Plasmodium falciparum	Membrane Trafficking	1
+5596930	Plasmodium falciparum	Metabolism of nitric oxide	1
+5596933	Plasmodium falciparum	TCR signaling	1
+5596935	Plasmodium falciparum	Regulatory RNA pathways	1
+5596937	Plasmodium falciparum	ER to Golgi Transport	1
+5596939	Plasmodium falciparum	Asparagine N-linked glycosylation	1
+5596941	Plasmodium falciparum	PTM: gamma carboxylation; hypusine formation and arylsulfatase activation	1
+5596943	Plasmodium falciparum	Regulation of beta-cell development	1
+5596948	Plasmodium falciparum	Arachidonic acid metabolism	1
+5596952	Plasmodium falciparum	Apoptotic execution  phase	1
+5596955	Plasmodium falciparum	Response to elevated platelet cytosolic Ca2+	1
+5596958	Plasmodium falciparum	Unfolded Protein Response (UPR)	1
+5596960	Plasmodium falciparum	ABC-family proteins mediated transport	1
+5596964	Plasmodium falciparum	Protein folding	1
+5596968	Plasmodium falciparum	Platelet homeostasis	1
+5596970	Plasmodium falciparum	Ion channel transport	1
+5596973	Plasmodium falciparum	Effects of PIP2 hydrolysis	1
+5596977	Plasmodium falciparum	Transport of inorganic cations/anions and amino acids/oligopeptides	1
+5596979	Plasmodium falciparum	Sphingolipid metabolism	1
+5596981	Plasmodium falciparum	Transport of glucose and other sugars; bile salts and organic acids; metal ions and amine compounds	1
+5596984	Plasmodium falciparum	Deadenylation-dependent mRNA decay	1
+5596987	Plasmodium falciparum	Transport of glycerol from adipocytes to the liver by Aquaporins	1
+5596991	Plasmodium falciparum	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5596992	Plasmodium falciparum	Iron uptake and transport	1
+5596995	Plasmodium falciparum	Insulin processing	1
+5596997	Plasmodium falciparum	GP1b-IX-V activation signalling	1
+5596998	Plasmodium falciparum	Vasopressin regulates renal water homeostasis via Aquaporins	1
+5597005	Plasmodium falciparum	Phase 1 - Functionalization of compounds	1
+5597007	Plasmodium falciparum	Regulation of mRNA stability by proteins that bind AU-rich elements	1
+5597008	Plasmodium falciparum	Passive transport by Aquaporins	1
+5597011	Plasmodium falciparum	Circadian Clock	1
+5597015	Plasmodium falciparum	Netrin-1 signaling	1
+5597016	Plasmodium falciparum	Transport of vitamins; nucleosides; and related molecules	1
+5597019	Plasmodium falciparum	Glycosaminoglycan metabolism	1
+5597023	Plasmodium falciparum	MPS VI - Maroteaux-Lamy syndrome	1
+5597026	Plasmodium falciparum	MPS VII - Sly syndrome	1
+5597036	Plasmodium falciparum	Advanced glycosylation endproduct receptor signaling	1
+5597037	Plasmodium falciparum	Factors involved in megakaryocyte development and platelet production	1
+5597038	Plasmodium falciparum	Meiotic recombination	1
+5597039	Plasmodium falciparum	Meiosis	1
+5597042	Plasmodium falciparum	Nonsense-Mediated Decay (NMD)	1
+5597046	Plasmodium falciparum	Class I MHC mediated antigen processing & presentation	1
+5597047	Plasmodium falciparum	Kinesins	1
+5597065	Plasmodium falciparum	PI Metabolism	1
+5597068	Plasmodium falciparum	XBP1(S) activates chaperone genes	1
+5597071	Plasmodium falciparum	ATF6-alpha activates chaperone genes	1
+5597073	Plasmodium falciparum	SRP-dependent cotranslational protein targeting to membrane	1
+5597075	Plasmodium falciparum	Inositol phosphate metabolism	1
+5597080	Plasmodium falciparum	Regulation of lipid metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)	1
+5597082	Plasmodium falciparum	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	1
+5597084	Plasmodium falciparum	MHC class II antigen presentation	1
+5597085	Plasmodium falciparum	Abnormal metabolism in phenylketonuria	1
+5597087	Plasmodium falciparum	Abacavir transport and metabolism	1
+5597090	Plasmodium falciparum	Ubiquinol biosynthesis	1
+5597096	Plasmodium falciparum	Mitochondrial iron-sulfur cluster biogenesis	1
+5597103	Plasmodium falciparum	beta-catenin independent WNT signaling	1
+5597108	Plasmodium falciparum	SUMOylation	1
+5597113	Plasmodium falciparum	Cytosolic sensors of pathogen-associated DNA 	1
+5597116	Plasmodium falciparum	Mitotic Prophase	1
+5597117	Plasmodium falciparum	M Phase	1
+5597119	Plasmodium falciparum	Mismatch Repair	1
+5597121	Plasmodium falciparum	Aflatoxin activation and detoxification	1
+5602358	Homo sapiens	Diseases associated with the TLR signaling cascade	
+5602410	Homo sapiens	TLR3 deficiency - HSE	
+5602415	Homo sapiens	UNC93B1 deficiency - HSE	
+5602498	Homo sapiens	MyD88 deficiency (TLR2/4)	
+5602566	Homo sapiens	TICAM1 deficiency - HSE	
+5602571	Homo sapiens	TRAF3 deficiency - HSE	
+5602636	Homo sapiens	IKBKB deficiency causes SCID	
+5602680	Homo sapiens	MyD88 deficiency (TLR5)	
+5603027	Homo sapiens	IKBKG deficiency causes anhidrotic ectodermal dysplasia with immunodeficiency (EDA-ID) (via TLR)	
+5603029	Homo sapiens	IkBA variant leads to EDA-ID	
+5603037	Homo sapiens	IRAK4 deficiency (TLR5)	
+5603041	Homo sapiens	IRAK4 deficiency (TLR2/4)	
+5604683	Mus musculus	Metabolism of lipids and lipoproteins	1
+5605722	Mus musculus	Advanced glycosylation endproduct receptor signaling	1
+5605723	Mus musculus	Factors involved in megakaryocyte development and platelet production	1
+5605903	Mus musculus	Metabolism of Angiotensinogen to Angiotensins	1
+5605913	Mus musculus	MHC class II antigen presentation	1
+5605982	Mus musculus	Chromatin organization	1
+5607171	Schizosaccharomyces pombe	Metabolism	1
+5607240	Schizosaccharomyces pombe	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5607244	Schizosaccharomyces pombe	Nucleotide Excision Repair	1
+5607251	Schizosaccharomyces pombe	Signal Transduction	1
+5607319	Schizosaccharomyces pombe	Signaling by EGFR in Cancer	1
+5607327	Schizosaccharomyces pombe	Signaling by FGFR in disease	1
+5607334	Schizosaccharomyces pombe	Immune System	1
+5607412	Schizosaccharomyces pombe	Vasopressin regulates renal water homeostasis via Aquaporins	1
+5607590	Schizosaccharomyces pombe	Metabolism of nitric oxide	1
+5607777	Schizosaccharomyces pombe	PI Metabolism	1
+5607798	Schizosaccharomyces pombe	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	1
+5607851	Schizosaccharomyces pombe	Epigenetic regulation of gene expression	1
+5610787	Homo sapiens	Hedgehog 'off' state	
+5617833	Homo sapiens	Assembly of the primary cilium	
+5617990	Saccharomyces cerevisiae	M/G1 Transition	1
+5617991	Saccharomyces cerevisiae	Cell Cycle; Mitotic	1
+5617992	Saccharomyces cerevisiae	Cell Cycle	1
+5617993	Saccharomyces cerevisiae	DNA Replication	1
+5617996	Saccharomyces cerevisiae	Regulation of DNA replication	1
+5617998	Saccharomyces cerevisiae	Synthesis of DNA	1
+5617999	Saccharomyces cerevisiae	S Phase	1
+5618002	Saccharomyces cerevisiae	Mitotic G1-G1/S phases	1
+5618064	Saccharomyces cerevisiae	Phase 1 - Functionalization of compounds	1
+5618067	Saccharomyces cerevisiae	tRNA Aminoacylation	1
+5618068	Saccharomyces cerevisiae	Gene Expression	1
+5618069	Saccharomyces cerevisiae	Processing of Capped Intron-Containing Pre-mRNA	1
+5618072	Saccharomyces cerevisiae	Eukaryotic Translation Initiation	1
+5618073	Saccharomyces cerevisiae	Translation	1
+5618074	Saccharomyces cerevisiae	Metabolism of proteins	1
+5618090	Saccharomyces cerevisiae	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5618094	Saccharomyces cerevisiae	Nucleotide Excision Repair	1
+5618099	Saccharomyces cerevisiae	Signaling by Insulin receptor	1
+5618100	Saccharomyces cerevisiae	Signal Transduction	1
+5618108	Saccharomyces cerevisiae	Double-Strand Break Repair	1
+5618118	Saccharomyces cerevisiae	RNA Polymerase II Transcription	1
+5618125	Saccharomyces cerevisiae	Glycerophospholipid biosynthesis	1
+5618126	Saccharomyces cerevisiae	Phospholipid metabolism	1
+5618127	Saccharomyces cerevisiae	mRNA Capping	1
+5618130	Saccharomyces cerevisiae	Processing of Capped Intronless Pre-mRNA	1
+5618343	Saccharomyces cerevisiae	Transport of glucose and other sugars; bile salts and organic acids; metal ions and amine compounds	1
+5618345	Saccharomyces cerevisiae	Metabolism of porphyrins	1
+5618346	Saccharomyces cerevisiae	Cholesterol biosynthesis	1
+5618350	Saccharomyces cerevisiae	Asparagine N-linked glycosylation	1
+5618352	Saccharomyces cerevisiae	Bile acid and bile salt metabolism	1
+5618364	Saccharomyces cerevisiae	Signaling by Rho GTPases	1
+5618367	Saccharomyces cerevisiae	Metabolism of water-soluble vitamins and cofactors	1
+5618368	Saccharomyces cerevisiae	Metabolism of vitamins and cofactors	1
+5618371	Saccharomyces cerevisiae	Defects in vitamin and cofactor metabolism	1
+5618386	Saccharomyces cerevisiae	Defective HLCS causes multiple carboxylase deficiency	1
+5618393	Saccharomyces cerevisiae	Costimulation by the CD28 family	1
+5618394	Saccharomyces cerevisiae	Adaptive Immune System	1
+5618395	Saccharomyces cerevisiae	PIP3 activates AKT signaling	1
+5618400	Saccharomyces cerevisiae	Signaling by the B Cell Receptor (BCR)	1
+5618403	Saccharomyces cerevisiae	PI3K/AKT Signaling in Cancer	1
+5618409	Saccharomyces cerevisiae	GPCR downstream signaling	1
+5618422	Saccharomyces cerevisiae	Membrane Trafficking	1
+5618425	Saccharomyces cerevisiae	Metabolism of nitric oxide	1
+5618427	Saccharomyces cerevisiae	TCR signaling	1
+5618429	Saccharomyces cerevisiae	Regulatory RNA pathways	1
+5618432	Saccharomyces cerevisiae	ER to Golgi Transport	1
+5618437	Saccharomyces cerevisiae	Regulation of beta-cell development	1
+5618439	Saccharomyces cerevisiae	Apoptotic execution  phase	1
+5618441	Saccharomyces cerevisiae	Regulation of Apoptosis	1
+5618445	Saccharomyces cerevisiae	Neurotransmitter Release Cycle	1
+5618448	Saccharomyces cerevisiae	Arachidonic acid metabolism	1
+5618451	Saccharomyces cerevisiae	ABC-family proteins mediated transport	1
+5618459	Saccharomyces cerevisiae	Transport of inorganic cations/anions and amino acids/oligopeptides	1
+5618465	Saccharomyces cerevisiae	Neurotransmitter Clearance In The Synaptic Cleft	1
+5618469	Saccharomyces cerevisiae	Unfolded Protein Response (UPR)	1
+5618470	Saccharomyces cerevisiae	Transcriptional regulation of white adipocyte differentiation	1
+5618473	Saccharomyces cerevisiae	Peroxisomal lipid metabolism	1
+5618481	Saccharomyces cerevisiae	Protein folding	1
+5618493	Saccharomyces cerevisiae	Platelet homeostasis	1
+5618495	Saccharomyces cerevisiae	Ion channel transport	1
+5618498	Saccharomyces cerevisiae	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5618509	Saccharomyces cerevisiae	Sphingolipid metabolism	1
+5618512	Saccharomyces cerevisiae	Deadenylation-dependent mRNA decay	1
+5618516	Saccharomyces cerevisiae	Transport of glycerol from adipocytes to the liver by Aquaporins	1
+5618520	Saccharomyces cerevisiae	Iron uptake and transport	1
+5618524	Saccharomyces cerevisiae	Peptide hormone metabolism	1
+5618530	Saccharomyces cerevisiae	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+5618536	Saccharomyces cerevisiae	Myogenesis	1
+5618539	Saccharomyces cerevisiae	Regulation of mRNA stability by proteins that bind AU-rich elements	1
+5618543	Saccharomyces cerevisiae	Passive transport by Aquaporins	1
+5618549	Saccharomyces cerevisiae	Circadian Clock	1
+5618553	Saccharomyces cerevisiae	Nucleotide-binding domain; leucine rich repeat containing receptor (NLR) signaling pathways	1
+5618554	Saccharomyces cerevisiae	Advanced glycosylation endproduct receptor signaling	1
+5618555	Saccharomyces cerevisiae	Factors involved in megakaryocyte development and platelet production	1
+5618558	Saccharomyces cerevisiae	Abnormal conversion of 2-oxoglutarate to 2-hydroxyglutarate	1
+5618560	Saccharomyces cerevisiae	GABA synthesis; release; reuptake and degradation	1
+5618562	Saccharomyces cerevisiae	Abnormal metabolism in phenylketonuria	1
+5618566	Saccharomyces cerevisiae	Nonsense-Mediated Decay (NMD)	1
+5618572	Saccharomyces cerevisiae	Class I MHC mediated antigen processing & presentation	1
+5618574	Saccharomyces cerevisiae	Kinesins	1
+5618587	Saccharomyces cerevisiae	Translocation of GLUT4 to the plasma membrane	1
+5618606	Saccharomyces cerevisiae	Activation of gene expression by SREBF (SREBP)	1
+5618609	Saccharomyces cerevisiae	Regulation of lipid metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)	1
+5618611	Saccharomyces cerevisiae	PI Metabolism	1
+5618616	Saccharomyces cerevisiae	XBP1(S) activates chaperone genes	1
+5618619	Saccharomyces cerevisiae	ATF6-alpha activates chaperone genes	1
+5618626	Saccharomyces cerevisiae	Inositol phosphate metabolism	1
+5618631	Saccharomyces cerevisiae	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	1
+5618637	Saccharomyces cerevisiae	Abacavir transport and metabolism	1
+5618642	Saccharomyces cerevisiae	Ubiquinol biosynthesis	1
+5618644	Saccharomyces cerevisiae	Mitotic Prophase	1
+5618645	Saccharomyces cerevisiae	M Phase	1
+5618651	Saccharomyces cerevisiae	Diseases associated with visual transduction	1
+5618653	Saccharomyces cerevisiae	Visual phototransduction	1
+5618656	Saccharomyces cerevisiae	Mitotic Metaphase and Anaphase	1
+5618666	Saccharomyces cerevisiae	SUMOylation	1
+5618672	Saccharomyces cerevisiae	WNT ligand biogenesis and trafficking	1
+5618673	Saccharomyces cerevisiae	Signaling by Wnt	1
+5618677	Saccharomyces cerevisiae	Cellular response to heat stress	1
+5618680	Saccharomyces cerevisiae	beta-catenin independent WNT signaling	1
+5618682	Saccharomyces cerevisiae	Chromatin modifying enzymes	1
+5618683	Saccharomyces cerevisiae	Chromatin organization	1
+5618689	Saccharomyces cerevisiae	Mismatch Repair	1
+5621481	Homo sapiens	C-type lectin receptors (CLRs)	
+5625740	Homo sapiens	RHO GTPases activate PKNs	
+5625886	Homo sapiens	Activated PKN1 stimulates transcription of AR (androgen receptor) regulated genes KLK2 and KLK3	
+5625900	Homo sapiens	RHO GTPases activate CIT	
+5625970	Homo sapiens	RHO GTPases activate KTN1	
+5626467	Homo sapiens	RHO GTPases activate IQGAPs	
+5627083	Homo sapiens	RHO GTPases regulate CFTR trafficking	
+5627117	Homo sapiens	RHO GTPases Activate ROCKs	
+5627123	Homo sapiens	RHO GTPases activate PAKs	
+5628897	Homo sapiens	TP53 Regulates Metabolic Genes	
+5632684	Homo sapiens	Hedgehog 'on' state	
+5633231	Homo sapiens	Defective ALG14 causes congenital myasthenic syndrome (ALG14-CMS)	
+5637759	Dictyostelium discoideum	Cell Cycle	1
+5637812	Homo sapiens	Signaling by EGFRvIII in Cancer	
+5637815	Homo sapiens	Signaling by Ligand-Responsive EGFR Variants in Cancer	
+5637817	Dictyostelium discoideum	The citric acid (TCA) cycle and respiratory electron transport	1
+5638209	Dictyostelium discoideum	Glycosaminoglycan metabolism	1
+5638247	Dictyostelium discoideum	Metabolism of porphyrins	1
+5638302	Homo sapiens	Signaling by Overexpressed Wild-Type EGFR in Cancer	
+5638303	Homo sapiens	Inhibition of Signaling by Overexpressed EGFR	
+5638567	Dictyostelium discoideum	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	1
+5638620	Dictyostelium discoideum	Chromatin modifying enzymes	1
+5638641	Dictyostelium discoideum	Organelle biogenesis and maintenance	1
+5642072	Plasmodium falciparum	Cell Cycle; Mitotic	1
+5642073	Plasmodium falciparum	Cell Cycle	1
+5642074	Plasmodium falciparum	DNA Replication	1
+5642091	Plasmodium falciparum	Metabolism of carbohydrates	1
+5642092	Plasmodium falciparum	Metabolism	1
+5642095	Plasmodium falciparum	Disease	1
+5642100	Plasmodium falciparum	SLC-mediated transmembrane transport	1
+5642101	Plasmodium falciparum	Transmembrane transport of small molecules	1
+5642118	Plasmodium falciparum	Metabolism of nucleotides	1
+5642120	Plasmodium falciparum	Cellular responses to stress	1
+5642123	Plasmodium falciparum	tRNA Aminoacylation	1
+5642124	Plasmodium falciparum	Gene Expression	1
+5642127	Plasmodium falciparum	Eukaryotic Translation Initiation	1
+5642128	Plasmodium falciparum	Translation	1
+5642129	Plasmodium falciparum	Metabolism of proteins	1
+5642151	Plasmodium falciparum	Signaling by GPCR	1
+5642152	Plasmodium falciparum	Signal Transduction	1
+5642153	Plasmodium falciparum	DAG and IP3 signaling	1
+5642171	Plasmodium falciparum	Immune System	1
+5642173	Plasmodium falciparum	Muscle contraction	1
+5642176	Plasmodium falciparum	Adaptive Immune System	1
+5642178	Plasmodium falciparum	Fc epsilon receptor (FCERI) signaling	1
+5642190	Plasmodium falciparum	Glycerophospholipid biosynthesis	1
+5642194	Plasmodium falciparum	RNA Polymerase II Transcription	1
+5642319	Plasmodium falciparum	Membrane Trafficking	1
+5642322	Plasmodium falciparum	TCR signaling	1
+5642331	Plasmodium falciparum	Developmental Biology	1
+5642339	Plasmodium falciparum	ABC-family proteins mediated transport	1
+5642342	Plasmodium falciparum	Apoptotic execution  phase	1
+5642362	Plasmodium falciparum	GPCR downstream signaling	1
+5642409	Plasmodium falciparum	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5642429	Plasmodium falciparum	Toll-Like Receptors Cascades	1
+5642486	Plasmodium falciparum	Circadian Clock	1
+5642519	Plasmodium falciparum	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	1
+5642529	Plasmodium falciparum	Mitotic Prophase	1
+5642533	Plasmodium falciparum	Visual phototransduction	1
+5642540	Plasmodium falciparum	Signaling by Wnt	1
+5653656	Homo sapiens	Vesicle-mediated transport	
+5654736	Homo sapiens	Signaling by FGFR1	
+5654738	Homo sapiens	Signaling by FGFR2	
+5654741	Homo sapiens	Signaling by FGFR3	
+5654743	Homo sapiens	Signaling by FGFR4	
+5655253	Homo sapiens	Signaling by FGFR2 in disease	
+5655291	Homo sapiens	Signaling by FGFR4 in disease	
+5655302	Homo sapiens	Signaling by FGFR1 in disease	
+5655332	Homo sapiens	Signaling by FGFR3 in disease	
+5657560	Homo sapiens	Hereditary fructose intolerance	
+5657562	Homo sapiens	Essential fructosuria	
+5659898	Homo sapiens	Intestinal saccharidase deficiencies	
+5662449	Dictyostelium discoideum	Assembly of the pre-replicative complex	1
+5662453	Dictyostelium discoideum	Cell Cycle	1
+5662454	Dictyostelium discoideum	DNA Replication	1
+5662457	Dictyostelium discoideum	DNA replication initiation	1
+5662474	Dictyostelium discoideum	G1/S DNA Damage Checkpoints	1
+5662479	Dictyostelium discoideum	Metabolism of carbohydrates	1
+5662480	Dictyostelium discoideum	Metabolism	1
+5662483	Dictyostelium discoideum	Disease	1
+5662503	Dictyostelium discoideum	Glycogen breakdown (glycogenolysis)	1
+5662506	Dictyostelium discoideum	Metabolism of amino acids and derivatives	1
+5662509	Dictyostelium discoideum	Neurotransmitter Release Cycle	1
+5662510	Dictyostelium discoideum	Transmission across Chemical Synapses	1
+5662511	Dictyostelium discoideum	Neuronal System	1
+5662516	Dictyostelium discoideum	Lysine catabolism	1
+5662517	Dictyostelium discoideum	Citric acid cycle (TCA cycle)	1
+5662519	Dictyostelium discoideum	The citric acid (TCA) cycle and respiratory electron transport	1
+5662520	Dictyostelium discoideum	Propionyl-CoA catabolism	1
+5662523	Dictyostelium discoideum	Metabolism of lipids and lipoproteins	1
+5662524	Dictyostelium discoideum	Cobalamin (Cbl; vitamin B12) transport and metabolism	1
+5662525	Dictyostelium discoideum	Metabolism of water-soluble vitamins and cofactors	1
+5662528	Dictyostelium discoideum	Defects in cobalamin (B12) metabolism	1
+5662532	Dictyostelium discoideum	Defective AMN causes hereditary megaloblastic anemia 1	1
+5662534	Dictyostelium discoideum	Defective MTRR causes methylmalonic aciduria and homocystinuria type cblE	1
+5662535	Dictyostelium discoideum	Defective MTR causes methylmalonic aciduria and homocystinuria type cblG	1
+5662538	Dictyostelium discoideum	Defective MMACHC causes methylmalonic aciduria and homocystinuria type cblC	1
+5662544	Dictyostelium discoideum	Defective HLCS causes multiple carboxylase deficiency	1
+5662546	Dictyostelium discoideum	Abnormal metabolism in phenylketonuria	1
+5662549	Dictyostelium discoideum	Pyruvate metabolism	1
+5662551	Dictyostelium discoideum	Metabolism of nucleotides	1
+5662553	Dictyostelium discoideum	Cellular responses to stress	1
+5662568	Dictyostelium discoideum	Defective FMO3 causes Trimethylaminuria (TMAU)	1
+5662578	Dictyostelium discoideum	Gene Expression	1
+5662579	Dictyostelium discoideum	Ribosomal scanning and start codon recognition	1
+5662581	Dictyostelium discoideum	Eukaryotic Translation Initiation	1
+5662582	Dictyostelium discoideum	Translation	1
+5662583	Dictyostelium discoideum	Metabolism of proteins	1
+5662586	Dictyostelium discoideum	Recycling of eIF2:GDP	1
+5662602	Dictyostelium discoideum	DNA Repair	1
+5662606	Dictyostelium discoideum	Resolution of Abasic Sites (AP sites)	1
+5662607	Dictyostelium discoideum	Base Excision Repair	1
+5662619	Dictyostelium discoideum	Opioid Signalling	1
+5662620	Dictyostelium discoideum	Signaling by GPCR	1
+5662621	Dictyostelium discoideum	Signal Transduction	1
+5662622	Dictyostelium discoideum	DAG and IP3 signaling	1
+5662623	Dictyostelium discoideum	PLC-gamma1 signalling	1
+5662626	Dictyostelium discoideum	Downstream signal transduction	1
+5662627	Dictyostelium discoideum	Signaling by PDGF	1
+5662628	Dictyostelium discoideum	Phospholipase C-mediated cascade	1
+5662629	Dictyostelium discoideum	Downstream signaling of activated FGFR	1
+5662632	Dictyostelium discoideum	EGFR interacts with phospholipase C-gamma	1
+5662636	Dictyostelium discoideum	Signaling by Ligand-Responsive EGFR Variants in Cancer	1
+5662638	Dictyostelium discoideum	PLCG1 events in ERBB2 signaling	1
+5662640	Dictyostelium discoideum	DAP12 signaling	1
+5662641	Dictyostelium discoideum	DAP12 interactions	1
+5662643	Dictyostelium discoideum	Immune System	1
+5662645	Dictyostelium discoideum	Muscle contraction	1
+5662647	Dictyostelium discoideum	Signaling by the B Cell Receptor (BCR)	1
+5662648	Dictyostelium discoideum	Adaptive Immune System	1
+5662650	Dictyostelium discoideum	Fc epsilon receptor (FCERI) signaling	1
+5662681	Dictyostelium discoideum	Glycerophospholipid biosynthesis	1
+5662702	Homo sapiens	Melanin biosynthesis	
+5662787	Dictyostelium discoideum	Removal of DNA patch containing abasic residue	1
+5662789	Dictyostelium discoideum	CaMK IV-mediated phosphorylation of CREB	1
+5662799	Dictyostelium discoideum	Glucagon signaling in metabolic regulation	1
+5662848	Dictyostelium discoideum	G2/M Transition	1
+5662935	Dictyostelium discoideum	SLC-mediated transmembrane transport	1
+5662975	Dictyostelium discoideum	Digestion of dietary carbohydrate	1
+5662977	Dictyostelium discoideum	Metabolism of porphyrins	1
+5662979	Dictyostelium discoideum	Synthesis of Dolichyl-phosphate	1
+5662981	Dictyostelium discoideum	Bile acid and bile salt metabolism	1
+5662987	Dictyostelium discoideum	Recycling of bile acids and salts	1
+5662996	Dictyostelium discoideum	Vitamin B5 (pantothenate) metabolism	1
+5663002	Dictyostelium discoideum	Signalling to ERK5	1
+5663006	Dictyostelium discoideum	GAB1 signalosome	1
+5663017	Dictyostelium discoideum	ERKs are inactivated	1
+5663020	Dictyostelium discoideum	Membrane Trafficking	1
+5663029	Dictyostelium discoideum	ER to Golgi Transport	1
+5663060	Dictyostelium discoideum	Clathrin derived vesicle budding	1
+5663084	Homo sapiens	Diseases of carbohydrate metabolism	
+5663202	Homo sapiens	Diseases of signal transduction	
+5663205	Homo sapiens	Infectious disease	
+5663213	Homo sapiens	RHO GTPases Activate WASPs and WAVEs	
+5663220	Homo sapiens	RHO GTPases Activate Formins	
+5666185	Homo sapiens	RHO GTPases Activate Rhotekin and Rhophilins	
+5666766	Plasmodium falciparum	M/G1 Transition	1
+5666767	Plasmodium falciparum	Cell Cycle; Mitotic	1
+5666768	Plasmodium falciparum	Cell Cycle	1
+5666769	Plasmodium falciparum	DNA Replication	1
+5666771	Plasmodium falciparum	Regulation of DNA replication	1
+5666773	Plasmodium falciparum	Synthesis of DNA	1
+5666774	Plasmodium falciparum	S Phase	1
+5666777	Plasmodium falciparum	Mitotic G1-G1/S phases	1
+5666789	Plasmodium falciparum	Metabolism of carbohydrates	1
+5666790	Plasmodium falciparum	Metabolism	1
+5666793	Plasmodium falciparum	Disease	1
+5666798	Plasmodium falciparum	SLC-mediated transmembrane transport	1
+5666799	Plasmodium falciparum	Transmembrane transport of small molecules	1
+5666806	Plasmodium falciparum	The citric acid (TCA) cycle and respiratory electron transport	1
+5666808	Plasmodium falciparum	Metabolism of amino acids and derivatives	1
+5666817	Plasmodium falciparum	Metabolism of nucleotides	1
+5666818	Plasmodium falciparum	Detoxification of Reactive Oxygen Species	1
+5666819	Plasmodium falciparum	Cellular responses to stress	1
+5666824	Plasmodium falciparum	Gene Expression	1
+5666829	Plasmodium falciparum	Metabolism of proteins	1
+5666844	Plasmodium falciparum	Opioid Signalling	1
+5666846	Plasmodium falciparum	Signal Transduction	1
+5666852	Plasmodium falciparum	Signaling by PDGF	1
+5666856	Plasmodium falciparum	Signaling by FGFR in disease	1
+5666860	Plasmodium falciparum	Signaling by EGFR in Cancer	1
+5666868	Plasmodium falciparum	Immune System	1
+5666870	Plasmodium falciparum	Muscle contraction	1
+5666873	Plasmodium falciparum	Adaptive Immune System	1
+5666880	Plasmodium falciparum	Signaling by Insulin receptor	1
+5666884	Plasmodium falciparum	DNA Repair	1
+5666895	Plasmodium falciparum	Metabolism of lipids and lipoproteins	1
+5666901	Plasmodium falciparum	Phospholipid metabolism	1
+5666920	Plasmodium falciparum	Base Excision Repair	1
+5666938	Plasmodium falciparum	Apoptosis	1
+5666939	Plasmodium falciparum	Programmed Cell Death	1
+5666942	Plasmodium falciparum	Hemostasis	1
+5666951	Plasmodium falciparum	Post-translational protein modification	1
+5666953	Plasmodium falciparum	Integration of energy metabolism	1
+5666962	Plasmodium falciparum	Fcgamma receptor (FCGR) dependent phagocytosis	1
+5666966	Plasmodium falciparum	Phase II conjugation	1
+5666967	Plasmodium falciparum	Biological oxidations	1
+5666969	Plasmodium falciparum	Metabolic disorders of biological oxidation enzymes	1
+5666985	Plasmodium falciparum	Telomere Maintenance	1
+5666986	Plasmodium falciparum	Chromosome Maintenance	1
+5666995	Plasmodium falciparum	Metabolism of steroid hormones and vitamin D	1
+5667092	Mus musculus	Nr1d1 (Rev-erba) represses gene expression	
+5667099	Plasmodium falciparum	Mucopolysaccharidoses	1
+5667176	Plasmodium falciparum	Passive transport by Aquaporins	1
+5667187	Plasmodium falciparum	Nucleotide-binding domain; leucine rich repeat containing receptor (NLR) signaling pathways	1
+5667191	Plasmodium falciparum	Meiotic recombination	1
+5667192	Plasmodium falciparum	Meiosis	1
+5667211	Plasmodium falciparum	Metabolism of nitric oxide	1
+5667222	Plasmodium falciparum	PI Metabolism	1
+5667226	Plasmodium falciparum	Inositol phosphate metabolism	1
+5667233	Plasmodium falciparum	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	1
+5667236	Plasmodium falciparum	Abnormal metabolism in phenylketonuria	1
+5667241	Plasmodium falciparum	Ubiquinol biosynthesis	1
+5667243	Plasmodium falciparum	Binding and Uptake of Ligands by Scavenger Receptors	1
+5667244	Plasmodium falciparum	PIP3 activates AKT signaling	1
+5667253	Plasmodium falciparum	PI3K/AKT Signaling in Cancer	1
+5667259	Plasmodium falciparum	Mitochondrial iron-sulfur cluster biogenesis	1
+5667261	Plasmodium falciparum	Visual phototransduction	1
+5667279	Plasmodium falciparum	Mitotic Prophase	1
+5667280	Plasmodium falciparum	M Phase	1
+5667288	Plasmodium falciparum	Assembly of the primary cilium	1
+5667289	Plasmodium falciparum	Organelle biogenesis and maintenance	1
+5668599	Homo sapiens	RHO GTPases Activate NADPH Oxidases	
+5668914	Homo sapiens	Diseases of metabolism	
+5674400	Homo sapiens	Constitutive Signaling by AKT1 E17K in Cancer	
+5674404	Homo sapiens	PTEN Loss of Function in Cancer	
+5676235	Schizosaccharomyces pombe	M/G1 Transition	1
+5676237	Schizosaccharomyces pombe	Cell Cycle	1
+5676246	Schizosaccharomyces pombe	Mitotic G1-G1/S phases	1
+5676266	Schizosaccharomyces pombe	Metabolism of carbohydrates	1
+5676267	Schizosaccharomyces pombe	Metabolism	1
+5676270	Schizosaccharomyces pombe	Disease	1
+5676275	Schizosaccharomyces pombe	Biological oxidations	1
+5676292	Schizosaccharomyces pombe	Transmembrane transport of small molecules	1
+5676297	Schizosaccharomyces pombe	The citric acid (TCA) cycle and respiratory electron transport	1
+5676299	Schizosaccharomyces pombe	Metabolism of amino acids and derivatives	1
+5676315	Schizosaccharomyces pombe	Detoxification of Reactive Oxygen Species	1
+5676319	Schizosaccharomyces pombe	Phase 1 - Functionalization of compounds	1
+5676342	Schizosaccharomyces pombe	Gene Expression	1
+5676345	Schizosaccharomyces pombe	Eukaryotic Translation Initiation	1
+5676347	Schizosaccharomyces pombe	Metabolism of proteins	1
+5676360	Schizosaccharomyces pombe	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5676361	Schizosaccharomyces pombe	Metabolism of lipids and lipoproteins	1
+5676365	Schizosaccharomyces pombe	DNA Repair	1
+5676401	Schizosaccharomyces pombe	mRNA Capping	1
+5676431	Schizosaccharomyces pombe	Signalling by NGF	1
+5676436	Schizosaccharomyces pombe	Signaling by EGFR	1
+5676438	Schizosaccharomyces pombe	Signaling by EGFR in Cancer	1
+5676455	Schizosaccharomyces pombe	Immune System	1
+5676457	Schizosaccharomyces pombe	Signaling by GPCR	1
+5676500	Schizosaccharomyces pombe	Base Excision Repair	1
+5676540	Schizosaccharomyces pombe	Programmed Cell Death	1
+5676549	Schizosaccharomyces pombe	Mitotic G2-G2/M phases	1
+5676673	Schizosaccharomyces pombe	Signaling by Rho GTPases	1
+5676706	Schizosaccharomyces pombe	Membrane Trafficking	1
+5676709	Schizosaccharomyces pombe	Adaptive Immune System	1
+5676726	Schizosaccharomyces pombe	Apoptotic execution  phase	1
+5676756	Schizosaccharomyces pombe	Peroxisomal lipid metabolism	1
+5676795	Schizosaccharomyces pombe	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5676800	Schizosaccharomyces pombe	Peptide hormone metabolism	1
+5676806	Schizosaccharomyces pombe	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+5676816	Schizosaccharomyces pombe	Regulation of mRNA stability by proteins that bind AU-rich elements	1
+5676832	Schizosaccharomyces pombe	Nucleotide-binding domain; leucine rich repeat containing receptor (NLR) signaling pathways	1
+5676844	Schizosaccharomyces pombe	Meiosis	1
+5676848	Schizosaccharomyces pombe	Nonsense-Mediated Decay (NMD)	1
+5676870	Schizosaccharomyces pombe	Mitochondrial protein import	1
+5676871	Schizosaccharomyces pombe	Mitochondrial iron-sulfur cluster biogenesis	1
+5676897	Schizosaccharomyces pombe	Regulation of lipid metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)	1
+5676937	Schizosaccharomyces pombe	Visual phototransduction	1
+5676943	Schizosaccharomyces pombe	Mitotic Metaphase and Anaphase	1
+5676947	Schizosaccharomyces pombe	Cytosolic iron-sulfur cluster assembly	1
+5694872	Dictyostelium discoideum	Cell Cycle Checkpoints	1
+5694890	Dictyostelium discoideum	Gene Expression	1
+5695088	Dictyostelium discoideum	NCAM signaling for neurite out-growth	1
+5695089	Dictyostelium discoideum	Axon guidance	1
+5695090	Dictyostelium discoideum	Developmental Biology	1
+5695122	Dictyostelium discoideum	MyD88 cascade initiated on plasma membrane	1
+5695162	Dictyostelium discoideum	Transmembrane transport of small molecules	1
+5695341	Dictyostelium discoideum	TCR signaling	1
+5695386	Dictyostelium discoideum	Rap1 signalling	1
+5695456	Dictyostelium discoideum	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5695458	Dictyostelium discoideum	Disease	1
+5695488	Dictyostelium discoideum	Netrin-1 signaling	1
+5695570	Dictyostelium discoideum	Inositol phosphate metabolism	1
+5695583	Dictyostelium discoideum	MHC class II antigen presentation	1
+5699220	Plasmodium falciparum	Metabolism	1
+5699231	Plasmodium falciparum	Transmembrane transport of small molecules	1
+5699240	Plasmodium falciparum	Metabolism of amino acids and derivatives	1
+5699260	Plasmodium falciparum	Metabolism of proteins	1
+5699277	Plasmodium falciparum	Signal Transduction	1
+5699290	Plasmodium falciparum	Innate Immune System	1
+5699291	Plasmodium falciparum	Immune System	1
+5699306	Plasmodium falciparum	Muscle contraction	1
+5699309	Plasmodium falciparum	Adaptive Immune System	1
+5699319	Plasmodium falciparum	Signaling by Insulin receptor	1
+5699368	Plasmodium falciparum	Intrinsic Pathway for Apoptosis	1
+5699373	Plasmodium falciparum	Hemostasis	1
+5699412	Plasmodium falciparum	Metabolism of porphyrins	1
+5699446	Plasmodium falciparum	Developmental Biology	1
+5699454	Plasmodium falciparum	Apoptotic execution  phase	1
+5699472	Plasmodium falciparum	Platelet homeostasis	1
+5699496	Plasmodium falciparum	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5699498	Plasmodium falciparum	Disease	1
+5699499	Plasmodium falciparum	Iron uptake and transport	1
+5699509	Plasmodium falciparum	Neuronal System	1
+5699534	Plasmodium falciparum	Advanced glycosylation endproduct receptor signaling	1
+5699634	Plasmodium falciparum	Organelle biogenesis and maintenance	1
+5709012	Schizosaccharomyces pombe	Cell Cycle; Mitotic	1
+5709022	Schizosaccharomyces pombe	Mitotic G1-G1/S phases	1
+5709042	Schizosaccharomyces pombe	Metabolism of carbohydrates	1
+5709043	Schizosaccharomyces pombe	Metabolism	1
+5709058	Schizosaccharomyces pombe	Hexose transport	1
+5709059	Schizosaccharomyces pombe	SLC-mediated transmembrane transport	1
+5709060	Schizosaccharomyces pombe	Transmembrane transport of small molecules	1
+5709065	Schizosaccharomyces pombe	The citric acid (TCA) cycle and respiratory electron transport	1
+5709067	Schizosaccharomyces pombe	Metabolism of amino acids and derivatives	1
+5709082	Schizosaccharomyces pombe	Metabolism of nucleotides	1
+5709095	Schizosaccharomyces pombe	Metabolism of proteins	1
+5709109	Schizosaccharomyces pombe	Metabolism of lipids and lipoproteins	1
+5709113	Schizosaccharomyces pombe	DNA Repair	1
+5709130	Schizosaccharomyces pombe	Double-Strand Break Repair	1
+5709173	Schizosaccharomyces pombe	RAF/MAP kinase cascade	1
+5709283	Schizosaccharomyces pombe	Integration of energy metabolism	1
+5709317	Schizosaccharomyces pombe	Telomere Maintenance	1
+5709320	Schizosaccharomyces pombe	Respiratory electron transport; ATP synthesis by chemiosmotic coupling; and heat production by uncoupling proteins.	1
+5709389	Schizosaccharomyces pombe	Metabolism of vitamins and cofactors	1
+5709401	Schizosaccharomyces pombe	Vesicle-mediated transport	1
+5709495	Schizosaccharomyces pombe	Disease	1
+5709572	Schizosaccharomyces pombe	Metabolism of nitric oxide	1
+5709600	Schizosaccharomyces pombe	Inositol phosphate metabolism	1
+5709617	Schizosaccharomyces pombe	PIP3 activates AKT signaling	1
+5719401	Saccharomyces cerevisiae	Cell Cycle; Mitotic	1
+5719402	Saccharomyces cerevisiae	Cell Cycle	1
+5719403	Saccharomyces cerevisiae	DNA Replication	1
+5719429	Saccharomyces cerevisiae	Metabolism of carbohydrates	1
+5719443	Saccharomyces cerevisiae	Gene Expression	1
+5719445	Saccharomyces cerevisiae	Hexose transport	1
+5719446	Saccharomyces cerevisiae	SLC-mediated transmembrane transport	1
+5719447	Saccharomyces cerevisiae	Transmembrane transport of small molecules	1
+5719451	Saccharomyces cerevisiae	Metabolism of amino acids and derivatives	1
+5719469	Saccharomyces cerevisiae	Metabolism of nucleotides	1
+5719481	Saccharomyces cerevisiae	Eukaryotic Translation Initiation	1
+5719497	Saccharomyces cerevisiae	Metabolism of lipids and lipoproteins	1
+5719517	Saccharomyces cerevisiae	Double-Strand Break Repair	1
+5719531	Saccharomyces cerevisiae	Glycerophospholipid biosynthesis	1
+5719536	Saccharomyces cerevisiae	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	1
+5719567	Saccharomyces cerevisiae	NGF signalling via TRKA from the plasma membrane	1
+5719584	Saccharomyces cerevisiae	Immune System	1
+5719643	Saccharomyces cerevisiae	Base-Excision Repair; AP Site Formation	1
+5719669	Saccharomyces cerevisiae	Integration of energy metabolism	1
+5719672	Saccharomyces cerevisiae	Aquaporin-mediated transport	1
+5719685	Saccharomyces cerevisiae	Programmed Cell Death	1
+5719755	Saccharomyces cerevisiae	Metabolism of porphyrins	1
+5719760	Saccharomyces cerevisiae	Asparagine N-linked glycosylation	1
+5719793	Saccharomyces cerevisiae	Membrane Trafficking	1
+5719844	Saccharomyces cerevisiae	Unfolded Protein Response (UPR)	1
+5719847	Saccharomyces cerevisiae	ABC-family proteins mediated transport	1
+5719850	Saccharomyces cerevisiae	Peroxisomal lipid metabolism	1
+5719861	Saccharomyces cerevisiae	Protein folding	1
+5719873	Saccharomyces cerevisiae	Ion channel transport	1
+5719895	Saccharomyces cerevisiae	Disease	1
+5719964	Saccharomyces cerevisiae	Mitochondrial protein import	1
+5719969	Saccharomyces cerevisiae	Metabolism of nitric oxide	1
+5719990	Saccharomyces cerevisiae	PI Metabolism	1
+5719997	Saccharomyces cerevisiae	Inositol phosphate metabolism	1
+5720002	Saccharomyces cerevisiae	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	1
+5720052	Saccharomyces cerevisiae	Cellular response to heat stress	1
+5720068	Saccharomyces cerevisiae	Mismatch Repair	1
+573389	Mus musculus	NoRC negatively regulates rRNA expression	
+5751460	Caenorhabditis elegans	S Phase	1
+5751461	Caenorhabditis elegans	Cell Cycle; Mitotic	1
+5751462	Caenorhabditis elegans	Cell Cycle	1
+5751463	Caenorhabditis elegans	DNA Replication	1
+5751468	Caenorhabditis elegans	Mitotic G1-G1/S phases	1
+5751482	Caenorhabditis elegans	Cell Cycle Checkpoints	1
+5751489	Caenorhabditis elegans	Metabolism of carbohydrates	1
+5751490	Caenorhabditis elegans	Metabolism	1
+5751503	Caenorhabditis elegans	Gene Expression	1
+5751512	Caenorhabditis elegans	The citric acid (TCA) cycle and respiratory electron transport	1
+5751514	Caenorhabditis elegans	Metabolism of amino acids and derivatives	1
+5751530	Caenorhabditis elegans	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5751531	Caenorhabditis elegans	Metabolism of lipids and lipoproteins	1
+5751539	Caenorhabditis elegans	Metabolism of nucleotides	1
+5751549	Caenorhabditis elegans	Processing of Capped Intron-Containing Pre-mRNA	1
+5751559	Caenorhabditis elegans	Eukaryotic Translation Initiation	1
+5751589	Caenorhabditis elegans	Signal Transduction	1
+5751630	Caenorhabditis elegans	Adaptive Immune System	1
+5751652	Caenorhabditis elegans	RHO GTPase Effectors	1
+5751653	Caenorhabditis elegans	Signaling by Rho GTPases	1
+5751677	Caenorhabditis elegans	Phospholipid metabolism	1
+5751723	Caenorhabditis elegans	Axon guidance	1
+5751724	Caenorhabditis elegans	Developmental Biology	1
+5751727	Caenorhabditis elegans	Cytokine Signaling in Immune system	1
+5751778	Caenorhabditis elegans	DNA Damage Bypass	1
+5751807	Caenorhabditis elegans	Programmed Cell Death	1
+5751819	Caenorhabditis elegans	Platelet homeostasis	1
+5751840	Caenorhabditis elegans	Bile acid and bile salt metabolism	1
+5751848	Caenorhabditis elegans	Respiratory electron transport; ATP synthesis by chemiosmotic coupling; and heat production by uncoupling proteins.	1
+5751851	Caenorhabditis elegans	Lipid digestion; mobilization; and transport	1
+5751874	Caenorhabditis elegans	beta-catenin independent WNT signaling	1
+5751875	Caenorhabditis elegans	Signaling by Wnt	1
+5751903	Caenorhabditis elegans	Glycosaminoglycan metabolism	1
+5751967	Caenorhabditis elegans	PIP3 activates AKT signaling	1
+5751999	Caenorhabditis elegans	TCF dependent signaling in response to WNT	1
+5752015	Caenorhabditis elegans	Signaling by Robo receptor	1
+5752042	Caenorhabditis elegans	Extracellular matrix organization	1
+5752182	Caenorhabditis elegans	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5752254	Caenorhabditis elegans	Meiosis	1
+5752291	Caenorhabditis elegans	Regulation of Hypoxia-inducible Factor (HIF) by oxygen	1
+5752314	Caenorhabditis elegans	Reproduction	1
+5752341	Caenorhabditis elegans	PI Metabolism	1
+5752361	Caenorhabditis elegans	ISG15 antiviral mechanism	1
+5752378	Caenorhabditis elegans	alpha-linolenic (omega3) and linoleic (omega6) acid metabolism	1
+5752448	Caenorhabditis elegans	RHO GTPases Activate Formins	1
+5752480	Caenorhabditis elegans	Organelle biogenesis and maintenance	1
+5811525	Sus scrofa	Cell Cycle	1
+5811536	Sus scrofa	Mitotic G1-G1/S phases	1
+5811557	Sus scrofa	Cellular responses to stress	1
+5811565	Sus scrofa	Metabolism of carbohydrates	1
+5811566	Sus scrofa	Metabolism	1
+5811570	Sus scrofa	Phase II conjugation	1
+5811609	Sus scrofa	Metabolism of water-soluble vitamins and cofactors	1
+5811675	Sus scrofa	Visual phototransduction	1
+5811689	Sus scrofa	Signalling by NGF	1
+5811698	Sus scrofa	Innate Immune System	1
+5811714	Sus scrofa	Muscle contraction	1
+5811725	Sus scrofa	C-type lectin receptors (CLRs)	1
+5811865	Sus scrofa	Toll Like Receptor 3 (TLR3) Cascade	1
+5811884	Sus scrofa	Base-Excision Repair; AP Site Formation	1
+5811907	Sus scrofa	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+5812063	Sus scrofa	Complement cascade	1
+5812072	Sus scrofa	TAK1 activates NFkB by phosphorylation and activation of IKKs complex	1
+5812196	Sus scrofa	Metabolism of steroid hormones and vitamin D	1
+5812256	Sus scrofa	GPCR ligand binding	1
+5812296	Sus scrofa	Cell-Cell communication	1
+5812328	Sus scrofa	ABC-family proteins mediated transport	1
+5812461	Sus scrofa	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5812462	Sus scrofa	Infectious disease	1
+5812586	Sus scrofa	Advanced glycosylation endproduct receptor signaling	1
+5812599	Sus scrofa	O-linked glycosylation	1
+5812634	Sus scrofa	Class I MHC mediated antigen processing & presentation	1
+5812675	Sus scrofa	Fertilization	1
+5812689	Sus scrofa	Degradation of the extracellular matrix	1
+5869390	Bos taurus	Cell Cycle; Mitotic	1
+5869391	Bos taurus	Cell Cycle	1
+5869399	Bos taurus	S Phase	1
+5869420	Bos taurus	Cell Cycle Checkpoints	1
+5869434	Bos taurus	Metabolism of carbohydrates	1
+5869435	Bos taurus	Metabolism	1
+5869448	Bos taurus	Gene Expression	1
+5869476	Bos taurus	Metabolism of lipids and lipoproteins	1
+5869478	Bos taurus	Metabolism of water-soluble vitamins and cofactors	1
+5869482	Bos taurus	Signal Transduction	1
+5869491	Bos taurus	Phase 1 - Functionalization of compounds	1
+5869508	Bos taurus	Translation	1
+5869509	Bos taurus	Metabolism of proteins	1
+5869567	Bos taurus	Immune System	1
+5869584	Bos taurus	Signaling by the B Cell Receptor (BCR)	1
+5869585	Bos taurus	Adaptive Immune System	1
+5869695	Bos taurus	Transport of vitamins; nucleosides; and related molecules	1
+5869765	Bos taurus	DNA Damage Bypass	1
+5869805	Bos taurus	Intrinsic Pathway for Apoptosis	1
+5869812	Bos taurus	GPCR downstream signaling	1
+5869815	Bos taurus	Hemostasis	1
+5869816	Bos taurus	Response to elevated platelet cytosolic Ca2+	1
+5869817	Bos taurus	Platelet Adhesion to exposed collagen	1
+5869819	Bos taurus	Extracellular matrix organization	1
+5869854	Bos taurus	Eukaryotic Translation Termination	1
+5869857	Bos taurus	M Phase	1
+5869873	Bos taurus	Signaling by NOTCH2	1
+5869891	Bos taurus	Post-translational protein modification	1
+5869917	Bos taurus	Lipid digestion; mobilization; and transport	1
+5869921	Bos taurus	GPCR ligand binding	1
+5869943	Bos taurus	Complement cascade	1
+5869966	Bos taurus	Signaling by Wnt	1
+5869979	Bos taurus	Signaling by TGF-beta Receptor Complex	1
+5870146	Bos taurus	TCF dependent signaling in response to WNT	1
+5870229	Bos taurus	Platelet Aggregation (Plug Formation)	1
+5870282	Bos taurus	Regulation of Insulin-like Growth Factor (IGF) transport and uptake by Insulin-like Growth Factor Binding Proteins (IGFBPs)	1
+5870338	Bos taurus	Circadian Clock	1
+5870349	Bos taurus	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5870350	Bos taurus	Infectious disease	1
+5870351	Bos taurus	Disease	1
+5870392	Bos taurus	GP1b-IX-V activation signalling	1
+5870484	Bos taurus	O-linked glycosylation	1
+5870521	Bos taurus	Class I MHC mediated antigen processing & presentation	1
+5870532	Bos taurus	ISG15 antiviral mechanism	1
+5870562	Bos taurus	Fertilization	1
+5870646	Bos taurus	Metabolism of Angiotensinogen to Angiotensins	1
+5870652	Bos taurus	MHC class II antigen presentation	1
+5870668	Bos taurus	Mitotic Prophase	1
+5870670	Bos taurus	Binding and Uptake of Ligands by Scavenger Receptors	1
+5870713	Bos taurus	WNT ligand biogenesis and trafficking	1
+5931144	Canis familiaris	Metabolism of carbohydrates	1
+5931167	Canis familiaris	The citric acid (TCA) cycle and respiratory electron transport	1
+5931188	Canis familiaris	Metabolism of water-soluble vitamins and cofactors	1
+5931250	Canis familiaris	Apoptosis	1
+5931272	Canis familiaris	Signaling by EGFR	1
+5931277	Canis familiaris	Innate Immune System	1
+5931278	Canis familiaris	Immune System	1
+5931282	Canis familiaris	Signaling by FGFR	1
+5931295	Canis familiaris	Signaling by the B Cell Receptor (BCR)	1
+5931298	Canis familiaris	Fc epsilon receptor (FCERI) signaling	1
+5931299	Canis familiaris	VEGFR2 mediated cell proliferation	1
+5931300	Canis familiaris	VEGFA-VEGFR2 Pathway	1
+5931301	Canis familiaris	Signaling by VEGF	1
+5931305	Canis familiaris	Insulin receptor recycling	1
+5931307	Canis familiaris	SOS-mediated signalling	1
+5931308	Canis familiaris	IRS-mediated signalling	1
+5931311	Canis familiaris	IRS-related events triggered by IGF1R	1
+5931323	Canis familiaris	Chk1/Chk2(Cds1) mediated inactivation of Cyclin B:Cdk1 complex	1
+5931324	Canis familiaris	RHO GTPases activate PKNs	1
+5931327	Canis familiaris	mRNA Splicing - Minor Pathway	1
+5931330	Canis familiaris	mRNA Editing	1
+5931331	Canis familiaris	RNA Polymerase II Transcription Pre-Initiation And Promoter Opening	1
+5931335	Canis familiaris	Homologous recombination repair of replication-independent double-strand breaks	1
+5931336	Canis familiaris	Homologous Recombination Repair	1
+5931337	Canis familiaris	Double-Strand Break Repair	1
+5931343	Canis familiaris	ATM mediated phosphorylation of repair proteins	1
+5931345	Canis familiaris	TNF signaling	1
+5931349	Canis familiaris	Triglyceride Biosynthesis	1
+5931350	Canis familiaris	RNA Polymerase II Promoter Escape	1
+5931358	Canis familiaris	Phospholipid metabolism	1
+5931359	Canis familiaris	Nonhomologous End-joining (NHEJ)	1
+5931360	Canis familiaris	Processing of DNA double-strand break ends	1
+5931365	Canis familiaris	RNA Polymerase III Transcription	1
+5931366	Canis familiaris	RNA Polymerase III Abortive And Retractive Initiation	1
+5931367	Canis familiaris	CYP2E1 reactions	1
+5931374	Canis familiaris	Nicotinate metabolism	1
+5931381	Canis familiaris	mitochondrial fatty acid beta-oxidation of saturated fatty acids	1
+5931387	Canis familiaris	Beta oxidation of decanoyl-CoA to octanoyl-CoA-CoA	1
+5931388	Canis familiaris	SLBP Dependent Processing of Replication-Dependent Histone Pre-mRNAs	1
+5931391	Canis familiaris	Transport of the SLBP Dependant Mature mRNA	1
+5931392	Canis familiaris	Transport of Mature mRNAs Derived from Intronless Transcripts	1
+5931400	Canis familiaris	RNA Polymerase III Transcription Initiation From Type 3 Promoter	1
+5931413	Canis familiaris	NCAM signaling for neurite out-growth	1
+5931419	Canis familiaris	Gastrin-CREB signalling pathway via PKC and MAPK	1
+5931424	Canis familiaris	GRB2 events in ERBB2 signaling	1
+5931434	Canis familiaris	ERK1 activation	1
+5931449	Canis familiaris	MyD88 dependent cascade initiated on endosome	1
+5931455	Canis familiaris	ERK2 activation	1
+5931462	Canis familiaris	Dual incision reaction in TC-NER	1
+5931463	Canis familiaris	Gap-filling DNA repair synthesis and ligation in TC-NER	1
+5931468	Canis familiaris	Cleavage of the damaged purine	1
+5931469	Canis familiaris	Depurination	1
+5931476	Canis familiaris	Resolution of Abasic Sites (AP sites)	1
+5931477	Canis familiaris	Abasic sugar-phosphate removal via the single-nucleotide replacement pathway	1
+5931479	Canis familiaris	PCNA-Dependent Long Patch Base Excision Repair	1
+5931480	Canis familiaris	Resolution of AP sites via the multiple-nucleotide patch replacement pathway	1
+5931481	Canis familiaris	SLBP independent Processing of Histone Pre-mRNAs	1
+5931482	Canis familiaris	Transport of the SLBP independent Mature mRNA	1
+5931483	Canis familiaris	phospho-PLA2 pathway	1
+5931484	Canis familiaris	CaMK IV-mediated phosphorylation of CREB	1
+5931490	Canis familiaris	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+5931494	Canis familiaris	Glucagon signaling in metabolic regulation	1
+5931495	Canis familiaris	Integration of energy metabolism	1
+5931498	Canis familiaris	Aquaporin-mediated transport	1
+5931501	Canis familiaris	RNA Polymerase II Transcription Elongation	1
+5931505	Canis familiaris	RNA Polymerase III Transcription Termination	1
+5931512	Canis familiaris	Intrinsic Pathway for Apoptosis	1
+5931519	Canis familiaris	GPCR downstream signaling	1
+5931527	Canis familiaris	Cell surface interactions at the vascular wall	1
+5931529	Canis familiaris	Disinhibition of SNARE formation	1
+5931552	Canis familiaris	PAOs oxidise polyamines to amines	1
+5931553	Canis familiaris	Interconversion of polyamines	1
+5931561	Canis familiaris	Regulation of mitotic cell cycle	1
+5931565	Canis familiaris	M Phase	1
+5931566	Canis familiaris	Polo-like kinase mediated events	1
+5931567	Canis familiaris	G2/M Transition	1
+5931578	Canis familiaris	Receptor-ligand binding initiates the second proteolytic cleavage of Notch receptor	1
+5931586	Canis familiaris	Dissolution of Fibrin Clot	1
+5931598	Canis familiaris	Gamma-carboxylation of protein precursors	1
+5931601	Canis familiaris	PKB-mediated events	1
+5931604	Canis familiaris	Synthesis of dolichyl-phosphate mannose	1
+5931605	Canis familiaris	Synthesis of substrates in N-glycan biosythesis	1
+5931606	Canis familiaris	Biosynthesis of the N-glycan precursor (dolichol lipid-linked oligosaccharide; LLO) and transfer to a nascent protein	1
+5931609	Canis familiaris	Mitotic Metaphase/Anaphase Transition	1
+5931613	Canis familiaris	Telomere Maintenance	1
+5931614	Canis familiaris	Chromosome Maintenance	1
+5931622	Canis familiaris	Lipid digestion; mobilization; and transport	1
+5931624	Canis familiaris	Glucagon-type ligand receptors	1
+5931625	Canis familiaris	Class B/2 (Secretin family receptors)	1
+5931626	Canis familiaris	GPCR ligand binding	1
+5931633	Canis familiaris	mTOR signalling	1
+5931635	Canis familiaris	mTORC1-mediated signalling	1
+5931656	Canis familiaris	TRAF6 mediated NF-kB activation	1
+5931657	Canis familiaris	RIG-I/MDA5 mediated induction of IFN-alpha/beta pathways	1
+5931661	Canis familiaris	JNK (c-Jun kinases) phosphorylation and  activation mediated by activated human TAK1	1
+5931662	Canis familiaris	DEx/H-box helicases activate type I IFN and inflammatory cytokines production 	1
+5931669	Canis familiaris	beta-catenin independent WNT signaling	1
+5931670	Canis familiaris	Signaling by Wnt	1
+5931685	Canis familiaris	Signaling by TGF-beta Receptor Complex	1
+5931687	Canis familiaris	Transcriptional activity of SMAD2/SMAD3:SMAD4 heterotrimer	1
+5931688	Canis familiaris	p38MAPK events	1
+5931693	Canis familiaris	Terminal pathway of complement	1
+5931695	Canis familiaris	Cyclin A:Cdk2-associated events at S phase entry	1
+5931706	Canis familiaris	Separation of Sister Chromatids	1
+5931709	Canis familiaris	SCF-beta-TrCP mediated degradation of Emi1	1
+5931723	Canis familiaris	Packaging Of Telomere Ends	1
+5931724	Canis familiaris	Conjugation of phenylacetate with glutamine	1
+5931725	Canis familiaris	Retrograde neurotrophin signalling	1
+5931728	Canis familiaris	PI-3K cascade:FGFR2	1
+5931731	Canis familiaris	Downregulation of TGF-beta receptor signaling	1
+5931738	Canis familiaris	G2 Phase	1
+5931740	Canis familiaris	Digestion of dietary carbohydrate	1
+5931750	Canis familiaris	FGFR1 ligand binding and activation	1
+5931759	Canis familiaris	FGFR1c and Klotho ligand binding and activation	1
+5931761	Canis familiaris	Gap junction degradation	1
+5931765	Canis familiaris	Vesicle-mediated transport	1
+5931767	Canis familiaris	Transport of connexons to the plasma membrane	1
+5931775	Canis familiaris	snRNP Assembly	1
+5931779	Canis familiaris	Synthesis of bile acids and bile salts via 7alpha-hydroxycholesterol	1
+5931784	Canis familiaris	Mineralocorticoid biosynthesis	1
+5931790	Canis familiaris	Glucocorticoid biosynthesis	1
+5931791	Canis familiaris	p75NTR recruits signalling complexes	1
+5931798	Canis familiaris	Cell death signalling via NRAGE; NRIF and NADE	1
+5931805	Canis familiaris	Axonal growth inhibition (RHOA activation)	1
+5931815	Canis familiaris	Vitamin B5 (pantothenate) metabolism	1
+5931821	Canis familiaris	CD28 co-stimulation	1
+5931828	Canis familiaris	VEGFR2 mediated vascular permeability	1
+5931831	Canis familiaris	AKT phosphorylates targets in the cytosol	1
+5931832	Canis familiaris	ERK/MAPK targets	1
+5931835	Canis familiaris	Signalling to STAT3	1
+5931841	Canis familiaris	CREB phosphorylation	1
+5931848	Canis familiaris	Signaling by BMP	1
+5931850	Canis familiaris	Apoptotic execution  phase	1
+5931856	Canis familiaris	WNT mediated activation of DVL	1
+5931859	Canis familiaris	Metabolism of nitric oxide	1
+5931860	Canis familiaris	Downstream TCR signaling	1
+5931863	Canis familiaris	Translocation of ZAP-70 to Immunological synapse	1
+5931864	Canis familiaris	Generation of second messenger molecules	1
+5931880	Canis familiaris	Hypusine synthesis from eIF5A-lysine	1
+5931881	Canis familiaris	Tie2 Signaling	1
+5931882	Canis familiaris	Regulation of KIT signaling	1
+5931890	Canis familiaris	Signal regulatory protein (SIRP) family interactions	1
+5931902	Canis familiaris	Regulation of activated PAK-2p34 by proteasome mediated degradation	1
+5931907	Canis familiaris	PRC2 methylates histones and DNA	1
+5931910	Canis familiaris	Laminin interactions	1
+5931912	Canis familiaris	Autodegradation of the E3 ubiquitin ligase COP1	1
+5931920	Canis familiaris	Trafficking of dietary sterols	1
+5931926	Canis familiaris	Clathrin derived vesicle budding	1
+5931927	Canis familiaris	trans-Golgi Network Vesicle Budding	1
+5931932	Canis familiaris	Amine compound SLC transporters	1
+5931949	Canis familiaris	Netrin-1 signaling	1
+5931955	Canis familiaris	Other semaphorin interactions	1
+5931956	Canis familiaris	Semaphorin interactions	1
+5931958	Canis familiaris	Sema4D in semaphorin signaling	1
+5931960	Canis familiaris	Myogenesis	1
+5932056	Canis familiaris	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5932057	Canis familiaris	Infectious disease	1
+5932058	Canis familiaris	Disease	1
+5932107	Canis familiaris	Type I hemidesmosome assembly	1
+5932108	Canis familiaris	Bile salt and organic anion SLC transporters	1
+5932109	Canis familiaris	Sodium-coupled sulphate; di- and tri-carboxylate transporters	1
+5932110	Canis familiaris	Proton-coupled monocarboxylate transport	1
+5932113	Canis familiaris	Zinc transporters	1
+5932114	Canis familiaris	Zinc influx into cells by the SLC39 gene family	1
+5932115	Canis familiaris	RHO GTPases Activate WASPs and WAVEs	1
+5932117	Canis familiaris	CREB phosphorylation through the activation of Ras	1
+5932118	Canis familiaris	CREB phosphorylation through the activation of CaMKII	1
+5932119	Canis familiaris	Ras activation uopn Ca2+ infux through NMDA receptor	1
+5932122	Canis familiaris	CHL1 interactions	1
+5932123	Canis familiaris	Free fatty acid receptors	1
+5932125	Canis familiaris	Relaxin receptors	1
+5932131	Canis familiaris	Synthesis of dolichyl-phosphate-glucose	1
+5932132	Canis familiaris	Interleukin-1 processing	1
+5932133	Canis familiaris	Mitochondrial tRNA aminoacylation	1
+5932178	Canis familiaris	Factors involved in megakaryocyte development and platelet production	1
+5932281	Canis familiaris	Translocation of GLUT4 to the plasma membrane	1
+597592	Homo sapiens	Post-translational protein modification	
+5990979	Mus musculus	Cell Cycle; Mitotic	1
+5990980	Mus musculus	Cell Cycle	1
+5990981	Mus musculus	DNA Replication	1
+5990983	Mus musculus	Regulation of DNA replication	1
+5990988	Mus musculus	S Phase	1
+5990991	Mus musculus	Mitotic G1-G1/S phases	1
+5991009	Mus musculus	Cell Cycle Checkpoints	1
+5991010	Mus musculus	DNA Damage/Telomere Stress Induced Senescence	1
+5991012	Mus musculus	Cellular responses to stress	1
+5991018	Mus musculus	Oxidative Stress Induced Senescence	1
+5991019	Mus musculus	Oncogene Induced Senescence	1
+5991023	Mus musculus	Metabolism of carbohydrates	1
+5991024	Mus musculus	Metabolism	1
+5991029	Mus musculus	Biological oxidations	1
+5991036	Mus musculus	Generic Transcription Pathway	1
+5991037	Mus musculus	Gene Expression	1
+5991039	Mus musculus	Hexose transport	1
+5991040	Mus musculus	SLC-mediated transmembrane transport	1
+5991041	Mus musculus	Transmembrane transport of small molecules	1
+5991046	Mus musculus	The citric acid (TCA) cycle and respiratory electron transport	1
+5991048	Mus musculus	Metabolism of amino acids and derivatives	1
+5991052	Mus musculus	Transmission across Chemical Synapses	1
+5991053	Mus musculus	Neuronal System	1
+5991055	Mus musculus	Neurotransmitter Release Cycle	1
+5991064	Mus musculus	Fatty acid; triacylglycerol; and ketone body metabolism	1
+5991065	Mus musculus	Metabolism of lipids and lipoproteins	1
+5991067	Mus musculus	Metabolism of water-soluble vitamins and cofactors	1
+5991071	Mus musculus	Signal Transduction	1
+5991078	Mus musculus	Metabolism of nucleotides	1
+5991079	Mus musculus	Detoxification of Reactive Oxygen Species	1
+5991085	Mus musculus	tRNA Aminoacylation	1
+5991094	Mus musculus	RNA Polymerase II Transcription	1
+5991098	Mus musculus	Eukaryotic Translation Initiation	1
+5991099	Mus musculus	Translation	1
+5991100	Mus musculus	Metabolism of proteins	1
+5991114	Mus musculus	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	1
+5991127	Mus musculus	Ligand-dependent caspase activation	1
+5991129	Mus musculus	Apoptosis	1
+5991130	Mus musculus	Programmed Cell Death	1
+5991134	Mus musculus	Visual phototransduction	1
+5991141	Mus musculus	Opioid Signalling	1
+5991142	Mus musculus	Signaling by GPCR	1
+5991143	Mus musculus	DAG and IP3 signaling	1
+5991145	Mus musculus	NGF signalling via TRKA from the plasma membrane	1
+5991146	Mus musculus	Signalling by NGF	1
+5991148	Mus musculus	Signaling by PDGF	1
+5991152	Mus musculus	Signaling by ERBB2	1
+5991155	Mus musculus	Innate Immune System	1
+5991156	Mus musculus	Immune System	1
+5991159	Mus musculus	Signaling by FGFR1	1
+5991160	Mus musculus	Signaling by FGFR	1
+5991163	Mus musculus	Signaling by FGFR2	1
+5991169	Mus musculus	Signaling by FGFR4	1
+5991171	Mus musculus	Muscle contraction	1
+5991173	Mus musculus	Signaling by the B Cell Receptor (BCR)	1
+5991174	Mus musculus	Adaptive Immune System	1
+5991176	Mus musculus	Fc epsilon receptor (FCERI) signaling	1
+5991179	Mus musculus	Signaling by VEGF	1
+5991182	Mus musculus	C-type lectin receptors (CLRs)	1
+5991187	Mus musculus	Signaling by Insulin receptor	1
+5991206	Mus musculus	Epigenetic regulation of gene expression	1
+5991210	Mus musculus	Signaling by Rho GTPases	1
+5991214	Mus musculus	mRNA Editing	1
+5991242	Mus musculus	Glycerophospholipid biosynthesis	1
+5991243	Mus musculus	Phospholipid metabolism	1
+5991288	Mus musculus	Transport of vitamins; nucleosides; and related molecules	1
+5991291	Mus musculus	RAF/MAP kinase cascade	1
+5991298	Mus musculus	NCAM signaling for neurite out-growth	1
+5991299	Mus musculus	Axon guidance	1
+5991300	Mus musculus	Developmental Biology	1
+5991302	Mus musculus	Signaling by Interleukins	1
+5991303	Mus musculus	Cytokine Signaling in Immune system	1
+5991304	Mus musculus	Gastrin-CREB signalling pathway via PKC and MAPK	1
+5991307	Mus musculus	Signaling by ERBB4	1
+5991325	Mus musculus	Toll-Like Receptors Cascades	1
+5991331	Mus musculus	MyD88-independent TLR3/TLR4 cascade 	1
+5991332	Mus musculus	Toll Like Receptor 3 (TLR3) Cascade	1
+5991334	Mus musculus	MyD88 dependent cascade initiated on endosome	1
+5991337	Mus musculus	MyD88 cascade initiated on plasma membrane	1
+5991342	Mus musculus	L1CAM interactions	1
+5991351	Mus musculus	Base-Excision Repair; AP Site Formation	1
+5991352	Mus musculus	Base Excision Repair	1
+5991361	Mus musculus	Resolution of Abasic Sites (AP sites)	1
+5991375	Mus musculus	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+5991380	Mus musculus	Integration of energy metabolism	1
+5991383	Mus musculus	Aquaporin-mediated transport	1
+5991408	Mus musculus	GPCR downstream signaling	1
+5991411	Mus musculus	Hemostasis	1
+5991413	Mus musculus	Integrin cell surface interactions	1
+5991414	Mus musculus	Extracellular matrix organization	1
+5991416	Mus musculus	Cell surface interactions at the vascular wall	1
+5991424	Mus musculus	Platelet homeostasis	1
+5991449	Mus musculus	APC/C-mediated degradation of cell cycle proteins	1
+5991451	Mus musculus	Eukaryotic Translation Termination	1
+5991454	Mus musculus	M Phase	1
+5991457	Mus musculus	Mitotic G2-G2/M phases	1
+5991465	Mus musculus	Signaling by NOTCH1	1
+5991466	Mus musculus	Signaling by NOTCH	1
+5991480	Mus musculus	Bile acid and bile salt metabolism	1
+5991488	Mus musculus	Post-translational protein modification	1
+5991499	Mus musculus	Asparagine N-linked glycosylation	1
+5991505	Mus musculus	Telomere Maintenance	1
+5991514	Mus musculus	Lipid digestion; mobilization; and transport	1
+5991518	Mus musculus	GPCR ligand binding	1
+5991538	Mus musculus	Complement cascade	1
+5991542	Mus musculus	Fcgamma receptor (FCGR) dependent phagocytosis	1
+5991544	Mus musculus	MAPK targets/ Nuclear events mediated by MAP kinases	1
+5991550	Mus musculus	Cytosolic sensors of pathogen-associated DNA 	1
+5991555	Mus musculus	Interleukin-1 signaling	1
+5991560	Mus musculus	beta-catenin independent WNT signaling	1
+5991561	Mus musculus	Signaling by Wnt	1
+5991574	Mus musculus	Signaling by TGF-beta Receptor Complex	1
+5991575	Mus musculus	Signaling by NODAL	1
+5991578	Mus musculus	Transcriptional activity of SMAD2/SMAD3:SMAD4 heterotrimer	1
+5991608	Mus musculus	Glycosaminoglycan metabolism	1
+5991625	Mus musculus	Senescence-Associated Secretory Phenotype (SASP)	1
+5991633	Mus musculus	Transport of glucose and other sugars; bile salts and organic acids; metal ions and amine compounds	1
+5991652	Mus musculus	Gap junction trafficking and regulation	1
+5991653	Mus musculus	Membrane Trafficking	1
+5991654	Mus musculus	Vesicle-mediated transport	1
+5991662	Mus musculus	Cholesterol biosynthesis	1
+5991699	Mus musculus	Degradation of beta-catenin by the destruction complex	1
+5991711	Mus musculus	Costimulation by the CD28 family	1
+5991712	Mus musculus	PIP3 activates AKT signaling	1
+5991726	Mus musculus	Immunoregulatory interactions between a Lymphoid and a non-Lymphoid cell	1
+5991738	Mus musculus	Signaling by BMP	1
+5991743	Mus musculus	TCF dependent signaling in response to WNT	1
+5991749	Mus musculus	Metabolism of nitric oxide	1
+5991751	Mus musculus	TCR signaling	1
+5991757	Mus musculus	RHO GTPases Activate Formins	1
+5991767	Mus musculus	Signaling by Robo receptor	1
+5991780	Mus musculus	Cell-Cell communication	1
+5991797	Mus musculus	PRC2 methylates histones and DNA	1
+5991805	Mus musculus	Insulin processing	1
+5991806	Mus musculus	Peptide hormone metabolism	1
+5991811	Mus musculus	ABC-family proteins mediated transport	1
+5991819	Mus musculus	Transport of inorganic cations/anions and amino acids/oligopeptides	1
+5991824	Mus musculus	Integrin alphaIIb beta3 signaling	1
+5991827	Mus musculus	Rap1 signalling	1
+5991836	Mus musculus	Ligand-independent caspase activation via DCC	1
+5991838	Mus musculus	Netrin-1 signaling	1
+5991840	Mus musculus	Nephrin interactions	1
+5991845	Mus musculus	Semaphorin interactions	1
+5991874	Mus musculus	Unfolded Protein Response (UPR)	1
+5991878	Mus musculus	Regulation of Insulin-like Growth Factor (IGF) transport and uptake by Insulin-like Growth Factor Binding Proteins (IGFBPs)	1
+5991892	Mus musculus	RHO GTPases activate PAKs	1
+5991897	Mus musculus	Protein folding	1
+5991934	Mus musculus	Regulation of lipid metabolism by Peroxisome proliferator-activated receptor alpha (PPARalpha)	1
+5991935	Mus musculus	Circadian Clock	1
+5991936	Mus musculus	RORA activates gene expression	1
+5991945	Mus musculus	Ion channel transport	1
+5991947	Mus musculus	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+5991948	Mus musculus	Infectious disease	1
+5991949	Mus musculus	Disease	1
+5991956	Mus musculus	Cell junction organization	1
+5991957	Mus musculus	RHO GTPases Activate ROCKs	1
+5992005	Mus musculus	RHO GTPases Activate WASPs and WAVEs	1
+5992022	Mus musculus	Interleukin-1 processing	1
+5992047	Mus musculus	BMAL1:CLOCK;NPAS2 activates circadian gene expression	1
+5992066	Mus musculus	Interferon gamma signaling	1
+5992067	Mus musculus	Interferon Signaling	1
+5992069	Mus musculus	Advanced glycosylation endproduct receptor signaling	1
+5992070	Mus musculus	Factors involved in megakaryocyte development and platelet production	1
+5992077	Mus musculus	Interferon alpha/beta signaling	1
+5992078	Mus musculus	Meiotic recombination	1
+5992079	Mus musculus	Meiosis	1
+5992115	Mus musculus	Prolactin receptor signaling	1
+5992120	Mus musculus	Class I MHC mediated antigen processing & presentation	1
+5992127	Mus musculus	Potassium Channels	1
+5992132	Mus musculus	Antiviral mechanism by IFN-stimulated genes	1
+5992136	Mus musculus	Regulation of Hypoxia-inducible Factor (HIF) by oxygen	1
+5992137	Mus musculus	Cellular response to hypoxia	1
+5992147	Mus musculus	Reversible hydration of carbon dioxide	1
+5992151	Mus musculus	Mitochondrial protein import	1
+5992161	Mus musculus	Fertilization	1
+5992162	Mus musculus	Reproduction	1
+5992174	Mus musculus	Translocation of GLUT4 to the plasma membrane	1
+5992176	Mus musculus	Degradation of the extracellular matrix	1
+5992178	Mus musculus	Defensins	1
+5992181	Mus musculus	Assembly of collagen fibrils and other multimeric structures	1
+5992201	Mus musculus	Mitochondrial biogenesis	1
+5992204	Mus musculus	Activation of Matrix Metalloproteinases	1
+5992206	Mus musculus	Elastic fibre formation	1
+5992212	Mus musculus	Collagen biosynthesis and modifying enzymes	1
+5992218	Mus musculus	Activation of gene expression by SREBF (SREBP)	1
+5992219	Mus musculus	Regulation of cholesterol biosynthesis by SREBP (SREBF)	1
+5992227	Mus musculus	Trafficking and processing of endosomal TLR	1
+5992233	Mus musculus	Inositol phosphate metabolism	1
+5992248	Mus musculus	Metabolism of Angiotensinogen to Angiotensins	1
+5992249	Mus musculus	Signaling by Hippo	1
+5992270	Mus musculus	Mitotic Prophase	1
+5992272	Mus musculus	Binding and Uptake of Ligands by Scavenger Receptors	1
+5992297	Mus musculus	Transcriptional regulation of pluripotent stem cells	1
+5992313	Mus musculus	Chromatin modifying enzymes	1
+5992314	Mus musculus	Chromatin organization	1
+5992316	Mus musculus	WNT ligand biogenesis and trafficking	1
+5992324	Mus musculus	Cellular response to heat stress	1
+5992338	Mus musculus	EPH-Ephrin signaling	1
+5992352	Mus musculus	Miscellaneous transport and binding events	1
+5992354	Mus musculus	DNA methylation	1
+5992376	Mus musculus	Assembly of the primary cilium	1
+5992388	Mus musculus	RHO GTPases regulate CFTR trafficking	1
+5992404	Mus musculus	NR1D1 (REV-ERBA) represses gene expression	1
+6051497	Rattus norvegicus	Cell Cycle; Mitotic	1
+6051498	Rattus norvegicus	Cell Cycle	1
+6051527	Rattus norvegicus	Cell Cycle Checkpoints	1
+6051541	Rattus norvegicus	Metabolism of carbohydrates	1
+6051542	Rattus norvegicus	Metabolism	1
+6051546	Rattus norvegicus	Phase II conjugation	1
+6051554	Rattus norvegicus	Generic Transcription Pathway	1
+6051555	Rattus norvegicus	Gene Expression	1
+6051559	Rattus norvegicus	Transmembrane transport of small molecules	1
+6051566	Rattus norvegicus	Metabolism of amino acids and derivatives	1
+6051570	Rattus norvegicus	Transmission across Chemical Synapses	1
+6051573	Rattus norvegicus	Neurotransmitter Release Cycle	1
+6051582	Rattus norvegicus	Fatty acid; triacylglycerol; and ketone body metabolism	1
+6051588	Rattus norvegicus	Death Receptor Signalling	1
+6051589	Rattus norvegicus	Signal Transduction	1
+6051596	Rattus norvegicus	Metabolism of nucleotides	1
+6051597	Rattus norvegicus	Detoxification of Reactive Oxygen Species	1
+6051600	Rattus norvegicus	Phase 1 - Functionalization of compounds	1
+6051632	Rattus norvegicus	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	1
+6051646	Rattus norvegicus	Caspase activation via extrinsic apoptotic signalig pathway	1
+6051647	Rattus norvegicus	Apoptosis	1
+6051661	Rattus norvegicus	Signaling by GPCR	1
+6051662	Rattus norvegicus	DAG and IP3 signaling	1
+6051664	Rattus norvegicus	NGF signalling via TRKA from the plasma membrane	1
+6051665	Rattus norvegicus	Signalling by NGF	1
+6051669	Rattus norvegicus	Signaling by EGFR	1
+6051674	Rattus norvegicus	Innate Immune System	1
+6051675	Rattus norvegicus	Immune System	1
+6051690	Rattus norvegicus	Muscle contraction	1
+6051692	Rattus norvegicus	Signaling by the B Cell Receptor (BCR)	1
+6051693	Rattus norvegicus	Adaptive Immune System	1
+6051698	Rattus norvegicus	Signaling by VEGF	1
+6051701	Rattus norvegicus	C-type lectin receptors (CLRs)	1
+6051705	Rattus norvegicus	Signaling by Insulin receptor	1
+6051711	Rattus norvegicus	Signaling by Type 1 Insulin-like Growth Factor 1 Receptor (IGF1R)	1
+6051737	Rattus norvegicus	Double-Strand Break Repair	1
+6051745	Rattus norvegicus	TNF signaling	1
+6051755	Rattus norvegicus	Peroxisomal lipid metabolism	1
+6051777	Rattus norvegicus	Arachidonic acid metabolism	1
+6051806	Rattus norvegicus	RAF/MAP kinase cascade	1
+6051815	Rattus norvegicus	Developmental Biology	1
+6051817	Rattus norvegicus	Signaling by Interleukins	1
+6051818	Rattus norvegicus	Cytokine Signaling in Immune system	1
+6051819	Rattus norvegicus	Gastrin-CREB signalling pathway via PKC and MAPK	1
+6051822	Rattus norvegicus	Signaling by ERBB4	1
+6051837	Rattus norvegicus	MyD88:Mal cascade initiated on plasma membrane	1
+6051840	Rattus norvegicus	Toll-Like Receptors Cascades	1
+6051895	Rattus norvegicus	Integration of energy metabolism	1
+6051920	Rattus norvegicus	GPCR downstream signaling	1
+6051922	Rattus norvegicus	Platelet activation; signaling and aggregation	1
+6051966	Rattus norvegicus	M Phase	1
+6052011	Rattus norvegicus	Asparagine N-linked glycosylation	1
+6052030	Rattus norvegicus	GPCR ligand binding	1
+6052052	Rattus norvegicus	Complement cascade	1
+6052075	Rattus norvegicus	Signaling by Wnt	1
+6052121	Rattus norvegicus	Glycosaminoglycan metabolism	1
+6052175	Rattus norvegicus	Cholesterol biosynthesis	1
+6052187	Rattus norvegicus	Metabolism of steroid hormones and vitamin D	1
+6052224	Rattus norvegicus	Costimulation by the CD28 family	1
+6052225	Rattus norvegicus	PIP3 activates AKT signaling	1
+6052264	Rattus norvegicus	TCR signaling	1
+6052295	Rattus norvegicus	Regulation of beta-cell development	1
+6052304	Rattus norvegicus	Regulation of Apoptosis	1
+6052332	Rattus norvegicus	Transport of inorganic cations/anions and amino acids/oligopeptides	1
+6052336	Rattus norvegicus	GABA synthesis; release; reuptake and degradation	1
+6052340	Rattus norvegicus	Rap1 signalling	1
+6052387	Rattus norvegicus	Unfolded Protein Response (UPR)	1
+6052430	Rattus norvegicus	Signal amplification	1
+6052448	Rattus norvegicus	Circadian Clock	1
+6052459	Rattus norvegicus	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+6052461	Rattus norvegicus	Disease	1
+6052532	Rattus norvegicus	Signaling by Hedgehog	1
+6052536	Rattus norvegicus	Interleukin-1 processing	1
+6052542	Rattus norvegicus	Regulation of mRNA stability by proteins that bind AU-rich elements	1
+6052632	Rattus norvegicus	Class I MHC mediated antigen processing & presentation	1
+6052649	Rattus norvegicus	Cellular response to hypoxia	1
+6052663	Rattus norvegicus	Mitochondrial protein import	1
+6052687	Rattus norvegicus	Degradation of the extracellular matrix	1
+6052737	Rattus norvegicus	Trafficking and processing of endosomal TLR	1
+6052743	Rattus norvegicus	Inositol phosphate metabolism	1
+6052805	Rattus norvegicus	Syndecan interactions	1
+6052823	Rattus norvegicus	Chromatin modifying enzymes	1
+6052834	Rattus norvegicus	Cellular response to heat stress	1
+6052841	Rattus norvegicus	Regulated Necrosis	1
+6095868	Gallus gallus	Cell Cycle; Mitotic	1
+6095869	Gallus gallus	Cell Cycle	1
+6095877	Gallus gallus	S Phase	1
+6095904	Gallus gallus	Metabolism of carbohydrates	1
+6095905	Gallus gallus	Metabolism	1
+6095923	Gallus gallus	Gene Expression	1
+6095926	Gallus gallus	The citric acid (TCA) cycle and respiratory electron transport	1
+6095944	Gallus gallus	Fatty acid; triacylglycerol; and ketone body metabolism	1
+6095947	Gallus gallus	Metabolism of water-soluble vitamins and cofactors	1
+6095960	Gallus gallus	Detoxification of Reactive Oxygen Species	1
+6095961	Gallus gallus	Cellular responses to stress	1
+6096016	Gallus gallus	Visual phototransduction	1
+6096039	Gallus gallus	Immune System	1
+6096054	Gallus gallus	Muscle contraction	1
+6096057	Gallus gallus	Adaptive Immune System	1
+6096111	Gallus gallus	Peroxisomal lipid metabolism	1
+6096130	Gallus gallus	Arachidonic acid metabolism	1
+6096331	Gallus gallus	Bile acid and bile salt metabolism	1
+6096358	Gallus gallus	Lipid digestion; mobilization; and transport	1
+6096462	Gallus gallus	Transport of glucose and other sugars; bile salts and organic acids; metal ions and amine compounds	1
+6096495	Gallus gallus	Asparagine N-linked glycosylation	1
+6096679	Gallus gallus	Cell-Cell communication	1
+6096777	Gallus gallus	Cell junction organization	1
+6096788	Gallus gallus	Synthesis; secretion; and deacylation of Ghrelin	1
+6096802	Gallus gallus	Sphingolipid metabolism	1
+6096892	Gallus gallus	Interferon alpha/beta signaling	1
+6096977	Gallus gallus	Fertilization	1
+6097032	Gallus gallus	Regulation of cholesterol biosynthesis by SREBP (SREBF)	1
+6097125	Gallus gallus	STAT6-mediated induction of chemokines	1
+6097126	Gallus gallus	TRP channels	1
+6097127	Gallus gallus	HATs acetylate histones	1
+6097128	Gallus gallus	Chromatin modifying enzymes	1
+6097131	Gallus gallus	Regulation by c-FLIP	1
+6097135	Gallus gallus	Attenuation phase	1
+6097136	Gallus gallus	HSF1-dependent transactivation	1
+6097139	Gallus gallus	RIPK1-mediated regulated necrosis	1
+6097148	Gallus gallus	EPH-Ephrin signaling	1
+6097157	Gallus gallus	PKMTs methylate histone lysines	1
+6097158	Gallus gallus	O-glycosylation of TSR domain-containing proteins	1
+6097160	Gallus gallus	RHO GTPases Activate NADPH Oxidases	1
+6097166	Gallus gallus	Lysosomal glycogen catabolism	1
+6097171	Gallus gallus	Mismatch repair (MMR) directed by MSH2:MSH3 (MutSbeta)	1
+6097172	Gallus gallus	Release of Hh-Np from the secreting cell	1
+6097175	Gallus gallus	negative regulation of TCF-dependent signaling by DVL-interacting proteins	1
+6097179	Gallus gallus	PIWI-interacting RNA (piRNA) biogenesis	1
+6097185	Gallus gallus	BBSome-mediated cargo-targeting to cilium	1
+6097187	Gallus gallus	Assembly of the primary cilium	1
+6097192	Gallus gallus	RHO GTPases activate PKNs	1
+6097194	Gallus gallus	ARL13B-mediated ciliary trafficking of INPP5E	1
+6097201	Gallus gallus	POLB-Dependent Long Patch Base Excision Repair	1
+6097210	Gallus gallus	Translesion synthesis by POLK	1
+6097213	Gallus gallus	Melanin biosynthesis	1
+6139184	Taeniopygia guttata	Fatty acid; triacylglycerol; and ketone body metabolism	1
+6139187	Taeniopygia guttata	Metabolism of water-soluble vitamins and cofactors	1
+6139635	Taeniopygia guttata	Signaling by Wnt	1
+6195219	Xenopus tropicalis	Cell Cycle	1
+6195263	Xenopus tropicalis	Metabolism	1
+6195306	Xenopus tropicalis	Metabolism of water-soluble vitamins and cofactors	1
+6195319	Xenopus tropicalis	Phase 1 - Functionalization of compounds	1
+6195640	Xenopus tropicalis	GPCR downstream signaling	1
+6195875	Xenopus tropicalis	Vesicle-mediated transport	1
+6196054	Xenopus tropicalis	Cell-Cell communication	1
+6196450	Xenopus tropicalis	MHC class II antigen presentation	1
+6272421	Danio rerio	DNA Replication	1
+6272452	Danio rerio	Cellular responses to stress	1
+6272463	Danio rerio	Metabolism of carbohydrates	1
+6272464	Danio rerio	Metabolism	1
+6272469	Danio rerio	Biological oxidations	1
+6272475	Danio rerio	Transcriptional Regulation by TP53	1
+6272476	Danio rerio	Generic Transcription Pathway	1
+6272477	Danio rerio	Gene Expression	1
+6272480	Danio rerio	SLC-mediated transmembrane transport	1
+6272481	Danio rerio	Transmembrane transport of small molecules	1
+6272488	Danio rerio	Metabolism of amino acids and derivatives	1
+6272492	Danio rerio	Transmission across Chemical Synapses	1
+6272493	Danio rerio	Neuronal System	1
+6272505	Danio rerio	Metabolism of lipids and lipoproteins	1
+6272511	Danio rerio	Signal Transduction	1
+6272519	Danio rerio	Detoxification of Reactive Oxygen Species	1
+6272526	Danio rerio	Processing of Capped Intron-Containing Pre-mRNA	1
+6272534	Danio rerio	Eukaryotic Translation Initiation	1
+6272535	Danio rerio	Translation	1
+6272536	Danio rerio	Metabolism of proteins	1
+6272550	Danio rerio	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	1
+6272561	Danio rerio	DNA Repair	1
+6272567	Danio rerio	Programmed Cell Death	1
+6272569	Danio rerio	RNA Polymerase II Transcription	1
+6272581	Danio rerio	Signaling by GPCR	1
+6272582	Danio rerio	DAG and IP3 signaling	1
+6272595	Danio rerio	Immune System	1
+6272610	Danio rerio	Muscle contraction	1
+6272618	Danio rerio	Signaling by VEGF	1
+6272693	Danio rerio	mRNA Capping	1
+6272731	Danio rerio	Axon guidance	1
+6272732	Danio rerio	Developmental Biology	1
+6272783	Danio rerio	Base-Excision Repair; AP Site Formation	1
+6272784	Danio rerio	Base Excision Repair	1
+6272790	Danio rerio	DNA Damage Bypass	1
+6272793	Danio rerio	Resolution of Abasic Sites (AP sites)	1
+6272807	Danio rerio	Neurotransmitter Receptor Binding And Downstream Transmission In The  Postsynaptic Cell	1
+6272812	Danio rerio	Integration of energy metabolism	1
+6272814	Danio rerio	Vasopressin regulates renal water homeostasis via Aquaporins	1
+6272815	Danio rerio	Aquaporin-mediated transport	1
+6272838	Danio rerio	GPCR downstream signaling	1
+6272841	Danio rerio	Hemostasis	1
+6272844	Danio rerio	Extracellular matrix organization	1
+6272899	Danio rerio	Metabolism of porphyrins	1
+6272973	Danio rerio	Nucleotide-binding domain; leucine rich repeat containing receptor (NLR) signaling pathways	1
+6272992	Danio rerio	Signaling by TGF-beta Receptor Complex	1
+6272993	Danio rerio	Signaling by NODAL	1
+6272996	Danio rerio	Transcriptional activity of SMAD2/SMAD3:SMAD4 heterotrimer	1
+6273047	Danio rerio	Transport of glucose and other sugars; bile salts and organic acids; metal ions and amine compounds	1
+6273050	Danio rerio	Iron uptake and transport	1
+6273068	Danio rerio	Vesicle-mediated transport	1
+6273079	Danio rerio	Metabolism of non-coding RNA	1
+6273159	Danio rerio	Cell surface interactions at the vascular wall	1
+6273167	Danio rerio	Regulatory RNA pathways	1
+6273212	Danio rerio	Peptide hormone metabolism	1
+6273217	Danio rerio	ABC-family proteins mediated transport	1
+6273225	Danio rerio	Transport of inorganic cations/anions and amino acids/oligopeptides	1
+6273245	Danio rerio	Cell-Cell communication	1
+6273251	Danio rerio	Semaphorin interactions	1
+6273256	Danio rerio	Transmission across Electrical Synapses 	1
+6273281	Danio rerio	Regulation of Insulin-like Growth Factor (IGF) transport and uptake by Insulin-like Growth Factor Binding Proteins (IGFBPs)	1
+6273285	Danio rerio	Incretin synthesis; secretion; and inactivation	1
+6273339	Danio rerio	Circadian Clock	1
+6273348	Danio rerio	Ion channel transport	1
+6273352	Danio rerio	Disease	1
+6273392	Danio rerio	Deadenylation-dependent mRNA decay	1
+6273434	Danio rerio	Regulation of mRNA stability by proteins that bind AU-rich elements	1
+6273534	Danio rerio	Potassium Channels	1
+6273544	Danio rerio	Cellular response to hypoxia	1
+6273552	Danio rerio	Erythrocytes take up carbon dioxide and release oxygen	1
+6273553	Danio rerio	O2/CO2 exchange in erythrocytes	1
+6273554	Danio rerio	Reversible hydration of carbon dioxide	1
+6273555	Danio rerio	Erythrocytes take up oxygen and release carbon dioxide	1
+6273558	Danio rerio	Mitochondrial protein import	1
+6273600	Danio rerio	Mitochondrial biogenesis	1
+6273601	Danio rerio	Organelle biogenesis and maintenance	1
+6273629	Danio rerio	Inositol phosphate metabolism	1
+6273657	Danio rerio	Abacavir transport and metabolism	1
+6273694	Danio rerio	Cytosolic iron-sulfur cluster assembly	1
+6273708	Danio rerio	SUMOylation of DNA damage response and repair proteins	1
+6273712	Danio rerio	Chromatin modifying enzymes	1
+6273713	Danio rerio	Chromatin organization	1
+6273722	Danio rerio	Cellular response to heat stress	1
+6273729	Danio rerio	Regulated Necrosis	1
+6273735	Danio rerio	EPH-Ephrin signaling	1
+6273762	Danio rerio	Mitochondrial translation	1
+6273773	Danio rerio	Assembly of the primary cilium	1
+6322545	Drosophila melanogaster	Regulation of DNA replication	1
+6322575	Drosophila melanogaster	Metabolism of carbohydrates	1
+6322576	Drosophila melanogaster	Metabolism	1
+6322589	Drosophila melanogaster	Gene Expression	1
+6322593	Drosophila melanogaster	Transmembrane transport of small molecules	1
+6322600	Drosophila melanogaster	Metabolism of amino acids and derivatives	1
+6322618	Drosophila melanogaster	Metabolism of nucleotides	1
+6322626	Drosophila melanogaster	Processing of Capped Intron-Containing Pre-mRNA	1
+6322672	Drosophila melanogaster	Signaling by GPCR	1
+6322673	Drosophila melanogaster	Signal Transduction	1
+6322674	Drosophila melanogaster	DAG and IP3 signaling	1
+6322679	Drosophila melanogaster	Signaling by PDGF	1
+6322681	Drosophila melanogaster	Signaling by EGFR	1
+6322686	Drosophila melanogaster	Innate Immune System	1
+6322687	Drosophila melanogaster	Immune System	1
+6322730	Drosophila melanogaster	Visual phototransduction	1
+6322817	Drosophila melanogaster	Developmental Biology	1
+6322838	Drosophila melanogaster	MAP kinase activation in TLR cascade	1
+6322842	Drosophila melanogaster	Toll-Like Receptors Cascades	1
+6322886	Drosophila melanogaster	Integration of energy metabolism	1
+6322912	Drosophila melanogaster	Hemostasis	1
+6322936	Drosophila melanogaster	Mitotic Telophase/Cytokinesis	1
+6322947	Drosophila melanogaster	Signaling by NOTCH1	1
+6322948	Drosophila melanogaster	Signaling by NOTCH	1
+6322989	Drosophila melanogaster	Fcgamma receptor (FCGR) dependent phagocytosis	1
+6322991	Drosophila melanogaster	MAPK targets/ Nuclear events mediated by MAP kinases	1
+6322995	Drosophila melanogaster	TAK1 activates NFkB by phosphorylation and activation of IKKs complex	1
+6323019	Drosophila melanogaster	Signaling by TGF-beta Receptor Complex	1
+6323020	Drosophila melanogaster	Signaling by NODAL	1
+6323047	Drosophila melanogaster	Glycosaminoglycan metabolism	1
+6323085	Drosophila melanogaster	Vesicle-mediated transport	1
+6323100	Drosophila melanogaster	Metabolism of steroid hormones and vitamin D	1
+6323116	Drosophila melanogaster	Degradation of beta-catenin by the destruction complex	1
+6323132	Drosophila melanogaster	PIP3 activates AKT signaling	1
+6323184	Drosophila melanogaster	Extracellular matrix organization	1
+6323195	Drosophila melanogaster	Regulation of beta-cell development	1
+6323229	Drosophila melanogaster	Neurotransmitter Clearance In The Synaptic Cleft	1
+6323241	Drosophila melanogaster	Cell-Cell communication	1
+6323288	Drosophila melanogaster	Rap1 signalling	1
+6323300	Drosophila melanogaster	Circadian Clock	1
+6323420	Drosophila melanogaster	O-linked glycosylation	1
+6323452	Drosophila melanogaster	Potassium Channels	1
+6323463	Drosophila melanogaster	Nucleotide-binding domain; leucine rich repeat containing receptor (NLR) signaling pathways	1
+6323488	Drosophila melanogaster	Reversible hydration of carbon dioxide	1
+6323533	Drosophila melanogaster	Inositol phosphate metabolism	1
+6323540	Drosophila melanogaster	Pre-NOTCH Expression and Processing	1
+6323583	Drosophila melanogaster	Mitotic Prometaphase	1
+6323589	Drosophila melanogaster	Cytosolic iron-sulfur cluster assembly	1
+6323626	Drosophila melanogaster	EPH-Ephrin signaling	1
+6323661	Drosophila melanogaster	Assembly of the primary cilium	1
+6350489	Arabidopsis thaliana	Cell Cycle; Mitotic	1
+6350490	Arabidopsis thaliana	Cell Cycle	1
+6350499	Arabidopsis thaliana	Mitotic G1-G1/S phases	1
+6350513	Arabidopsis thaliana	Cell Cycle Checkpoints	1
+6350516	Arabidopsis thaliana	Metabolism of carbohydrates	1
+6350517	Arabidopsis thaliana	Metabolism	1
+6350521	Arabidopsis thaliana	Phase II conjugation	1
+6350527	Arabidopsis thaliana	TP53 Regulates Metabolic Genes	1
+6350529	Arabidopsis thaliana	Generic Transcription Pathway	1
+6350530	Arabidopsis thaliana	Gene Expression	1
+6350534	Arabidopsis thaliana	Transmembrane transport of small molecules	1
+6350539	Arabidopsis thaliana	The citric acid (TCA) cycle and respiratory electron transport	1
+6350541	Arabidopsis thaliana	Metabolism of amino acids and derivatives	1
+6350546	Arabidopsis thaliana	Neuronal System	1
+6350556	Arabidopsis thaliana	Metabolism of nucleotides	1
+6350557	Arabidopsis thaliana	Detoxification of Reactive Oxygen Species	1
+6350558	Arabidopsis thaliana	Cellular responses to stress	1
+6350560	Arabidopsis thaliana	Phase 1 - Functionalization of compounds	1
+6350564	Arabidopsis thaliana	Processing of Capped Intron-Containing Pre-mRNA	1
+6350572	Arabidopsis thaliana	Eukaryotic Translation Initiation	1
+6350573	Arabidopsis thaliana	Translation	1
+6350574	Arabidopsis thaliana	Metabolism of proteins	1
+6350590	Arabidopsis thaliana	Metabolism of lipids and lipoproteins	1
+6350598	Arabidopsis thaliana	Visual phototransduction	1
+6350599	Arabidopsis thaliana	Signal Transduction	1
+6350611	Arabidopsis thaliana	NGF signalling via TRKA from the plasma membrane	1
+6350616	Arabidopsis thaliana	Signaling by EGFR	1
+6350622	Arabidopsis thaliana	Immune System	1
+6350637	Arabidopsis thaliana	Muscle contraction	1
+6350640	Arabidopsis thaliana	Adaptive Immune System	1
+6350682	Arabidopsis thaliana	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	1
+6350683	Arabidopsis thaliana	mRNA Capping	1
+6350712	Arabidopsis thaliana	RAF/MAP kinase cascade	1
+6350727	Arabidopsis thaliana	Developmental Biology	1
+6350747	Arabidopsis thaliana	Toll-Like Receptors Cascades	1
+6350795	Arabidopsis thaliana	Programmed Cell Death	1
+6350798	Arabidopsis thaliana	Hemostasis	1
+6350812	Arabidopsis thaliana	APC/C-mediated degradation of cell cycle proteins	1
+6350813	Arabidopsis thaliana	Regulation of mitotic cell cycle	1
+6350814	Arabidopsis thaliana	Eukaryotic Translation Termination	1
+6350818	Arabidopsis thaliana	Eukaryotic Translation Elongation	1
+6350850	Arabidopsis thaliana	Mitotic G2-G2/M phases	1
+6350870	Arabidopsis thaliana	Glycosaminoglycan metabolism	1
+6350887	Arabidopsis thaliana	Metabolism of porphyrins	1
+6350888	Arabidopsis thaliana	Cholesterol biosynthesis	1
+6350900	Arabidopsis thaliana	Metabolism of steroid hormones and vitamin D	1
+6350933	Arabidopsis thaliana	MAPK targets/ Nuclear events mediated by MAP kinases	1
+6350938	Arabidopsis thaliana	Vesicle-mediated transport	1
+6350952	Arabidopsis thaliana	Gamma carboxylation; hypusine formation and arylsulfatase activation	1
+6350984	Arabidopsis thaliana	Neurotransmitter Clearance In The Synaptic Cleft	1
+6350991	Arabidopsis thaliana	ABC-family proteins mediated transport	1
+6351001	Arabidopsis thaliana	Protein folding	1
+6351029	Arabidopsis thaliana	Sphingolipid metabolism	1
+6351037	Arabidopsis thaliana	Passive transport by Aquaporins	1
+6351042	Arabidopsis thaliana	Latent infection of Homo sapiens with Mycobacterium tuberculosis	1
+6351044	Arabidopsis thaliana	Disease	1
+6351045	Arabidopsis thaliana	Iron uptake and transport	1
+6351064	Arabidopsis thaliana	Cellular Senescence	1
+6351067	Arabidopsis thaliana	Regulation of mRNA stability by proteins that bind AU-rich elements	1
+6351120	Arabidopsis thaliana	O2/CO2 exchange in erythrocytes	1
+6351126	Arabidopsis thaliana	Mitochondrial iron-sulfur cluster biogenesis	1
+6351132	Arabidopsis thaliana	Metabolism of nitric oxide	1
+6351152	Arabidopsis thaliana	Activation of gene expression by SREBF (SREBP)	1
+6351155	Arabidopsis thaliana	PI Metabolism	1
+6351161	Arabidopsis thaliana	SRP-dependent cotranslational protein targeting to membrane	1
+6351163	Arabidopsis thaliana	Inositol phosphate metabolism	1
+6351168	Arabidopsis thaliana	Cytosolic sensors of pathogen-associated DNA 	1
+6351217	Arabidopsis thaliana	Cellular response to heat stress	1
+6351233	Arabidopsis thaliana	Mitochondrial translation	1
+6351234	Arabidopsis thaliana	Organelle biogenesis and maintenance	1
+6351239	Arabidopsis thaliana	Assembly of the primary cilium	1
+6378453	Oryza sativa	Cell Cycle; Mitotic	1
+6378454	Oryza sativa	Cell Cycle	1
+6378455	Oryza sativa	DNA Replication	1
+6378461	Oryza sativa	S Phase	1
+6378464	Oryza sativa	Mitotic G1-G1/S phases	1
+6378479	Oryza sativa	Cell Cycle Checkpoints	1
+6378484	Oryza sativa	Metabolism of carbohydrates	1
+6378485	Oryza sativa	Metabolism	1
+6378497	Oryza sativa	Generic Transcription Pathway	1
+6378498	Oryza sativa	Gene Expression	1
+6378507	Oryza sativa	The citric acid (TCA) cycle and respiratory electron transport	1
+6378509	Oryza sativa	Metabolism of amino acids and derivatives	1
+6378525	Oryza sativa	Detoxification of Reactive Oxygen Species	1
+6378526	Oryza sativa	Cellular responses to stress	1
+6378541	Oryza sativa	Translation	1
+6378542	Oryza sativa	Metabolism of proteins	1
+6378556	Oryza sativa	RNA Polymerase I; RNA Polymerase III; and Mitochondrial Transcription	1
+6378562	Oryza sativa	Fatty acid; triacylglycerol; and ketone body metabolism	1
+6378567	Oryza sativa	DNA Repair	1
+6378572	Oryza sativa	Signal Transduction	1
+6378643	Oryza sativa	Glycerophospholipid biosynthesis	1
+6378679	Oryza sativa	RAF/MAP kinase cascade	1
+6378694	Oryza sativa	Developmental Biology	1
+6378767	Oryza sativa	Intrinsic Pathway for Apoptosis	1
+6378867	Oryza sativa	Bile acid and bile salt metabolism	1
+6378873	Oryza sativa	Metabolism of steroid hormones and vitamin D	1
+6378883	Oryza sativa	Metabolism of water-soluble vitamins and cofactors	1
+6379032	Oryza sativa	Oxidative Stress Induced Senescence	1
+6379033	Oryza sativa	Cellular Senescence	1
+6379060	Oryza sativa	Meiotic recombination	1
+6379061	Oryza sativa	Meiosis	1
+6379131	Oryza sativa	Inositol phosphate metabolism	1
+6379184	Oryza sativa	Chromatin modifying enzymes	1
+6379185	Oryza sativa	Chromatin organization	1
+68874	Homo sapiens	M/G1 Transition	
+68875	Homo sapiens	Mitotic Prophase	
+68877	Homo sapiens	Mitotic Prometaphase	
+68884	Homo sapiens	Mitotic Telophase/Cytokinesis	
+68886	Homo sapiens	M Phase	
+69239	Homo sapiens	Synthesis of DNA	
+69242	Homo sapiens	S Phase	
+69278	Homo sapiens	Cell Cycle; Mitotic	
+69304	Homo sapiens	Regulation of DNA replication	
+69306	Homo sapiens	DNA Replication	
+69620	Homo sapiens	Cell Cycle Checkpoints	
+71291	Homo sapiens	Metabolism of amino acids and derivatives	
+71387	Homo sapiens	Metabolism of carbohydrates	
+72086	Homo sapiens	mRNA Capping	
+72203	Homo sapiens	Processing of Capped Intron-Containing Pre-mRNA	
+72613	Homo sapiens	Eukaryotic Translation Initiation	
+72764	Homo sapiens	Eukaryotic Translation Termination	
+72766	Homo sapiens	Translation	
+73857	Homo sapiens	RNA Polymerase II Transcription	
+73884	Homo sapiens	Base Excision Repair	
+73885	Homo sapiens	Nucleotide Excision Repair	
+73886	Homo sapiens	Chromosome Maintenance	
+73887	Homo sapiens	Death Receptor Signalling	
+73890	Homo sapiens	Double-Strand Break Repair	
+73893	Homo sapiens	DNA Damage Bypass	
+73894	Homo sapiens	DNA Repair	
+73923	Homo sapiens	Lipid digestion; mobilization; and transport	
+73929	Homo sapiens	Base-Excision Repair; AP Site Formation	
+73933	Homo sapiens	Resolution of Abasic Sites (AP sites)	
+73942	Homo sapiens	DNA Damage Reversal	
+74160	Homo sapiens	Gene Expression	
+74752	Homo sapiens	Signaling by Insulin receptor	
+75067	Homo sapiens	Processing of Capped Intronless Pre-mRNA	
+75072	Homo sapiens	mRNA Editing	
+75153	Homo sapiens	Apoptotic execution  phase	
+75157	Homo sapiens	FasL/ CD95L signaling	
+75158	Homo sapiens	TRAIL  signaling	
+75205	Homo sapiens	Dissolution of Fibrin Clot	
+75892	Homo sapiens	Platelet Adhesion to exposed collagen	
+75893	Homo sapiens	TNF signaling	
+76002	Homo sapiens	Platelet activation; signaling and aggregation	
+76005	Homo sapiens	Response to elevated platelet cytosolic Ca2+	
+76009	Homo sapiens	Platelet Aggregation (Plug Formation)	
+774815	Homo sapiens	Nucleosome assembly	
+870392	Mycobacterium tuberculosis	Mycobacterium tuberculosis biological processes	
+877300	Homo sapiens	Interferon gamma signaling	
+879415	Homo sapiens	Advanced glycosylation endproduct receptor signaling	
+881907	Homo sapiens	Gastrin-CREB signalling pathway via PKC and MAPK	
+888590	Homo sapiens	GABA synthesis; release; reuptake and degradation	
+909733	Homo sapiens	Interferon alpha/beta signaling	
+912446	Homo sapiens	Meiotic recombination	
+912497	Mus musculus	Meiotic Recombination	
+913531	Homo sapiens	Interferon Signaling	
+917937	Homo sapiens	Iron uptake and transport	
+927802	Homo sapiens	Nonsense-Mediated Decay (NMD)	
+975155	Homo sapiens	MyD88 dependent cascade initiated on endosome	
+975871	Homo sapiens	MyD88 cascade initiated on plasma membrane	
+977225	Homo sapiens	Amyloids	
+982772	Homo sapiens	Growth hormone receptor signaling	
+983169	Homo sapiens	Class I MHC mediated antigen processing & presentation	
+983189	Homo sapiens	Kinesins	
+983231	Homo sapiens	Factors involved in megakaryocyte development and platelet production	
+983705	Homo sapiens	Signaling by the B Cell Receptor (BCR)	
+983712	Homo sapiens	Ion channel transport	
