@@ -40,8 +40,8 @@ public class FileExporter {
     public static void addRow(PathwaySummary pathwaySummary, BioModel bioModel) {
         try {
             fileWriter.write(pathwaySummary.getDbId() + TAB +
-                    pathwaySummary.getStId() + TAB +
                     bioModel.getBioMdId() + TAB +
+                    pathwaySummary.getStId() + TAB +
                     bioModel.getName() + NEW_LINE);
             fileWriter.flush();
         } catch (IOException e) {

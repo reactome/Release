@@ -11,6 +11,8 @@ import org.reactome.server.core.models2pathways.core.model.Specie;
 import org.sbml.jsbml.*;
 
 import javax.xml.stream.XMLStreamException;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,12 +31,12 @@ public class ExtractInformationFromSBMLModel {
      * @param bioMdSBML
      * @return
      */
-    public static Model convertBioModelSBMLString(String bioMdSBML) {
+    public static Model convertBioModelSBMLString(File bioMdSBML) {
         SBMLReader reader = new SBMLReader();
         SBMLDocument model = null;
         try {
-            model = reader.readSBMLFromString(bioMdSBML);
-        } catch (XMLStreamException e) {
+            model = reader.readSBML(bioMdSBML);
+        } catch (XMLStreamException | IOException e) {
             e.printStackTrace();
         }
         return model != null ? model.getModel() : null;
