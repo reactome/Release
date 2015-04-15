@@ -1,8 +1,6 @@
 package org.reactome.server.core.models2pathways.core.entrypoint;
 
 import com.martiansoftware.jsap.JSAPResult;
-import org.reactome.server.analysis.core.data.HierarchiesDataContainer;
-import org.reactome.server.analysis.core.model.HierarchiesData;
 import org.reactome.server.core.models2pathways.biomodels.model.BioModel;
 import org.reactome.server.core.models2pathways.core.Consumer;
 import org.reactome.server.core.models2pathways.core.Producer;
@@ -37,6 +35,7 @@ public class Models2Pathways {
         JSAPResult jsapResult = JSAPHandler.ArgumentHandler(args);
         FileExporter.setLocationPath(jsapResult.getString("output"));
         AnalysisCoreHelper.setStructure(jsapResult.getString("reactome"));
+        Producer.setPath(jsapResult.getString("biomodels"));
 
         //Load static properties files.
         //TODO: make those as profile. 
