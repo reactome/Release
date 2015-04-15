@@ -1,12 +1,10 @@
 package org.reactome.server.core.models2pathways.core;
 
 //import org.reactome.server.core.models2pathways.biomodels.helper.BioModelHelper;
+
 import org.reactome.server.core.models2pathways.biomodels.helper.BioModelHelper;
-import org.reactome.server.core.models2pathways.biomodels.helper.ExtractInformationFromSBMLModel;
 import org.reactome.server.core.models2pathways.biomodels.model.BioModel;
 import org.reactome.server.core.models2pathways.core.helper.SpeciesHelper;
-import org.reactome.server.core.models2pathways.core.helper.TrivialChemicalHelper;
-import org.sbml.jsbml.Model;
 
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
@@ -17,21 +15,24 @@ import java.util.logging.Logger;
  */
 public class Producer implements Runnable {
     final static Logger logger = Logger.getLogger(Producer.class.getName());
-
+    private static String path;
     private BlockingQueue<BioModel> bioModelBlockingQueue;
-    private String path = "/Users/maximiliankoch/Documents/Reactome/BioModels/curated/";
 
     public Producer(BlockingQueue<BioModel> bioModelBlockingQueue) {
         this.bioModelBlockingQueue = bioModelBlockingQueue;
     }
 
+    public static void setPath(String path) {
+        Producer.path = path;
+    }
+
     @Override
     public void run() {
         try {
-            for(File file : new File(path).listFiles()){
-                if(file.getName().contains("BIOMD")){
+            for (File file : new File(path).listFiles()) {
+                if (file.getName().contains("BIOMD")) {
                     BioModel bioModel = BioModelHelper.getBioModelByBioModelId(file);
-                    if(bioModel.getSpecie() != null && SpeciesHelper.getInstance().getSpecies().contains(bioModel.getSpecie())){
+                    if (bioModel.getSpecie() != null && SpeciesHelper.getInstance().getSpecies().contains(bioModel.getSpecie())) {
                         bioModelBlockingQueue.put(BioModelHelper.getBioModelByBioModelId(file));
                     }
                 }
