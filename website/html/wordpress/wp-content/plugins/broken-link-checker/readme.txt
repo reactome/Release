@@ -3,8 +3,8 @@ Contributors: whiteshadow
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A6P9S6CE3SRSW
 Tags: links, broken, maintenance, blogroll, custom fields, admin, comments, posts
 Requires at least: 3.2
-Tested up to: 3.9
-Stable tag: 1.9.3
+Tested up to: 4.1
+Stable tag: 1.10.4
 
 This plugin will check your posts, comments and other content for broken links and missing images, and notify you if any are found. 
 
@@ -45,7 +45,6 @@ You can also click on the contents of the "Status" or "Link Text" columns to get
 
 * Arabic - Yaser Maadan
 * Belorussian - [M. Comfi](http://www.comfi.com/)
-* Bulgarian - [Ajoft Technologes](http://www.ajoft.com/)
 * Chinese Simplified - Kaijia Feng
 * Chinese Traditional - [YILIN](http://sh2153.com)
 * Czech - [Lelkoun](http://lelkoun.cz/)
@@ -59,7 +58,7 @@ You can also click on the contents of the "Status" or "Link Text" columns to get
 * Hungarian - [Language Connect](http://www.languageconnect.net/)
 * Irish - [Ray Gren](http://letsbefamous.com/)
 * Italian - [Gianni Diurno](http://gidibao.net/index.php/portfolio/) and [Giacomo Ross](http://www.luxemozione.com/) (alternative)
-* Japanese - [ningendesu](http://ningendesu.com/)
+* Japanese - [Shohei Tanak](http://artisanworkshop.biz/)
 * Korean - [MinHyeong Lim](http://ssamture.net/)
 * Persian - [Omid Sheerkavand](http://qanal.ir/)
 * Polish - [http://positionmaker.pl](http://positionmaker.pl/)
@@ -67,6 +66,8 @@ You can also click on the contents of the "Status" or "Link Text" columns to get
 * Brazilian Portuguese - [Paulino Michelazzo](http://www.michelazzo.com.br/)
 * Romanian - [Ovidiu](http://www.jibo.ro)
 * Russian - [Anna Ozeritskaya](http://hweia.ru/)
+* Serbo-Croatian - [Borisa Djuraskovic](http://www.webhostinghub.com)
+* Slovakian - [Patrik Žec](http://patwist.com/)
 * Spanish - [Neoshinji](http://blog.tuayudainformatica.com/traducciones-de-plugins-wordpress/)
 * Turkish - [Murat Durgun](http://www.lanwifi.net/)
 * Ukrainian - [Stas Mykhajlyuk](http://www.kosivart.com/)
@@ -96,6 +97,80 @@ To upgrade your installation
 1. Reactivate the plugin. Your settings will be retained from the previous version.
 
 == Changelog ==
+
+= 1.10.4 =
+* Tested on WordPress 4.1.
+* Fixed a "Use of undefined constant ENT_HTML401" notice showing up on sites running PHP 5.3 or older.
+* Fixed a double-escaping bug that could cause some link URLs to be displayed incorrectly.
+* Updated French translation.
+* Updated Dutch translation.
+
+= 1.10.3 =
+ * Security: Filter link URLs before displaying them on the "Broken Links" page.
+ * Security: Prevent Editors and Administrators who don't have the "unfiltered_html" capability from creating "javascript:" URLs by editing existing links.
+
+= 1.10.2 =
+* Fixed an XSS vulnerability on the link checker settings page.
+* Fixed old YouTube embed code parsing - now it should pick up self-closing embed tags without an `<object>` wrapper.
+* Updated German translation.
+* Updated Simplified Chinese translation.
+* Link actions will now wrap properly on small screens.
+
+= 1.10.1 =
+* Fixed a database versioning issue that would cause multiple errors when upgrading from 1.9.5 to 1.10.
+
+= 1.10 =
+* Added a way to hide individual link actions like "Dismiss" and "Unlink".
+* Added a "Fix redirect" link action. It replaces a redirect with a direct link. It is hidden by default and can be enabled through the settings page.
+* Added a "Recheck" link action. Unlike the bulk action by the same name, it checks a link immediately and displays the results without having to refresh the page. 
+* Added a "Dismiss" bulk action.
+* Added a note below the "link tweaks" settings explaining that they only apply to the contents of posts (and pages, and CPTs), not comments or custom fields.
+* Made the "Redirect URL" column sortable.
+* Added a "Details" link to the "Status" column.
+* Added a "Warnings" section to Tools -> Broken Links. It shows problems that might be temporary or false positives. Warnings can be disabled through the settings page.
+* Fixed a conflict with plugins that use PHP sessions.
+* Fixed the "post statuses" option. Now disabling a post status (e.g. "Draft") should take effect immediately.
+* Fixed the Mediafire link checker.
+* Fixed the text in the "Status" column being slightly offset vertically when compared to other columns.
+* Fixed search box position in WP 4.1-alpha.
+* Added a few workarounds for situations where a custom post type is removed without first removing the posts.
+* Removed the screen icon. WordPress has deprecated it.
+* Other minor fixes.
+
+= 1.9.5 =
+* Fixed missing YouTube videos not being detected when the video URL starts with https instead of http.
+* Enabled the YouTube video checker by default on new installations.
+* Made the "dismiss link" option more permanent. Instead of restoring a dismissed link if the redirect URL changes even a little bit, the plugin will now ignore query string changes. This should fix many of the reports about dismissed links reappearing for no apparent reason.
+* Updated Portuguese, German and Dutch translations.
+* Other minor fixes.
+
+= 1.9.4.2 =
+* Updated Dutch translation again.
+* Removed Bulgarian translation because it was poor quality and outdated.
+
+= 1.9.4.1 =
+* Updated Dutch translation.
+* Updated POT file.
+
+= 1.9.4 =
+* Tested on WP 4.0 beta.
+* Added a Serbo-Croatian translation.
+* Added a Slovakian translation.
+* Replaced the old Japanese translation with a new and more up-to-date version from a different translator.
+* Updated Dutch, German, Polish, Hebrew and other translations.
+* Fixed a notice about undefined index "status_text".
+* Fixed a "doing it wrong" warning related to screen options.
+* Fixed spurious false positives on links copied from Word or similar editors.
+* Fixed view switcher appearance in WP 4.0.
+* Replaced the deprecated like_esc() function with $wpdb->esc_like() where available.
+* Fixed plaintext URLs not being detected if they're the very first thing in a post.
+* Fixed a bug that caused quotes and other special characters in the broken link CSS and removed link CSS fields to be auto-escaped with a slash, potentially breaking the CSS.
+* Fixed a bug that caused the "check custom fields" feature work inconsistently or not at all on custom post types.
+* Fixed duplicate custom field links showing up when the user creates a revision with different field values.
+* Fixed a specific type of false positive where some links would get flagged as "Unknown Error" and the log message would be "Empty reply from server".
+* Fixed a bug where only the first enabled post type would be resynchronized during plugin activation.
+* Added more logging.
+* Removed Megavideo and MegaUpload modules. These sites no longer exist.
 
 = 1.9.3 =
 * Tested on WP 3.8.1 and WP 3.9-beta2.

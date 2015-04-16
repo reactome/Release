@@ -24,7 +24,7 @@ class blcComment extends blcContainer{
    */
 	function get_wrapped_object($ensure_consistency = false){
 		if( $ensure_consistency || is_null($this->wrapped_object) ){
-			$this->wrapped_object = &get_comment($this->container_id);
+			$this->wrapped_object = get_comment($this->container_id);
 		}		
 		return $this->wrapped_object;
 	}	
@@ -106,7 +106,7 @@ class blcComment extends blcContainer{
 	 */
 	function current_user_can_delete(){
 		//TODO: Fix for custom post types? WP itself doesn't care, at least in 3.0.
-		$comment = &$this->get_wrapped_object();
+		$comment = $this->get_wrapped_object();
 		return current_user_can('edit_post', $comment->comment_post_ID); 
 	}
 	
@@ -146,9 +146,15 @@ class blcComment extends blcContainer{
 		
 		$comment = $this->get_wrapped_object();
 		$post = get_post($comment->comment_post_ID); /* @var StdClass $post */
-		
+
+		//If the post type no longer exists, we can't really do anything with this comment.
+		//WordPress will just throw errors if we try.
+		if ( !post_type_exists(get_post_type($post)) ) {
+			return $actions;
+		}
+
 		//Display Edit & Delete/Trash links only if the user has the right caps.
-		$user_can = current_user_can('edit_post', $comment->comment_post_ID);  
+		$user_can = current_user_can('edit_post', $comment->comment_post_ID);
 		if ( $user_can ){
 			$actions['edit'] = "<a href='". $this->get_edit_url() ."' title='" . esc_attr__('Edit comment') . "'>". __('Edit') . '</a>';
 		
@@ -226,12 +232,12 @@ class blcCommentManager extends blcContainerManager {
 	function init(){
 		parent::init();
 		
-		add_action('post_comment', array(&$this, 'hook_post_comment'), 10, 2);
-		add_action('edit_comment', array(&$this, 'hook_edit_comment'));
-		add_action('transition_comment_status', array(&$this, 'hook_comment_status'), 10, 3);
+		add_action('post_comment', array($this, 'hook_post_comment'), 10, 2);
+		add_action('edit_comment', array($this, 'hook_edit_comment'));
+		add_action('transition_comment_status', array($this, 'hook_comment_status'), 10, 3);
 		
-		add_action('trashed_post_comments', array(&$this, 'hook_trashed_post_comments'), 10, 2);
-		add_action('untrash_post_comments', array(&$this, 'hook_untrash_post_comments'));
+		add_action('trashed_post_comments', array($this, 'hook_trashed_post_comments'), 10, 2);
+		add_action('untrash_post_comments', array($this, 'hook_untrash_post_comments'));
 	}
 
 	function hook_post_comment($comment_id, $comment_status){
@@ -261,7 +267,7 @@ class blcCommentManager extends blcContainerManager {
 		}
 	}
 	
-	function hook_trashed_post_comments($post_id, $statuses){
+	function hook_trashed_post_comments(/** @noinspection PhpUnusedParameterInspection */$post_id, $statuses){
 		foreach($statuses as $comment_id => $comment_status){
 			if ( $comment_status == '1' ){
 				$container = blcContainerHelper::get_container(array($this->container_type, $comment_id));
@@ -298,19 +304,21 @@ class blcCommentManager extends blcContainerManager {
 		
 		if ( $forced ){
 			//Create new synchronization records for all comments.
-			$blclog->log('...... Creating synch. records for comments'); 
+			$blclog->log('...... Creating synch. records for comments');
+			$start = microtime(true);
 	    	$q = "INSERT INTO {$wpdb->prefix}blc_synch(container_id, container_type, synched)
 				  SELECT comment_ID, '{$this->container_type}', 0
 				  FROM {$wpdb->comments}
 				  WHERE
 				  	{$wpdb->comments}.comment_approved = '1'";
 	 		$wpdb->query( $q );
-	 		$blclog->log(sprintf('...... %d rows affected', $wpdb->rows_affected));
+	 		$blclog->log(sprintf('...... %d rows inserted in %.3f seconds', $wpdb->rows_affected, microtime(true) - $start));
  		} else {
  			//Delete synch records corresponding to comments that no longer exist 
 			//or have been trashed/spammed/unapproved.
 			$blclog->log('...... Deleting synch. records for removed comments');
- 			$q = "DELETE synch.*
+			$start = microtime(true);
+			$q = "DELETE synch.*
 				  FROM 
 					 {$wpdb->prefix}blc_synch AS synch LEFT JOIN {$wpdb->comments} AS comments
 					 ON comments.comment_ID = synch.container_id
@@ -318,10 +326,11 @@ class blcCommentManager extends blcContainerManager {
 					 synch.container_type = '{$this->container_type}' 
 					 AND (comments.comment_ID IS NULL OR comments.comment_approved <> '1')";
 			$wpdb->query( $q );
-			$blclog->log(sprintf('...... %d rows affected', $wpdb->rows_affected));
+			$blclog->log(sprintf('...... %d rows deleted in %.3f seconds', $wpdb->rows_affected, microtime(true) - $start));
 			
 			//Create synch. records for comments that don't have them.
 			$blclog->log('...... Creating synch. records for new comments');
+			$start = microtime(true);
 			$q = "INSERT INTO {$wpdb->prefix}blc_synch(container_id, container_type, synched)
 				  SELECT comment_ID, '{$this->container_type}', 0
 				  FROM 
@@ -331,7 +340,7 @@ class blcCommentManager extends blcContainerManager {
 				  	comments.comment_approved = '1'
 					AND synch.container_id IS NULL";
 			$wpdb->query($q);
-			$blclog->log(sprintf('...... %d rows affected', $wpdb->rows_affected));
+			$blclog->log(sprintf('...... %d rows inserted in %.3f seconds', $wpdb->rows_affected, microtime(true) - $start));
 			
 			/*
 			Note that there is no way to detect comments that were *edited* (not added - those

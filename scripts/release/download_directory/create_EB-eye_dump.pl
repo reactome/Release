@@ -177,7 +177,7 @@ sub get_formatted_date_string {
 sub get_db_connection {
     my $logger = get_logger(__PACKAGE__);
     
-    @ARGV || die "Usage: $0 RELEASE_NUMBER -db STABLE_ID_DB [-user ... -host ... -port ... -pass ...]\n";
+    @ARGV || $logger->error_die("Usage: $0 RELEASE_NUMBER -db STABLE_ID_DB [-user ... -host ... -port ... -pass ...]\n");
     my $dba = GKB::Utils::get_db_connection();
     my $release_num = shift @ARGV;
     $release_num || die "Need release number\n";

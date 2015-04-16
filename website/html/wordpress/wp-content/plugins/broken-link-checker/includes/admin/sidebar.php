@@ -9,6 +9,7 @@ $show_plugin_feed = false;
 if ( !$configuration->get('user_has_donated', false) ) {
 	$show_plugin_feed = true;
 }
+$show_plugin_feed = false; //Disabled for now to make room for the EmbedPlus banner.
 ?>
 
 <!-- "More plugins" RSS feed -->
@@ -85,6 +86,22 @@ if ( !$configuration->get('user_has_donated') ):
 			<a href="http://managewp.com/?utm_source=broken_link_checker&utm_medium=Banner&utm_content=mwp250_2&utm_campaign=Plugins" title="ManageWP">
 				<img src="<?php echo plugins_url('images/mwp250_2.png', BLC_PLUGIN_FILE) ?>" width="250" height="250" alt="ManageWP">
 			</a>
+		</div>
+	</div>
+<?php
+endif; ?>
+
+<!-- EmbedPlus banner -->
+<?php
+if ( !$configuration->get('user_has_donated') ):
+	?>
+	<div id="embedplus-ad" class="postbox">
+		<div class="inside" style="text-align: left">
+			<a href="http://bit.ly/wordpress-youtube-plugin" title="YouTube EmbedPlus">
+				<img src="<?php echo plugins_url('images/embedplus_banner.jpg', BLC_PLUGIN_FILE) ?>" width="255" height="255" alt="YouTube EmbedPlus">
+			</a>
+
+			<a href="http://www.embedplus.com/">Discover advanced YouTube-WordPress embedding &raquo;</a>
 		</div>
 	</div>
 <?php
