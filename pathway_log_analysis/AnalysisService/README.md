@@ -6,9 +6,9 @@ First run this:
 
     grep '\/AnalysisService\/identifiers' /usr/local/gkb/website/logs/extended_log \
     | cut -f1 -d' ' | sort | uniq -c | perl -pe 's/^\s+//' \
-    perl -pe 's/\s+/,/' | python geo_ip.py > ~/analysis_counts.txt
+    | perl -pe 's/\s+/,/' | python geo_ip.py > ~/analysis_counts.txt
     
-The file look like so:
+The file looks like so:
 
     "weight";"lat";"lon"
     23;-33.9333;18.85
