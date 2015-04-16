@@ -23,13 +23,17 @@ use autodie;
 use Getopt::Long;
 use GKB::Config;
 
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
+
 our ($opt_outputdir);
 &GetOptions("outputdir:s");
 $opt_outputdir ||= '.';
 
-open(my $diagnostics, '>', "$opt_outputdir/PSIMI_dumper2.out");
+#open(my $diagnostics, '>', "$opt_outputdir/PSIMI_dumper2.out");
 
-print $diagnostics "PSIMI_dumper2.pl has started\n";
+$logger->info("PSIMI_dumper2.pl has started\n");
 
 my $libs = $GK_ROOT_DIR . "/java/libs";
 my $sbml_libs = "$libs/sbml";
@@ -45,7 +49,7 @@ opendir my($pdh), $psicquic_libs or die "Couldn't open dir '$psicquic_libs': $!"
 my @psicquic_files = readdir $pdh;
 closedir $pdh;
 
-print $diagnostics "psicquic_files=@psicquic_files\n";
+$logger->info("psicquic_files=@psicquic_files\n");
 # JAR file order is important, because JPSIMI is present in at least 2 of the
 # JAR files and we want to get the most up-to-date version.
 foreach my $file (sort(@sbml_files)) {
@@ -57,7 +61,7 @@ foreach my $file (sort(@sbml_files)) {
 	}
 	
 	$classpath .= ":$sbml_libs/$file";
-	print $diagnostics "Adding $sbml_libs/$file to classpath\n";
+	$logger->info("Adding $sbml_libs/$file to classpath\n");
 }
 foreach my $file (sort(@psicquic_files)) {
 	if ($file eq "reactome.jar") {
@@ -68,19 +72,17 @@ foreach my $file (sort(@psicquic_files)) {
 	}
 	
 	$classpath .= ":$psicquic_libs/$file";
-	print $diagnostics "Adding $psicquic_libs/$file to classpath\n";
+	$logger->info("Adding $psicquic_libs/$file to classpath\n");
 }
 
-print $diagnostics "classpath=$classpath\n";
+$logger->info("classpath=$classpath\n");
 
 #my $command = "java -classpath $classpath org.gk.psimixml.PSIMIBuilderCommandLine @ARGV";
 #my $command = "java -Xmx6144m -classpath $classpath org.gk.psimixml.PSIMIBuilderCommandLine @ARGV";
 my $command = "java -Xmx8000M -classpath $classpath org.gk.psimixml.PSIMIBuilderCommandLine @ARGV";
 
-print $diagnostics "command=$command\n";
+$logger->info("command=$command\n");
 
 system($command) == 0 || die "$command failed: $!";
 
-print $diagnostics "PSIMI_dumper2.pl has finished\n";
-
-close $diagnostics;
+$logger->info("PSIMI_dumper2.pl has finished\n");

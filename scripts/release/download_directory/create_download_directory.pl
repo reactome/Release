@@ -201,23 +201,9 @@ $logger->info("opt_sp=$opt_sp\n");
 # log files foo_script.err, foo_script.out
 my @cmds = (
     [
-     "SearchIndexer",
-     1,
-     1,
-#     "cd $GK_ROOT_DIR",
-#     "git stash",
-#     "git subtree pull --prefix scripts/release/download_directory/search --squash search master",
-#     "git stash pop",
-#     "cd -",
-     "perl search_indexer.pl -r $release_nr $reactome_db_options",
-     "mv ebeye.xml.gz $release_nr"
-    ]
-    );
-my @foobarcmds = (
-    [
      "$species_file_stem.interactions.stid", 
      1, 
-     0,  set to 0 if STDOUT is redirected in command
+     0,  #set to 0 if STDOUT is redirected in command
      "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' ".
      "| sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz"
     ],
@@ -386,7 +372,6 @@ my @foobarcmds = (
      "./make_release_tarball.pl $release_nr"
     ],
     
-    
     [
      "PathwaySummationMappingfile",
      1,
@@ -423,13 +408,14 @@ sub run {
     $redirect = ">> $log" if $log;
     $redirect .= " 2>> $elog" if $elog;
 
-    $logger->info("Executing task $label")
+    $logger->info("Executing task $label");
+
     my $not_good = 0;
 
     # create the list of commands with individual logging 
     my $command = join(';', map {"$_ $redirect"} @commands);
-		       
-    $logger->info("Executing: " . hide_password($command) . "\n")
+
+    $logger->info("Executing: " . hide_password($command) . "\n");
 
     my $retval = system $command; 
     if ($retval) {

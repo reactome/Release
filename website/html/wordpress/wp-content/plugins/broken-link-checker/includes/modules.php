@@ -22,7 +22,12 @@ $blc_module_manager = blcModuleManager::getInstance(array(
 		'custom_field',     //Post metadata container (aka custom fields)
 		'post',             //Post content container
 		'page',             //Page content container
+		'youtube-checker',  //Video checker using the YouTube API
+		'youtube-iframe',   //Embedded YouTube video container
 		'dummy',            //Dummy container used as a fallback
 ));
 
 require 'any-post.php';
+
+//Let other plugins register virtual modules.
+do_action('blc_register_modules', $blc_module_manager);
