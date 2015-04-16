@@ -33,6 +33,10 @@ use constant EXE  => './add_links_to_single_resource.pl';
 use constant LOG  => 'logs';
 use constant RLOG => 'resource_log.txt';
 
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
+
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_edb,$opt_db_ids);
 my $pid;
 
@@ -46,8 +50,8 @@ my $gk_root_dir = $GK_ROOT_DIR;
 my $pwd = &Cwd::cwd();
 
 unless ($pwd =~ m!/scripts/release/add_links$! && -d '../../../modules') {
-    $logger->error_die("Current working directory is $pwd:\n" .
-    "Please run this script from $gk_root_dir/scripts/release/add_links.\n");
+    $logger->error("Current working directory is $pwd:");
+    $logger->error_die("Please run this script from $gk_root_dir/scripts/release/add_links");
 }
 
 my $exe = EXE;
@@ -131,6 +135,7 @@ if (@failed) {
     my %failed = map { $_ => 1 } @failed;
     $logger->error("The following resources failed: " . join("\t", (sort keys %failed)));
 }
+
 if (@passed) {
     my %passed = map { $_ => 1 } @passed;
     $logger->info("The following resources passed: " . join("\t", (sort keys %passed)));
@@ -144,7 +149,6 @@ sub run {
     my $resource = shift;
 
     my $logger = get_logger(__PACKAGE__);
-
     $logger->info("Running $exe $args\n");
     _run($exe,$resource,$args);
 }
@@ -153,7 +157,6 @@ sub _run {
     my ($exe,$resource,$args) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-
     chomp(my $timestamp = `date`);
     $logger->info("$timestamp Starting $args\n");
 
