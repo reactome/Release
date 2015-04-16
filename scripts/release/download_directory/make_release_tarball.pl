@@ -1,5 +1,7 @@
 #!/usr/local/bin/perl -w
 use strict;
+use lib '/usr/local/gkb/modules';
+use GKB::Config;
 
 use constant TARD => '/tmp/tarball';
 use constant BASE => '/usr/local/reactomes/Reactome/production';
@@ -109,7 +111,7 @@ sub check_solr_data {
     my $base = shift;
     
     my $logger = get_logger(__PACKAGE__);
-    my $data = "$base/Solr/cores/reactome_v$release";
+    my $data = "$base/Solr/cores/reactome_v$release.tar.gz";
     unless (-e $data) {
         $logger->error_die("$data does not exist!  Make sure that you update the Solr data before proceeding\n");
     }
