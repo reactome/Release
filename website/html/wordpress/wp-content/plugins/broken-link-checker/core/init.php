@@ -46,7 +46,7 @@ define('BLC_FOR_EDITING', 'edit');
 define('BLC_FOR_PARSING', 'parse');
 define('BLC_FOR_DISPLAY', 'display');
 
-define('BLC_DATABASE_VERSION', 7);
+define('BLC_DATABASE_VERSION', 8);
 
 /***********************************************
 				Configuration
@@ -86,8 +86,11 @@ $blc_config_manager = new blcConfigurationManager(
 		'last_notification_sent' => 0,		//When the last email notification was sent (Unix timestamp)
 
 		'suggestions_enabled' => true,  //Whether to suggest alternative URLs for broken links.
-		
-		'server_load_limit' => 4,		//Stop parsing stuff & checking links if the 1-minute load average
+
+		'warnings_enabled' => true,		//Try to automatically detect temporary problems and false positives,
+										//and report them as "Warnings" instead of broken links.
+
+		'server_load_limit' => null,	//Stop parsing stuff & checking links if the 1-minute load average
 										//goes over this value. Only works on Linux servers. 0 = no limit.
 		'enable_load_limit' => true,	//Enable/disable load monitoring. 
 		
@@ -122,6 +125,9 @@ $blc_config_manager = new blcConfigurationManager(
 
 		'user_has_donated' => false,   //Whether the user has donated to the plugin.
 		'donation_flag_fixed' => false,
+
+		                              //Visible link actions.
+		'show_link_actions' => array('blc-deredirect-action' => false),
    )
 );
 

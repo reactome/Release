@@ -17,14 +17,10 @@
  */
 define( 'WPINC', 'wp-includes' );
 
-
-// DB credentials
-require( ABSPATH . '/wp-secrets.php');
-
-
 // Include files required for initialization.
 require( ABSPATH . WPINC . '/load.php' );
 require( ABSPATH . WPINC . '/default-constants.php' );
+require( ABSPATH . '/wp-secrets.php');
 
 /*
  * These can't be directly globalized in version.php. When updating,
@@ -124,6 +120,7 @@ require( ABSPATH . WPINC . '/theme.php' );
 require( ABSPATH . WPINC . '/class-wp-theme.php' );
 require( ABSPATH . WPINC . '/template.php' );
 require( ABSPATH . WPINC . '/user.php' );
+require( ABSPATH . WPINC . '/session.php' );
 require( ABSPATH . WPINC . '/meta.php' );
 require( ABSPATH . WPINC . '/general-template.php' );
 require( ABSPATH . WPINC . '/link-template.php' );
