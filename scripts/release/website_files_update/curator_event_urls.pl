@@ -78,7 +78,7 @@ foreach my $event (@events) {
     my $name = $event->name->[0];
     my $url = 'http://reactomecurator.oicr.on.ca/PathwayBrowser/#' . $db_id;
 
-    next if $seen{$db_id}++;
+    #next if $seen{$db_id}++;
 
     print $out join("\t", ($db_id, $name, $url)) . "\n";
 }
