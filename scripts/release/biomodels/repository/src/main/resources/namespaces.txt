@@ -1,0 +1,5 @@
+uniprot	false
+chebi	true
+obo.chebi	true
+chembl.compound	false
+ensembl	false
