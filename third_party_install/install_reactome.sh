@@ -4,7 +4,6 @@
 # software and data on an Ubuntu or Debian server
 # Sheldon McKay <sheldon.mckay@gmail.com>
 
-
 if [[ $EUID -ne 0 ]]
 then
     echo -e "\nSorry, you must be the root user run this script!" 1>&2
@@ -102,7 +101,8 @@ Search::Tools \
 Capture::Tiny \
 WWW::SearchResult \
 JSON \
-PDF::API2
+PDF::API2 \
+Log::Log4perl
 
 echo -e "\nDownloading the reactome software..."
 mkdir -p /usr/local/reactomes/Reactome/production
