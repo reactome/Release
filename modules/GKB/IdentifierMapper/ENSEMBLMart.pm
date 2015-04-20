@@ -220,6 +220,15 @@ sub convert_list_uniprot_to_ensembl {
     my ($self, $input_ids, $species) = @_;
     
     my $logger = get_logger(__PACKAGE__);
+        my @input_variant_ids = ();
+    my @input_no_variant_ids = ();
+    foreach my $input_id (@{$input_ids}) {
+    	if ($input_id =~ /-/) {
+	    push(@input_variant_ids, $input_id);
+	} else {
+	    push(@input_no_variant_ids, $input_id);
+	}
+    }
     
     my $output_id_hash = {};
     if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'ensembl_gene_id', $species))) {
@@ -338,7 +347,7 @@ sub query_ensembl_mart {
     $query_runner->printResults($temp);
     close $temp;
     
-    open(my $temp, '<', "$output_table.tmp");    
+    open($temp, '<', "$output_table.tmp");    
     while (my $line = <$temp>) {
 	chomp $line;
 	my ($acc,$id) = split "\t", $line;
@@ -391,6 +400,10 @@ sub generate_ensembl_mart_species_abbreviation {
     }
     
     return $ensembl_mart_species_abbreviation;
+}
+
+sub close {
+    my ($self) = @_;
 }
 
 1;

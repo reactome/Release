@@ -1,6 +1,6 @@
 =head1 NAME
 
-GKB::AddLinks::PROToReferencePeptideSequence
+GKB::AddLinks::BioModelsEventToDatabaseIdentifier
 
 =head1 SYNOPSIS
 
@@ -26,7 +26,7 @@ disclaimers of warranty.
 
 =cut
 
-package GKB::AddLinks::PROToReferencePeptideSequence;
+package GKB::AddLinks::BioModelsEventToDatabaseIdentifier;
 use strict;
 
 use autodie;
@@ -86,7 +86,6 @@ sub buildPart {
     my $dba = $self->builder_params->refresh_dba();
     $dba->matching_instance_handler(new GKB::MatchingInstanceHandler::Simpler);
     
-    #my $reference_peptide_sequences = $self->fetch_reference_peptide_sequences(1);
     my @pathways = @{$dba->fetch_instance(-CLASS => 'Pathway')};
     my %pwy_st_id_2_pwy_instance;
     foreach my $pathway (@pathways) {
@@ -121,15 +120,17 @@ sub buildPart {
 	# But a good thing to have if you need to run the script a second time.
 	$self->remove_typed_instances_from_attribute($pathway, $attribute, $biomodels_reference_database);
 	
-	foreach my $biomodels_record ($pwy_st_id_2_biomodels{$pwy_st_id) {
-	    my ($biomodels_id, $biomodels_fdr) = @$biomodels_record;
+	foreach my $biomodels_records ($pwy_st_id_2_biomodels{$pwy_st_id}) {
+	    foreach my $biomodels_record (@{$biomodels_records}) {
+	    	my ($biomodels_id, $biomodels_fdr) = @{$biomodels_record};
 	    
-	    my $biomodels_database_identifier = $self->builder_params->database_identifier->get_biomodels_database_identifier($biomodels_id);
-	    $pathway->add_attribute_value($attribute, $biomodels_database_identifier);
-	    $dba->update_attribute($pathway,$attribute);
-	    $pathway->add_attribute_value('modified', $self->instance_edit);
-	    $dba->update_attribute($pathway, 'modified');
-	    $self->increment_insertion_stats_hash($pathway->db_id());
+		my $biomodels_database_identifier = $self->builder_params->database_identifier->get_biomodels_database_identifier($biomodels_id);
+		$pathway->add_attribute_value($attribute, $biomodels_database_identifier);
+		$dba->update_attribute($pathway,$attribute);
+		$pathway->add_attribute_value('modified', $self->instance_edit);
+		$dba->update_attribute($pathway, 'modified');
+		$self->increment_insertion_stats_hash($pathway->db_id());
+	    }
 	}
     }
 
