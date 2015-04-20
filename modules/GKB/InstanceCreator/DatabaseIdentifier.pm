@@ -204,7 +204,7 @@ sub get_biomodels_database_identifier {
     my ( $self, $identifier ) = @_;
     
     return $self->get_database_identifier(
-        $self->reference_database->get_biomodels_database_identifier(),
+        $self->reference_database->get_biomodels_reference_database(),
         $identifier );
 }
 
