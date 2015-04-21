@@ -347,13 +347,13 @@ sub query_ensembl_mart {
     $query->addAttribute($output_table);
     $query->formatter("TSV");
     
-    my $que
-    open(my $temp, '>', "$output_table.tmp");
+    my $query_output;
+    open(my $temp, '>', \$query_output);
     $query_runner->execute($query);
     $query_runner->printResults($temp);
     close $temp;
     
-    open($temp, '<', "$output_table.tmp");    
+    open($temp, '<', \$query_output);    
     while (my $line = <$temp>) {
 	chomp $line;
 	my ($acc,$id) = split "\t", $line;
@@ -361,8 +361,6 @@ sub query_ensembl_mart {
         push(@{$output_id_hash->{uc($acc)}}, $id);
     }
     close $temp;
-    
-    unlink "$output_table.tmp";
 
     return 1;
 }
