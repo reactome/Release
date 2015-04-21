@@ -77,7 +77,7 @@ END
 }
 
 sub get_registry_file_path {
-    return dirname(abs_path(__FILE__)) . 'registry.xml';
+    return dirname(abs_path(__FILE__)) . '/registry.xml';
 }
 
 1;
