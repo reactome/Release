@@ -337,11 +337,17 @@ sub query_ensembl_mart {
     my $query = get_query();
     my $query_runner = get_query_runner();
     
-    $query->setDataset($ensembl_mart_species_abbreviation . "_gene_ensembl");
+    my $dataset = $ensembl_mart_species_abbreviation . "_gene_ensembl";
+    if (!grep $dataset, @{$query->getDatasetNames}) {
+	return 0;
+    }
+    
+    $query->setDataset($dataset);
     $query->addAttribute($input_table);
     $query->addAttribute($output_table);
     $query->formatter("TSV");
     
+    my $que
     open(my $temp, '>', "$output_table.tmp");
     $query_runner->execute($query);
     $query_runner->printResults($temp);
