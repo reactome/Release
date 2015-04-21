@@ -909,7 +909,7 @@ sub infer_ewas {
         $inf_ewas->StartCoordinate(@{$i->StartCoordinate});
         $inf_ewas->EndCoordinate(@{$i->EndCoordinate});
         if ((defined $inf_ewas->StartCoordinate->[0]  && $inf_ewas->StartCoordinate->[0] > 1) || (defined $inf_ewas->EndCoordinate->[0] && $inf_ewas->EndCoordinate->[0] > 1)) {
-            $inf_ewas->Name(@{$i->Name}, "Note: the coordinates are copied over from $from_name\.", $inf_id);
+            $inf_ewas->Name($i->Name->[0] . " (the coordinates are copied over from $from_name)", $inf_id);
         }
 #infer modifications
         my @mod_res;
