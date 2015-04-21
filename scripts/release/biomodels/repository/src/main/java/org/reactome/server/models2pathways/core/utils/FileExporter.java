@@ -15,8 +15,6 @@ import java.util.logging.Logger;
 public class FileExporter {
     final static Logger logger = Logger.getLogger(FileExporter.class.getName());
 
-    private static final String TAB = "\t";
-    private static final String NEW_LINE = System.getProperty("line.separator");
     private static final String FILE_NAME = "models2pathways";
     private static final String PATHWAY_BROWSER_BASE_URL = "http://www.reactome.org/PathwayBrowser/#";
     private static final String GO_EVIDENCE_CODE = "IEA";
@@ -41,19 +39,19 @@ public class FileExporter {
     public static void addRow(PathwaySummary pathwaySummary, BioModel bioModel) {
         try {
             fileWriter.append(bioModel.getBioMdId());
-            fileWriter.append(TAB);
+            fileWriter.append("\t");
             fileWriter.append(pathwaySummary.getStId());
-            fileWriter.append(TAB);
+            fileWriter.append("\t");
             fileWriter.append(pathwaySummary.getEntities().getFdr().toString());
-            fileWriter.append(TAB);
+            fileWriter.append("\t");
             fileWriter.append(PATHWAY_BROWSER_BASE_URL).append(pathwaySummary.getStId());
-            fileWriter.append(TAB);
+            fileWriter.append("\t");
             fileWriter.append(pathwaySummary.getName());
-            fileWriter.append(TAB);
+            fileWriter.append("\t");
             fileWriter.append(GO_EVIDENCE_CODE);
-            fileWriter.append(TAB);
+            fileWriter.append("\t");
             fileWriter.append(bioModel.getSpecie().getName());
-            fileWriter.append(NEW_LINE);
+            fileWriter.append(System.getProperty("line.separator"));
             fileWriter.flush();
         } catch (IOException e) {
             logger.info("Error on witting in file");
@@ -86,6 +84,5 @@ public class FileExporter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

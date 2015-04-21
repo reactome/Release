@@ -103,6 +103,6 @@ public class Consumer implements Runnable {
         logger.info("Consumer process has been finished.");
         FileExporter.closeFile();
         logger.info("\nProcess has been finished");
-        System.exit(1);
+        System.exit(0);
     }
 }
