@@ -167,10 +167,10 @@ $source_species || $logger->error_die("can't find source species instance for $s
 ####code begins###
 ##################
 
-open(FILE, ">>$opt_r\/report_ortho_inference_$opt_db\.txt");
-open(REGULATOR, ">>$opt_r\/cyclical_reactions_$opt_db\.txt");
-open(INF, ">$opt_r\/inferred_$opt_sp\_$opt_thr\.txt");
-open(ELI, ">$opt_r\/eligible_$opt_sp\_$opt_thr\.txt");
+open(my $report, ">>", "$opt_r\/report_ortho_inference_$opt_db\.txt");
+open(my $regulator, ">>", "$opt_r\/cyclical_reactions_$opt_db\.txt");
+open(my $inf, ">", "$opt_r\/inferred_$opt_sp\_$opt_thr\.txt");
+open(my $eli, ">", "$opt_r\/eligible_$opt_sp\_$opt_thr\.txt");
 
 my (%uni, %orthologous_entity, %inferred_cp, %inferred_gse, %homol_gee, %seen_rps, %inferred_event, %being_inferred, %homol_cat, %instances);
 my $a =("#"x20)."\n";
@@ -308,12 +308,12 @@ if (!(defined $count_leaves)) {
 if ($count_leaves == 0) {
 	$warning .= " count_leaves == 0;";
 }
-print FILE $opt_from, " to ",$opt_sp, "\t", $count_inferred_leaves, " out of ", $count_leaves, " eligible reactions (", $perc, "%)$warning\n";
+print $report $opt_from, " to ",$opt_sp, "\t", $count_inferred_leaves, " out of ", $count_leaves, " eligible reactions (", $perc, "%)$warning\n";
 
-close(FILE);
-close(REGULATOR);
-close(INF);
-close(ELI);
+close($report);
+close($regulator);
+close($inf);
+close($eli);
 
 $logger->info("end\n");
 
@@ -376,8 +376,8 @@ sub read_orthology {
     
     my %homologue;
     $logger->info("Now reading orthology mapping file: $file\n");
-    if (open(READ_ORTHOPAIR, $file)) {
-	    while (<READ_ORTHOPAIR>) {
+    if (open(my $read_orthopair, '>', $file)) {
+	    while (<$read_orthopair>) {
 		my %seen_to;
 		my ($from, $tos) = split/\t/, $_;
 		my @tos = split/\s/, $tos;
@@ -386,7 +386,7 @@ sub read_orthology {
 		}
 		push @{$homologue{$from}}, keys %seen_to;
 	    }
-	    close(READ_ORTHOPAIR);
+	    close($read_orthopair);
     } else {
     	$logger->error("Could not open file: $file\n");
     }
@@ -401,8 +401,8 @@ sub read_ensg_mapping {
     
     my %ensg;
     $logger->info("Now reading ensg mapping file: $file\n");
-    if (open(READ, $file)) {
-	    while (<READ>) {
+    if (open(my $read, $file)) {
+	    while (<$read>) {
 	        my ($ensg, $protein_ids) = split/\t/, $_;
 	        my @protein_ids = split/\s/, $protein_ids;
 	        foreach my $id (@protein_ids) {
@@ -410,7 +410,7 @@ sub read_ensg_mapping {
 		    push @{$ensg{$id}}, $ensg;
 	        }
 	    }
-	    close(READ);
+	    close($read);
     } else {
     	$logger->error("Could not open file: $file\n");
     }
@@ -595,7 +595,7 @@ sub infer_event {
     $logger->info("total=$total, inferred=$inferred, max=$max\n");
     return 1 unless $total; #reactions with no EWAS at all should not be inferred
     $count_leaves++; #these are the eligible events
-    print ELI $event->db_id, "\t", $event->displayName, "\n";
+    print $eli $event->db_id, "\t", $event->displayName, "\n";
 
     $being_inferred{$event} = 1;
 #fill in physical entities - this is done in the respective methods called, the test variables decide as to whether the event inference can continue successfully or whether inference should be stopped as unsuccessful
@@ -642,7 +642,7 @@ sub infer_event {
     }
     $count_inferred_leaves++; #counts successfully inferred events
     push @all_human_events, $event;
-    print INF $inf_e->db_id, "\t", $inf_e->displayName, "\n";
+    print $inf $inf_e->db_id, "\t", $inf_e->displayName, "\n";
 
     return $inf_e;
 }
@@ -747,7 +747,7 @@ sub infer_regulator {
 	$inf_reg = create_inf_cat($reg);
     } elsif ($reg->is_a('Event')) {
 	if ($being_inferred{$reg}) {
-	    print REGULATOR $reg->db_id . "\n";
+	    print $regulator $reg->db_id . "\n";
 	    return;
 	}
 	
@@ -1059,7 +1059,7 @@ sub create_orthologous_generic_event {
 	    create_orthologous_generic_event($gen_hum_event);
 	    
 	    $logger->info("orthologous generic event subroutine:\n");
-	    $gen_hum_event->displayName, " => ", $inferred_event{$gen_hum_event}->displayName, "\n";
+	    $logger->info($gen_hum_event->displayName . " => " . $inferred_event{$gen_hum_event}->displayName . "\n");
 	}
     }
 }
