@@ -592,7 +592,7 @@ sub infer_event {
     $inf_e->GoBiologicalProcess(@{$event->GoBiologicalProcess}); 
 
     my ($total, $inferred, $max) = count_distinct_proteins($event);
-    print "infer_events.infer_event: total=$total, inferred=$inferred, max=$max\n";
+    $logger->info("total=$total, inferred=$inferred, max=$max\n");
     return 1 unless $total; #reactions with no EWAS at all should not be inferred
     $count_leaves++; #these are the eligible events
     print ELI $event->db_id, "\t", $event->displayName, "\n";
@@ -762,10 +762,13 @@ sub infer_regulator {
 #returns a Complex/Polymer instance if inference successful, undef if unsuccessful
 sub infer_complex_polymer {
     my ($cp, $override) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     $inferred_cp{$cp} && return $inferred_cp{$cp};
 #count components to apply thresholds
     my ($total, $inferred, $max) = count_distinct_proteins($cp);
-    print $total, "\t", $inferred, "\t", $max, "\n";
+    $logger->info("$total\t$inferred\t$max\n");
     use integer;
     my $perc;
     $total && ($perc = $inferred * 100 / $total);
@@ -984,31 +987,34 @@ sub create_ReferenceDNASequence {
 #Argument: an instance, returns an instance
 sub check_for_identical_instances {
     my ($i) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     $i->identical_instances_in_db(undef); #clear first
     $dba->fetch_identical_instances($i);
     if ($i->identical_instances_in_db && $i->identical_instances_in_db->[0]) {
 	my $count_ii = @{$i->identical_instances_in_db}; #number of elements
 	if ($count_ii == 1) {
-	    print "Replaced with existing identical instance: ",$i->identical_instances_in_db->[0]->db_id , ".\n";
+	    $logger->info("Replaced with existing identical instance: " . $i->identical_instances_in_db->[0]->db_id . "\n");
 	    return $i->identical_instances_in_db->[0];
 	} else { #interactive replacement
-	    print "This entity has more than one identical instances.......\n";
+	    $logger->info("This entity has more than one identical instances.......\n");
 #The following condition check is only needed for databases in the old data model when isoforms were included in the ReferencePeptideSequence class  - the details are slightly complicated, but that was one reason why we have changed the data model - so it's sorted now and this check is only kept for backward compatibility
 	    if (($protein_class eq 'ReferencePeptideSequence') &&
 		$i->is_a('ReferencePeptideSequence') && $i->identical_instances_in_db->[0]->VariantIdentifier->[0]) {
-		print $i->identical_instances_in_db->[0]->VariantIdentifier->[0], " ***different isoforms used?***\n";
+		$logger->info($i->identical_instances_in_db->[0]->VariantIdentifier->[0], " ***different isoforms used?***\n");
 	    } else {
 #temporary hack to avoid failing of script due to duplicates
-		print "***duplicates***:\n";
+		$logger->warn("***duplicates***:\n");
 		foreach (@{$i->identical_instances_in_db}) {
-		    print "\t", $_->extended_displayName, "\n";
+		    $logger->warn("\t" . $_->extended_displayName . "\n");
 		}
 	    }
 	    return $i->identical_instances_in_db->[0]; #return first element for now
 	}
     } else {
 	my $ID = $dba->store($i);
-	print "Stored instance: ", $ID, "\n";
+	$logger->info("Stored instance: $ID\n");
 	return $i;
     }
 }
@@ -1017,9 +1023,12 @@ sub check_for_identical_instances {
 #This method now deals with both Pathways and BlackBoxEvents (both of which can group subevents)
 sub create_orthologous_generic_event {
     my ($hum_event) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my $ar = $hum_event->reverse_attribute_value('hasEvent');
     if ($ar->[0]) {
-	print "ID_hum_event: ", $hum_event->db_id, "\n";
+	$logger->info("ID_hum_event: " . $hum_event->db_id . "\n");
 	foreach my $gen_hum_event (@{$ar}) {
 	    unless ($inferred_event{$gen_hum_event}) { 
 		my $gen_inf_event = new_inferred_instance($gen_hum_event);
@@ -1049,7 +1058,7 @@ sub create_orthologous_generic_event {
 	    }
 	    create_orthologous_generic_event($gen_hum_event);
 	    
-	    print "orthologous generic event subroutine:\n",
+	    $logger->info("orthologous generic event subroutine:\n");
 	    $gen_hum_event->displayName, " => ", $inferred_event{$gen_hum_event}->displayName, "\n";
 	}
     }
@@ -1062,7 +1071,7 @@ sub infer_preceding_events {
     foreach my $hum_event (@all_human_events) {
 	next if $seen_event{$hum_event}++;
 	next unless $hum_event->PrecedingEvent->[0];
-	print "hum_event=$hum_event\n";
+	$logger->info("hum_event=$hum_event\n");
 	my @tmp;
 	foreach my $preceding_hum_event (@{$hum_event->PrecedingEvent}) {
 	    if ($inferred_event{$preceding_hum_event}) {
@@ -1086,6 +1095,9 @@ sub infer_preceding_events {
  #returns the total number of proteins, the number of inferred proteins, and the maximal number of homologues for any entity involved in the count
 sub count_distinct_proteins {
     my ($i) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my $ar = $i->follow_class_attributes(-INSTRUCTIONS => 
 					 {'ReactionlikeEvent' => {'attributes' => [qw(input output catalystActivity)]},
 					  'CatalystActivity' => {'attributes' => [qw(physicalEntity)]},
@@ -1104,7 +1116,7 @@ sub count_distinct_proteins {
 	    my $id = $pe->Identifier->[0];
 	    my $count = 0;
 	    $homologue{$id} && ($count = scalar(@{$homologue{$id}}));
-	    print $id, "\t", $count, "\n";
+	    $logger->info("$id\t$count\n");
 	    $total++;
 	    ($count >  $max) && ($max = $count);
 	    ($count > 0) && ($inferred += 1);
