@@ -48,7 +48,7 @@ sub archive_files {
 	my $step = shift;
 	my $version = shift;
 	
-	my $step_archive = "/nfs/reactome/reactome/archive/release/$step";
+	my $step_archive = "$archive/$step";
 	my $step_version_archive = "$step_archive/$version";
 	
 	`mkdir -p $step_version_archive`;
