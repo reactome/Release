@@ -338,7 +338,7 @@ sub query_ensembl_mart {
     my $query_runner = get_query_runner();
     
     my $dataset = $ensembl_mart_species_abbreviation . "_gene_ensembl";
-    if (!grep $dataset, @{$query->getDatasetNames}) {
+    if (!grep $dataset, getRegistry()->getAllDatasetNames('default')) {
 	return 0;
     }
     
