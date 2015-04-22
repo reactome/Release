@@ -16,18 +16,25 @@ use BioMart::QueryRunner;
 use GKB::EnsEMBLUtils qw/:all/;
 use parent 'GKB::EnsEMBLUtils';
 
-our @EXPORT_OK = qw/get_query get_query_runner update_registry_file get_identifiers/;
+our @EXPORT_OK = qw/get_query get_query_runner get_registry update_registry_file get_identifiers/;
 push @EXPORT_OK, @GKB::EnsEMBLUtils::EXPORT_OK;
 
 our %EXPORT_TAGS = (all => [@EXPORT_OK],
                    query => [qw/get_query get_query_runner/]);
 
-sub get_query {
+sub get_registry {
     my $action = shift // 'cached';
     my $registry_file = shift // get_registry_file_path();
     
+    update_registry_file($registry_file);
+    
     my $initializer = BioMart::Initializer->new('registryFile'=>$registry_file,'action'=>$action);
-    my $registry = $initializer->getRegistry;
+
+    return $initializer->getRegistry();
+}
+
+sub get_query {
+    my $registry = shift // getRegistry();
 
     return BioMart::Query->new('registry'=>$registry,'virtualSchemaName'=>'default');
 }    
