@@ -58,6 +58,7 @@ our $tmp = "$gkbdev/tmp";
 our $cvs = "/usr/local/cvs_repository";
 our $logdir = "$release/logs";
 our $logfile = "$logdir/release$version.log";
+our $archive = "/nfs/reactome/reactome/archive/release";
 
 our %passwords = (
     'sudo' => \$sudo, 
@@ -100,7 +101,7 @@ our $log_conf = dirname(__FILE__)."/releaselog.conf";
 our @EXPORT = qw/
     $user $pass $sudo $date $version $prevver 
     $db $slicedb $releasedb $biomartdb $gkcentral $gkcentral_host
-    $gkbdev $scripts $release $compara $website $html $gkbmodules $go $dumpdir $tmp $cvs $logdir $logfile
+    $gkbdev $scripts $release $compara $website $html $gkbmodules $go $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server %hosts %maillist
     $log_conf
 /;
