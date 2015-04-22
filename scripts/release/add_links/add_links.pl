@@ -33,10 +33,6 @@ use constant EXE  => './add_links_to_single_resource.pl';
 use constant LOG  => 'logs';
 use constant RLOG => 'resource_log.txt';
 
-use Log::Log4perl qw/get_logger/;
-Log::Log4perl->init(\$LOG_CONF);
-my $logger = get_logger(__PACKAGE__);
-
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_edb,$opt_db_ids);
 my $pid;
 
