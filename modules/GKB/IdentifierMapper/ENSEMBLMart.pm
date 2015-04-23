@@ -336,6 +336,7 @@ sub query_ensembl_mart {
     
     my $query = get_query();
     my $query_runner = get_query_runner();
+    $query_runner->uniqueRowsOnly(1);
     
     my $dataset = $ensembl_mart_species_abbreviation . "_gene_ensembl";
     if (!grep $dataset, get_registry()->getAllDatasetNames('default')) {
@@ -347,20 +348,55 @@ sub query_ensembl_mart {
     $query->addAttribute($output_table);
     $query->formatter("TSV");
     
-    my $query_output;
-    open(my $temp, '>', \$query_output);
-    $query_runner->execute($query);
-    $query_runner->printResults($temp);
-    close $temp;
+    # Following adapted from https://www.biostars.org/p/53241/
+    my $max_attempts = 10;
     
-    open($temp, '<', \$query_output);    
-    while (my $line = <$temp>) {
-	chomp $line;
-	my ($acc,$id) = split "\t", $line;
-	next unless exists $input{$acc};
-        push(@{$output_id_hash->{uc($acc)}}, $id);
+    my $count_query_attempt=1;
+    #Turn on counting
+    $query->count(1);
+    my $query_count;
+    do {
+	$query_runner->execute($query);
+	$query_count=$query_runner->getCount();
+	sleep(1);
+	$count_query_attempt++;
+    } until ($query_count || $count_query_attempt == $max_attempts);
+    unless ($query_count) {
+	$logger->warn("count of query results could not be obtained");
+	return 0;
     }
-    close $temp;
+    #turn off counting so that full results can be obtained below
+    $query->count(0);
+
+    my $query_attempt;
+    my $result_count;
+    do {
+	$output_id_hash = {};
+	
+	my $query_output;
+	open(my $temp, '>', \$query_output);
+	$query_runner->execute($query);
+	$query_runner->printResults($temp);
+	close $temp;
+    
+	open($temp, '<', \$query_output);    
+	my @results = <$temp>;
+	close $temp;
+	
+	$result_count = scalar @results;
+	foreach my $line (@results) {
+	    chomp $line;
+	    my ($acc,$id) = split "\t", $line;
+	    next unless $id;
+	    next unless exists $input{$acc};
+	    push(@{$output_id_hash->{uc($acc)}}, $id);
+	}
+	sleep(1);
+	$query_attempt++;
+    } until ($result_count == $query_count || $query_attempt == $max_attempts);
+    unless($result_count == $query_count) {
+	$logger->warn("only " . ($result_count / $query_count * 100) . " percent of results were obtained");
+    }
 
     return 1;
 }
