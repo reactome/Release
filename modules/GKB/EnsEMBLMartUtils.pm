@@ -34,7 +34,7 @@ sub get_registry {
 }
 
 sub get_query {
-    my $registry = shift // getRegistry();
+    my $registry = shift // get_registry();
 
     return BioMart::Query->new('registry'=>$registry,'virtualSchemaName'=>'default');
 }    
