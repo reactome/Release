@@ -91,7 +91,7 @@ foreach my $rgp (@{$rgps}) {
       next;
    }
 
-   my @entrez_genes = $uniprot2entrez_gene{$rgp_identifier};
+   my @entrez_genes = @{$uniprot2entrez_gene{$rgp_identifier}};
    foreach my $entrez_gene (@entrez_genes) {
       print $gene_xml get_link_xml($link_id, $entrez_gene, "&entity.base.url", $rgp_identifier, "Reactome Entity:$rgp_identifier");
       $link_id++;
@@ -129,6 +129,7 @@ sub get_link_xml {
    my $url_name = shift;
    
 return <<XML;
+
    <Link>
       <LinkId>$link_id</LinkId>
       <ProviderId>4914</ProviderId>
