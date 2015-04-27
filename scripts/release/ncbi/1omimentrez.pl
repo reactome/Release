@@ -19,8 +19,8 @@ to /usr/local/gkbdev/scripts/ncbi/archive on the release server.
 END
 
     my $ftp = Net::FTP->new(Host => "ftp.ncbi.nih.gov", Debug => 0, Passive => 1);
-    $ftp->login("anonymous",'-anonymous@') or die;
-    $ftp->cwd("/gene/DATA") or die;
+    $ftp->login("anonymous",'-anonymous@') or die $instructions . $ftp->message;
+    $ftp->cwd("/gene/DATA") or die $instructions . $ftp->message;
     $ftp->get("mim2gene_medgen") or die $instructions . $ftp->message;
     $ftp->quit;
 
