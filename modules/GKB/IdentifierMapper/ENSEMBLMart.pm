@@ -339,7 +339,7 @@ sub query_ensembl_mart {
     $query_runner->uniqueRowsOnly(1);
     
     my $dataset = $ensembl_mart_species_abbreviation . "_gene_ensembl";
-    if (!grep $dataset, get_registry()->getAllDatasetNames('default')) {
+    if (!grep(/^$dataset$/, get_registry()->getAllDatasetNames('default'))) {
 	return 0;
     }
     
