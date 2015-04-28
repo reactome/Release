@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl  -w
+#!/usr/local/bin/perl -w
 use strict;
 
 #this script is meant for the new format given by NCBI
@@ -55,6 +55,7 @@ foreach my $entrez_gene_instance (@{$ap}){
       push @{$uniprot2entrez_gene{$uniprot_id}}, $entrez_gene_id;
    }
 }
+close($proteins);
 print "Total number of proteins: ". (keys %uniprot2entrez_gene) ."\n";
 
 
@@ -105,6 +106,9 @@ foreach my $rgp (@{$rgps}) {
 }
 print $gene_xml "</LinkSet>\n";
 print $error "total no.of errors: $error_count\n";
+
+close($gene_xml);
+close($error);
 
 sub get_events {
    my $rgp = shift; 
