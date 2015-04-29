@@ -36,6 +36,8 @@ use GKB::SOAPServer::PICR;
 use GKB::IdentifierMapper::Base;
 use GKB::EnsEMBLMartUtils qw/:all/;
 
+use Try::Tiny;
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 
 use Log::Log4perl qw/get_logger/;
