@@ -5,6 +5,7 @@ use warnings;
 
 use Cwd 'abs_path';
 use File::Basename 'dirname';
+use Try::Tiny;
 
 use lib "/usr/local/reactomes/Reactome/development/GKB/modules";
 use lib '/usr/local/reactomes/Reactome/development/GKB/BioMart/biomart-perl/lib';
