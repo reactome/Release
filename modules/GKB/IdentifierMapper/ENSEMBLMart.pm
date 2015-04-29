@@ -334,25 +334,22 @@ sub query_ensembl_mart {
     my %input;
     $input{$_}++ foreach @{$input_ids};
     
-    my $query = get_query();
-    my $query_runner = get_query_runner();
-    $query_runner->uniqueRowsOnly(1);
-    
-    my $dataset = $ensembl_mart_species_abbreviation . "_gene_ensembl";
-    if (!grep(/^$dataset$/, get_registry()->getAllDatasetNames('default'))) {
+
+    my $query = _prepare_query($ensembl_mart_species_abbreviation, $input_table, $output_table);
+    if (!$query) {
+	$logger->warn("Query could not be prepared for $ensembl_mart_species_abbreviation on table $output_table");
 	return 0;
     }
     
-    $query->setDataset($dataset);
-    $query->addAttribute($input_table);
-    $query->addAttribute($output_table);
-    $query->formatter("TSV");
-    
     my $query_output;
     open(my $temp, '>', \$query_output);
-    $query_runner->execute($query);
-    $query_runner->printResults($temp);
+    _execute_query($query, $temp);
     close $temp;
+    
+    if (!$query_output) {
+	$logger->warn("Query results could not be obtained");
+	return 0;
+    }
     
     open($temp, '<', \$query_output);
     while (my $line = <$temp>) {
@@ -364,6 +361,62 @@ sub query_ensembl_mart {
     }
 
     return 1;
+}
+
+sub _prepare_query {
+    my $species = shift;
+    my $input_table = shift;
+    my $output_table = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    my $query;
+    my $attempts;
+    my $error;
+    do {
+	$attempts++;
+	try {
+	    my $dataset = $species . "_gene_ensembl";
+	    unless (grep(/^$dataset$/, get_registry()->getAllDatasetNames('default'))) {
+		return;
+	    }
+	    
+	    $query = get_query();
+	    $query->setDataset($dataset);
+	    $query->addAttribute($input_table);
+	    $query->addAttribute($output_table);
+	    $query->formatter("TSV");
+	} catch {
+	    $error = $_;
+	    $logger->warn("Unable to prepare query on attempt $attempts: $error");
+	    sleep 60;
+	};
+    } while ($error && $attempts < 10);
+
+    return $query;
+}
+
+sub _execute_query {
+    my $query = shift;
+    my $file_handle = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    my $attempts;
+    my $error;
+    do {
+	$attempts++;
+	try {
+	    my $query_runner = get_query_runner();
+	    $query_runner->uniqueRowsOnly(1);
+	    $query_runner->execute($query);
+	    $query_runner->printResults($file_handle);
+	} catch {
+	    $error = $_;
+	    $logger->warn("Unable to execute query on attempt $attempts: $error");
+	    sleep 60;
+	};
+    } while ($error && $attempts < 10);
 }
 
 # Runs a query against the ENSEMBL BioMart, using a join.  This works
