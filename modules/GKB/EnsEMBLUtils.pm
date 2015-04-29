@@ -3,6 +3,9 @@ package GKB::EnsEMBLUtils;
 use strict;
 use warnings;
 
+use Carp;
+use Try::Tiny;
+
 use constant GKB_MODULES => '/usr/local/gkb/modules';
 
 use parent 'Exporter';
@@ -11,23 +14,45 @@ our @EXPORT_OK = qw/get_version get_ensembl_genome_version install_ensembl_api e
 our %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
 sub get_version {
-    my $url = 'http://rest.ensembl.org/info/software?';
+    my $release;
+    my $attempts;
     
-    my $release_json = `wget -q --header='Content-type:application/json' '$url' -O -`;
+    until ($release || $attempts == 10) {
+	my $url = 'http://rest.ensembl.org/info/software?';
+	my $release_json = `wget -q --header='Content-type:application/json' '$url' -O -`;
+	($release) = $release_json =~ /"release":(\d+)/;
+	return $release - 1 if $release;
+	
+	$attempts++;
+	sleep 60;
+    }
     
-    my ($release) = $release_json =~ /"release":(\d+)/;
-    
-    return $release - 1;
+    if ($release) {
+	return $release - 1;
+    } else {
+	carp "Unable to get EnsEMBL version\n";
+    }
 }
 
 sub get_ensembl_genome_version {
-    my $url = 'http://rest.ensemblgenomes.org/info/eg_version?';
+    my $version;
+    my $attempts;
     
-    my $version_json = `wget -q --header='Content-type:application/json' '$url' -O -`;
+    until ($version || $attempts == 10) {    
+	my $url = 'http://rest.ensemblgenomes.org/info/eg_version?';
+	my $version_json = `wget -q --header='Content-type:application/json' '$url' -O -`;
+	($version) = $version_json =~ /"version":"(\d+)"/; 
+	return $version if $version;
+	
+	$attempts++;
+	sleep 60;
+    }
     
-    my ($version) = $version_json =~ /"version":"(\d+)"/;
-    
-    return $version;
+    if ($version) {
+	return $version;
+    } else {
+	carp "Unable to get EnsEMBL Genomes version\n";
+    }
 }
 
 sub install_ensembl_api {
