@@ -4,16 +4,10 @@ GKB::AddLinks::BioModelsEventToDatabaseIdentifier
 
 =head1 SYNOPSIS
 
-Insert links from Pathways and ReactionlikeEvents to
-corresponding BioModels models.
-
 =head1 DESCRIPTION
 
-Right now, it is not possible to create links to BioModels
-reactions, so links from ReactionlikeEvents can only be
-linked to models.
 
-Original code lifted from the script add_biomodels_links.sh, from David.
+Original code lifted from the script add_ucsc_links.pl, probably from Imre.
 
 =head1 SEE ALSO
 
@@ -35,11 +29,15 @@ disclaimers of warranty.
 package GKB::AddLinks::BioModelsEventToDatabaseIdentifier;
 use strict;
 
+use autodie;
+
 use GKB::Config;
 use GKB::AddLinks::Builder;
-use vars qw(@ISA $AUTOLOAD %ok_field);
+
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
+
+use vars qw(@ISA $AUTOLOAD %ok_field);
 
 @ISA = qw(GKB::AddLinks::Builder);
 
@@ -69,7 +67,7 @@ sub new {
 # this class.
 sub get_ok_field {
     my ($pkg) = @_;
-    
+
     %ok_field = $pkg->SUPER::get_ok_field();
 
     return %ok_field;
@@ -77,91 +75,66 @@ sub get_ok_field {
 
 sub buildPart {
     my ($self) = @_;
-
+    
+    my $pkg = __PACKAGE__;
+    
     my $logger = get_logger(__PACKAGE__);
-
+    
     $logger->info("entered\n");
-
+    
     $self->timer->start($self->timer_message);
+    my $dba = $self->builder_params->refresh_dba();
+    $dba->matching_instance_handler(new GKB::MatchingInstanceHandler::Simpler);
+    
+    my @pathways = @{$dba->fetch_instance(-CLASS => 'Pathway')};
+    my %pwy_st_id_2_pwy_instance;
+    foreach my $pathway (@pathways) {
+	next unless $pathway->stableIdentifier->[0] && $pathway->stableIdentifier->[0]->identifier->[0];
+	$pwy_st_id_2_pwy_instance{$pathway->stableIdentifier->[0]->identifier->[0]} = $pathway;
+    }
+    
+    my %pwy_st_id_2_biomodels;
+    my $biomodels_tsv = $GK_ROOT_DIR . '/scripts/release/biomodels/models2pathways.tsv';
+    open(my $biomodels_fh, '<', $biomodels_tsv);
+    while(my $line = <$biomodels_fh>) {
+	my ($biomodels_id, $pathway_st_id, $biomodels_fdr) = split "\t", $line, 3;
+	next unless $biomodels_id && $pathway_st_id && $biomodels_fdr;
+	push @{$pwy_st_id_2_biomodels{$pathway_st_id}}, [$biomodels_id, $biomodels_fdr];
+    }
+    close($biomodels_fh);
+    
+    my $attribute = 'crossReference';
+    $self->set_instance_edit_note("${attribute}s inserted by $pkg");
+    
+    # Load the values of an attribute to be updated. Not necessary for the 1st time though.
+    #$dba->load_class_attribute_values_of_multiple_instances('DatabaseIdentifier','identifier',$reference_peptide_sequences);
 
-    # Set up some handy varaibles
-    my $cabigr3 = "$GK_ROOT_DIR/../caBIG/caBIGR3";
-    if (!(-e $cabigr3)) {
-	$logger->warn("root directory for caBIGR3, $cabigr3, not available!\n");
-	$cabigr3 = "/usr/local/caBIG/caBIGR3";
-	if (!(-e $cabigr3)) {
-	    $logger->error("root directory for caBIGR3, $cabigr3, not available, aborting!!\n");
-	    return;
+    my $biomodels_reference_database = $self->builder_params->reference_database->get_biomodels_reference_database();
+    foreach my $pwy_st_id (keys %pwy_st_id_2_biomodels) {
+	my $pathway = $pwy_st_id_2_pwy_instance{$pwy_st_id};
+	
+	$logger->info("pathway stable identifier" . $pwy_st_id . "\n");
+	
+	# Remove identifiers to make sure the mapping is up-to-date, keep others
+	# this isn't really necessary as long as the script is run on the slice only
+	# But a good thing to have if you need to run the script a second time.
+	$self->remove_typed_instances_from_attribute($pathway, $attribute, $biomodels_reference_database);
+	
+	foreach my $biomodels_records ($pwy_st_id_2_biomodels{$pwy_st_id}) {
+	    foreach my $biomodels_record (@{$biomodels_records}) {
+	    	my ($biomodels_id, $biomodels_fdr) = @{$biomodels_record};
+	    
+		my $biomodels_database_identifier = $self->builder_params->database_identifier->get_biomodels_database_identifier($biomodels_id);
+		$pathway->add_attribute_value($attribute, $biomodels_database_identifier);
+		$dba->update_attribute($pathway,$attribute);
+		$pathway->add_attribute_value('modified', $self->instance_edit);
+		$dba->update_attribute($pathway, 'modified');
+		$self->increment_insertion_stats_hash($pathway->db_id());
+	    }
 	}
     }
-    my $lib = "$cabigr3/lib";
-    my $src = "$cabigr3/src";
 
-    $logger->info("lib=$lib, src=$src\n");
-
-    # Collect stuff for classpath
-    my $axis_cp = "$lib/axis/axis.jar:$lib/axis/jaxrpc.jar:$lib/axis/saaj.jar:$lib/axis/wsdl4j-1.5.1.jar";
-    my $batik_cp = "$lib/batik/xml-apis.jar";
-    my $biomodels_cp = "$lib/biomodels/biomodelswslib-commons-discovery-1.8.jar:$lib/biomodels/biomodelswslib-single-1.8.jar:$lib/biomodels/junit.jar";
-    my $commons_math_cp = "$lib/commons-math/commons-math-1.1.jar";
-    my $ensj_cp = "$lib/ensj/ensj-39.2.jar";
-    my $freemarker_cp = "$lib/freemarker/freemarker.jar";
-    my $hibernate_cp = "$lib/hibernate/hibernate3.jar:$lib/hibernate/commons-logging-1.0.4.jar";
-    my $jdom_cp = "$lib/jdom/jaxen-core.jar:$lib/jdom/jaxen-jdom.jar:$lib/jdom/jdom.jar:$lib/jdom/saxpath.jar";
-    my $jung_cp = "$lib/jung/colt.jar:$lib/jung/commons-collections-3.2.jar:$lib/jung/concurrent.jar:$lib/jung/jung-1.7.6.jar";
-    my $junit_cp = "$lib/junit/junit.jar";
-    my $kegg_cp = "$lib/kegg/keggapi.jar";
-    my $log4j_cp = "$lib/log4j/log4j-1.2.12.jar";
-    my $mysql_cp = "$lib/mysql/mysql-connector-java-3.1.12-bin.jar";
-    my $owl_cp = "$lib/owl/commons-logging.jar";
-    my $reactome_cp = "$lib/reactome/reactome.jar:$lib/reactome/caBigR3.jar";
-#	my $r3_cp = "$lib/r3.jar";
-    my $sjsxp_cp = "$lib/sjsxp/jsr173_api.jar:$lib/sjsxp/sjsxp.jar";
-    my $smile_cp = "$lib/smile/jsmile.jar";
-    my $weka_cp = "$lib/weka/weka.jar";
-    my $xfire_cp = "$lib/xfire/xfire-all-1.2.2.jar";
-    my $cp = "$axis_cp:$batik_cp:$biomodels_cp:$commons_math_cp:$ensj_cp:$freemarker_cp:$hibernate_cp:$jdom_cp:$jung_cp:$junit_cp:$kegg_cp:$log4j_cp:$mysql_cp:$owl_cp:$reactome_cp:$sjsxp_cp:$smile_cp:$weka_cp:$xfire_cp:$src";
-
-    chdir $cabigr3;
-
-    $logger->info("cabigr3=$cabigr3\n");
-    $logger->info("CWD=" . &Cwd::cwd() . "\n");
-
-    # Compile the java source
-    print "Compiling....\n";
-    my $compile_success = system("./compile.sh");
-    if ($compile_success!=0) {
-    	$logger->error("could not compile java code, aborting!!\n");
-    	return;
-    }
-
-    $logger->info("compilation complete\n");
-
-    my $args = "";
-    my $db_params = $self->builder_params->get_db_params();
-    if (defined $db_params->[0]) {
-    	$args .= " -db " . $db_params->[0];
-    }
-    if (defined $db_params->[1]) {
-    	$args .= " -host " . $db_params->[1];
-    }
-    if (defined $db_params->[2]) {
-    	$args .= " -port " . $db_params->[2];
-    }
-    if (defined $db_params->[3]) {
-    	$args .= " -user " . $db_params->[3];
-    }
-    if (defined $db_params->[4]) {
-    	$args .= " -pass " . $db_params->[4];
-    }
-    chomp($args);
-    
-    $logger->info("args=$args\n");
-    
-    # Run command
-    my $command = "java -Xmx500m -classpath $cp org.reactome.biomodels.InsertBioModelsXrefsIntoRelease $args";
-    print "Running command=$command\n";
-    system($command);
+    $self->print_insertion_stats_hash();
 
     $self->timer->stop($self->timer_message);
     $self->timer->print();
