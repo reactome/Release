@@ -67,6 +67,11 @@ my %reference_database_info_hash = (
         'URL'       => "http://biogps.org/",
         'AccessUrl' => "http://biogps.org/gene/###ID###"
     },
+    'BioModels' => {
+        'Name'      => ['BioModels'],
+        'URL'       => "http://www.ebi.ac.uk/biomodels/",
+        'AccessURL' => "http://www.ebi.ac.uk/biomodels-main/publ-model.do?mid=###ID###"
+    },
     'Brenda' => {
         'Name' => ['Brenda'],
         'URL'  => "http://www.brenda-enzymes.info/index.php4",
@@ -718,6 +723,12 @@ sub prepend_new_name_if_necessary {
     if ( !$name_exists_flag ) {
         unshift( @{$names}, $name );
     }
+}
+# Returns a ReferenceDatabase instance for BioModels.
+sub get_biomodels_reference_database {
+    my ($self) = @_;
+    
+    return $self->get_reference_database('BioModels');
 }
 
 # Returns a ReferenceDatabase instance for BioGPS Gene.

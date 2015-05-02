@@ -1,14 +1,15 @@
-#!/usr/local/bin/perl  -w
+#!/usr/local/bin/perl -w
 use strict;
 
 use lib '/usr/local/gkbdev/modules';
-use lib "$ENV{HOME}/bioperl-1.0";
-#use lib "$ENV{HOME}/GKB/modules";
+
 use GKB::ClipsAdaptor;
 use GKB::DBAdaptor;
+use GKB::Utils;
+
+use autodie;
 use Data::Dumper;
 use Getopt::Long;
-use GKB::Utils;
 
 our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
 (@ARGV)  || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
@@ -16,53 +17,6 @@ our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
 $opt_db  || die "Need database name (-db).\n";
 
 my ($num) = $opt_db =~ /(\d+)/;
-
-my $count =0;
-
-my $tag1 = "http://www.reactome.org/content/query?q=UniProt:";
-my $tag ="http://www.reactome.org/PathwayBrowser/#";
-
-
-my @out_classes = ('Event');
-
-my %instructions = (-INSTRUCTIONS =>
-		    {
-			'ReferencePeptideSequence' => {'reverse_attributes' => [qw(referenceEntity referenceSequence)]},
-			'PhysicalEntity' => {'reverse_attributes' => [qw(hasComponent hasMember hasCandidate input output physicalEntity inferredFrom)]},
-			'CatalystActivity' => {'reverse_attributes' =>[qw(catalystActivity regulator)]},
-			'Event' => {'reverse_attributes' =>[qw(hasComponent hasEvent hasMember)]}
-		
-		    },
-		    -OUT_CLASSES => \@out_classes
-		    );
-		    
-my %hash;
-
-my $dbid;
-  
-my $out_put1 = 'protein_reactome'.$num.'.ft';
-
-
-open (OUTPUT1, ">archive/$out_put1");
-
-#Eg. my $out_put1 = 'protein_reactome16.ft';
-
-my $out_put3 = 'prot_gene'.$num; #this file is needed for getting OMIM mapping
-#my $out_put3 = 'prot_gene16';
-
-open (OUTPUT3, ">archive/$out_put3");
-
-print OUTPUT3 "UniProt ID"."\t"."Gene id\n\n";
-
-
-print OUTPUT1  "-" x 56,"\n";
-print OUTPUT1 "prid:     4914\n";
-print OUTPUT1 "dbase:    protein\n";
-print OUTPUT1 "stype:    meta-databases\n";
-print OUTPUT1 "!base:    $tag1"."\n";
-print OUTPUT1  "-" x  56,"\n";
-
-print OUTPUT1 "linkid:   0\n";
 
 my $dba = GKB::DBAdaptor->new
     (
@@ -74,112 +28,62 @@ my $dba = GKB::DBAdaptor->new
     );
 
 # gets Entrez Gene
-    
 my $gene_db = $dba->fetch_instance_by_attribute('ReferenceDatabase', [['name', ['Entrez Gene']]])||
     die("No ReferenceDatabase with name 'Gene'.\n");
-    
-#print Dumper( $gene_db);
-
-
- 
-
 
 #gets all Entrez Gene instances
-
-my $ap = $dba->fetch_instance('ReferenceDNASequence',[['referenceDatabase',[$gene_db->[0]->db_id]]]);
-
-print "Total number of Gene ids are:".@{$ap}."\n";
+my $entrez_gene_instances = $dba->fetch_instance('ReferenceDNASequence',[['referenceDatabase',[$gene_db->[0]->db_id]]]);
+print "Total number of Gene ids are:".@{$entrez_gene_instances}."\n";
 
 
-my $s =0;
-my @input;
-my %test;
+my $archive = 'archive';  
+open(my $protein_reactome_out, ">", "$archive/protein_reactome$num.ft");
+print $protein_reactome_out get_protein_reactome_header();
 
-foreach(@{$ap}){
+#this file is needed for getting OMIM mapping
+open(my $prot_gene_out, ">", "$archive/prot_gene$num");
+print $prot_gene_out "UniProt ID"."\t"."Gene id\n\n";
 
+my $protein_count;
+foreach my $entrez_gene_instance (@{$entrez_gene_instances}){
     #get only RefPepSeq with Entrez Gene as refGene
-
     my $protein_class = &GKB::Utils::get_reference_protein_class($dba);
+    my $rgps = $dba->fetch_instance($protein_class,[['referenceGene',[$entrez_gene_instance->db_id]]]);
 
-    my $gp = $dba->fetch_instance($protein_class,[['referenceGene',[$ap->[$s]->db_id]]]);
-
-
-    if(@{$gp}>=1){	#see whether the RefPepSeq has a  referenceGene at all
-
-	push (@input,$gp->[0]->Identifier->[0]."\n");
-	print OUTPUT1 "query:\t".$gp->[0]->Identifier->[0]."\t[pacc]\n";
-	print OUTPUT3 $gp->[0]->Identifier->[0]."\t".$ap->[$s]->Identifier->[0]."\n";
-
-
-	my $x = $gp->[0]->Identifier->[0];
-	my $y=  $ap->[$s]->Identifier->[0];
-
-	$test{$x} =$y;
-
-	#print $test{$x}."\n";
-
-	$s++;
-	####################################################################################
-
-	#if there are any many to many mappings use this section after changing if clause argument
-	#in the above part of the loop to ==1
-
-
-
-
-    #}elsif(@{$gp}>1){
-	#
-	#my $c =0;
-	#
-	#my $len = @{$gp};
-	#
-	##print $len."\t";
-	#
-	#until ($c == $len){
-	    #
-	    #push (@input,$gp->[0]->Identifier->[0]."\n");
-	    #print OUTPUT1 "query:\t".$gp->[0]->Identifier->[0]."\t[pacc]\n";
-	    #print OUTPUT3 $gp->[$c]->variantIdentifier->[0]."\t".$ap->[$s]->Identifier->[0]."\n";
-	    #
-	    #
-	    #my $x = $gp->[0]->Identifier->[0];
-	    #my $y=  $ap->[$s]->Identifier->[0];
-	    #
-	    #$test{$x} =$y;
-	    #
-	    #$c++;
-	    #
-	#}
-	#$s++;
-	##################################################################################
-    }else{
-	$s++;
-	next;
+    foreach my $rgp (@{$rgps}){	
+	print $protein_reactome_out "query:\t".$rgp->Identifier->[0]."\t[pacc]\n";
+	print $prot_gene_out $rgp->Identifier->[0]."\t".
+			     $entrez_gene_instance->Identifier->[0]."\n";
+	$protein_count++;
     }
 }
 
-my $l = @input;
-print "Total number of proteins:".$l."\n";
+print "Total number of proteins:$protein_count\n";
 
-print OUTPUT1 "base:     &base\;\n";
-print OUTPUT1 "rule:     &lo.pacc\;\n";
-print OUTPUT1  "-"x56,"\n";
+print $protein_reactome_out get_protein_reactome_footer();
 
-       
-print STDERR  "total no.of errors:$count\n";
-print STDERR "check proteinentrez_errorfile.txt for the list of errors\n";		
-  
-  
-sub find_top_events {
-    my ($events) = @_;
-    my @out;
-    
-    foreach my $e (@{$events}) {
-	@{$e->reverse_attribute_value('hasComponent')} && next;
-	@{$e->reverse_attribute_value('hasInstance')} && next;
-	push @out, $e;
-    }
-    return \@out;
-}	
+close($protein_reactome_out);
+close($prot_gene_out);
 
+sub get_protein_reactome_header {
+    return
+    get_separator() .
+    "prid:     4914\n" .
+    "dbase:    protein\n" .
+    "stype:    meta-databases\n" .
+    "!base:    http://www.reactome.org/content/query?q=UniProt:\n" .
+    get_separator() .
+    "linkid:   0\n";
+}
+
+sub get_protein_reactome_footer {
+    return
+    "base:     &base\;\n" .
+    "rule:     &lo.pacc\;\n" .
+    get_separator();
+}
+
+sub get_separator {
+    return "-"x56 . "\n";
+}
 

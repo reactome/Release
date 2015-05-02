@@ -197,6 +197,17 @@ sub get_biogps_gene_database_identifier {
         $identifier );
 }
 
+# Gets a DatabaseIdentifier instance for BioModels
+#
+# Returns a DatabaseIdentifier instance.
+sub get_biomodels_database_identifier {
+    my ( $self, $identifier ) = @_;
+    
+    return $self->get_database_identifier(
+        $self->reference_database->get_biomodels_reference_database(),
+        $identifier );
+}
+
 # Gets a DatabaseIdentifier instance for Brenda.
 #
 # Returns a DatabaseIdentifier instance.

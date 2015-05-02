@@ -5,9 +5,8 @@ import org.reactome.server.models2pathways.reactome.model.PathwaySummary;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 /**
@@ -16,9 +15,6 @@ import java.util.logging.Logger;
 public class FileExporter {
     final static Logger logger = Logger.getLogger(FileExporter.class.getName());
 
-    private static final String TAB = "\t";
-    private static final String NEW_LINE = System.getProperty("line.separator");
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("YYYY-MM-dd_hh-mm-ss");
     private static final String FILE_NAME = "models2pathways";
     private static final String PATHWAY_BROWSER_BASE_URL = "http://www.reactome.org/PathwayBrowser/#";
     private static final String GO_EVIDENCE_CODE = "IEA";
@@ -27,6 +23,7 @@ public class FileExporter {
 
     public static boolean createFile() {
         String locationPath = getLocationPath();
+        removeFile();
         try {
             fileWriter = new FileWriter(locationPath + ".tsv", true);
         } catch (IOException e) {
@@ -41,14 +38,20 @@ public class FileExporter {
 
     public static void addRow(PathwaySummary pathwaySummary, BioModel bioModel) {
         try {
-            fileWriter.write(
-                    bioModel.getBioMdId() + TAB +
-                            pathwaySummary.getStId() + TAB +
-                            pathwaySummary.getEntities().getFdr() + TAB +
-                            PATHWAY_BROWSER_BASE_URL + pathwaySummary.getStId() + TAB +
-                            pathwaySummary.getName() + TAB +
-                            GO_EVIDENCE_CODE + TAB +
-                            bioModel.getSpecie().getName() + NEW_LINE);
+            fileWriter.append(bioModel.getBioMdId());
+            fileWriter.append("\t");
+            fileWriter.append(pathwaySummary.getStId());
+            fileWriter.append("\t");
+            fileWriter.append(pathwaySummary.getEntities().getFdr().toString());
+            fileWriter.append("\t");
+            fileWriter.append(PATHWAY_BROWSER_BASE_URL).append(pathwaySummary.getStId());
+            fileWriter.append("\t");
+            fileWriter.append(pathwaySummary.getName());
+            fileWriter.append("\t");
+            fileWriter.append(GO_EVIDENCE_CODE);
+            fileWriter.append("\t");
+            fileWriter.append(bioModel.getSpecie().getName());
+            fileWriter.append(System.getProperty("line.separator"));
             fileWriter.flush();
         } catch (IOException e) {
             logger.info("Error on witting in file");
@@ -73,5 +76,13 @@ public class FileExporter {
 
     public static void setLocationPath(String locationPath) {
         FileExporter.locationPath = locationPath;
+    }
+
+    private static void removeFile() {
+        try {
+            Files.deleteIfExists(Paths.get(getLocationPath() + ".tsv"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
