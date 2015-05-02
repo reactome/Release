@@ -1,151 +1,114 @@
-#!/usr/local/bin/perl  -w                                                                                                                                                          
-
-# This is a better version of the script. the main script is 7check.pl and this 
-#should always be a copy of 7check.pl
-
-use lib "$ENV{HOME}/bioperl-1.0";
-use lib "$ENV{HOME}/GKB/modules";
-
-use GKB::ClipsAdaptor;
-use GKB::DBAdaptor;
-use GKB::Release::Utils;
-use GKB::Release::Config;
-
-use Data::Dumper;
-use Getopt::Long;
- 
-use GKB::Utils_esther;
+#!/usr/local/bin/perl -w
 use strict;
 
-print 'Enter recent test slice version: (e.g. 39, 39a, etc) ';
-my $ver = <STDIN>;
-chomp $ver;
+use lib "/usr/local/gkb/modules";
 
-print 'Enter previous test slice version: (e.g. 38) ';
-my $prevver = <STDIN>;
-chomp $prevver;
+use GKB::Config;
+use GKB::DBAdaptor;
 
-my $out = '/home/matthews/newevents'.$ver.'.html';
-
-open (OUTPUT,">$out");
- 
-my $recent = 'test_slice_'.$ver;
-
-print OUTPUT 'Current release is version '.$ver.'<br><br>';
-
-print 'recent db is '.$recent."\n";
-
-print OUTPUT 'recent db is '.$recent.'<br>';
-
-
-my $db = $recent;
-
-my $host = 'localhost';
-
-my $pass = prompt("Enter your mysql password: ", 1);
-
-
-my $dba_new = GKB::DBAdaptor->new(
-     -dbname => $db,
-     -user   => $user,
-     -host   => $host, # host where mysqld is running                                                                                                                              
-     -pass   => $pass,
-     -port   => '3306'
-);
-
-my $human = '48887';
-
-my (%hashnew, %hashold, $count, $count2, @ina);
-
-my $proteinnew = $dba_new->fetch_instance(-CLASS => 'Event');
-
-my %seen = ();
-
-foreach (@{$proteinnew}){ 
-    $hashnew{$_->db_id} = $_->db_id unless $seen{$_->db_id}++; 
-}                                
-
-print 'total events from ' . $recent . ' = ';
-
-print OUTPUT 'total events from ' . $recent . ' = ';
-
-
-my $total = keys %hashnew;
-print $total . "\n";
-print OUTPUT $total . '<br><br>';
+use autodie;
+use Term::ReadKey;
  
 
+my $recent_version = prompt('Enter recent test slice version: (e.g. 39, 39a, etc):');
+my $previous_version = prompt('Enter previous test slice version: (e.g. 38):');
 
+my $recent_test_slice = "test_slice_$recent_version";
+my $previous_test_slice = "test_slice_$previous_version";
 
+open (my $output, ">", "newevents$recent_version.txt"); 
+report("Current release is version $recent_version\n", $output);
 
-my $previous= 'test_slice_' . $prevver . '_myisam';
-chomp $previous;
+my @recent_slice_events = get_slice_events($recent_test_slice);
+my @previous_slice_events = get_slice_events($previous_test_slice);
 
-print 'previous db is ' . $previous . "\n";
-
-print OUTPUT 'previous db is '.$previous.'<br>';
-
-$db = $previous;
+report("total events from $recent_test_slice = " . get_unique_db_ids(@recent_slice_events) . "\n", $output);
+report("total events from $previous_test_slice = " . get_unique_db_ids(@previous_slice_events) . "\n", $output);
  
-my $dba_old = GKB::DBAdaptor->new (
-     -dbname => $db,
-     -user   => $user,
-     -host   => $host, # host where mysqld is running                                                                                                                              
-     -pass   => $pass,
-     -port   =>  '3306'
-);
- 
-my $proteinold = $dba_old->fetch_instance(-CLASS => 'Event');
-
-%seen = ();
-
-foreach (@{$proteinold}){
-    $hashold{$_->db_id} =$_->db_id unless $seen{$_->db_id}++;
-}
-
-print 'total events from ' . $previous . ' = ';
-    
-$total = keys %hashold;
-print $total . "\n\n";
-
-print OUTPUT 'total events from ' . $previous. ' = ';
-    
-print OUTPUT $total . '<br><br>';
- 
- 
- 
-my %newevents;
-
-my @id;
-
-my $curator;
-foreach (@{$proteinnew}){
-    if (! $hashold{$_->db_id}){
-        $count++;
+my %new_events;
+my $total_new_events;
+foreach my $event (@recent_slice_events){
+    my $event_db_id = $event->db_id;
+    if (! grep(/^$event_db_id$/, map($_->db_id, @previous_slice_events))) {
+        my $curator = get_author_name($event) ? get_author_name($event) : 'Created Mysteriously';
+        push(@{$new_events{$curator}}, $event->_class->[0] . " " . $event->db_id . ":" . $event->name->[0]);
 	
-        push (@id, $_->db_id);
-	
-        my $eve = $dba_new->fetch_instance_by_db_id($_->db_id);
-	
-        if($eve->[0]->created->[0] && $eve->[0]->created->[0]->author->[0]){
-            $curator = $eve->[0]->created->[0]->author->[0]->_displayName->[0];
-        }else{
-            $curator = 'Created Mysteriously';
-        }
-        push(@{$newevents{$curator}},$_->db_id."\t".$_->_class->[0]."\t".$_->name->[0]);
-        #print $_->db_id."\t".$_->_class->[0]."\t".$_->name->[0]."\n";
+	$total_new_events++;
     }
 }
 
-foreach my $key (keys %newevents){
-    #print  $key."\n\n";
-    print OUTPUT $key.'<br><br>'."\n";
-    #print  join ("\n", @{$newevents{$key}});
-    print OUTPUT join ('<br>', @{$newevents{$key}});
-    #print  "\n\n";
-    print OUTPUT  '<br><br>'."\n";
+print $output "\n\nCurator\tNew Event Count\tNew Events\n";
+foreach my $curator (keys %new_events){
+    print $output $curator . "\t" .
+		  scalar @{$new_events{$curator}} . "\t" .
+		  join ("\t", @{$new_events{$curator}})."\n";
 }
  
-print 'new events total = ' . $count . "\n";
- 
-print OUTPUT 'new events total = ' . $count . '<br><br>'."\n";
+report('new events total = ' . $total_new_events . "\n", $output);
+
+close($output);
+
+sub prompt {
+    my $question = shift;
+    print $question;
+    my $pass = shift;
+    ReadMode 'noecho' if $pass; # Don't show keystrokes if it is a password
+    my $return = ReadLine 0;
+    chomp $return;
+    
+    ReadMode 'normal';
+    print "\n" if $pass;
+    return $return;
+}
+
+sub get_slice_events {
+    my $slice = shift;
+    
+    my $dba = get_dba($slice);
+    my $slice_events = $dba->fetch_instance(-CLASS => 'Event');
+    
+    return @{$slice_events};
+}
+
+sub get_unique_db_ids {
+    my @instances = @_;
+    
+    my %unique_ids = ();
+    foreach my $instance (@instances){ 
+        $unique_ids{$instance->db_id} = 1; 
+    }
+    
+    return keys %unique_ids;
+}
+
+sub get_dba {
+    my $db = shift;
+
+    return GKB::DBAdaptor->new(
+	-dbname => $db,
+	-user   => $GKB::Config::GK_DB_USER,
+	-host   => $GKB::Config::GK_DB_HOST, # host where mysqld is running                                                                                                                              
+	-pass   => $GKB::Config::GK_DB_PASS,
+	-port   => '3306'
+    );	
+}
+
+sub report {
+    my $message = shift;
+    my @file_handles = @_;
+    
+    push @file_handles, *STDOUT;
+    
+    foreach my $file_handle (@file_handles) {
+	print $file_handle $message;
+    }
+}
+
+sub get_author_name {
+    my $event = shift;
+    
+    return unless ($event->created->[0] && $event->created->[0]->author->[0]);
+    
+    return $event->created->[0]->author->[0]->_displayName->[0];
+}
+

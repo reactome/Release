@@ -1,28 +1,21 @@
-#!/usr/bin/perl  -w
+#!/usr/bin/perl -w
 use strict;
+
+use autodie qw/:all/;
 use Net::FTP;
 use Getopt::Long;
 
+my $archive = 'archive';
 #to get mim2gene file from Entrez gene ftp site
+my $mim2gene_path = "$archive/mim2gene";
 
+my $ftp = Net::FTP->new(Host => "ftp.ncbi.nih.gov", Debug => 0, Passive => 1);
+$ftp->login("anonymous",'-anonymous@') or die get_instructions() . $ftp->message;
+$ftp->cwd("/gene/DATA") or die get_instructions() . $ftp->message;
+$ftp->get("mim2gene_medgen") or die get_instructions() . $ftp->message;
+$ftp->quit;
 
-my $instructions =<<END;
-
-The mim2gene file did not download properly.  To manually download it,
-go to ftp.ncbi.nih.gov and click "gene" then "DATA" and save the
-mim2gene file to your hard drive.  Then, transfer the mim2gene file
-to /usr/local/gkbdev/scripts on the release server.
-
-IGNORE THIS MESSAGE IF YOU HAVE ALREADY DOWNLOADED mim2gene.
-
-END
-
-my  $ftp = Net::FTP->new(Host => "ftp.ncbi.nih.gov", Debug => 0, Passive => 1);
-    $ftp->login("anonymous",'-anonymous@') or die;
-    
-    $ftp->cwd("/gene/DATA") or die;
-    $ftp->get("mim2gene_medgen") or die $instructions . $ftp->message;
-    $ftp->quit;
+system("mv mim2gene_medgen $mim2gene_path");
 
 our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db);
 (@ARGV)  || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
@@ -31,129 +24,96 @@ $opt_db  || die "Need database name (-db).\n";
 
 my ($num) = $opt_db =~ /(\d+)/;
 
-my $output = 'genemim'.$num;  #this is for gene to mim id mapping; for test not for sending out;
-open (OUTPUT, ">archive/$output");
-
-print OUTPUT "UniProt ","\t","MIM"."\n";
-
-my $output2 = 'omim_reactome'.$num.'.ft';
-open (OUTPUT2, ">archive/$output2");
-
-
-#make sure the path is correct to these 2 files if not in the same directory
-system("mv mim2gene_medgen archive/mim2gene");
-
-my $in1 = 'archive/mim2gene';  # already transferred from ncbi ftpsite as above
-my $in2 = 'archive/prot_gene'.$num; # get this file first by running 1proteinentrez.pl 
-
-
-
-open (FH1,"<$in1");
-open (FH2,"<$in2");
-
-
-my $tag = "\t"."http://www.reactome.org/content/query?q=UniProt:";
-
-my $X;
- 
-my %content;
-my $string;
-
-my %arr1 =();
-my %arr2 =();
-
-
-my $label5 = "\nprid:     4914\n"."dbase:    gene\n"."stype:    meta-databases\n"."!base:    $tag\n";
-my $label6 = "\nlinkid:   0\n";
-
-my $label7 = "-"x56;
-my $label8 = "base:   &base;\n";
- 
-
-while (<FH1>){
+my %ncbi_gene_2_mim =();
+open (my $mim2gene_in, "<", "$mim2gene_path");
+while (<$mim2gene_in>){
     if(/^(\d+)\s+(\d+)/){
-        my $Y  = $2;
-        my $Y1 = $1;
+        my $mim_number = $1;
+        my $gene_id = $2;
 
-
-        push (@{$arr1{$Y}{mim}},$Y1);
-
+        push @{$ncbi_gene_2_mim{$gene_id}},$mim_number;
     }
 }
 
-my $val;
-
-my $c =0;
-
-
-while(<FH2>){
+my %ncbi_gene_2_uniprot =();
+open (my $prot_gene_in, "<", "$archive/prot_gene$num"); # get this file first by running 1proteinentrez.pl
+while(<$prot_gene_in>){
     if(/^(\w{6})\-*\d*\s+(\d+)$/){
-        my $X  = $1;
-        my $X1 = $2;
+        my $uniprot_id  = $1;
+        my $gene_id = $2;
 
-        push (@{$arr2{$X1}{genes}},$X);
-
-        foreach(@{$arr2{$X1}{genes}}){
-
-
-            my $G = $X1;
-            my $P = $_;
-
-            my $uid = "uids:   $G\n";
-            my $rule ="rule:   $P\n";
-
-
- 
-
-        $c++;
-    }
-
-    #if ($arr1{$X1}){
-    #
-    #push (@{$content{$X}{genes}},$arr1{$X1});
-    ##push (@{$content{$X}{url}},$tag.$X1);
-    #
-    #
-    #}
-
+        push @{$ncbi_gene_2_uniprot{$gene_id}},$uniprot_id;
     }
 }
 
-print "No. of entries for Gene:$c\n";
+#this is for gene to mim id mapping; for test not for sending out;
+open (my $genemim_out, ">", "$archive/genemim$num");
+print $genemim_out "UniProt ","\t","MIM"."\n";
 
-my $label1 = "\nprid:     4914\n"."dbase:    omim\n"."stype:    meta-databases\n"."!base:    $tag\n";
-my $label2= "\nlinkid:   0\n";
-
-my $label3 = "-"x56;
-my $label4 = "base:   &base;\n";
-
-print OUTPUT2 $label3.$label1.$label3;
+open (my $omim_reactome_out, ">", "$archive/omim_reactome$num.ft");
+print $omim_reactome_out get_header();
 
 my $count = 0;
+foreach my $gene_id (keys %ncbi_gene_2_uniprot){
+    foreach my $uniprot_id (@{$ncbi_gene_2_uniprot{$gene_id}}){
+        if($ncbi_gene_2_mim{$gene_id}){
+            print $genemim_out $uniprot_id."\t"."@{$ncbi_gene_2_mim{$gene_id}}\n";
 
-foreach $val (keys %arr2){
-
-    foreach(@{$arr2{$val}{genes}}){
-
-        my $M = $_;
-
-        if($arr1{$val}{mim}){
-
-            #print OUTPUT "@{$arr2{$val}{genes}}"."\t"."@{$arr1{$val}{mim}}\n";
-            print OUTPUT $M."\t"."@{$arr1{$val}{mim}}\n";
-
-            foreach (@{$arr1{$val}{mim}}){
-
-                my $Z = $_;
-                my $uid = "uids:   $Z\n";
-                my $rule ="rule:   $M\n";
-
-                print OUTPUT2 $label2,$uid,$label4,$rule,$label3;
+            foreach my $mim_number (@{$ncbi_gene_2_mim{$gene_id}}){
+                print $omim_reactome_out
+                    get_omim_record($mim_number,$uniprot_id) .
+                    get_separator();
  
                 $count++;
             }
         }
     }
 }
-
 print "No. of entries for OMIM:$count\n";
+
+close($mim2gene_in);
+close($prot_gene_in);
+close($genemim_out);
+close($omim_reactome_out);
+
+sub get_instructions {
+    return <<END;
+
+The mim2gene file did not download properly.  To manually download it,
+go to ftp.ncbi.nih.gov and click "gene" then "DATA" and save the
+mim2gene file to your hard drive.  Then, transfer the mim2gene file
+to /usr/local/gkbdev/scripts/ncbi/archive on the release server.
+
+END
+
+}
+
+sub get_header {
+    return
+get_separator() .
+<<END
+
+prid:     4914
+dbase:    omim
+stype:    meta-databases
+!base:    http://www.reactome.org/content/query?q=UniProt:
+END
+.get_separator()
+}
+
+sub get_separator {
+    return "-" x 56;
+}
+
+sub get_omim_record {
+    my $uid = shift;
+    my $rule = shift;
+
+    return <<END;
+
+linkid:   0
+uids:   $uid
+base:   &base;
+rule:   $rule
+END
+}

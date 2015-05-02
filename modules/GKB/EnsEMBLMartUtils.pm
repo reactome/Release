@@ -3,7 +3,9 @@ package GKB::EnsEMBLMartUtils;
 use strict;
 use warnings;
 
-use constant REGISTRY_FILE => 'registry.xml';
+use Cwd 'abs_path';
+use File::Basename 'dirname';
+use Try::Tiny;
 
 use lib "/usr/local/reactomes/Reactome/development/GKB/modules";
 use lib '/usr/local/reactomes/Reactome/development/GKB/BioMart/biomart-perl/lib';
@@ -15,17 +17,25 @@ use BioMart::QueryRunner;
 use GKB::EnsEMBLUtils qw/:all/;
 use parent 'GKB::EnsEMBLUtils';
 
-our @EXPORT_OK = qw/get_query get_query_runner update_registry_file get_identifiers/;
+our @EXPORT_OK = qw/get_query get_query_runner get_registry update_registry_file get_identifiers/;
 push @EXPORT_OK, @GKB::EnsEMBLUtils::EXPORT_OK;
 
 our %EXPORT_TAGS = (all => [@EXPORT_OK],
                    query => [qw/get_query get_query_runner/]);
 
-sub get_query {
+sub get_registry {
     my $action = shift // 'cached';
+    my $registry_file = shift // get_registry_file_path();
     
-    my $initializer = BioMart::Initializer->new('registryFile'=>REGISTRY_FILE,'action'=>$action);
-    my $registry = $initializer->getRegistry;
+    update_registry_file($registry_file);
+    
+    my $initializer = BioMart::Initializer->new('registryFile'=>$registry_file,'action'=>$action);
+
+    return $initializer->getRegistry();
+}
+
+sub get_query {
+    my $registry = shift // get_registry();
 
     return BioMart::Query->new('registry'=>$registry,'virtualSchemaName'=>'default');
 }    
@@ -35,12 +45,12 @@ sub get_query_runner {
 }
 
 sub update_registry_file {
-    my $registry_file = shift // REGISTRY_FILE;
+    my $registry_file = shift // get_registry_file_path();
     
     my $version = get_version();
     return unless $version =~ /^\d+$/;
     
-    my $contents = `cat $registry_file`;
+    my $contents = get_registry_xml_contents();
     chomp $contents;
     $contents =~ s/(ensembl_mart_)(\d+)/$1$version/;    
     
@@ -64,6 +74,18 @@ sub get_identifiers {
     }
     
     return @identifiers, "interpro", "smart", "pfam", "prints";
+}
+
+sub get_registry_xml_contents {
+    return <<END
+<MartRegistry>
+  <MartURLLocation database="ensembl_mart_78" default="1" displayName="ENSEMBL GENES (SANGER UK)" host="www.ensembl.org" includeDatasets="" martUser="" name="ENSEMBL_MART_ENSEMBL" path="/biomart/martservice" port="80" serverVirtualSchema="default" visible="1" />
+</MartRegistry>    
+END
+}
+
+sub get_registry_file_path {
+    return dirname(abs_path(__FILE__)) . '/registry.xml';
 }
 
 1;
