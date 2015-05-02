@@ -6,9 +6,15 @@ use GKB::Graphics::SimpleDraw::Box;
 use CGI::Util 'rearrange';
 use Carp;
 
-use constant SMALLMOL_RENDERING_PARAMS => {box=>1,fill=>[255,255,255]};
-use constant COMPLEX_RENDERING_PARAMS => {box=>1,fill=>[255,130,71]};
-use constant PROTEIN_RENDERING_PARAMS => {box=>1,fill=>[176,196,222]};
+
+use constant PROTEIN_COLOR  => [206,253,208];
+use constant COMPLEX_COLOR  => [208,255,255];
+use constant SMALLMOL_COLOR => [206,253,208];
+use constant SET_COLOR      => [206,253,208];
+
+use constant SMALLMOL_RENDERING_PARAMS => {elipse=>1,fill=>SMALLMOL_COLOR};
+use constant COMPLEX_RENDERING_PARAMS => {box=>1,fill=>COMPLEX_COLOR};
+use constant PROTEIN_RENDERING_PARAMS => {box=>1,fill=>PROTEIN_COLOR};
 use constant SEQUENCE_RENDERING_PARAMS => {box=>1,fill=>[222,176,196]};
 #use constant GENERIC_RENDERING_PARAMS => {box=>1,fill=>[255,0,255]};
 use constant OTHER_RENDERING_PARAMS => {fill=>[200,200,200]};
@@ -18,9 +24,9 @@ use constant EVENT_RENDERING_PARAMS => {};
 use constant HELPER_RENDERING_PARAMS => {};
 
 use constant GEE_RENDERING_PARAMS => {box=>1,fill=>[200,100,100]};
-use constant DEFINEDSET_RENDERING_PARAMS => {box=>1,fill=>[0,200,200]};
-use constant OPENSET_RENDERING_PARAMS => {box=>1,fill=>[0,200,100]};
-use constant CANDIDATESET_RENDERING_PARAMS => {box=>1,fill=>[0,100,200],fontcolor=>[255,255,255]};
+use constant DEFINEDSET_RENDERING_PARAMS => {double_box=>1,fill=> SET_COLOR};
+use constant OPENSET_RENDERING_PARAMS => {double_box=>1,fill=>SET_COLOR};
+use constant CANDIDATESET_RENDERING_PARAMS => {double_box=>1,fill=>SET_COLOR};
 
 sub new {
     my $class = shift;
