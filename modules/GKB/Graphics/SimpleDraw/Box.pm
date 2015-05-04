@@ -141,11 +141,10 @@ sub elipse {
 
     my $x = int(($x2 - $x1)/2 + 0.5) + $x1;
     my $y = int(($y2 - $y1)/2 + 0.5) + $y1;
-    my $w = $x2 - $x1 + MARGIN;
+    my $w = $x2 - $x1 + int(MARGIN/2+0.5);
     my $h = $y2 - $y1;
     
     $gd->arc($x,$y,$w,$h,0,360,$black);
-
     $gd->fill($x,$y,$fill) if $fill;
 }
 
@@ -175,15 +174,14 @@ sub render_with_coefficient {
 
   my $dx1 = $dx + $coefficient_w;
 
-  my $rendered;
   $self->double_box($gd,$options,$dx1,$dy,$dx+$self->width,$dy+$self->height)
-      and $rendered++ if $options->{double_box};
+      if $options->{double_box};
 
   $self->box($gd,$options,$dx1,$dy,$dx+$self->width,$dy+$self->height)
-      and $rendered++ if $options->{box};
+      if $options->{box};
 
   $self->elipse($gd,$options,$dx1,$dy,$dx+$self->width,$dy+$self->height)
-      and $rendered++ if $options->{elipse};
+      if $options->{elipse};
 
   # draw a tiny box if this is the reaction
   if (@{$self->{lines}}==1 && $self->{lines}->[0] !~ /\S/) {
@@ -197,7 +195,7 @@ sub render_with_coefficient {
   my $center = $dx1 + int($self->width/2);
 
   for my $line (@{$self->{lines}}) {
-      $line .= ' ';
+      $line .= ' ' if $options->{double_box} || $options->{box};
       my $width = $coefficient_w + ($font->width * length($line));
       my $x = $center - int($width/2) + MARGIN;
       $gd->string($font,$x,$top,$line,$fontcolor);
