@@ -54,6 +54,7 @@ use GKB::Config;
 use GKB::DBAdaptor;
 use GKB::HTMLUtils;
 use GKB::FileUtils;
+use GKB::WebUtils;
 use GKB::Utils;
 use GKB::DocumentGeneration::TextUnit;
 use GKB::DocumentGeneration::Reader;
@@ -899,6 +900,24 @@ END
     push @text_units, $text_unit;
 
 
+    $text = "Reaction Diagram Key";
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("section_internal_header");
+    $text_unit->set_contents($text);
+    push @text_units, $text_unit;
+
+    my $key_diagram = '/usr/local/gkb/website/html/images/reaction_diagram_key.png';
+    my $image_text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $image_text_unit->set_type("image_file_name");
+    $image_text_unit->set_contents([$key_diagram,0]);
+    push @text_units, $image_text_unit;
+
+    $text_unit = GKB::DocumentGeneration::TextUnit->new();
+    $text_unit->set_type("vertical_space");
+    $text_unit->set_contents(2);
+    push @text_units, $text_unit;
+
+
     # Only show this section if it is a disease event
     if ($disease) {
 	$text = "<b>A note on Disease pathways:</b> Disease associated reactions and entities are highlighted in red. The ".
@@ -1143,7 +1162,7 @@ sub get_instance_text_units {
 	}
     }
 
-    if ($instance->is_a("Pathway") || $instance->is_a("ReactionlikeEvent")) { 
+    if ($instance->is_a("Pathway") || $instance->is_a("ReactionlikeEvent") || $instance->is_a("BlackBoxEvent")) { 
         if (defined $self->hyperlink_base_url && defined $self->hyperlink_db) {
             $text_unit = GKB::DocumentGeneration::TextUnit->new();
             push @text_units, $text_unit;
@@ -1152,7 +1171,7 @@ sub get_instance_text_units {
             $text_unit->set_contents("See web page for this $event_type");
 	    
 	    my $url = $self->hyperlink_base_url;
-	    if ($instance->is_a("Pathway")) {
+	    if ($instance->is_a("Pathway") && GKB::WebUtils->has_diagram($db_name,$instance)) {
 		$url .= "/PathwayBrowser/#FOCUS_PATHWAY_ID=$instance_db_id";
 	    }
 	    else {
@@ -1795,16 +1814,8 @@ sub get_reaction_diagram_text_units {
     push @text_units, $space_text_unit;
 		    
     my $image_text_unit = GKB::DocumentGeneration::TextUnit->new();
-#   $image_text_unit->set_type("image");
-#   $image_text_unit->set_contents($gd);
-
-    # Use a temporary file rather than the GD::Image,
-    # because otherwise we will run out of memory when
-    # dealing with large amounts of data (e.g. generating
-    # the entire Reactome book).
     $image_text_unit->set_type("image_file_name");
-    # The second element of "contents" is set to 1 to force
-    # the deletion of this file once it has been used.
+    # note secord argument deleted image file
     my @contents = ($image_file_name, 1);
 
     $image_text_unit->set_contents(\@contents);
