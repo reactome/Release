@@ -6,7 +6,9 @@ use GKB::Graphics::ReactomeReaction::NodeFactory;
 use GKB::Graphics::SimpleDraw::ThreePartArrow;
 use GKB::Graphics::ReactomeReaction::Edge;
 use GKB::Graphics::ReactomeReaction::Node;
+use List::Util qw/min max/;
 use GKB::Utils;
+use Data::Dumper;
 use Carp 'croak';
 
 use constant V_SPACING => 3;  # min vertical spacing between reactant boxes
@@ -24,7 +26,7 @@ use constant NE_SPACING => 3; # gap between node and edge
 #use constant CATALYST_RENDERING_PARAMS => {box=>1,fill=>CATALYST_COLOR};
 #use constant INPUTCATALYST_RENDERING_PARAMS => {box=>1,fill=>CATALYST_COLOR};
 #use constant NEIGHBOURINGEVENT_RENDERING_PARAMS => {fill=>[240,240,240]};
-use constant NEIGHBOURINGEVENT_RENDERING_PARAMS => {};
+use constant NEIGHBOURINGEVENT_RENDERING_PARAMS => {neighbor=>1};
 
 
 sub new {
@@ -57,160 +59,97 @@ sub node_factory {
     return $self->{node_factory};
 }
 
-sub create_nodes_and_edges1 {
-    my ($self) = @_;
-    my $r = $self->instance;
-    my $node_factory = GKB::Graphics::ReactomeReaction::NodeFactory->new(-font => gdSmallFont());
-    $self->node_factory($node_factory);
-
-    # Create nodes and edges
-    # This reaction
-    my $reaction_node = $node_factory->create_node($r);
-    # catalyst and preceding events
-    my $preceding_nodes = [];
-    my $catalyst_nodes = $node_factory->create_nodes([map {$_->PhysicalEntity->[0]} @{$r->CatalystActivity}]);
-    foreach my $node (@{$catalyst_nodes}) {
-	$self->create_edge($node,$reaction_node,'catalyst');
-	my $i = $node->instance;
-	foreach my $e (@{$r->PrecedingEvent}) {
-	    my $p_node = $node_factory->create_node($e);
-	    push @{$preceding_nodes}, $p_node;
-	    if (grep {$_ == $i} @{$e->Output}) {
-		$self->create_edge($p_node,$node,'output');
-	    }
-	}
-    }
-    # inputs and (remaining) preceding events
-    my $input_nodes = $node_factory->create_nodes($r->Input);
-    foreach my $node (@{$input_nodes}) {
-	$self->create_edge($node,$reaction_node,'input');
-	my $i = $node->instance;
-	foreach my $e (@{$r->PrecedingEvent}) {
-	    if (grep {$_ == $i} @{$e->Output}) {
-		my $p_node;
-		unless ($p_node = $node_factory->get_instance_node($e)->[0]) {
-		    $p_node = $node_factory->create_node($e);
-		    push @{$preceding_nodes}, $p_node;
-		}
-		$self->create_edge($p_node,$node,'output');
-	    }
-	}
-    }
-    # output and following events
-    my $following_nodes = [];
-    my $output_nodes = $node_factory->create_nodes($r->Output);
-    foreach my $node (@{$output_nodes}) {
-	$self->create_edge($reaction_node,$node,'output');
-	my $i = $node->instance;
-	foreach my $e (@{$r->reverse_attribute_value('precedingEvent')}) {
-	    if (grep {$_ == $i} @{$e->Output}) {
-		my $f_node = $node_factory->create_node($e);
-		push @{$following_nodes}, $f_node;
-		$self->create_edge($node,$f_node,'input');
-	    }
-	}
-    }
-    $self->reaction_node($reaction_node);
-    $self->input_nodes($input_nodes);
-    $self->output_nodes($output_nodes);
-    $self->catalyst_nodes($catalyst_nodes);
-    $self->preceding_nodes($preceding_nodes);
-    $self->following_nodes($following_nodes);
-}
-
 sub create_nodes_and_edges {
     my ($self) = @_;
     my $r = $self->instance;
     my $node_factory = GKB::Graphics::ReactomeReaction::NodeFactory->new(-font => gdSmallFont());
     $self->node_factory($node_factory);
 
-    # Create nodes and edges
-    # This reaction
-    my $reaction_node = $node_factory->create_node($r);
+    my $reaction_node = $node_factory->create_node($r,1,{},1);
     my ($inputs,$input_catalysts,$catalysts) = GKB::Utils::group_inputs_and_catalysts($r);
     # catalyst and preceding events
     my $preceding_nodes = [];
     my $catalyst_nodes = $node_factory->create_nodes($catalysts);
     foreach my $node (@{$catalyst_nodes}) {
-	$self->create_edge($node,$reaction_node,'catalyst');
-	my $i = $node->instance;
-	foreach my $e (@{$r->PrecedingEvent}) {
-	    if (grep {$_ == $i} @{$e->Output}) {
-		my $p_node = $node_factory->create_node($e);
-		push @{$preceding_nodes}, $p_node;
-		$self->create_edge($p_node,$node,'output');
-	    }
-	}
+        $self->create_edge($node,$reaction_node,'catalyst');
+        my $i = $node->instance;
+        foreach my $e (@{$r->PrecedingEvent}) {
+            if (grep {$_ == $i} @{$e->Output}) {
+                my $p_node = $node_factory->create_node($e);
+                push @{$preceding_nodes}, $p_node;
+                #$self->create_edge($p_node,$node,'output');
+            }
+        }
     }
     # inputcatalyst and preceding events
     my $input_nodes = $node_factory->create_nodes($input_catalysts);
     foreach my $node (@{$input_nodes}) {
-	$self->create_edge($node,$reaction_node,'inputcatalyst');
-	my $i = $node->instance;
-	foreach my $e (@{$r->PrecedingEvent}) {
-	    if (grep {$_ == $i} @{$e->Output}) {
-		my $p_node;
-		unless ($p_node = $node_factory->get_instance_node($e)->[0]) {
-		    $p_node = $node_factory->create_node($e);
-		    push @{$preceding_nodes}, $p_node;
-		}
-		$self->create_edge($p_node,$node,'output');
-	    }
-	}
+        $self->create_edge($node,$reaction_node,'inputcatalyst');
+        my $i = $node->instance;
+        foreach my $e (@{$r->PrecedingEvent}) {
+            if (grep {$_ == $i} @{$e->Output}) {
+                my $p_node;
+                unless ($p_node = $node_factory->get_instance_node($e)->[0]) {
+                    $p_node = $node_factory->create_node($e);
+                    push @{$preceding_nodes}, $p_node;
+                }
+                #$self->create_edge($p_node,$node,'output');
+            }
+        }
     }
     # inputs and (remaining) preceding events
     my $tmp = $node_factory->create_nodes($inputs);
     foreach my $node (@{$tmp}) {
-	$self->create_edge($node,$reaction_node,'input');
-	my $i = $node->instance;
-	foreach my $e (@{$r->PrecedingEvent}) {
-	    if (grep {$_ == $i} @{$e->Output}) {
-		my $p_node;
-		unless ($p_node = $node_factory->get_instance_node($e)->[0]) {
-		    $p_node = $node_factory->create_node($e);
-		    push @{$preceding_nodes}, $p_node;
-		}
-		$self->create_edge($p_node,$node,'output');
-	    }
-	}
+        $self->create_edge($node,$reaction_node,'input');
+        my $i = $node->instance;
+        foreach my $e (@{$r->PrecedingEvent}) {
+            if (grep {$_ == $i} @{$e->Output}) {
+                my $p_node;
+                unless ($p_node = $node_factory->get_instance_node($e)->[0]) {
+                    $p_node = $node_factory->create_node($e);
+                    push @{$preceding_nodes}, $p_node;
+                }
+                #$self->create_edge($p_node,$node,'output');
+            }
+        }
     }
     push @{$input_nodes}, @{$tmp};
     # remaining preceding events
     foreach my $e (@{$r->PrecedingEvent}) {
-	unless (my $p_node = $node_factory->get_instance_node($e)->[0]) {
-	    $p_node = $node_factory->create_node($e);
-	    push @{$preceding_nodes}, $p_node;
-	}
+        unless (my $p_node = $node_factory->get_instance_node($e)->[0]) {
+            $p_node = $node_factory->create_node($e);
+            push @{$preceding_nodes}, $p_node;
+        }
     }
 
     # output and following events
     my $following_nodes = [];
     my $output_nodes = $node_factory->create_nodes($r->Output);
     foreach my $node (@{$output_nodes}) {
-	$self->create_edge($reaction_node,$node,'output');
-	my $i = $node->instance;
-	foreach my $e (@{$r->reverse_attribute_value('precedingEvent')}) {
-	    if (grep {$_ == $i} (@{$e->Input}, map {$_->PhysicalEntity->[0]} @{$e->CatalystActivity})) {
-		my $f_node;
-		unless (($f_node = $node_factory->get_instance_node($e)->[0]) && (! grep {$_ == $f_node} @{$preceding_nodes})) {
-		    $f_node = $node_factory->create_node($e);
-		    push @{$following_nodes}, $f_node;
-		}
-		$self->create_edge($node,$f_node,'input');
-	    }
-	}
+        $self->create_edge($reaction_node,$node,'output');
+        my $i = $node->instance;
+        foreach my $e (@{$r->reverse_attribute_value('precedingEvent')}) {
+            if (grep {$_ == $i} (@{$e->Input}, map {$_->PhysicalEntity->[0]} @{$e->CatalystActivity})) {
+                my $f_node;
+                unless (($f_node = $node_factory->get_instance_node($e)->[0]) && (! grep {$_ == $f_node} @{$preceding_nodes})) {
+                    $f_node = $node_factory->create_node($e);
+                    push @{$following_nodes}, $f_node;
+                }
+                #$self->create_edge($node,$f_node,'input');
+            }
+        }
     }
     # remaining following events
     foreach my $e (@{$r->reverse_attribute_value('precedingEvent')}) {
-	my $f_node;
-	unless (($f_node = $node_factory->get_instance_node($e)->[-1]) && (! grep {$_ == $f_node} @{$preceding_nodes})) {
-	    $f_node = $node_factory->create_node($e);
-	    push @{$following_nodes}, $f_node;
-	}
+        my $f_node;
+        unless (($f_node = $node_factory->get_instance_node($e)->[-1]) && (! grep {$_ == $f_node} @{$preceding_nodes})) {
+            $f_node = $node_factory->create_node($e);
+            push @{$following_nodes}, $f_node;
+        }
     }
     #
     foreach my $n (@{$preceding_nodes}, @{$following_nodes}) {
-	$n->rendering_params(NEIGHBOURINGEVENT_RENDERING_PARAMS);
+        $n->rendering_params(NEIGHBOURINGEVENT_RENDERING_PARAMS);
     }
     $self->reaction_node($reaction_node);
     $self->input_nodes($input_nodes);
@@ -220,104 +159,6 @@ sub create_nodes_and_edges {
     $self->following_nodes($following_nodes);
 }
 
-sub create_nodes_and_edges3 {
-    my ($self) = @_;
-    my $r = $self->instance;
-    my $node_factory = GKB::Graphics::ReactomeReaction::NodeFactory->new(-font => gdSmallFont());
-    $self->node_factory($node_factory);
-
-    # Create nodes and edges
-    # This reaction
-    my $reaction_node = $node_factory->create_node($r);
-    my $helper_node = $node_factory->create_helper_node();
-    $self->helper_node($helper_node);
-    my ($inputs,$input_catalysts,$catalysts) = GKB::Utils::group_inputs_and_catalysts($r);
-    # catalyst and preceding events
-    my $preceding_nodes = [];
-    my $catalyst_nodes = $node_factory->create_nodes($catalysts);
-    foreach my $node (@{$catalyst_nodes}) {
-	$self->create_edge($node,$reaction_node,'catalyst');
-	my $i = $node->instance;
-	foreach my $e (@{$r->PrecedingEvent}) {
-	    if (grep {$_ == $i} @{$e->Output}) {
-		my $p_node = $node_factory->create_node($e);
-		push @{$preceding_nodes}, $p_node;
-		$self->create_edge($p_node,$node,'output');
-	    }
-	}
-    }
-    # inputcatalyst and preceding events
-    my $input_nodes = $node_factory->create_nodes($input_catalysts);
-    foreach my $node (@{$input_nodes}) {
-	$self->create_edge($node,$reaction_node,'inputcatalyst');
-	my $i = $node->instance;
-	foreach my $e (@{$r->PrecedingEvent}) {
-	    if (grep {$_ == $i} @{$e->Output}) {
-		my $p_node;
-		unless ($p_node = $node_factory->get_instance_node($e)->[0]) {
-		    $p_node = $node_factory->create_node($e);
-		    push @{$preceding_nodes}, $p_node;
-		}
-		$self->create_edge($p_node,$node,'output');
-	    }
-	}
-    }
-    # inputs and (remaining) preceding events
-    my $tmp = $node_factory->create_nodes($inputs);
-    foreach my $node (@{$tmp}) {
-	$self->create_edge($node,$reaction_node,'input');
-	my $i = $node->instance;
-	foreach my $e (@{$r->PrecedingEvent}) {
-	    if (grep {$_ == $i} @{$e->Output}) {
-		my $p_node;
-		unless ($p_node = $node_factory->get_instance_node($e)->[0]) {
-		    $p_node = $node_factory->create_node($e);
-		    push @{$preceding_nodes}, $p_node;
-		}
-		$self->create_edge($p_node,$node,'output');
-	    }
-	}
-    }
-    push @{$input_nodes}, @{$tmp};
-    # remaining preceding events
-    foreach my $e (@{$r->PrecedingEvent}) {
-	unless (my $p_node = $node_factory->get_instance_node($e)->[0]) {
-	    $p_node = $node_factory->create_node($e);
-	    push @{$preceding_nodes}, $p_node;
-	    $self->create_edge($p_node,$helper_node,'preceding');
-	}
-    }
-
-    # output and following events
-    my $following_nodes = [];
-    my $output_nodes = $node_factory->create_nodes($r->Output);
-    foreach my $node (@{$output_nodes}) {
-	$self->create_edge($reaction_node,$node,'output');
-	my $i = $node->instance;
-	foreach my $e (@{$r->reverse_attribute_value('precedingEvent')}) {
-	    if (grep {$_ == $i} (@{$e->Input}, map {$_->PhysicalEntity} @{$e->CatalystActivity})) {
-		my $f_node = $node_factory->create_node($e);
-		push @{$following_nodes}, $f_node;
-		$self->create_edge($node,$f_node,'input');
-	    }
-	}
-    }
-    # remaning following events
-    foreach my $e (@{$r->reverse_attribute_value('precedingEvent')}) {
-	unless (my $f_node = $node_factory->get_instance_node($e)->[0]) {
-	    $f_node = $node_factory->create_node($e);
-	    push @{$following_nodes}, $f_node;
-	    $self->create_edge($helper_node,$f_node,'following');
-	}
-    }
-    #
-    $self->reaction_node($reaction_node);
-    $self->input_nodes($input_nodes);
-    $self->output_nodes($output_nodes);
-    $self->catalyst_nodes($catalyst_nodes);
-    $self->preceding_nodes($preceding_nodes);
-    $self->following_nodes($following_nodes);
-}
 
 sub do_layout {
     my $self = shift;
@@ -380,16 +221,31 @@ sub do_layout {
 									  -color=>CATALYST_COLOR,
 #									  -dashed=>1
 									 );
+    my @coords;
+    my $ymid  = $self->reaction_node->top + $self->reaction_node->height/2;
+    my $xboxl = $self->reaction_node->left;
+    my $xboxr = $xboxl + $self->reaction_node->width;
+
     foreach my $edge (@{$self->edges}) {
-#	my @c = $edge->get_coordinates;
-#	print STDERR "@c\n";
-#	$three_part_arrow->draw_horizontal(@c);
 	if ($edge->type eq 'catalyst') {
 	    $catalyst_arrow->draw($edge->get_coordinates);
 	} elsif ($edge->type eq 'inputcatalyst') {
 	    $catalyst_arrow->draw_horizontal($edge->get_coordinates);
-	} else {
-	    $three_part_arrow->draw_horizontal($edge->get_coordinates);
+	} elsif ($edge->type =~ /input|output/) {
+	    my @c = $edge->get_coordinates;
+	    push @coords, \@c
+	}
+    }
+
+    if (@coords) {
+	for my $edge (@coords) {
+	    my ($x1,$y1,$x2,$y2) = @$edge;
+	    if ($x1 > $xboxl) { # right side
+		$three_part_arrow->draw_horizontal($xboxr-1,$ymid,$x2,$y2,{right=>1});
+	    }
+	    else {
+		$three_part_arrow->draw_horizontal($x1,$y1,$xboxl+1,$ymid,{left=>1}); 
+	    }
 	}
     }
 
@@ -406,9 +262,6 @@ sub do_layout2 {
     );
 
     my $max_height = $self->_max(
-#	($self->reaction_node->height + 2 * ($self->_sum_height(@{$self->catalyst_nodes})) + RC_SPACING),
-#	$self->_sum_height(@{$self->input_nodes}),
-#	$self->_sum_height(@{$self->output_nodes}),
 	$bounding_box_height,
 	$self->_sum_height(@{$self->preceding_nodes}),
 	$self->_sum_height(@{$self->following_nodes})
@@ -421,9 +274,6 @@ sub do_layout2 {
 	+ $self->_max(map {$_->width} @{$self->output_nodes})
 	+ H_SPACING *3;
     my $width = 
-#	$middle_col_max_w 
-#	+ $self->_max(map {$_->width} @{$self->input_nodes})
-#	+ $self->_max(map {$_->width} @{$self->output_nodes})
 	$bounding_box_width
 	+ $self->_max(map {$_->width} @{$self->preceding_nodes})
 	+ $self->_max(map {$_->width} @{$self->following_nodes})
