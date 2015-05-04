@@ -49,7 +49,7 @@ foreach my $recent_uniprot_id (keys %recent_uniprot_ids) {
 print 'new reference gene products in the recent release: ' . scalar @new_uniprot_ids."\n";
 
 print "Second step for curators to reference gene products mapping starts now\n\n";
-open (my $curator_new_uniprot_fh, ">", "curator_newproteins_new$recent_version.txt");
+open (my $curator_new_uniprot_fh, ">", "curator_newUniProt$recent_version.txt");
 
 my $new_uniprot_instances = $dba_recent->fetch_instance(
 	-CLASS => 'ReferenceGeneProduct',
