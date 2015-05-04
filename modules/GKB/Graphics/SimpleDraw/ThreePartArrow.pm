@@ -54,14 +54,14 @@ sub draw_horizontal {
 
   if ($options->{right}) {
       my $join = $x2 - $w/2;
-      $gd->$operation($x1,$y1,$join,$y1,$color);
+      $gd->$operation($x1-1,$y1,$join,$y1,$color);
       $gd->$operation($join,$y1,$x2-7,$y2,$color);
       $self->draw_arrowhead($x2,$y2,$color);
   }
   elsif ($options->{left}) {
       $join = $x1 + $w/2;
-      $gd->$operation($x1,$y1,$join,$y2,$color);
-      $gd->$operation($join,$y2,$x2,$y2,$color);
+      $gd->$operation($x1+2,$y1,$join,$y2,$color);
+      $gd->$operation($join,$y2,$x2+1,$y2,$color);
   }
   else { # catalyst arrow
       $join = $x2 - $w/2;
