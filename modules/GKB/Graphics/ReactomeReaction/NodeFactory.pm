@@ -31,7 +31,7 @@ sub create_nodes {
 }
 
 sub create_node {
-    my ($self,$instance,$count,$rendering_params) = @_;
+    my ($self,$instance,$count,$rendering_params,$center_reaction) = @_;
     my $node;
     if ($count && ($count > 1)) {
 	$node = GKB::Graphics::ReactomeReaction::Node->new
@@ -39,7 +39,7 @@ sub create_node {
 	     -INSTANCE => $instance,
 	     -COEFFICIENT => "$count x ",
 #	     -RENDERING_PARAMS => $self->$rendering_params,
-	    );
+	   );
     } else {
 	$node = GKB::Graphics::ReactomeReaction::Node->new
 	    (
@@ -48,7 +48,11 @@ sub create_node {
 	    );
     }
     $self->add_node($instance,$node);
-    $self->format_node($node);
+
+    if ($instance->isa('BlackBoxEvent')) {
+	$center_reaction = 1;
+    }
+    $self->format_node($node,$center_reaction);
     return $node;
 }
 
@@ -71,8 +75,9 @@ sub get_instance_node {
 }
 
 sub format_node {
-    my ($self,$node) = @_;
-    my $label = $node->instance->displayName;
+    my ($self,$node,$isa_reaction) = @_;
+    my $label = $isa_reaction ? ' ' : $node->instance->displayName;
+    $label =~ s/\[.+\]//;
     if (!$label || $label eq "") {
 	$label = "UNKNOWN";
     }

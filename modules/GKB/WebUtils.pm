@@ -1392,25 +1392,7 @@ sub has_diagram_instance {
     }
 
     my $instances = $instance->reverse_attribute_value('representedPathway');
-    
     foreach my $instance (@{$instances}) {
-#    	# Diagnostics
-#    	if (defined $instance) {
-#    		print STDERR "WebUtils.has_diagram_instance: class=" . $instance->class() . ", DB_ID=" . $instance->db_id() . "\n";
-#    		if ($instance->is_a("PathwayDiagram")) {
-#    			print STDERR "WebUtils.has_diagram_instance: we have a PathwayDiagram\n";
-#	    		if (scalar(@{$instance->storedATXML}) > 0) {
-#    				print STDERR "WebUtils.has_diagram_instance: the storedATXML array contains something\n";
-#		    		if (defined $instance->storedATXML->[0]) {
-#    					print STDERR "WebUtils.has_diagram_instance: the first storedATXML element is defined\n";
-#			    		if (!($instance->storedATXML->[0] eq "")) {
-#    						print STDERR "WebUtils.has_diagram_instance: the first storedATXML element contains something\n";
-#			    		}
-#		    		}
-#	    		}
-#    		}
-#    	}
-    	
     	if (defined $instance &&
     		$instance->is_a("PathwayDiagram") &&
     		scalar(@{$instance->storedATXML}) > 0 &&
