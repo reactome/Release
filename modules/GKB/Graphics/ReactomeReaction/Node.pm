@@ -10,7 +10,7 @@ use Carp;
 use constant PROTEIN_COLOR  => [206,253,208];
 use constant COMPLEX_COLOR  => [208,255,255];
 use constant SMALLMOL_COLOR => [206,253,208];
-use constant SET_COLOR      => [206,253,208];
+use constant SET_COLOR      => [208,255,255];
 
 use constant SMALLMOL_RENDERING_PARAMS => {elipse=>1,fill=>SMALLMOL_COLOR};
 use constant COMPLEX_RENDERING_PARAMS => {box=>1,fill=>COMPLEX_COLOR};
