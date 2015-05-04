@@ -1021,7 +1021,7 @@ sub generate_text_unit {
     	# Nothing to do, yahoo!!
     	$logger->info("doing nothing, how relaxing");
     } else {
-	$logger->warn("strewf mate, never erd of a " . $text_unit->get_type() . " before, cant print that, more than me jobs worf");
+	$logger->warn("strewf mate, never erd of a " . ($text_unit->get_type() || 'UNKNOWN') . " before, cant print that, more than me jobs worf");
     }
 
     # Let's see if we can free up some memory
