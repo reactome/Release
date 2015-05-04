@@ -14,7 +14,7 @@ my $recent_version = prompt('Enter recent test slice version: (e.g. 39, 39a, etc
 my $previous_version = prompt('Enter previous test slice version: (e.g. 38):');
 
 my $recent_test_slice = "test_slice_$recent_version";
-my $previous_test_slice = "test_slice_$previous_version";
+my $previous_test_slice = "test_slice_$previous_version\_myisam";
 
 open (my $output, ">", "newevents$recent_version.txt"); 
 report("Current release is version $recent_version\n", $output);
