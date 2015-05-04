@@ -371,8 +371,9 @@ sub generate_image {
     my $percent_scale = 100 * $self->find_scale_to_fit_image_to_page($image);
 
     my $rtf = $self->rtf;
-	$rtf->image_paragraph('filename' => $image_file_name, 'scalex' => $percent_scale, 'scaley' => $percent_scale);
-	unlink($image_file_name); # don't need image file anymore
+    $rtf->image_paragraph('filename' => $image_file_name, 'scalex' => $percent_scale, 'scaley' => $percent_scale);
+
+    unlink($image_file_name); # don't need image file anymore
 }
 
 # Scale image so that it fits within a page, but also so that it
@@ -383,9 +384,7 @@ sub generate_image {
 sub find_scale_to_fit_image_to_page {
     my ($self, $image) = @_;
 
-    # It is guesstimated that 600-ish pts is the widest that will fit
-    # aesthetically onto a page.
-    my $max_width = 600.0;
+    my $max_width = 450.0;
 
     my ($width,$height) = $image->getBounds();
 
