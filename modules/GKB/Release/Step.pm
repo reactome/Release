@@ -66,7 +66,13 @@ sub run {
 	chdir $self->directory;
 	set_environment($self->host);
 	$self->run_commands($self->gkb);
-	archive_files($self->name, $version);
+	my $archive_dir = archive_files($self->name, $version);
+	my @errors = get_errors($archive_dir);
+	if (@errors) {
+		$self->mail->{'body'} .= "Errors Reported\n\n";
+		$self->mail->{'body'} .= join("\n", @errors);
+		mailnow($self->mail);
+	}
 }
 
 sub set_user_input_and_passwords {

@@ -53,7 +53,37 @@ sub archive_files {
 	
 	`mkdir -p $step_version_archive`;
 	`mv --backup=numbered $_ $step_version_archive 2>/dev/null` foreach qw/*.dump *.err *.log *.out/;
-	symlink $step_archive, 'archive' unless (-e 'archive'); 
+	symlink $step_archive, 'archive' unless (-e 'archive');
+	
+	return $step_version_archive;
+}
+
+sub get_errors {
+	my $error_log_dir = shift;
+	
+	my @all_errors;
+	opendir my $dir, $error_log_dir;
+	while (my $file = readdir $dir) {
+		next unless ($file =~ /\.err$/);
+		push @all_errors, _get_errors_from_file("$error_log_dir/$file");
+	}
+	close $dir;
+	
+	return @all_errors;
+}
+
+sub _get_errors_from_file {
+	my $file_path = shift;
+	
+	my @errors;
+	open(my $file, "<", $file_path);
+	while (my $line = <$file>) {
+		next if $line =~ /^WARN/;
+		push @errors, $line;
+	}
+	close $file;
+	
+	return @errors;
 }
 
 # Mail sent when some steps completed
