@@ -15,8 +15,8 @@ our %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
 sub get_version {
     my $release;
-    my $attempts;
     
+    my $attempts = 0;
     until ($release || $attempts == 10) {
 	my $url = 'http://rest.ensembl.org/info/software?';
 	my $release_json = `wget -q --header='Content-type:application/json' '$url' -O -`;
@@ -36,8 +36,8 @@ sub get_version {
 
 sub get_ensembl_genome_version {
     my $version;
-    my $attempts;
     
+    my $attempts = 0;
     until ($version || $attempts == 10) {    
 	my $url = 'http://rest.ensemblgenomes.org/info/eg_version?';
 	my $version_json = `wget -q --header='Content-type:application/json' '$url' -O -`;
