@@ -221,16 +221,16 @@ sub retrieve_next_array_element {
     my $array_element = undef;
     if ( -e $filename ) {
     	$array_element = Storable::retrieve($filename);
-		unlink($filename);
+	unlink($filename);
     }
 
-	if (defined $array_element) {
-		my $stored_array_element_num = $self->stored_array_element_num;
-		$stored_array_element_num++;
-		$self->stored_array_element_num($stored_array_element_num);
-	}
-	
-	return $array_element;
+    if (defined $array_element) {
+	my $stored_array_element_num = $self->stored_array_element_num;
+	$stored_array_element_num++;
+	$self->stored_array_element_num($stored_array_element_num);
+    }
+
+    return $array_element;
 }
 
 sub set_db_params {
@@ -1562,7 +1562,7 @@ sub get_descriptive_text_units_from_instance() {
 	$text =~ s/<br>/__LINEBREAK__/ig;
 	$text =~ s/<br[^0-9a-zA-Z]/__LINEBREAK__/ig; # to cope with somebody forgetting the closing >
 	$text =~ s/<\/*p>/__LINEBREAK__/ig;
-	$text =~ s/<[a-zA-Z]+>/ /g;
+	#$text =~ s/<[a-zA-Z]+>/ /g;
 	
 #		$text_unit = GKB::DocumentGeneration::TextUnit->new();
 #		$text_unit->set_type("section_internal_header");
