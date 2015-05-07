@@ -437,7 +437,7 @@ sub generate_paragraph {
         my $paragraph_rtf = RTF::Writer->new_to_string(\$paragraph_rtf_string);
         $paragraph_rtf->paragraph(@params, $text);
         my $markup_free_paragraph_rtf_string = $self->interpret_markup($paragraph_rtf_string);
-        $rtf->print(\$markup_free_paragraph_rtf_string);
+	$rtf->print(\$markup_free_paragraph_rtf_string);
         $paragraph_rtf->close();
         $paragraph_printed_ok = 1;
     };
@@ -692,6 +692,15 @@ sub interpret_markup {
     
     my $logger = get_logger(__PACKAGE__);
 
+=head
+    my $new_text = $text;
+
+    my $rtf_red_font_string = '{\rtf1\ansi\deff0{\colortbl;\red0\green0\blue255;\red255\green0\blue0;}\cf1';
+    $new_text =~ s/\<font color=red\>/$rtf_red_font_string/g;
+    $new_text =~ s/\<\/font>/}/g;
+    
+    $new_text =~ s/\<b\>(.*?)\<\/b\>/{\\b$1}/sg;
+=cut
     my $rtf_string;
     my $rtf;
     
@@ -813,6 +822,7 @@ sub interpret_markup {
     }
     
     return $new_text;
+
 }
 
 1;
