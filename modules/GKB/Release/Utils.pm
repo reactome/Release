@@ -20,7 +20,7 @@ use base 'Exporter';
 # Purpose: A module to automate release reactome data -- each step is a subroutine.
 
 #Exports all subroutines
-our @EXPORT = qw/cvs set_environment archive_files mailnow prompt getpass cmd releaselog replace_gkb_alias_in_dir/;
+our @EXPORT = qw/cvs set_environment archive_files get_errors mailnow prompt getpass cmd releaselog replace_gkb_alias_in_dir/;
 
 sub cvs {
 	my $usr = shift || $user;
@@ -62,12 +62,12 @@ sub get_errors {
 	my $error_log_dir = shift;
 	
 	my @all_errors;
-	opendir my $dir, $error_log_dir;
+	opendir (my $dir, $error_log_dir);
 	while (my $file = readdir $dir) {
 		next unless ($file =~ /\.err$/);
 		push @all_errors, _get_errors_from_file("$error_log_dir/$file");
 	}
-	close $dir;
+	closedir $dir;
 	
 	return @all_errors;
 }
