@@ -36,7 +36,7 @@ use File::Basename;
 use Log::Log4perl qw/get_logger/;
 use LWP::UserAgent;
 
-Log::Log4perl->init(dirname(__FILE__) . '/compara_log.conf');
+Log::Log4perl->init(\$LOG_CONF);
 
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
@@ -110,6 +110,13 @@ sub get_mapping_table_from_mart {
     
     my $mart_group = $species_info{$species_key}->{'mart_group'};
     my $out = $self->schemifier0($mart_url, $attribute_names, $mart_virtual_schema, $mart_group);
+    
+    if ($self->is_mart_output_erroneous($out)) {
+	$logger->warn("problem while running BioMart query for $mart_group, trying with accession suffix removed from attributes\n");
+        s/_accession// foreach @$attribute_names;
+	
+	$out = $self->schemifier0($mart_url, $attribute_names, $mart_virtual_schema, $mart_group);
+    }
 
     if ($self->is_mart_output_erroneous($out)) {
         $logger->warn("problem while running BioMart query for $species_key, trying with base attributes only\n");
@@ -157,17 +164,10 @@ sub schemifier0 {
     my $out = $self->run_mart_query($mart_url, $xml);
 
     if ($self->is_mart_output_erroneous($out)) {
-        $logger->warn("problem while running BioMart query for $mart_group, trying with base attributes only\n");
-        
-        $xml = $self->build_mart_query($attribute_names, $mart_virtual_schema, $mart_group);
-        $out = $self->run_mart_query($mart_url, $xml);
+        $out = $self->schemifier1($mart_url, $attribute_names, $mart_virtual_schema, $mart_group);
         
         if ($self->is_mart_output_erroneous($out)) {
-            $out = $self->schemifier1($mart_url, $attribute_names, $mart_virtual_schema, $mart_group);
-        
-            if ($self->is_mart_output_erroneous($out)) {
-                $logger->error("problem while running BioMart query for $mart_group, giving up\n");
-            }
+            $logger->warn("problem while running BioMart query for $mart_group, giving up\n");
         }
     }
 
@@ -183,7 +183,7 @@ sub schemifier1 {
     my $out = undef;
 
     if ($mart_virtual_schema eq "default" || !($mart_virtual_schema =~ /_[0-9]+$/)) {
-        $logger->error("mart_virtual_schema=$mart_virtual_schema does not end with an incrementable number\n");
+        $logger->warn("mart_virtual_schema=$mart_virtual_schema does not end with an incrementable number\n");
         
         return $out;
     }
@@ -198,7 +198,7 @@ sub schemifier1 {
         $out = $self->schemifier2($mart_url, $attribute_names, $s_mart_virtual_schema, $mart_group);
         
         if ($self->is_mart_output_erroneous($out)) {
-            $logger->error("problem while running BioMart query for $mart_group, giving up!\n");
+            $logger->warn("problem while running BioMart query for $mart_group, giving up!\n");
         }
     }
 
@@ -271,12 +271,13 @@ sub is_mart_output_erroneous {
     my $logger = get_logger(__PACKAGE__);
 
     if (!(defined $mart_output)) {
-        $logger->error("mart_output is undef!!\n");
+        $logger->warn("mart_output is undef!!\n");
         return 1;
     }
 
     if ($mart_output =~ /ERROR/) {
-        return 1;
+        $logger->warn("MART OUTPUT: $mart_output");
+	return 1;
     }
 
     return 0;
