@@ -282,7 +282,15 @@ log4perl.appender.ErrorLog.mode=append
 log4perl.appender.ErrorLog.layout=PatternLayout
 log4perl.appender.ErrorLog.layout.ConversionPattern=%p %l %d - %m%n
 log4perl.appender.ErrorLog.Threshold = WARN
-' if abs_path($0) !~ /cgi-bin/;
+';
+
+$LOG_CONF = '
+log4perl.rootLogger = OFF, Screen
+log4perl.threshold = OFF
+
+log4perl.appender.Screen = Log::Log4perl::Appender::Screen
+log4perl.appender.Screen.layout = Log::Log4perl::Layout::SimpleLayout
+' if abs_path($0) =~ /cgi-bin/;
 
 sub get_name {
     my ($name) = $0 =~ /(.*)\./;
