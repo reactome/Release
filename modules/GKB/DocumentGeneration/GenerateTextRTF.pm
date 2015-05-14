@@ -781,24 +781,24 @@ sub interpret_markup {
 		$rtf->close();
 		
 		unlink($src); # don't need anymore
-	    } elsif ($line3 =~ /^<b>$/) {
+	    } elsif ($line3 =~ /^<b>$/i) {
 		# Start bold
 		$new_text .= '{\b' . "\n";
-	    } elsif ($line3 =~ /^<\/b>$/) {
+	    } elsif ($line3 =~ /^<\/b>$/i) {
 		# Stop bold
 		$new_text .= "\n" . '}' . "\n";
-	    } elsif ($line3 =~ /^<i>$/) {
+	    } elsif ($line3 =~ /^<i>$/i) {
 		# Start italics
 		$new_text .= '{\i' . "\n";
-	    } elsif ($line3 =~ /^<\/i>$/) {
+	    } elsif ($line3 =~ /^<\/i>$/i) {
 		# Stop italics
 		$new_text .= "\n" . '}' . "\n";
-	    } elsif ($line3 =~ /^<font/) {
+	    } elsif ($line3 =~ /^<font/i) {
 		my ($color) = $line3 =~ /color=["']?([a-z]+)/i;
-		if ($color && $color =~ /red|blue/) {
+		if ($color && $color =~ /red|blue/i) {
 		    $new_text .= '{\rtf1\ansi\deff0{\colortbl;\red0\green0\blue255;\red255\green0\blue0;}\cf1'
 		}
-	    } elsif ($line3 =~ /^<\/font/) {
+	    } elsif ($line3 =~ /^<\/font/i) {
 		$new_text .= '}';#'\cf1'."\n".'}';
 	    }
 	    else {
