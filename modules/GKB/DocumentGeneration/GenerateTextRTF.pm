@@ -692,17 +692,72 @@ sub interpret_markup {
     
     my $logger = get_logger(__PACKAGE__);
 
-=head
     my $new_text = $text;
 
     my $rtf_red_font_string = '{\rtf1\ansi\deff0{\colortbl;\red0\green0\blue255;\red255\green0\blue0;}\cf1';
     $new_text =~ s/\<font color=red\>/$rtf_red_font_string/g;
     $new_text =~ s/\<\/font>/}/g;
     
-    $new_text =~ s/\<b\>(.*?)\<\/b\>/{\\b$1}/sg;
-=cut
+    $new_text =~ s/\<b\>/{\\b /gi;
+    $new_text =~ s/\<\/b\>/}/gi;
+    $new_text =~ s/\<i\>/{\\i /gi;
+    $new_text =~ s/\<\/i\>/}/gi;
+    
+    while ($new_text =~ /^(<img.*?\>)/gi) {
+	my $image_tag = $1;
+	
+	# An embedded image
+	$image_tag =~ /src="([^"]+)"/i;
+	my $src = $1;
+    
+	# Remove RTF-specific escape sequences
+	$src =~ s/\\_/-/g;
+	$src =~ s/\\'2e/./g; #'
+	
+	if (!(defined $src) || $src eq '') { #'
+	    $logger->warn("cannot find image source file, skipping to next line");
+	    next;
+	}
+	if (!(-e $src)) {
+	    $logger->warn("we cant see the file $src, skipping to next line");
+	    next;
+	}
+	
+	$image_tag =~ /width="([^"]+)"/i; #"
+	my $width = $1;
+	$image_tag =~ /height="([^"]+)"/i; #"
+	my $height = $1;
+	
+	# Don't write to the RTF output stream, because we
+	# want to edit the RTF a bit first.
+	my $rtf_string = '';
+	my $rtf = RTF::Writer->new_to_string(\$rtf_string);
+	$rtf->image_paragraph('filename' => $src);
+	
+	# Chuck out the first and last lines of the RTF
+	# string, they contain paragraph stuff
+	my @lines = split(/\n/, $rtf_string);
+	$rtf_string = '';
+	for (my $i=1; $i<scalar(@lines)-1; $i++) {
+	    my $line = $lines[$i];
+	    if (!($rtf_string eq '')) {
+		$rtf_string .= "\n";
+	    }
+	    $rtf_string .= $line;
+	}
+	
+	$rtf->close();
+	unlink($src); # don't need anymore
+	
+	$new_text =~ s/$image_tag/$rtf_string/;
+    }
+
+    return $new_text;
+
+=head
     my $rtf_string;
     my $rtf;
+    
     
     # Break up text to extract potential markup
     my $initial_backarrow_flag = 0;
@@ -745,9 +800,9 @@ sub interpret_markup {
     foreach my $line3 (@lines3) {
 	if ($line3 =~ /^</) {
 	    # We have markup
-	    if ($line3 =~ /^<img /) {
+	    if ($line3 =~ /^<img /i) {
 		# An embedded image
-		$line3 =~ /src="([^"]+)"/;
+		$line3 =~ /src="([^"]+)"/i;
 		$src = $1;
 		
 		# Remove RTF-specific escape sequences
@@ -763,9 +818,9 @@ sub interpret_markup {
 		    next;
 		}
 		
-		$line3 =~ /width="([^"]+)"/; #"
+		$line3 =~ /width="([^"]+)"/i; #"
 		$width = $1;
-		$line3 =~ /height="([^"]+)"/; #"
+		$line3 =~ /height="([^"]+)"/i; #"
 		$height = $1;
 		
 		# Don't write to the RTF output stream, because we
@@ -790,24 +845,24 @@ sub interpret_markup {
 		$rtf->close();
 		
 		unlink($src); # don't need anymore
-	    } elsif ($line3 =~ /^<b>$/) {
+	    } elsif ($line3 =~ /^<b>$/i) {
 		# Start bold
 		$new_text .= '{\b' . "\n";
-	    } elsif ($line3 =~ /^<\/b>$/) {
+	    } elsif ($line3 =~ /^<\/b>$/i) {
 		# Stop bold
 		$new_text .= "\n" . '}' . "\n";
-	    } elsif ($line3 =~ /^<i>$/) {
+	    } elsif ($line3 =~ /^<i>$/i) {
 		# Start italics
 		$new_text .= '{\i' . "\n";
-	    } elsif ($line3 =~ /^<\/i>$/) {
+	    } elsif ($line3 =~ /^<\/i>$/i) {
 		# Stop italics
 		$new_text .= "\n" . '}' . "\n";
-	    } elsif ($line3 =~ /^<font/) {
+	    } elsif ($line3 =~ /^<font/i) {
 		my ($color) = $line3 =~ /color=["']?([a-z]+)/i;
-		if ($color && $color =~ /red|blue/) {
+		if ($color && $color =~ /red|blue/i) {
 		    $new_text .= '{\rtf1\ansi\deff0{\colortbl;\red0\green0\blue255;\red255\green0\blue0;}\cf1'
 		}
-	    } elsif ($line3 =~ /^<\/font/) {
+	    } elsif ($line3 =~ /^<\/font/i) {
 		$new_text .= '}';#'\cf1'."\n".'}';
 	    }
 	    else {
@@ -820,8 +875,9 @@ sub interpret_markup {
 	    $new_text .= $line3;
 	}
     }
-    
+
     return $new_text;
+=cut
 
 }
 
