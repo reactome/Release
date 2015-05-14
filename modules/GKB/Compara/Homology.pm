@@ -188,8 +188,6 @@ sub prepare_homology_hash {
         my $from_m = $homology->get_Member_by_GenomeDB($from_species);
         my $to_m = $homology->get_Member_by_GenomeDB($to_species);
 	
-	$logger->info("homology member - " . $_->description()) foreach @{$homology->get_all_Members()};
-	
         foreach my $member (@{$from_m}) {
 	    foreach my $to_member (@{$to_m}) {
 		next unless $to_member;
@@ -228,13 +226,13 @@ sub fetch_by_name_assembly {
     }
 
     my $species = undef;
-    try {$species = $gdb_a->fetch_by_registry_name($name);};
+    try {$species = $gdb_a->fetch_by_name_assembly($name);};
     if (!(defined $species)) {
         $logger->warn("there was a problem with name=$name, trying new name=");
         $name =~ s/ +/_/g;
         $name = lc($name);
         $logger->warn("$name\n");
-        try {$species = $gdb_a->fetch_by_registry_name($name);};
+        try {$species = $gdb_a->fetch_by_name_assembly($name);};
         if (!(defined $species)) {
             $logger->error("there was a problem with name=$name, aborting!\n");
             return undef;
