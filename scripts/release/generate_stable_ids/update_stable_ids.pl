@@ -10,6 +10,10 @@ use Data::Dumper;
 use lib '/usr/local/gkb/modules';
 use GKB::DBAdaptor;
 
+
+use constant DB_IDS => 'SELECT DB_ID FROM DatabaseObject WHERE _class = ?';
+use constant MAX_ID => 'SELECT MAX(DB_ID) FROM DatabaseObject';
+
 #Log::Log4perl->init(\$LOG_CONF);
 #my $logger = get_logger(__PACKAGE__);
 
@@ -44,13 +48,19 @@ my @db_ids = get_db_ids($release_db);
 # Evaluate each instance
 for my $db_id (@db_ids) {
     my $instance   = get_instance($db_id, $release_db);
+    say Dumper $instance->{attribute};
     my $p_instance = get_instance($db_id, $prev_release_db);
 
     my $species = get_species($instance) || "Homo sapiens";
     my $spc     = abbreviate($species);
     my $class   = $instance->class;
     my $name    = $instance->displayName;
-    say join("\t",$db_id,$class,$species,$spc,$name) if $species;
+#    say join("\t",$db_id,$class,$species,$spc,$name) if $species;
+
+    # testing: create a new stable id instance 
+    my $identifier = 'random' . int(1000*rand());
+    my $inst = create_st_id($gk_central,$identifier,1);
+    last;
 }
 
 sub abbreviate {
@@ -96,7 +106,7 @@ sub get_api_connections {
 }
 
 sub get_db_ids {
-    my $sth = $dba{$release_db}->prepare(query('get_db_ids'));
+    my $sth = $dba{$release_db}->prepare(DB_IDS);
     my @db_ids;
     for my $class (classes_with_stable_ids()) {
 	$sth->execute($class);
@@ -138,21 +148,52 @@ sub update_st_id {
     
 }
 
-sub create_st_id {
-    my ($identifier,$version) =@_;
 
+sub set_st_id_attributes {
+    my ($instance,$identifier,$version) = @_;
+    $instance->attribute_value('identifier',$identifier);
+    $instance->attribute_value('identifierVersion',$version);
+    $instance->attribute_value('_class','StableIdentifier');
+    $instance->attribute_value('_displayName',"$identifier.version");
 }
 
-sub query {
-    my $q = shift;
-    my %Q = (
-	get_db_ids         => 'SELECT DB_ID FROM DatabaseObject WHERE _class = ?',
-	get_max_db_id      => 'SELECT MAX(DB_ID) FROM DatabaseObject',    
-	update_version     => 'UPDATE StableIdentifier SET identifierVersion = ? where DB_ID = ?',
-	update_identifier  => 'UPDATE StableIdentifier SET identifier = ? WHERE DB_ID = ?',
-	update_db_object   => 'UPDATE DatabaseObject   SET _displayName = ? WHERE DB_ID = ?',
-	archive_identifier => 'UPDATE StableIdentifier SET oldIdentifier = ? WHERE DB_ID = ?',
-	archive_version    => 'UPDATE StableIdentifier SET oldIdentifierVersion = ? WHERE DB_ID = ?',
-	);
-    return $Q{$q};
+sub new_identifier {
+    my $instance = shift;
+    my $species = shift;
+    if (my ($one,$twothree) = $species =~ /^([A-Z])[a-z]+\s+([a-z]{2})/) {
+	$species = $one . uc $twothree;
+    }
+    return join('-','R',$species,$instance->db_id());
+}
+
+sub create_st_id {
+    my ($db,$identifier,$version,$db_id) = @_;
+    $db_id ||= new_db_id($db);
+    my $instance = $dba{$db}->instance_from_hash({},'StableIdentifier',$db_id);
+    set_st_id_attributes($instance,$identifier,$version);
+    $dba{$db}->store($instance,1);
+    return $instance;
+}
+
+sub max_db_id {
+    my $db = shift;
+    my $sth = $dba{$db}->prepare(MAX_ID);
+    $sth->execute;
+    my $max_db_id = $sth->fetchrow_arrayref->[0];
+    return $max_db_id;
+}
+
+# get the largest DB_ID from slice or gk_central
+sub new_db_id {
+    my $max_id = 0;
+    for my $db ($gk_central,$release_db) {
+	my $id = max_db_id($db);
+	$max_id = $id if $id > $max_id;
+    }
+    return $max_id + 1;
+}
+
+sub make_decision_on_species {
+    my $instance = shift;
+    my $species = get_species($instance) || 'ALL';
 }
