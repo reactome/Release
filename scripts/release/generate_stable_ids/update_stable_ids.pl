@@ -5,11 +5,11 @@ use autodie;
 use Cwd;
 use Getopt::Long;
 use Data::Dumper;
-#use Log::Log4perl qw/get_logger/;
+use Log::Log4perl qw/get_logger/;
 
 use lib '/usr/local/gkb/modules';
 use GKB::DBAdaptor;
-
+use GKB::Config;
 
 # A few bare SQL queries
 use constant DB_IDS => 'SELECT DB_ID FROM DatabaseObject WHERE _class = ?';
@@ -17,10 +17,10 @@ use constant MAX_ID => 'SELECT MAX(DB_ID) FROM DatabaseObject';
 use constant ST_ID  => 'SELECT DB_ID FROM StableIdentifier WHERE identifier = ?';
 use constant ALL_ST => 'SELECT DB_ID FROM StableIdentifier';
 
-#Log::Log4perl->init(\$LOG_CONF);
-#my $logger = get_logger(__PACKAGE__);
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
-our($pass,$user,$release_db,$prev_release_db,$gk_central,$ghost,%attached,$release_num);
+our($pass,$user,$release_db,$prev_release_db,$gk_central,$ghost,%attached,$release_num,%history,%species);
 
 my $usage = "Usage:\n\t" . join("\n\t", 
 				"$0 -sdb slice_db_name -gdb gk_central_db_name -pdb prev_release_db_name \\",
@@ -36,7 +36,7 @@ GetOptions(
     "release:i" => \$release_num
     );
 
-($release_db && $prev_release_db && $gk_central && $ghost && $user && $pass && $release_num) || die "$usage\n";
+($release_db && $prev_release_db && $gk_central && $ghost && $user && $pass && $release_num) || say "$usage\n";
 
 
 # Make sure our requested DBs are slice DBs
@@ -53,24 +53,24 @@ my @db_ids = get_db_ids($release_db);
 # Evaluate each instance
 for my $db_id (@db_ids) {
     my $instance   = get_instance($db_id, $release_db);
+    my $identifier = identifier($instance);
     my $class      = $instance->class;
     my $name       = $instance->displayName;
     my $stable_id  = stable_id($instance);
 
     if ($stable_id->displayName =~ /^REACT/) {
-	say "Reassigning " . $stable_id->displayName . " to " . identifier($instance);
-	archive_old_identifier($stable_id);
+	$logger->info("Reassigning " . $stable_id->displayName . " to " . identifier($instance) . ".1\n");
+	rename_identifier($stable_id,$identifier);
     }
 
-#    if (should_be_incremented($instance)) {
-#	increment_stable_id($stable_id);
-#    }
+    if (should_be_incremented($instance)) {
+	increment_stable_id($stable_id);
+    }
 
-    $attached{$stable_id->db_id()} = 1;
+    $logger->info(join("\t","STABLE",$db_id,$name,$stable_id->displayName)."\n");
 }
 
 remove_orphan_stable_ids();
-
 
 # If stable ID exists, return instance.  If not, 
 # create and store new ST_ID instance and return that.
@@ -85,14 +85,17 @@ sub stable_id {
 	$st_id = create_stable_id($instance,$identifier,$version);
     }
 
-    $attached{$st_id->db_id} = 1;
+    $attached{$st_id->db_id} = $instance;
+
+    add_stable_id_to_history($st_id,$instance);
     return $st_id;
 }
 
-sub archive_old_identifier {
+sub rename_identifier {
     my $instance = shift;
+    my $identifier = shift;
     $instance->inflate();
-    my $identifier = identifier($instance);
+
     my $old_id = $instance->attribute_value('identifier')->[0];
     my $old_version =  $instance->attribute_value('identifierVersion')->[0];
 
@@ -102,17 +105,21 @@ sub archive_old_identifier {
     $instance->attribute_value('oldIdentifier',$old_id);
     $instance->attribute_value('oldIdentifierVersion',$old_version);
 
-    $dba{$gk_central}->update($instance);
-    $dba{$release_db}->update($instance);
-
-    log_creation($instance);
-    add_stable_id_to_history($instance);
+    update($instance);
+    add_stable_id_to_history($instance,$attached{$instance->db_id});
+    log_renaming($instance);
 }
 
 sub should_be_incremented {
     my $instance = shift;
     my $db_id = $instance->db_id();
-    my $prev_instance = get_instance($db_id,$prev_release_db) || return 0;
+    my $prev_instance = get_instance($db_id,$prev_release_db);
+    
+    unless ($prev_instance) {
+	$logger->info($instance->displayName  . " is new, no increment.\n");
+	return 0;
+    }
+
     my $mods2 = @{$instance->attribute_value('modified')} || 0;
     my $mods1 = @{$prev_instance->attribute_value('modified')} || 0;
     if ($mods1 == $mods2) {
@@ -183,17 +190,16 @@ sub increment_stable_id {
     my $version  = $instance->attribute_value('identifierVersion')->[0];
     my $new_version = $version + 1;
 
-    say "Incrementing ".$instance->displayName." from $version to $new_version";
+    $logger->info("Incrementing ".$instance->displayName." version from $version to $new_version\n");
 
     $instance->attribute_value('identifierVersion',$new_version);
     $instance->displayName("$identifier.$new_version");
     
-    $dba{$gk_central}->update($instance);
-    $dba{$release_db}->update($instance);
-
-    my $sth = $dba{history}->prepare("UPDATE StableIdentifier SET identifierVersion = $version");
-    $sth->execute();
+    update($instance);
     log_incrementation($instance);
+
+    my $sth = $dba{history}->prepare("UPDATE StableIdentifier SET identifierVersion = $new_version");
+    $sth->execute();
 }
 
 # If the stable ID is not attached to an event, put it in the attic
@@ -207,14 +213,13 @@ sub remove_orphan_stable_ids {
 	my $deleted;
 	for my $db ($release_db,$gk_central) {
 	    my $st_id =  get_instance($db_id,$db) || next;
-	    $st_id->inflate();
 
 	    my $history_id = add_stable_id_to_history($st_id);
-	    $history_id || $self->throw("Problem getting/setting history for " . $st_id->displayName());
+	    $history_id || Bio::Root::Root->throw("Problem getting/setting history for " . $st_id->displayName());
 
 	    log_deletion($st_id) unless $deleted;
 
-	    say "Deleting orphan stable identifier ".$st_id->displayName unless $deleted;
+	    $logger->info("Deleting orphan stable identifier ".$st_id->displayName."\n");
 
 	    $dba{$db}->delete($st_id);
 	    $deleted++;
@@ -223,20 +228,36 @@ sub remove_orphan_stable_ids {
 }
 
 #####################################################################
-##  This set of functions deal with the stable identifier history db
-sub stable_id_has_history {
+##  This set of functions deals with the stable identifier history db
+sub has_history {
     my $instance = shift;
+    my $identifier = $instance->attribute_value('identifier')->[0]; 
+    
+    if ($history{$identifier}) {
+	return  $history{$identifier};
+    }
+
     my $dbh = $dba{history};
     my $sth = $dbh->prepare("SELECT DB_ID FROM StableIdentifier WHERE identifier = ?");
-    $sth->execute();
+    $sth->execute($identifier);
     my $ary = $sth->fetchrow_arrayref || [];
-    return $ary->[0];
+    my $db_id = $ary->[0];
+
+    if ($db_id) {
+	$history{$identifier} = $db_id;
+	return $db_id;
+    }
+    else {
+	return undef;
+    }
 }
 
 sub add_stable_id_to_history {
-    my $instance = shift;
+    my $instance  = shift;
+    my $parent    = shift;
+    my $parent_id = $parent ? $parent->db_id : 'NULL';
 
-    my $history_id = stable_identifier_has_history($instance);
+    my $history_id = has_history($instance);
     if ($history_id) {
 	return $history_id;
     }
@@ -247,12 +268,25 @@ sub add_stable_id_to_history {
     my $oidentifier = $instance->attribute_value('oldIdentifier')->[0] || 'NULL';
     my $oversion = $instance->attribute_value('oldIdentifierVersion')->[0] || 'NULL';
 
-    my $sth = $dbh->prepare('INSERT INTO StableIdentifier VALUES (?, ?, ?, ?)');
-    $sth->execute($identifier,$version,$oidentifier,$oversion);
+    my $sth = $dbh->prepare('INSERT INTO StableIdentifier VALUES (NULL, ?, ?, ?)');
+    $sth->execute($identifier,$version,$parent_id);
 
     $sth = $dbh->prepare("SELECT DB_ID FROM StableIdentifier WHERE identifier = ?");
     $sth->execute($identifier);
-    return $sth->fetchrow_arrayref->[0];
+
+    my $db_id = eval{$sth->fetchrow_arrayref->[0]};
+
+    if ($db_id) {
+	$history{$identifier} = $db_id;
+	return $db_id;
+    }
+    else {
+	return undef;
+    }
+}
+
+sub log_renaming {
+    add_change_to_history(@_,'renamed');
 }
 
 sub log_deletion {
@@ -269,7 +303,8 @@ sub log_incrementation {
 
 sub add_change_to_history {
     my ($instance,$change) = @_;
-    my $st_db_id = stable_id_has_history($instance);
+    $logger->info("Logging $change event for " . $instance->displayName . " in history database\n");
+    my $st_db_id = has_history($instance) || add_stable_id_to_history($instance);
     my $dbh = $dba{history};
     my $sth = $dbh->prepare('INSERT INTO Changed values (NULL, ?, ?, ?, NOW())');
     $sth->execute($st_db_id,$change,$release_num);
@@ -285,12 +320,6 @@ sub get_instance {
     return $instance;
 }
 
-sub get_species {
-    my $instance = shift;
-    my $sp = $instance->attribute_value('species')->[0]  || return undef;
-    return $sp->displayName;
-}
-
 sub classes_with_stable_ids {
     # derived from:
     # select distinct _class from DatabaseObject where StableIdentifier is not null 
@@ -300,12 +329,6 @@ sub classes_with_stable_ids {
     Depolymerisation EntitySet Polymerisation FailedReaction
     /;
 }
-
-sub update_st_id {
-    my ($identifier,$version) = @_;
-    
-}
-
 
 # Add the necessary attributes to our stable ID instance 
 sub set_st_id_attributes {
@@ -318,17 +341,39 @@ sub set_st_id_attributes {
 
 sub identifier {
     my $instance = shift;
-    my $spc = make_decision_on_species($instance);
-    my $species = abbreviate($spc);
+    my $species = species($instance);
     return join('-','R',$species,$instance->db_id());
+}
+
+sub species {
+    my $instance = shift;
+    my $name = $instance->displayName;
+    return $species{$name} if $species{$name};
+    my $long = make_decision_on_species($instance);
+    $species{$name} = abbreviate($long);
+    return $species{$name};
 }
 
 sub abbreviate {
     local $_ = shift;
-    return $_ if /ALL/;
-    my $short_name = uc(join('', /([A-Za-z])[a-z]+\s+([a-z]{2})/));
+    return $_ if /ALL|NUL/;
+    my $short_name = uc(join('', /^([A-Za-z])[a-z]+\s+([a-z]{2})[a-z]+$/));
     unless ($short_name) {
-	warn "Species $_ is not in binomial form!\n";
+	if (/Influenza/i) {
+	    $short_name = 'FLU';
+	}
+	elsif (/human immunodeficiency/i) {
+	    $short_name = "HIV";
+	}
+	elsif (/Bacteria/) {
+	    $short_name = 'BAC';
+	}
+	elsif (/Virus/) {
+            $short_name = 'VIR';
+        }
+	else {
+	    $short_name = "I_DUNNO";
+	}
     }
     return $short_name;
 }
@@ -336,23 +381,59 @@ sub abbreviate {
 # Make a new ST_ID instance from scratch
 sub create_stable_id {
     my ($instance,$identifier,$version,$db_id) = @_;
-    $instance->inflate;
+    $instance->inflate();
 
     $db_id ||= new_db_id($gk_central);
     my $st_id = $dba{$gk_central}->instance_from_hash({},'StableIdentifier',$db_id);
     set_st_id_attributes($st_id,$identifier,$version);
 
-    say STDERR "creating new ST_ID " . $st_id->displayName . " for " . $instance->displayName;
-
-    $dba{$gk_central}->store($st_id,1);
-    $dba{$release_db}->store($st_id,1);
+    $logger->info("creating new ST_ID " . $st_id->displayName . " for " . $instance->displayName);
+    
+    store($st_id);
     add_stable_id_to_history($st_id);
     log_creation($st_id);
     
+    # Attach the stable ID to its parent instance
     $instance->stableIdentifier($st_id);
+    update($instance);
 
     return $st_id;
 }
+
+
+#########################################################################
+## failure tolerant(?) wrappoer for the GKInstance store and update methods
+sub update {
+    my $instance = shift;
+    my @dbs = @_;
+    unless (@dbs > 0) {
+	@dbs = ($gk_central,$release_db);
+    }
+    for my $db (@dbs) {
+	my $updated = eval {$dba{$db}->update($instance)};
+	unless ($updated) {
+	    $logger->warn("Oops, that update operation failed for $db: $@_\nI'll try again!");
+	    update($instance,$db);
+	}
+    }
+}
+
+sub store {
+    my $instance = shift;
+    my @dbs = @_;
+    unless (@dbs > 0) {
+	@dbs =($gk_central,$release_db);
+    }
+    for my $db (@dbs) {
+        my $stored = eval {$dba{$db}->store($instance,1)};
+	unless ($stored) {
+	    $logger->warn("Oops, that store operation failed for $db: I'll try again!");
+            store($instance,$db);
+	}
+    }
+}
+##
+######################################################################### 
 
 sub fetch_stable_id {
     my ($instance,$identifier) = @_;
@@ -392,8 +473,40 @@ sub new_db_id {
     return $max_id + 1;
 }
 
-# Hopefully not too compicated reasoner to deal with entities that lack a species
+# Hopefully not-too-compicated reasoner to deal with entities that lack a species
 sub make_decision_on_species {
     my $instance = shift;
-    my $species = get_species($instance) || 'ALL';
+    my $class = $instance->class;
+    my $all_species   = $instance->attribute_value('species');
+    my $species = eval {$all_species->[0]->displayName};
+    my $last_species  = eval {$all_species->[-1]->displayName};
+    
+
+    # Regulator?  Get last species if applicable
+    if (!$species && $class =~ /regulation|requirement/i) {
+	$species = $last_species || $species || 'NUL';
+    }
+    elsif ($class =~ /SimpleEntity|Polymer/) {
+	$species = 'ALL';
+    }
+    elsif (!$species && $class eq 'Complex') {
+	my $members = $instance->attribute_value('hasComponent');
+	while (!$species && @$members >0) {
+            my $member = shift @$members;
+            $species = $member->attribute_value('species')->[0];
+        }
+    }
+    elsif (!$species && $class =~ /Set/) {
+	my $members = $instance->attribute_value('hasMember');
+	while (!$species && @$members > 0) {
+	    my $member = shift @$members;
+            $species = $member->attribute_value('species')->[0];
+        }
+    }
+    else {
+	$species ||= 'NUL';
+    }
+    
+    $logger->info(join("\t","SPECIES",$class,$species,abbreviate($species))."\n");
+    return $species;
 }
