@@ -492,8 +492,8 @@ sub execute {
 sub instance_from_hash {
     my $self = shift;
     my ($href,$class,$id) = @_;
-    unless ($href && ref $href = 'HASH' && $class && $id) {
-	$self->throw("Usage: $dba->instance_from_hash($hash_ref, $class, $db_id)");
+    unless ($href && ref($href) eq 'HASH' && $class && $id) {
+	$self->throw("Usage: \$dba->instance_from_hash(\$hash_ref, \$class, \$db_id)");
     }
     $self->_instance_from_hash(@_);
 }
