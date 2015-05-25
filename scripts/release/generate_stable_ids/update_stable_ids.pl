@@ -17,6 +17,19 @@ use constant MAX_ID => 'SELECT MAX(DB_ID) FROM DatabaseObject';
 use constant ST_ID  => 'SELECT DB_ID FROM StableIdentifier WHERE identifier = ?';
 use constant ALL_ST => 'SELECT DB_ID FROM StableIdentifier';
 
+# a few hard to place species names
+use constant SPECIES => {
+    'Hepatitis C virus genotype 2a'         => 'HEP',
+    'Human herpesvirus 8'                   => 'HER',
+    'Molluscum contagiosum virus subtype 1' => 'MCV',
+    'Mycobacterium tuberculosis H37Rv'      => 'MTU',
+    'Neisseria meningitidis serogroup B'    => 'NME',
+    'Influenza A virus'                     => 'FLU',
+    'Human immunodeficiency virus 1'        => 'HIV'
+};
+
+
+
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
@@ -92,22 +105,23 @@ sub stable_id {
 }
 
 sub rename_identifier {
-    my $instance = shift;
+    my $st_id = shift;
     my $identifier = shift;
-    $instance->inflate();
+    $st_id->inflate();
 
-    my $old_id = $instance->attribute_value('identifier')->[0];
-    my $old_version =  $instance->attribute_value('identifierVersion')->[0];
+    my $old_id = $st_id->attribute_value('identifier')->[0];
+    my $old_version =  $st_id->attribute_value('identifierVersion')->[0];
 
-    $instance->attribute_value('identifier',$identifier);
-    $instance->attribute_value('identifierVersion',1);
-    $instance->displayName("$identifier.1");
-    $instance->attribute_value('oldIdentifier',$old_id);
-    $instance->attribute_value('oldIdentifierVersion',$old_version);
+    $st_id->attribute_value('identifier',$identifier);
+    $st_id->attribute_value('identifierVersion',1);
+    $st_id->displayName("$identifier.1");
+    $st_id->attribute_value('oldIdentifier',$old_id);
+    $st_id->attribute_value('oldIdentifierVersion',$old_version);
 
-    update($instance);
-    add_stable_id_to_history($instance,$attached{$instance->db_id});
-    log_renaming($instance);
+    store($st_id,'update');
+    my $parent = $attached{$st_id->db_id};
+    add_stable_id_to_history($st_id,$parent);
+    log_renaming($st_id);
 }
 
 sub should_be_incremented {
@@ -127,6 +141,10 @@ sub should_be_incremented {
     }
     elsif ($mods2 > $mods1) {
 	return 1;
+    }
+    else {
+	$logger->warn("Something is fishy with the modifications for instance $db_id");
+	return 0;
     }
 }
 
@@ -195,7 +213,7 @@ sub increment_stable_id {
     $instance->attribute_value('identifierVersion',$new_version);
     $instance->displayName("$identifier.$new_version");
     
-    update($instance);
+    store($instance,'update');
     log_incrementation($instance);
 
     my $sth = $dba{history}->prepare("UPDATE StableIdentifier SET identifierVersion = $new_version");
@@ -257,6 +275,7 @@ sub add_stable_id_to_history {
     my $parent    = shift;
     my $parent_id = $parent ? $parent->db_id : 'NULL';
 
+
     my $history_id = has_history($instance);
     if ($history_id) {
 	return $history_id;
@@ -265,8 +284,12 @@ sub add_stable_id_to_history {
     my $dbh = $dba{history};
     my $identifier = $instance->attribute_value('identifier')->[0];
     my $version = $instance->attribute_value('identifierVersion')->[0];
-    my $oidentifier = $instance->attribute_value('oldIdentifier')->[0] || 'NULL';
-    my $oversion = $instance->attribute_value('oldIdentifierVersion')->[0] || 'NULL';
+
+    # We need a parent ID for all non-orphans, try to get one if it is missing
+    # The parent DB_ID unifies all ST_IDs for an event
+    unless ($parent_id) {
+        ($parent_id) = $identifier =~ /R-\S{3}-(\d+)$/;
+    }
 
     my $sth = $dbh->prepare('INSERT INTO StableIdentifier VALUES (NULL, ?, ?, ?)');
     $sth->execute($identifier,$version,$parent_id);
@@ -302,9 +325,10 @@ sub log_incrementation {
 }
 
 sub add_change_to_history {
-    my ($instance,$change) = @_;
-    $logger->info("Logging $change event for " . $instance->displayName . " in history database\n");
-    my $st_db_id = has_history($instance) || add_stable_id_to_history($instance);
+    my ($st_id,$change) = @_;
+    my $parent = $attached{$st_id->db_id};
+    $logger->info("Logging $change event for " . $st_id->displayName . " in history database\n");
+    my $st_db_id = has_history($st_id,$parent) || add_stable_id_to_history($st_id,$parent);
     my $dbh = $dba{history};
     my $sth = $dbh->prepare('INSERT INTO Changed values (NULL, ?, ?, ?, NOW())');
     $sth->execute($st_db_id,$change,$release_num);
@@ -357,23 +381,24 @@ sub species {
 sub abbreviate {
     local $_ = shift;
     return $_ if /ALL|NUL/;
+
+    # an instance?
+    $_ = $_->displayName if ref($_);
+
+    my $other_species = SPECIES;
+
     my $short_name = uc(join('', /^([A-Za-z])[a-z]+\s+([a-z]{2})[a-z]+$/));
     unless ($short_name) {
-	if (/Influenza/i) {
-	    $short_name = 'FLU';
-	}
-	elsif (/human immunodeficiency/i) {
-	    $short_name = "HIV";
-	}
-	elsif (/Bacteria/) {
+	if (/Bacteria/) {
 	    $short_name = 'BAC';
 	}
 	elsif (/Virus/) {
             $short_name = 'VIR';
         }
 	else {
-	    $short_name = "I_DUNNO";
+	    $short_name = $other_species->{$_} || 'NUL';
 	}
+	$logger->info("Set short name for '$_' to $short_name\n");
     }
     return $short_name;
 }
@@ -389,46 +414,36 @@ sub create_stable_id {
 
     $logger->info("creating new ST_ID " . $st_id->displayName . " for " . $instance->displayName);
     
-    store($st_id);
-    add_stable_id_to_history($st_id);
+    store($st_id,'store');
+    add_stable_id_to_history($st_id,$instance);
     log_creation($st_id);
     
     # Attach the stable ID to its parent instance
     $instance->stableIdentifier($st_id);
-    update($instance);
+    store($instance,'update');
 
     return $st_id;
 }
 
 
 #########################################################################
-## failure tolerant(?) wrappoer for the GKInstance store and update methods
-sub update {
-    my $instance = shift;
-    my @dbs = @_;
-    unless (@dbs > 0) {
-	@dbs = ($gk_central,$release_db);
-    }
-    for my $db (@dbs) {
-	my $updated = eval {$dba{$db}->update($instance)};
-	unless ($updated) {
-	    $logger->warn("Oops, that update operation failed for $db: $@_\nI'll try again!");
-	    update($instance,$db);
-	}
-    }
-}
-
+## failure tolerant(?) wrapper for the GKInstance store and update methods
 sub store {
     my $instance = shift;
+    my $action   = shift;
     my @dbs = @_;
+
+    my $force = $action eq 'store' ? 1 : 0;
+
     unless (@dbs > 0) {
 	@dbs =($gk_central,$release_db);
     }
     for my $db (@dbs) {
-        my $stored = eval {$dba{$db}->store($instance,1)};
+        my $stored = eval {$dba{$db}->$action($instance,$force)};
 	unless ($stored) {
-	    $logger->warn("Oops, that store operation failed for $db: I'll try again!");
-            store($instance,$db);
+	    $logger->warn("Oops, the $action operation failed for $db:\n$@_\nI'll try again!");
+	    sleep 1;
+            store($instance,$action,$db);
 	}
     }
 }
@@ -473,21 +488,41 @@ sub new_db_id {
     return $max_id + 1;
 }
 
+
+sub fetch_species {
+    my $instance = shift;
+    my $species = $instance->attribute_value('species');
+    return undef if @$species == 0;
+    my @species = map {$_->displayName} @$species;
+    return wantarray ? @species : $species[0];
+}
+
 # Hopefully not-too-compicated reasoner to deal with entities that lack a species
 sub make_decision_on_species {
     my $instance = shift;
     my $class = $instance->class;
-    my $all_species   = $instance->attribute_value('species');
-    my $species = eval {$all_species->[0]->displayName};
-    my $last_species  = eval {$all_species->[-1]->displayName};
+    my @all_species = fetch_species($instance);
+    my $species = $all_species[0];
+    my $last_species  = $all_species[-1];
     
-
     # Regulator?  Get last species if applicable
-    if (!$species && $class =~ /regulation|requirement/i) {
-	$species = $last_species || $species || 'NUL';
+    if ($class =~ /regulation|requirement/i) {
+	$species = $last_species || $species;
+	unless ($species) {
+	    $logger->info("Looking for species of pathways or regulators for this $class\n");
+	    my @entities = @{$instance->attribute_value('containedinPathway')};
+	    push @entities, @{$instance->attribute_value('regulator')};
+	    for my $entity (@entities) {
+		$logger->info("Checking species for ".$entity->displayName);
+		$species = fetch_species($entity);
+		$logger->info("No species found") unless $species;
+		last if $species;
+	    }
+	    $species ||= 'ALL';
+	}
     }
     elsif ($class =~ /SimpleEntity|Polymer/) {
-	$species = 'ALL';
+	$species ||= 'ALL';
     }
     elsif (!$species && $class eq 'Complex') {
 	my $members = $instance->attribute_value('hasComponent');
