@@ -363,6 +363,7 @@ sub find_interactors_for_ReferenceSequence {
 		 );
 	    foreach my $pe1 (@{$pes1}) {
 		next if ($pe1 == $pe);
+		#next if ($pe1 == $pe);
 		my $rpss = $pe1->follow_class_attributes
 		    (-INSTRUCTIONS =>
 		     {'Complex' => {'attributes' => [qw(hasComponent)]},
