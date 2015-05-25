@@ -542,7 +542,7 @@ sub fetch_simple_query_form_instances {
     # displayed with eventbrowser, rather than with
     # eventbrowser_st_id
     $self->is_stable_identifier(undef);
-    if ($qstr =~ /REACT_[0-9]+/) {
+    if ($qstr =~ /REACT_[0-9]+|R-[A-Z]{3}-\d+/) {
     	# Very special case: if we detect a query containing a
     	# stable ID (REACT_XXX), look in all releases, if necessary.
 		$ar = $self->fetch_instance_by_stable_identifier($qstr, $operator);
