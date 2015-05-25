@@ -121,7 +121,7 @@ sub buildPart {
 	
 	my $instance = undef;
 	my $stable_identifier = undef;
-	if ($db_id =~ /(REACT_[0-9]+)/) {
+	if ($db_id =~ /(REACT_[0-9]+|R-[A-Z]{3}-\d+)/) {
 	    # First check to see if ID is actually a stable
 	    # ID and use that to retrieve instance if so
 	    $stable_identifier = $1;
