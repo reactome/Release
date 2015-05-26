@@ -376,7 +376,7 @@ sub read_orthology {
     
     my %homologue;
     $logger->info("Now reading orthology mapping file: $file\n");
-    if (open(my $read_orthopair, '>', $file)) {
+    if (open(my $read_orthopair, '<', $file)) {
 	    while (<$read_orthopair>) {
 		my %seen_to;
 		my ($from, $tos) = split/\t/, $_;
@@ -401,7 +401,7 @@ sub read_ensg_mapping {
     
     my %ensg;
     $logger->info("Now reading ensg mapping file: $file\n");
-    if (open(my $read, $file)) {
+    if (open(my $read, '<', $file)) {
 	    while (<$read>) {
 	        my ($ensg, $protein_ids) = split/\t/, $_;
 	        my @protein_ids = split/\s/, $protein_ids;
