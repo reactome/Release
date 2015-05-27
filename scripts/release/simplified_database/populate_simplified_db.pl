@@ -355,7 +355,7 @@ sub create_denormalised_database {
 sub load_denormalised_database_schema {
     my $denormalised_database = shift;
     
-    my $schema_file = "dn.sql";
+    my $schema_file = "simplified.sql";
     croak "$schema_file doesn't exist" unless (-e $schema_file);
     
     system("mysql -u $GKB::Config::GK_DB_USER -p$GKB::Config::GK_DB_PASS $denormalised_database < $schema_file");
