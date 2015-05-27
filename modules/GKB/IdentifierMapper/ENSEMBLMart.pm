@@ -33,13 +33,8 @@ use strict;
 
 use GKB::Config;
 use GKB::SOAPServer::PICR;
-use GKB::IdentifierMapper::Base;
-use GKB::EnsEMBLMartUtils qw/:all/;
-
-use Try::Tiny;
-
 use vars qw(@ISA $AUTOLOAD %ok_field);
-
+use GKB::IdentifierMapper::Base;
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 
@@ -58,13 +53,16 @@ sub AUTOLOAD {
 sub new {
     my($pkg, $wsdl) = @_;
 
-    update_registry_file();
-    
     # Get class variables from superclass and define any new ones
     # specific to this class.
     $pkg->get_ok_field();
 
     my $self = $pkg->SUPER::new();
+
+    my %ensembl_mart_table_hash = ();
+    $self->ensembl_mart_table_hash(\%ensembl_mart_table_hash);
+    $self->ensembl_mart_params(undef);
+    $self->handle_to_ensembl_mart(undef);
 
     return $self;
 }
@@ -75,15 +73,145 @@ sub get_ok_field {
     my ($pkg) = @_;
 
     %ok_field = $pkg->SUPER::get_ok_field();
+    $ok_field{"ensembl_mart_table_hash"}++;
+    $ok_field{"ensembl_mart_params"}++;
+    $ok_field{"handle_to_ensembl_mart"}++;
+    $ok_field{"mart_up"}++;
 
     return %ok_field;
+}
+
+sub refresh {
+    my ($self) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    my $e = $self->ensembl_mart_params;
+    if (defined $e) {
+    	$logger->info("reconnecting to ENSEMBL BioMart database, just to be on the safe side\n");
+    	$self->set_ensembl_mart_params($e->[0], $e->[1], $e->[2], $e->[3], $e->[4]);
+    }
+}
+
+# Set parameters for accessing the ENSEMB Mart.  You may set db_name
+# to undef, in which case, the current ENSEMBL Mart will be used.
+# Arguments:
+#
+# db_name
+# host
+# port
+# user
+# password
+#
+# Calling this method will also automatically set up an ENSEMBL Mart handle.
+sub set_ensembl_mart_params {
+    my ($self, $db_name, $host, $port, $user, $password) = @_;
+    
+    my $ensembl_mart_params = [$db_name, $host, $port, $user, $password];
+    $self->ensembl_mart_params($ensembl_mart_params);
+    $self->handle_to_ensembl_mart(GKB::Utils::get_handle_to_ensembl_mart(@{$ensembl_mart_params}));
+    $self->mart_up(1);
+}
+
+# Gets an ENSEMBL mart table name that can be used for mapping
+# from the $input_db database to a (species-specific) $ensembl_db
+# database.  If something goes wrong, e.g. an appropriate table
+# could not be found, returns undef.
+sub get_ensembl_mart_xref_table_name {
+    my ($self, $input_db, $ensembl_db) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    my $table_name = $self->ensembl_mart_table_hash->{$input_db}->{$ensembl_db};
+    if (defined $table_name) {
+    	return $table_name;
+    }
+
+    my $ensembl_mart_species_abbreviation = $ensembl_db;
+    $ensembl_mart_species_abbreviation =~ s/^ENSEMBL_//;
+    $ensembl_mart_species_abbreviation = $self->generate_ensembl_mart_species_abbreviation($ensembl_mart_species_abbreviation);
+    if (!(defined $ensembl_mart_species_abbreviation)) {
+    	return undef;
+    }
+
+    $table_name = "$ensembl_mart_species_abbreviation\_gene_ensembl__xref_" . lc($input_db) . "_accession__dm";
+    if ($self->check_ensembl_mart_table_existence($table_name)) {
+    	$self->ensembl_mart_table_hash->{$input_db}->{$ensembl_db} = $table_name;
+    } else {
+	$logger->warn("could not find a Mart table called: $table_name\n");
+	return undef;
+    }
+    
+    return $table_name;
+}
+
+# Check to see if the named BioMart table exists.
+# Returns 0 if it doesnt (!!).
+sub check_ensembl_mart_table_existence {
+    my ($self, $table) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    eval {
+    	if (!(defined $self->handle_to_ensembl_mart)) {
+	    $logger->warn("handle_to_ensembl_mart is undef\n");
+    	}
+	$self->handle_to_ensembl_mart()->do("select count(*) from $table"); 
+    };
+    
+    if ($@) {
+	if ($@ !~ /doesn\'t exist/) {
+	    $logger->warn("$table exists produces unknown response\n");
+	    $logger->warn("dollars at=" . $@ . "\n");
+	    $self->mart_up(0);
+	}
+    } else {
+	return 1;
+    };
+    
+    return 0;
 }
 
 # For the given input database name, convert the supplied ID into
 # appropriate IDs for the named output database.
 # Returns a reference to an array of output IDs.
 sub convert {
+    my ($self, $input_db, $input_id, $output_db) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+    
+    my $handle_to_ensembl_mart = $self->handle_to_ensembl_mart;
+    if (!(defined $handle_to_ensembl_mart)) {
+    	$logger->warn("handle_to_ensembl_mart is undef!\n");
+    	return undef;
+    }
+    
+    my $output_ids = [];
+
+    my $table_name = $self->get_ensembl_mart_xref_table_name($input_db, $output_db);
+    if (!(defined $table_name)) {
+    	return $output_ids;
+    }
+    
+    # Build and execute query against ENSEMBL Mart to get the
+    # ENSEMBL gene IDs assocaited with $input_id.
+    my $query = "select gene_stable_id from $table_name where dbprimary_id=?";
+    my $cur = $handle_to_ensembl_mart->prepare($query);
+    $cur->execute($input_id);
+    
+    # Loop over the rows returned by the database query and add unique
+    # ENSEMBL gene identifiers to the list associated with
+    # $reference_peptide_sequence.
+    my %seen;
+    while (my ($ensembl_gene_id) = $cur->fetchrow) {
+    	if ($seen{$ensembl_gene_id}) {
+    	    next;
+	}
+	$seen{$ensembl_gene_id} = 1;
+    	push(@{$output_ids}, $ensembl_gene_id);
+    }
+
+    return $output_ids;
 }
 
 # You *must* supply a species name for list conversion to work.
@@ -120,12 +248,12 @@ sub convert_list {
 	}
 	if ($output_db eq 'Wormbase') {
 	    my $output_id_hash = {};
-	    $self->query_ensembl_mart_with_ensp($input_ids, $output_id_hash, 'wormbase_gene', $species);
+	    $self->query_ensembl_mart_with_ensp($input_ids, $output_id_hash, 'wormbase_gene', $species, 0);
 	    return $output_id_hash;
 	}
 	if ($output_db eq 'Entrez Gene') {
 	    my $output_id_hash = {};
-	    $self->query_ensembl_mart_with_ensp($input_ids, $output_id_hash, 'entrezgene', $species);
+	    $self->query_ensembl_mart_with_ensp($input_ids, $output_id_hash, 'entrezgene', $species, 0);
 	    return $output_id_hash;
 	}
     }
@@ -139,10 +267,10 @@ sub convert_list_uniprot_to_omim {
     my ($self, $input_ids, $species) = @_;
 
     my $output_id_hash = {};
-    if (!$self->query_ensembl_mart($input_ids, $output_id_hash, 'uniprot_swissprot', 'mim_morbid', $species)) {
+    if (!$self->query_ensembl_mart($input_ids, $output_id_hash, 'uniprot_accession', 'mim_morbid', $species)) {
     	return undef;
     }
-    if (!$self->query_ensembl_mart($input_ids, $output_id_hash, 'uniprot_swissprot', 'mim_gene', $species)) {
+    if (!$self->query_ensembl_mart($input_ids, $output_id_hash, 'uniprot_accession', 'mim_gene', $species)) {
     	return undef;
     }
 
@@ -165,7 +293,10 @@ sub convert_list_uniprot_to_refseq_peptide {
     }
     
     my $output_id_hash = {};
-    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'refseq_peptide', $species))) {
+    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_accession', 'refseq_peptide', $species, 1))) {
+    	return undef;
+    }
+    if (!($self->query_ensembl_mart(\@input_variant_ids, $output_id_hash, 'uniprot_varsplic', 'refseq_peptide', $species, 1))) {
     	return undef;
     }
 
@@ -188,8 +319,11 @@ sub convert_list_uniprot_to_pdb {
     }
 
     my $output_id_hash = {};
-    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'pdb', $species))) {
+    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_accession', 'pdb', $species, 1))) {
         return undef;
+    }
+    if (!($self->query_ensembl_mart(\@input_variant_ids, $output_id_hash, 'uniprot_varsplic', 'pdb', $species, 1))) {
+	return undef;
     }
 
     return $output_id_hash;
@@ -211,7 +345,10 @@ sub convert_list_uniprot_to_refseq_dna {
     }
 
     my $output_id_hash = {};
-    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'refseq_dna', $species))) {
+    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_accession', 'refseq_dna', $species, 1))) {
+    	return undef;
+    }
+    if (!($self->query_ensembl_mart(\@input_variant_ids, $output_id_hash, 'uniprot_varsplic', 'refseq_dna', $species, 1))) {
     	return undef;
     }
 
@@ -222,19 +359,30 @@ sub convert_list_uniprot_to_ensembl {
     my ($self, $input_ids, $species) = @_;
     
     my $logger = get_logger(__PACKAGE__);
-        my @input_variant_ids = ();
-    my @input_no_variant_ids = ();
-    foreach my $input_id (@{$input_ids}) {
-    	if ($input_id =~ /-/) {
-	    push(@input_variant_ids, $input_id);
-	} else {
-	    push(@input_no_variant_ids, $input_id);
-	}
+    
+    my $handle_to_ensembl_mart = $self->handle_to_ensembl_mart;
+    if (!(defined $handle_to_ensembl_mart)) {
+    	$logger->warn("handle_to_ensembl_mart is undef!\n");
+    	return undef;
     }
     
-    my $output_id_hash = {};
-    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'ensembl_gene_id', $species))) {
+    my $underscore_species = $species;
+    $underscore_species =~ s/\s+/_/g;
+    my $table_name = $self->get_ensembl_mart_xref_table_name("UniProt", "ENSEMBL_$underscore_species");
+    if (!(defined $table_name)) {
     	return undef;
+    }
+    
+    # Build and execute query against ENSEMBL Mart to get the
+    # ENSEMBL gene IDs assocaited with $input_id.
+    my $comma_separated_input_ids = join(',', (('?') x scalar(@{$input_ids})));
+    my $query = "select dbprimary_id,gene_stable_id from $table_name where dbprimary_id IN ($comma_separated_input_ids)";
+    my $sth = $handle_to_ensembl_mart->prepare($query);
+    $sth->execute(@{$input_ids});
+    
+    my $output_id_hash = {};
+    while (my ($acc,$id) = $sth->fetchrow_array) {
+        push(@{$output_id_hash->{uc($acc)}}, $id);
     }
 
     return $output_id_hash;
@@ -256,7 +404,10 @@ sub convert_list_uniprot_to_wormbase {
     }
 
     my $output_id_hash = {};
-    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'wormbase_gene', $species))) {
+    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_accession', 'wormbase_gene', $species, 1))) {
+    	return undef;
+    }
+    if (!($self->query_ensembl_mart(\@input_variant_ids, $output_id_hash, 'uniprot_varsplic', 'wormbase_gene', $species, 1))) {
     	return undef;
     }
 
@@ -279,7 +430,10 @@ sub convert_list_uniprot_to_entrez_gene {
     }
 
     my $output_id_hash = {};
-    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'entrezgene', $species))) {
+    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_accession', 'entrezgene', $species, 1))) {
+    	return undef;
+    }
+    if (!($self->query_ensembl_mart(\@input_variant_ids, $output_id_hash, 'uniprot_varsplic', 'entrezgene', $species, 1))) {
     	return undef;
     }
 
@@ -295,10 +449,40 @@ sub convert_list_ensp_to_ensembl {
 
     my $logger = get_logger(__PACKAGE__);
     
-    my $output_id_hash = {};
-    
-    if (!($self->query_ensembl_mart($input_ids, $output_id_hash, 'ensembl_peptide_id', 'ensembl_gene_id', $species))) {
+    my $handle_to_ensembl_mart = $self->handle_to_ensembl_mart;
+    if (!(defined $handle_to_ensembl_mart)) {
+    	$logger->warn("handle_to_ensembl_mart is undef!\n");
     	return undef;
+    }
+
+    my $underscore_species = $species;
+    $underscore_species =~ s/\s+/_/g;
+    my $ensembl_mart_species_abbreviation = $self->generate_ensembl_mart_species_abbreviation($underscore_species);
+    my $table_name = "$ensembl_mart_species_abbreviation\_gene_ensembl__transcript__main";
+    
+#    print STDERR "ENSEMBLMart.convert_list_uniprot_to_ensembl: table_name=$table_name\n";
+
+    if (!($self->check_ensembl_mart_table_existence($table_name))) {
+        $logger->warn("could not find a Mart table called: $table_name\n");
+        return undef;
+    }
+    
+    # Build and execute query against ENSEMBL Mart to get the
+    # ENSEMBL gene IDs assocaited with $input_id.
+    my $comma_separated_input_ids = join(',', (('?') x scalar(@{$input_ids})));
+    my $output_id_hash = {};
+    if ($self->check_ensembl_mart_table_existence($table_name)) {
+	my $query = "select translation_stable_id,gene_stable_id from $table_name where translation_stable_id IN ($comma_separated_input_ids)";
+
+#    	print STDERR "ENSEMBLMart.convert_list_uniprot_to_ensembl: query=$query\n";
+#    	print STDERR "ENSEMBLMart.convert_list_uniprot_to_ensembl: input_ids=@{$input_ids}\n";
+    
+	my $sth = $handle_to_ensembl_mart->prepare($query);
+	$sth->execute(@{$input_ids});
+    
+	while (my ($acc,$id) = $sth->fetchrow_array) {
+	    push(@{$output_id_hash->{uc($acc)}}, $id);
+	}
     }
 
     return $output_id_hash;
@@ -311,10 +495,11 @@ sub convert_list_ensp_to_ensembl {
 # input_table		Table against which input IDs is queried
 # output_table		Table containing output IDs
 # species			Species name, e.g. 'Homo sapiens'
+# translation		If set to 1, uses 'translation_id' instead of 'gene_id_key' as common key between tables.
 #
 # Returns 1 if everything ran normally, 0 if something went wrong.
 sub query_ensembl_mart {
-    my ($self, $input_ids, $output_id_hash, $input_table, $output_table, $species) = @_;
+    my ($self, $input_ids, $output_id_hash, $input_table, $output_table, $species, $translation) = @_;
 
     my $logger = get_logger(__PACKAGE__);
     
@@ -328,97 +513,53 @@ sub query_ensembl_mart {
     	return 0;
     }
 
+    my $handle_to_ensembl_mart = $self->handle_to_ensembl_mart;
+    if (!(defined $handle_to_ensembl_mart)) {
+    	$logger->warn("handle_to_ensembl_mart is undef!\n");
+    	return 0;
+    }
+    
     my $ensembl_mart_species_abbreviation = $self->generate_ensembl_mart_species_abbreviation($species);
     if (!(defined $ensembl_mart_species_abbreviation)) {
     	return 0;
     }
-
-    my %input;
-    $input{$_}++ foreach @{$input_ids};
-    
-
-    my $query = _prepare_query($ensembl_mart_species_abbreviation, $input_table, $output_table);
-    if (!$query) {
-	$logger->warn("Query could not be prepared for $ensembl_mart_species_abbreviation on table $output_table");
+    my $full_input_table = "${ensembl_mart_species_abbreviation}_gene_ensembl__xref_${input_table}__dm";
+    if (!($self->check_ensembl_mart_table_existence($full_input_table))) {
+    	$logger->warn("no ENSEMBL Mart input table: $full_input_table\n");
+    	return 0;
+    }
+    my $full_output_table = "${ensembl_mart_species_abbreviation}_gene_ensembl__xref_${output_table}__dm";
+    if (!($self->check_ensembl_mart_table_existence($full_output_table))) {
+	$logger->warn("no ENSEMBL Mart output table: $full_output_table\n");
 	return 0;
     }
-    
-    my $query_output;
-    open(my $temp, '>', \$query_output);
-    _execute_query($query, $temp);
-    close $temp;
-    
-    if (!$query_output) {
-	$logger->warn("Query results could not be obtained");
-	return 0;
+
+    my $shared_key = 'gene_id_key';
+    if ($translation) {
+	$shared_key = 'translation_id';
     }
+
+    my $comma_separated_input_ids = join(',', (('?') x scalar(@{$input_ids})));
+
+    my $stmt = <<__END__;
+SELECT A.dbprimary_id, B.dbprimary_id
+FROM
+$full_input_table A,
+$full_output_table B
+WHERE
+A.${shared_key} = B.${shared_key} AND
+B.dbprimary_id IS NOT NULL AND
+A.dbprimary_id IN ($comma_separated_input_ids)
+__END__
+
+    my $sth = $handle_to_ensembl_mart->prepare($stmt);
+    $sth->execute(@{$input_ids});
     
-    open($temp, '<', \$query_output);
-    while (my $line = <$temp>) {
-	chomp $line;
-	my ($acc,$id) = split "\t", $line;
-	next unless $id;
-	next unless exists $input{$acc};
-	push(@{$output_id_hash->{uc($acc)}}, $id);
+    while (my ($acc,$id) = $sth->fetchrow_array) {
+        push(@{$output_id_hash->{uc($acc)}}, $id);
     }
 
     return 1;
-}
-
-sub _prepare_query {
-    my $species = shift;
-    my $input_table = shift;
-    my $output_table = shift;
-    
-    my $logger = get_logger(__PACKAGE__);
-    
-    my $query;
-    my $attempts;
-    my $error;
-    do {
-	$attempts++;
-	try {
-	    my $dataset = $species . "_gene_ensembl";
-	    unless (grep(/^$dataset$/, get_registry()->getAllDatasetNames('default'))) {
-		return;
-	    }
-	    
-	    $query = get_query();
-	    $query->setDataset($dataset);
-	    $query->addAttribute($input_table);
-	    $query->addAttribute($output_table);
-	    $query->formatter("TSV");
-	} catch {
-	    $error = $_;
-	    $logger->warn("Unable to prepare query on attempt $attempts: $error");
-	    sleep 60;
-	};
-    } while ($error && $attempts < 10);
-
-    return $query;
-}
-
-sub _execute_query {
-    my $query = shift;
-    my $file_handle = shift;
-    
-    my $logger = get_logger(__PACKAGE__);
-    
-    my $attempts;
-    my $error;
-    do {
-	$attempts++;
-	try {
-	    my $query_runner = get_query_runner();
-	    $query_runner->uniqueRowsOnly(1);
-	    $query_runner->execute($query);
-	    $query_runner->printResults($file_handle);
-	} catch {
-	    $error = $_;
-	    $logger->warn("Unable to execute query on attempt $attempts: $error");
-	    sleep 60;
-	};
-    } while ($error && $attempts < 10);
 }
 
 # Runs a query against the ENSEMBL BioMart, using a join.  This works
@@ -431,12 +572,71 @@ sub _execute_query {
 # output_id_hash	Reference to a hash to store query result (keys=i/p IDs, values=lists of o/p IDs)
 # output_table		Table containing output IDs
 # species			Species name, e.g. 'Homo sapiens'
+# translation		If set to 1, uses 'translation_id' instead of 'gene_id_key' as common key between tables.
 #
 # Returns 1 if everything ran normally, 0 if something went wrong.
 sub query_ensembl_mart_with_ensp {
-    my ($self, $input_ids, $output_id_hash, $output_table, $species) = @_;
+    my ($self, $input_ids, $output_id_hash, $output_table, $species, $translation) = @_;
     
-    return $self->query_ensembl_mart($input_ids, $output_id_hash, 'ensembl_peptide_id', $output_table, $species);
+    my $logger = get_logger(__PACKAGE__);
+    
+    if (scalar(@{$input_ids})<1) {
+    	# Empty input, so no point in doing a query
+    	return 1;
+    }
+
+    if (!(defined $species)) {
+    	$logger->warn("no species has been defined, aborting!\n");
+    	return 0;
+    }
+    
+    my $handle_to_ensembl_mart = $self->handle_to_ensembl_mart;
+    if (!(defined $handle_to_ensembl_mart)) {
+    	$logger->warn("handle_to_ensembl_mart is undef!\n");
+    	return 0;
+    }
+
+    my $ensembl_mart_species_abbreviation = $self->generate_ensembl_mart_species_abbreviation($species);
+    if (!(defined $ensembl_mart_species_abbreviation)) {
+    	return 0;
+    }
+    my $full_input_table = "${ensembl_mart_species_abbreviation}_gene_ensembl__transcript__main";
+    if (!($self->check_ensembl_mart_table_existence($full_input_table))) {
+    	$logger->warn("no ENSEMBL Mart input table: $full_input_table\n");
+    	return 0;
+    }
+    my $full_output_table = "${ensembl_mart_species_abbreviation}_gene_ensembl__xref_${output_table}__dm";
+    if (!($self->check_ensembl_mart_table_existence($full_output_table))) {
+    	$logger->warn("no ENSEMBL Mart output table: $full_output_table\n");
+    	return 0;
+    }
+
+    my $shared_key = 'gene_id_key';
+    if ($translation) {
+    	$shared_key = 'translation_id';
+    }
+    
+    my $comma_separated_input_ids = join(',', (('?') x scalar(@{$input_ids})));
+
+    my $stmt = <<__END__;
+SELECT A.translation_stable_id, B.dbprimary_id
+FROM
+$full_input_table A,
+$full_output_table B
+WHERE
+A.${shared_key} = B.${shared_key} AND
+B.dbprimary_id IS NOT NULL AND
+A.translation_stable_id IN ($comma_separated_input_ids)
+__END__
+
+    my $sth = $handle_to_ensembl_mart->prepare($stmt);
+    $sth->execute(@{$input_ids});
+
+    while (my ($acc,$id) = $sth->fetchrow_array) {
+        push(@{$output_id_hash->{uc($acc)}}, $id);
+    }
+    
+    return 1;
 }
 
 # Given a species name like 'Homo sapiens', generate the corresponding
@@ -464,6 +664,9 @@ sub generate_ensembl_mart_species_abbreviation {
 
 sub close {
     my ($self) = @_;
+    
+    $self->handle_to_ensembl_mart->disconnect();
+    $self->mart_up(0);
 }
 
 1;
