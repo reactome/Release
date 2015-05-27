@@ -50,7 +50,6 @@ if (!$dbc) {
 # or the default source (test_reactome_XX) is used, the database name is constructed to reflect this
 my $db = construct_db_name($opt_sp, $opt_from, $opt_source_db, $opt_r);
 
-=head
 # Create and populate test_reactome_XX from test_slice_XX_myisam
 system("mysql -u$opt_user -p$opt_pass -e 'drop database if exists $db'") == 0 or die "$?";
 system("mysql -u$opt_user -p$opt_pass -e 'create database $db'") == 0 or die "$?";
@@ -78,7 +77,7 @@ foreach my $sp (@species) {
     run("perl infer_events.pl -db $db -r $opt_r -from $opt_from -sp $sp -thr 75 @ARGV $db_option_string"); #run script with 75% complex threshold
 }
 `chgrp gkb $opt_r/* 2> /dev/null`; # Allows all group members to read/write compara release files
-=cut
+
 $logger->info("wrapper_ortho_inference: run clean up scripts\n");
 #These are two "clean-up" scripts to remove unused PhysicalEntities and to update display names
 run("perl remove_unused_PE.pl -db $db $db_option_string");
