@@ -1161,7 +1161,7 @@ sub get_instance_text_units {
 	    @text_units = (@text_units, $self->get_reaction_diagram_text_units($instance));
 	}
     }
-
+    
     if ($instance->is_a("Pathway") || $instance->is_a("ReactionlikeEvent") || $instance->is_a("BlackBoxEvent")) { 
         if (defined $self->hyperlink_base_url && defined $self->hyperlink_db) {
             $text_unit = GKB::DocumentGeneration::TextUnit->new();
@@ -1171,13 +1171,22 @@ sub get_instance_text_units {
             $text_unit->set_contents("See web page for this $event_type");
 	    
 	    my $url = $self->hyperlink_base_url;
-	    if ($instance->is_a("Pathway") && GKB::WebUtils->has_diagram($db_name,$instance)) {
-		$url .= "/PathwayBrowser/#FOCUS_PATHWAY_ID=$instance_db_id";
+	    
+	    if ($instance->is_a("Pathway")) {
+		my $has_diagram = GKB::WebUtils->has_diagram($db_name,$instance);
+		my $focus_pathway;
+		if ($has_diagram) {
+		    $focus_pathway = $instance_db_id;
+		}
+		else {
+		    $focus_pathway = GKB::WebUtils->find_parent_pathway($instance);
+		}
+		$url .= "/PathwayBrowser/#FOCUS_PATHWAY_ID=$focus_pathway";
 	    }
 	    else {
 		$url .= "/content/detail/$instance_db_id";
 	    }
-
+	    
             $text_unit->set_url($url);
             push @text_units, $text_unit;
         }
