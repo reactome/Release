@@ -101,10 +101,10 @@ sub extract_identifier_and_version_from_string {
 	}
 	
 	# Parse stable ID out of i/p string
-	$str =~ /(REACT_[0-9.]+)/;
+	$str =~ /(REACT_[0-9.]+|R-[A-Z]{3}-\d+)/;
 	my $extended_stable_id = $1;
 	
-	if (!(defined $extended_stable_id) || !($extended_stable_id =~ /REACT_[0-9.]+/)) {
+	if (!(defined $extended_stable_id) || !($extended_stable_id =~ /REACT_[0-9.]+|R-[A-Z]{3}-\d+/)) {
 		return @parts_of_extended_stable_id;
 	}
 	
