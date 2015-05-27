@@ -64,10 +64,10 @@ unless (defined $ARGV[0] && $ARGV[0] =~ /\d(\.\.)\d|\d,?/) {
     exit;
 }
 
-@choices = split ',', $ARGV[0];
+@choices = split(',', $ARGV[0]);
 foreach my $choice (@choices) {
     if ($choice =~ /\.\./) {
-	my ($start, $end) = split '..', $choice;
+	my ($start, $end) = split('\.\.', $choice);
         for (my $i = $start; $i <= $end; $i++) {
             $allchoices[$i] = 1;
         }
