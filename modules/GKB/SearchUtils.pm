@@ -127,7 +127,7 @@ sub paginate_query_results {
 			# explanation for it.  An alternative would have been to keep
 			# the explanatory instances, but promote the instance that
 			# matches the stable ID to the top of the list.
-			if (!($query =~ /^\s*REACT_[0-9\.]+\s*$/)) {
+			if (!($query =~ /^\s*REACT_[0-9\.]+\s*$/ || $query =~ /^\s+R-[A-Z]+-\d+\s*$/)) {
 				$ar = GKB::SearchUtils::ExplanatoryInstances->add_explanatory_instances($ar, $species_db_id);
 				$ar = GKB::SearchUtils::ResultsFilter->filter($ar);
 			}
