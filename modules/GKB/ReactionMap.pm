@@ -126,7 +126,7 @@ sub _init {
 	$require_attribute = "GD::SVG";
     }
     else{
-	$extention = "png";
+       $extention = "gif";
 	$require_attribute = "GD";
     }
     eval "require $require_attribute";
@@ -139,9 +139,9 @@ sub _init {
     if ($self->format) {
 	$image = GD::SVG::Image->new($self->width,$self->height,1);
     } else {
-#	$image = GD::Image->new($self->width,$self->height,1);
+	$image = GD::Image->new($self->width,$self->height,1);
 	$image = GD::Image->new($self->width,$self->height+1,1); # HACK 20060613
-	$image->transparent($image->colorAllocate(255,255,255));
+#	$image->transparent($image->colorAllocate(255,255,255));
     }
 #    $image->filledRectangle(0,0,$self->width - 1,$self->height - 1,$image->colorAllocate(255,255,255));
     $image->filledRectangle(0,0,$self->width - 1,$self->height,$image->colorAllocate(255,255,255)); # HACK 20060613

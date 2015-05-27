@@ -8,6 +8,7 @@ use lib "$ENV{HOME}/bioperl-1.0";
 use lib "$ENV{HOME}/GKB/modules";
 use lib "$ENV{HOME}/my_perl_stuff";
 
+use GKB::Config;
 use GKB::DBAdaptor;
 use GKB::Instance;
 use GKB::Utils_esther;
