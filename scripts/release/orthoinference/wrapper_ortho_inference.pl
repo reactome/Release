@@ -4,9 +4,7 @@ use strict;
 #This script wraps the various steps needed for inference from one species to another. It creates the ortho database, tweaks the datamodel needed for the inference, and runs the inference script, followed by two clean-up scripts.
 #The standard run (for Reactome releases) only requires the reactome release version on the command line. One can also change the source species, restrict the run to one target species, or indicate a source database other than the default test_slice_reactomeversion_myisam. It's also possible to limit inference to specific Events by giving the internal id of the upstream event(s) on the command line. Inference will then be performed for these Events and all their downstream Events.
 
-use lib "$ENV{HOME}/bioperl-1.0";
-use lib "$ENV{HOME}/GKB/modules";
-use lib "$ENV{HOME}/my_perl_stuff";
+use lib "/usr/local/gkb/modules";
 
 use GKB::Config;
 use GKB::DBAdaptor;
@@ -52,6 +50,7 @@ if (!$dbc) {
 # or the default source (test_reactome_XX) is used, the database name is constructed to reflect this
 my $db = construct_db_name($opt_sp, $opt_from, $opt_source_db, $opt_r);
 
+=head
 # Create and populate test_reactome_XX from test_slice_XX_myisam
 system("mysql -u$opt_user -p$opt_pass -e 'drop database if exists $db'") == 0 or die "$?";
 system("mysql -u$opt_user -p$opt_pass -e 'create database $db'") == 0 or die "$?";
@@ -79,7 +78,7 @@ foreach my $sp (@species) {
     run("perl infer_events.pl -db $db -r $opt_r -from $opt_from -sp $sp -thr 75 @ARGV $db_option_string"); #run script with 75% complex threshold
 }
 `chgrp gkb $opt_r/* 2> /dev/null`; # Allows all group members to read/write compara release files
-
+=cut
 $logger->info("wrapper_ortho_inference: run clean up scripts\n");
 #These are two "clean-up" scripts to remove unused PhysicalEntities and to update display names
 run("perl remove_unused_PE.pl -db $db $db_option_string");
