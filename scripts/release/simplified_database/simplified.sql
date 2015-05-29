@@ -42,10 +42,10 @@ CREATE TABLE Id_To_ExternalIdentifier (
     referenceDatabase VARCHAR(255),
     externalIdentifier VARCHAR(32),
     description VARCHAR(255) NULL,
-    PRIMARY KEY (id, referenceDatabase, externalIdentifier),
-    FOREIGN KEY (id) REFERENCES Pathway (id),
-    FOREIGN KEY (id) REFERENCES ReactionLikeEvent (id),
-    FOREIGN KEY (id) REFERENCES PhysicalEntity (id)
+    PRIMARY KEY (id, referenceDatabase, externalIdentifier)
+    #FOREIGN KEY (id) REFERENCES Pathway (id),
+    #FOREIGN KEY (id) REFERENCES ReactionLikeEvent (id),
+    #FOREIGN KEY (id) REFERENCES PhysicalEntity (id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE PathwayHierarchy (
