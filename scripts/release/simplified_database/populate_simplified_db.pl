@@ -15,6 +15,7 @@ use GKB::DBAdaptor;
 
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
 my $denormalised_database = $GKB::Config::GK_DB_NAME . "_dn";
 create_denormalised_database($denormalised_database);
@@ -24,25 +25,41 @@ load_denormalised_database_schema($denormalised_database);
 my $dba = get_dba();
 
 my @pathways = @{$dba->fetch_instance(-CLASS => 'Pathway')};
+$logger->info("Beginning population of pathway table");
 populate_pathway_table(@pathways);
+$logger->info("Finished population of pathway table");
 
 my @reaction_like_events = @{$dba->fetch_instance(-CLASS => 'ReactionlikeEvent')};
+$logger->info("Beginning population of reaction like event table");
 populate_reaction_like_event_table(@reaction_like_events);
+$logger->info("Finished population of reaction like event table");
+
+$logger->info("Beginning population of pathway link tables");
 populate_pathway_link_tables(@pathways);
+$logger->info("Finished population of pathway link tables");
 
 my @physical_entities = @{$dba->fetch_instance(-CLASS => 'PhysicalEntity')};
+$logger->info("Beginning population of physical entity table");
 populate_physical_entity_table(@physical_entities);
-populate_physical_entity_hierarchy_table(@physical_entities);
-populate_reaction_like_event_to_physical_entity_table(@reaction_like_events);    
+$logger->info("Finished population of physical entity table");
 
+$logger->info("Beginning population of physical entity hierarchy table");
+populate_physical_entity_hierarchy_table(@physical_entities);
+$logger->info("Finished population of physical entity hierarchy table");
+
+$logger->info("Beginning population of reaction like event to physical entity table");
+populate_reaction_like_event_to_physical_entity_table(@reaction_like_events);    
+$logger->info("Finished population of reaction like event to physical entity table");
+
+$logger->info("Beginning population of id to external identifier table");
 populate_id_to_external_identifier_table(@pathways, @reaction_like_events, @physical_entities);
+$logger->info("Finished population of id to external identifier table");
 
 sub get_dba {
     return GKB::DBAdaptor->new (
 	-user => $GKB::Config::GK_DB_USER,
 	-pass => $GKB::Config::GK_DB_PASS,
-	-dbname => 'test_reactome_52'
-	#$GKB::Config::GK_DB_NAME
+	-dbname => $GKB::Config::GK_DB_NAME
     );
 }
 
@@ -177,7 +194,8 @@ sub populate_reaction_like_event_to_physical_entity_table {
 	    try {
 		$sth->execute($reaction_like_event->db_id, $physical_entity->db_id);
 	    } catch {
-		$logger->logcarp("Problem inserting reaction like event " . $reaction_like_event->db_id . " with physical entity " . $physical_entity->db_id . ": $_");
+		$logger->logcarp("Problem inserting reaction like event " . $reaction_like_event->db_id . " with physical entity " . $physical_entity->db_id . ": $_")
+		unless /duplicate/i;
 	    };
 	}
     }
