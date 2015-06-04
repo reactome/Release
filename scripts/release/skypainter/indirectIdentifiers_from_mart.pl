@@ -105,7 +105,7 @@ foreach my $rpg_id (keys %accs) {
 
 while (my ($acc,$ar) = each %accs) {
     foreach my $i (@{$ar}) {
-	my @otherIdentifiers = sort {fc($a) cmp fc($b)} @{$i->OtherIdentifier};
+	my @otherIdentifiers = sort {fc($a) cmp fc($b)} grep {defined} @{$i->OtherIdentifier};
 	$i->OtherIdentifier(undef);
 	$i->OtherIdentifier(@otherIdentifiers);
 	
