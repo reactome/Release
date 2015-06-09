@@ -7,6 +7,7 @@ import org.reactome.server.analysis.core.model.resource.MainResource;
 import org.reactome.server.analysis.core.model.resource.Resource;
 import org.reactome.server.analysis.core.model.resource.ResourceFactory;
 import org.reactome.server.analysis.core.util.MapSet;
+import org.reactome.server.analysis.service.exception.BadRequestException;
 import org.reactome.server.analysis.service.model.*;
 
 import java.util.*;
@@ -212,6 +213,46 @@ public class AnalysisStoredResult {
             }
         }
         return rtn;
+    }
+
+    public SpeciesFilteredResult filterBySpecies(Long speciesId, String resource){
+        if(resource!=null){
+            Resource r = ResourceFactory.getResource(resource);
+
+            this.filterPathwaysByResource(resource);
+            List<PathwayBase> rtn = new LinkedList<PathwayBase>();
+            Double min = null; Double max=null;
+
+            for (PathwayNodeSummary pathway : this.pathways) {
+                if(pathway.getSpecies().getSpeciesID().equals(speciesId)){
+                    PathwaySummary aux = new PathwaySummary(pathway, resource.toUpperCase());
+                    rtn.add(new PathwayBase(aux));
+
+                    List<Double> exps = new LinkedList<Double>();
+                    if(r instanceof MainResource) {
+                        exps = pathway.getData().getExpressionValuesAvg((MainResource) r);
+                    }else if (resource.equals("TOTAL")) {
+                        exps = pathway.getData().getExpressionValuesAvg();
+                    }
+
+                    for (Double exp : exps) {
+                        if (min == null || exp < min) {
+                            min = exp;
+                        } else if (max==null || exp > max) {
+                            max = exp;
+                        }
+                    }
+                }
+            }
+            ExpressionSummary summary;
+            if(this.expressionSummary==null){
+                summary = null;
+            }else{
+                summary = new ExpressionSummary(this.expressionSummary.getColumnNames(), min, max);
+            }
+            return new SpeciesFilteredResult(this.summary.getType(), summary,  rtn);
+        }
+        throw new BadRequestException();
     }
 
     private Comparator<PathwayNodeSummary> getComparator(String sortBy, String order, String resource){

@@ -68,6 +68,22 @@ public class TokenController {
         return controller.getFromToken(token).filterByPathways(pathwayIds, resource);
     }
 
+    @ApiOperation(value = "Filters the result by species",
+                  notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "No result corresponding to the token was found"),
+            @ApiResponse(code = 410, message = "Result deleted due to a new data release")})
+    @RequestMapping(value = "/{token}/filter/species/{species}", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public SpeciesFilteredResult filterBySpecies( @ApiParam(name = "token", required = true, value = "The token associated with the data to query")
+                                          @PathVariable String token,
+                                           @ApiParam(name = "species", required = true, value = "The dbId of the species to filter the result")
+                                          @PathVariable Long species,
+                                           @ApiParam(name = "resource", value = "the resource to sort", required = false, defaultValue = "TOTAL", allowableValues = "TOTAL,UNIPROT,ENSEMBL,CHEBI,MIRBASE,NCBI_PROTEIN,EMBL,COMPOUND")
+                                          @RequestParam(required = false, defaultValue = "TOTAL") String resource) {
+        return controller.getFromToken(token).filterBySpecies(species, resource);
+    }
+
     @ApiOperation(value = "Returns the page where the corresponding pathway is taking into account the passed parameters",
                   notes = "Useful when implementing UI with tables showing the results in a page way and the user needs " +
                           "to know in which page a certain pathway is present for a given set of sorting and filtering " +
