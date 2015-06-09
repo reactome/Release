@@ -12,6 +12,12 @@ public class ExpressionSummary {
     Double min;
     Double max;
 
+    public ExpressionSummary(List<String> columnNames, Double min, Double max) {
+        this.columnNames = columnNames;
+        this.min = min;
+        this.max = max;
+    }
+
     public ExpressionSummary(UserData storedResult) {
         this.columnNames = storedResult.getExpressionColumnNames();
         this.min = storedResult.getExpressionBoundaries().getMin();
