@@ -128,7 +128,7 @@ public class PhysicalEntityHierarchyBuilder {
         }
 
         //4th -> set the node for the main identifier
-        PhysicalEntityNode node = this.getPhysicalEntityNode(physicalEntityId, species, physicalEntity.getCrossReference());
+        PhysicalEntityNode node = this.getPhysicalEntityNode(physicalEntity, species);
         if(node!=null){
             MapSet<Resource, String> resourceIdentifiers = this.getResourceIdentifiers(physicalEntity);
             for (Resource resource : resourceIdentifiers.keySet()) {
@@ -205,6 +205,39 @@ public class PhysicalEntityHierarchyBuilder {
         return rtn;
     }
 
+    //This method takes into account only curated data
+    private PhysicalEntityNode getPhysicalEntityNode(PhysicalEntity pe, SpeciesNode species){
+        try {
+            GKInstance instance = dba.fetchInstance(pe.getDbId());
+
+            if(instance.getSchemClass().isValidAttribute(ReactomeJavaConstants.referenceEntity)){
+                String database=null;
+                GKInstance re = (GKInstance) instance.getAttributeValue(ReactomeJavaConstants.referenceEntity);
+                if(re!=null){
+                    GKInstance dbInstance = (GKInstance) re.getAttributeValue(ReactomeJavaConstants.referenceDatabase);
+                    if(dbInstance!=null){
+                        database = dbInstance.getDisplayName();
+                    }
+                }
+                if(database!=null) {
+                    String identifier = getMainIdentifier(re);
+                    if (identifier != null) {
+                        Resource resource = ResourceFactory.getResource(database);
+                        if (resource instanceof MainResource) {
+                            MainResource mainResource = (MainResource) resource;
+                            return new PhysicalEntityNode(pe.getDbId(), species, mainResource, identifier);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return getPhysicalEntityNode(pe.getDbId(), species, pe.getCrossReference());
+    }
+
+    //This method checks the cross-references looking for the main identifier (or takes an auxiliary main resource in case
+    //the main one does not exist
     private PhysicalEntityNode getPhysicalEntityNode(Long physicalEntityId, SpeciesNode species, List<DatabaseIdentifier> identifiers){
         PhysicalEntityNode aux = null;
         if(identifiers != null) {
@@ -249,19 +282,11 @@ public class PhysicalEntityHierarchyBuilder {
             }
 
             if(resource!=null){
-                //If the variant identifier exists we use it as the identifier
-                if(instance.getSchemClass().isValidAttribute(ReactomeJavaConstants.variantIdentifier)){
-                    String variantIdentifier = (String) instance.getAttributeValue(ReactomeJavaConstants.variantIdentifier);
-                    if(variantIdentifier!=null){
-                        rtn.add(new Pair<Resource, String>(resource, variantIdentifier));
-                    }
+                String mainIdentifier = getMainIdentifier(instance);
+                if(mainIdentifier!=null){
+                    rtn.add(new Pair<Resource, String>(resource, mainIdentifier));
                 }
-                if(rtn.isEmpty()){ //If rtn is empty is because the variant identifier does NOT exist
-                    if(instance.getSchemClass().isValidAttribute(ReactomeJavaConstants.identifier)){
-                        String mainIdentifier = (String) instance.getAttributeValue(ReactomeJavaConstants.identifier);
-                        rtn.add(new Pair<Resource, String>(resource, mainIdentifier));
-                    }
-                }
+
                 //From now on, resource will have "#" to distinguish from the main pair above
                 String rscAux = "#" + resource.getName(); //fake resource
                 resource = ResourceFactory.getResource(rscAux);
@@ -289,6 +314,27 @@ public class PhysicalEntityHierarchyBuilder {
             e.printStackTrace();
         }
         return rtn;
+    }
+
+    private String getMainIdentifier(GKInstance referenceEntity){
+        try {
+            //If the variant identifier exists we use it as the identifier
+            if(referenceEntity.getSchemClass().isValidAttribute(ReactomeJavaConstants.variantIdentifier)){
+                String variantIdentifier = (String) referenceEntity.getAttributeValue(ReactomeJavaConstants.variantIdentifier);
+                if(variantIdentifier!=null){
+                    return variantIdentifier;
+                }
+            }
+            if(referenceEntity.getSchemClass().isValidAttribute(ReactomeJavaConstants.identifier)){
+                String mainIdentifier = (String) referenceEntity.getAttributeValue(ReactomeJavaConstants.identifier);
+                if(mainIdentifier!=null) {
+                    return mainIdentifier;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @SuppressWarnings("ConstantConditions")
