@@ -406,8 +406,14 @@ public class Enricher implements IEnricher  {
                 List<String> list = new ArrayList<String>();
                 List<?> instanceList = instance.getAttributeValuesList(fieldName);
                 for (Object attributeObject : instanceList) {
-                    GKInstance attributeInstance = (GKInstance) attributeObject;
-                    list.add(attributeInstance.getDisplayName());
+                    if(attributeObject instanceof GKInstance) {
+                        GKInstance attributeInstance = (GKInstance) attributeObject;
+                        list.add(attributeInstance.getDisplayName());
+                    } else if (attributeObject instanceof String){
+                        list.add((String) attributeObject);
+                    } else {
+                        logger.error(instance.getSchemClass().getName() + " field type unknown for " + fieldName);
+                    }
                 }
                 return list;
             } catch (Exception e) {
