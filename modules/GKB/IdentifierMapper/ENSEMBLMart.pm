@@ -64,6 +64,8 @@ sub new {
     $self->ensembl_mart_params(undef);
     $self->handle_to_ensembl_mart(undef);
 
+    $self->set_ensembl_mart_params();
+
     return $self;
 }
 
@@ -87,9 +89,13 @@ sub refresh {
     my $logger = get_logger(__PACKAGE__);
     
     my $e = $self->ensembl_mart_params;
+    
+    $logger->info("reconnecting to ENSEMBL BioMart database, just to be on the safe side\n");
+    
     if (defined $e) {
-    	$logger->info("reconnecting to ENSEMBL BioMart database, just to be on the safe side\n");
     	$self->set_ensembl_mart_params($e->[0], $e->[1], $e->[2], $e->[3], $e->[4]);
+    } else {
+	$self->set_ensembl_mart_params();
     }
 }
 
@@ -122,6 +128,8 @@ sub get_ensembl_mart_xref_table_name {
     
     my $logger = get_logger(__PACKAGE__);
     
+    $self->refresh();
+    
     my $table_name = $self->ensembl_mart_table_hash->{$input_db}->{$ensembl_db};
     if (defined $table_name) {
     	return $table_name;
@@ -152,6 +160,8 @@ sub check_ensembl_mart_table_existence {
     
     my $logger = get_logger(__PACKAGE__);
     
+    $self->refresh();
+    
     eval {
     	if (!(defined $self->handle_to_ensembl_mart)) {
 	    $logger->warn("handle_to_ensembl_mart is undef\n");
@@ -179,6 +189,8 @@ sub convert {
     my ($self, $input_db, $input_id, $output_db) = @_;
 
     my $logger = get_logger(__PACKAGE__);
+    
+    $self->refresh();
     
     my $handle_to_ensembl_mart = $self->handle_to_ensembl_mart;
     if (!(defined $handle_to_ensembl_mart)) {
@@ -360,6 +372,8 @@ sub convert_list_uniprot_to_ensembl {
     
     my $logger = get_logger(__PACKAGE__);
     
+    $self->refresh();
+    
     my $handle_to_ensembl_mart = $self->handle_to_ensembl_mart;
     if (!(defined $handle_to_ensembl_mart)) {
     	$logger->warn("handle_to_ensembl_mart is undef!\n");
@@ -449,6 +463,8 @@ sub convert_list_ensp_to_ensembl {
 
     my $logger = get_logger(__PACKAGE__);
     
+    $self->refresh();
+    
     my $handle_to_ensembl_mart = $self->handle_to_ensembl_mart;
     if (!(defined $handle_to_ensembl_mart)) {
     	$logger->warn("handle_to_ensembl_mart is undef!\n");
@@ -502,6 +518,8 @@ sub query_ensembl_mart {
     my ($self, $input_ids, $output_id_hash, $input_table, $output_table, $species, $translation) = @_;
 
     my $logger = get_logger(__PACKAGE__);
+    
+    $self->refresh();
     
     if (scalar(@{$input_ids})<1) {
     	# Empty input, so no point in doing a query
@@ -579,6 +597,8 @@ sub query_ensembl_mart_with_ensp {
     my ($self, $input_ids, $output_id_hash, $output_table, $species, $translation) = @_;
     
     my $logger = get_logger(__PACKAGE__);
+    
+    $self->refresh();
     
     if (scalar(@{$input_ids})<1) {
     	# Empty input, so no point in doing a query
@@ -665,7 +685,8 @@ sub generate_ensembl_mart_species_abbreviation {
 sub close {
     my ($self) = @_;
     
-    $self->handle_to_ensembl_mart->disconnect();
+    my $ensembl_mart_handle = $self->handle_to_ensembl_mart;
+    $ensembl_mart_handle->disconnect() if $ensembl_mart_handle;
     $self->mart_up(0);
 }
 
