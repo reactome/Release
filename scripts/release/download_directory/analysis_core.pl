@@ -54,7 +54,7 @@ $opt_port ||= $GK_DB_PORT;
 my $present_dir = getcwd();
 
 chdir "$GK_ROOT_DIR/scripts/release/download_directory/analysis/Core";
-system("mvn clean package -PAnalysis-Core-Command-Line");
+system("mvn clean package");
 system("mv target/tools-jar-with-dependencies.jar analysis_core.jar");
 my $analysis_core = "java -jar -Xms5120M -Xmx10240M analysis_core.jar";
 my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
