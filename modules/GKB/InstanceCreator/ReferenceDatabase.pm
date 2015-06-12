@@ -70,7 +70,7 @@ my %reference_database_info_hash = (
     'BioModels' => {
         'Name'      => ['BioModels'],
         'URL'       => "http://www.ebi.ac.uk/biomodels/",
-        'AccessURL' => "http://www.ebi.ac.uk/biomodels-main/publ-model.do?mid=###ID###"
+        'AccessUrl' => "http://www.ebi.ac.uk/biomodels-main/publ-model.do?mid=###ID###"
     },
     'Brenda' => {
         'Name' => ['Brenda'],
