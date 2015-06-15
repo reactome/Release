@@ -54,5 +54,5 @@ sub add_key {
     my $homedir = shift;
     my $host = shift;
     
-    `cat $homedir/.ssh/id_rsa.pub | ssh -v $user\@$host 'cat >> $homedir/.ssh/authorized_keys'`;
+    `cat $homedir/.ssh/id_rsa.pub | ssh -v $user\@$host 'cat >> $homedir/.ssh/authorized_keys; chmod 600 $homedir/.ssh/authorized_keys'`;
 }
