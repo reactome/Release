@@ -70,6 +70,8 @@ sub populate_pathway_table {
     
     my $dbh = get_denormalised_database_handle();
     
+    $dbh->begin_work();
+    
     my $sth = $dbh->prepare("INSERT INTO Pathway (id, displayName, species, stableId) VALUES (?, ?, ?, ?)")
 		or $logger->logconfess($dbh->errstr);
 		
@@ -84,6 +86,8 @@ sub populate_pathway_table {
 	    $logger->logcarp("Problem inserting pathway $db_id: $_");
 	};
     }
+    
+    $dbh->commit();
 }
 
 sub populate_pathway_link_tables {
@@ -92,6 +96,8 @@ sub populate_pathway_link_tables {
     my $logger = get_logger(__PACKAGE__);
     
     my $dbh = get_denormalised_database_handle();
+    
+    $dbh->begin_work();
     
     my $reaction_statement_handle = $dbh->prepare("INSERT INTO Pathway_To_ReactionLikeEvent (pathwayId, reactionLikeEventId) VALUES (?, ?)")
 		or $logger->logconfess($dbh->errstr);
@@ -110,6 +116,8 @@ sub populate_pathway_link_tables {
 	    };
 	}
     }
+    
+    $dbh->commit();
 }
 
 sub populate_reaction_like_event_table {
@@ -118,6 +126,8 @@ sub populate_reaction_like_event_table {
     my $logger = get_logger(__PACKAGE__);
     
     my $dbh = get_denormalised_database_handle();
+    
+    $dbh->begin_work();
     
     my $sth = $dbh->prepare("INSERT INTO ReactionLikeEvent (id, displayName, species, class, stableId) VALUES (?, ?, ?, ?, ?)")
 		or $logger->logconfess($dbh->errstr);
@@ -134,6 +144,8 @@ sub populate_reaction_like_event_table {
 	    $logger->logcarp("Problem inserting reaction like event $db_id: $_");
 	};
     }
+    
+    $dbh->commit();
 }
 
 sub populate_physical_entity_table {
@@ -142,6 +154,8 @@ sub populate_physical_entity_table {
     my $logger = get_logger(__PACKAGE__);
     
     my $dbh = get_denormalised_database_handle();
+    
+    $dbh->begin_work();
     
     my $sth = $dbh->prepare("INSERT INTO PhysicalEntity (id, displayName, species, class, stableId) VALUES (?, ?, ?, ?, ?)")
 		or $logger->logconfess($dbh->errstr);
@@ -158,6 +172,8 @@ sub populate_physical_entity_table {
 	    $logger->logcarp("Problem inserting physical entity $db_id: $_");
 	};
     }
+    
+    $dbh->commit();
 }
 
 sub populate_physical_entity_hierarchy_table {
@@ -166,6 +182,8 @@ sub populate_physical_entity_hierarchy_table {
     my $logger = get_logger(__PACKAGE__);
     
     my $dbh = get_denormalised_database_handle();
+    
+    $dbh->begin_work();
     
     my $sth = $dbh->prepare("INSERT INTO PhysicalEntityHierarchy (physicalEntityId, childPhysicalEntityId) VALUES (?, ?)")
 		or $logger->logconfess($dbh->errstr);
@@ -177,6 +195,8 @@ sub populate_physical_entity_hierarchy_table {
 	    };
 	}
     }
+    
+    $dbh->commit();
 }
 
 sub populate_reaction_like_event_to_physical_entity_table {
@@ -185,6 +205,8 @@ sub populate_reaction_like_event_to_physical_entity_table {
     my $logger = get_logger(__PACKAGE__);
     
     my $dbh = get_denormalised_database_handle();
+    
+    $dbh->begin_work();
     
     my $sth = $dbh->prepare("INSERT INTO ReactionLikeEvent_To_PhysicalEntity (reactionLikeEventId, physicalEntityId) VALUES (?, ?)")
 		or $logger->logconfess($dbh->errstr);
@@ -199,6 +221,8 @@ sub populate_reaction_like_event_to_physical_entity_table {
 	    };
 	}
     }
+    
+    $dbh->commit();
 }
 
 sub get_physical_entities_in_reaction_like_event {
@@ -233,6 +257,8 @@ sub populate_id_to_external_identifier_table {
     
     my $dbh = get_denormalised_database_handle();
     
+    $dbh->begin_work();
+    
     my $sth = $dbh->prepare("INSERT INTO Id_To_ExternalIdentifier (id, referenceDatabase, externalIdentifier, description) VALUES (?, ?, ?, ?)")
 		or $logger->logconfess($dbh->errstr);
     
@@ -247,10 +273,13 @@ sub populate_id_to_external_identifier_table {
 	    try {
 		$sth->execute($db_id, $reference_database, $identifier, $description);
 	    } catch {
-		$logger->logcarp("Problem inserting external identifier $reference_database:$identifier $description for $db_id: $_");
+		$logger->logcarp("Problem inserting external identifier $reference_database:$identifier $description for $db_id: $_")
+		unless /duplicate/i;
 	    };
 	}
     }
+    
+    $dbh->commit();
 }
 
 
