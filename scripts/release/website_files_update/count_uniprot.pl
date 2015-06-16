@@ -1,6 +1,10 @@
 #!/usr/local/bin/perl -w                                                                                                                                                          
 use strict;
 
+# The collection of UniProt identifiers does not distinguish
+# between canonical and isoform representations, so isoforms
+# are not counted.
+
 use lib "/usr/local/gkbdev/modules";
 
 use GKB::ClipsAdaptor;
