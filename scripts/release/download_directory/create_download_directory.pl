@@ -245,6 +245,13 @@ my @cmds = (
     ],
     
     [
+     "SBGN_dumper",
+     1,
+     0,
+     "perl SBGN_dumper.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.sbgn.gz",
+    ],
+    
+    [
      "interactions_for_all_species",
      1,
      1,
