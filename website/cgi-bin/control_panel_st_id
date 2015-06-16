@@ -29,6 +29,7 @@ use GKB::DBAdaptor;
 use GKB::WebUtils;
 use GKB::Utils;
 use GKB::Config;
+use GKB::StableIdentifierDatabase;
 use HTTP::Tiny;
 use JSON;
 use GKB::FrontPage3;
@@ -60,7 +61,7 @@ eval {
 	my $url_release_num = $CGI->param("RELEASE_NUM");
 	my $extended_st_id = $CGI->param("ST_ID");
 	if ( !$extended_st_id ) {
-		handle_error("ST_ID missing!!\n");
+	    handle_error("ST_ID missing!!\n");
 	}
 
 
@@ -69,8 +70,14 @@ eval {
 	    ($identifier = $extended_st_id) =~ s/\.\d+$//;
 	}
 
+	# Is there a new stable ID for this?
+	my $current_stable_id = get_current_stable_id($identifier);
+	if ($extended_st_id  ne $current_stable_id) {
+	    handle_warning("The current identifier has been renamed to $current_stable_id");
+	} 
+	
         # Let's check to see what the real stable id version is
-        $real_current_stable_id_version = get_current_stable_id($identifier);
+        $real_current_stable_id_version = get_current_stable_version($identifier);
 
 	unless ($real_current_stable_id_version) {
 	    handle_error("A current version of $extended_st_id was not found in the database");
@@ -93,6 +100,10 @@ eval {
 
         # Get StableIdentifier instance
 	my $stable_identifier = $si->get_stable_identifier($identifier);
+
+	if ($identifier =~ /^R-/) {
+	    handle_message("Stable Identifier $identifier is new with release 53.  The history is not yet available");
+	}
 
 	if (!$stable_identifier) {
 	    handle_error("Could not find stable ID $identifier");
@@ -335,6 +346,15 @@ sub generate_row {
     return $release_table_row;
 }
 	
+
+sub handle_message {
+    my $message = shift;
+    print_page_start();
+    print h1($message);
+    print_page_end();
+    exit 0;
+}
+
 sub handle_error {
 	my ($error_message) = @_;
 	
@@ -422,10 +442,20 @@ sub get_current_stable_id {
       or warn "get_current_stable_id: No stable identifier found!\n";
     my $display_name = $stable_id->{displayName} 
       or warn "get_current_stable_id: No stable identifier dsiplayName found!\n";
+    return $display_name;
+}
+
+
+sub get_current_stable_version {
+    my $id = shift;
+    my $json = REST_query($id);
+    my $stable_id = $json->{stableIdentifier}
+    or warn "get_current_stable_id: No stable identifier found!\n";
+    my $display_name = $stable_id->{displayName}
+    or warn "get_current_stable_id: No stable identifier dsiplayName found!\n";
     my ($version) = $display_name =~ /\.(\d+)$/;
     return $version;
 }
-
 
 # use this to query the current daatabase through the RESTful API
 sub REST_query {
