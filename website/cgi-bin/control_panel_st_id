@@ -6,25 +6,11 @@
 # "control panel" showing the history etc. for this
 # stable ID.
 
-# The following block sets the script to pick up libraries from ../../modules.
-# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
-# on different server setups.
-BEGIN {
-    my ($path) = $0 =~ /^(\S+)$/;
-    my @a = split('/',$path);
-    pop @a;
-    if (@a && !$a[0]) {
-	$#a = $#a - 2;
-    } else {
-	push @a, ('..','..');
-    }
-    push @a, 'modules';
-    my $libpath = join('/', @a);
-    unshift (@INC, $libpath);
-}
-
 use strict;
 use CGI qw(:standard);
+use common::sense;
+
+use lib "/usr/local/gkb/modules";
 use GKB::DBAdaptor;
 use GKB::WebUtils;
 use GKB::Utils;
@@ -33,319 +19,86 @@ use GKB::StableIdentifierDatabase;
 use HTTP::Tiny;
 use JSON;
 use GKB::FrontPage3;
+use Data::Dumper;
 
 use constant BY_ID    => '/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject';
 
 my $host = url(-base => 1);
 my $script_name = $0;
-my ( $CGI, $WU, $si, $reactome_release_column_name );
 
 my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (Stable ID)", "/stylesheet.css");
 my $header = $front_page->get_header();
 my $footer = $front_page->get_footer();
 my $enclosing_div_start = $front_page->get_enclosing_div_start();
 my $enclosing_div_end = $front_page->get_enclosing_div_end();
-my $real_current_stable_id_version;
 my $warning;
 
-$CGI = CGI->new();
+my $CGI = CGI->new();
+my $stable = GKB::StableIdentifierDatabase->new();
 
-eval {
-	# Gives access to a whole bunch of methods for dealing with
-	# previous releases and stable identifiers.
-	$si = GKB::StableIdentifiers->new($CGI);
-		
-	# Global setting, needed by print_page_start/end
-	$WU = GKB::WebUtils->new_nocheck( -CGI => $CGI );
-	
-	my $url_release_num = $CGI->param("RELEASE_NUM");
-	my $extended_st_id = $CGI->param("ST_ID");
-	if ( !$extended_st_id ) {
-	    handle_error("ST_ID missing!!\n");
-	}
-
-
-	my ($identifier, $version) = $extended_st_id =~ /^(\S+)\.(\d+)$/;
-	unless ($identifier) {
-	    ($identifier = $extended_st_id) =~ s/\.\d+$//;
-	}
-
-	# Is there a new stable ID for this?
-	my $current_stable_id = get_current_stable_id($identifier);
-	if ($extended_st_id  ne $current_stable_id) {
-	    handle_warning("The current identifier has been renamed to $current_stable_id");
-	} 
-	
-        # Let's check to see what the real stable id version is
-        $real_current_stable_id_version = get_current_stable_version($identifier);
-
-	unless ($real_current_stable_id_version) {
-	    handle_error("A current version of $extended_st_id was not found in the database");
-	}
-	
-	if (!$identifier) {
-	    handle_error("I could not figure out which stable ID you mean ($extended_st_id), I'm sorry, I give up");
-	}
-	if (!$version) {
-	    handle_warning("The version was not specified for $extended_st_id.  Using version $real_current_stable_id_version");
-	    $version = $real_current_stable_id_version;
-	    $extended_st_id = "$identifier.$version";
-	}
-	if ($version > $real_current_stable_id_version) {
-	    handle_warning("The specified version for $extended_st_id is not valid.  Using $identifier.$real_current_stable_id_version");
-            $version = $real_current_stable_id_version;
-	    $extended_st_id = "$identifier.$version";
-	}
-
-
-        # Get StableIdentifier instance
-	my $stable_identifier = $si->get_stable_identifier($identifier);
-
-	if ($identifier =~ /^R-/) {
-	    handle_message("Stable Identifier $identifier is new with release 53.  The history is not yet available");
-	}
-
-	if (!$stable_identifier) {
-	    handle_error("Could not find stable ID $identifier");
-	}
-
-	my $display_name = $si->get_current_instance_name($stable_identifier, $identifier, $version);
-	print_page_start($extended_st_id);
-	my $warn = handle_warning();
-	if ($warn) {
-	    print "<br clear='ALL'><p>$warn</p>";
-	}
-	print qq(<h1 CLASS="frontpage">Stable identifier history for $extended_st_id</h1>\n);
-	if ($display_name) {
-		print qq(<P><DIV align="center"><B>Instance: "$display_name"</B></DIV></P>);
-	}
-	print "<P>The following table presents the full history of the current instance.</P>\n";
-	print "<P>The first column contains one row for every version of the instance.  The stable identifier (REACT_...) is a clickable link, that will take you to a web page for the given version of the instance, which may well be part of a previous release. </P>\n";
-	print "<P>In the second column, the releases containing a given version of the instance are listed.</P>\n";
-	print "<P>Rows marked in red correspond to the current instance.  Multiple rows will appear in red if the version number has not changed from one release to the next.</P>\n";
-	print html_table($stable_identifier, $identifier, $version, $url_release_num);
-	print "<P>\n<P>\n";
-    print_page_end();  
-
-	# Close any open database connections
-	$si->close_all_dbas();
-};
-
-sub html_table {
-    my ($stable_identifier, $identifier, $version, $release_num) = @_;
-    
-    my $table_model = generate_table_model($stable_identifier, $identifier, $version, $release_num);
-    my $forms = generate_forms($table_model);
-    my $rows = generate_rows($table_model);
-    
-    my $tstyle = 'style="border:1px solid black"';
-    my $table = '';
-    $table .= '<table WIDTH="100%" CELLSPACING="0" style="border:2px solid black">' . "\n";
-    $table .= "    <TR>\n        <TD $tstyle WIDTH=" . '"55%"' . ">Stable ID</TD>\n        <TD $tstyle WIDTH=" .'"45%"' . ">Release numbers</TD>\n    </TR>\n";
-    $table .= $forms;
-    $table .= $rows;
-    $table .= "</table>\n";
-    
-    return $table;
+my $extended_st_id = $CGI->param("ST_ID");
+if ( !$extended_st_id ) {
+    handle_error("ST_ID missing!!\n");
 }
 
-# The table model is an array, with one element per row of the
-# table to be printed.  Each element is itself an array, with
-# one element per column of the table to be printed.  Colums
-# are:
-#
-# 1) Stable ID
-# 2) Version
-# 3) Release number
-# 4) is_current: true if the identifier is the same as in the URL
-sub generate_table_model {
-    my ($stable_identifier, $identifier, $current_version, $current_release_num) = @_;
-    
-	my $identifier_database_dba = $si->get_identifier_database_dba();
-
-	if (!$identifier_database_dba) {
-		print STDERR "control_panel_st_id.generate_table_model: no identifier database, aborting!\n";
-		return '';
-	}
-	
-	$identifier_database_dba->load_attribute_values( $stable_identifier, 'stableIdentifierVersion' );
-	if (!$stable_identifier->is_valid_attribute('stableIdentifierVersion')) {
-		print STDERR "control_panel_st_id.generate_table_model: stableIdentifierVersion attribute is not available, aborting!\n";
-		return '';
-	}
-	my $stable_identifier_versions = $stable_identifier->stableIdentifierVersion;
-	my $release_ids;
-	my @rows = ();
-	my $row_counter = 0;
-	my $stable_identifier_version;
-	$reactome_release_column_name = $si->reactome_release_column_name;
-	foreach $stable_identifier_version (@{$stable_identifier_versions}) {
-		my $version = $si->get_att_value_from_identifier_database_instance($stable_identifier_version, 'identifierVersion');
-
-		if ($version > $real_current_stable_id_version) {
-		    my $st_id = $CGI->param("ST_ID");
-		    warn "Something is wonky with $st_id: The version ($version) is higher " .
-			 "than the actual current version($real_current_stable_id_version)\n";
-		    $version = $real_current_stable_id_version;
-		}
-
-		my $is_current = 0;
-		if (defined $current_version && !( $current_version eq "" ) && $version eq $current_version) {
-			$is_current = 1;
-		}
-			
-		# Get the releases in which this version was
-		# valid
-		$identifier_database_dba->load_attribute_values( $stable_identifier_version, 'releaseIds' );
-		$release_ids = $stable_identifier_version->releaseIds;
-		# Get a list of release numbers where the supplied
-		# version is valid
-		if ($release_ids && scalar($release_ids) =~ /ARRAY/) {
-		    my $release_id;
-		    foreach $release_id (@{$release_ids}) {
-			my @cols;
-			
-			my $release = $si->get_att_value_from_identifier_database_instance($release_id, $reactome_release_column_name);
-			my $num = $si->get_att_value_from_identifier_database_instance($release, 'num');
-			# temporary band-aid -- block fake release number
-			if (!$num || $num > 99) {
-			    warn "$0 strange release number (".$num||'unknown'.") blocked";
-			    next;
-			}
-			
-			$cols[0] = $identifier;
-			$cols[1] = $version;
-			$cols[2] = $num;
-			if (defined $current_release_num && !($current_release_num eq '')) {
-			    if ($current_release_num == $num) {
-				$cols[3] = 1;
-			    } else {
-				$cols[3] = 0;
-			    }
-			} else {
-			    $cols[3] = $is_current;
-			}
-			
-			$rows[$row_counter] = \@cols;
-			
-			$row_counter++;
-		    }
-		}
-	}
-    
-    # Sort rows by release num
-    my @sorted_rows = sort { $a->[2] <=> $b->[2] } @rows;
-    
-    return \@sorted_rows;
+my ($identifier, $version) = $extended_st_id =~ /^(\S+)\.(\d+)$/;
+unless ($identifier) {
+    ($identifier = $extended_st_id) =~ s/\.\d+$//;
 }
 
-sub generate_forms {
-	my ($table_model) = @_;
-	
-	my $out = '';
-	
-	if (!$table_model) {
-		return $out;
-	}
-	
-	my $row_model;
-	foreach $row_model (@{$table_model}) {
-		$out .= generate_form($row_model);
-	}
-	
-	return $out;
+if (!$identifier) {
+    handle_error("I could not figure out which stable ID you mean ($extended_st_id), I'm sorry, I give up");
 }
 
-sub generate_form {
-	my ($row_model) = @_;
-	
-	if (!$row_model) {
-		return '';
-	}
-	
-	my $identifier = $row_model->[0];
-	my $version = $row_model->[1];
-	my $release_num = $row_model->[2];
-	my $is_current = $row_model->[3];
-				
-    my $identifier_version = $identifier;
-    if (defined $version && !($version eq '')) {
-    	$identifier_version .= ".$version";
-    }
-    
-    my $style = "";
-    if ($is_current) {
-    	$style = "font-color:red;";
-    }
+my $dba = $stable->get_dba();
+my $instance_db_id = $stable->db_id_from_stable_id($identifier) || handle_error("I could not find a record for $identifier");
 
-#    my $identifier_version = $identifier . '.' . $version;
-	my @release_table_rows = ();
-	my $form_name = $WU->form_name_for_eventbrowser_st_id($identifier, $version, $release_num);
-	my $out = $WU->form_for_eventbrowser_st_id($form_name, $identifier, $version, $release_num);
+my $instance = $dba->fetch_instance_by_db_id($instance_db_id)->[0];
+my $display_name = $instance->displayName;
+my $class = $instance->class;
 
-	return $out;
-}
-	
-sub generate_rows {
-	my ($table_model) = @_;
-	
-	my $out = '';
-	
-	if (!$table_model) {
-		return $out;
-	}
-	
-	my $row_model;
-	foreach $row_model (@{$table_model}) {
-		$out .= generate_row($row_model);
-	}
-	
-	return $out;
+my @events = $stable->get_events($instance_db_id);
+
+
+print_page_start();
+say h1("External identifier history for $class '$display_name'");
+my %event;
+my $used_name;
+for my $event (@events) {
+    my ($name, $st_id, $event, $release) = @$event;
+    if ($used_name && $used_name eq $name) {
+	$name = '';
+    }
+    $used_name = $name if $name;
+    $event = '' if $event eq 'exists';
+
+    push @{$event{$release}}, [$st_id, $event];
 }
 
-sub generate_row {
-    my ($row_model) = @_;
-	
-    if (!$row_model) {
-	return '';
+my @keys = sort {$a <=> $b} keys %event;
+my @rows = (th(['Release','Identifier','Change']));
+for my $release (@keys) {
+    for my $evt (@{$event{$release}}) {
+	$evt->[0] = a(
+	    {
+		-href => '/PathwayBrowser/#'.$evt->[0],
+		-target => '_BLANK'
+	    },
+	    $evt->[0]
+	    );
+	push @rows, td([$release,@$evt]);
     }
-    
-    my $identifier = $row_model->[0];
-    my $version = $row_model->[1];
-    my $release_num = $row_model->[2];
-    my $is_current = $row_model->[3];
-    
-    my $identifier_version = $identifier;
-    if (defined $version && !($version eq '')) {
-    	$identifier_version .= ".$version";
-    }
-    
-    my $style = "";
-    my $style_string = "";
-    if ($is_current) {
-#    	$style = "font-color:red;";
-    	$style = "color:red;";
-    	$style_string = " STYLE=\"$style\"";
-    }
-    
-    my $bookmark = create_stable_identifier_bookmark($style, $identifier, $version);
-#    my $identifier_version = $identifier . '.' . $version;
-    my @release_table_rows = ();
-    my $form_name = $WU->form_name_for_eventbrowser_st_id($identifier, $version, $release_num);
-    if (defined $bookmark) {
-	if (!($bookmark eq '')) {
-	    $bookmark = " ($bookmark)";
-	}
-    } else {
-	$bookmark = '';
-    }
-    my $link = $WU->onclick_for_eventbrowser_st_id($style, $form_name, $identifier_version, $bookmark);
-    my $tstyle = 'style="border:1px solid black"';
-    my $release_table_row = "    <TR$style_string>\n        <TD $tstyle>$link</TD>\n        <TD $tstyle>$release_num</TD>\n    </TR>\n";
-    
-    return $release_table_row;
 }
-	
+
+say table(
+    {-style=>"width:100%"},
+    TR(\@rows)
+    );
+
+
+print_page_end();
+
+
 
 sub handle_message {
     my $message = shift;
@@ -366,9 +119,6 @@ sub handle_error {
 	# Print to log file
 	print STDERR "$error_message\n";
 
-	# Close any open database connections
-	$si->close_all_dbas();
-	
 	exit;
 }
 
@@ -383,56 +133,20 @@ sub handle_warning {
 }
 
 sub print_page_end {
-#    ($WU) &&  print $WU->make_footer;
-    print $footer;
+    print $enclosing_div_end, $footer;
     print $CGI->end_html;
 }
 
 sub print_page_start {
-	my ($title) = @_;
-	
-	if (!(defined $title)) {
-		$title = "$PROJECT_NAME ($script_name)";
-	}
-	
+    my ($title) = @_;
+    
+    if (!(defined $title)) {
+	$title = "$PROJECT_NAME ($script_name)";
+    }
+    
     print $CGI->header(-charset => 'UTF-8');
-
-#    my $header = $CGI->start_html(
-#		-style => {-src => '/stylesheet.css'},
-#		-title => $title);
-	
-	print $header;
-
-    # Warning messages
-#    print $WU->warnings();
+    print $header, $enclosing_div_start;
 }
-
-# If you supply a stable identifier and (optionally) a version,
-# this subroutine will return a little bit of Javascript that
-# you can insert into your code to provide a link that will
-# try to bookmark a safe page for the stable ID.
-sub create_stable_identifier_bookmark {
-    my ($style, $identifier, $version) = @_;
-
-	my $url = $CGI->url();
-
-	# Remove command name
-	$url =~ s/[^\/]+$//;
-	
-	my $instance_version = $identifier;
-	if (defined $version) {
-		$instance_version .= ".$version";
-	}
-	my $local_arg_string = "ST_ID=$instance_version";
-
-	my $redirect_string = $url . 'eventbrowser_st_id?' . $local_arg_string;
-	
-	my $bookmark = $WU->create_bookmark($style, "Reactome instance: $instance_version", $redirect_string);
-
-	return $bookmark;
-}
-
-
 
 # get the real current stable ID from the main database
 sub get_current_stable_id {
