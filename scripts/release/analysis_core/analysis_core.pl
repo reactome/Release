@@ -54,7 +54,7 @@ $opt_port ||= $GK_DB_PORT;
 my $present_dir = getcwd();
 
 chdir $GK_ROOT_DIR;
-system("git stash; git subtree pull --prefix $present_dir/analysis --squash analysis master; git stash pop");
+system("git stash; git subtree pull --prefix scripts/release/analysis_core/analysis --squash analysis master; git stash pop");
 
 chdir "$present_dir/analysis/Core";
 system("mvn clean package");
