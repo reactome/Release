@@ -336,8 +336,8 @@ sub query_ensembl_mart {
     my %input;
     $input{$_}++ foreach @{$input_ids};
     
-
-    my $query = _prepare_query($ensembl_mart_species_abbreviation, $input_table, $output_table);
+    my $registry = get_registry();
+    my $query = _prepare_query($registry, $ensembl_mart_species_abbreviation, $input_table, $output_table);
     if (!$query) {
 	$logger->warn("Query could not be prepared for $ensembl_mart_species_abbreviation on table $output_table");
 	return 0;
@@ -366,6 +366,7 @@ sub query_ensembl_mart {
 }
 
 sub _prepare_query {
+    my $registry = shift;
     my $species = shift;
     my $input_table = shift;
     my $output_table = shift;
@@ -383,7 +384,7 @@ sub _prepare_query {
 		return;
 	    }
 	    
-	    $query = get_query();
+	    $query = get_query($registry);
 	    $query->setDataset($dataset);
 	    $query->addAttribute($input_table);
 	    $query->addAttribute($output_table);
