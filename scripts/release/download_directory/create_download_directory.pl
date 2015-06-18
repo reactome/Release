@@ -350,26 +350,14 @@ my @cmds = (
      "SearchIndexer",
      1,
      1,
-     "cd $GK_ROOT_DIR",
-     "git stash",
-     "git subtree pull --prefix scripts/release/download_directory/search --squash search master",
-     "git stash pop",
-     "cd -",
-     "perl search_indexer.pl -r $release_nr $reactome_db_options",
-     "mv ebeye.xml.gz $release_nr"
+     "cp ../search_indexer/ebeye.xml.gz $release_nr"
     ],
     
     [
      "AnalysisCore",
      1,
      1,
-     "cd $GK_ROOT_DIR",
-     "git stash",
-     "git subtree pull --prefix scripts/release/download_directory/analysis --squash analysis master",
-     "git stash pop",
-     "cd -",
-     "perl analysis_core.pl -r $release_nr $reactome_db_options",
-     "mv *.txt $release_nr"
+     "cp ../analysis_core/*.txt $release_nr"
     ],
     
     [
