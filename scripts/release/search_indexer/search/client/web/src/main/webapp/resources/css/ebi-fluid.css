@@ -1,0 +1,156 @@
+/**
+ * Copyright (c) EMBL-EBI 2014
+ * Authors: Francis Rowland, Peter Walter, Glen van Ginkel, Nicola Buso
+ *
+ * This is just a slim slightly altered version of the original ebi-fluid.css
+ * so it can be integrated within the Reactome website
+ */
+
+
+.ebi-content * {
+    font-weight:normal;
+    font-style:normal;
+    text-decoration:none;
+}
+
+.ebi-content a:visited {
+    color:#660099;
+}
+
+.ebi-content h1,h2,h3,h4,h5,h6{
+    font: 13px/1.5 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
+    margin:9px 0;
+    clear:both;
+    line-height:1.2
+
+}
+.ebi-content h1 {
+    font-size:370%;
+    margin:20px 0
+}
+
+.ebi-content h2{
+    padding: 15px 0 5px 0;
+    font-size:277%;
+    line-height:1.11;
+    color:#05194C;
+}
+
+.ebi-content h3{
+    font-size:182%
+}
+.ebi-content h4{
+    font-size:161.6%;
+    color:#1F419A;
+}
+.ebi-content h5{
+    font-size:138.5%;
+    color:#1F419A;
+    padding-left: 5px;
+}
+.ebi-content h6{
+    font-size:123%;
+    font-variant:small-caps;
+    color:#000
+}
+.ebi-content p,ul,ol{
+    font-size:100%;
+    margin:0 0 20px 0
+}
+
+.ebi-content strong{
+    font-weight:bold;
+    color:#1F419A;
+    font-size: 108%;
+}
+
+.ebi-content a,a:link,a:visited{
+    border-bottom: 1px inherit;
+}
+.ebi-content a:hover,a:focus,a:active{
+    border-bottom-style:solid
+}
+
+.ebi-content div#local-title-logo a{
+    border:0 none;
+    text-decoration:none
+}
+.ebi-content h1 a, h1 a:link, h1 a:visited, h2 a, h2 a:link, h2 a:visited,
+h3 a, h3 a:link,
+h3 a:visited,
+h4 a, h4 a:link,
+h4 a:visited,
+h5 a, h5 a:link,
+h5 a:visited{
+    border-bottom:0 none;
+    color:#444
+}
+.ebi-content h2 a:hover,
+h2 a:focus,
+h2 a:active,
+h3 a:hover,
+h3 a:focus,
+h3 a:active,
+h4 a:hover,
+h4 a:focus,
+h4 a:active,
+h5 a:hover,
+h5 a:focus,
+h5 a:active{
+    color:#444
+}
+
+.ebi-content form{
+    font-size:100%;
+    font-family:Helvetica,sans-serif;
+    color:#444
+}
+
+.ebi-content form label{
+    display:inline;
+    margin-right:0.3em
+}
+.ebi-content form input{
+    margin:0.2em 0.1em 0.2em 0.2em;
+    font-family:'Helvetica Neue',Helvetica,sans-serif;
+    vertical-align:middle
+}
+
+.ebi-content table{
+    border-collapse:collapse;
+    width:99%;
+    background-color:white;
+    margin:9px auto;
+    border:5px solid #f1f1f1
+}
+.ebi-content th,td{
+    padding:8px 5px 5px 5px;
+    border:1px solid #f1f1f1;
+    border-collapse:collapse;
+    vertical-align:top
+}
+.ebi-content th,td{
+    font-size:93%
+}
+
+.tableHead  {
+    background-color: #eeeeee;
+    background-image: -moz-linear-gradient(top, #eeeeee, #d8d8d8);
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #eeeeee),color-stop(1, #d8d8d8));
+    background-image: -webkit-linear-gradient(#eeeeee, #d8d8d8);
+    background-image: linear-gradient(top, #eeeeee, #d8d8d8);
+}
+.tableHead td {
+    color:#1F419A;
+    font-size: 108%;
+}
+
+.ebi-content span.searchterm{
+    font-style:italic;
+    padding:0.1em 0.3em 0.1em 0.2em;
+    background-color:lightgray;
+    -moz-border-radius:5px;
+    -khtml-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px
+}
