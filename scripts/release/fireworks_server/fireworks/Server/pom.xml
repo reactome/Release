@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.reactome.server</groupId>
+    <artifactId>fireworks</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <name>Reactome Fireworks Layout</name>
+
+    <developers>
+        <developer>
+            <id>fabregat</id>
+            <name>Antonio Fabregat</name>
+            <email>fabregat@ebi.ac.uk</email>
+            <roles>
+                <role>Author</role>
+            </roles>
+            <organization>http://www.ebi.ac.uk/</organization>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <!-- Analysis Core -->
+        <dependency>
+            <groupId>org.reactome.server.tools</groupId>
+            <artifactId>analysis-core</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
+        <!-- Reactome Core -->
+        <!--<dependency>-->
+            <!--<groupId>org.reactome.server</groupId>-->
+            <!--<artifactId>reactome-core</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
+
+        <!-- Gephi libraries and extension points -->
+        <dependency>
+        <groupId>org.gephi</groupId>
+        <artifactId>gephi-toolkit</artifactId>
+        <version>0.8.2</version>
+        </dependency>
+
+        <!-- Kryo Serializer -->
+        <dependency>
+            <groupId>com.esotericsoftware.kryo</groupId>
+            <artifactId>kryo</artifactId>
+            <version>2.22</version>
+        </dependency>
+
+        <!--JSON export-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jsonSchema</artifactId>
+            <version>2.4.3</version>
+        </dependency>
+
+        <!-- Command line parameters parser -->
+        <dependency>
+            <groupId>com.martiansoftware</groupId>
+            <artifactId>jsap</artifactId>
+            <version>2.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <!--<includes>-->
+                <!--<include>**/props/*.properties</include>-->
+                <!--<include>**/webconfig/*.json</include>  &lt;!&ndash; currently needs to be filtered to provide the deployment path of the webapp &ndash;&gt;-->
+                <!--</includes>-->
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Tests.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <!--<finalName>OptionalNameForTheFileWithDependencies</finalName>-->
+                    <archive>
+                        <manifest>
+                            <mainClass>org.reactome.server.fireworks.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://repo.maven.apache.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>central_1</id>
+            <name>Maven Repository Switchboard</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- EBI repo -->
+        <repository>
+            <id>nexus-ebi-repo</id>
+            <name>The EBI internal repository</name>
+            <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-repo/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- EBI SNAPSHOT repo -->
+        <repository>
+            <id>nexus-ebi-snapshot-repo</id>
+            <name>The EBI internal snapshot repository</name>
+            <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <!-- GEPHI repos-->
+        <repository>
+            <id>gephi-snapshots</id>
+            <name>Gephi Snapshots</name>
+            <url>http://nexus.gephi.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>gephi-releases</id>
+            <name>Gephi Releases</name>
+            <url>http://nexus.gephi.org/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+</project>
