@@ -5,6 +5,7 @@ use warnings;
 use lib '/usr/local/gkb/modules';
 
 use autodie qw/:all/;
+use Getopt::Long;
 use Net::OpenSSH;
 
 use GKB::Config;
@@ -14,12 +15,16 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
+#our($opt_cvs_user, $opt_cvs_pass);
+#&GetOptions("cvs_user:s", "cvs_pass:s");
+
 my $cvs_host = 'reactomecurator.oicr.on.ca';
 my $cvs_images_dir = '/usr/local/cvs_repository/GKB/website/images/Pathway_Illustrations';
 my $images_dir = '/usr/local/reactomes/Reactome/production/GKB/website/images';
 
 my $ssh = Net::OpenSSH->new($cvs_host);
-die $ssh->error if $ssh->error;
+#$ssh = Net::OpenSSH->new("$opt_cvs_user:$opt_cvs_pass\@$cvs_host") if $ssh->error;
+die usage_instructions($cvs_host) if $ssh->error;
 
 my @cvs_pathway_illustration_files = $ssh->capture("find $cvs_images_dir -maxdepth 1 -type f -printf '%f\n'");
 
@@ -67,4 +72,15 @@ sub get_dba {
 	-pass => $GKB::Config::GK_DB_PASS,
 	-dbname => $GKB::Config::GK_DB_NAME
     );
+}
+
+sub usage_instructions {
+    my $cvs_host = shift;
+    return <<END;
+    
+$0 requires passwordless access to $cvs_host.
+
+This can be setup by executing the following:
+perl /usr/local/gkb/scripts/release/setup_keypair.pl $cvs_host
+END
 }

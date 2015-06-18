@@ -347,6 +347,14 @@ my @cmds = (
     ],
     
     [
+     "CompiledPathwayImages",
+     1,
+     1,
+     "perl compiled_pathway_images.pl",
+     "mv compiled_pathway_images*.gz $release_nr"
+    ]
+    
+    [
      "SearchIndexer",
      1,
      1,
@@ -359,6 +367,13 @@ my @cmds = (
      1,
      "cp ../analysis_core/*.txt $release_nr"
     ],
+	
+	[
+	 "FireworksServer",
+	 1,
+	 1,
+	 "cp -r ../fireworks_server/json $release_nr/fireworks"
+	],
     
     [
      "release_tarball",
