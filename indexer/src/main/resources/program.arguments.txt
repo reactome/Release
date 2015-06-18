@@ -1,0 +1,12 @@
+-d reactome -u reactome -p reactome -s http://localhost:8983/solr/reactome_final -c controlledvocabulary.csv -o ebeye.xml -r 49 -x -v
+
+<profile>
+            <id>indexer</id>
+            <properties>
+                <indexer.addInterval>100</indexer.addInterval>
+                <indexer.numberOfTries>1</indexer.numberOfTries>
+                <indexer.databaseName>Reactome</indexer.databaseName>
+                <indexer.databaseDescription>Pathway Database</indexer.databaseDescription>
+                <log4j.fileLocation>/home/flo/test/logging.log</log4j.fileLocation>
+            </properties>
+        </profile>
