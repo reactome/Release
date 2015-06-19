@@ -23,7 +23,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
 	
-    cmd("Creating simplified database",[["perl simplified_database.pl"]]);
+    cmd("Creating simplified database",[["perl simplified_db.pl"]]);
 };
 
 1;
