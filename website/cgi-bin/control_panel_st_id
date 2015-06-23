@@ -77,15 +77,18 @@ for my $event (@events) {
 
 my @keys = sort {$a <=> $b} keys %event;
 my @rows = (th(['Release','Identifier','Change']));
+my $i = -1;
 for my $release (@keys) {
     for my $evt (@{$event{$release}}) {
-	$evt->[0] = a(
+	if (++$i == @keys) {	
+	    $evt->[0] = a(
 	    {
 		-href => '/PathwayBrowser/#'.$evt->[0],
 		-target => '_BLANK'
 	    },
 	    $evt->[0]
 	    );
+	}
 	push @rows, td([$release,@$evt]);
     }
 }
