@@ -19,9 +19,14 @@ has '+mail' => ( default => sub {
 					};
 				}
 );
+has '+user_input' => (default => sub {{'skip_list_verified' => {'query' => 'Has the normal event skip list been verified for version $version (y/n):'}}});
 
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
+    
+    my $skip_list_verified = $self->user_input->{'skip_list_verified'}->{'response'} =~ /^y/i;
+    
+    die "Skip list must be verified before running the orthoinference process" unless $skip_list_verified;
     
     cmd("Creating orthopredictions and backing up database",
     	[
