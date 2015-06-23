@@ -64,8 +64,10 @@ print_page_start();
 say h1("External identifier history for $class '$display_name'");
 my %event;
 my $used_name;
+my $highest_release = 0;
 for my $event (@events) {
     my ($name, $st_id, $event, $release) = @$event;
+    $highest_release = $release if $release > $highest_release;
     if ($used_name && $used_name eq $name) {
 	$name = '';
     }
@@ -77,10 +79,9 @@ for my $event (@events) {
 
 my @keys = sort {$a <=> $b} keys %event;
 my @rows = (th(['Release','Identifier','Change']));
-my $i = -1;
 for my $release (@keys) {
     for my $evt (@{$event{$release}}) {
-	if (++$i == @keys) {	
+	if ($release == $highest_release) {	
 	    $evt->[0] = a(
 	    {
 		-href => '/PathwayBrowser/#'.$evt->[0],
