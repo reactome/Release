@@ -5,6 +5,7 @@ use warnings;
 use lib '/usr/local/gkb/modules';
 
 use autodie qw/:all/;
+use Getopt::Long;
 
 use GKB::Config;
 use GKB::DBAdaptor;
@@ -13,6 +14,13 @@ use GKB::DBAdaptor;
 #Log::Log4perl->init(\$LOG_CONF);
 #my $logger = get_logger(__PACKAGE__);
 
+my $help;
+GetOptions('help' => \$help);
+
+if ($help) {
+    print usage_instructions();
+    exit;
+}
 
 my $dba = get_dba();
 
@@ -61,4 +69,19 @@ sub report {
     
     print "$message\n";
     print $fh "$message\n" if $fh;
+}
+
+sub usage_instructions {
+    return <<END;
+For all stable identifiers in $GKB::Config::GK_DB_NAME, the following
+types of issues will be reported:
+
+A stable id instance has an empty identifier slot
+A stable id is duplicated
+A stable id is used by more than one instance in the database
+A stable id is not used
+
+Usage: perl $0
+
+END
 }
