@@ -1,15 +1,13 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use feature qw/state/;
 
 use lib '/usr/local/gkb/modules';
 
 use autodie qw/:all/;
-use Carp;
-use DBI;
-use Try::Tiny;
 
+use List::MoreUtils qw/any/;
+use Getopt::Long;
 use GKB::Config;
 use GKB::DBAdaptor;
 
@@ -17,18 +15,29 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-die usage_instructions() unless ($ARGV[0]);
+
+my $selected_pathways;
+GetOptions('pathways=s' => \$selected_pathways);
+
+unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
+    print usage_instructions();
+    exit;
+}
 
 my @reactions;
-if ($ARGV[0] eq 'all') {    
+if ($selected_pathways eq 'all') {    
     @reactions = @{get_dba()->fetch_instance(-CLASS => 'ReactionlikeEvent', [['species',['48887']]])};
 } else {
-    my $db_id_list = $ARGV[0];
-    my @db_ids = split(",", $db_id_list);
+    my @db_ids = split(",", $selected_pathways);
     my @pathways;
     
     foreach my $db_id (@db_ids) {
-	push @pathways, get_dba()->fetch_instance_by_db_id($db_id)->[0];
+	my $pathway = get_dba()->fetch_instance_by_db_id($db_id)->[0];
+	unless($pathway->is_a('Pathway')) {
+	    warn("$db_id is not a pathway");
+	    next;
+	}
+	push @pathways, $pathway;
     }
     
     foreach my $pathway (@pathways) {
@@ -43,13 +52,45 @@ open my $logic_table_fh, ">", "$logic_table_output_file";
 print $logic_table_fh "Parent\tChild\tValue\tLogic\n";
 
 my %interactions;
+my %parent2child;
+my %child2parent;
+my %id2instance;
+
 foreach my $reaction (@reactions) {
-    add_reaction_to_logic_table($reaction, $logic_table_fh);
+    populate_graph($reaction);
+}
+
+foreach my $reaction (@reactions) {
+    add_reaction_to_logic_table($reaction, \@reactions, $logic_table_fh);
 }
 close $logic_table_fh;
 
+sub populate_graph {
+    my $reaction = shift;
+    
+    my @inputs = @{$reaction->input};
+    my @outputs = @{$reaction->output};
+    my @catalysts =  map($_->physicalEntity->[0], @{$reaction->catalystActivity});
+    my @regulations = @{$reaction->reverse_attribute_value('regulatedEntity')};
+    
+    foreach my $parent (@inputs, @catalysts, @regulations) {
+	$parent2child{$parent->db_id}->{$reaction->db_id}++;
+	$child2parent{$reaction->db_id}->{$parent->db_id}++;
+	$id2instance{$parent->db_id} = $parent;
+    }
+    
+    foreach my $child (@outputs) {
+	$parent2child{$reaction->db_id}->{$child->db_id}++;
+	$child2parent{$child->db_id}->{$reaction->db_id}++;
+	$id2instance{$child->db_id} = $child;
+    }
+    
+    $id2instance{$reaction->db_id} = $reaction;
+}
+
 sub add_reaction_to_logic_table {
     my $reaction = shift;
+    my $all_reactions = shift;
     my $fh = shift;
     
     my @inputs = @{$reaction->input};
@@ -60,8 +101,8 @@ sub add_reaction_to_logic_table {
     process_inputs($reaction, \@catalysts, $fh);
     
     foreach my $output (@outputs) {
-	process_if_set_or_complex($output, $fh);
-	my $reaction_like_events_with_output = $output->reverse_attribute_value('output');
+	my $output_name = $output->name->[0];
+	my $reaction_like_events_with_output = get_reactions_with_output($output, $all_reactions);
 	
 	process_output($output, $reaction_like_events_with_output, $fh);
     }
@@ -76,7 +117,7 @@ sub process_inputs {
     my $fh = shift;
     
     foreach my $input (@$inputs) {
-	process_if_set_or_complex($input, $fh);
+	process_if_set_or_complex($input, $fh) unless is_an_output_in_binding_reaction($input);
 	process_input($reaction, $input, $fh);
     }
 }
@@ -97,11 +138,10 @@ sub process_output {
     my $associated_reactions = shift;
     my $fh = shift;
     
-    process_if_set_or_complex($output, $fh);
-    
     my $logic = scalar @$associated_reactions > 1 ? 'OR' : 'AND';
     my $output_name = $output->displayName;
     foreach my $reaction (@$associated_reactions) {
+	next if output_is_ancestral_input($output) && $reaction->catalystActivity->[0];	
 	my $reaction_name = $reaction->displayName;
 	
 	report($fh,$reaction_name,$output_name,1,$logic);
@@ -140,7 +180,7 @@ sub process_regulations {
     my $reaction_name = $reaction->displayName;
     foreach my $regulation (@$regulations) {
 	my $regulator = $regulation->regulator->[0];
-	process_if_set_or_complex($regulator, $fh);
+	process_if_set_or_complex($regulator, $fh) unless is_an_output_in_binding_reaction($regulator);
 	
 	my $regulator_name = $regulator->displayName;
 	my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
@@ -179,12 +219,75 @@ sub get_reaction_like_events {
 						      -OUT_CLASSES => ['ReactionlikeEvent']);
 }
 
+sub output_is_ancestral_input {
+    my $output = shift;
+
+    return grep({$output->db_id == $_->db_id} get_ancestors([$output]));
+}
+
+sub get_ancestors {
+    my $children = shift;
+    my $seen_ancestors = shift;
+    
+    return () unless @$children;
+    
+    my @parents;
+    foreach my $child (@$children) {
+	my @reaction_ids = keys %{$child2parent{$child->db_id}};
+	foreach my $reaction_id (@reaction_ids) {
+	    push @parents, map({$id2instance{$_}} grep({!$seen_ancestors->{$_}++} keys %{$child2parent{$reaction_id}}));
+	}
+    }
+    
+    push @parents, get_ancestors(\@parents, $seen_ancestors);
+    
+    return @parents;
+}
+
+sub is_binding_reaction {
+    my $reaction = shift;
+    
+    return
+    $reaction &&
+    $reaction->is_a('ReactionlikeEvent') &&
+    !$reaction->catalystActivity->[0] &&
+    scalar @{$reaction->input} >= 2 &&
+    scalar @{$reaction->input} > scalar @{$reaction->output};
+}
+
+sub is_an_output_in_binding_reaction {
+    my $entity = shift;
+    
+    my @reactions_with_entity_as_output = map({$id2instance{$_}} keys %{$child2parent{$entity->db_id}});
+
+    return any {is_binding_reaction($_)} @reactions_with_entity_as_output;
+}
+
+sub get_reactions_with_output {
+    my $output = shift;
+    my $reactions = shift;
+    
+    my %reaction_output_id_2_reactions;
+    foreach my $reaction (@$reactions) {
+	foreach my $reaction_output_id (map {$_->db_id} @{$reaction->output}) {
+	    push @{$reaction_output_id_2_reactions{$reaction_output_id}}, $reaction;
+	}
+    }
+    
+    return \@{$reaction_output_id_2_reactions{$output->db_id}};
+}
+
 sub usage_instructions {
-    print <<END;
-perl $0 comma delimited list of pathway db_ids or 'all'
+    return <<END;
+
+This script creates a tab delimited text file describing a directed graph
+with nodes being reactions and their physical entities (inputs, outputs,
+catalysts, and regulators) connected by boolean logic.
+
+perl $0 -pathways comma delimited list of pathway db_ids or 'all'
 Example:
-perl $0 123,234,etc.
-perl $0 all
+perl $0 -pathways 123,234,etc.
+perl $0 -pathways all
 
 END
 }
