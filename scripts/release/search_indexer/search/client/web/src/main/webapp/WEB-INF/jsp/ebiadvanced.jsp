@@ -20,7 +20,7 @@
                     <%--<li>Available fields: dbId, stId, name, type, species, synonyms, summation, compartmentName, compartmentAccession, goBiologicalProcessName, goBiologicalProcessAccession, goCellularComponentName, goCellularComponentAccession, goMolecularFunctionName, goMolecularFunctionAccession, literatureReferenceTitle, literatureReferenceAuthor, literatureReferencePubMedId, literatureReferenceIsbn, crossReferences, referenceCrossReferences, referenceName, referenceSynonyms, referenceIdentifier, referenceOtherIdentifier, referenceGeneNames</li>--%>
                     <%--<li>Syntax: fieldname:searchterm</li>--%>
                 <%--</ul>--%>
-                <label for="querySearchBox"></label><textarea name="q" rows="10" id="querySearchBox" class="searchBox">(raf AND map) OR (name:"PTEN S170N") OR (apoptosis) OR stID:"REACT_12858.1"</textarea>
+                <label for="querySearchBox"></label><textarea name="q" rows="10" id="querySearchBox" class="searchBox">(raf AND map) OR (name:"PTEN S170N") OR (apoptosis) OR stID:"REACT_12858.1" OR stID:"R-HSA-198344.1"</textarea>
             </div>
             <br>
             <div>

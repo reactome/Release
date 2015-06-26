@@ -309,7 +309,7 @@ class WebController {
         //Massaging the query parameter to remove dots in Reactome stable identifiers
         StringBuilder sb = new StringBuilder();
         for (String token : q.split("\\s+")) {
-            if(token.toUpperCase().contains("REACT_")){
+            if(token.toUpperCase().contains("REACT_") || token.toUpperCase().contains("R-")){
                 sb.append(token.split("\\.")[0]);
             }else{
                 sb.append(token);

@@ -163,7 +163,7 @@ public class SearchService {
     public EnrichedEntry getEntryById(String id) throws EnricherException, SolrSearcherException {
         if (id != null && !id.isEmpty()) {
             IEnricher enricher = new Enricher(host, currentDatabase, user, password, port);
-            if (id.toUpperCase().contains("REACT_")) {
+            if (id.toUpperCase().contains("REACT_") || id.toUpperCase().contains("R-")) {
                 Entry entry = solrConverter.getEntryById(id.split("\\.")[0]);
                 if (entry!= null) {
                     return enricher.enrichEntry(entry.getDbId());
@@ -183,7 +183,7 @@ public class SearchService {
     public EnrichedEntry getEntryById(Integer version, String id) throws EnricherException, SolrSearcherException {
 
         IEnricher enricher = new Enricher(host,  database + version, user, password, port);
-        if (id.toUpperCase().contains("REACT_")) {
+        if (id.toUpperCase().contains("REACT_") || id.toUpperCase().contains("R-")) {
             Entry entry = solrConverter.getEntryById(id.split("\\.")[0]);
             if (entry!=null) {
                 return enricher.enrichEntry(entry.getDbId());
