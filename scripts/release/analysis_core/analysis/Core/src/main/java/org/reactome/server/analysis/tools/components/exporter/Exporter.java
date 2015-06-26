@@ -80,7 +80,8 @@ public class Exporter {
 
             //TOKEN
             sb.append("\t").append(pbUrl);
-            if(id.matches("^REACT_\\d+(\\.\\d+)?$")){
+//            if(id.matches("^REACT_\\d+(\\.\\d+)?$")){
+            if(id.startsWith("REACT_") || id.startsWith("R-")){
                 sb.append(id);
             }else{
                 if(!species.getDbId().equals(48887L)){
