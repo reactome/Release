@@ -3,6 +3,7 @@ package GKB::EnsEMBLMartUtils;
 use strict;
 use warnings;
 
+use Carp;
 use Cwd 'abs_path';
 use File::Basename 'dirname';
 use Try::Tiny;
@@ -50,7 +51,7 @@ sub update_registry_file {
     my $version = get_version();
     return unless $version =~ /^\d+$/;
     
-    my $contents = get_registry_xml_contents();
+    my $contents = get_registry_xml_contents($registry_file);
     chomp $contents;
     $contents =~ s/(ensembl_mart_)(\d+)/$1$version/;    
     
@@ -77,11 +78,10 @@ sub get_identifiers {
 }
 
 sub get_registry_xml_contents {
-    return <<END
-<MartRegistry>
-  <MartURLLocation database="ensembl_mart_78" default="1" displayName="ENSEMBL GENES (SANGER UK)" host="www.ensembl.org" includeDatasets="" martUser="" name="ENSEMBL_MART_ENSEMBL" path="/biomart/martservice" port="80" serverVirtualSchema="default" visible="1" />
-</MartRegistry>    
-END
+    my $registry_file = shift;
+    
+    #open(my $registry_file_handle, '<', $registry_file)
+    return `cat $registry_file`;
 }
 
 sub get_registry_file_path {

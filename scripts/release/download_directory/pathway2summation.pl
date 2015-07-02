@@ -14,6 +14,8 @@ use lib "/usr/local/gkb/modules";
 # for use @HOME
 use lib "$ENV{HOME}/bioperl-1.0";
 use lib "$ENV{HOME}/GKB/modules";
+
+use GKB::Config;
 use GKB::Instance;
 use GKB::DBAdaptor;
 use GKB::Utils;
