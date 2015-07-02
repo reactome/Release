@@ -1,0 +1,43 @@
+{
+  "name": "Copper",
+  "node": {
+    "initial": "#0000FF",
+    "highlight": "#EEB956",
+    "selection": "#FF7700",
+    "fadeout": "#E6E6E6",
+    "hit": "#C2C2C2",
+    "enrichment": {
+      "min": "#FDE233",
+      "stop" : null,
+      "max": "#959000"
+    },
+    "expression": {
+      "min": "#FFFF00",
+      "stop": null,
+      "max": "#0000FF"
+    }
+  },
+  "edge": {
+    "initial": "#CCCCFF",
+    "highlight": "#EEB956",
+    "selection": "#FF7700",
+    "fadeout": "#E6E6E6",
+    "hit": "#C6C6C6",
+    "enrichment": {
+      "min": "#F8DE36",
+      "stop" : null,
+      "max": "#8F8A05"
+    },
+    "expression": {
+      "min": "#F4FA58",
+      "stop": null,
+      "max": "#2E64FE"
+    }
+  },
+  "thumbnail": {
+    "initial": "#CCCCFF",
+    "highlight": "#FF7700",
+    "selection": "#FF5A00",
+    "fadeout": "#E6E6E6"
+  }
+}
