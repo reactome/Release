@@ -489,6 +489,16 @@ sub execute {
     return ($sth, $res);
 }
 
+sub instance_from_hash {
+    my $self = shift;
+    my ($href,$class,$id) = @_;
+    unless ($href && ref($href) eq 'HASH' && $class && $id) {
+	$self->throw("Usage: \$dba->instance_from_hash(\$hash_ref, \$class, \$db_id)");
+    }
+    $self->_instance_from_hash(@_);
+}
+
+
 sub _instance_from_hash {
     my ($self,$t_hr,$class,$id) = @_;
     $self->debug && print "", (caller(0))[3], "\n";
