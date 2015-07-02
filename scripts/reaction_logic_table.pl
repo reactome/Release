@@ -47,9 +47,9 @@ if ($selected_pathways eq 'all') {
 
 exit unless @reactions;
 
-(my $logic_table_output_file = $0) =~ s/.pl$/.txt/;
+(my $logic_table_output_file = $0) =~ s/.pl$/.tsv/;
 open my $logic_table_fh, ">", "$logic_table_output_file";
-print $logic_table_fh "Parent\tChild\tValue\tLogic\n";
+#print $logic_table_fh "Parent\tChild\tValue\tLogic\n";
 
 my %interactions;
 my %parent2child;
@@ -64,6 +64,9 @@ foreach my $reaction (@reactions) {
     add_reaction_to_logic_table($reaction, \@reactions, $logic_table_fh);
 }
 close $logic_table_fh;
+
+add_line_count($logic_table_output_file);
+`dos2unix $logic_table_output_file`;
 
 sub populate_graph {
     my $reaction = shift;
@@ -127,10 +130,7 @@ sub process_input {
     my $input = shift;
     my $fh = shift;
     
-    my $input_name = $input->displayName;
-    my $reaction_name = $reaction->displayName;
-    
-    report($fh,$input_name,$reaction_name,1,'AND');
+    report($fh, get_label($input), get_label($reaction), 1, 'AND');
 }
 
 sub process_output {
@@ -139,12 +139,10 @@ sub process_output {
     my $fh = shift;
     
     my $logic = scalar @$associated_reactions > 1 ? 'OR' : 'AND';
-    my $output_name = $output->displayName;
     foreach my $reaction (@$associated_reactions) {
 	next if output_is_ancestral_input($output) && $reaction->catalystActivity->[0];	
-	my $reaction_name = $reaction->displayName;
 	
-	report($fh,$reaction_name,$output_name,1,$logic);
+	report($fh, get_label($reaction), get_label($output), 1, $logic);
     }
 }
 
@@ -163,11 +161,8 @@ sub process_if_set_or_complex {
 	$logic = 'AND';
     }
     
-    my $physical_entity_name = $physical_entity->displayName;
-    foreach my $element (@elements) {
-	my $element_name = $element->displayName;
-	
-	report($fh,$element_name, $physical_entity_name, 1, $logic);
+    foreach my $element (@elements) {	
+	report($fh, get_label($element), get_label($physical_entity), 1, $logic);
 	process_if_set_or_complex($element, $fh);
     }
 }
@@ -177,14 +172,12 @@ sub process_regulations {
     my $regulations = shift;
     my $fh = shift;
     
-    my $reaction_name = $reaction->displayName;
     foreach my $regulation (@$regulations) {
 	my $regulator = $regulation->regulator->[0];
 	process_if_set_or_complex($regulator, $fh) unless is_an_output_in_binding_reaction($regulator);
 	
-	my $regulator_name = $regulator->displayName;
 	my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
-	report($fh, $regulator_name, $reaction_name, $value, 'AND');
+	report($fh, get_label($regulator), get_label($reaction), $value, 'AND');
     }
 }
 
@@ -202,6 +195,16 @@ sub report {
     }
     
     print $fh join("\t", $parent, $child, $value, $logic) . "\n";
+}
+
+sub get_label {
+    my $instance = shift;
+    
+    if (is_set_or_complex($instance) || $instance->is_a('ReactionlikeEvent')) {
+	return $instance->db_id;
+    }
+    
+    return $instance->name->[0];
 }
 
 sub get_dba {
@@ -244,6 +247,12 @@ sub get_ancestors {
     return @parents;
 }
 
+sub is_set_or_complex {
+    my $entity = shift;
+    
+    return $entity->is_a('EntitySet') || $entity->is_a('Complex');
+}
+
 sub is_binding_reaction {
     my $reaction = shift;
     
@@ -275,6 +284,19 @@ sub get_reactions_with_output {
     }
     
     return \@{$reaction_output_id_2_reactions{$output->db_id}};
+}
+
+sub add_line_count {
+    my $file = shift;
+    
+    open(my $fh, '<', $file);
+    my @lines = <$fh>;
+    close $fh;
+    
+    open($fh, '>', $file);
+    print $fh scalar(@lines) . "\n\n";
+    print $fh $_ foreach @lines;
+    close $fh;
 }
 
 sub usage_instructions {
