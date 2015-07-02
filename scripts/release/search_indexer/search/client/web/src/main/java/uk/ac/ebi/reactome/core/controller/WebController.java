@@ -310,6 +310,7 @@ class WebController {
         StringBuilder sb = new StringBuilder();
         for (String token : q.split("\\s+")) {
             if(token.toUpperCase().contains("REACT_") || token.toUpperCase().contains("R-")){
+            	System.err.println("Stable ID "+token);
                 sb.append(token.split("\\.")[0]);
             }else{
                 sb.append(token);
