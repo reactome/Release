@@ -139,7 +139,7 @@ my $p_all =0;
 my $c = 0;
 my $r =0;
 my $path =0;
-my $all_human = 0;
+my $all_human = 0; # Count includes parent and isoform RGPs (counted individually) with at least one EWAS referrer
 
 #create 2 letter acronym for each species
 foreach my $x (@si) {
