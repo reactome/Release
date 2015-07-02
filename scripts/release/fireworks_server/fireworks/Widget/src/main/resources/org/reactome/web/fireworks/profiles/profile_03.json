@@ -1,0 +1,43 @@
+{
+    "name" : "Barium Lithium",
+    "node" : {
+        "initial"   : "#FF0000",
+        "highlight" : "#E1ED55",
+        "selection" : "#BBBBFF",
+        "fadeout"   : "#F8F8F8",
+        "hit"       : "#E0E0E0",
+        "enrichment": {
+            "min"  : "#A0A0A0",
+            "stop" : null,
+            "max"  : "#000000"
+        },
+        "expression": {
+            "min"  : "#00FF00",
+            "stop" : "#000000",
+            "max"  : "#FF0000"
+        }
+    },
+    "edge" : {
+        "initial"   : "#FFCCCC",
+        "highlight" : "#E1ED55",
+        "selection" : "#EEEEFF",
+        "fadeout"   : "#F8F8F8",
+        "hit"       : "#E0E0E0",
+        "enrichment": {
+            "min"  : "#B0B0B0",
+            "stop" : null,
+            "max"  : "#303030"
+        },
+        "expression": {
+            "min"  : "#6FFF6F",
+            "stop" : "#6F6F6F",
+            "max"  : "#FF6F6F"
+        }
+    },
+    "thumbnail" : {
+        "initial"   : "#FFCCCC",
+        "highlight" : "#0A0A0A",
+        "selection" : "#0000FF",
+        "fadeout"   : "#F8F8F8"
+    }
+}

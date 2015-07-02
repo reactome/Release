@@ -183,7 +183,12 @@ my @list;
 foreach my $pwy_id (162906, 168254, 977225) {  #human-viral pathways, amyloids
     push @list, get_reaction_ids($pwy_id);  #inference is done on reaction level, therefore extract all downstream reactions and store them in @list.
 }
-push @list, (1222512, 1222662, 1222376, 1222516, 1222353, 1222342, 1222384, 1222491); # normal reactions in disease context to be excluded 
+open(my $skip_list_fh, '<', 'normal_event_skip_list.txt');
+while (my $reaction_db_id = <$skip_list_fh>) {
+    push @list, $reaction_db_id;
+}
+close $skip_list_fh;
+
 #define reactions to be considered for inference (by default all ReactionlikeEvents)
     my $reaction_ar;
     if (@ARGV) { #list of event ids, for which downstream reactions should be inferred - NOTE : make sure these events are from the source species
@@ -376,7 +381,7 @@ sub read_orthology {
     
     my %homologue;
     $logger->info("Now reading orthology mapping file: $file\n");
-    if (open(my $read_orthopair, '>', $file)) {
+    if (open(my $read_orthopair, '<', $file)) {
 	    while (<$read_orthopair>) {
 		my %seen_to;
 		my ($from, $tos) = split/\t/, $_;
@@ -401,7 +406,7 @@ sub read_ensg_mapping {
     
     my %ensg;
     $logger->info("Now reading ensg mapping file: $file\n");
-    if (open(my $read, $file)) {
+    if (open(my $read, '<', $file)) {
 	    while (<$read>) {
 	        my ($ensg, $protein_ids) = split/\t/, $_;
 	        my @protein_ids = split/\s/, $protein_ids;
