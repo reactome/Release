@@ -21,7 +21,7 @@ require_once(dirname(__FILE__) . '/includes/block_direct_access.php');
 class bcn_breadcrumb_trail
 {
 	//Our member variables
-	const version = '5.2.0';
+	const version = '5.2.2';
 	//An array of breadcrumbs
 	public $breadcrumbs = array();
 	public $trail = array();
@@ -170,10 +170,8 @@ class bcn_breadcrumb_trail
 		{
 			//Since we are paged and are linking the root breadcrumb, time to change to the regular template
 			$breadcrumb->set_template($this->opt['Hsearch_template']);
-			//Figure out the hyperlink for the anchor
-			$url = home_url('?s=' . str_replace(' ', '+', get_search_query()));
 			//Figure out the anchor for the search
-			$breadcrumb->set_url($url);
+			$breadcrumb->set_url(get_search_link());
 		}
 	}
 	/**
@@ -274,11 +272,11 @@ class bcn_breadcrumb_trail
 			}
 		}
 		//If we never got a good parent for the type_archive, make it now
-		if($parent == NULL)
+		if(!($parent instanceof WP_Post))
 		{
 			$parent = get_post($id);
 		}
-		//
+		//Finish off with trying to find the type archive
 		$this->type_archive($parent);
 	}
 	/**
@@ -424,10 +422,16 @@ class bcn_breadcrumb_trail
 			//Add the link
 			$breadcrumb->set_url(get_permalink());
 		}
-		//Get the parent's information
-		$parent = get_post($post->post_parent);
-		//Take care of the parent's breadcrumb
-		$this->do_post($parent);
+		//Done with the current item, now on to the parents
+		$frontpage = get_option('page_on_front');
+		//Make sure the id is valid, and that we won't end up spinning in a loop
+		if($post->post_parent >= 0 && $post->post_parent != false && $post->ID != $post->post_parent && $frontpage != $post->post_parent)
+		{
+			//Get the parent's information
+			$parent = get_post($post->post_parent);
+			//Take care of the parent's breadcrumb
+			$this->do_post($parent);
+		}
 	}
 	/**
 	 * A Breadcrumb Trail Filling Function
@@ -711,6 +715,11 @@ class bcn_breadcrumb_trail
 		if(is_attachment())
 		{
 			$type = get_post($post->post_parent);
+			//If the parent of the attachment is a page, exit early (works around bug where is_single() returns true for an attachment to a page)
+			if($type->post_type == 'page')
+			{
+				return;
+			}
 		}
 		else
 		{
