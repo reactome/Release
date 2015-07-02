@@ -114,7 +114,7 @@ sub buildPart {
 	
 	my $instance = undef;
 	my $stable_identifier = undef;
-	if ($reactome_id =~ /(REACT_[0-9]+)/) {
+	if ($reactome_id =~ /(REACT_[0-9]+|R-[A-Z]{3}-\d+)/) {
 	    # First check to see if ID is actually a stable
 	    # ID and use that to retrieve instance if so
 	    $stable_identifier = $1;
@@ -178,7 +178,7 @@ sub get_all_rhea_ids_with_links_to_reactome {
     my $logger = get_logger(__PACKAGE__);
 
 #    $ENV{FTP_PASSIVE} = 1;
-    my $url = 'http://www.ebi.ac.uk/rhea/rest/1.0/ws/reaction?q=REACT_*';
+    my $url = 'http://www.ebi.ac.uk/rhea/rest/1.0/ws/reaction?q=R-*';
     my $page = $self->get_page($url);
     
     $logger->info("page=$page\n");
@@ -207,7 +207,7 @@ sub get_reactome_id_from_rhea_id {
     my @lines = split(/\n/, $page);
     my $reactome_id = "";
     foreach my $line (@lines) {
-	if ($line =~ /(REACT_[0-9]+)/) {
+	if ($line =~ /(REACT_[0-9]+|R-[A-Z]{3}-\d+)/) {
 	    $reactome_id = $1;
 	    last;
 	}
