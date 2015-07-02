@@ -110,7 +110,7 @@
             <analyzer type="query">
                 <tokenizer class="solr.WhitespaceTokenizerFactory"/>
                 <filter class="solr.PatternReplaceFilterFactory" pattern="^(?!REACT_[0-9]+(\.[0-9]+)?$).*$" replacement=""/>
-		<filter class="solr.PatternReplaceFilterFactory" pattern="^(?!R-\S+(\.[0-9]+)?$).*$" replacement=""/>
+		<filter class="solr.PatternReplaceFilterFactory" pattern="^(?!R-[A-Z]+-[0-9]+(\.[0-9]+)?$).*$" replacement=""/>
                 <filter class="solr.PatternReplaceFilterFactory" pattern="\.[0-9]*" replacement=""/>
             </analyzer>
         </fieldType>
