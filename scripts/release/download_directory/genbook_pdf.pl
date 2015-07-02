@@ -10,6 +10,7 @@ use lib "$ENV{HOME}/GKB/modules";
 use lib "$ENV{HOME}/my_perl_stuff";
 
 use Getopt::Long;
+use GKB::Config;
 use GKB::DocumentGeneration::GenerateTextPDF;
 use GKB::DocumentGeneration::ReactomeDatabaseReader;
 use Log::Log4perl qw/get_logger/;
