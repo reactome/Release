@@ -35,7 +35,11 @@
     <div class="contentwrap">
     <div class="contenthead">About Reactome</div><!--close contenthead-->
     <div class="contentbody">
+<<<<<<< Updated upstream
     	Reactome is a free, open-source, curated and peer reviewed pathway database. Our goal is to provide intuitive bioinformatics tools for the visualization, interpretation and analysis of pathway knowledge to support basic research, genome analysis, modeling, systems biology and education. The current version (v53) of Reactome was released on July 2, 2015.
+=======
+    	Reactome is a free, open-source, curated and peer reviewed pathway database. Our goal is to provide intuitive bioinformatics tools for the visualization, interpretation and analysis of pathway knowledge to support basic research, genome analysis, modeling, systems biology and education. The current version (v51) of Reactome was released on December 8, 2014.
+>>>>>>> Stashed changes
     </div><!--close contentbody-->
     </div><!--close contentwrap-->
     
@@ -56,9 +60,13 @@
             <div class="contentbody">
             
             <div class="announcement">
+<<<<<<< Updated upstream
 
             <a href="/version-53-released/"> Current Version: Reactome V53 
 
+=======
+            <a href="/version-51-released/"> Current Version: Reactome V51
+>>>>>>> Stashed changes
             <!--This is a placeholder for static announcements. For example, downtime due to server maintenance, or some other important announcement-->
             </div><!--close annoucement-->
 
