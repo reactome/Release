@@ -21,7 +21,7 @@ require_once(dirname(__FILE__) . '/includes/block_direct_access.php');
 class bcn_breadcrumb
 {
 	//Our member variables
-	const version = '5.2.0';
+	const version = '5.2.2';
 	//The main text that will be shown
 	protected $title;
 	//The breadcrumb's template, used durring assembly
@@ -29,7 +29,7 @@ class bcn_breadcrumb
 	//The breadcrumb's no anchor template, used durring assembly when there won't be an anchor
 	protected $template_no_anchor = '%title%';
 	//Boolean, is this element linked
-	protected $linked;
+	protected $linked = false;
 	//The link the breadcrumb leads to, null if $linked == false
 	protected $url;
 	//The corresponding resource ID
@@ -56,10 +56,10 @@ class bcn_breadcrumb
 		$this->set_id($id);
 		//Set the title
 		$this->set_title($title);
-		//Assign the breadcrumb template
-		if($template == NULL)
+		//Assign the breadcrumb template, need strict comparison as we only want to enter if we had a blank URL, not NULL URL
+		if($template == NULL || $url === '')
 		{
-			if($url == NULL)
+			if($url == NULL || $url === '')
 			{
 				$template = __('<span typeof="v:Breadcrumb"><span property="v:title">%htitle%</span></span>', 'breadcrumb-navxt');
 			}
@@ -68,6 +68,7 @@ class bcn_breadcrumb
 				$template = __('<span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" title="Go to %title%." href="%link%" class="%type%">%htitle%</a></span>', 'breadcrumb-navxt');
 			}
 		}
+		//Loose comparison, evaluates to true if URL is '' or NULL
 		if($url == NULL)
 		{
 				$this->template_no_anchor = wp_kses(apply_filters('bcn_breadcrumb_template_no_anchor', $template, $this->type, $this->id), $this->allowed_html);
@@ -109,7 +110,7 @@ class bcn_breadcrumb
 	{
 		$this->url = esc_url(apply_filters('bcn_breadcrumb_url', $url, $this->type, $this->id));
 		//Set linked to true if we set a non-null $url
-		if($url)
+		if($url && $url != '')
 		{
 			$this->linked = true;
 		}
