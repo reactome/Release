@@ -42,7 +42,7 @@ if(!class_exists('mtekk_adminKit'))
  */
 class bcn_network_admin extends mtekk_adminKit
 {
-	const version = '5.2.0';
+	const version = '5.2.2';
 	protected $full_name = 'Breadcrumb NavXT Network Settings';
 	protected $short_name = 'Breadcrumb NavXT';
 	protected $access_level = 'manage_network_options';
@@ -402,7 +402,7 @@ class bcn_network_admin extends mtekk_adminKit
 			{
 				$this->message['updated fade'][] = __('Warning: Individual site settings will override any settings set in this page.', 'breadcrumb-navxt');
 			}
-			else if(defined('BCN_SETTINGS_USE_NETWORK') && BCN_SETTINGS_FAVOR_NETWORK)
+			else if(defined('BCN_SETTINGS_USE_NETWORK') && BCN_SETTINGS_USE_NETWORK)
 			{
 				
 			}
