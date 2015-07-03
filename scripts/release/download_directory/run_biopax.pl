@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-
+use lib "/usr/local/gkb/modules";
 use GKB::Config;
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
