@@ -28,6 +28,7 @@ sub db_id_from_stable_id {
     my $self = shift;
     my $stable_id = shift;
 
+    $stable_id = uc($stable_id);
     $stable_id =~ /^REACT|^R-/ or die "$stable_id does not look like a stable ID to me";
     $stable_id =~ s/\.\d+$//;
 
