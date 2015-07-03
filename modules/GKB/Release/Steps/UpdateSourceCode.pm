@@ -28,7 +28,7 @@ override 'run_commands' => sub {
     my $ssh_server = ($gkbdir eq "gkb") ? $live_server : '';
     my $git_repo = '/usr/local/gkb';
    
-    cmd("Updating source code from git",[["perl git_update.pl $git_repo $ssh_server"]]);
+    cmd("Updating source code from git",[["perl git_update.pl -repo $git_repo -host $ssh_server"]]);
 };
 
 1;
