@@ -4,7 +4,7 @@
      </div>
 -->
      <div class="grid_15">     
-     <div class="buttonswrap"><!--set left colum with buttons-->
+     <div class="buttonswrap"><!--set left column with buttons-->
 	  <div class="grid_5 alpha">
 	    <a class="button icon browse" href="/PathwayBrowser/"><span>Browse Pathways</span></a>
  	 </div>

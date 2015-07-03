@@ -2,18 +2,11 @@
 use strict;
 use common::sense;
 
-BEGIN {
-    my @a = split('/',$0);
-    pop @a;
-    push @a, ('..','..','..');
-    my $libpath = join('/', @a);
-    unshift (@INC, "$libpath/modules");
-    $ENV{PATH} = "$libpath/scripts:$libpath/scripts/release:" . $ENV{PATH};
-}
+use lib "/usr/local/gkb/modules";
 
 use GKB::Config;
 
-use autodie qw/:all/;
+use autodie;
 use Cwd;
 use Getopt::Long;
 

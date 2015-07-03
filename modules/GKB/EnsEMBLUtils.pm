@@ -3,6 +3,8 @@ package GKB::EnsEMBLUtils;
 use strict;
 use warnings;
 
+use feature qw/state/;
+
 use Carp;
 use Try::Tiny;
 
@@ -13,9 +15,9 @@ use parent 'Exporter';
 our @EXPORT_OK = qw/get_version get_ensembl_genome_version install_ensembl_api ensembl_api_installed/;
 our %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
-sub get_version {
-    my $release;
-    
+
+my $release;
+sub get_version {    
     my $attempts = 0;
     until ($release || $attempts == 10) {
 	my $url = 'http://rest.ensembl.org/info/software?';
@@ -34,9 +36,9 @@ sub get_version {
     }
 }
 
+
+my $version;
 sub get_ensembl_genome_version {
-    my $version;
-    
     my $attempts = 0;
     until ($version || $attempts == 10) {    
 	my $url = 'http://rest.ensemblgenomes.org/info/eg_version?';
