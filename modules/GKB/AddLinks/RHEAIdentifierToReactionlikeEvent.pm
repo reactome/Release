@@ -28,9 +28,10 @@ disclaimers of warranty.
 package GKB::AddLinks::RHEAIdentifierToReactionlikeEvent;
 use strict;
 
+use lib '/usr/local/gkb/modules';
 use GKB::Config;
 use GKB::AddLinks::Builder;
-
+use GKB::StableIdentifierDatabase;
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 
@@ -120,6 +121,14 @@ sub buildPart {
 	    $stable_identifier = $1;
 	    my $instances = $dba->fetch_instance_by_remote_attribute('DatabaseObject',[['stableIdentifier.identifier','=',[$stable_identifier]]]);
 	    $instance = $instances->[0];
+
+	    unless ($instance) {
+		warn "Getting stable ID from GKB::StableIdentifierDatabase";
+		my $db_id = GKB::StableIdentifierDatabase->new->db_id_from_stable_id($stable_identifier);
+		$instance = $dba->fetch_instance_by_db_id($db_id)->[0];
+		warn "Instance = $instance";
+	    }
+
 	}
 	
 	if (!$instance) {
@@ -178,7 +187,8 @@ sub get_all_rhea_ids_with_links_to_reactome {
     my $logger = get_logger(__PACKAGE__);
 
 #    $ENV{FTP_PASSIVE} = 1;
-    my $url = 'http://www.ebi.ac.uk/rhea/rest/1.0/ws/reaction?q=R-*';
+#    my $url = 'http://www.ebi.ac.uk/rhea/rest/1.0/ws/reaction?q=R-*-*';
+    my $url = 'http://www.ebi.ac.uk/rhea/rest/1.0/ws/reaction?q=REACT*'; 
     my $page = $self->get_page($url);
     
     $logger->info("page=$page\n");
