@@ -57,6 +57,7 @@ public class Enricher implements IEnricher  {
             return null;
         }
         try {
+	    System.err.println("I am working with DB_ID "+id);
             GKInstance instance = dba.fetchInstance(id);
             if (instance != null) {
                 EnrichedEntry enrichedEntry = new EnrichedEntry();

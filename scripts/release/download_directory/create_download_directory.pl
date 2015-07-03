@@ -107,7 +107,7 @@ my $diagram_dump_options = "";
 my $mysqldump_db_options = $db;
 my $mysqldump_dn_db_options = "$db\_dn";
 my $mysqldump_mart_db_options = "test_reactome_mart";
-my $mysqldump_identifier_db_options = "test_reactome_stable_identifiers";
+my $mysqldump_identifier_db_options = "stable_identifiers";
 my $mysqldump_wordpress_db_options = "wordpress";
 
 if (defined $opt_host && !($opt_host eq '')) {
@@ -248,7 +248,8 @@ my @cmds = (
      "SBGN_dumper",
      1,
      0,
-     "perl SBGN_dumper.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.sbgn.gz",
+     "perl SBGN_dumper.pl $reactome_db_options -sp '$sbml2_species'",
+     "tar -cvf - *.sbgn | gzip -c > $release_nr/$species_file_stem.sbgn.gz",
     ],
     
     [
@@ -352,7 +353,7 @@ my @cmds = (
      1,
      "perl compiled_pathway_images.pl",
      "mv compiled_pathway_images*.gz $release_nr"
-    ]
+    ],
     
     [
      "SearchIndexer",
@@ -368,12 +369,12 @@ my @cmds = (
      "cp ../analysis_core/*.txt $release_nr"
     ],
 	
-	[
-	 "FireworksServer",
-	 1,
-	 1,
-	 "cp -r ../fireworks_server/json $release_nr/fireworks"
-	],
+    [
+     "FireworksServer",
+     1,
+     1,
+     "cp -r ../fireworks_server/json $release_nr/fireworks"
+    ],
     
     [
      "release_tarball",

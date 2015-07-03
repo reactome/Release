@@ -78,10 +78,13 @@ sub get_identifiers {
 }
 
 sub get_registry_xml_contents {
-    my $registry_file = shift;
+    my $registry_file = shift // get_registry_file_path();
     
-    #open(my $registry_file_handle, '<', $registry_file)
-    return `cat $registry_file`;
+    open(my $registry_file_handle, '<', $registry_file);
+    my $contents = join("", <$registry_file_handle>);
+    close $registry_file_handle;
+    
+    return $contents;
 }
 
 sub get_registry_file_path {
