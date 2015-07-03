@@ -48,7 +48,7 @@ override 'run_commands' => sub {
         my $analysis_binary = "analysis_v$version.bin";
         cmd("Copying analyis binary from $host",
             [
-             ["scp $analysis_binary $live_server:$analysis_dir"],
+             ["scp $analysis_dir/$analysis_binary $live_server:$analysis_dir"],
              ["ssh $live_server 'cd $analysis_dir;rm analysis.bin; ln -s $analysis_binary analysis.bin'"]
             ]
         );
@@ -56,8 +56,7 @@ override 'run_commands' => sub {
 	my $solr_dir = '/usr/local/reactomes/Reactome/production/Solr';
         cmd("Copying solr index from $host",
             [
-             ["ssh $live_server 'rm -r $solr_dir'"],
-             ["scp -rp $solr_dir $live_server:$solr_dir"]
+             ["rsync -avh -e ssh $solr_dir $live_server:$solr_dir"]
             ]
         );
     }
