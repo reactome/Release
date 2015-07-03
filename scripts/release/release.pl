@@ -10,8 +10,8 @@ use constant {
 };
 
 my @options = (
-	['UniprotUpdate', GKB_DEV_ALIAS,"-runs uniprot update"],
-	['GoUpdate', GKB_DEV_ALIAS, "-runs go update"],
+    ['UniprotUpdate', GKB_DEV_ALIAS,"-runs uniprot update"],
+    ['GoUpdate', GKB_DEV_ALIAS, "-runs go update"],
     ['ChebiUpdate', GKB_DEV_ALIAS, "-runs chebi update"],
     ['Orthopair', GKB_DEV_ALIAS, "-runs orthopair script"],
     ['UpdateSourceCode', GKB_DEV_ALIAS, "-updates source code"],
@@ -20,24 +20,23 @@ my @options = (
     ['Myisam', GKB_DEV_ALIAS, "-convert database to myisam format"],
     ['OrthoInference', GKB_DEV_ALIAS, "-computational prediction for other species"],
     ['UpdateConfig', GKB_DEV_ALIAS, "-update configuration file to current version"],
-	['GoaPrepare', GKB_DEV_ALIAS, "-prepares GOA submission file"],
+    ['GoaPrepare', GKB_DEV_ALIAS, "-prepares GOA submission file"],
     ['ExternalResourceLinks', GKB_DEV_ALIAS, "-creates external resource links"],
     ['GenerateOrthoInferenceStableIds', GKB_DEV_ALIAS, "-assign stable identifiers to ortho-predicted instances"],    	
     ['Skypainter', GKB_DEV_ALIAS, "-creates skypainter database"],
     ['Orthodiagrams', GKB_DEV_ALIAS, "-create diagrams for predicted pathways"],
-	['AnalysisCore', GKB_DEV_ALIAS, "-creates analysis binary and mapping files for export"],
+    ['AnalysisCore', GKB_DEV_ALIAS, "-creates analysis binary and mapping files for export"],
     ['SearchIndexer', GKB_DEV_ALIAS, "-creates search index content and ebeye.xml"],
     ['BioModels', GKB_DEV_ALIAS, "-creates BioModels cross-references"],
     ['FireworksServer', GKB_DEV_ALIAS, "-creates fireworks JSON for pathways in each species"],
-	['SimplifiedDatabase', GKB_DEV_ALIAS, "-creates simplified database from release database"],
-	['UpdateGkCurrent', GKB_DEV_ALIAS, "-populate gk_current database with new release content"],
-	['FrontpageAndTOC', GKB_DEV_ALIAS, "-create frontpage images and cached toc file"],
-	['DownloadDirectory', GKB_DEV_ALIAS, "-update the download directory"],
-	['RerouteRequests', GKB_LIVE_ALIAS, "-reroute website to reactomerelease"],
+    ['SimplifiedDatabase', GKB_DEV_ALIAS, "-creates simplified database from release database"],
+    ['UpdateGkCurrent', GKB_DEV_ALIAS, "-populate gk_current database with new release content"],
+    ['FrontpageAndTOC', GKB_DEV_ALIAS, "-create frontpage images and cached toc file"],
+    ['DownloadDirectory', GKB_DEV_ALIAS, "-update the download directory"],
+    ['RerouteRequests', GKB_LIVE_ALIAS, "-reroute website to reactomerelease"],
     ['UpdateSourceCode', GKB_LIVE_ALIAS, "-update source code"],
     ['DownloadDirectory', GKB_LIVE_ALIAS, "-update download directory"],
     ['CopyOverDatabases', GKB_LIVE_ALIAS, "-copy over databases"],
-    ['UpdateStableIdDb', GKB_LIVE_ALIAS, "-update stable id databases"],
     ['UpdateConfig', GKB_LIVE_ALIAS, "-update configuration file to current version"],
     ['FrontpageAndTOC', GKB_LIVE_ALIAS, "-copy over front page images and create cached toc file"],
     ['ClearSearchCache', GKB_LIVE_ALIAS, "-clear search cache"],
@@ -45,7 +44,7 @@ my @options = (
     ['RestartTomcat', GKB_LIVE_ALIAS, "-restart tomcat for WS SOAP API"],
     ['CommitGoa', GKB_DEV_ALIAS, "-commit goa files to cvs"],
     ['NCBI', GKB_DEV_ALIAS, "-create gene,protein, and omim files as well as hapmap and ucsc"],
-	['UncuratedProteins', GKB_DEV_ALIAS, "-creates a list of UniProt identifiers without EWAS referrers"]
+    ['UncuratedProteins', GKB_DEV_ALIAS, "-creates a list of UniProt identifiers without EWAS referrers"]
 );
 
 

@@ -8,21 +8,36 @@ use strict;
 #
 # -sp	limiting species (defaults to all species without this option)
 
-BEGIN {
-    my @a = split('/',$0);
-    pop @a;
-    push @a, ('..','..','modules');
-    my $libpath = join('/', @a);
-    unshift (@INC, $libpath);
-}
 # Set the umask so that the files are group writeable
 umask(002);
 
+use lib '/usr/local/gkb/modules';
+
+use autodie;
 use Getopt::Long;
 use GKB::Config;
+use GKB::DBAdaptor;
+
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
+
+my ($user, $host, $pass, $port, $db, $species);
+GetOptions(
+    "user=s" => \$user,
+    "host=s" => \$host,
+    "pass=s" => \$pass,
+    "port=i" => \$port,
+    "db=s" => \$db,
+    "sp=s" => \$species
+);
+
+$user ||= $GKB::Config::GK_DB_USER;
+$host ||= $GKB::Config::GK_DB_HOST;
+$pass ||= $GKB::Config::GK_DB_PASS;
+$port ||= $GKB::Config::GK_DB_PORT;
+$db ||= $GKB::Config::GK_DB_NAME;
+
 
 if (-e $LIBSBML_LD_LIBRARY_PATH) {
     my $ld_library_path = $ENV{'LD_LIBRARY_PATH'};
@@ -61,7 +76,48 @@ foreach my $file (sort(@files)) {
 }
 
 #print STDERR "classpath=$classpath\n";
+my $dba = GKB::DBAdaptor->new(
+    -user => $user,
+    -pass => $pass,
+    -host => $host,
+    -port => $port,
+    -dbname => $db
+);
 
-my $command = "java -classpath $classpath org.gk.sbgn.SBGNBuilderCommandLine @ARGV";
+my $species_instance = $species ? $dba->fetch_instance_by_db_id($species)->[0] : undef;
+my @pathways = @{$dba->fetch_instance(-CLASS => 'Pathway')};
 
-system($command) == 0 or $logger->error_die("$command failed");
+foreach my $pathway (@pathways) {
+    next if $species_instance && $species_instance->db_id != $pathway->species->[0]->db_id;
+    print $pathway->species->[0]->name->[0] . "\n";
+    my $pathway_id = $pathway->db_id;
+    my $outfile = trim($pathway->name->[0]) . '.sbgn';
+    
+    my $command = qq(java -classpath $classpath org.gk.sbgn.SBGNBuilderCommandLine -user $user -pass $pass -host $host -db $db -port $port -sp $species -pid $pathway_id -o "$outfile");
+    system($command) == 0 or $logger->warn("$command failed");
+    remove_if_empty_sbgn_file($outfile);
+}
+
+sub trim {
+    my $string = shift;
+    
+    $string =~ s/^\s+//;
+    $string =~ s/\s+$//;
+    
+    return $string;
+}
+
+sub remove_if_empty_sbgn_file {
+    my $file = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    open(my $fh, '<', $file);
+    my $contents = join('', <$fh>);
+    close $fh;
+    
+    unless ($contents && $contents =~ /<\/sbgn>/) {
+	system("rm \"$file\"");
+	$logger->info("$file removed");
+    }
+}
