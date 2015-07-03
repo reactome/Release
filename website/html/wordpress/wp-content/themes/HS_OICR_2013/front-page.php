@@ -14,6 +14,7 @@
 
     <div class="grid_5 omega">
     <a class="button icon cytoscape" href="http://wiki.reactome.org/index.php/Reactome_FI_Cytoscape_Plugin"><span>ReactomeFIViz app</span></a>
+
     </div>
   
  	 <div class="clear"></div> <!--clear the first row of buttons -->
