@@ -19,13 +19,13 @@ has '+mail' => ( default => sub {
 					};
 				}
 );
-						
-override 'run_commands' => sub {
-	my ($self, $gkbdir) = @_;
-	
-	my $host = $self->host;
 
-    my @args = ("-db", $db, "-host", $host, "-user", $user, "-pass", $pass);
+override 'run_commands' => sub {
+    my ($self, $gkbdir) = @_;
+
+    my $host = $self->host;
+
+    my @args = ("-db", $db, "-host", $host, "-user", $user, "-pass", $pass, "-r", $version);
     cmd("Running fireworks JSON generator",[["perl fireworks.pl @args > fireworks.out 2> fireworks.err"]]);
 };
 
