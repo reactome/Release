@@ -353,7 +353,7 @@ class blcCurlHttp extends blcHttpCheckerBase {
 		$log .= " ===\n\n";
 
 		$log .= "Response headers\n" . str_repeat('=', 16) . "\n";
-        $log .= $this->last_headers;
+        $log .= htmlentities($this->last_headers);
 
 		if ( isset($info['request_header']) ) {
 			$log .= "Request headers\n" . str_repeat('=', 16) . "\n";
