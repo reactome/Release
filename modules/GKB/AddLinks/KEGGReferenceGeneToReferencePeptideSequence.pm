@@ -33,15 +33,17 @@ disclaimers of warranty.
 
 package GKB::AddLinks::KEGGReferenceGeneToReferencePeptideSequence;
 use strict;
+use common::sense;
 
 use GKB::Config;
 use GKB::AddLinks::Builder;
 use GKB::HTMLUtils;
+use Data::Dumper;
 
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 
-use Data::Dumper;
+
 use vars qw(@ISA $AUTOLOAD %ok_field);
 
 @ISA = qw(GKB::AddLinks::Builder);
@@ -180,6 +182,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
     # Run the UniProt IDs against KEGG web services, pulling back information
     # on the associated KEGG gene IDs, in tab-delimited format.
     my $output = $self->bconv($query_string);
+    say "OUTPUT $output";
     if ($output eq '') {
         $logger->warn("output is empty!!\n");
         return;
@@ -216,6 +219,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         # that may have been collected for this UniProt ID.  Use a
         # hash, to avoid duplication.
         $kegg_gene_ids{$kegg_gene_id} = $kegg_gene_id;
+	say "KEGG gene ID $kegg_gene_id";
         $uniprot_to_kegg_gene{$uniprot_identifier} = \%kegg_gene_ids;
     }
 
@@ -306,7 +310,10 @@ sub process_accumulated_reference_peptide_sequences_chunk {
             }
             
             my $kegg_ref_dna_instance = $self->get_KEGG_ReferenceDNASequence($kegg_gene_id, $kegg_name, \@enzymes, $reference_peptide_sequence->species);
-
+	    
+	    $kegg_ref_dna_instance->inflate();
+	    $kegg_ref_dna_instance->displayName("KEGG Gene:$kegg_gene_id");
+	    $dba->update($kegg_ref_dna_instance);
             push(@reference_genes, $kegg_ref_dna_instance);
             
             $id_hash{$kegg_gene_id}++;
@@ -330,6 +337,9 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         # Incorporate KEGG genes as reference genes in UniProt entry
         $reference_peptide_sequence->inflate;
         $reference_peptide_sequence->referenceGene(undef);
+
+	say "This is my refpep: ", $reference_peptide_sequence->dbId();
+	say Dumper([map {$_->displayName} @reference_genes]);
         $reference_peptide_sequence->add_attribute_value('referenceGene', @reference_genes);
         $reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
 
