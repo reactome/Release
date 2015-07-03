@@ -164,9 +164,10 @@ public class SearchService {
         if (id != null && !id.isEmpty()) {
             IEnricher enricher = new Enricher(host, currentDatabase, user, password, port);
             if (id.toUpperCase().contains("REACT_") || id.toUpperCase().contains("R-")) {
-            	System.err.println("Stable ID "+id);
+            	System.err.println("Stable ID "+id+" AKA "+id.split("\\.")[0]);
                 Entry entry = solrConverter.getEntryById(id.split("\\.")[0]);
                 if (entry!= null) {
+		    System.err.println("I have an entry and my DbId is "+entry.getDbId());
                     return enricher.enrichEntry(entry.getDbId());
                 }
             } else {

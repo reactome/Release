@@ -393,9 +393,18 @@ sub process_disease {
 
 sub process_generic_identifier {
     my @instances = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
     my @records;
-    push @records, [$_->referenceDatabase->[0]->displayName, $_->identifier->[0], $_->displayName] foreach (@instances);
+    
+    foreach my $instance (@instances) {
+	try {
+	    push @records, [$instance->referenceDatabase->[0]->displayName, $instance->identifier->[0], $instance->displayName];
+	} catch {
+	    $logger->warn("Can't insert a record for " . $instance->db_id);
+	}
+    }
     return @records;
 }
 
