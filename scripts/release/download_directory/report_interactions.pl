@@ -3,10 +3,6 @@
 # Make sure you don't have "competing" libraries...
 # for use @CSHL
 use lib "/usr/local/gkb/modules";
-# for use @HOME
-use lib "$ENV{HOME}/bioperl-1.0";
-use lib "$ENV{HOME}/GKB/modules";
-use lib "$ENV{HOME}/my_perl_stuff";
 
 use GKB::DBAdaptor;
 use GKB::Instance;

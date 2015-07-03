@@ -16,7 +16,7 @@ BEGIN {
 
 use GKB::Config;
 
-use autodie qw/:all/;
+use autodie;
 use Cwd;
 use Getopt::Long;
 use common::sense;
@@ -59,9 +59,14 @@ system("git stash; git subtree pull --prefix scripts/release/analysis_core/analy
 chdir "$present_dir/analysis/Core";
 system("mvn clean package");
 system("mv target/tools-jar-with-dependencies.jar analysis_core.jar");
+
 my $analysis_core = "java -jar -Xms5120M -Xmx10240M analysis_core.jar";
 my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
 system("$analysis_core build $credentials -o $present_dir/analysis_v$opt_r.bin");
+my $analysis_dir = '/usr/local/reactomes/Reactome/AnalysisService/input';
+link("$present_dir/analysis_v$opt_r.bin", "$analysis_dir/analysis_v$opt_r.bin");
+unlink("$analysis_dir/analysis.bin");
+symlink("$analysis_dir/analysis_v$opt_r.bin","$analysis_dir/analysis.bin");
 
 foreach my $resource (qw/UniProt ChEBI Ensembl miRBase/) {
     my $export = "$analysis_core export $credentials -i $present_dir/analysis_v$opt_r.bin";
