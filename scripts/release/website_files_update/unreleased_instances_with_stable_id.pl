@@ -10,7 +10,7 @@ use Getopt::Long;
 
 my $help;
 GetOptions(
-  'help=s' => \$help
+  'help' => \$help
 );
 
 if ($help) {
