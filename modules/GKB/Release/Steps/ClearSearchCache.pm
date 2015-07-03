@@ -24,10 +24,11 @@ override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
     my $html_dir = replace_gkb_alias_in_dir($html, "gkb");
+    my $img_tmp_dir = "$html_dir/img-tmp";
 
     cmd("Clearing search cache",
 	[
-	    ["ssh $live_server 'rm -f $html_dir/img-tmp/query_store_gk_current* *.rtf *.pdf'"]
+	    ["ssh $live_server 'rm -f $img_tmp_dir/query_store_gk_current* $img_tmp_dir/*.rtf $img_tmp_dir/*.pdf'"]
 	]
     );
 };
