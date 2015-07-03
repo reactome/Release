@@ -1161,7 +1161,8 @@ sub get_instance_text_units {
 	    @text_units = (@text_units, $self->get_reaction_diagram_text_units($instance));
 	}
     }
-    
+
+<<<<<<< Updated upstream
     if ($instance->is_a("Pathway") || $instance->is_a("ReactionlikeEvent") || $instance->is_a("BlackBoxEvent")) { 
         if (defined $self->hyperlink_base_url && defined $self->hyperlink_db) {
             $text_unit = GKB::DocumentGeneration::TextUnit->new();
@@ -1171,22 +1172,29 @@ sub get_instance_text_units {
             $text_unit->set_contents("See web page for this $event_type");
 	    
 	    my $url = $self->hyperlink_base_url;
-	    
-	    if ($instance->is_a("Pathway")) {
-		my $has_diagram = GKB::WebUtils->has_diagram($db_name,$instance);
-		my $focus_pathway;
-		if ($has_diagram) {
-		    $focus_pathway = $instance_db_id;
-		}
-		else {
-		    $focus_pathway = GKB::WebUtils->find_parent_pathway($instance);
-		}
-		$url .= "/PathwayBrowser/#FOCUS_PATHWAY_ID=$focus_pathway";
+	    if ($instance->is_a("Pathway") && GKB::WebUtils->has_diagram($db_name,$instance)) {
+		$url .= "/PathwayBrowser/#FOCUS_PATHWAY_ID=$instance_db_id";
 	    }
 	    else {
 		$url .= "/content/detail/$instance_db_id";
 	    }
-	    
+=======
+    # Emit a hyperlink to the Reactome page for the instance
+#    if ($instance->is_a("Pathway")) { # Hack for Lisa
+#        if (defined $self->hyperlink_base_url && defined $self->hyperlink_db) {
+#            $text_unit = GKB::DocumentGeneration::TextUnit->new();
+#            $text_unit->set_type("vertical_space");
+#            push @text_units, $text_unit;
+#            $text_unit = GKB::DocumentGeneration::TextUnit->new();
+#            $text_unit->set_type("hyperlink");
+#            $text_unit->set_contents("See web page for this $event_type");
+#            $text_unit->set_url($self->hyperlink_base_url . "/cgi%2Dbin/eventbrowser?DB=" . $self->hyperlink_db . "&ID=$instance_db_id");
+#            $text_unit->set_url($self->hyperlink_base_url . "/PathwayBrowser/FOCUS_PATHWAY_ID=$instance_db_id");
+#            push @text_units, $text_unit;
+#        }
+#    }
+>>>>>>> Stashed changes
+
             $text_unit->set_url($url);
             push @text_units, $text_unit;
         }
