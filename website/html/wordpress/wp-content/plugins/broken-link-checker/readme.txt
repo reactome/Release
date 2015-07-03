@@ -3,8 +3,8 @@ Contributors: whiteshadow
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=A6P9S6CE3SRSW
 Tags: links, broken, maintenance, blogroll, custom fields, admin, comments, posts
 Requires at least: 3.2
-Tested up to: 4.2.1
-Stable tag: 1.10.8
+Tested up to: 4.2.2
+Stable tag: 1.10.9
 
 This plugin will check your posts, comments and other content for broken links and missing images, and notify you if any are found. 
 
@@ -99,9 +99,15 @@ To upgrade your installation
 
 == Changelog ==
 
+= 1.10.9 =
+* Fixed a security vulnerability where part of the log data visibile in the "Details" view was not properly sanitized.
+* Updated French translation.
+* Updated Portuguese translation.
+* Removed an advertising banner.
+
 = 1.10.8 =
 * Added a Swedish translation.
-* Fixed an encoding-related bug that caused some translated text on the "Broken Links" to show up as gibberish.
+* Fixed an encoding-related bug that caused some translated text on the "Broken Links" page to show up as gibberish.
 * Fixed a potential security vulnerability where the "Final URL" field was not sanitized.
 * Fixed link text being truncated to 250 characters.
 * Fixed the "Edit URL" function updating the link text even when the user left that field unchanged.
