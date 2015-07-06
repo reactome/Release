@@ -702,6 +702,10 @@ sub interpret_markup {
     $new_text =~ s/\<\/b\>/}/gi;
     $new_text =~ s/\<i\>/{\\i /gi;
     $new_text =~ s/\<\/i\>/}/gi;
+    $new_text =~ s/\<sup\>/{\\super /gi;
+    $new_text =~ s/\<\/sup\>/}/gi;
+    $new_text =~ s/\<sub\>/{\\sub /gi;
+    $new_text =~ s/\<\/sub\>/}/gi;
     
     while ($new_text =~ /^(<img.*?\>)/gi) {
 	my $image_tag = $1;
