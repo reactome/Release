@@ -49,15 +49,16 @@ my $solr_dir  = '/usr/local/reactomes/Reactome/production/Solr/cores';
 # my $solr_user = $GKB::Config::GK_SOLR_USER;
 # my $solr_pass = $GKB::Config::GK_SOLR_PASS;
 
-
+my $tmp_dir = "/tmp";
 my $present_dir = getcwd();
 my $output = "$present_dir/ebeye.xml";
 my $prev_release = $opt_r - 1;
 
 disable_authentication();
 
-chdir $GK_ROOT_DIR;
-system("git stash; git subtree pull --prefix scripts/release/search_indexer/search --squash search master; git stash pop");
+chdir $tmp_dir;
+system("git clone https://github.com/reactome/Search.git");
+system("rm -rf $present_dir/search; ln -s Search $present_dir/search");
 
 # then index.  This actually uses tomcat/solr to write to the filesystem!
 $logger->info("I am updating and compiling the indexer now...");
@@ -72,6 +73,9 @@ system("gzip -f $output");
 
 chdir $solr_dir;
 system "tar czvf reactome_v$opt_r.tar.gz reactome";
+
+chdir $tmp_dir;
+system("rm -rf Search");
 
 enable_authentication();
 
