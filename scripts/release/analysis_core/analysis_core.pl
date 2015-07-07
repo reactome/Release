@@ -50,11 +50,13 @@ $opt_user ||= $GK_DB_USER;
 $opt_pass ||= $GK_DB_PASS;
 $opt_port ||= $GK_DB_PORT;
 
-
+my $tmp_dir = "/tmp";
 my $present_dir = getcwd();
 
-chdir $GK_ROOT_DIR;
-system("git stash; git subtree pull --prefix scripts/release/analysis_core/analysis --squash analysis master; git stash pop");
+
+chdir $tmp_dir;
+system("git clone https://github.com/reactome/AnalysisTools");
+system("rm -rf AnalysisTools; ln -s AnalysisTools $present_dir/analysis");
 
 chdir "$present_dir/analysis/Core";
 system("mvn clean package");
@@ -82,5 +84,8 @@ while(my ($type, $output) = each %hierarchy) {
 my $tempfiles = TEMP.'/*';
 $logger->info("Removing analysis temp files...");
 system "rm -f $tempfiles";
+
+chdir $tmp_dir;
+system("rm -rf AnalysisTools");
 
 $logger->info("$0 has finished its job\n");
