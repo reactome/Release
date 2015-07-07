@@ -48,15 +48,17 @@ $opt_user ||= $GK_DB_USER;
 $opt_pass ||= $GK_DB_PASS;
 $opt_port ||= $GK_DB_PORT;
 
-
+my $tmp_dir = "/tmp";
 my $present_dir = getcwd();
 
-#chdir $GK_ROOT_DIR;
-#system("git stash; git subtree pull --prefix scripts/release/fireworks_server/fireworks --squash fireworks master; git stash pop");
+chdir $tmp_dir;
+system("git clone https://github.com/reactome/Fireworks");
+system("rm -rf $present_dir/fireworks; ln -s Fireworks");
 
 #chdir "$present_dir/fireworks/Server";
 #system("mvn clean package");
 #system("mv target/Reactome-Fireworks-Layout-jar-with-dependencies.jar fireworks.jar");
+chdir $present_dir;
 my $fireworks_package = "java -jar -Xms5120M -Xmx10240M fireworks.jar";
 my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
 my $reactome_graph_binary = "$present_dir/ReactomeGraphs.bin";
@@ -64,5 +66,7 @@ system("$fireworks_package GRAPH -s $present_dir/../analysis_core/analysis_v$opt
 my $json_dir = "$present_dir/json";
 system("$fireworks_package LAYOUT $credentials -g $reactome_graph_binary -f $present_dir/fireworks/Server/config -o $json_dir");
 
+chdir $tmp_dir;
+system("rm -rf Fireworks");
 
 $logger->info("$0 has finished its job\n");
