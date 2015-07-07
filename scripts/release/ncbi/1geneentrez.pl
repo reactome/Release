@@ -94,12 +94,12 @@ foreach my $rgp (@{$rgps}) {
 
    my @entrez_genes = @{$uniprot2entrez_gene{$rgp_identifier}};
    foreach my $entrez_gene (@entrez_genes) {
-      print $gene_xml get_link_xml($link_id, $entrez_gene, "&entity.base.url", $rgp_identifier, "Reactome Entity:$rgp_identifier");
+      print $gene_xml get_link_xml($link_id, $entrez_gene, "&entity.base.url;", $rgp_identifier, "Reactome Entity:$rgp_identifier");
       $link_id++;
 
       my @pathways = grep {@{$_->reverse_attribute_value('frontPageItem')}} @{$events}; 
       foreach my $pathway (@pathways){
-	 print $gene_xml get_link_xml($link_id, $entrez_gene, "&event.base.url", $pathway->stableIdentifier->[0]->identifier->[0], "Reactome Event:".fix_name($pathway->Name->[0]));
+	 print $gene_xml get_link_xml($link_id, $entrez_gene, "&event.base.url;", $pathway->stableIdentifier->[0]->identifier->[0], "Reactome Event:".fix_name($pathway->Name->[0]));
 	 $link_id++;
       }
    }
