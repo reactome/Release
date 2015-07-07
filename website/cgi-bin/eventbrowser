@@ -46,12 +46,6 @@ if (!(defined $classic && $classic =~ /1/)) {
 	$classic = $CGI->cookie('ClassicView');
 }
 
-if (my $cookie = handle_cookie($CGI)) {
-    print $CGI->header(-charset => 'UTF-8', -cookie => $cookie);
-} else {
-    print $CGI->header(-charset => 'UTF-8');
-}
-
 eval {
     $WU = GKB::WebUtils->new_from_cgi(-CGI => $CGI);
     $DBA = $WU->dba;
@@ -106,62 +100,69 @@ eval {
 		$title = "$PROJECT_NAME (eventbrowser)";
     }
 
-    if (!(defined $header)) {
-        my @meta_tags = $WU->instance_meta_tag_builder($CGI->param('ID'));
-        print $CGI->start_html(
-    	# \-dtd => "-//IETF//DTD HTML//EN",
-    	-style => {-src => '/stylesheet.css'},
-    	-title => $title,
-    	-head => \@meta_tags
-	-script => {-src => '/google.js'},
-    	);
-    }
-	
     if ( @$instances == 1 && $instances->[0]->class =~ /Pathway|Reaction|Complex/ ){ 
 	my $url = $WU->build_pathway_browser_url($instances->[0]);
-	print $WU->form_redirect($url);
-    }
-    elsif (my $name = $instances->[0]->displayName) {
-	$name = "/content/query?q='$name'";
-	print qq(<script type="text/javascript">window.location.href="$name"</script>);
+	print $CGI->redirect($url);
     }
     else {
+	if (my $cookie = handle_cookie($CGI)) {
+	    print $CGI->header(-charset => 'UTF-8', -cookie => $cookie);
+	} else {
+	    print $CGI->header(-charset => 'UTF-8');
+	}
+	if (!(defined $header)) {
+	    my @meta_tags = $WU->instance_meta_tag_builder($CGI->param('ID'));
+	    print $CGI->start_html(
+		# \-dtd => "-//IETF//DTD HTML//EN",
+		-style => {-src => '/stylesheet.css'},
+		-title => $title,
+		-head => \@meta_tags
+		-script => {-src => '/google.js'},
+	    );
+	}
+	
+	if (my $name = $instances->[0]->displayName) {
+	    $name = "/content/query?q='$name'";
+	    print qq(<script type="text/javascript">window.location.href="$name"</script>);
+	}
+	else {
 	    @{$instances} && print_toolbar($instances);
 	
-		# Top navigation box
-		if (is_decorated()) {
-		    if (defined $header) {
-		        print $header;
-		    } else {
-		        print $WU->navigation_bar;
-		    }
-		}
-		# query form
-		if (!(defined $header)) {
-		    $WU->print_simple_query_form;
-		}
-		
-		# Main part of page
-		if (@{$instances}) {
-		    # 1 or more instances to be displayed
-			my $ar = GKB::Utils::find_focus_species_names($DBA,$CGI, ((scalar(@{$instances}) == 1) ? $instances->[0]: undef));
-			if (@{$ar}) {
-				$WU->urlmaker->param('FOCUS_SPECIES',$ar);
-	#			$CGI->param('FOCUS_SPECIES',@{$ar});
-			}
-			$WU->print_view($instances,1);
-		} elsif ($CGI->param('QUERY') || $CGI->param('ID')) {
-			print qq(<P /><H2 CLASS="nothingfound" ALIGN="center">No matching instances were found.</H2>\n);
+	    # Top navigation box
+	    if (is_decorated()) {
+		if (defined $header) {
+		    print $header;
 		} else {
-			$WU->print_TOC;
+		    print $WU->navigation_bar;
 		}
-		    
-		if (is_decorated()) {
-		    if (!(defined $footer)) {
-		        print $WU->make_footer;
-		    }
+	    }
+	    # query form
+	    if (!(defined $header)) {
+		$WU->print_simple_query_form;
+	    }
+		
+	    # Main part of page
+	    if (@{$instances}) {
+		# 1 or more instances to be displayed
+		my $ar = GKB::Utils::find_focus_species_names($DBA,$CGI, ((scalar(@{$instances}) == 1) ? $instances->[0]: undef));
+		if (@{$ar}) {
+		    $WU->urlmaker->param('FOCUS_SPECIES',$ar);
+		    #$CGI->param('FOCUS_SPECIES',@{$ar});
 		}
+		$WU->print_view($instances,1);
+	    } elsif ($CGI->param('QUERY') || $CGI->param('ID')) {
+		print qq(<P /><H2 CLASS="nothingfound" ALIGN="center">No matching instances were found.</H2>\n);
+	    } else {
+		$WU->print_TOC;
+	    }
+		
+	    if (is_decorated()) {
+		if (!(defined $footer)) {
+		    print $WU->make_footer;
+		}
+	    }
 	}
+    }
     if (defined $footer) {
         if (is_decorated()) {
             print $footer;
