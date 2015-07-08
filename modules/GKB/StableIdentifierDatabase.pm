@@ -72,10 +72,13 @@ sub get_events {
 	warn "STUFF ($st_db_id,$identifier,$version)";
 	while (my $event = $query->fetchrow_arrayref) {
 	    my ($class,$release) = @$event;
-	    my $dba = eval{$self->get_dba("test_slice_$release")};
-	    unless ($dba) {
-		$dba = eval{$self->get_dba("test_slice_$release\_myisam")};
+
+	    my $dba;
+	    for ("test_reactome_$release", "test_slice_$release", "test_slice_${release}_myisam") {
+		$dba = eval{$self->get_dba("test_slice_$release")};
+		last if $dba
 	    }
+
 	    unless ($dba) {
 		say STDERR "Could not get DBA for $release, moving along";
 		next;
