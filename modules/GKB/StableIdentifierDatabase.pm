@@ -72,7 +72,14 @@ sub get_events {
 	warn "STUFF ($st_db_id,$identifier,$version)";
 	while (my $event = $query->fetchrow_arrayref) {
 	    my ($class,$release) = @$event;
-	    my $dba = $self->get_dba("test_slice_$release");
+	    my $dba = eval{$self->get_dba("test_slice_$release")};
+	    unless ($dba) {
+		$dba = eval{$self->get_dba("test_slice_$release\_myisam")};
+	    }
+	    unless ($dba) {
+		say STDERR "Could not get DBA for $release, moving along";
+		next;
+	    }
 	    my ($actual_identifier, $actual_version, $display_name);
 	    if ($class eq 'deleted' || $class eq 'renamed') {
 		warn "ACTUAL $identifier $class";
