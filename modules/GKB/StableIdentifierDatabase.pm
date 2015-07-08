@@ -80,6 +80,7 @@ sub get_events {
 		say STDERR "Could not get DBA for $release, moving along";
 		next;
 	    }
+
 	    my ($actual_identifier, $actual_version, $display_name);
 	    if ($class eq 'deleted' || $class eq 'renamed') {
 		warn "ACTUAL $identifier $class";
