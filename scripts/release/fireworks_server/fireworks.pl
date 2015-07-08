@@ -53,11 +53,12 @@ my $present_dir = getcwd();
 
 chdir $tmp_dir;
 system("git clone https://github.com/reactome/Fireworks");
-system("rm -rf $present_dir/fireworks; ln -s Fireworks");
+system("rm -rf $present_dir/fireworks; ln -s Fireworks $present_dir/fireworks");
 
 #chdir "$present_dir/fireworks/Server";
 #system("mvn clean package");
 #system("mv target/Reactome-Fireworks-Layout-jar-with-dependencies.jar fireworks.jar");
+
 chdir $present_dir;
 my $fireworks_package = "java -jar -Xms5120M -Xmx10240M fireworks.jar";
 my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
