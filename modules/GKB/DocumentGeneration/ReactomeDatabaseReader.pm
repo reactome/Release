@@ -930,7 +930,7 @@ END
 	$self->hyperlink("Navigating Disease pathways", "http://wiki.reactome.org/index.php/Usersguide#Navigating_Disease_Pathway_Diagrams");
     }
 
-    $text = 'A more detailed description the website and its features can be found in our Users Guide.';
+    $text = 'A more detailed description of the website and its features can be found in our Users Guide.';
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("body_text_paragraph");
     $text_unit->set_contents($text);
