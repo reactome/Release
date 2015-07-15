@@ -2,10 +2,12 @@
 use strict;
 use warnings;
 
+use constant AND => 0;
+use constant OR => 1;
+
 use lib '/usr/local/gkb/modules';
 
 use autodie qw/:all/;
-
 use List::MoreUtils qw/any/;
 use Getopt::Long;
 use GKB::Config;
@@ -16,8 +18,11 @@ Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
 
-my $selected_pathways;
-GetOptions('pathways=s' => \$selected_pathways);
+my ($selected_pathways, $output_file);
+GetOptions(
+    'pathways=s' => \$selected_pathways,
+    'output=s' => \$output_file
+);
 
 unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
     print usage_instructions();
@@ -47,9 +52,8 @@ if ($selected_pathways eq 'all') {
 
 exit unless @reactions;
 
-(my $logic_table_output_file = $0) =~ s/.pl$/.tsv/;
-open my $logic_table_fh, ">", "$logic_table_output_file";
-#print $logic_table_fh "Parent\tChild\tValue\tLogic\n";
+($output_file = $0) =~ s/.pl$/.tsv/ unless $output_file;
+open my $logic_table_fh, ">", "output_file";
 
 my %interactions;
 my %parent2child;
@@ -65,8 +69,8 @@ foreach my $reaction (@reactions) {
 }
 close $logic_table_fh;
 
-add_line_count($logic_table_output_file);
-`dos2unix $logic_table_output_file`;
+add_line_count($output_file);
+`dos2unix $output_file`;
 
 sub populate_graph {
     my $reaction = shift;
@@ -130,7 +134,7 @@ sub process_input {
     my $input = shift;
     my $fh = shift;
     
-    report($fh, get_label($input), get_label($reaction), 1, 'AND');
+    report($fh, get_label($input), get_label($reaction), 1, AND);
 }
 
 sub process_output {
@@ -138,7 +142,7 @@ sub process_output {
     my $associated_reactions = shift;
     my $fh = shift;
     
-    my $logic = scalar @$associated_reactions > 1 ? 'OR' : 'AND';
+    my $logic = scalar @$associated_reactions > 1 ? OR : AND;
     foreach my $reaction (@$associated_reactions) {
 	next if output_is_ancestral_input($output) && $reaction->catalystActivity->[0];	
 	
@@ -155,10 +159,10 @@ sub process_if_set_or_complex {
     if ($physical_entity->is_a('EntitySet')) {
 	push @elements, @{$physical_entity->hasMember};
 	push @elements, @{$physical_entity->hasCandidate};
-	$logic = 'OR';
+	$logic = OR;
     } elsif ($physical_entity->is_a('Complex')) {
 	push @elements, @{$physical_entity->hasComponent};
-	$logic = 'AND';
+	$logic = AND;
     }
     
     foreach my $element (@elements) {	
@@ -177,7 +181,7 @@ sub process_regulations {
 	process_if_set_or_complex($regulator, $fh) unless is_an_output_in_binding_reaction($regulator);
 	
 	my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
-	report($fh, get_label($regulator), get_label($reaction), $value, 'AND');
+	report($fh, get_label($regulator), get_label($reaction), $value, AND);
     }
 }
 
@@ -200,9 +204,9 @@ sub report {
 sub get_label {
     my $instance = shift;
     
-    if (is_set_or_complex($instance) || $instance->is_a('ReactionlikeEvent')) {
-	return $instance->db_id;
-    }
+    #if (is_set_or_complex($instance) || $instance->is_a('ReactionlikeEvent')) {
+#	return $instance->db_id;
+#    }
     
     return $instance->name->[0];
 }
@@ -304,12 +308,19 @@ sub usage_instructions {
 
 This script creates a tab delimited text file describing a directed graph
 with nodes being reactions and their physical entities (inputs, outputs,
-catalysts, and regulators) connected by boolean logic.
+catalysts, and regulators) connected by boolean logic ('0' representing
+'AND' and '1' representing 'or').  The output has a header of the number of
+node interactions and rows describing those interactions with four columns:
 
-perl $0 -pathways comma delimited list of pathway db_ids or 'all'
-Example:
-perl $0 -pathways 123,234,etc.
-perl $0 -pathways all
+Parent Node, Child Node, Value, Logic
+
+
+Usage: perl $0 [options]
+
+Options
+
+-pathways	comma delimited list of pathway db_ids or 'all' (required)
+-output		name of output file (defaults to name of script with .tsv extension)
 
 END
 }
