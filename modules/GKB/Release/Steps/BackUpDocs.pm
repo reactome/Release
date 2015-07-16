@@ -23,7 +23,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
     
-    $self->md("Backing up usersguide and release SOP",
+    $self->cmd("Backing up usersguide and release SOP",
     	[
     		["perl run_download_html_from_wiki.pl -wiki_url \"http://wiki.reactome.org/index.php/Usersguide\" -target_dir ../../website/html/userguide"],
     		["perl run_download_html_from_wiki.pl -wiki_url \"http://devwiki.reactome.org/index.php/Release_SOP\" -target_dir ../../docs/SOP"]
