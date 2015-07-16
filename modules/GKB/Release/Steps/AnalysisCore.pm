@@ -26,7 +26,7 @@ override 'run_commands' => sub {
 	my $host = $self->host;
 
     my @args = ("-db", $db, "-host", $host, "-user", $user, "-pass", $pass, "-r", $version);
-    cmd("Running analysis core",[["perl analysis_core.pl @args > analysis.out 2> analysis.err"]]);
+    $self->cmd("Running analysis core",[["perl analysis_core.pl @args > analysis.out 2> analysis.err"]]);
 };
 
 1;

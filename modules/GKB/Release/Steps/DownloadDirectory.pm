@@ -28,9 +28,9 @@ override 'run_commands' => sub {
     my $download_dir = replace_gkb_alias_in_dir($html, $gkbdir) . '/download';
 
     if ($gkbdir eq "gkbdev") {
-        cmd("Creating download directory",[["perl create_download_directory.pl -host $host -port 3306 -user $user -pass $pass -r $version -db $db > create_download_directory.$version.out"]]);
-        cmd("Creating BioSystems export file",[["perl create_reactome2biosystems.pl -host $host -port 3306 -user $user -pass $pass -r $version -db $db > create_reactome2biosystems.$version.out"]]);
-	cmd("Moving download directory to website folder",
+        $self->cmd("Creating download directory",[["perl create_download_directory.pl -host $host -port 3306 -user $user -pass $pass -r $version -db $db > create_download_directory.$version.out"]]);
+        $self->cmd("Creating BioSystems export file",[["perl create_reactome2biosystems.pl -host $host -port 3306 -user $user -pass $pass -r $version -db $db > create_reactome2biosystems.$version.out"]]);
+	$self->cmd("Moving download directory to website folder",
 	    [
 		["mkdir -p $download_dir/$version"],
 		["mv $version/* $download_dir/$version"],
@@ -38,15 +38,15 @@ override 'run_commands' => sub {
 	    ]);
     } elsif ($gkbdir eq "gkb") {
 	my $archive_live = replace_gkb_alias_in_dir("$html/download/archive", 'gkb');
-	cmd("Archiving version $prevver download directory", [["tar zcvf - $html/download/$prevver | ssh $live_server 'cat > $archive_live/$prevver.tgz'"]]);
-    	cmd("Copying current download directory from $host",[["scp -r $html/download/$version $live_server:$download_dir"]]);
-	cmd("Removing version $prevver download directory from $live_server (archive still available)",
+	$self->cmd("Archiving version $prevver download directory", [["tar zcvf - $html/download/$prevver | ssh $live_server 'cat > $archive_live/$prevver.tgz'"]]);
+    	$self->cmd("Copying current download directory from $host",[["scp -r $html/download/$version $live_server:$download_dir"]]);
+	$self->cmd("Removing version $prevver download directory from $live_server (archive still available)",
 	    [["rm -r $download_dir/$prevver"]], {'ssh' => $live_server}
 	);
         
         my $analysis_dir = '/usr/local/reactomes/Reactome/production/AnalysisService/input';
         my $analysis_binary = "analysis_v$version.bin";
-        cmd("Copying analyis binary from $host",
+        $self->cmd("Copying analyis binary from $host",
             [
              ["scp $analysis_dir/$analysis_binary $live_server:$analysis_dir"],
              ["ssh $live_server 'cd $analysis_dir;rm analysis.bin; ln -s $analysis_binary analysis.bin'"]
@@ -54,7 +54,7 @@ override 'run_commands' => sub {
         );
 	
 	my $solr_dir = '/usr/local/reactomes/Reactome/production/Solr';
-        cmd("Copying solr index from $host",
+        $self->cmd("Copying solr index from $host",
             [
              ["rsync -avh -e ssh $solr_dir $live_server:$solr_dir"]
             ]
@@ -64,7 +64,7 @@ override 'run_commands' => sub {
     
     # The command is run on the live server when $gkbdir is gkb_prod or gkb_test
     my $ssh_server = ($gkbdir eq "gkb") ? $live_server : undef;
-    cmd("Creating link to current download directory",
+    $self->cmd("Creating link to current download directory",
     	[
     		["mv $download_dir/$prevver $download_dir/foo 2> /dev/null"],
     		["rm $download_dir/current"],

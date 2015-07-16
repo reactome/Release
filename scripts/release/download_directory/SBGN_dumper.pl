@@ -89,13 +89,12 @@ my @pathways = @{$dba->fetch_instance(-CLASS => 'Pathway')};
 
 foreach my $pathway (@pathways) {
     next if $species_instance && $species_instance->db_id != $pathway->species->[0]->db_id;
-    print $pathway->species->[0]->name->[0] . "\n";
     my $pathway_id = $pathway->db_id;
     my $outfile = trim($pathway->name->[0]) . '.sbgn';
     
     my $command = qq(java -classpath $classpath org.gk.sbgn.SBGNBuilderCommandLine -user $user -pass $pass -host $host -db $db -port $port -sp $species -pid $pathway_id -o "$outfile");
     system($command) == 0 or $logger->warn("$command failed");
-    remove_if_empty_sbgn_file($outfile);
+    remove_if_empty_sbgn_file($outfile) if (-e $outfile);
 }
 
 sub trim {

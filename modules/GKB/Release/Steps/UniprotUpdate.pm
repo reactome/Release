@@ -23,9 +23,9 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
-    cmd("Setting all UniProt files to have group permissions", [["echo $sudo | sudo -S chgrp gkb *"]]);
+    $self->cmd("Setting all UniProt files to have group permissions", [["echo $sudo | sudo -S chgrp gkb *"]]);
 	 
-    cmd("Backing up database and downloading necessary files",
+    $self->cmd("Backing up database and downloading necessary files",
 	[
 	    ["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral > $gkcentral.dump"],
 	    ["wget -q -N ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz"],
@@ -34,7 +34,7 @@ override 'run_commands' => sub {
     ); 
  
     my @args = ("-db", $gkcentral, "-host", $gkcentral_host, "-user", $user, "-pass", $pass);
-    cmd("Running uniprot perl script",[["perl uniprot_xml2sql_isoform.pl @args > uniprot.out 2> uniprot.err"]]);
+    $self->cmd("Running uniprot perl script",[["perl uniprot_xml2sql_isoform.pl @args > uniprot.out 2> uniprot.err"]]);
 };
 
 1;

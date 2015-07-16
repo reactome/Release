@@ -26,7 +26,7 @@ override 'run_commands' => sub {
 	my $host = $self->host;
 
     my @args = ("-db", $db, "-host", $host, "-user", $user, "-pass", $pass, "-r", $version);
-    cmd("Running search indexer",[["perl SearchIndexer.pm @args > search.out 2> search.err"]]);
+    $self->cmd("Running search indexer",[["perl SearchIndexer.pm @args > search.out 2> search.err"]]);
 };
 
 1;
