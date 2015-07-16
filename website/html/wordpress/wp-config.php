@@ -65,3 +65,6 @@ require_once(ABSPATH . 'wp-settings.php');
 /** Set up WordPress without using FTP */
 define('FS_METHOD', 'direct');
 
+/** Repair Wordpress database */
+define('WP_ALLOW_REPAIR', true);
+
