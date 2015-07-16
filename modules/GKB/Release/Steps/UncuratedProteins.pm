@@ -25,7 +25,7 @@ override 'run_commands' => sub {
     
     my $host = $self->host;
 	
-    cmd("Generating uncurated proteins file",[["perl uncurated_proteins.pl"]]);
+    $self->cmd("Generating uncurated proteins file",[["perl uncurated_proteins.pl"]]);
 };
 
 1;

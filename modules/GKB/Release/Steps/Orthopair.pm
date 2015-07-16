@@ -34,16 +34,16 @@ override 'run_commands' => sub {
     mkdir $version unless (-d $version); 
     
     for (my $i = 0; $i < 3; $i++) {
-    	cmd("Running orthopair script",[["./wrapper_orthopair.sh $version $ensmbl_ver > $version/wrapper_orthopair.out"]]);
+    	$self->cmd("Running orthopair script",[["./wrapper_orthopair.sh $version $ensmbl_ver > $version/wrapper_orthopair.out"]]);
 	last if files_okay();
     } # Determine if species files are present -- script rerun if not.  After 3 times, it is considered to have failed 
     die "Orthopair script has failed." unless files_okay();
     
             
     # Check orthopair files and attempt repairs if need be
-    my $return = (cmd("Checking orthopair files",[["perl check_orthopair_files.pl", ("-release", $version)]]))[0]->{'exit_code'};
+    my $return = ($self->cmd("Checking orthopair files",[["perl check_orthopair_files.pl", ("-release", $version)]]))[0]->{'exit_code'};
     if ($return) {
-		cmd("Fixing orthopair files",
+		$self->cmd("Fixing orthopair files",
 			[
 				["perl check_orthopair_files.pl",  ("-release", $version, "-fix", "-run_count", 0)], 
 				["perl check_orthopair_files.pl", ("-release", $version)]

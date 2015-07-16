@@ -28,14 +28,14 @@ override 'run_commands' => sub {
     my $livedb = 'gk_current';
   
     if ($gkbdir eq "gkbdev") {
-    	cmd("Removing cached frontpage files",
+    	$self->cmd("Removing cached frontpage files",
     	    [
     		["echo $sudo | sudo -S rm -rf $html/img-fp/$db"],
 		["echo $sudo | sudo -S rm $html/img-fp/$livedb"]
     	   ]
     	);
     
-    	cmd("Creating table of contents",
+    	$self->cmd("Creating table of contents",
     	    [
     		["mkdir -p $website_dir/html/img-fp"],
 		["$website_dir/cgi-bin/toc DB=$db"],
@@ -46,7 +46,7 @@ override 'run_commands' => sub {
     	    ]
     	);
     } elsif ($gkbdir eq "gkb") {
-        cmd("Creating table of contents",
+        $self->cmd("Creating table of contents",
 	    [
 		["echo $sudo | sudo -S rm -rf $website_dir/html/img-fp/$livedb"],
         	["$website_dir/cgi-bin/toc DB=$livedb"],

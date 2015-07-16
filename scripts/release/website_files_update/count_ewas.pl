@@ -8,7 +8,19 @@ use GKB::DBAdaptor;
 use GKB::Utils;
 
 use autodie;
+use Getopt::Long;
 use Term::ReadKey;
+
+my ($help);
+GetOptions(
+	'help' => \$help	
+);
+
+if ($help) {
+	print usage_instructions();
+	exit;
+}
+
 
 my $recent_version = prompt('Enter recent test slice version: (e.g. 39, 39a, etc):');
 my $previous_version = prompt('Enter previous test slice version: (e.g. 38):');
@@ -122,4 +134,18 @@ sub get_instances {
 			}
 		]
 	);
+}
+
+sub usage_instructions {
+	return <<END;
+
+This script counts and reports the number of new EWASs between an old
+and new test slice as well as a break down by curator reporting the number
+of new EWASs as well as the EWAS names.
+
+Usage: perl $0
+
+Output: curator_newEWASXX.txt where XX is reactome release version
+	
+END
 }
