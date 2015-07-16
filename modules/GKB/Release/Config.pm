@@ -13,29 +13,20 @@ use File::Basename;
 my $TEST_MODE = 0;
 
 # Set user variables
-my $defaultuser = `whoami`;
-chomp $defaultuser;
-print 'Enter user name - leave blank for default of ' . $defaultuser . ': ' unless $TEST_MODE;
-our $user = $TEST_MODE ? $defaultuser : <STDIN>; # User name or default
-chomp $user;
-$user ||= $defaultuser;
+chomp(our $user = `whoami`);
 
 our $pass; # mysql password
 our $sudo; # Sudo password
 
-our $date = `date "+%Y%m%d"`; # Today's date
-chomp $date;
+chomp(our $date = `date "+%Y%m%d"`); # Today's date
 
-print 'Enter current version number: ' unless $TEST_MODE;
-our $version = $TEST_MODE ? 999 : <STDIN>; # New Reactome Version
-chomp $version;
-
-our $prevver = $version - 1; # Previous Reactome Version
+our $version;
+our $prevver;
 
 # Set database names
-our $db = "test_reactome_$version"; # Test Reactome Database (e.g. test_reactome_38)
-our $slicedb = "test_slice_$version"; # Slice Database (e.g. test_slice_38)
-our $releasedb = "test_release_$version"; # Release Database (e.g. test_release_38)
+our $db = "test_reactome_{version}"; # Test Reactome Database (e.g. test_reactome_38)
+our $slicedb = "test_slice_{version}"; # Slice Database (e.g. test_slice_38)
+our $releasedb = "test_release_{version}"; # Release Database (e.g. test_release_38)
 our $biomartdb = "test_reactome_mart";
 our $gkcentral = "gk_central";
 our $gkcentral_host = "reactomecurator.oicr.on.ca";
@@ -43,6 +34,7 @@ our $gkcentral_host = "reactomecurator.oicr.on.ca";
 if ($TEST_MODE) {
     $gkcentral = "test_gk_central";
     $gkcentral_host = "reactomerelease.oicr.on.ca";
+    $version = 999;
     $prevver = 46;
 }
 
@@ -57,7 +49,7 @@ our $dumpdir = "$gkbdev/tmp";
 our $tmp = "$gkbdev/tmp";
 our $cvs = "/usr/local/cvs_repository";
 our $logdir = "$release/logs";
-our $logfile = "$logdir/release$version.log";
+our $logfile = "$logdir/release{version}.log";
 our $archive = "/nfs/reactome/reactome/archive/release";
 
 our %passwords = (
@@ -99,11 +91,20 @@ our %maillist = (
 our $log_conf = dirname(__FILE__)."/releaselog.conf";
 
 our @EXPORT = qw/
-    $user $pass $sudo $date $version $prevver 
+    $TEST_MODE
+    $user $pass $sudo $date $version $prevver
     $db $slicedb $releasedb $biomartdb $gkcentral $gkcentral_host
     $gkbdev $scripts $release $compara $website $html $gkbmodules $go $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server %hosts %maillist
     $log_conf
 /;
+
+sub set_version_for_config_variables {
+    my $version_number = shift;
+    
+    s/{version}/$version_number/ foreach @EXPORT;
+}
+
+push @EXPORT, 'set_version_for_config_variables';
 
 1;
