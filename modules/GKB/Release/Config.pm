@@ -10,7 +10,7 @@ use File::Basename;
 # Created by: Joel Weiser (joel.weiser@oicr.on.ca for questions/comments)
 # Purpose: A module to set and export reactome release variables
 
-my $TEST_MODE = 0;
+our $TEST_MODE = 0;
 
 # Set user variables
 chomp(our $user = `whoami`);
@@ -26,8 +26,6 @@ our $prevver;
 # Set database names
 our $db = "test_reactome_{version}"; # Test Reactome Database (e.g. test_reactome_38)
 our $slicedb = "test_slice_{version}"; # Slice Database (e.g. test_slice_38)
-our $releasedb = "test_release_{version}"; # Release Database (e.g. test_release_38)
-our $biomartdb = "test_reactome_mart";
 our $gkcentral = "gk_central";
 our $gkcentral_host = "reactomecurator.oicr.on.ca";
 
@@ -93,7 +91,7 @@ our $log_conf = dirname(__FILE__)."/releaselog.conf";
 our @EXPORT = qw/
     $TEST_MODE
     $user $pass $sudo $date $version $prevver
-    $db $slicedb $releasedb $biomartdb $gkcentral $gkcentral_host
+    $db $slicedb $gkcentral $gkcentral_host
     $gkbdev $scripts $release $compara $website $html $gkbmodules $go $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server %hosts %maillist
     $log_conf
@@ -102,7 +100,7 @@ our @EXPORT = qw/
 sub set_version_for_config_variables {
     my $version_number = shift;
     
-    s/{version}/$version_number/ foreach @EXPORT;
+    s/{version}/$version_number/ foreach ($db, $slicedb, $logfile);
 }
 
 push @EXPORT, 'set_version_for_config_variables';

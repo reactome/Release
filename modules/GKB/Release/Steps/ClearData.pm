@@ -39,13 +39,13 @@ override 'run_commands' => sub {
 	
 	# Drop the following created databases
 	foreach my $database ("$db","$db\_myisam","$db\_dn") {
-	    cmd("Dropping database $db",[["mysql -e drop database $database"]]);
+	    $self->cmd("Dropping database $db",[["mysql -e drop database $database"]]);
 	}
 
 	# Attempt to list the stable identifiers database dump and if present, recreate database    
 	my $return = system("ls generate_stable_ids/test_reactome_stable_identifiers_$version.dump");
 	if ($return == 0) {
-	    cmd("Recreating stable identifiers database",
+	    $self->cmd("Recreating stable identifiers database",
 	        [
 	            ["mysql -e drop database test_reactome_stable_identifiers"],
 		    ["mysql -e create database test_reactome_stable_identifiers"],

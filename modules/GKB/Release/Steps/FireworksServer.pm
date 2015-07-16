@@ -26,7 +26,7 @@ override 'run_commands' => sub {
     my $host = $self->host;
 
     my @args = ("-db", $db, "-host", $host, "-user", $user, "-pass", $pass, "-r", $version);
-    cmd("Running fireworks JSON generator",[["perl fireworks.pl @args > fireworks.out 2> fireworks.err"]]);
+    $self->cmd("Running fireworks JSON generator",[["perl fireworks.pl @args > fireworks.out 2> fireworks.err"]]);
 };
 
 1;

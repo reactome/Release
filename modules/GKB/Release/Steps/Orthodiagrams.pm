@@ -30,7 +30,7 @@ override 'run_commands' => sub {
 
     my $host = $self->host;
     my $person_id = $self->user_input->{'person_id'}->{'response'};
-    cmd("Running ELV tool to generate diagrams for predicted pathway",
+    $self->cmd("Running ELV tool to generate diagrams for predicted pathway",
         [
 	    ["mysqldump --opt -u $user -p$pass $db > $db\_before_pathway_diagram.dump"],
             ["./WebELVTool/runWebELVTool.sh $host $db $user $pass 3306 $person_id > runWebELVTool.$version.out"]
