@@ -2,6 +2,14 @@
 use strict;
 use warnings;
 
+<<<<<<< Temporary merge branch 1
+use lib '/usr/local/gkb/modules';
+
+use autodie qw/:all/;
+
+use List::MoreUtils qw/any/;
+use Getopt::Long;
+=======
 use constant AND => 0;
 use constant OR => 1;
 
@@ -11,6 +19,7 @@ use autodie qw/:all/;
 use List::MoreUtils qw/any/;
 use Getopt::Long;
 
+>>>>>>> Temporary merge branch 2
 use GKB::Config;
 use GKB::DBAdaptor;
 
@@ -19,11 +28,16 @@ Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
 
+<<<<<<< Temporary merge branch 1
+my $selected_pathways;
+GetOptions('pathways=s' => \$selected_pathways);
+=======
 my ($selected_pathways, $output_file);
 GetOptions(
     'pathways=s' => \$selected_pathways,
     'output=s' => \$output_file
 );
+>>>>>>> Temporary merge branch 2
 
 unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
     print usage_instructions();
@@ -53,8 +67,14 @@ if ($selected_pathways eq 'all') {
 
 exit unless @reactions;
 
+<<<<<<< Temporary merge branch 1
+(my $logic_table_output_file = $0) =~ s/.pl$/.tsv/;
+open my $logic_table_fh, ">", "$logic_table_output_file";
+#print $logic_table_fh "Parent\tChild\tValue\tLogic\n";
+=======
 ($output_file = $0) =~ s/.pl$/.tsv/ unless $output_file;
 open my $logic_table_fh, ">", "output_file";
+>>>>>>> Temporary merge branch 2
 
 my %interactions;
 my %parent2child;
@@ -70,8 +90,13 @@ foreach my $reaction (@reactions) {
 }
 close $logic_table_fh;
 
+<<<<<<< Temporary merge branch 1
+add_line_count($logic_table_output_file);
+`dos2unix $logic_table_output_file`;
+=======
 add_line_count($output_file);
 `dos2unix $output_file`;
+>>>>>>> Temporary merge branch 2
 
 sub populate_graph {
     my $reaction = shift;
@@ -135,7 +160,11 @@ sub process_input {
     my $input = shift;
     my $fh = shift;
     
+<<<<<<< Temporary merge branch 1
+    report($fh, get_label($input), get_label($reaction), 1, 'AND');
+=======
     report($fh, get_label($input), get_label($reaction), 1, AND);
+>>>>>>> Temporary merge branch 2
 }
 
 sub process_output {
@@ -143,7 +172,11 @@ sub process_output {
     my $associated_reactions = shift;
     my $fh = shift;
     
+<<<<<<< Temporary merge branch 1
+    my $logic = scalar @$associated_reactions > 1 ? 'OR' : 'AND';
+=======
     my $logic = scalar @$associated_reactions > 1 ? OR : AND;
+>>>>>>> Temporary merge branch 2
     foreach my $reaction (@$associated_reactions) {
 	next if output_is_ancestral_input($output) && $reaction->catalystActivity->[0];	
 	
@@ -160,10 +193,17 @@ sub process_if_set_or_complex {
     if ($physical_entity->is_a('EntitySet')) {
 	push @elements, @{$physical_entity->hasMember};
 	push @elements, @{$physical_entity->hasCandidate};
+<<<<<<< Temporary merge branch 1
+	$logic = 'OR';
+    } elsif ($physical_entity->is_a('Complex')) {
+	push @elements, @{$physical_entity->hasComponent};
+	$logic = 'AND';
+=======
 	$logic = OR;
     } elsif ($physical_entity->is_a('Complex')) {
 	push @elements, @{$physical_entity->hasComponent};
 	$logic = AND;
+>>>>>>> Temporary merge branch 2
     }
     
     foreach my $element (@elements) {	
@@ -182,7 +222,11 @@ sub process_regulations {
 	process_if_set_or_complex($regulator, $fh) unless is_an_output_in_binding_reaction($regulator);
 	
 	my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
+<<<<<<< Temporary merge branch 1
+	report($fh, get_label($regulator), get_label($reaction), $value, 'AND');
+=======
 	report($fh, get_label($regulator), get_label($reaction), $value, AND);
+>>>>>>> Temporary merge branch 2
     }
 }
 
@@ -205,9 +249,15 @@ sub report {
 sub get_label {
     my $instance = shift;
     
+<<<<<<< Temporary merge branch 1
+    if (is_set_or_complex($instance) || $instance->is_a('ReactionlikeEvent')) {
+	return $instance->db_id;
+    }
+=======
     #if (is_set_or_complex($instance) || $instance->is_a('ReactionlikeEvent')) {
 #	return $instance->db_id;
 #    }
+>>>>>>> Temporary merge branch 2
     
     return $instance->name->[0];
 }
@@ -309,6 +359,14 @@ sub usage_instructions {
 
 This script creates a tab delimited text file describing a directed graph
 with nodes being reactions and their physical entities (inputs, outputs,
+<<<<<<< Temporary merge branch 1
+catalysts, and regulators) connected by boolean logic.
+
+perl $0 -pathways comma delimited list of pathway db_ids or 'all'
+Example:
+perl $0 -pathways 123,234,etc.
+perl $0 -pathways all
+=======
 catalysts, and regulators) connected by boolean logic ('0' representing
 'AND' and '1' representing 'or').  The output has a header of the number of
 node interactions and rows describing those interactions with four columns:
@@ -322,6 +380,7 @@ Options
 
 -pathways	comma delimited list of pathway db_ids or 'all' (required)
 -output		name of output file (defaults to name of script with .tsv extension)
+>>>>>>> Temporary merge branch 2
 
 END
 }
