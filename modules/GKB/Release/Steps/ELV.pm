@@ -24,7 +24,7 @@ override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
 
     if ($gkbdir eq "gkbdev") {
-        cmd("Backing up previous version of ELV directory and running ELV tool for current version",
+        $self->cmd("Backing up previous version of ELV directory and running ELV tool for current version",
         	[
         		["tar -zcvf test_reactome_$prevver.tgz test_reactome_$prevver"],
         		["rm -rf test_reactome_$prevver"],
@@ -33,7 +33,7 @@ override 'run_commands' => sub {
         	]
         );
     } elsif ($gkbdir eq "gkb_prod") {
-        cmd("Copying over ELV directory from reactomedev",
+        $self->cmd("Copying over ELV directory from reactomedev",
         	[
         		["scp -r reactomedev.oicr.on.ca:$tmp/test_reactome_$version.tgz ."],
         		["tar -zxvf $db.tgz"]
@@ -42,7 +42,7 @@ override 'run_commands' => sub {
     } else {
     	my $prod;
     	($prod = $self->directory) =~ s/gkb/gkb_prod/;
-    	cmd("Linking gkb to gkb_prod ELV directory",
+    	$self->cmd("Linking gkb to gkb_prod ELV directory",
         	[
         		["ln -s $prod/$db ."],
         		["rm gk_current"],

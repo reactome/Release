@@ -29,12 +29,12 @@ override 'run_commands' => sub {
     
     my $remote_server = ($self->host eq $biomart_server) ? undef : $biomart_server;
     if (! $self->_biomart_installed($remote_server)) {
-	cmd("Installing BioMart",[["./install_biomart.sh"]], {'ssh' => $remote_server});
+	$self->cmd("Installing BioMart",[["./install_biomart.sh"]], {'ssh' => $remote_server});
     }
     
     my $biomart_release_dir = $self->directory;
     
-    cmd("Updating biomart database",
+    $self->cmd("Updating biomart database",
         [
 	    ["mysqldump --opt -u $user -p$pass $biomartdb > $biomart_release_dir/$biomartdb.dump.beforeupdate.$version"],
 	    ["perl martify_reactome.pl -db $db -user $user -pass $pass -bdb $biomartdb -interactions > $biomart_release_dir/martify_reactome.out.$version"],
@@ -44,7 +44,7 @@ override 'run_commands' => sub {
     );
 
     
-    cmd("Importing new parameters into biomart database",[["perl update_reactome_mart.pl -sudo -biomart_version -0.7"]],{'ssh' => $remote_server});
+    $self->cmd("Importing new parameters into biomart database",[["perl update_reactome_mart.pl -sudo -biomart_version -0.7"]],{'ssh' => $remote_server});
 };
 
 sub _biomart_installed {
