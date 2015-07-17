@@ -30,7 +30,7 @@ disclaimers of warranty.
 =cut
 
 use vars qw(@ISA $AUTOLOAD %ok_field);
-use strict;
+use common::sense;
 use Bio::Root::Root;
 use Data::CTable;
 use Data::Dumper;
@@ -75,21 +75,27 @@ sub get_file {
     
     $file = "intact.txt";
     my $zip  = "intact.zip";
-    system "rm -f intact*";
     
-    system "wget $url > /dev/null 2>&1";
-    
-    $logger->info("IntAct.get_file: NEW file=$file");
-    
-    if ( -e $zip) {
+    if (-e $zip && -M $zip > 7) {
+	system "rm -f intact*";
+    }
+
+    unless (-e $file) {
+	say "I am getting the $zip file";
+
+	system "wget $url > /dev/null 2>&1";
+	
+	$logger->info("IntAct.get_file: NEW file=$zip");
+	
 	system "unzip $zip";
 	$self->file("$dir/$file");
 	$logger->info('file ' . `ls $file`);
 	$logger->info('zip' . `ls $zip`);
 	$logger->info("FILE " . $self->file);
-    } 
-    else {
-	$logger->error_die("IntAct.get_file: could not find $zip");
+    }
+
+    unless (-e $file) {
+	$logger->error_die("IntAct.get_file: could not find file $file");
     }
     
     chdir $cwd;
@@ -133,7 +139,13 @@ sub get_interaction_data {
     (my $db_file = $file) =~ s/txt$/db/;
     (my $path = $db_file) =~ s!/[^/]+$!!;
     
-    system "rm -f $path/*db";
+    if (-e $db_file && -M $db_file < 8) {
+	$db =  BerkeleyDB::Hash->new(-Filename => $db_file) or die $!;
+	$self->interaction_data($db);
+	return $db;
+    }
+
+    unlink $db_file;
 
     $db = BerkeleyDB::Hash->new(-Filename => $db_file, -Flags => DB_CREATE) or die $!;
 
@@ -148,6 +160,7 @@ sub get_interaction_data {
 	$db->db_get($key,$other_ids);
 	my $ids = $id3;
 	$ids .= " $other_ids" if $other_ids;
+	say join("\t","IDs",$key, $id1, $id2, $ids);
 	next unless $ids;
 	$db->db_put($key,$ids);
 	$db->db_put($id1,1);

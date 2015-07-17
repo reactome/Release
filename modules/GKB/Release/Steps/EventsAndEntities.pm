@@ -28,7 +28,7 @@ override 'run_commands' => sub {
     my @reaction = ("reaction", @args);
     my @pathway = ("pathway", @args);
     
-    cmd("Preparing mapping of events to genes and molecules",
+    $self->cmd("Preparing mapping of events to genes and molecules",
     	[
     	    ["perl events2genes.pl @reaction"],
     	    ["perl events2molecules.pl @reaction"],
@@ -43,7 +43,7 @@ override 'run_commands' => sub {
     system("tar -cvzf $events @files");
     
     # Mapping entities to events (i.e. pathways)
-    cmd("Mapping entities to events",
+    $self->cmd("Mapping entities to events",
     	[
     	    ["perl ewas2pathways.pl @args"],
     	    ["perl smallmolecule2pathways.pl @args"],

@@ -28,7 +28,7 @@ override 'run_commands' => sub {
     my $host = $hosts{$gkbdir};
     my $path = "/usr/local/$gkbdir/modules/GKB";
 
-    cmd("Updating configuration file",[["perl updateconfig.pl -version $version -lastrelease $prd -host $host -configpath $path"]]);
+    $self->cmd("Updating configuration file",[["perl updateconfig.pl -version $version -lastrelease $prd -host $host -configpath $path"]]);
     
     if ($gkbdir eq "gkbdev") {	    
     	$self->mail->{'to'} = 'curation';

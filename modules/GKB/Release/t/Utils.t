@@ -2,20 +2,16 @@
 use strict;
 use warnings;
 
+use lib '/usr/local/gkb/modules';
+
 use Test::More;
 
 use_ok('GKB::Release::Utils');
 ok(1, "testing works");
 
-my $command = "perl -e 'print STDERR \"error\"; print \"output\";'";
-my @results = cmd("Test command", [[$command]]);
-
-ok(@results, "got results from cmd()");
-is($results[0]->{'command'}, $command, "$command archived");
-is(@{$results[0]->{'args'}}, 0, "no arguments");
-is($results[0]->{'stdout'}, 'output', "output archived");
-is($results[0]->{'stderr'}, 'error', "errors archived");
-like($results[0]->{'exit_code'}, qr/^\d+$/, "exit code is numeric");
-is($results[0]->{'exit_code'}, 0, "command executed successfully");
+is(replace_gkb_alias_in_dir('/usr/local/gkb/scripts', 'gkbdev'), '/usr/local/gkbdev/scripts', 'replaced gkb with gkbdev');
+is(replace_gkb_alias_in_dir('/usr/local/gkbdev/website', 'gkb'), '/usr/local/gkb/website', 'replaced gkbdev with gkb');
+isnt(replace_gkb_alias_in_dir('/usr/local/gkdev/website', 'gkb'), '/usr/local/gkb/website', 'gkbdev not replaced because of typo');
+is(replace_gkb_alias_in_dir('/home/weiserj/release', 'gkb'), '/home/weiserj/release', 'no gkb alias to replace');
 
 done_testing();
