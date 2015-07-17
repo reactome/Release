@@ -25,7 +25,7 @@ override 'run_commands' => sub {
 
 	my $host = $self->host;
  	
-   	cmd("Backing up databases and generating stable ids",
+   	$self->cmd("Backing up databases and generating stable ids",
 		[
 	    	["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE $slicedb > $slicedb.dump"],
     		["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE test_reactome_stable_identifiers > test_reactome_stable_identifiers_$version.dump"],

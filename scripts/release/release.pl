@@ -9,6 +9,9 @@ use constant {
     GKB_LIVE_ALIAS => 'gkb'
 };
 
+use GKB::Release::Config;
+use GKB::Release::Utils;
+
 my @options = (
     ['UniprotUpdate', GKB_DEV_ALIAS,"-runs uniprot update"],
     ['GoUpdate', GKB_DEV_ALIAS, "-runs go update"],
@@ -66,6 +69,14 @@ unless (defined $ARGV[0] && $ARGV[0] =~ /\d(\.\.)\d|\d,?/) {
     
     exit;
 }
+
+unless ($TEST_MODE) {
+    $user = prompt("Enter user name - leave blank for default of $user:") || $user;
+    $version = prompt("Enter current version number:");
+    die "Current version number must be an integer" unless $version && $version =~ /^\d+$/;
+}    
+set_version_for_config_variables($version);
+
 
 @choices = split(',', $ARGV[0]);
 foreach my $choice (@choices) {
