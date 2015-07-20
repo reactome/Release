@@ -74,6 +74,7 @@ unless ($TEST_MODE) {
     $user = prompt("Enter user name - leave blank for default of $user:") || $user;
     $version = prompt("Enter current version number:");
     die "Current version number must be an integer" unless $version && $version =~ /^\d+$/;
+    $prevver = $version - 1;
 }    
 set_version_for_config_variables($version);
 
