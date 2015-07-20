@@ -368,7 +368,7 @@ my @cmds = (
      1,
      "cp ../analysis_core/*.txt $release_nr"
     ],
-	
+    
     [
      "FireworksServer",
      1,
@@ -395,7 +395,8 @@ my @cmds = (
 
 my $broken_command_counter = 0;
 foreach my $cmd (@cmds) {
-    $broken_command_counter += run($cmd);
+    print $cmd->[3],"\n";
+#    $broken_command_counter += run($cmd);
 }
 
 if ($broken_command_counter > 0) {

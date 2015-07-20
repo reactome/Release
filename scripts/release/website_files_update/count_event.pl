@@ -7,8 +7,19 @@ use GKB::Config;
 use GKB::DBAdaptor;
 
 use autodie;
+use Getopt::Long;
 use Term::ReadKey;
- 
+
+my ($help);
+GetOptions(
+  'help'=> \$help 
+);
+
+if ($help) {
+    print usage_instructions();
+    exit;
+}
+
 
 my $recent_version = prompt('Enter recent test slice version: (e.g. 39, 39a, etc):');
 my $previous_version = prompt('Enter previous test slice version: (e.g. 38):');
@@ -112,3 +123,14 @@ sub get_author_name {
     return $event->created->[0]->author->[0]->_displayName->[0];
 }
 
+sub usage_instructions{
+    return <<END;
+    
+This script counts and reports the number of new events between an old
+and new test slice as well as a break down by curator reporting the number
+of new events as well as the event names.
+
+Usage: perl $0
+    
+END
+}

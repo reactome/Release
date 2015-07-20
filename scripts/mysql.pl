@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-use strict;
+use common::sense;
 use Getopt::Long;
 use Data::Dumper;
 use List::Util 'min';
@@ -30,66 +30,38 @@ chomp(my $timestamp = `date`);
 report(usage()) && exit 0 if $help;
 $passwd || die "You need to provide the mysql password\n", usage();
 
-my @connections;
-my @cpu_usage;
-my $no_mysql;
-for my $it (1..5) {
+
+my $proc = my @pids = get_mysql_pids();
+
+my @reasons;
+if ($proc) {
     my $cpu_usage = 0;
-    my $proc = my @pids = get_mysql_pids();
-    unless ($proc) {
-	warn "No MYSQL!";
-	$no_mysql++;
-	last;
-    }
-    #my $report_process = @pids > 1;
     for my $pid (@pids) {
-	#print STDERR `ps -o args -p $pid | tail -1` if $report_process;
 	my $cpu = get_cpu_usage($pid);
 	$cpu_usage += $cpu;
     }
     
     my $connections = get_mysql_connections();
-
+    
     my ($is,$s) = @pids > 1 ? ('are','es') : ('is','');
-
+    
     report("MySQL Server: $is $proc process$s; $cpu_usage\% CPU; $connections active connections.");
     
-    if ($connections > MAXCON || $cpu_usage > MAXCPU) {
-	push @connections, $connections;
-	push @cpu_usage, $cpu_usage;
-	sleep 60 unless $it == 2;
-	chomp($timestamp = `date`);
-    } 
-    else {
-	@connections = ();
-	@cpu_usage   = ();
-	last;
+
+    if ($connections > MAXCON) {
+	push @reasons, "Too many connections";
     }
-}
-
-
-my @reasons = ("Forced restart") if $force;
-
-unless ($no_mysql) {
-    if (@connections == 2) {
-	my $mincon = min(@connections);
-	my $mincpu = min(@cpu_usage);
-	my $maxcon = MAXCON;
-	my $maxcpu = MAXCPU;
-	
-	if ($mincon > MAXCON) {
-	    push @reasons, "sustained number of connection > $maxcon over 5 minutes";
-	}
-	
-	if ($mincpu > MAXCPU) {
-	    push @reasons, "sustained CPU usage > $maxcpu over 5 minutes";
-	}
+    
+    if ($cpu_usage > MAXCPU) {
+	push @reasons, "Too much CPU usage";
     }
+    
+    push @reasons, "Forced restart" if $force;
+    
 }
 else {
     push @reasons, "No mysql server running";
 }
-
 
 if (!$norestart && @reasons > 0) {
     restart_mysql(@reasons);
@@ -107,7 +79,10 @@ sub restart_mysql {
     report("I will now try to restart the mysql server because:\n$reasons\n");
     my $log = "/tmp/mysql_log$$.txt";
     system "echo '$timestamp' > $log";
-    system "/etc/init.d/mysql restart >>$log 2>&1";
+
+    system "ps aux |grep mysql |grep -v grep | grep -v mysql.pl | awk '{ print \$2 }' | xargs kill -9 >>$log 2>&1";
+    
+    system "/etc/init.d/mysql start >> $log 2>&1";
     system "cat $log";
     system "cat $log | mail -s 'MYSQL RESTART ALERT' sheldon.mckay\@gmail.com";
     #unlink $log;
