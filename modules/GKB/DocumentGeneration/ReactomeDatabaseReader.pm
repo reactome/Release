@@ -837,31 +837,25 @@ sub get_reviewers_report_introduction {
     $text_unit->set_contents($text);
     push @text_units, $text_unit;
 
-    $text = "non-ASCII characters (primarily in author names) are not displayed correctly in this document. We apologize for this inconvenience.";
+    $text = "Non-ASCII characters, primarily in author names, are not displayed correctly in this document. We apologize for this inconvenience.";
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("bullet_text");
     $text_unit->set_contents($text);
     push @text_units, $text_unit;
 
-    $text = "Each reaction description in this report starts with a reaction diagram that shows the input and output molecules for that reaction, any catalysts and regulators, and that lists the reactions that immediately precede and follow it.";
+    $text = "Each reaction (pathway event) is represented here by a simple diagram. Input molecules are shown as labelled boxes (left side) connected by plain lines to a central square. Arrowed lines connect the central square to the output molecules (right side). If relevant, catalyst molecules are represented above the central square, connected to it by a red arrowed line. Input molecules that are also the catalyst (e.g. signaling or enzyme/substrate complexes) are shown on the left and joined to the central node by a red arrowed line. The names of reactions that precede/follow in the pathway are shown as text on the far left/far right respectively.";
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("bullet_text");
     $text_unit->set_contents($text);
     push @text_units, $text_unit;
 
-    $text = "The description of any human reaction that has been inferred from a reaction in another species is followed (in the text) by a description of the corresponding reaction in that other species. These are referred to as \"Source\" reactions in this document. A more detailed description of the human reaction can be found by following the hyperlink to the corresponding webpage.";
+    $text = "Summary text may appear to be overlapping or redundant. Please remember that this document is extracted from multiple pages on the Reactome website, this redundancy is useful to provide context for users who might first arrive at a mid-point in the pathway. Suggestions for improvement are welcome.";
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("bullet_text");
     $text_unit->set_contents($text);
     push @text_units, $text_unit;
 
-    $text = "You may come across overlapping/redundant information in the text summaries of the events. We include this redundancy to accommodate users who are not reading the module through as a chapter but rather coming to the website to visit individual pages. Each summary is meant to provide some context. We realize that this is not optimal for the person who happens to be reading the module as a chapter, but we try to strike a balance. Any suggestions for improvement are welcome.";
-    $text_unit = GKB::DocumentGeneration::TextUnit->new();
-    $text_unit->set_type("bullet_text");
-    $text_unit->set_contents($text);
-    push @text_units, $text_unit;
-
-    $text = "Our reference list is not necessarily complete. For each reaction, we aim to provide at least one primary literature reference that demonstrates the occurrence of a given reaction in humans. We unfortunately do not have the resources to identify all relevant references, but we would be happy to cite any that you feel should be included.\n\n";
+    $text = "Reactome represents human biology. Literature references that demonstrate the occurrence of the reaction in humans are given preference, they are not intended to provide a historical record. Unfortunately we do not have the resources to identify all relevant references, but we are happy to cite any that you feel should be included.\n\n";
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("bullet_text");
     $text_unit->set_contents($text);
@@ -886,11 +880,15 @@ sub get_reviewers_report_introduction {
     push @text_units, $text_unit;
 
     $text = <<END;
-A more detailed description of the pathway as well as a pathway diagram can be found on our website.
-We would appreciate your feedback on the content of the website and its navigability as well. A link to a short tutorial of the pathway browser
-can be found at the top of the web page. The zoomable pathway diagram is interactive. Text descriptions are revealed in the panel below
-the diagram under the overview tab. To view a text description, select a participating molecules or reaction node in the diagram. Clicking
-on an event in the hierarchy in the left panel will highlight the event(s) in the diagram and a text description will be displayed in the panel below.
+A more detailed representation of the pathway as a diagram can be found on our
+website. We would appreciate your feedback on the content and navigability of
+the website. A short tutorial of the Pathway Browser can be found at the top of
+the webpage. The zoomable pathway diagram is interactive. Text descriptions are
+revealed in the panel below the diagram under the overview tab. To view a text
+description, select a participating molecules or reaction node in the diagram.
+Clicking on an event in the hierarchy in the left panel will highlight the
+event(s) in the diagram and a text description will be displayed in the panel
+below.
 END
 ;
     $text =~ s/\n/ /g;
