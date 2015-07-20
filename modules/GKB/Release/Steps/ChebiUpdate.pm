@@ -23,7 +23,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
 
-    cmd("Running Chebi script",
+    $self->cmd("Running Chebi script",
     	[
 		    #["cvs up improve_chebi_ids.pl"],
  			["perl improve_chebi_ids.pl -db $gkcentral -host $gkcentral_host -user $user -pass $pass > improve_chebi_ids.out"]

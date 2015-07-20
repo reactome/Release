@@ -57,7 +57,7 @@ my $instance = $dba->fetch_instance_by_db_id($instance_db_id)->[0];
 my $display_name = $instance->displayName;
 my $class = $instance->class;
 
-my @events = $stable->get_events($instance_db_id);
+my @events = $stable->get_history($instance_db_id);
 
 
 print_page_start();
@@ -66,14 +66,10 @@ my %event;
 my $used_name;
 my $highest_release = 0;
 for my $event (@events) {
-    my ($name, $st_id, $event, $release) = @$event;
+    my ($st_id, $event, $release, $database) = @$event;
     $highest_release = $release if $release > $highest_release;
-    if ($used_name && $used_name eq $name) {
-	$name = '';
-    }
-    $used_name = $name if $name;
-    $event = '' if $event eq 'exists';
 
+    $event = '' if $event eq 'exists';
     push @{$event{$release}}, [$st_id, $event];
 }
 

@@ -23,7 +23,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
     
-    cmd("Creating pathway co-ordinates",
+    $self->cmd("Creating pathway co-ordinates",
     	[
     		["perl create_PathwayCoordinates.pl -db $db"]
 		]

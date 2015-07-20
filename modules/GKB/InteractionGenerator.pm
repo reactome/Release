@@ -1600,6 +1600,13 @@ sub print_line {
 }
 
 sub _interactor_info {
+    my $logger = get_logger(__PACKAGE__);
+    for my $refgene (@{$_[0]->ReferenceGene}) {
+	unless ($refgene->ReferenceDatabase->[0]) {
+            $logger->warn("No reference database found for " . $_[0]->displayName . " " . $refgene->displayName);
+            return '';
+        }
+    }
     return
 	_db_name_colon_identifier($_[0]) . "\t" .
 	join('|', map {_db_name_colon_identifier($_)} grep {uc($_->ReferenceDatabase->[0]->displayName) =~ /ENSEMBL/} @{$_[0]->ReferenceGene}) . "\t" .

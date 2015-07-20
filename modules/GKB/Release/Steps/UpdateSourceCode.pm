@@ -23,12 +23,10 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
     
-        
-    # The command is run on the live server when $gkbdir is gkb
-    my $ssh_server = ($gkbdir eq "gkb") ? $live_server : '';
-    my $git_repo = '/usr/local/gkb';
+    my $args = "-repo /usr/local/gkb";
+    $args .= " -host $live_server" if $gkbdir eq "gkb";
    
-    cmd("Updating source code from git",[["perl git_update.pl -repo $git_repo -host $ssh_server"]]);
+    $self->cmd("Updating source code from git",[["perl git_update.pl $args"]]);
 };
 
 1;

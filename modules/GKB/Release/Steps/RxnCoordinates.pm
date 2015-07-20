@@ -23,7 +23,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
     
-    cmd("Creating reaction co-ordinates",[["perl create_ReactionCoordinates_for_orthologues.pl -db $db -user $user -pass $pass"]]);
+    $self->cmd("Creating reaction co-ordinates",[["perl create_ReactionCoordinates_for_orthologues.pl -db $db -user $user -pass $pass"]]);
 };
 
 1;
