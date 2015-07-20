@@ -32,6 +32,7 @@ use strict;
 use GKB::Config;
 use GKB::AddLinks::Builder;
 use GKB::InteractionGenerator;
+use GKB::StableIdentifierDatabase;
 
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
@@ -127,6 +128,13 @@ sub buildPart {
 	    $stable_identifier = $1;
 	    my $instances = $dba->fetch_instance_by_remote_attribute('DatabaseObject',[['stableIdentifier.identifier','=',[$stable_identifier]]]);
 	    $instance = $instances->[0];
+
+	    if (!$instance) {
+		$self->{stable_id_database} ||= GKB::StableIdentifierDatabase->new();
+		$db_id = $self->{stable_id_database}->db_id_from_stable_id($identifier) || die "I could not find a record for $identifier";
+	    }
+
+
 	}
 	if (!$instance) {
 	    # Maybe ID really was a DB_ID - let's see:

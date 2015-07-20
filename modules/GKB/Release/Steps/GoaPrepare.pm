@@ -29,8 +29,8 @@ override 'run_commands' => sub {
     my $utildir = "$go/software/utilities";
     my @args = ("-user", $user, "-pass", $pass, "-host", $host, "-db", $db, "-date", $date, "-debug");
    
-    cmd("Updating GO ontology folder from GO SVN",[["svn --ignore-externals update $go"]]);
-    cmd("Preparing GO submission",
+    $self->cmd("Updating GO ontology folder from GO SVN",[["svn --ignore-externals update $go"]]);
+    $self->cmd("Preparing GO submission",
     	[
     		["perl goa_submission.pl @args"],
     		["perl goa_submission_stats.pl gene_association.reactome gene_association.reactome.stats"],

@@ -28,7 +28,7 @@ override 'run_commands' => sub {
     
     die "Skip list must be verified before running the orthoinference process" unless $skip_list_verified;
     
-    cmd("Creating orthopredictions and backing up database",
+    $self->cmd("Creating orthopredictions and backing up database",
     	[
             ["mkdir -p $version"],
             ["perl wrapper_ortho_inference.pl -r $version -user $user -pass $pass > $version/wrapper_ortho_inference.out"],

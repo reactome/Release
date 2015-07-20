@@ -25,7 +25,7 @@ override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
     my $overwrite = $self->user_input->{'overwrite'}->{'response'} =~ /^y/i ? '-overwrite' : '';
-    cmd("Creating simplified database",[["perl simplified_db.pl -source_db $db $overwrite"]]);
+    $self->cmd("Creating simplified database",[["perl simplified_db.pl -source_db $db $overwrite"]]);
 };
 
 1;

@@ -1,5 +1,4 @@
 #!/usr/local/bin/perl
-package SearchIndexer;
 use strict;
 use warnings;
 use common::sense;
@@ -13,7 +12,7 @@ use Getopt::Long;
 use Log::Log4perl qw/get_logger/;
 use constant CONF => '/usr/local/reactomes/Reactome/development/apache-tomcat/webapps/solr/WEB-INF/web.xml';
 
-__PACKAGE__->run(@ARGV) unless caller();
+run(@ARGV) unless caller();
 
 sub run {
     Log::Log4perl->init(\$LOG_CONF);
@@ -167,5 +166,3 @@ sub remove_symbolic_link {
     
     return (system("rm -r $link") == 0);
 }
-
-__END__

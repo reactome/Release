@@ -23,10 +23,10 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
-    cmd("Dumping $db",[["mysqldump -u$user -p$pass $db > $db.dump"]]); 
+    $self->cmd("Dumping $db",[["mysqldump -u$user -p$pass $db > $db.dump"]]);
  
     my @args = ("-db", 'gk_current', "-source", "$db.dump");
-    cmd("Populating gk_current with $db.dump",[["perl restore_database.pl @args > gk_current.out 2> gk_current.err"]]);
+    $self->cmd("Populating gk_current with $db.dump",[["perl restore_database.pl @args > gk_current.out 2> gk_current.err"]]);
 };
 
 1;
