@@ -1,56 +1,43 @@
 #!/usr/local/bin/perl -w 
 use strict;
+use lib "/usr/local/gkb/modules";
+use GKB::StableIdentifierDatabase;
 use CGI qw(:standard);
 use CGI::Carp 'fatalsToBrowser';
-use HTTP::Tiny;
-use Data::Dumper;
-use JSON;
+use GKB::FrontPage3;
 
-
-# This script does a quick RESTful API query to see if a 
-# database ID can be mapped to the stable ID in the current release.
-# If so, redirect to the eventbrowser (fast).  Otherwise, send the 
-# stable ID to the (former) eventbrowser_st_id for a (slow)
-# post-mortem.
-# Sheldon McKay <sheldon.mckay@gmail.com>
-
-use constant REST => 'http://reactomerelease.oicr.on.ca';
-
-my $url = REST . '/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject';
-my $event_browser = '/cgi-bin/eventbrowser';
+my $stable = GKB::StableIdentifierDatabase->new();
+my $browser = '/content/detail';
 
 my $CGI = CGI->new();
-my $st_id = my $full_st_id = $CGI->param('ST_ID') || die ('NO STABLE ID');
+
+my $st_id = $CGI->param('ST_ID') || $CGI->param('STID') || handle_error('NO STABLE ID TO SEARCH');
 $st_id =~ s/\.\d+$//;
-my $db_id;
 
-# Query RESTful API to see if we can map the stable id to a DB_ID.
+my $db_id = $stable->db_id_from_stable_id($st_id);
 
-my $host = $CGI->url(-base => 1);
-my $rest_url = "$url/$st_id";
-my $response = HTTP::Tiny->new->get($rest_url, {'content-type' => 'application/json'});
-if ($response->{success}) {
-    my $result = decode_json($response->{content});
-#    print header,pre(Dumper $result);
-    $db_id = $result->{dbId};
-#    print h1("DB ID is $db_id");
-}
-
-
-# We have an ID, send to event browser (fast)
+# We have an ID, send to event browser
 if ($db_id) {
-    my $url = "$event_browser?ID=$db_id";
+    my $url = "$browser/$db_id";
     print $CGI->redirect($url);
 }
-
-
-
-
-# This stable ID is not in current DB, send to
-# eventbrowser_st_id_deleted (slow)
 else {
-    my $url = "$event_browser\_st_id_deleted?ST_ID=$full_st_id";
-    print $CGI->redirect($url);
+    handle_error("Unable to find a Reactome Instance for stable identifier $st_id");
 }
 
 exit 0;
+
+sub handle_error {
+    my ($error_message) = @_;
+
+    my $front_page = GKB::FrontPage3->new("eventbrowser", "/stylesheet.css");
+    my $header = $front_page->get_header();
+    my $footer = $front_page->get_footer();
+
+    print header, $header;
+    print qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Internal error</FONT></h1>\n);
+    print qq(<h1><PRE>\n\n\n$error_message\n\n</PRE></h1>\n);
+    print $footer;
+
+    exit;
+}
