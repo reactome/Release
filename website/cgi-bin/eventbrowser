@@ -1,278 +1,59 @@
 #!/usr/local/bin/perl -w
-
-# The following block sets the script to pick up libraries from ../../modules.
-# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
-# on different server setups.
-BEGIN {
-    my ($path) = $0 =~ /^(\S+)$/;
-    my @a = split('/',$path);
-    pop @a;
-    if (@a && !$a[0]) {
-	$#a = $#a - 2;
-    } else {
-	push @a, ('..','..');
-    }
-    push @a, 'modules';
-    my $libpath = join('/', @a);
-    unshift (@INC, $libpath);
-}
-# Set the umask so that the files are group writeable. This way member of the
-# nobody group can delete them should the necessity arise.
-umask(002);
-
-use strict;
+use lib "/usr/local/gkb/modules";
+use common::sense;
 use CGI qw(:standard);
-use CGI::Cookie;
-use GKB::DBAdaptor;
-use GKB::PrettyInstance;
-use GKB::WebUtils;
-use GKB::Config;
+use CGI::Carp 'fatalsToBrowser';
 use Data::Dumper;
+use GKB::StableIdentifierDatabase;
 use GKB::FrontPage3;
 
-my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (instancebrowser)", "/stylesheet.css");
-my $header = $front_page->get_header();
-my $footer = $front_page->get_footer();
-my $enclosing_div_start = $front_page->get_enclosing_div_start();
-my $enclosing_div_end = $front_page->get_enclosing_div_end();
+my $CGI = CGI->new();
+my $stable = GKB::StableIdentifierDatabase->new();
 
-my ($CGI,$WU,$DBA,$FOCUS_SPECIES_NAME);
-my $start = time();
+my $query_url  = '/content/query?q=';
+my $detail_url = '/content/detail';
 
-$CGI = CGI->new();
+my $id = $CGI->param('ID') || $CGI->param('DB_ID');
+my $st_id = $CGI->param('STID') || $CGI->param('ST_ID');
+my $query = $CGI->param('QUERY') || $CGI->param('EXACT');
 
-my $classic = $CGI->param('CLASSIC');
-if (!(defined $classic && $classic =~ /1/)) {
-	$classic = $CGI->cookie('ClassicView');
+unless ($id || $st_id || $query) {
+    handle_error("eventbrowser: I do not have any search terms");
 }
 
-eval {
-    $WU = GKB::WebUtils->new_from_cgi(-CGI => $CGI);
-    $DBA = $WU->dba;
-    GKB::WebUtils::set_cgi_format_parameter_if_unset($CGI);
 
-    my $forbid_page_access = $WU->forbid_page_access();
-    if (defined $forbid_page_access) {
-        handle_forbid_page_access($forbid_page_access);
-    }
-
-    if (my $tmp = $CGI->param('SHOW_HIERARCHY_TYPES')) {
-	$WU->urlmaker->param('SHOW_HIERARCHY_TYPES',$tmp);
-    }
-
-    my $instances = [];
-
-    # Here I assume that the user when typing in the search terms wants to find
-    # records containing ALL of them rather than ANY of them. Hence I tweak the
-    # query unless it looks like a proper MySQL fulltext serach in boolean mode.
-    if (my $tmp = $CGI->param('QUERY')) {
-	if (($tmp !~ /^".+"$/) && ($tmp !~ / (\+|-)\w/)) {
-	    $tmp =~ s/ (\w)/ \+$1/g;
-	    $CGI->param('QUERY',$tmp);
-	}
-    }
-
-    my $format = $CGI->param('FORMAT');
-	
-    # Fetch instance(s)
-    if (defined $CGI->param('FOCUS')) {
-        $instances = $WU->handle_mouse_click;
-    }
-    elsif ($CGI->param('ID') || $CGI->param('QUERY') || $CGI->param('EXACT') || $CGI->param('STID')) {
-		$instances = $WU->handle_query_form;
-		
-		if (!(defined $classic && $classic =~ /1/) && $format eq 'elv' && scalar(@{$instances}) == 1 && !($WU->is_in_diagram($instances->[0]))) {
-    		my $focus_pathway_db_id = $CGI->param('FOCUS_PATHWAY_ID');
-    		if (defined $focus_pathway_db_id && !($focus_pathway_db_id eq '')) {
-    			$CGI->param('ID', $focus_pathway_db_id);
-				$instances = $WU->handle_query_form;
-    		}
-		}
-    }
-
-    # Get information needed for header, and print it.
-    my $title;
-    if (@{$instances} == 1) {
-		$title = "$PROJECT_NAME: " . GKB::WebUtils::replace_StableIdentifier_instance_with_referrer($instances->[0])->displayName;
-    } elsif ($CGI->param('QUERY')) {
-		$title = "$PROJECT_NAME: query results";
-    } else {
-		$title = "$PROJECT_NAME (eventbrowser)";
-    }
-
-    if ( @$instances == 1 && $instances->[0]->class =~ /Pathway|Reaction|Complex/ ){ 
-	my $url = $WU->build_pathway_browser_url($instances->[0]);
-	print $CGI->redirect($url);
-    }
-    else {
-	if (my $cookie = handle_cookie($CGI)) {
-	    print $CGI->header(-charset => 'UTF-8', -cookie => $cookie);
-	} else {
-	    print $CGI->header(-charset => 'UTF-8');
-	}
-	if (!(defined $header)) {
-	    my @meta_tags = $WU->instance_meta_tag_builder($CGI->param('ID'));
-	    print $CGI->start_html(
-		# \-dtd => "-//IETF//DTD HTML//EN",
-		-style => {-src => '/stylesheet.css'},
-		-title => $title,
-		-head => \@meta_tags
-		-script => {-src => '/google.js'},
-	    );
-	}
-	
-	if (my $name = $instances->[0]->displayName) {
-	    $name = "/content/query?q='$name'";
-	    print qq(<script type="text/javascript">window.location.href="$name"</script>);
-	}
-	else {
-	    @{$instances} && print_toolbar($instances);
-	
-	    # Top navigation box
-	    if (is_decorated()) {
-		if (defined $header) {
-		    print $header;
-		} else {
-		    print $WU->navigation_bar;
-		}
-	    }
-	    # query form
-	    if (!(defined $header)) {
-		$WU->print_simple_query_form;
-	    }
-		
-	    # Main part of page
-	    if (@{$instances}) {
-		# 1 or more instances to be displayed
-		my $ar = GKB::Utils::find_focus_species_names($DBA,$CGI, ((scalar(@{$instances}) == 1) ? $instances->[0]: undef));
-		if (@{$ar}) {
-		    $WU->urlmaker->param('FOCUS_SPECIES',$ar);
-		    #$CGI->param('FOCUS_SPECIES',@{$ar});
-		}
-		$WU->print_view($instances,1);
-	    } elsif ($CGI->param('QUERY') || $CGI->param('ID')) {
-		print qq(<P /><H2 CLASS="nothingfound" ALIGN="center">No matching instances were found.</H2>\n);
-	    } else {
-		$WU->print_TOC;
-	    }
-		
-	    if (is_decorated()) {
-		if (!(defined $footer)) {
-		    print $WU->make_footer;
-		}
-	    }
-	}
-    }
-    if (defined $footer) {
-        if (is_decorated()) {
-            print $footer;
-        }
-    } else {
-        print $CGI->end_html;  
-    }
-    $DBA && $DBA->db_handle->disconnect;
-};
-if ($@) {
-    handle_error("$@");
+if ($st_id) {
+   $id = $stable->db_id_from_stable_id($st_id)
+       || handle_error("Unable to find a Reactome Instance for Stable ID $st_id");
 }
+
+my $url;
+
+if ($id) {
+    $url = "$detail_url/$id";
+}
+elsif ($query) {
+    $url = "$query_url/'$query'";
+}
+
+print $CGI->redirect($url);
+#print header, $CGI->start_html;
+#print $CGI->h1($url);
+#print $CGI->end_html;
+
+
 
 sub handle_error {
-    print qq(<PRE>\n$_[0]\n</PRE>\n);
-}
+    my ($error_message) = @_;
 
-sub handle_forbid_page_access {
-    my $forbid_page_access = shift;
-    print $CGI->header(-charset => 'UTF-8');
-    print $forbid_page_access;
-    print $WU->make_footer;
-    print $CGI->end_html;  
-    $DBA && $DBA->db_handle->disconnect;
-}
+    my $front_page = GKB::FrontPage3->new("eventbrowser", "/stylesheet.css");
+    my $header = $front_page->get_header();
+    my $footer = $front_page->get_footer();
 
-# The cookie stores user choices about page format, such as whether to hide
-# the reactionmap or not.
-sub handle_cookie {
-    my $cgi = shift;
-    my %values = $cgi->cookie('preferences');
-#    print STDERR "->", %values, "<-\n";
-#    print STDERR "->", $cgi->param, "<-\n";
-    if (my $val = $cgi->param('reactionmap')) {
-#	print STDERR "reactionmap\t$val\n";
-	if (lc($val) eq 'off') {
-	    $values{'reactionmap'} = 'off';
-	} elsif (lc($val) eq 'on') {
-	    $values{'reactionmap'} = 'on' if $values{'reactionmap'};
-	}
-    }
-    $cgi->delete('reactionmap');
-    if (my $val = $cgi->param('eventhierarchy')) {
-#	print STDERR "eventhierarchy\t$val\n";
-	if (lc($val) eq 'off') {
-	    $values{'eventhierarchy'} = 'off';
-	} elsif (lc($val) eq 'on') {
-	    $values{'eventhierarchy'} = 'on' if $values{'eventhierarchy'};
-	}
-    }
-    $cgi->delete('eventhierarchy');
-    if (my $val = $cgi->param('description')) {
-#	print STDERR "description\t$val\n";
-	if (lc($val) eq 'off') {
-	    $values{'description'} = 'off';
-	} elsif (lc($val) eq 'on') {
-	    $values{'description'} = 'on' if $values{'description'};
-	}
-    }
-    $cgi->delete('description');
-    my @values = %values;
-    # This is a bit naughty but I don't know how I could otherwise reset the
-    # existing cookie's value(s).
-    if ($cgi->{'.cookies'}->{'preferences'}) {
-	$cgi->{'.cookies'}->{'preferences'}->value(\@values);
-    } elsif (@values) {
-	$cgi->{'.cookies'}->{'preferences'} = CGI::Cookie->new(-name => 'preferences', -value => \@values);
-    }
-    if (@values) {
-	return $cgi->cookie(-name => 'preferences', -value => \%values);
-    } else {
-	return undef;
-    }
-}
+    print header, $header;
+    print qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Internal error</FONT></h1>\n);
+    print qq(<h1><PRE>\n\n\n$error_message\n\n</PRE></h1>\n);
+    print $footer;
 
-# Optionally displays a toolbar that allows the user to select the type of
-# view - instancebrowser, eventbrowser, etc.
-sub print_toolbar {
-    return '' if (!$DISPLAY_VIEW_SWITCH_TOOLBAR);
-    return '' if ($CGI->user_agent =~ /MSIE/);
-    my $ar = shift;
-    my $url = '/cgi-bin/eventbrowser?DB=' . $CGI->param('DB') .
-	join('', map{'&ID=' . $_->db_id} @{$ar});
-    print <<__END__;
-<STYLE type="text/css">
-DIV.floatingtoolbar {position:fixed;top:0px;left:0px;right:0px;text-align:left;background:black;color:white;filter:alpha(opacity=50);-moz-opacity:0.5;opacity:0.5;z-index:101;}
-DIV.floatingtoolbar A:link { font-weight: bold; text-decoration: none; color: white; }
-DIV.floatingtoolbar A:hover { font-weight: bold; text-decoration: none; color: black; background: white; }
-DIV.floatingtoolbar A:visited { font-weight: bold; text-decoration: none; color: white; }
-</STYLE>
-<DIV CLASS="floatingtoolbar">
-<DIV ID="toolbar_f" STYLE="padding:2px;padding-left:10px;">
-<A HREF="$url&FORMAT=instancebrowser">instancebrowser</A>
-<!--
-|
-<A HREF="$url&FORMAT=eventbrowser">classic</A>
--->
-|
-<A HREF="$url&FORMAT=sectioned">sectioned</A>
-|
-<A HREF="$url&FORMAT=sidebarwithdynamichierarchy">sidebarwithdynamichierarchy</A>
-</DIV>
-</DIV>
-__END__
-}
-
-sub is_decorated {
-    my $undecorated = $CGI->param('UNDECORATED');
-    if (defined $undecorated && $undecorated == 1) {
-        return 0;
-    }
-    return 1;
+    exit;
 }
