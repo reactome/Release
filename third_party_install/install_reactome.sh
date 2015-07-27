@@ -4,6 +4,9 @@
 # software and data on an Ubuntu or Debian server
 # Sheldon McKay <sheldon.mckay@gmail.com>
 
+# this value should be interpolated at release time
+RELEASE=RELEASENUM
+
 if [[ $EUID -ne 0 ]]
 then
     echo -e "\nSorry, you must be the root user run this script!" 1>&2
@@ -117,6 +120,9 @@ rm -f reactome.tar.gz
 cd /usr/local
 ln -s /usr/local/reactomes/Reactome/production/GKB gkb
 
+cd /usr/local/gkb/website/html/download
+ln -sf $RELEASE current
+
 echo -e "Updating configuration..."
 cd /
 tar zxvf /usr/local/gkb/third_party_install/config.tar.gz
@@ -130,6 +136,7 @@ cd databases
 wget http://www.reactome.org/download/current/databases/gk_current.sql.gz
 wget http://www.reactome.org/download/current/databases/gk_stable_ids.sql.gz
 wget http://www.reactome.org/download/current/databases/gk_wordpress.sql.gz
+wget http://www.reactome.org/download/current/databases/gk_current_dn.sql.gz
 
 if [[ ! $HAVEMYSQL && -n $MROOT ]]
 then
@@ -143,32 +150,43 @@ fi
 
 mysql -uroot $MROOT -e 'DROP DATABASE IF EXISTS gk_current'
 mysql -uroot $MROOT -e 'CREATE DATABASE gk_current'
-mysql -uroot $MROOT -e 'DROP DATABASE IF EXISTS gk_stable_ids'
+mysql -uroot $MROOT -e 'DROP DATABASE IF EXISTS gk_current_dn'
+mysql -uroot $MROOT -e 'CREATE DATABASE gk_current_dn'
+mysql -uroot $MROOT -e 'DROP DATABASE IF EXISTS stable_identifiers'
 mysql -uroot $MROOT -e 'CREATE DATABASE gk_stable_ids'
 mysql -uroot $MROOT -e 'DROP DATABASE IF EXISTS gk_wordpress'
 mysql -uroot $MROOT -e 'CREATE DATABASE gk_wordpress'
 
+
 echo -e "\nLoading main reactome database..."
 zcat gk_current.sql.gz | mysql -uroot $MROOT gk_current
 rm -f gk_current.sql.gz
+
+echo -e "\nLoading simplified reactome database..."
+zcat gk_current_dn.sql.gz | mysql -uroot $MROOT gk_current_dn
+rm -f gk_current.sql.gz
+
 
 echo -e "\nLoading reactome_wordpress database..."
 zcat gk_wordpress.sql.gz | mysql -uroot $MROOT gk_wordpress
 rm -f gk_wordpress.sql.gz
 
 echo -e "\nLoading main reactome_stable_identifiers database..."
-zcat gk_stable_ids.sql.gz | mysql -uroot $MROOT gk_stable_ids
+zcat gk_stable_ids.sql.gz | mysql -uroot $MROOT stable_identifiers
 rm -f gk_stable_ids.sql.gz
 
 echo -e "\nSetting database permissions..."
-mysql -uroot $MROOT -e "GRANT SELECT ON gk_stable_ids.* \
+mysql -uroot $MROOT -e "GRANT SELECT ON stable_identifiers.* \
 TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
 mysql -uroot $MROOT -e "GRANT SELECT ON gk_current.*  \
 TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
-mysql -uroot $MROOT -e "GRANT ALL ON gk_current_dn.* \
+mysql -uroot $MROOT -e "GRANT SELECT ON gk_current_dn.* \
 TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
 mysql -uroot $MROOT -e "GRANT ALL ON gk_wordpress.* \
 TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
+
+# reset the worpress permalinks so they will work on a new server
+mysql -uroot $MROOT -e "update wp_options set option_value=NULL where option_name = 'permalink_structure'"
 
 rm -fr databases*
 
