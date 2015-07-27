@@ -153,7 +153,7 @@ mysql -uroot $MROOT -e 'CREATE DATABASE gk_current'
 mysql -uroot $MROOT -e 'DROP DATABASE IF EXISTS gk_current_dn'
 mysql -uroot $MROOT -e 'CREATE DATABASE gk_current_dn'
 mysql -uroot $MROOT -e 'DROP DATABASE IF EXISTS stable_identifiers'
-mysql -uroot $MROOT -e 'CREATE DATABASE gk_stable_ids'
+mysql -uroot $MROOT -e 'CREATE DATABASE stable_identifiers'
 mysql -uroot $MROOT -e 'DROP DATABASE IF EXISTS gk_wordpress'
 mysql -uroot $MROOT -e 'CREATE DATABASE gk_wordpress'
 
@@ -186,7 +186,7 @@ mysql -uroot $MROOT -e "GRANT ALL ON gk_wordpress.* \
 TO 'reactome_user'@'localhost' IDENTIFIED BY 'reactome_pass'"
 
 # reset the worpress permalinks so they will work on a new server
-mysql -uroot $MROOT -e "update wp_options set option_value=NULL where option_name = 'permalink_structure'"
+mysql -uroot $MROOT gk_wordpress -e "update wp_options set option_value=NULL where option_name = 'permalink_structure'"
 
 rm -fr databases*
 
