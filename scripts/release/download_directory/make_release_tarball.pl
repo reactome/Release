@@ -58,6 +58,7 @@ my @cmds = (
     qq(rm -f reactome/GKB/website/html/stats*),
     qq(cp $base/GKB/scripts/release/website_files_update/stats.* reactome/GKB/website/html),
     qq(cp -r $base/Solr reactome),
+    qq(find reactome/Solr |grep 'tar.gz\|.tgz' |xargs rm -f),
     qq(cp -r $base/apache-tomcat* reactome),
     qq(rm -f reactome/apache-tomcat/webapps/*.war),
     qq(rm -fr $unwanted_webapps),
@@ -65,18 +66,20 @@ my @cmds = (
     qq(mkdir reactome/AnalysisService),
     qq(mkdir reactome/AnalysisService/temp),
     qq(mkdir reactome/AnalysisService/input),
+    qq(rm -fr reactome/GKB/website/html/download/),
+    qq(mkdir -p reactome/GKB/website/html/download/$release),
+    qq(cp $repo/website/html/download/*html reactome/GKB/website/html/download/),
+    qq(cp -r $rhome/fireworks reactome/GKB/website/html/download/$release), 
     qq(cp $base/AnalysisService/input/analysis.bin reactome/AnalysisService/input),
-    qq(mkdir reactome/RESTful),
-    qq(mkdir reactome/RESTful/temp),
-    qq(rm -fr reactome/GKB/modules/*ensem*),
-    qq(find reactome/GKB -name .git* | xargs rm -f)
-    );
-
+    qq(mkdir -p reactome/RESTful/temp),
+    qq(rm -fr reactome/GKB/modules/*ensem*)
+   );
 
 my @cmds2 = (
     qq(tar czf ../reactome.tar.gz *),
     qq(cp ../reactome.tar.gz $rhome),
     qq(cp $repo/third_party_install/install_reactome.sh $rhome),
+    qq(perl -i -pe 's/RELEASENUM/$release/' $rhome/install_reactome.sh)
 );
 
 for my $cmd (@cmds) {
