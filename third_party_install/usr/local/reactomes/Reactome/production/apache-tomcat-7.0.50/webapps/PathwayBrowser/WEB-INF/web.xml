@@ -24,10 +24,6 @@
             <param-name>proxyPath</param-name>
             <param-value>/ReactomeRESTfulAPI/RESTfulWS</param-value>
         </init-param>
-        <!--<init-param>-->
-        <!--<param-name>maxFileUploadSize</param-name>-->
-        <!--<param-value></param-value>-->
-        <!--</init-param>-->
     </servlet>
     <servlet-mapping>
         <servlet-name>ReactomeRESTfulAPI</servlet-name>
@@ -57,6 +53,20 @@
     <servlet-mapping>
         <servlet-name>ReactomeAnalysis</servlet-name>
         <url-pattern>/AnalysisService/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Reactome Fireworks static files local server (ONLY USED IN DEV MODE) -->
+    <servlet>
+        <servlet-name>FireworksProxy</servlet-name>
+        <servlet-class>uk.ac.ebi.pride.web.util.servlet.proxy.StaticFilesProxyServlet</servlet-class>
+        <init-param>
+            <param-name>proxyFilePath</param-name>
+            <param-value>/Users/amundo/fireworks/static</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FireworksProxy</servlet-name>
+        <url-pattern>/download/current/fireworks/*</url-pattern>
     </servlet-mapping>
 
     <!-- Reactome IMAGES (ONLY USED IN DEV MODE) -->
@@ -101,29 +111,6 @@
     <servlet-mapping>
         <servlet-name>ChEBIProxy</servlet-name>
         <url-pattern>/ebi/webservices/chebi/2.0/test/*</url-pattern>
-    </servlet-mapping>
-
-    <!-- Gene Expression Atlas PROXY Configuration -->
-    <servlet>
-        <servlet-name>GXAProxy</servlet-name>
-        <servlet-class>uk.ac.ebi.pride.web.util.servlet.proxy.ProxyServlet</servlet-class>
-        <init-param>
-            <param-name>proxyHost</param-name>
-            <param-value>www.ebi.ac.uk</param-value>
-            <!--<param-value>wwwdev.ebi.ac.uk</param-value>-->
-        </init-param>
-        <init-param>
-            <param-name>proxyPort</param-name>
-            <param-value>80</param-value>
-        </init-param>
-        <init-param>
-            <param-name>proxyPath</param-name>
-            <param-value>/gxa</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>GXAProxy</servlet-name>
-        <url-pattern>/gxa/*</url-pattern>
     </servlet-mapping>
 
     <!-- Rhea PROXY Configuration -->
