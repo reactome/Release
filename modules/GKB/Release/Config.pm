@@ -1,5 +1,80 @@
 package GKB::Release::Config;
 
+=head1 NAME
+
+GKB::Release::Config
+
+=head1 DESCRIPTION
+
+Exports variables needed by the Reactome
+release pipeline.
+
+=head2 VARIABLES
+
+$TEST_MODE (1 for test; 0 for production)
+$user (user running release)
+$pass (mysql password for user)
+$sudo (sudo password for user)
+$date (today's date)
+$version (Reactome release version)
+$prevver (previous Reactome release version)
+$db (Reactome release database -- i.e. test_reactome_XX)
+$slicedb (Reactome slice database -- i.e. test_slice_XX)
+$gkcentral (Reactome curator database)
+$gkcentral_host (host server for Reactome database)
+$gkbdev (directory for Release Git repository)
+$scripts (scripts directory)
+$release (release directory)
+$website (website directory)
+$html (html directory)
+$gkbmodules (GKB modules directory)
+$dumpdir (database dump directory)
+$tmp (temporary directory)
+$cvs (cvs repository directory)
+$logdir (directory for logging files)
+$logfile (log file -- $logdir/releaseXX.log)
+$archive (base archive directory)
+%passwords (password hash of name to variable reference)
+$release_server (release server host name)
+$live_server (live server host name)
+$dev_server (development server host name)
+%hosts (hash of host to gkb alias and vice-versa)
+%maillist (hash of 'role' to e-mail address)
+$log_conf (configuration file for Log4perl)
+
+=head2 METHODS
+
+=over 12
+	
+=item C<set_version_for_config_variables>
+
+Replace {version} with actual numeric
+value of Reactome release version for
+exported variables in this module.
+
+Parameters:
+	Reactome release version (Number - required)
+
+	
+=back
+	
+=head1 SEE ALSO
+
+GKB::Release::Step
+GKB::Release::Steps::*
+GKB::Release::Utils
+
+=head1 AUTHOR
+Joel Weiser E<lt>joel.weiser@oicr.on.caE<gt>
+
+Copyright (c) 2015 Ontario Institute for Cancer Research
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  See DISCLAIMER for
+disclaimers of warranty.
+
+=cut
+
 use strict;
 use warnings;
 
@@ -92,7 +167,7 @@ our @EXPORT = qw/
     $TEST_MODE
     $user $pass $sudo $date $version $prevver
     $db $slicedb $gkcentral $gkcentral_host
-    $gkbdev $scripts $release $compara $website $html $gkbmodules $go $dumpdir $tmp $cvs $logdir $logfile $archive
+    $gkbdev $scripts $release $website $html $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server %hosts %maillist
     $log_conf
 /;
