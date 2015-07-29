@@ -1,9 +1,188 @@
 package GKB::Release::Step;
 
+=head1 NAME
+
+GKB::Release::Step
+
+=head1 DESCRIPTION
+
+Provides an abstract class for defining what
+a step in the release pipeline will be and
+what it will do.
+
+=head2 ATTRIBUTES
+
+=item Passwords (read-only)
+
+The passwords the step requires to run (none by default)
+
+=item User Input (read-write)
+
+Input the step requires from the user (generic queries as
+opposed to passwords - none by default)
+
+=item Gkb (read-only)
+
+Alias the step will use for the gkb directory (i.e. gkb or gkbdev)
+
+=item Directory (read-write)
+
+Starting working directory for the step (release directory
+by default)
+
+=item Name (read-only)
+
+Name of the step (extracted from the starting directory
+by default)
+
+=item Host (read-only)
+
+Host server on which the step will run (server housing
+this module by default)
+
+=item Mail (read-write)
+
+Mail attributes as a hash reference (i.e. 'to', 'from', 'subject',
+'body', etc.)
+
+
+=head2 Methods
+
+=over 12
+
+=item C<set_user_inputs_and_passwords>
+
+Prompt the user for passwords (unless
+obtained by a previously invoked step)
+and input specific to the step instance
+which invoked this method.
+
+Parameter:
+	$self (implicit in method call)
+
+=item C<run>
+
+The main method of the Step (and its children) module.
+Defines the order of what is done in running a release
+step.
+
+Parameter:
+	$self (implicit in method call)
+	
+=item C<source_code_passes_tests>
+
+Checks for source code tests in 't' directory
+of 'directory' attribute and runs them.
+
+Return:
+	Outcome (Boolean - true by default if no 't'
+	directory or 'prove' binary not available)
+	
+=item C<run_commands> Abstract
+
+Method to run commands -- C<cmd> method
+provided to aid implementation in child
+classes.
+
+Parameter:
+	$self (implicit in method call)
+
+=item C<post_step_tests>
+
+Checks output files for problems in
+size and content.
+
+Parameter:
+	$self (implicit in method call)
+
+Return:
+	Errors in file size/content (Array)
+	
+=item C<cmd>
+
+Runs a group of commmand line statements,
+logging results in the log file specified
+by the configuration module.
+
+Parameters:
+	$self (implicit in method call)
+	message - displayed to user when invoking method (String -- required)
+	cmdref - reference to array of arrays composed of commands
+			 and arguments.  Arguments can be embedded with or
+			 separated from the command.
+			 
+			 e.g. [
+				["perl test.pl", "arg1", "arg2", ]
+				["ls -l"]
+			 ]
+	parameters - parameters for the command (Hashref).
+				Valid parameters:
+					'ssh' => 'server on which to execute commands'
+
+Return:
+	List of results for each command in cmdref.
+	Each element is a hashref with the following
+	structure (Array of hashref).
+	
+	{
+		'command' => $cmd,
+		'args' => \@args,
+		'stdout' => $stdout,
+		'stderr' => $stderr,
+		'exit_code' => $exit_code
+	}
+	
+=item C<archive_files>
+
+Send files ending in .dump, .err, .log,
+.out to an archive directory derived
+from the name of the step and the archive
+base directory specified in the configuration
+module.
+
+Parameters:
+	$self (implicit in method call)
+	version - reactome release version (String -- required)
+
+Return:
+	Directory where files were archived.  Undefined
+	if errors (String)
+
+=item C<mail_now>
+
+Send mail using parameters defined in
+the 'mail' attribute.
+
+Parameters:
+	$self (implicit in method call)
+
+Return:
+	Return value -- 1 for success, 0 for failure
+	
+=back
+	
+=head1 SEE ALSO
+
+GKB::Release::Config
+GKB::Release::Utils
+GKB::Release::Steps::*
+
+=head1 AUTHOR
+Joel Weiser E<lt>joel.weiser@oicr.on.caE<gt>
+
+Copyright (c) 2015 Ontario Institute for Cancer Research
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  See DISCLAIMER for
+disclaimers of warranty.
+
+=cut
+
 use feature qw/say/;
 
 use autodie;
 use Capture::Tiny ':all';
+use File::Basename;
 use File::stat;
 use Net::OpenSSH;
 
@@ -63,27 +242,45 @@ has 'mail' => (
 	isa => 'HashRef[Str]'
 );
 
+sub set_user_input_and_passwords {
+	my $self = shift;
+	
+	$self->_set_passwords();
+	$self->_set_user_input();
+}
+
 sub run {
 	my $self = shift;
 	
 	chdir $self->directory;
 	set_environment($self->host);
 	return unless source_code_passes_tests();
-	$self->run_commands($self->gkb);
-	my @file_size_errors = get_file_size_errors('post_requisite_file_listing');
-	my $archive_dir = archive_files($self->name, $version);
-	my @output_errors = get_output_errors($archive_dir);
-	my @errors = (@file_size_errors, @output_errors);
-	if (@errors) {
-		$self->mail->{'body'} .= "Errors Reported\n\n";
-		$self->mail->{'body'} .= join("\n", @errors);
-		mail_now($self->mail);
-	}
+	
+	$self->run_commands();
+	
+	my @errors = $self->post_step_tests();
+	$self->archive_files($version);
+
+	$self->mail->{'body'} .= "Errors Reported\n\n" . join("\n", @errors) if @errors;
+	$self->mail_now();
 }
 
 sub source_code_passes_tests {
 	return 1 unless (-e "t") && `which prove`;
 	return (system("prove") == 0);
+}
+
+sub run_commands {
+	die "The run_commands method must be overridden!";
+}
+
+sub post_step_tests {
+	my $self = shift;
+	
+	my @file_size_errors = _get_file_size_errors('post_requisite_file_listing');
+	my @output_errors = _get_output_errors();
+	
+	return (@file_size_errors, @output_errors);
 }
 
 sub cmd {
@@ -147,10 +344,10 @@ sub cmd {
 }
 
 sub archive_files {
-	my $step = shift;
+	my $self = shift;
 	my $version = shift;
 	
-	my $step_archive = "$archive/$step";
+	my $step_archive = "$archive/" . $self->name;
 	my $step_version_archive = "$step_archive/$version";
 	
 	`mkdir -p $step_version_archive`;
@@ -160,8 +357,36 @@ sub archive_files {
 	return $step_version_archive;
 }
 
-sub get_output_errors {
-	my $error_log_dir = shift;
+sub mail_now {
+	my $self = shift;
+    my $params = $self->mail;
+    
+	my $from = _get_sender_address($params);
+    my $to = _get_recipient_addresses($params);
+    my $subject = $params->{'subject'};
+	my $body = $params->{'body'} . "\nThe $subject section has finished";
+    
+    my $mail = {
+    	From => $from,
+    	To => $to,
+    	Subject => $subject
+    };
+	
+	unless ($params->{'attachment'}) {
+		use Mail::Sendmail;
+		$mail->{'Message'} = $body;
+		return sendmail(%{$mail});
+	}
+	
+    return _add_body_and_attachment(
+		$mail,
+		$body,
+		$params->{'attachment'}
+	)->send();
+}
+
+sub _get_output_errors {
+	my $error_log_dir = shift // '.';
 	
 	my @all_errors;
 	opendir (my $dir, $error_log_dir);
@@ -188,7 +413,7 @@ sub _get_output_errors_from_file {
 	return @errors;
 }
 
-sub get_file_size_errors {
+sub _get_file_size_errors {
 	my $type = shift;
 	
 	my @file_listings = _get_listing_of_required_files($type);
@@ -197,19 +422,22 @@ sub get_file_size_errors {
 	my @errors;
 	foreach my $file_listing (@file_listings) {
 		chomp $file_listing;
-		my ($file_name, $old_file_size, $verify_file_size) = split "\t", $file_listing;
-		my $file_exists = (-e $file_name);
-		my $new_file_size = stat($file_name)->size if $file_exists;
-		my $file_size_ok = (!$verify_file_size || _file_size_ok($new_file_size, $old_file_size));
+		my ($file_name_pattern, $old_file_size, $verify_file_size) = split "\t", $file_listing;
+		my $file_name_pattern_with_version = $file_name_pattern;
+		$file_name_pattern_with_version =~ s/{version}/$version/g;
+		$verify_file_size //= 0;
 		
-		if ($file_exists) {
+		my @file_names = _get_files_matching_pattern($file_name_pattern_with_version);
+		push @errors, "there are no files matching $file_name_pattern_with_version" unless @file_names;
+		foreach my $file_name (@file_names) {
+			my $new_file_size = stat($file_name)->size;
+			my $file_size_ok = (!$verify_file_size || _file_size_ok($new_file_size, $old_file_size));
+		
 			if ($file_size_ok) {
-				$file_listing = join("\t", $file_name, $new_file_size, $verify_file_size);
+				$file_listing = join("\t", $file_name_pattern, $new_file_size, $verify_file_size);
 			} else {
 				push @errors, "$file_name is too small";
 			}
-		} else {
-			push @errors, "$file_name doesn't exist";
 		}
 	}
 	
@@ -228,6 +456,24 @@ sub _get_listing_of_required_files {
 	close $file_listing_fh;
 	
 	return @file_listings;
+}
+
+
+sub _get_files_matching_pattern {
+	my $pattern = shift;
+	
+	my($file_pattern, $base_dir) = fileparse($pattern);
+
+	opendir(my $dir, $base_dir);
+	my @matching_files;
+	while (my $file = readdir($dir)) {
+		chomp $file;
+		push @matching_files, "$base_dir$file" if $file =~ qr/^$file_pattern$/;
+	}
+	closedir($dir);
+	
+	
+	return @matching_files;
 }
 
 sub _update_listing_of_required_files {
@@ -253,67 +499,49 @@ sub _file_size_ok {
 	return $percent_reduction < $percent_change_tolerance ? 1 : 0;
 }
 
-# Mail sent when some steps completed
-sub mail_now {
-    my %params = %{$_[0]};
-    
-	my $from = $params{'from'} || $maillist{'automation'};
-    
-    my @recipients = split ",", $params{'to'};
+sub _get_sender_address {
+	my $params = shift;
+	
+	return $params->{'from'} || $maillist{'automation'};
+}
 
-    my $to = $from;
+sub _get_recipient_addresses {
+	my $params = shift;
+	
+	my @recipients = split ",", $params->{'to'};
+
+    my $to = _get_sender_address($params);
     foreach my $recipient (@recipients) {
         $to .= "," . $maillist{$recipient}; 
     }
-    
-    my $subject = $params{'subject'};
-    
-    my %mail = (
-    	From => $from,
-    	To => $to,
-    	Subject => $subject
-    );
-    
-    
-    my $body = $params{'body'} . "\nThe $subject section has finished";
-    
-    my $attachment_path = $params{'attachment'};
-    
-    if ($attachment_path) {
-    	use MIME::Lite;
-    	
-        my ($filename) = $attachment_path =~ /\\(.*)$/;
-        $mail{'Type'} = "multipart/mixed";
 	
-	    # Construct e-mail message
-    	my $msg = MIME::Lite->new(%mail);
-   
-   		$msg->attach(
-        	Type => "TEXT",
-        	Data => $body
-    	);
-
-    	$msg->attach(
-       		Type => "text/plain",
-        	Path => $attachment_path,
-        	Filename => $filename 
-    	);
-   
-    	$msg->send() or die;
-	} else {
-		use Mail::Sendmail;
-		
-		$mail{'Message'} = $body;
-		sendmail(%mail) or die;
-	}	
-    print "Mail has been sent\n";
+	return $to;
 }
 
-sub set_user_input_and_passwords {
-	my $self = shift;
+sub _add_body_and_attachment {
+	my $mail = shift;
+	my $body = shift;
+	my $attachment_path = shift;
 	
-	$self->_set_passwords();
-	$self->_set_user_input();
+	use MIME::Lite;	
+    my ($filename) = $attachment_path =~ /\\(.*)$/;
+    $mail->{'Type'} = "multipart/mixed";
+	
+	# Construct e-mail message
+    my $msg = MIME::Lite->new(%{$mail});
+   
+   	$msg->attach(
+        Type => "TEXT",
+        Data => $body
+    );
+
+    $msg->attach(
+       	Type => "text/plain",
+        Path => $attachment_path,
+        Filename => $filename 
+    );
+	
+	return $msg;
 }
 
 sub _set_passwords {
@@ -338,8 +566,9 @@ sub _set_user_input {
 
 sub _hide_passwords {
 	my $nopasscmd = shift;
+	my $passwords = shift // {%passwords};
 	
-	foreach my $passtype (keys %passwords) {
+	foreach my $passtype (keys %{$passwords}) {
 		my $pass = ${$passwords{$passtype}};
 		next unless $pass;
 		
@@ -348,10 +577,6 @@ sub _hide_passwords {
 	}
 	
 	return $nopasscmd;
-}
-
-sub run_commands {
-	die "The run_commands method must be overridden!";
 }
 
 1;
