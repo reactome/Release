@@ -23,7 +23,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
 
-    $self->cmd("Converting database to myisam",[["perl innodb2myisam.pl -user $user -pass $pass -dbfrom test_slice_$version -dbto test_slice_$version\_myisam"]]);
+    $self->cmd("Converting database to myisam",[["perl innodb2myisam.pl -user $user -pass $pass -dbfrom test_slice_$version -dbto test_slice_$version\_myisam > myisam.out 2> myisam.err"]]);
 };
 
 1;
