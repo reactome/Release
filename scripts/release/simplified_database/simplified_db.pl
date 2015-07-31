@@ -73,6 +73,10 @@ $logger->info("Beginning population of id to external identifier table");
 populate_id_to_external_identifier_table(@pathways, @reaction_like_events, @physical_entities);
 $logger->info("Finished population of id to external identifier table");
 
+$logger->info("Indexing external identifiers");
+index_external_identifiers();
+$logger->info("Finished indexing external identifiers"); 
+
 sub get_dba {
     my $db = shift;
     my $host = shift;
@@ -249,16 +253,46 @@ sub populate_reaction_like_event_to_physical_entity_table {
 
 sub get_physical_entities_in_reaction_like_event {
     my $reaction_like_event = shift;
-    
+
+    my $logger = get_logger(__PACKAGE__);
+
     my @physical_entities;
     push @physical_entities, @{$reaction_like_event->input};
     push @physical_entities, @{$reaction_like_event->output};
     push @physical_entities, map($_->physicalEntity->[0], @{$reaction_like_event->catalystActivity});
     
-    @physical_entities = grep {defined} @physical_entities;
+    my %physical_entities = map {$_->db_id => $_} grep {$_} @physical_entities;
     
-    return @physical_entities;
+    # ...and all the sub-components of this PE
+    for my $pe (values %physical_entities) {
+	my @subs = recurse_physical_entity_components($pe);
+	for my $sub (@subs) {
+	    $sub or next;
+	    #$logger->info("Adding sub component ".join(' ',$sub->class,$sub->displayName));
+	    $physical_entities{$sub->db_id} = $sub;
+	}
+    }
+
+    return values %physical_entities;
 }
+
+# Recurse through all members/components so all descendent PEs will also
+# be linked to the reaction/pathway
+sub recurse_physical_entity_components {
+    my $pe = shift;
+
+    my %components = map {$_->db_id => $_} grep {$_} @{$pe->hasMember}, @{$pe->hasComponent};
+    keys %components || return ();
+    
+    for my $component (values %components) {
+	for my $sub_component (recurse_physical_entity_components($component)) { 
+	    $components{$sub_component->db_id} = $sub_component;
+	}
+    }
+
+    return values %components;
+}
+
 
 sub populate_id_to_external_identifier_table {
     my @instances = @_;
@@ -301,6 +335,15 @@ sub populate_id_to_external_identifier_table {
 	}
     }
     
+    $dbh->commit();
+}
+
+
+sub index_external_identifiers {
+    my $dbh = get_simplified_database_handle();
+    $dbh->begin_work();
+    my $sth = $dbh->prepare("CREATE INDEX `externalIdentifier` ON Id_To_ExternalIdentifier (`externalIdentifier`)") 
+	or $logger->logconfess($dbh->errstr);
     $dbh->commit();
 }
 
