@@ -35,13 +35,14 @@ open(my $fh, '>', $output_file);
 
 my @events = @{get_dba($db, $host)->fetch_instance(-CLASS => 'ReactionlikeEvent')};
 foreach my $event (@events) {
-	next if $event->inferredFrom->[0];
+	next if is_chimeric($event);
+	next unless has_human_species_tag($event);
 	
 	my $event_name = $event->displayName;
 	my $event_id = $event->db_id;
 	
-	report("$event_name ($event_id) is tagged as human and has multiple species", $fh) if multiple_species($event) && has_human_species_tag($event);
-	report("$event_name ($event_id) is tagged as human and has a related species", $fh) if $event->relatedSpecies->[0] && has_human_species_tag($event);
+	report(join("\t", $event_name, $event_id, "multiple species"), $fh) if multiple_species($event);
+	report(join("\t", $event_name, $event_id, "related species"), $fh) if $event->relatedSpecies->[0];
 }
 
 sub get_dba {
@@ -54,6 +55,14 @@ sub get_dba {
 	-host => $host,
 	-dbname => $db
     );
+}
+
+sub is_chimeric {
+    my $instance = shift;
+	
+    return $instance->is_valid_attribute('isChimeric') &&
+		   $instance->isChimeric->[0] &&
+		   $instance->isChimeric->[0] =~ /^true$/i; 
 }
 
 sub multiple_species {
@@ -86,8 +95,18 @@ sub report {
 
 sub usage_instructions {
     return <<END;
-    perl $0 [options]
     
+	This script searches through all human reaction like events
+	(except chimeric events) and reports those events that have
+	more than one value in their species attribute or that have
+	any value in their related species attribute.
+	
+	The output file (name of this script with .txt extension) is
+	tab-delimited with three columns: event name, event database
+	id, and issue with the event.
+	
+	perl $0 [options]
+    	
     Options:
     
     -db	[db_name]	Source database (default is $GKB::Config::GK_DB_NAME)
