@@ -49,7 +49,7 @@ my $dba = GKB::DBAdaptor->new
 
 
 my %seen; # Prevents duplication in the file
-open(my $output, ">", "event_qa_$opt_db.out");
+open(my $output, ">", "event_qa_$opt_db.txt");
 	
 
 my $ar = $dba->fetch_instance(-CLASS => 'Event'); # Obtains a reference to the array of all Reactome events
