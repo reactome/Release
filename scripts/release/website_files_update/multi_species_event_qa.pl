@@ -106,7 +106,7 @@ sub usage_instructions {
 	id, and issue with the event.
 	
 	perl $0 [options]
-    	
+
     Options:
     
     -db	[db_name]	Source database (default is $GKB::Config::GK_DB_NAME)
