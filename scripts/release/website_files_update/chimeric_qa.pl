@@ -152,7 +152,7 @@ sub usage_instructions {
 	- Not chimeric but have chimeric components
 	
 	The output file (name of this script with .txt extension) is
-	tab-delimited with three columns: event name, event database
+	tab-delimited with five columns: event name, event database
 	id, isChimeric, issue with event, instances (species or chimeric
 	components).
 	
