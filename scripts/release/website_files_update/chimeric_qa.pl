@@ -38,12 +38,10 @@ foreach my $event (@events) {
 	my $event_name = $event->displayName;
 	my $event_id = $event->db_id;
 	
-	report("$event_name ($event_id) has multiple species but is not marked as chimeric", $fh) if multiple_species($event) && !is_chimeric($event);
-	report("$event_name ($event_id) has one species but is marked as chimeric", $fh) if !multiple_species($event) && is_chimeric($event);
+	report(make_record($event_name, $event_id, 'not chimeric', 'multiple species', get_species($event)), $fh) if multiple_species($event) && !is_chimeric($event);
+	report(make_record($event_name, $event_id, 'chimeric', 'one species', get_species($event)), $fh) if !multiple_species($event) && is_chimeric($event);
 	my @chimeric_components = grep {is_chimeric($_)} get_physical_entities_in_reaction_like_event($event);
-	report("$event_name ($event_id) has chimeric component(s):\n" .
-		   join("\n", map {"\t" . $_->displayName . " " . $_->db_id} @chimeric_components) .
-		   "\nbut is not marked as chimeric", $fh) if @chimeric_components && !is_chimeric($event);
+	report(make_record($event_name, $event_id , 'not chimeric', 'chimeric components', get_db_ids(@chimeric_components)), $fh) if @chimeric_components && !is_chimeric($event);
 }
 
 sub get_dba {
@@ -116,6 +114,25 @@ sub is_chimeric {
 		   $instance->isChimeric->[0] =~ /^true$/i; 
 }
 
+sub make_record {
+	return join("\t", @_);
+}
+
+sub get_species {
+	my $instance = shift;
+	return unless $instance;
+	
+	return join "|", map {$_->displayName} @{$instance->species};
+}
+
+sub get_db_ids {
+	my @instances = @_;
+	
+	return unless @instances;
+	
+	return join "|", map {$_->db_id} @instances;
+}
+
 sub report {
 	my $message = shift;
 	my $fh = shift;
@@ -126,6 +143,19 @@ sub report {
 
 sub usage_instructions {
     return <<END;
+	
+	This script searches through all reaction like events and
+	reports any events that are:
+	
+	- Not chimeric but have multiple species
+	- Chimeric but have one species
+	- Not chimeric but have chimeric components
+	
+	The output file (name of this script with .txt extension) is
+	tab-delimited with three columns: event name, event database
+	id, isChimeric, issue with event, instances (species or chimeric
+	components).
+	
     perl $0 [options]
     
     Options:
