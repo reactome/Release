@@ -53,9 +53,6 @@ if ($selected_pathways eq 'all') {
 
 exit unless @reactions;
 
-($output_file = $0) =~ s/.pl$/.tsv/ unless $output_file;
-open my $logic_table_fh, ">", "$output_file";
-
 my %interactions;
 my %parent2child;
 my %child2parent;
@@ -66,8 +63,12 @@ foreach my $reaction (@reactions) {
 }
 
 foreach my $reaction (@reactions) {
-    add_reaction_to_logic_table($reaction, \@reactions, $logic_table_fh);
+    add_reaction_to_logic_table($reaction, \@reactions);
 }
+
+($output_file = $0) =~ s/.pl$/.tsv/ unless $output_file;
+open my $logic_table_fh, ">", "$output_file";
+report_interactions(\%interactions, $logic_table_fh);
 close $logic_table_fh;
 
 add_line_count($output_file);
@@ -99,61 +100,56 @@ sub populate_graph {
 sub add_reaction_to_logic_table {
     my $reaction = shift;
     my $all_reactions = shift;
-    my $fh = shift;
     
     my @inputs = @{$reaction->input};
     my @outputs = @{$reaction->output};
     my @catalysts =  map($_->physicalEntity->[0], @{$reaction->catalystActivity});
     
-    process_inputs($reaction, \@inputs, $fh);
-    process_inputs($reaction, \@catalysts, $fh);
+    process_inputs($reaction, \@inputs);
+    process_inputs($reaction, \@catalysts);
     
     foreach my $output (@outputs) {
 	my $output_name = $output->name->[0];
 	my $reaction_like_events_with_output = get_reactions_with_output($output, $all_reactions);
 	
-	process_output($output, $reaction_like_events_with_output, $fh);
+	process_output($output, $reaction_like_events_with_output);
     }
     
     my @regulations = @{$reaction->reverse_attribute_value('regulatedEntity')};
-    process_regulations($reaction, \@regulations, $fh);
+    process_regulations($reaction, \@regulations);
 }
 
 sub process_inputs {
     my $reaction = shift;
     my $inputs = shift;
-    my $fh = shift;
     
     foreach my $input (@$inputs) {
-	process_if_set_or_complex($input, $fh) unless is_an_output_in_binding_reaction($input);
-	process_input($reaction, $input, $fh);
+	process_if_set_or_complex($input) unless is_an_output_in_binding_reaction($input);
+	process_input($reaction, $input);
     }
 }
 
 sub process_input {
     my $reaction = shift;
     my $input = shift;
-    my $fh = shift;
     
-    report($fh, get_label($input), get_label($reaction), 1, AND);
+    record(get_label($input), get_label($reaction), 1, AND);
 }
 
 sub process_output {
     my $output = shift;
     my $associated_reactions = shift;
-    my $fh = shift;
     
     my $logic = scalar @$associated_reactions > 1 ? OR : AND;
     foreach my $reaction (@$associated_reactions) {
 	next if output_is_ancestral_input($output) && $reaction->catalystActivity->[0];	
 	
-	report($fh, get_label($reaction), get_label($output), 1, $logic);
+	record(get_label($reaction), get_label($output), 1, $logic);
     }
 }
 
 sub process_if_set_or_complex {
     my $physical_entity = shift;
-    my $fh = shift;
     
     my @elements;
     my $logic;
@@ -167,39 +163,31 @@ sub process_if_set_or_complex {
     }
     
     foreach my $element (@elements) {	
-	report($fh, get_label($element), get_label($physical_entity), 1, $logic);
-	process_if_set_or_complex($element, $fh);
+	record(get_label($element), get_label($physical_entity), 1, $logic);
+	process_if_set_or_complex($element);
     }
 }
 
 sub process_regulations {
     my $reaction  = shift;
     my $regulations = shift;
-    my $fh = shift;
     
     foreach my $regulation (@$regulations) {
 	my $regulator = $regulation->regulator->[0];
-	process_if_set_or_complex($regulator, $fh) unless is_an_output_in_binding_reaction($regulator);
+	process_if_set_or_complex($regulator) unless is_an_output_in_binding_reaction($regulator);
 	
 	my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
-	report($fh, get_label($regulator), get_label($reaction), $value, AND);
+	record(get_label($regulator), get_label($reaction), $value, AND);
     }
 }
 
-sub report {
-    my $fh = shift;
-    
+sub record {    
     my $parent = shift;
     my $child = shift;
     my $value = shift;
     my $logic = shift;
     
-    if ($interactions{$parent}{$child}++) {
-	$logger->info("Skipping $parent to $child association with logic '$logic' and value $value");
-	return;
-    }
-    
-    print $fh join("\t", $parent, $child, $value, $logic) . "\n";
+    $interactions{$child}{$logic}{$parent}{$value}++;
 }
 
 sub get_label {
@@ -289,6 +277,45 @@ sub get_reactions_with_output {
     }
     
     return \@{$reaction_output_id_2_reactions{$output->db_id}};
+}
+
+sub report_interactions {
+	my $interactions = shift;
+	my $fh = shift;
+	
+	foreach my $child (keys %$interactions) {
+		my @logic_keys = keys %{$interactions{$child}};
+			
+		if (@logic_keys > 1) {
+			introduce_dummy_nodes($interactions, $child);
+		}
+	}
+	
+	foreach my $child (keys %{$interactions}) {
+		foreach my $logic (keys %{$interactions{$child}}) {
+			foreach my $parent (keys %{$interactions{$child}{$logic}}) {
+				foreach my $value (keys %{$interactions{$child}{$logic}{$parent}}) {
+					print $fh join("\t", $parent, $child, $logic, $value) . "\n";
+				}
+			}
+		}
+	}
+}
+
+sub introduce_dummy_nodes {
+	my $interactions = shift;
+	my $child = shift;
+		
+	my $AND_parents = $interactions{$child}{AND()};
+	my $OR_parents = $interactions{$child}{OR()};
+	
+	delete $interactions{$child};
+	
+	$interactions{$child}{AND()}{"$child\_AND"}{1}++;
+	$interactions{$child}{AND()}{"$child\_OR"}{1}++;
+	
+	$interactions{"$child\_AND"}{AND()} = $AND_parents;
+	$interactions{"$child\_OR"}{OR()} = $OR_parents;
 }
 
 sub add_line_count {
