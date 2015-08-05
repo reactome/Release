@@ -26,12 +26,12 @@ unless ($class) {
     my @classes = qw/Event EntityWithAccessionedSequence/;
     
     until ($class) {
-	print_choose_class_query(@classes);
-	my $answer = <STDIN>;
-	chomp $answer;
-	eval {
-	    $class = $classes[$answer - 1] if $answer =~ /^\d+$/;
-	};
+		print_choose_class_query(@classes);
+		my $answer = <STDIN>;
+		chomp $answer;
+		eval {
+			$class = $classes[$answer - 1] if $answer =~ /^\d+$/;
+		};
     }
 }
 
@@ -130,9 +130,9 @@ sub print_choose_class_query {
     my @classes = @_;
     print "Choose class - \n";
     for (my $index = 0; $index < scalar @classes; $index++) {
-	my $class = $classes[$index];
-	my $num = $index + 1;
-	print "$class($num)\n";
+		my $class = $classes[$index];
+		my $num = $index + 1;
+		print "$class($num)\n";
     }
     print "Select number:"
 }
@@ -150,11 +150,13 @@ sub usage_instructions {
     -release_pass db_pass (default: $GKB::Config::GK_DB_PASS)
     -release_port db_port (default: $GKB::Config::GK_DB_PORT)
     -release_db db_name (default: $GKB::Config::GK_DB_NAME)
+	-release_debug (default: not used)
     -curated_user db_user (default: $GKB::Config::GK_DB_USER)
     -curated_host db_host (default: reactomecurator.oicr.on.ca)
     -curated_pass db_pass (default: $GKB::Config::GK_DB_PASS)
     -curated_port db_port (default: $GKB::Config::GK_DB_PORT)
     -curated_db db_name (default: gk_central)
+	-curated_debug (default: not used)
 
 END
 }

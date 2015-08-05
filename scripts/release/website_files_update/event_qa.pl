@@ -21,36 +21,44 @@ use autodie;
 use Getopt::Long;
 
 
-our($opt_host,$opt_db,$opt_pass,$opt_port,$opt_debug,$opt_user);
+my ($user, $pass, $port, $host, $db, $debug, $help);
 
-&GetOptions("user:s",
-"host:s",
-"pass:s",
-"port:i",
-"debug",
-"db=s");
+&GetOptions(
+    "user:s" => \$user,
+    "host:s" => \$host,
+    "pass:s" => \$pass,
+    "port:i" => \$port,
+    "db:s" => \$db,
+    "debug" => \$debug,
+    "help" => \$help
+);
 
-$opt_db || die "Usage: $0 -db db_name [-user db_user -host db_host -pass db_pass -port db_port]";
-$opt_host ||= $GK_DB_HOST;
-$opt_user ||= $GK_DB_USER;
-$opt_pass ||= $GK_DB_PASS;
-$opt_port ||= $GK_DB_PORT;
+if ($help) {
+    print usage_instructions();
+    exit;
+}
+
+
+$db ||= $GK_DB_NAME;
+$host ||= $GK_DB_HOST;
+$user ||= $GK_DB_USER;
+$pass ||= $GK_DB_PASS;
+$port ||= $GK_DB_PORT;
 
 my $dba = GKB::DBAdaptor->new
     (
-     -user   => $opt_user,
-     -host   => $opt_host,
-     -pass   => $opt_pass,
-     -port   => $opt_port,
-     -dbname => $opt_db,
-     -DEBUG => $opt_debug
+     -user   => $user,
+     -host   => $host,
+     -pass   => $pass,
+     -port   => $port,
+     -dbname => $db,
+     -DEBUG => $debug
      );
 
 
 
 my %seen; # Prevents duplication in the file
-open(my $output, ">", "event_qa_$opt_db.txt");
-	
+open(my $output, ">", "event_qa_$db.txt");
 
 my $ar = $dba->fetch_instance(-CLASS => 'Event'); # Obtains a reference to the array of all Reactome events
 
@@ -110,4 +118,17 @@ sub report {
 	my $message = shift;
 	
 	print $output $message . $event->db_id . '-' . $event->_displayName->[0] . '-' . join(",", map($_->_displayName->[0], (@{$event->species}))) . "\n";
+}
+
+sub usage_instructions {
+    return <<END;
+    
+    This script checks all events (pathways and reactions)
+    in the database and reports the following:
+    
+    Events with more than one species
+    Human pathways with non-human events
+    Orphan events (not a preceding event, regulatory event, or in the hierarchy)
+    
+END
 }

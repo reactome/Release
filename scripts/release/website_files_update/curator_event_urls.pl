@@ -16,18 +16,14 @@ use autodie;
 use Data::Dumper;
 use Getopt::Long;
 
-if ($ARGV[0] && $ARGV[0] =~ /-h(elp)?$/) {
-    print <<END;
-Usage: perl $0 [input file]
 
-An optional input file can be specified containing a list of human event
-database identifiers for which pathway browser links should be output.
+my ($help);
+GetOptions(
+  'help' => \$help  
+);
 
-The file must have one numeric database identifier per line.
-
-Without a specified file, links will be output for all human event database identifiers.
-
-END
+if ($help) {
+    print usage_instructions();
     exit;
 }
 
@@ -83,3 +79,18 @@ foreach my $event (@events) {
     print $out join("\t", ($db_id, $name, $url)) . "\n";
 }
 close $out;
+
+sub usage_instructions {
+    return <<END;
+Usage: perl $0 [input file]
+
+An optional input file can be specified containing a list of human event
+database identifiers for which pathway browser links should be output.
+
+The file must have one numeric database identifier per line.
+
+Without a specified file, links will be output for all human event database identifiers.
+
+END
+
+}
