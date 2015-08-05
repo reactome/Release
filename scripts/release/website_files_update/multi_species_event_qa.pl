@@ -40,10 +40,13 @@ foreach my $event (@events) {
 	
 	my $event_name = $event->displayName;
 	my $event_id = $event->db_id;
+	my $event_creator = get_event_creator($event);
 	
-	report(join("\t", $event_name, $event_id, "multiple species"), $fh) if multiple_species($event);
-	report(join("\t", $event_name, $event_id, "related species"), $fh) if $event->relatedSpecies->[0];
+	report(join("\t", $event_name, $event_id, "multiple species", $event_creator), $fh) if multiple_species($event);
+	report(join("\t", $event_name, $event_id, "related species", $event_creator), $fh) if $event->relatedSpecies->[0];
 }
+
+close($fh);
 
 sub get_dba {
     my $db = shift;
@@ -85,6 +88,21 @@ sub has_human_species_tag {
 	return 0;
 }
 
+sub get_event_creator {
+	my $event = shift;
+	
+	return 'Unknown' unless $event;
+	
+	my $created_instance = $event->created->[0];
+	my $last_modified_instance = $event->modified->[-1];
+	my $author_instance = $created_instance->author->[0] if $created_instance;
+	$author_instance ||= $last_modified_instance->author->[0] if $last_modified_instance;
+	
+	my $author_name = $author_instance->displayName if $author_instance;
+	
+	return $author_name || 'Unknown';
+}
+
 sub report {
 	my $message = shift;
 	my $fh = shift;
@@ -95,22 +113,22 @@ sub report {
 
 sub usage_instructions {
     return <<END;
-    
+	
 	This script searches through all human reaction like events
 	(except chimeric events) and reports those events that have
 	more than one value in their species attribute or that have
 	any value in their related species attribute.
 	
 	The output file (name of this script with .txt extension) is
-	tab-delimited with three columns: event name, event database
-	id, and issue with the event.
+	tab-delimited with four columns: event name, event database
+	id, issue with the event, and event author.
 	
-	perl $0 [options]
-
-    Options:
-    
-    -db	[db_name]	Source database (default is $GKB::Config::GK_DB_NAME)
-    -host [db_host]	Host of source database (default is $GKB::Config::GK_DB_HOST)
-    -help			Display these instructions
+	USAGE: perl $0 [options]
+	
+	Options:
+	
+	-db [db_name]	Source database (default is $GKB::Config::GK_DB_NAME)
+	-host [db_host]	Host of source database (default is $GKB::Config::GK_DB_HOST)
+	-help 		Display these instructions
 END
 }
