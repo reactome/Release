@@ -37,12 +37,15 @@ my @events = @{get_dba($db, $host)->fetch_instance(-CLASS => 'ReactionlikeEvent'
 foreach my $event (@events) {
 	my $event_name = $event->displayName;
 	my $event_id = $event->db_id;
+	my $event_creator = get_event_creator($event);
 	
-	report(make_record($event_name, $event_id, 'not chimeric', 'multiple species', get_species($event)), $fh) if multiple_species($event) && !is_chimeric($event);
-	report(make_record($event_name, $event_id, 'chimeric', 'one species', get_species($event)), $fh) if !multiple_species($event) && is_chimeric($event);
+	report(make_record($event_name, $event_id, 'not chimeric', 'multiple species', get_species($event), $event_creator), $fh) if multiple_species($event) && !is_chimeric($event);
+	report(make_record($event_name, $event_id, 'chimeric', 'one species', get_species($event), $event_creator), $fh) if !multiple_species($event) && is_chimeric($event);
 	my @chimeric_components = grep {is_chimeric($_)} get_physical_entities_in_reaction_like_event($event);
-	report(make_record($event_name, $event_id , 'not chimeric', 'chimeric components', get_db_ids(@chimeric_components)), $fh) if @chimeric_components && !is_chimeric($event);
+	report(make_record($event_name, $event_id , 'not chimeric', 'chimeric components', get_db_ids(@chimeric_components), $event_creator), $fh) if @chimeric_components && !is_chimeric($event);
 }
+
+close($fh);
 
 sub get_dba {
     my $db = shift;
@@ -133,6 +136,21 @@ sub get_db_ids {
 	return join "|", map {$_->db_id} @instances;
 }
 
+sub get_event_creator {
+	my $event = shift;
+	
+	return 'Unknown' unless $event;
+	
+	my $created_instance = $event->created->[0];
+	my $last_modified_instance = $event->modified->[-1];
+	my $author_instance = $created_instance->author->[0] if $created_instance;
+	$author_instance ||= $last_modified_instance->author->[0] if $last_modified_instance;
+	
+	my $author_name = $author_instance->displayName if $author_instance;
+	
+	return $author_name || 'Unknown';
+}
+
 sub report {
 	my $message = shift;
 	my $fh = shift;
@@ -152,16 +170,16 @@ sub usage_instructions {
 	- Not chimeric but have chimeric components
 	
 	The output file (name of this script with .txt extension) is
-	tab-delimited with five columns: event name, event database
+	tab-delimited with six columns: event name, event database
 	id, isChimeric, issue with event, instances (species or chimeric
-	components).
+	components), and event author.
 	
-    perl $0 [options]
-    
-    Options:
-    
-    -db	[db_name]	Source database (default is $GKB::Config::GK_DB_NAME)
-    -host [db_host]	Host of source database (default is $GKB::Config::GK_DB_HOST)
-    -help			Display these instructions
+	USAGE: perl $0 [options]
+	
+	Options:
+	
+	-db [db_name]		Source database (default is $GKB::Config::GK_DB_NAME)
+	-host [db_host]		Host of source database (default is $GKB::Config::GK_DB_HOST)
+	-help			Display these instructions
 END
 }
