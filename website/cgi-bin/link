@@ -2,22 +2,7 @@
 
 # CGI to allow linking from external databases to Reactome
 
-# The following block sets the script to pick up libraries from ../../modules.
-# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
-# on different server setups.
-BEGIN {
-    my ($path) = $0 =~ /^(\S+)$/;
-    my @a = split('/',$path);
-    pop @a;
-    if (@a && !$a[0]) {
-	$#a = $#a - 2;
-    } else {
-	push @a, ('..','..');
-    }
-    push @a, 'modules';
-    my $libpath = join('/', @a);
-    unshift (@INC, $libpath);
-}
+use lib '/usr/local/gkb/modules';
 
 use CGI qw(:standard);
 use GKB::DBAdaptor;
@@ -26,12 +11,16 @@ use GKB::WebUtils;
 use GKB::Config;
 use Data::Dumper;
 use GKB::FrontPage3;
+use GKB::StableIdentifierDatabase;
 
 use strict;
 
 my ($CGI,$WU,$DBA);
 
 $CGI = CGI->new();
+
+
+my $stable = GKB::StableIdentifierDatabase->new();
 
 eval {
 	
@@ -41,15 +30,30 @@ eval {
 	);
 
     my $dbname = $CGI->param('SOURCE');
+
+    if ($dbname =~ /gk_current/i) {
+	$dbname = 'Reactome';
+    }
+
     my $id = $CGI->param('ID');
+
+    if ($id =~ /^REACT_|^R-[A-Z]{3}/) {
+	my $db_id = $stable->db_id_from_stable_id($id);
+	if ($db_id) { 
+	    $id = $db_id;
+	    print $CGI->redirect("/cgi-bin/instancebrowser?ID=$db_id");
+	}
+    }
+
     if ((!defined $dbname || $dbname eq "") && defined $id && $id =~ /^([a-zA-Z]+):(.+)$/) {
     	# Deal with the case where the URL looks like this:
     	# http://www.reactome.org/cgi-bin/link?ID=CHEBI:15422
     	$dbname = $1;
     	$id = $2;
-    } else {
-	    ($dbname && $id) || print_search_form_page_w_message(qq(This script needs a SOURCE and database ID));
-	}
+    } 
+    else {
+	($dbname && $id) || print_search_form_page_w_message(qq(This script needs a SOURCE and database ID));
+    }
     
     # Deal with multiple, comma-separated IDs
     my $ids = [$id];
@@ -115,9 +119,8 @@ eval {
 			} else {
 			    $ar = $DBA->fetch_instance_by_remote_attribute('ReferenceGeneProduct',[['crossReference.identifier','=',$ids]]);
 			}
-    } elsif ($dbname eq 'REACTOME') {
-		$ar = $DBA->fetch_instance_by_remote_attribute('DatabaseObject',[['stableIdentifier.identifier','=',$ids]]);
-    } else {
+    }
+    else {
 		# Take our chances and see if we can pull out a corresponding ReferenceEntity instance
 		$ar = $DBA->fetch_instance_by_attribute('ReferenceEntity',[['identifier',$ids]]) ||
 		    $DBA->fetch_instance_by_attribute('ReferenceEntity',[['otherIdentifier',$ids]]);
@@ -126,7 +129,12 @@ eval {
     }
     @{$ar} || print_search_form_page_w_message("No matches for $dbname:$id");
 
-    print $CGI->redirect('/cgi-bin/eventbrowser?DB=' . $CGI->param('DB') . join('', map {'&ID=' . $_->db_id} @{$ar}) . ((scalar(@{$ar}) == 1) ? '' : '&FORMAT=list'));
+    
+    #print $CGI->redirect($query_url . join(':',$dbname, $id)); 
+    #print $CGI->redirect('/cgi-bin/eventbrowser?DB=' . $CGI->param('DB') . join('', map {'&ID=' . $_->db_id} @{$ar}) . ((scalar(@{$ar}) == 1) ? '' : '&FORMAT=list'));
+
+    my $ID = join('&', map {"ID=".$_->db_id} @$ar);
+    print $CGI->redirect("/cgi-bin/instancebrowser?$ID");
 
 };
 $@ && handle_error("$@");
