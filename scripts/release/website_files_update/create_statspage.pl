@@ -18,20 +18,43 @@ BEGIN {
 #use GKB::ClipsAdaptor;
 use GKB::DBAdaptor;
 use GKB::Utils;
+use GKB::Config;
 use GKB::Config_Species;
 #use Data::Dumper;
 use Getopt::Long;
 use strict;
 
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug);
+my($user, $host, $pass, $port, $db, $debug, $help);
+
+GetOptions(
+  "help" => \$help  
+);
+
+if ($help) {
+    print usage_instructions();
+    exit;
+}
+
 
 # Parse commandline
 my $usage = "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name'\n";
-&GetOptions("user:s", "host:s", "pass:s", "port:i", "db=s", "debug");
-$opt_db || die $usage;
+GetOptions(
+    "user:s" => \$user,
+    "host:s" => \$host,
+    "pass:s" => \$pass,
+    "port:i" => \$port,
+    "db=s" => \$db,
+    "debug" => \$debug
+);
+
+$user ||= $GKB::Config::GK_DB_USER;
+$pass ||= $GKB::Config::GK_DB_PASS;
+$host ||= $GKB::Config::GK_DB_HOST;
+$port ||= $GKB::Config::GK_DB_PORT;
+$db ||= $GKB::Config::GK_DB_NAME;
 
 my $version;
-if ($opt_db =~ /_(\d+)$/) {
+if ($db =~ /_(\d+)$/) {
     $version = $1;
 } else {
     until ($version && $version =~ /^\d+$/) {
@@ -41,19 +64,17 @@ if ($opt_db =~ /_(\d+)$/) {
     }
 }
 
-my $dba = GKB::DBAdaptor->new
-    (
-     -dbname => $opt_db,
-     -user   => $opt_user,
-     -host   => $opt_host,
-     -pass   => $opt_pass,
-     -port   => $opt_port,
-     -DEBUG => $opt_debug
-     );
-if (!(defined $dba)) {
-	print STDERR "$0: could not connect to database $opt_db, aborting\n";
-	exit(1);
-}
+my $dba = GKB::DBAdaptor->new(
+    -dbname => $db,
+    -user   => $user,
+    -host   => $host,
+    -pass   => $pass,
+    -port   => $port,
+    -DEBUG => $debug
+);
+
+
+die "$0: could not connect to database $opt_db, aborting\n" unless $dba;
 
 my $sdis = $dba->fetch_instance(-CLASS => 'Species');
 
@@ -374,4 +395,26 @@ sub is_in_list {
     	}
     }
 	return 0;
+}
+
+sub usage_instructions {
+    return <<END
+
+    This script creates the stats page detailing the
+    number of proteins, complexes, reactions, and
+    pathways per species.
+    
+    Usage: perl $0 [options]
+    
+    Options:
+    
+    user [db_user]	Database user name (defaults to $GKB::Config::GK_DB_USER)
+    pass [db_pass]	Database user password (defaults to $GKB::Config::GK_DB_PASS)
+    host [db_host]	Database host (defaults to $GKB::Config::GK_DB_HOST)
+    port [db_port]	Database port (defaults to $GKB::Config::GK_DB_PORT)
+    db	 [db_name]	Database name (defaults to $GKB::Config::GK_DB_NAME)
+    debug		Show database adaptor debug information 
+    help		Show these instructions
+ 
+END
 }

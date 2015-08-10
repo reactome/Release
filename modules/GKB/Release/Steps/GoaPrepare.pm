@@ -15,7 +15,7 @@ has '+mail' => ( default => sub {
 						'to' => '',
 						'subject' => $self->name,
 						'body' => "",
-						'attachment' => ""
+						'attachment' => $self->directory . "/gofilter.report"
 					};
 				}
 );
@@ -34,9 +34,7 @@ override 'run_commands' => sub {
     	[
     		["perl goa_submission.pl @args"],
     		["perl goa_submission_stats.pl gene_association.reactome gene_association.reactome.stats"],
-    		["rm -f $go/gene-associations/submission/gene_association.reactome"],
-    		["mv gene_association.reactome $go/gene-associations/submission"],
-		["perl $utildir/filter-gene-association.pl -e -v 2 -p nocheck -i $go/gene-associations/submission/gene_association.reactome > gofilter.report 2>&1"]
+		["perl $utildir/filter-gene-association.pl -e -v 2 -p nocheck -i gene_association.reactome > gofilter.report 2>&1"]
     	]
     );    
 };
