@@ -8,64 +8,76 @@ use GKB::Config;
 use Data::Dumper;
 use Getopt::Long;
 
-if ($ARGV[0] && $ARGV[0] =~ /-h(elp)?$/) {
-    print <<END;
-A released database (default $GKB::Config::GK_DB_NAME) and a curated but unreleased database (default gk_central) are needed to find unreleased EWASs in the latter
 
-Usage: $0 -release_user db_user -release_host db_host -release_pass db_pass -release_port db_port -release_db db_name -curated_user db_user -curated_host db_host -curated_pass db_pass -curated_port db_port -curated_db db_name
+my $help;
+GetOptions(
+	'help' => \$help	
+);
 
-END
+if ($help) {
+	print usage_instructions();
     exit;
 }
 
-our($opt_debug);
-&GetOptions("debug");
+my ($release_user, $release_host, $release_pass, $release_port, $release_db, $release_debug);
+GetOptions(
+	"release_user:s" => \$release_user,
+	"release_host:s" => \$release_host,
+	"release_pass:s" => \$release_pass,
+	"release_port:i" => \$release_port,
+	"release_db=s" => \$release_db,
+	"release_debug" => \$release_debug
+);
 
-our($opt_release_user,$opt_release_host,$opt_release_pass,$opt_release_port,$opt_release_db);
-&GetOptions("release_user:s", "release_host:s", "release_pass:s", "release_port:i", "release_db=s");
+$release_user ||= $GKB::Config::GK_DB_USER;
+$release_pass ||= $GKB::Config::GK_DB_PASS;
+$release_port ||= $GKB::Config::GK_DB_PORT;
+$release_db ||= $GKB::Config::GK_DB_NAME;
 
-$opt_release_user ||= $GKB::Config::GK_DB_USER;
-$opt_release_pass ||= $GKB::Config::GK_DB_PASS;
-$opt_release_port ||= $GKB::Config::GK_DB_PORT;
-$opt_release_db ||= $GKB::Config::GK_DB_NAME;
-
-if ($opt_release_db eq $GKB::Config::GK_DB_NAME) {
+if ($release_db eq $GKB::Config::GK_DB_NAME) {
     print "Enter name of release database (leave blank for default of $opt_release_db):";
-    my $release_db = <STDIN>;
-    chomp $release_db;
-    $opt_release_db = $release_db if $release_db;
+    my $db = <STDIN>;
+    chomp $db;
+    $release_db = $db if $db;
 }
 
 my $release_dba = GKB::DBAdaptor->new
     (
-     -dbname => $opt_release_db,
-     -user   => $opt_release_user,
-     -host   => $opt_release_host,
-     -pass   => $opt_release_pass,
-     -port   => $opt_release_port,
+     -dbname => $release_db,
+     -user   => $release_user,
+     -host   => $release_host,
+     -pass   => $release_pass,
+     -port   => $release_port,
      -driver => 'mysql',
-     -DEBUG => $opt_debug
+     -DEBUG => $release_debug
     );
 
     
-our($opt_curated_user,$opt_curated_host,$opt_curated_pass,$opt_curated_port,$opt_curated_db);
-&GetOptions("curated_user:s", "curated_host:s", "curated_pass:s", "curated_port:i", "curated_db=s");
+my ($curated_user,$curated_host,$curated_pass,$curated_port,$curated_db,$curated_debug);
+GetOptions(
+	"curated_user:s" => \$curated_user,
+	"curated_host:s" => \$curated_host,
+	"curated_pass:s" => \$curated_pass,
+	"curated_port:i" => \$curated_port,
+	"curated_db=s" => \$curated_db,
+	"curated_debug" => \$curated_debug
+);
 
-$opt_curated_user ||= $GKB::Config::GK_DB_USER;
-$opt_curated_pass ||= $GKB::Config::GK_DB_PASS;
-$opt_curated_port ||= $GKB::Config::GK_DB_PORT;
-$opt_curated_db ||= 'gk_central';
-$opt_curated_host ||= 'reactomecurator.oicr.on.ca';
+$curated_user ||= $GKB::Config::GK_DB_USER;
+$curated_pass ||= $GKB::Config::GK_DB_PASS;
+$curated_port ||= $GKB::Config::GK_DB_PORT;
+$curated_db ||= 'gk_central';
+$curated_host ||= 'reactomecurator.oicr.on.ca';
 
 my $curated_dba = GKB::DBAdaptor->new
     (
-     -dbname => $opt_curated_db,
-     -user   => $opt_curated_user,
-     -host   => $opt_curated_host,
-     -pass   => $opt_curated_pass,
-     -port   => $opt_curated_port,
+     -dbname => $curated_db,
+     -user   => $curated_user,
+     -host   => $curated_host,
+     -pass   => $curated_pass,
+     -port   => $curated_port,
      -driver => 'mysql',
-     -DEBUG => $opt_debug
+     -DEBUG => $curated_debug
     );
 
 print "Obtaining reference gene products referencing UniProt from release database...\n";
@@ -102,29 +114,28 @@ foreach my $rgp (@{$curated_RGPs}) {
     my @curated_EWASs = grep {$_->is_a('EntityWithAccessionedSequence')} @{$curated_dba->fetch_referer_by_instance($rgp)};
     
     foreach my $curated_ewas (@curated_EWASs) {
-	my $report_ewas = 1;
+		my $report_ewas = 1;
 	
-	my @released_EWASs = exists $released{$uniprot_id} ? @{$released{$uniprot_id}} : ();
-	foreach my $released_ewas (@released_EWASs) {
-	    my $same_display_name = $curated_ewas->displayName eq $released_ewas->displayName;
-	    my $same_db_id = $curated_ewas->db_id == $released_ewas->db_id;
+		my @released_EWASs = exists $released{$uniprot_id} ? @{$released{$uniprot_id}} : ();
+		foreach my $released_ewas (@released_EWASs) {
+			my $same_display_name = $curated_ewas->displayName eq $released_ewas->displayName;
+			my $same_db_id = $curated_ewas->db_id == $released_ewas->db_id;
 	    
-	    if ($same_display_name && $same_db_id) {
-		$report_ewas = 0;
-	    } else {
-		if ($same_display_name) {
-		    report_mismatch($curated_ewas, 'database identifiers', $mismatch);
-		    $report_ewas = 0;
-		}
+			if ($same_display_name && $same_db_id) {
+				$report_ewas = 0;
+			} else {
+				if ($same_display_name) {
+					report_mismatch($curated_ewas, 'database identifiers', $mismatch);
+					$report_ewas = 0;
+				}
 		
-		if ($same_db_id) {
-		    report_mismatch($curated_ewas, 'display names', $mismatch);
-		    $report_ewas = 0;
+				if ($same_db_id) {
+					report_mismatch($curated_ewas, 'display names', $mismatch);
+					$report_ewas = 0;
+				}
+			}
 		}
-	    }
-	}
-	
-	report_unreleased_ewas($curated_ewas, $out) if $report_ewas;
+		report_unreleased_ewas($curated_ewas, $out) if $report_ewas;
     }
 }
 close $mismatch;
@@ -152,4 +163,29 @@ sub report_mismatch {
     
     print $fh $ewas->db_id . " " . $ewas->name->[0];
     print $fh " in curated database has mismatched $type in release database\n";
+}
+
+sub usage_instructions {
+	return <<END;
+		
+	A released database (default $GKB::Config::GK_DB_NAME) and a curated but unreleased database (default gk_central)
+	are used to find unreleased EWASs in the latter
+
+    Usage: perl $0 [options]
+    
+    -class instance_class (will prompt if not specified)
+    -release_user db_user (default: $GKB::Config::GK_DB_USER)
+    -release_host db_host (default: $GKB::Config::GK_DB_HOST)
+    -release_pass db_pass (default: $GKB::Config::GK_DB_PASS)
+    -release_port db_port (default: $GKB::Config::GK_DB_PORT)
+    -release_db db_name (default: $GKB::Config::GK_DB_NAME)
+	-release_debug (default: not used)
+    -curated_user db_user (default: $GKB::Config::GK_DB_USER)
+    -curated_host db_host (default: reactomecurator.oicr.on.ca)
+    -curated_pass db_pass (default: $GKB::Config::GK_DB_PASS)
+    -curated_port db_port (default: $GKB::Config::GK_DB_PORT)
+    -curated_db db_name (default: gk_central)
+	-curated_debug (default: not used)
+
+END
 }

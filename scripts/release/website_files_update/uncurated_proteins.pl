@@ -7,20 +7,48 @@ use GKB::Config;
 use Data::Dumper;
 use Getopt::Long;
 
-if ($ARGV[0] && $ARGV[0] =~ /-h(elp)?$/) {
-    print <<END;
-Usage: $0 -user db_user -host db_host -pass db_pass -db db_name
+my ($user, $pass, $db, $host, $help);
 
-END
+GetOptions(
+    "help" => \$help
+);
+
+if ($help) {
+    print usage_instructions();
     exit;
 }
 
-our($opt_user,$opt_host,$opt_pass,$opt_db);
-&GetOptions("user:s", "host:s", "pass:s", "db=s");
+GetOptions(
+    "user:s",
+    "host:s",
+    "pass:s",
+    "db=s"
+);
 
-$opt_user ||= $GKB::Config::GK_DB_USER;
-$opt_pass ||= $GKB::Config::GK_DB_PASS;
-$opt_db ||= 'gk_central';
-$opt_host = 'reactomecurator.oicr.on.ca';
+$user ||= $GKB::Config::GK_DB_USER;
+$pass ||= $GKB::Config::GK_DB_PASS;
+$db ||= 'gk_central';
+$host ||= 'reactomecurator.oicr.on.ca';
 
-`java -jar ../../../java/authorTool/uncurated_proteins.jar $opt_host $opt_db $opt_user $opt_pass`;
+`java -jar $GK_ROOT_DIR/java/authorTool/uncurated_proteins.jar $host $db $user $pass`;
+
+sub usage_instructions {
+    return <<END;
+
+This script invokes the jar file of the same name
+(in the $GK_ROOT_DIR/java/authorTool directory)
+to produce a list of UniProt accessions that
+haven't been used in Reactome.
+
+The output file is named UnUsedUniProtsYYYYMMDD.txt
+using the current date.
+
+Usage: perl $0 [options]
+    
+-user db_user (default: $GKB::Config::GK_DB_USER)
+-host db_host (default: reactomecurator.oicr.on.ca)
+-pass db_pass (default: $GKB::Config::GK_DB_PASS)
+-db db_name (default: gk_central)
+
+END
+}

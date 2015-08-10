@@ -22,52 +22,89 @@ use Getopt::Long;
 use common::sense;
 
 use Log::Log4perl qw/get_logger/;
-Log::Log4perl->init(\$LOG_CONF);
-my $logger = get_logger(__PACKAGE__);
 
+run(@ARGV) unless caller();
 
-$GKB::Config::NO_SCHEMA_VALIDITY_CHECK = undef;
+sub run {
+    Log::Log4perl->init(\$LOG_CONF);
+    my $logger = get_logger(__PACKAGE__);
 
-our($opt_host,$opt_db,$opt_pass,$opt_port,$opt_debug,$opt_user,$opt_r);
+    $GKB::Config::NO_SCHEMA_VALIDITY_CHECK = undef;
 
-my $usage = "Usage: $0 -db db_name -user db_user -host db_host -pass db_pass -port db_port -r release_number";
+    our($opt_host,$opt_db,$opt_pass,$opt_port,$opt_debug,$opt_user,$opt_r);
 
-&GetOptions("user:s",
-"host:s",
-"pass:s",
-"port:i",
-"debug",
-"db=s",
-"r:i");
+    my $usage = "Usage: $0 -db db_name -user db_user -host db_host -pass db_pass -port db_port -r release_number";
 
-$opt_db || die $usage;
-$opt_r || die $usage;
-	
-$opt_host ||= $GK_DB_HOST;
-$opt_user ||= $GK_DB_USER;
-$opt_pass ||= $GK_DB_PASS;
-$opt_port ||= $GK_DB_PORT;
+    &GetOptions("user:s",
+    "host:s",
+    "pass:s",
+    "port:i",
+    "debug",
+    "db=s",
+    "r:i");
 
-my $tmp_dir = "/tmp";
-my $present_dir = getcwd();
+    $opt_db || die $usage;
+    $opt_r || die $usage;
+    	
+    $opt_host ||= $GK_DB_HOST;
+    $opt_user ||= $GK_DB_USER;
+    $opt_pass ||= $GK_DB_PASS;
+    $opt_port ||= $GK_DB_PORT;
 
-chdir $tmp_dir;
-system("git clone https://github.com/reactome/Fireworks");
-system("rm -rf $present_dir/fireworks; ln -s Fireworks $present_dir/fireworks");
+    my $tmp_dir = "/tmp";
+    
+    clone_fireworks_repository_from_github($tmp_dir);
+    create_symbolic_link_to_fireworks_repository();
 
-#chdir "$present_dir/fireworks/Server";
-#system("mvn clean package");
-#system("mv target/Reactome-Fireworks-Layout-jar-with-dependencies.jar fireworks.jar");
+    my $fireworks_package = "java -jar -Xms5120M -Xmx10240M fireworks.jar";
+    my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
+    my $reactome_graph_binary = "ReactomeGraphs.bin";
+    create_reactome_graph_binary($fireworks_package, $credentials, $opt_r, $reactome_graph_binary);
 
-chdir $present_dir;
-my $fireworks_package = "java -jar -Xms5120M -Xmx10240M fireworks.jar";
-my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
-my $reactome_graph_binary = "$present_dir/ReactomeGraphs.bin";
-system("$fireworks_package GRAPH -s $present_dir/../analysis_core/analysis_v$opt_r.bin -o $reactome_graph_binary --verbose");
-my $json_dir = "$present_dir/json";
-system("$fireworks_package LAYOUT $credentials -g $reactome_graph_binary -f $present_dir/fireworks/Server/config -o $json_dir");
+    my $json_dir = "json";
+    create_fireworks_json($fireworks_package, $credentials, $reactome_graph_binary, $json_dir);
+    
+    remove_fireworks_repository($tmp_dir);
+    
+    $logger->info("$0 has finished its job\n");
+}
 
-chdir $tmp_dir;
-system("rm -rf Fireworks");
+sub clone_fireworks_repository_from_github {
+    my $directory = shift;
+    
+    my $present_dir = getcwd();
+    chdir $directory;
+    my $return_value = system("git clone https://github.com/reactome/Fireworks");
+    chdir $present_dir;
+    
+    return ($return_value == 0);
+}
 
-$logger->info("$0 has finished its job\n");
+sub create_symbolic_link_to_fireworks_repository {
+    return (system("rm -rf fireworks; ln -s Fireworks fireworks") == 0);
+}
+
+sub create_reactome_graph_binary_file {
+    my $fireworks_jar = shift;
+    my $credentials = shift;
+    my $reactome_version = shift;
+    my $reactome_graph_binary = shift;
+    
+    return (system("$fireworks_jar GRAPH -s ../analysis_core/analysis_v$reactome_version.bin -o $reactome_graph_binary --verbose") == 0);
+}
+
+sub create_fireworks_json {
+    my $fireworks_jar = shift;
+    my $credentials = shift;
+    my $reactome_graph_binary = shift;
+    my $json_dir = shift;
+    
+    return (system("$fireworks_jar LAYOUT $credentials -g $reactome_graph_binary -f fireworks/Server/config -o $json_dir") == 0);
+}
+
+sub remove_fireworks_repository {
+    my $directory = shift;
+    
+    chdir $directory;
+    return (system("rm -rf Fireworks") == 0);
+}
