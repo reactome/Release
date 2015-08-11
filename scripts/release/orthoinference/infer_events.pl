@@ -235,7 +235,7 @@ foreach my $rxn (@{$reaction_ar}) {
 	}
     
 	if ($rxn->Species->[1]) {
-		$logger->info("skipping reaction with multiple species - " . $rxn->db_id; #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway
+		$logger->info("skipping reaction with multiple species - " . $rxn->db_id); #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway
 		next;
 	}
 	
@@ -250,7 +250,7 @@ foreach my $rxn (@{$reaction_ar}) {
 	}
 	
 	if ($rxn->inferredFrom->[0]) {
-		$logger->info("skipping manually inferred reaction - " . $rxn->db_id) # manually inferred reactions should not be used for inference
+		$logger->info("skipping manually inferred reaction - " . $rxn->db_id); # manually inferred reactions should not be used for inference
 		next;
 	}
 	
