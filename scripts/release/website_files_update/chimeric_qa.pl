@@ -40,6 +40,7 @@ foreach my $event (@events) {
 	my $event_creator = get_event_creator($event);
 	
 	report(make_record($event_name, $event_id, 'not chimeric', 'multiple species', get_species($event), $event_creator), $fh) if multiple_species($event) && !is_chimeric($event);
+	report(make_record($event_name, $event_id, 'chimeric', 'not used for inference', get_species($event), $event_creator), $fh) if !$event->reverse_attribute_value('inferredFrom')->[0] && is_chimeric($event);
 	report(make_record($event_name, $event_id, 'chimeric', 'one species', get_species($event), $event_creator), $fh) if !multiple_species($event) && is_chimeric($event);
 	my @chimeric_components = grep {is_chimeric($_)} get_physical_entities_in_reaction_like_event($event);
 	report(make_record($event_name, $event_id , 'not chimeric', 'chimeric components', get_db_ids(@chimeric_components), $event_creator), $fh) if @chimeric_components && !is_chimeric($event);
@@ -167,6 +168,7 @@ sub usage_instructions {
 	
 	- Not chimeric but have multiple species
 	- Chimeric but have one species
+	- Chimeric but aren't used for manual inference
 	- Not chimeric but have chimeric components
 	
 	The output file (name of this script with .txt extension) is
