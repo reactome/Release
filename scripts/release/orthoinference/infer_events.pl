@@ -234,6 +234,11 @@ foreach my $rxn (@{$reaction_ar}) {
 		next;
 	}
     
+	if (is_chimeric($rxn)) {
+        $logger->info("skipping chimeric reaction - " . $rxn->db_id);
+        next;
+    }
+	
 	if ($rxn->Species->[1]) {
 		$logger->info("skipping reaction with multiple species - " . $rxn->db_id); #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway
 		next;
@@ -254,10 +259,6 @@ foreach my $rxn (@{$reaction_ar}) {
 		next;
 	}
 	
-    if (is_chimeric($rxn)) {
-        $logger->info("skipping chimeric reaction - " . $rxn->db_id);
-        next;
-    }
     next if ($rxn->is_a('ReactionlikeEvent') && $rxn->reverse_attribute_value('hasMember')->[0]); #Reactions under hasMember are basically covered by the higher-level event, including them would be a duplication
 	
 	if (scalar get_species_from_reaction_like_event_entities($rxn) > 1) {
