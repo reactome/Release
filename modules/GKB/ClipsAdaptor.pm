@@ -517,6 +517,8 @@ sub _store_instance_get_attribute_instances {
      my $displayName = protege_displayName($i);
      $displayName =~ s/\\/\\\\/g;
      $displayName =~ s/\\*"/\\\"/g; #"
+     $displayName =~ s/\n/\\n/g;
+
      $self->_print("\n\t(_displayName \"$displayName\"\)");
      my @attribute_instances;
      foreach my $att (grep {! /_(displayName|class|internal\d+|timestamp|partial|html|Protege_id)$/} $i->list_valid_attributes) {
@@ -533,7 +535,11 @@ sub _store_instance_get_attribute_instances {
 	    push @attribute_instances, @{$i->attribute_value($att)};
 	} else {
 	    foreach (@vals) {
-                s/\\/\\\\/g;
+		if ($att eq 'description') {
+		    s/<[^>]+>|\n//g;
+		    s/\s+/ /g;
+		}
+		s/\\/\\\\/g;
 		s/\\*"/\\\"/g; #"
 		s/\r\n/\\n/g;
 		s/\r/\\n/g;
@@ -705,6 +711,10 @@ sub protege_displayName {
 	    $out = '[' . GKB::Utils::species_abbreviation($i->PhysicalEntity->[0]->Species->[0]) . '] ' . $out;
 	}
     }
+
+    # remove XML tags and newlines
+    $out =~ s/<.+>|\n|\\n//g;
+    $out =~ s/\s+/ /gm;
     return $out;
 }
 
