@@ -23,8 +23,9 @@
 	  as the base for the database with inference that is
 	  produced; the source and target species are appended
 	  when specified
-	  
-#### tweak_data_model.pl<a name="tweak_data_model.pl"></a>
+
+<a name="tweak_data_model.pl"></a>	  
+#### tweak_data_model.pl
 - changes made to the data model of the newly created
   database to house computationally inferred events and
   entities
