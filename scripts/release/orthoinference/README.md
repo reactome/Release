@@ -13,7 +13,7 @@
 	- from *source_species* (default: hsap)
 	- r *release_version*
 - calls other scripts
-	- tweak_data_model.pl
+	- [tweak_data_model.pl](#tweak_data_model.pl)
 	- infer_events.pl (run for all target species)
 	- remove_unused_PE.pl
 	- updateDisplayName.pl
