@@ -14,9 +14,9 @@
 	- r *release_version*
 - calls other scripts
 	- [tweak_data_model.pl](#tweak_data_model.pl)
-	- infer_events.pl (run for all target species)
-	- remove_unused_PE.pl
-	- updateDisplayName.pl
+	- [infer_events.pl](#infer_events.pl) (run for all target species)
+	- [remove_unused_PE.pl](#remove_unused_PE.pl)
+	- [updateDisplayName.pl](#updateDisplayName.pl)
 - output
 	- new database with inference (default: test_reactome_xx)
 	- if a source database is specified, its name is used
@@ -39,6 +39,7 @@
 		  changed to 'all'
 		- ReferenceDatabase has accessUrl changed to 'all'		
 
+<a name="infer_events.pl"></a>
 #### infer_events.pl
 - for each species inferred, the species gene to protein
   mapping file and source species (human by default) protein
@@ -67,7 +68,7 @@
   hierarchy to be included
   
 ##### inferring events
-- starts at infer_event subroutine
+- starts at [infer_event](#infer_events.pl) subroutine
 - source event used to create a new inferred event instance
 - generic summation and evidence type added
 - copied from source event:
@@ -114,16 +115,17 @@
   of target species
 
 ##### inferring entities
-- starts at orthologous_entity subroutine
+- starts at [orthologous_entity](#orthologous_entity) subroutine
 
+<a name="orthologous_entity"></a>
 ###### orthologous_entity
 - determines type/class of physical entity
   and sends it to the appropriate subroutine
   for inference and returns the resulting
   inferred entity:
-	- Genome Encoded Entity/EWAS sent to create_homol_gee
-	- Complex/Polymer sent to infer_complex_polymer
-	- Set sent to infer_gse
+	- Genome Encoded Entity/EWAS sent to [create_homol_gee](#create_homol_gee)
+	- Complex/Polymer sent to [infer_complex_polymer](#infer_complex_polymer)
+	- Set sent to [infer_gse](#infer_gse)
 	- Simple Entity returned as is (no new instance inferred;
 	  inferred event will point to the original entity)
 	- Other Entity returned as is (no new instance inferred;
@@ -133,17 +135,19 @@
 	  needed for organelle compartments in the source species
 	  that don't exist in the target species
 
+<a name="create_homol_gee"></a>
 ###### create_homol_gee (Genome Encoded Entity(GEE)/EWAS inference)
 - GEEs (that are not EWASs) are not inferred; if inference
   forced by the script (this is the case with polymer and complex
   components/repeated units), a ghost GEE instance is created
   using the compartment, species and name of source GEE
-- Each EWAS is inferred to its homologue(s) (uses infer_ewas
+- Each EWAS is inferred to its homologue(s) (uses [infer_ewas](#infer_ewas)
   subroutine)
 	- Defined Set inferred if multiple homologues
 	- EWAS inferred if one homologue
 	- Ghost GEE inferred if no homologue
-	
+
+<a name="infer_ewas"></a>
 ###### infer_ewas (EWAS inference)
 - each homologue of the source EWAS is inferred creating a new
   EWAS instance
@@ -155,7 +159,8 @@
   Sapiens" is appended
 - modified residues are also inferred and attached to the
   inferred EWAS
-  
+
+<a name="infer_complex_polymer"></a>  
 ###### infer_complex_polymer (Complex/Polymer inference)
 - first, components are tested to ensure at least a certain
   percentage (75% by default) are inferrable or the inference
@@ -173,6 +178,7 @@
   happens when components/repeated units are only simple or other
   entities)
 
+<a name="infer_gse"></a>
 ###### infer_gse (Set inference)
 - set instance is inferred
 - members inferred using the orthologous_entity subroutine
@@ -195,11 +201,13 @@
   member/candidate instances are identical (i.e. the same instances
   are used in the source and inferred set; happens when members/
   candidates are only simple or other entities)
-  
+
+<a name="remove_unused_PE.pl"></a>
 #### remove_unused_PE.pl
 - removes physical entities without referrers (except for simple
   entities and other entities)
-  
-#### update_display_name.pl
+
+<a name="updateDisplayName.pl"></a>
+#### updateDisplayName.pl
 - gives instances of a specified class proper display names and
   adds a modified instance edit to any changed instance
