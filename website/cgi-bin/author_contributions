@@ -1,21 +1,9 @@
 #!/usr/local/bin/perl -w 
-
-BEGIN {
-    my ($path) = $0 =~ /^(\S+)$/;
-    my @a = split('/',$path);
-    pop @a;
-    if (@a && !$a[0]) {
-        $#a = $#a - 2;
-    } else {
-        push @a, ('..','..');
-    }
-    push @a, 'modules';
-    my $libpath = join('/', @a);
-    unshift (@INC, $libpath);
-}
-
 use strict;
+use lib '/usr/local/gkb/modules';
 use GKB::Config;
+use GKB::DBAdaptor;
+use GKB::WebUtils;
 use GKB::FrontPage3;
 use CGI qw(:standard);
 use CGI::Carp 'fatalsToBrowser';
@@ -31,6 +19,8 @@ use constant BY_EMAIL => '/ReactomeRESTfulAPI/RESTfulWS/queryPeopleByEmail';
 use constant BY_NAME  => '/ReactomeRESTfulAPI/RESTfulWS/queryPeopleByName';
 use constant BY_ID    => '/ReactomeRESTfulAPI/RESTfulWS/queryById/DatabaseObject';
 
+
+my $CGI = CGI->new();
 my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (author_contributions)", "/stylesheet.css");
 my $header = $front_page->get_header();
 my $footer = $front_page->get_footer();
@@ -42,12 +32,33 @@ my $warning = '';
 
 print header, $header, $enclosing_div_start;
 
-print h1("Query your pathway contributions in Reactome");
+print h1("Query author contributions in Reactome");
 
-my $name   = param("name")  || '';
-my $email  = param("email") || '';
-my @db_id  = param("DB_ID");
-my $clear_ids = param('clear_ids');
+my $name   = $CGI->param("name")  || '';
+my $email  = $CGI->param("email") || '';
+my @db_id  = $CGI->param("DB_ID") || $CGI->param("ID");
+my $clear_ids = $CGI->param('clear_ids');
+
+my $DB = $CGI->param('DB') || $GK_DB_NAME;
+$CGI->param('DB', $DB);
+
+my $DBA = GKB::DBAdaptor->new
+    (
+     -dbname => $DB,
+     -user   => $GK_DB_USER,
+     -host   => $GK_DB_HOST,
+     -pass   => $GK_DB_PASS,
+     -port   => $GK_DB_PORT,
+     -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+    );
+
+my $wu = GKB::WebUtils->new(-DBA => $DBA,
+                            -CGI => $CGI,
+                            -DEBUG => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+    );
+
+
+$CGI->param('FORMAT','instancebrowser');
 
 if ($clear_ids) {
     @db_id = ();
@@ -76,6 +87,7 @@ print end_form;
 
 if (@db_id > 0) {
     for my $id (@db_id) {
+	my $instances = $DBA->fetch_instance_by_db_id($id); 
 	my @apaths = grep {defined $_ && ref $_} get_authored_pathways($id);
 	my @rpaths = grep {defined $_ && ref $_} get_reviewed_pathways($id);
 	my $nothing = @apaths + @rpaths == 0;
@@ -114,6 +126,10 @@ if (@db_id > 0) {
 	if ($nothing) {
 	    warning("No pathways have been reviewed or authored by $person_instance");
 	}
+
+	print $CGI->h1("Details on Person ", $instances->[0]->displayName);
+        $wu->print_view($instances,0);
+
     }
 }
 
@@ -209,7 +225,7 @@ sub contributions {
 
 sub warning {
     my $message = shift;
-    $warning .= div({style => 'font-size:medium;color:red;text-align:center;margin-bottom:25px'}, "Sorry: $message");
+    $warning .= div({style => 'font-size:medium;color:red;text-align:center;margin-bottom:25px'}, "$message");
 }
 
 sub email_OK {
