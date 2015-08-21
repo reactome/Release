@@ -226,17 +226,46 @@ foreach my $attribute ("compartment", "species", "referenceEntity") {
 
 #start looping over all events to be considered for inference
 foreach my $rxn (@{$reaction_ar}) {
-    $logger->info("considering reaction DB_ID=" . $rxn->db_id . "\n");
+    $logger->info("considering reaction DB_ID=" . $rxn->db_id);
 
 #exclude some events based on a number of criteria
-    next if grep {$rxn->db_id == $_} @list; #list of ids to be excluded
-    next if $rxn->Species->[1]; #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway    
-    next if $rxn->disease->[0]; # skip disease reactions
-    if (is_chimeric($rxn)) {
-        $logger->info("skipping chimeric reaction DB_ID=" . $rxn->db_id . "\n");
+    if (grep {$rxn->db_id == $_} @list) {
+		$logger->info("skipping reaction on skip list - " . $rxn->db_id);
+		next;
+	}
+    
+	if (is_chimeric($rxn)) {
+        $logger->info("skipping chimeric reaction - " . $rxn->db_id);
         next;
     }
+	
+	if ($rxn->Species->[1]) {
+		$logger->info("skipping reaction with multiple species - " . $rxn->db_id); #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway
+		next;
+	}
+	
+	if ($rxn->relatedSpecies->[0]) {
+		$logger->info("skipping reaction with related species - " . $rxn->db_id);
+		next;
+	}
+	
+    if ($rxn->disease->[0]) {
+		$logger->info("skipping disease reaction - " . $rxn->db_id);
+		next;
+	}
+	
+	if ($rxn->inferredFrom->[0]) {
+		$logger->info("skipping manually inferred reaction - " . $rxn->db_id); # manually inferred reactions should not be used for inference
+		next;
+	}
+	
     next if ($rxn->is_a('ReactionlikeEvent') && $rxn->reverse_attribute_value('hasMember')->[0]); #Reactions under hasMember are basically covered by the higher-level event, including them would be a duplication
+	
+	if (scalar get_species_from_reaction_like_event_entities($rxn) > 1) {
+		$logger->info("skipping reaction with multiple species in entities - " . $rxn->db_id);
+		next;
+	}
+	
 
 #checks whether the event exists already in the target species - two scenarios
 #are possible: the from-species event was itself inferred from the target
@@ -371,6 +400,64 @@ sub is_chimeric {
     my ($rxn) = @_;
     
     return $rxn->isChimeric->[0] && $rxn->isChimeric->[0] eq 'TRUE'; 
+}
+
+sub get_species_from_reaction_like_event_entities {
+	my $event = shift;
+	
+	my @entities = get_physical_entities_in_reaction_like_event($event);
+	
+	my %species;
+	foreach my $entity (@entities) {
+		foreach my $sp (@{$entity->species}) {
+			$species{$sp->db_id} = $sp;
+		}
+	}
+	
+	return values %species;
+}
+
+sub get_physical_entities_in_reaction_like_event {
+    my $reaction_like_event = shift;
+
+    my $logger = get_logger(__PACKAGE__);
+
+    my @physical_entities;
+    push @physical_entities, @{$reaction_like_event->input};
+    push @physical_entities, @{$reaction_like_event->output};
+    push @physical_entities, map($_->physicalEntity->[0], @{$reaction_like_event->catalystActivity});
+    
+    my %physical_entities = map {$_->db_id => $_} grep {$_} @physical_entities;
+    
+    # ...and all the sub-components of this PE
+    for my $pe (values %physical_entities) {
+		my @subs = recurse_physical_entity_components($pe);
+		for my $sub (@subs) {
+			$sub or next;
+			#$logger->info("Adding sub component ".join(' ',$sub->class,$sub->displayName));
+			$physical_entities{$sub->db_id} = $sub;
+		}
+    }
+
+    return values %physical_entities;
+}
+
+# Recurse through all members/components so all descendent PEs will also
+# be linked to the reaction/pathway
+sub recurse_physical_entity_components {
+    my $pe = shift;
+
+    my %components = map {$_->db_id => $_} grep {$_} @{$pe->hasMember}, @{$pe->hasComponent}, @{$pe->repeatedUnit};
+    keys %components || return ();
+    
+    for my $component (values %components) {
+		next unless $component->is_a('EntitySet') || $component->is_a('Complex') || $component->is_a('Polymer');
+		for my $sub_component (recurse_physical_entity_components($component)) { 
+			$components{$sub_component->db_id} = $sub_component;
+		}
+    }
+
+    return values %components;
 }
 
 #This method reads an orthopair file (in the format 'from_species tab to_species(=list separated by space)'), and returns a hash reference 'homologue'.
