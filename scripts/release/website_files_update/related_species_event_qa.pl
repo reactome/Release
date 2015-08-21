@@ -35,15 +35,18 @@ open(my $fh, '>', $output_file);
 
 my @events = @{get_dba($db, $host)->fetch_instance(-CLASS => 'ReactionlikeEvent')};
 foreach my $event (@events) {
-	next if is_chimeric($event);
-	next unless has_human_species_tag($event);
+	next unless $event->relatedSpecies->[0];
 	
 	my $event_name = $event->displayName;
 	my $event_id = $event->db_id;
 	my $event_creator = get_event_creator($event);
 	
-	report(join("\t", $event_name, $event_id, "multiple species", $event_creator), $fh) if multiple_species($event);
-	report(join("\t", $event_name, $event_id, "related species", $event_creator), $fh) if $event->relatedSpecies->[0];
+	my $event_disease_tags = get_disease_tags($event);
+	my $is_chimeric = is_chimeric($event) ? 'chimeric' : 'not chimeric';
+	my $base_species = $event->species->[0]->displayName;
+	my $related_species = $event->relatedSpecies->[0]->displayName;
+	
+	report(join("\t", $event_name, $event_id, $base_species, $related_species, $event_disease_tags, $is_chimeric, $event_creator), $fh);
 }
 
 close($fh);
@@ -58,6 +61,14 @@ sub get_dba {
 	-host => $host,
 	-dbname => $db
     );
+}
+
+sub get_disease_tags {
+    my $event = shift;
+    
+    my @diseases = @{$event->disease};
+    
+    return join(",", map({$_->displayName} @diseases)); 
 }
 
 sub is_chimeric {
@@ -114,14 +125,14 @@ sub report {
 sub usage_instructions {
     return <<END;
 	
-	This script searches through all human reaction like events
-	(except chimeric events) and reports those events that have
-	more than one value in their species attribute or that have
-	any value in their related species attribute.
+	This script searches through all reaction like events
+	and reports those events that have any value in their
+	related species attribute.
 	
 	The output file (name of this script with .txt extension) is
-	tab-delimited with four columns: event name, event database
-	id, issue with the event, and event author.
+	tab-delimited with seven columns: event name, event database
+	id, base species of event, related species of event, disease
+	tags on event, chimeric status of event, and event author.
 	
 	USAGE: perl $0 [options]
 	

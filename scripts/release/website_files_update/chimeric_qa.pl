@@ -38,11 +38,13 @@ foreach my $event (@events) {
 	my $event_name = $event->displayName;
 	my $event_id = $event->db_id;
 	my $event_creator = get_event_creator($event);
+	my $event_species = get_species($event);
 	
-	report(make_record($event_name, $event_id, 'not chimeric', 'multiple species', get_species($event), $event_creator), $fh) if multiple_species($event) && !is_chimeric($event);
-	report(make_record($event_name, $event_id, 'chimeric', 'one species', get_species($event), $event_creator), $fh) if !multiple_species($event) && is_chimeric($event);
+	report(make_record($event_name, $event_id, 'not chimeric', 'multiple species', $event_species, '', $event_creator), $fh) if multiple_species($event) && !is_chimeric($event);
+	report(make_record($event_name, $event_id, 'chimeric', 'not used for inference', $event_species, '', $event_creator), $fh) if !$event->reverse_attribute_value('inferredFrom')->[0] && is_chimeric($event);
+	report(make_record($event_name, $event_id, 'chimeric', 'one species', $event_species, '', $event_creator), $fh) if !multiple_species($event) && is_chimeric($event);
 	my @chimeric_components = grep {is_chimeric($_)} get_physical_entities_in_reaction_like_event($event);
-	report(make_record($event_name, $event_id , 'not chimeric', 'chimeric components', get_db_ids(@chimeric_components), $event_creator), $fh) if @chimeric_components && !is_chimeric($event);
+	report(make_record($event_name, $event_id , 'not chimeric', 'chimeric components', $event_species, get_db_ids(@chimeric_components), $event_creator), $fh) if @chimeric_components && !is_chimeric($event);
 }
 
 close($fh);
@@ -167,12 +169,13 @@ sub usage_instructions {
 	
 	- Not chimeric but have multiple species
 	- Chimeric but have one species
+	- Chimeric but aren't used for manual inference
 	- Not chimeric but have chimeric components
 	
 	The output file (name of this script with .txt extension) is
-	tab-delimited with six columns: event name, event database
-	id, isChimeric, issue with event, instances (species or chimeric
-	components), and event author.
+	tab-delimited with seven columns: event name, event database
+	id, isChimeric, issue with event, event species, flagged
+	chimeric components in event, and event author.
 	
 	USAGE: perl $0 [options]
 	

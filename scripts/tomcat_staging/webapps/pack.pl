@@ -1,23 +1,38 @@
 #!/usr/bin/perl -w
+use common::sense;
 use Cwd;
 
-my $cwd = getcwd;
+my $cwd = check_locale();
 
-my $only = shift;
+my $war = shift or die usage();
+chomp($war = `basename $war .war`);
 
-while (my $war = <*>) {
-    next unless -d $war;
-    next if $war eq 'bak';
-    next if $only && $war !~ /$only/i;
-    chdir $cwd;
-    print $war, "\n";
-    my $dir = $war;
-    $war = "$dir.war";
-
-    chdir $dir  or die $!;
-    system "jar cvf ../$war *";
-    chdir $cwd;
-    system "rm -fr $dir";
+if ($war && !-d $war) {
+    say STDERR "Directory $war does not exist!";
+    say STDERR usage();
+    exit;
 }
 
+say "Packing $war into $war.war";
+chdir $war or die $!;
+system "jar cvf ../$war.war *";
+chdir $cwd;
+system "rm -fr $war";
 
+
+
+sub usage {
+    "Usage: $0 my_webapp.war"
+}
+
+sub check_locale {
+    my $cwd = getcwd;
+    my $locale = '/usr/local/reactomes/Reactome/production/staging/webapps';
+    unless ($cwd eq $locale) {
+	#say STDERR "Hey!  Your are supposed to run me from $locale!";
+	#say STDERR "Changing directories....";
+	chdir($locale);
+	$cwd = getcwd;
+    }
+    return $cwd;
+}
