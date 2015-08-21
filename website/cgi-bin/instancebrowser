@@ -1,23 +1,7 @@
 #!/usr/local/bin/perl
 
-# The following block sets the script to pick up libraries from ../../modules.
-# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
-# on different server setups.
-BEGIN {
-    my ($path) = $0 =~ /^(\S+)$/;
-    my @a = split('/',$path);
-    pop @a;
-    if (@a && !$a[0]) {
-	$#a = $#a - 2;
-    } else {
-	push @a, ('..','..');
-    }
-    push @a, 'modules';
-    my $libpath = join('/', @a);
-    unshift (@INC, $libpath);
-}
-
 use strict;
+use lib "/usr/local/gkb/modules";
 use CGI qw(:standard);
 use GKB::DBAdaptor;
 use GKB::PrettyInstance;
@@ -44,22 +28,6 @@ my $CGI = CGI->new();
 
 my $DB = $CGI->param('DB') || $GK_DB_NAME;
 $CGI->param('DB', $DB);
-
-print $CGI->header(-charset => 'UTF-8');
-if (defined $header) {
-    print $header;
-} else {
-    print $CGI->start_html(
-    # \-dtd => "-//IETF//DTD HTML//EN",
-    -style => {-src => '/stylesheet.css'},
-    -title => "$PROJECT_NAME (instancebrowser)",
-    -script => {-src => '/google.js'},
-    );
-}
-
-if (defined $enclosing_div_start) {
-    print $enclosing_div_start;
-}
 
 eval {
 
@@ -91,10 +59,17 @@ if ($CGI->param('CLASS')) {
     # Link from classbrowser
     $CGI->param('FORMAT') || $CGI->param('FORMAT','list');
     $instances = $DBA->fetch_all_class_instances_as_shells($CGI->param('CLASS'));
+    do_header();
     $wu->print_view($instances,0);
 } elsif ($CGI->param('ID')) {
     $instances = $wu->handle_query_form;
     if (@{$instances} == 1) {
+	if ($instances->[0]->class eq 'Person') {
+	    my $id = $CGI->param('ID');
+	    print $CGI->redirect("/cgi-bin/author_contributions?DB_ID=$id");
+	    exit;
+	} 
+
 	if (! $CGI->param('FORMAT')) {
 	    $CGI->param('FORMAT','instancebrowser');
 	}
@@ -103,6 +78,7 @@ if ($CGI->param('CLASS')) {
 	    $CGI->param('FORMAT','list');
 	}
     }
+    do_header();
     $wu->print_view($instances);
 } elsif ($CGI->param('SUBMIT')) {
     $instances = $wu->handle_query_form;
@@ -135,4 +111,21 @@ sub handle_error {
     print qq(</TD></TR>\n</TABLE>\n);
 }
 
+sub do_header {
+    print $CGI->header(-charset => 'UTF-8');
+    if (defined $header) {
+	print $header;
+    } else {
+    print $CGI->start_html(
+	-style => {-src => '/stylesheet.css'},
+	-title => "$PROJECT_NAME (instancebrowser)",
+	-script => {-src => '/google.js'},
+	);
+    }
+
+    if (defined $enclosing_div_start) {
+	print $enclosing_div_start;
+    }
+
+}
 
