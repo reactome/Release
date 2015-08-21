@@ -11,7 +11,7 @@ my $CGI = CGI->new();
 my $stable = GKB::StableIdentifierDatabase->new();
 
 my $query_url  = '/content/query?q=';
-my $detail_url = '/content/detail';
+my $detail_url = '/cgi-bin/instancebrowser?ID=';
 
 my $id = $CGI->param('ID') || $CGI->param('DB_ID');
 my $st_id = $CGI->param('STID') || $CGI->param('ST_ID');
@@ -21,7 +21,6 @@ unless ($id || $st_id || $query) {
     handle_error("eventbrowser: I do not have any search terms");
 }
 
-
 if ($st_id) {
    $id = $stable->db_id_from_stable_id($st_id)
        || handle_error("Unable to find a Reactome Instance for Stable ID $st_id");
@@ -30,7 +29,7 @@ if ($st_id) {
 my $url;
 
 if ($id) {
-    $url = "$detail_url/$id";
+    $url = "$detail_url$id";
 }
 elsif ($query) {
     $url = "$query_url/'$query'";

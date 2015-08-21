@@ -1,12 +1,12 @@
-Steps to deploy a war file
-NOTE: This folder is backed up to reactomerelease daily
-      keep webapps synchronized
+Steps to deploy a web file
 
-1) copy war(s) from wherever to staging/webapps
-2) ./unpack.pl [warfile name] to create a folder and unpack the war contents 
-3) edit, if required (probably not required on live server)
-4) ./pack.pl [warfile name] to re-package the war files
-5) ./deploy.pl to copy to the apache-tomcat webapps folder
-6) sudo /etc/init.d/tomcat7 restart
+0) ./backup.pl # back up the existings live webapps!
+1) copy war(s) from wherever to /usr/local/reactomes/Reactome/development/staging/webapps
+2) ./unpack.pl warfile_name.war to create a folder and unpack the war contents 
+3) edit WEB-INF configuration file(s), if required
+4) ./pack.pl warfile_name.war to re-package the war files
+5) sudo ./deploy.pl warfile_name.war [deployed_warfile_name.war] to copy to the apache-tomcat webapps folder
+6) sudo /etc/init.d/tomcat7 restart (optional)
 
-Each script accepts a war name as an argument, otherwise acts on all
+Each script accepts a war name as a first argument.  
+A second argument to deploy.pl renames the war file on deployment

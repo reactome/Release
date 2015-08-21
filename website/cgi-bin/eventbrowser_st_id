@@ -7,7 +7,7 @@ use CGI::Carp 'fatalsToBrowser';
 use GKB::FrontPage3;
 
 my $stable = GKB::StableIdentifierDatabase->new();
-my $browser = '/content/detail';
+my $browser = '/cgi-bin/instancebrowser?ID=';
 
 my $CGI = CGI->new();
 
@@ -16,9 +16,9 @@ $st_id =~ s/\.\d+$//;
 
 my $db_id = $stable->db_id_from_stable_id($st_id);
 
-# We have an ID, send to event browser
+# We have an ID, send to instance browser
 if ($db_id) {
-    my $url = "$browser/$db_id";
+    my $url = "$browser$db_id";
     print $CGI->redirect($url);
 }
 else {

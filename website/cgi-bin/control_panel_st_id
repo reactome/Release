@@ -36,22 +36,39 @@ my $warning;
 my $CGI = CGI->new();
 my $stable = GKB::StableIdentifierDatabase->new();
 
-my $extended_st_id = $CGI->param("ST_ID");
-if ( !$extended_st_id ) {
-    handle_error("ST_ID missing!!\n");
-}
-
-my ($identifier, $version) = $extended_st_id =~ /^(\S+)\.(\d+)$/;
-unless ($identifier) {
-    ($identifier = $extended_st_id) =~ s/\.\d+$//;
-}
-
-if (!$identifier) {
-    handle_error("I could not figure out which stable ID you mean ($extended_st_id), I'm sorry, I give up");
-}
-
 my $dba = $stable->get_dba();
-my $instance_db_id = $stable->db_id_from_stable_id($identifier) || handle_error("I could not find a record for $identifier");
+my $instance_db_id;
+if ($CGI->param("ST_ID")) {
+    my $extended_st_id = $CGI->param("ST_ID");
+    if ( !$extended_st_id ) {
+	handle_error("ST_ID missing!!\n");
+    }
+
+    my ($identifier, $version) = $extended_st_id =~ /^(\S+)\.(\d+)$/;
+    unless ($identifier) {
+	($identifier = $extended_st_id) =~ s/\.\d+$//;
+    }
+
+    if (!$identifier) {
+	handle_error("I could not figure out which stable ID you mean ($extended_st_id), I'm sorry, I give up");
+    }
+
+    my $instance_db_ids = $stable->db_ids_from_stable_id($identifier);
+    if (@$instance_db_ids == 0) {
+	handle_error("I could not find a record for $identifier");
+    }
+    elsif (@$instance_db_ids > 1) {
+	handle_multiple_assignment_error($instance_db_ids);
+    }
+    else {
+	$instance_db_id = $instance_db_ids->[0];
+    }
+}
+else {
+    $instance_db_id = $CGI->param("DB_ID") || $CGI->param("ID") || handle_error("I could not find a database identifier or stable ID");
+}
+
+
 
 my $instance = $dba->fetch_instance_by_db_id($instance_db_id)->[0];
 my $display_name = $instance->displayName;
@@ -171,17 +188,29 @@ sub get_current_stable_version {
     return $version;
 }
 
-# use this to query the current daatabase through the RESTful API
-sub REST_query {
-    my $id = shift;
-
-    my $url = join('/',$host,BY_ID,$id);
-
-    my $response = HTTP::Tiny->new->get($url);
-
-    if ($response->{success}) {
-        return decode_json($response->{content});
+sub handle_multiple_assignment_error {
+    my $ids = shift;
+    print_page_start();
+    print handle_warning("This identifier is associated with more than one database object");
+    for my $id (@$ids) {
+	my $instance = $dba->fetch_instance_by_db_id($id)->[0];
+	my $name = $instance->displayName;
+	my $class = $instance->class;
+	my $species = attribute_name($instance,'species');
+	$species = "($species)" if $species;
+	my $text = "$name $species";
+	print qq(<p><a href="/cgi-bin/control_panel_st_id?DB_ID=$id">$text</a></p>);
     }
 
-    return undef;
+    print_page_end();
+}
+
+sub attribute_name {
+    my $instance = shift;
+    my $attribute = shift;
+    my $species = $instance->attribute_value($attribute)->[0];
+    if ($species) {
+	return $species->displayName;
+    }
+    return '';
 }
