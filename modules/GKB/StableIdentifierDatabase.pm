@@ -42,7 +42,24 @@ sub db_id_from_stable_id {
     while (my $id = $query->fetchrow_arrayref) {
 	return $id->[0];
     } 
+}
 
+sub db_ids_from_stable_id {
+    my $self = shift;
+    my $stable_id = shift;
+
+    $stable_id = uc($stable_id);
+    $stable_id =~ /^REACT|^R-/ or die "$stable_id does not look like a stable ID to me";
+    $stable_id =~ s/\.\d+$//;
+
+    my $query = $self->dbh->prepare(Q1);
+    $query->execute($stable_id);
+
+    my $ids = [];
+    while (my $id = $query->fetchrow_arrayref) {
+        push @$ids, $id->[0];
+    }
+    return $ids;
 }
 
 sub stable_id_from_db_id {
