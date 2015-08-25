@@ -110,7 +110,7 @@ foreach my $terms ( sort keys %categories ) {
 ## and extract all the information we need:
 ## accession, names, definition, synonyms.
 ## For each entry in the file we also check if it already exists in the database using the hashes created on the previous step
-
+$dba->execute('START TRANSACTION');
 
 open( GO, "$obo_file" ) or die;
 
@@ -424,6 +424,8 @@ foreach my $obs_id ( sort keys %obsolete) {
 }
 
 print FR "\|\}\n";
+
+$dba->execute('COMMIT');
 
 print "go_obo_update.pl has finished its job";
 
