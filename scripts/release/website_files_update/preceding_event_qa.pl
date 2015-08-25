@@ -67,32 +67,12 @@ sub get_dba {
     );
 }
 
-sub is_chimeric {
-    my $instance = shift;
-	
-    return $instance->is_valid_attribute('isChimeric') &&
-		   $instance->isChimeric->[0] &&
-		   $instance->isChimeric->[0] =~ /^true$/i; 
-}
-
 sub multiple_species {
     my $instance = shift;
     
     return 0 unless $instance->species;
     
     return (scalar (@{$instance->species}) > 1);
-}
-
-sub has_human_species_tag {
-	my $instance = shift;
-	
-	return 0 unless $instance;
-	
-	foreach my $species (@{$instance->species}) {
-		return 1 if $species->displayName =~ /Homo sapiens/i;
-	}
-	
-	return 0;
 }
 
 sub get_event_modifier {
