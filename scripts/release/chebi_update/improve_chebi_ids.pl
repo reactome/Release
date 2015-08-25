@@ -90,7 +90,9 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 				
 				$index = get_index($reference_molecule->name->[0], \@names);
 				splice @names, $index, 1 if $index != -1;
-				splice @names, 2, 0, $reference_molecule->name->[0]; 
+				$#names >= 2 ?
+					splice @names, 2, 0, $reference_molecule->name->[0] :
+					push @names, $reference_molecule->name->[0];
 			}
 			
 			$simple_entity->name(undef);
