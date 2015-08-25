@@ -105,7 +105,10 @@ Capture::Tiny \
 WWW::SearchResult \
 JSON \
 PDF::API2 \
-Log::Log4perl
+Log::Log4perl \
+common::sense \
+Email::Valid \
+URI::Encode
 
 echo -e "\nDownloading the reactome software..."
 mkdir -p /usr/local/reactomes/Reactome/production
