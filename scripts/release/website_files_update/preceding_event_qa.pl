@@ -102,7 +102,8 @@ sub get_event_modifier {
 	
 	my $created_instance = $event->created->[0];
 	my $last_modified_instance = $event->modified->[-1];
-	my $author_instance = $last_modified_instance->author->[0] if $last_modified_instance;
+	my $author_instance;
+	$author_instance = $last_modified_instance->author->[0] if $last_modified_instance;
 	$author_instance ||= $created_instance->author->[0] if $created_instance;
 	
 	my $author_name = $author_instance->displayName if $author_instance;

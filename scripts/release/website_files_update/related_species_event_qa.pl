@@ -99,15 +99,16 @@ sub has_human_species_tag {
 	return 0;
 }
 
-sub get_event_creator {
+sub get_event_modifier {
 	my $event = shift;
 	
 	return 'Unknown' unless $event;
 	
 	my $created_instance = $event->created->[0];
 	my $last_modified_instance = $event->modified->[-1];
-	my $author_instance = $created_instance->author->[0] if $created_instance;
-	$author_instance ||= $last_modified_instance->author->[0] if $last_modified_instance;
+	my $author_instance;
+	$author_instance = $last_modified_instance->author->[0] if $last_modified_instance;
+	$author_instance ||= $created_instance->author->[0] if $created_instance;
 	
 	my $author_name = $author_instance->displayName if $author_instance;
 	
