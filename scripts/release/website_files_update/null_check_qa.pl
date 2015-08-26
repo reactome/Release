@@ -138,7 +138,7 @@ sub get_reaction_like_event_issues {
 	
 	my @reaction_like_event_issues;
 	
-	get_skip_list('reaction_like_event_compartment_skip_list.txt');
+	#get_skip_list('reaction_like_event_compartment_skip_list.txt');
 	if (attribute_null($reaction_like_event, 'compartment')) {
 		if (!(any { $_ == $reaction_like_event->db_id } get_reaction_like_event_compartment_skip_list())) {
 			push @reaction_like_event_issues, 'event with no compartment';
@@ -210,7 +210,7 @@ sub get_skip_list {
 	while (my $line = <$fh>) {
 		chomp $line;
 		
-		my ($id) = split "\t", $line, 1;
+		my ($id) = split /\s+/, $line, 2;
 		$logger->warn("non-numeric id found in $skip_list_file: $id") && next unless $id =~ /^\d+$/;
 		push @skip_list, $id;
 	}
