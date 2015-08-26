@@ -74,11 +74,19 @@ sub report {
 sub usage_instructions {
     return <<END;
 	
+	This script looks at all ReactionlikeEvent and
+	CatalystActivity instances to find and report
+	regulators which are events.
+	
+	The output file (name of this script with .txt extension)
+	is tab-delimited with two columns: regulator database
+	identifier and regulator display name.
+	
 	USAGE: perl $0 [options]
 	
 	Options:
 	
-	-db [db_name]	Source database
+	-db [db_name]	Source database (default is $GKB::Config::GK_DB_NAME)
 	-host [db_host]	Host of source database (default is $GKB::Config::GK_DB_HOST)
 	-help 		Display these instructions
 END
