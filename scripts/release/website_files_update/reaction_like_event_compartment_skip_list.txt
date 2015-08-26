@@ -1,0 +1,18 @@
+3159227	HIV Virion Budding
+168306	Concerted hemagglutinin pore formation
+174493	Glycosylation of ENV polyprotein
+200879	Formation of a Nef:ARF1:CD4 complex
+168878	PB1-F2 binds to the mitochondrial adenine nucleotide translocator 3 ANT3, inducing apoptosis
+139913	Transactivation of BBC3 (PUMA) by p53
+168871	Fusion of vesicle containing the HA trimer, NA tetramer and M2 tetramer to the Golgi apparatus
+164158	Transcriptional activation of pyruvate kinase L isoform gene by mChREBP:mMLX
+168324	Conformation change in hemagglutinin freeing the fusion peptide of HA2
+140214	Transactivation of PMAIP1 (NOXA) by p53
+140217	Transactivation of PMAIP1 (NOXA) by E2F1
+168299	Ribonucleoprotein release from M1 proteins
+168312	Fusion of the influenza virion HA2 protein transmembrane domain to the host cell endosome membrane
+140221	Transactivation of BBC3 (PUMA) by E2F1
+168869	Budding of vesicle with the HA trimer, NA tetramer and M2 tetramer from the endoplasmic reticulum into the cytosol
+199990	Coat Complex Formation
+168337	Docking and transport of the RNP:Karyopherin complex through the nuclear pore
+168870	Neuraminidase enzymatic release from sialic acid
