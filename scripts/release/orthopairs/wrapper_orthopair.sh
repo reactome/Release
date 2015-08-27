@@ -12,12 +12,14 @@ echo ensembl_release==$ensembl_release
 GKB=/usr/local/gkbdev
 ensembl_dir=$GKB/modules/ensembl_api
 
-#do a cvs update of the Ensembl code
+#do a git update of the Ensembl code
 cd $ensembl_dir/ensembl
+git fetch
 git checkout release/$ensembl_release
 cd ..
 
 cd $ensembl_dir/ensembl-compara
+git fetch
 git checkout release/$ensembl_release
 cd ..
 
