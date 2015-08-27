@@ -45,7 +45,7 @@ my $ensembl_genomes_url = 'ftp.ensemblgenomes.org';
 my $ensembl_pan_homology_url = $ensembl_genomes_url . '/pub/pan_ensembl/current/mysql/ensembl_compara_pan_homology_' .
     get_ensembl_genome_version() . "_" . get_version();
 
-my @tables = qw/genome_db species_set method_link method_link_species_set homology homology_member gene_member seq_member/;
+my @tables = qw/genome_db species_set method_link method_link_species_set homology homology_member gene_member seq_member meta/;
     
 download_and_setup_db($ensembl_compara_url, \@tables, 'core_tables');    
 download_and_setup_db($ensembl_pan_homology_url, \@tables, 'pan_homology_tables');
