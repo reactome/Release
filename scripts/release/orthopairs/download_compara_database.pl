@@ -1,13 +1,29 @@
 #!/usr/local/bin/perl  -w
 use strict;
 
+# Created by: Joel Weiser (joel.weiser@oicr.on.ca)
+# Purpose: Download and setup the databases from ensembl compara necessary
+#          to create the mapping files for the orthopair release step.
+#		   Each database has its own folder under /nfs/reactome/reactome/
+#		   archive/compara_dbs housing the downloaded SQL schema file
+#		   and the text files with the table content.
+#		   The active databases are stored under /nfs/reactome/reactome/
+#		   archive/mysql and are pointed to by symbolic links under
+#		   /var/lib/mysql.
+# TODO:  This script needs a way to continue downloading the ensembl
+#		 compara content if it crashes or is interrupted.
+#		 A way to remove older downloaded versions is also needed
+#		 (this includes the downloaded content, the active databases
+#		 and the symbolic links pointing to them).
+
+
 use lib "/usr/local/gkb/modules";
 
 use GKB::Config;
 use GKB::Config_Species;
 use GKB::EnsEMBLMartUtils qw/get_version get_ensembl_genome_version/;
 
-use autodie;
+use autodie qw/:all/;
 use Cwd;
 use Net::FTP;
 
@@ -19,7 +35,7 @@ my $nfs_dir = "/nfs/reactome/reactome/archive";
 
 mkdir "$nfs_dir/$compara_db_dir" unless (-e "$nfs_dir/$compara_db_dir");
 symlink "$nfs_dir/$compara_db_dir", $compara_db_dir unless (-e $compara_db_dir);
-chdir $compara_db_dir;
+chdir "$compara_db_dir";
 
 my $ensembl_url = 'ftp.ensembl.org';
 my $ensembl_mysql_dir = 'pub/release-' . get_version() . "/mysql";
@@ -71,23 +87,24 @@ sub download_and_setup_db {
     chdir $dir;
     
     my ($db) = $url =~ /.*\/(.*)/;
-    `wget --passive-ftp 'ftp://$url/$db.sql.gz'; gunzip -f $db.sql.gz` unless (-e "$db.sql");
+    system("wget --passive-ftp 'ftp://$url/$db.sql.gz'; gunzip -f $db.sql.gz")
+		   unless (-e "$db.sql");
     
-    `mysql -u $user -p$pass -e 'drop database if exists $db;'`;
+    system("mysql -u $user -p$pass -e 'drop database if exists $db;'");
     my $nfs_db = "$nfs_dir/mysql/$db";
     mkdir $nfs_db unless (-e $nfs_db);
-    `sudo chmod 777 $nfs_db`;
+    system("sudo chmod 777 $nfs_db");
     chdir '/var/lib/mysql';
     symlink $nfs_db, $db unless (-e $db);
-    `sudo chown mysql:mysql $db`;
+    system("sudo chown mysql:mysql $db");
     chdir "$cwd/$dir";
-    `mysql -u $user -p$pass $db < $db.sql`;
+    system("mysql -u $user -p$pass $db < $db.sql");
     
     foreach my $table (@$tables) {
 	print "Processing $table\n";
 	my $table_file = "$table.txt.gz";
-	`wget --passive-ftp -N 'ftp://$url/$table_file'; gunzip -f $table_file` unless (-s "$table.txt");
-	`mysqlimport -u $user -p$pass $db -L $table.txt`;
+	system("wget --passive-ftp -N 'ftp://$url/$table_file'; gunzip -f $table_file") unless (-s "$table.txt");
+	system("mysqlimport -u $user -p$pass $db -L $table.txt");
     }
     
     chdir $cwd;
