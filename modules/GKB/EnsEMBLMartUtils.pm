@@ -57,7 +57,7 @@ sub update_registry_file {
     
     my $update = $version != $2;
     `echo '$contents' > $registry_file` if $update;
-    `rm -r *[Cc]ached*/` if $update;
+    `rm -rf *[Cc]ached*/` if $update;
     
     return $update;
 }
