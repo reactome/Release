@@ -77,13 +77,13 @@ sub new {
 sub clear_variables {
     my ($self) = @_;
 
-	$self->registry(undef);
+    $self->registry(undef);
 }
 
 # Needed by subclasses to gain access to class variables defined in
 # this class.
 sub get_ok_field {
-	return %ok_field;
+    return %ok_field;
 }
 
 sub set_registry {
@@ -91,44 +91,14 @@ sub set_registry {
 	
     my $registry = 'Bio::EnsEMBL::Registry';
 	
-    my @dbs;
-    
-    # Need Pan Compara if not a core species
-    if (!$core) {	
-	push @dbs, { 
-	    -host => 'mysql-eg-publicsql.ebi.ac.uk',
-	    -user => 'anonymous',
-	    -port => 4157,
-	    -DB_VERSION => $ensembl_db_ver
-	};
-    }
-    
-    # Always need core ensembl db for human genome (and also for any core species)
-    push @dbs, {
-	-host => 'ensembldb.ensembl.org',
-	-user => 'anonymous',
-	-port => 5306,
+    $registry->load_registry_from_db(
+	-host => $GKB::Config::GK_DB_HOST,
+	-user => $GKB::Config::GK_DB_USER,
+	-pass => $GKB::Config::GK_DB_PASS,
 	-DB_VERSION => $ensembl_db_ver
-    };
+    );
 
-    $registry->load_registry_from_multiple_dbs(@dbs);
-#The following is a "switch" method, which worked once when Ensembl and Ensembl Genomes were on the same Ensembl release version, but not any longer when Ensembl Genomes lacked behind one version, even when setting all db_version flags to the same version number. Reason for this unknown at present, I'm leaving the code in in case this works again in the future. If so, all species can be run within one go, and no core flag is needed. And no wrapper script either...
-=head
-	$registry->load_registry_from_multiple_dbs(
-	{
-        '-host'    => 'mysql.ebi.ac.uk',
-        '-user'    => 'anonymous',
-		'-port'    => 4157,
-	},
-	
-	{
-        '-host'     => 'ensembldb.ensembl.org',
-        '-user'     => 'anonymous',
-	} 
-);
-=cut
-	
-	$self->registry($registry);
+    $self->registry($registry);
 }
 
 #creates the homology hash with source species gene ids as keys, and target species gene ids as values 
@@ -217,6 +187,7 @@ sub prepare_homology_hash {
         
         my $from_m = $homology->get_Member_by_GenomeDB($from_species);
         my $to_m = $homology->get_Member_by_GenomeDB($to_species);
+	
         foreach my $member (@{$from_m}) {
 	    foreach my $to_member (@{$to_m}) {
 		next unless $to_member;
@@ -255,13 +226,13 @@ sub fetch_by_name_assembly {
     }
 
     my $species = undef;
-    try {$species = $gdb_a->fetch_by_registry_name($name);};
+    try {$species = $gdb_a->fetch_by_name_assembly($name);};
     if (!(defined $species)) {
         $logger->warn("there was a problem with name=$name, trying new name=");
         $name =~ s/ +/_/g;
         $name = lc($name);
         $logger->warn("$name\n");
-        try {$species = $gdb_a->fetch_by_registry_name($name);};
+        try {$species = $gdb_a->fetch_by_name_assembly($name);};
         if (!(defined $species)) {
             $logger->error("there was a problem with name=$name, aborting!\n");
             return undef;
