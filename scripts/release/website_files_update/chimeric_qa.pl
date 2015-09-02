@@ -34,6 +34,9 @@ $host	||= $GKB::Config::GK_DB_HOST;
 open(my $fh, '>', $output_file);
 
 my @events = @{get_dba($db, $host)->fetch_instance(-CLASS => 'ReactionlikeEvent')};
+
+die "$db has no reaction like events\n" unless @events;
+
 foreach my $event (@events) {
 	my $event_name = $event->displayName;
 	my $event_id = $event->db_id;
