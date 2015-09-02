@@ -185,7 +185,8 @@ foreach my $pwy_id (162906, 168254, 977225) {  #human-viral pathways, amyloids
 }
 open(my $skip_list_fh, '<', 'normal_event_skip_list.txt');
 while (my $reaction_db_id = <$skip_list_fh>) {
-    push @list, $reaction_db_id;
+    chomp $reaction_db_id;
+	push @list, $reaction_db_id;
 }
 close $skip_list_fh;
 
