@@ -74,7 +74,7 @@ my $dba = GKB::DBAdaptor->new(
 );
 
 
-die "$0: could not connect to database $opt_db, aborting\n" unless $dba;
+die "$0: could not connect to database $db, aborting\n" unless $dba;
 
 my $sdis = $dba->fetch_instance(-CLASS => 'Species');
 
@@ -409,7 +409,7 @@ sub usage_instructions {
     Options:
     
     user [db_user]	Database user name (defaults to $GKB::Config::GK_DB_USER)
-    pass [db_pass]	Database user password (defaults to $GKB::Config::GK_DB_PASS)
+    pass [db_pass]	Database user password (defaults to $GKB::Config::GK_DB_USER password)
     host [db_host]	Database host (defaults to $GKB::Config::GK_DB_HOST)
     port [db_port]	Database port (defaults to $GKB::Config::GK_DB_PORT)
     db	 [db_name]	Database name (defaults to $GKB::Config::GK_DB_NAME)
