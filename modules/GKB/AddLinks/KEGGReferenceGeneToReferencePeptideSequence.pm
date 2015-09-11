@@ -310,7 +310,10 @@ sub process_accumulated_reference_peptide_sequences_chunk {
             }
             
             my $kegg_ref_dna_instance = $self->get_KEGG_ReferenceDNASequence($kegg_gene_id, $kegg_name, \@enzymes, $reference_peptide_sequence->species);
-	    
+	    unless ($kegg_ref_dna_instance->db_id()) {
+		print "ERROR! NO DB_ID ", $kegg_ref_dna_instance->displayName, "\n";
+		next;
+	    }
 	    $kegg_ref_dna_instance->inflate();
 	    $kegg_ref_dna_instance->displayName("KEGG Gene:$kegg_gene_id");
 	    $dba->update($kegg_ref_dna_instance);
@@ -338,8 +341,6 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         $reference_peptide_sequence->inflate;
         $reference_peptide_sequence->referenceGene(undef);
 
-	say "This is my refpep: ", $reference_peptide_sequence->dbId();
-	say Dumper([map {$_->displayName} @reference_genes]);
         $reference_peptide_sequence->add_attribute_value('referenceGene', @reference_genes);
         $reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
 

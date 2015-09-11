@@ -21,9 +21,10 @@ has '+mail' => ( default => sub {
 );
 
 my $prd = prompt('Enter the previous release date as yyyymmdd:');
+my $gkbdir = prompt('Enter gkb alias:');
 
 override 'run_commands' => sub {
-    my ($self, $gkbdir) = @_;
+    my ($self) = @_;
 
     my $host = $hosts{$gkbdir};
     my $path = "/usr/local/$gkbdir/modules/GKB";
