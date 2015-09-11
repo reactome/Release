@@ -40,7 +40,7 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 
 use vars qw(@ISA $AUTOLOAD %ok_field);
-require XML::Simple;
+use XML::Simple ':strict';
 
 @ISA = qw(GKB::AddLinks::Builder);
 
@@ -114,8 +114,36 @@ sub buildPart {
     my $uniprot_id;
     my $i;
     my $xml_parser = XML::Simple->new();
-    my $mapping_hash = $xml_parser->XMLin($mapping_file);
-    my $orphanet_gene_hash = $mapping_hash->{"GeneList"}->{"Gene"};
+
+    # XML parsing just stopped working in release 54.  Added args to XMLin
+    # and checks to make sure we have hash
+    my $mapping_hash = $xml_parser->XMLin($mapping_file, 
+			     ForceArray => 0,
+			     KeyAttr    => {},
+	);
+    unless (ref $mapping_hash eq 'HASH') {
+	if (ref $mapping_hash eq 'ARRAY') {
+	    $mapping_hash = $mapping_hash->[0];
+	}
+	unless (ref $mapping_hash eq 'HASH'){
+	    die "I don't know what this thing is:\n", Dumper $mapping_hash;
+	}
+    }
+
+
+    my $putative_orphanet_gene_hash = $mapping_hash->{"GeneList"};
+    my $orphanet_gene_hash;
+
+    unless (ref $putative_orphanet_gene_hash eq 'HASH') {
+	if (ref $putative_orphanet_gene_hash eq 'ARRAY') {
+            $putative_orphanet_gene_hash = $putative_orphanet_gene_hash->[0];
+	    $orphanet_gene_hash = $putative_orphanet_gene_hash->{Gene};
+        }
+	else {
+	    die "I don't know what this thing is:\n", Dumper $putative_orphanet_gene_hash;
+	}
+    }
+
     foreach my $orphanet_gene_id (sort(keys(%{$orphanet_gene_hash}))) {
 	my $orphanet_gene = $orphanet_gene_hash->{$orphanet_gene_id};
 	my $external_reference_list = $orphanet_gene->{"ExternalReferenceList"};

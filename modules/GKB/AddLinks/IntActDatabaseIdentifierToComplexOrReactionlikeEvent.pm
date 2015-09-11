@@ -122,16 +122,16 @@ sub buildPart {
 	
 	my $instance = undef;
 	my $stable_identifier = undef;
-	if ($db_id =~ /(REACT_[0-9]+|R-[A-Z]{3}-\d+)/) {
+	if ($db_id =~ /REACT_[0-9]+|R-[A-Z]{3}-\d+/) {
 	    # First check to see if ID is actually a stable
 	    # ID and use that to retrieve instance if so
-	    $stable_identifier = $1;
-	    my $instances = $dba->fetch_instance_by_remote_attribute('DatabaseObject',[['stableIdentifier.identifier','=',[$stable_identifier]]]);
+	    $db_id =~ s/\.\d+$//;
+	    my $instances = $dba->fetch_instance_by_remote_attribute('DatabaseObject',[['stableIdentifier.identifier','=',[$db_id]]]);
 	    $instance = $instances->[0];
 
 	    if (!$instance) {
 		$self->{stable_id_database} ||= GKB::StableIdentifierDatabase->new();
-		$db_id = $self->{stable_id_database}->db_id_from_stable_id($identifier) || die "I could not find a record for $identifier";
+		$db_id = $self->{stable_id_database}->db_id_from_stable_id($db_id) || die "I could not find a record for $db_id";
 	    }
 
 
