@@ -185,7 +185,8 @@ foreach my $pwy_id (162906, 168254, 977225) {  #human-viral pathways, amyloids
 }
 open(my $skip_list_fh, '<', 'normal_event_skip_list.txt');
 while (my $reaction_db_id = <$skip_list_fh>) {
-    push @list, $reaction_db_id;
+	chomp $reaction_db_id;
+	push @list, $reaction_db_id;
 }
 close $skip_list_fh;
 
@@ -261,10 +262,17 @@ foreach my $rxn (@{$reaction_ar}) {
 	
     next if ($rxn->is_a('ReactionlikeEvent') && $rxn->reverse_attribute_value('hasMember')->[0]); #Reactions under hasMember are basically covered by the higher-level event, including them would be a duplication
 	
-	if (scalar get_species_from_reaction_like_event_entities($rxn) > 1) {
+	my @species = get_species_from_reaction_like_event_entities($rxn);
+	if (scalar @species > 1) {
 		$logger->info("skipping reaction with multiple species in entities - " . $rxn->db_id);
 		next;
 	}
+	
+	if (scalar @species == 1 && $species[0]->db_id != $source_species->db_id) {
+		$logger->info("skipping reaction with only one species that differs from source species - " . $rxn->db_id);
+		next;
+	}
+	
 	
 
 #checks whether the event exists already in the target species - two scenarios

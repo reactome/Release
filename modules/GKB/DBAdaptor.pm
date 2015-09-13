@@ -2066,6 +2066,12 @@ sub update {
     my $db_id = $i->db_id || $self->throw("Instance has to have db_id for updating.");
     my $class = $i->class;
     my $old_class = $self->fetch_single_attribute_value_by_db_id($db_id,$o->root_class,'_class')->[0]->[0];
+
+    unless ($old_class) {
+	warn "$class instance $db_id has no old class.  Did you call update on a new instance?";
+	$old_class ||= $class;
+    }
+
     $self->delete_by_db_id($i->db_id);
     $self->store($i,1,1);
     unless ($class eq $old_class) {

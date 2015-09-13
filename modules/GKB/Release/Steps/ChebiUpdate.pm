@@ -21,7 +21,7 @@ has '+mail' => ( default => sub {
 );
 
 override 'run_commands' => sub {
-	my ($self, $gkbdir) = @_;
+	my ($self) = @_;
 
     $self->cmd("Running Chebi script",
     	[

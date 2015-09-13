@@ -34,17 +34,27 @@ $host	||= $GKB::Config::GK_DB_HOST;
 open(my $fh, '>', $output_file);
 
 my @events = @{get_dba($db, $host)->fetch_instance(-CLASS => 'ReactionlikeEvent')};
+
+die "$db has no reaction like events\n" unless @events;
+
 foreach my $event (@events) {
 	my $event_name = $event->displayName;
 	my $event_id = $event->db_id;
-	my $event_creator = get_event_creator($event);
+	my $event_modifier = get_event_modifier($event);
 	my $event_species = get_species($event);
 	
-	report(make_record($event_name, $event_id, 'not chimeric', 'multiple species', $event_species, '', $event_creator), $fh) if multiple_species($event) && !is_chimeric($event);
-	report(make_record($event_name, $event_id, 'chimeric', 'not used for inference', $event_species, '', $event_creator), $fh) if !$event->reverse_attribute_value('inferredFrom')->[0] && is_chimeric($event);
-	report(make_record($event_name, $event_id, 'chimeric', 'one species', $event_species, '', $event_creator), $fh) if !multiple_species($event) && is_chimeric($event);
+	report(make_record($event_name, $event_id, 'not chimeric', 'multiple species', $event_species, '', $event_modifier), $fh) if multiple_species($event) && !is_chimeric($event);
+	report(make_record($event_name, $event_id, 'chimeric', 'not used for inference', $event_species, '', $event_modifier), $fh) if !$event->reverse_attribute_value('inferredFrom')->[0] && is_chimeric($event);
+	report(make_record($event_name, $event_id, 'chimeric', 'one species', $event_species, '', $event_modifier), $fh) if !multiple_species($event) && is_chimeric($event);
 	my @chimeric_components = grep {is_chimeric($_)} get_physical_entities_in_reaction_like_event($event);
-	report(make_record($event_name, $event_id , 'not chimeric', 'chimeric components', $event_species, get_db_ids(@chimeric_components), $event_creator), $fh) if @chimeric_components && !is_chimeric($event);
+	report(make_record($event_name, $event_id , 'not chimeric', 'chimeric components', $event_species, get_db_ids(@chimeric_components), $event_modifier), $fh) if @chimeric_components && !is_chimeric($event);
+	
+	if (is_chimeric($event)) {
+		foreach my $entity (grep {multiple_species($_) && !is_chimeric($_)} get_physical_entities_in_reaction_like_event($event)) {
+			report(make_record($entity->displayName, $entity->db_id, 'not chimeric', 'multi-species entity in chimeric event', get_species($entity), '', $event_modifier), $fh);
+		}
+	}
+	
 }
 
 close($fh);
@@ -138,15 +148,16 @@ sub get_db_ids {
 	return join "|", map {$_->db_id} @instances;
 }
 
-sub get_event_creator {
+sub get_event_modifier {
 	my $event = shift;
 	
 	return 'Unknown' unless $event;
 	
 	my $created_instance = $event->created->[0];
 	my $last_modified_instance = $event->modified->[-1];
-	my $author_instance = $created_instance->author->[0] if $created_instance;
-	$author_instance ||= $last_modified_instance->author->[0] if $last_modified_instance;
+	my $author_instance;
+	$author_instance = $last_modified_instance->author->[0] if $last_modified_instance;
+	$author_instance ||= $created_instance->author->[0] if $created_instance;
 	
 	my $author_name = $author_instance->displayName if $author_instance;
 	
@@ -172,10 +183,14 @@ sub usage_instructions {
 	- Chimeric but aren't used for manual inference
 	- Not chimeric but have chimeric components
 	
+	It also reports entities with multiple species that are
+	not labelled as chimeric but are participating in a chimeric
+	event.
+	
 	The output file (name of this script with .txt extension) is
-	tab-delimited with seven columns: event name, event database
-	id, isChimeric, issue with event, event species, flagged
-	chimeric components in event, and event author.
+	tab-delimited with seven columns: instance name, instance database
+	id, isChimeric, issue with instance, instance species, flagged
+	chimeric components in event (if applicable), and event author.
 	
 	USAGE: perl $0 [options]
 	
