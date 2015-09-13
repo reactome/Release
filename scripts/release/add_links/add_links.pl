@@ -6,20 +6,7 @@ use strict;
 # as UniProt.  These will appear as hyperlinks on
 # displayed web pages.
 
-BEGIN {
-    my ($path) = $0 =~ /^(\S+)$/;
-    my @a = split('/',$path);
-    pop @a;
-    if (@a && !$a[0]) {
-        $#a = $#a - 2;
-    } else {
-        push @a, ('..','..','..');
-    }
-    push @a, 'modules';
-    my $libpath = join('/', @a);
-    unshift (@INC, $libpath);
-}
-
+use lib '/usr/local/gkb/modules';
 use Getopt::Long;
 use GKB::Config;
 use Data::Dumper;

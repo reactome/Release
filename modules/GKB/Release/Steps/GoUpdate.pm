@@ -21,7 +21,7 @@ has '+mail' => ( default => sub {
 );
 						
 override 'run_commands' => sub {
-	my ($self, $gkbdir) = @_;
+	my ($self) = @_;
 
     $self->cmd("Setting all GO files to have group permissions", [["echo $sudo | sudo -S chgrp gkb *"]]);
         

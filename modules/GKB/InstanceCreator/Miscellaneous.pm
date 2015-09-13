@@ -230,8 +230,16 @@ sub get_reference_dna_sequence {
     }
     
     # Not cached, not in the database - make a new one.
-    $reference_dna_sequence = GKB::Instance->new(-ONTOLOGY => $dba->ontology, -CLASS => 'ReferenceDNASequence');
-    $reference_dna_sequence->inflated(1);
+
+    #$reference_dna_sequence = GKB::Instance->new(-ONTOLOGY => $dba->ontology, -CLASS => 'ReferenceDNASequence');
+    #$reference_dna_sequence->inflated(1); 
+    
+    # Changed instance creation method to the one below.  For some reason,
+    # the new ReferenceDNASequence instances were missing a DBA and DB_ID and 
+    # causing a fatal exception downstream.
+    my $db_id = $self->max_db_id() + 1;
+    $reference_dna_sequence = $dba->instance_from_hash({},'ReferenceDNASequence',$db_id);
+
     $reference_dna_sequence->created($self->get_instance_edit_for_effective_user());
     $reference_dna_sequence->Identifier($identifier);
     $reference_dna_sequence->ReferenceDatabase($reference_database);
@@ -244,13 +252,22 @@ sub get_reference_dna_sequence {
     }
     if (defined $name) {
 	$reference_dna_sequence->name($name);
-#	$reference_dna_sequence->_displayName($name);
     }
-		
-#	$dba->store($reference_dna_sequence);
+
+    $reference_dna_sequence->inflate();
+    $dba->store($reference_dna_sequence);
+
     $self->reference_dna_sequence_cache->{$reference_database->db_id()}->{$identifier} = $reference_dna_sequence;
     
     return $reference_dna_sequence;
+}
+
+sub max_db_id {
+    my $self = shift;
+    my $sth = $self->dba->prepare('SELECT MAX(DB_ID) FROM DatabaseObject');
+    $sth->execute;
+    my $max_db_id = $sth->fetchrow_arrayref->[0];
+    return $max_db_id;
 }
 
 sub get_reference_rna_sequence {

@@ -71,10 +71,9 @@ else {
 
 
 
-my $instance = $dba->fetch_instance_by_db_id($instance_db_id)->[0];
-
+my $instance = eval{$dba->fetch_instance_by_db_id($instance_db_id)->[0]};
 unless ($instance) {
-    handle_error("$identifier [$instance_db_id] does not exist the database");
+    handle_error("Could not find a database entry for DB_ID $instance_db_id"); 
 }
 
 my $display_name = $instance->displayName;

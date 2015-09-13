@@ -31,6 +31,8 @@ disclaimers of warranty.
 package GKB::IdentifierMapper::ENSEMBLMart;
 use strict;
 
+use feature qw/state/;
+
 use GKB::Config;
 use GKB::SOAPServer::PICR;
 use GKB::IdentifierMapper::Base;
@@ -336,7 +338,7 @@ sub query_ensembl_mart {
     my %input;
     $input{$_}++ foreach @{$input_ids};
     
-    my $registry = get_registry();
+    state $registry = get_registry();
     my $query = _prepare_query($registry, $ensembl_mart_species_abbreviation, $input_table, $output_table);
     if (!$query) {
 	$logger->warn("Query could not be prepared for $ensembl_mart_species_abbreviation on table $output_table");
@@ -380,7 +382,7 @@ sub _prepare_query {
 	$attempts++;
 	try {
 	    my $dataset = $species . "_gene_ensembl";
-	    unless (grep(/^$dataset$/, get_registry()->getAllDatasetNames('default'))) {
+	    unless (grep(/^$dataset$/, $registry->getAllDatasetNames('default'))) {
 		return;
 	    }
 	    

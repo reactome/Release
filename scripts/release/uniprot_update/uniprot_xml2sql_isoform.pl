@@ -178,7 +178,7 @@ while (<UP>) {
     }
 
     my $ac = shift @ac;
-    $sec_ac{$ac} = join( '|', @ac );
+    $sec_ac{$ac} = join( '|', @ac ) if $ac;
 
     #Taxonomy check
 
@@ -188,13 +188,13 @@ while (<UP>) {
     my %species_cache;
     my $species_instance;
     foreach my $tax_set ( sort keys %species ) {
-        if ( $oname =~ /$species{$tax_set}/ ) {
+        if ( $oname && $oname =~ /$species{$tax_set}/ ) {
             $taxon = $species{$tax_set};
             $species_instance = species_instance( $taxon, \%species_cache );
         }
     }
 
-    next if ( length($taxon) < 2 && not defined $reactome_gp{$ac} );
+    next if ( length($taxon) < 2 && (not defined $ac || not defined $reactome_gp{$ac}) );
 
     $total_xml++;
 
