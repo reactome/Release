@@ -38,13 +38,14 @@ my $stable = GKB::StableIdentifierDatabase->new();
 
 my $dba = $stable->get_dba();
 my $instance_db_id;
+my $identifier;
 if ($CGI->param("ST_ID")) {
     my $extended_st_id = $CGI->param("ST_ID");
     if ( !$extended_st_id ) {
 	handle_error("ST_ID missing!!\n");
     }
 
-    my ($identifier, $version) = $extended_st_id =~ /^(\S+)\.(\d+)$/;
+    ($identifier, my $version) = $extended_st_id =~ /^(\S+)\.(\d+)$/;
     unless ($identifier) {
 	($identifier = $extended_st_id) =~ s/\.\d+$//;
     }
@@ -71,6 +72,11 @@ else {
 
 
 my $instance = $dba->fetch_instance_by_db_id($instance_db_id)->[0];
+
+unless ($instance) {
+    handle_error("$identifier [$instance_db_id] does not exist the database");
+}
+
 my $display_name = $instance->displayName;
 my $class = $instance->class;
 
