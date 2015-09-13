@@ -44,6 +44,7 @@ my $reference_molecule;
 my $reference_molecule_db_ids = $dba->fetch_db_ids_by_class("ReferenceMolecule");
 my $molecule_identifier_counter = 0;
 my $outdated_molecule_identifier_counter = 0;
+$dba->execute('START TRANSACTION');
 foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	$reference_molecule = $dba->fetch_instance_by_db_id($reference_molecule_db_id)->[0];
 	if (!(defined $reference_molecule)) {
@@ -89,7 +90,9 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 				
 				$index = get_index($reference_molecule->name->[0], \@names);
 				splice @names, $index, 1 if $index != -1;
-				splice @names, 2, 0, $reference_molecule->name->[0]; 
+				$#names >= 2 ?
+					splice @names, 2, 0, $reference_molecule->name->[0] :
+					push @names, $reference_molecule->name->[0];
 			}
 			
 			$simple_entity->name(undef);
@@ -128,8 +131,9 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	$outdated_molecule_identifier_counter++;
 	
 }
-print OUT "$0: updated $outdated_molecule_identifier_counter of $molecule_identifier_counter ChEBI identifiers (" . (100 * $outdated_molecule_identifier_counter) / $molecule_identifier_counter . "%)\n";
+$dba->execute('COMMIT');
 
+print OUT "$0: updated $outdated_molecule_identifier_counter of $molecule_identifier_counter ChEBI identifiers (" . (100 * $outdated_molecule_identifier_counter) / $molecule_identifier_counter . "%)\n";
 print OUT "$0 has finished its job\n";
 
 # Adapted from http://www.perlmonks.org/?node_id=75660 and

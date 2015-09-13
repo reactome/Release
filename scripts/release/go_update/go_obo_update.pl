@@ -21,10 +21,10 @@ my $gk_central_host = 'http://reactomecurator.oicr.on.ca';
 my $obo_file = "gene_ontology_ext.obo";
 
 if (-e "$obo_file") { system("mv $obo_file $obo_file.old"); }
-my $return = system("wget -a go.err -Nc http://geneontology.org/ontology/obo_format_1_2/$obo_file");
+my $return = system("wget -q -Nc http://geneontology.org/ontology/obo_format_1_2/$obo_file");
 if ($return != 0) { die "ERROR: Download of $obo_file failed."; }
 
-$return = system("wget -a go.err -Nc http://geneontology.org/external2go/ec2go");
+$return = system("wget -q -Nc http://geneontology.org/external2go/ec2go");
 if ($return != 0) { die "ERROR: Download of ec2go file failed."; }
 
 my $file_age = int((time - (stat("$obo_file"))[9])/60/60/24);
@@ -110,7 +110,7 @@ foreach my $terms ( sort keys %categories ) {
 ## and extract all the information we need:
 ## accession, names, definition, synonyms.
 ## For each entry in the file we also check if it already exists in the database using the hashes created on the previous step
-
+$dba->execute('START TRANSACTION');
 
 open( GO, "$obo_file" ) or die;
 
@@ -424,6 +424,8 @@ foreach my $obs_id ( sort keys %obsolete) {
 }
 
 print FR "\|\}\n";
+
+$dba->execute('COMMIT');
 
 print "go_obo_update.pl has finished its job";
 

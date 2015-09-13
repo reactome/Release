@@ -5,8 +5,9 @@ use warnings;
 
 use feature qw/state/;
 
-use Carp;
+use Carp qw/cluck/;
 use Try::Tiny;
+use LWP::UserAgent;
 
 use constant GKB_MODULES => '/usr/local/gkb/modules';
 
@@ -17,22 +18,27 @@ our %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
 
 my $release;
-sub get_version {    
+sub get_version {	
     my $attempts = 0;
-    until ($release || $attempts == 10) {
-	my $url = 'http://rest.ensembl.org/info/software?';
-	my $release_json = `wget -q --header='Content-type:application/json' '$url' -O -`;
-	($release) = $release_json =~ /"release":(\d+)/;
-	return $release - 1 if $release;
+    until ($attempts == 10 || $release) {
+		my $url = 'http://rest.ensembl.org/info/software?';
+		my $release_json = `wget -q --header='Content-type:application/json' '$url' -O -`;
+		($release) = $release_json =~ /"release":(\d+)/;
 	
-	$attempts++;
-	sleep 60;
+		$attempts++;
+		sleep 60;
     }
     
     if ($release) {
-	return $release - 1;
+		my $previous_release = $release - 1;
+		my $pan_homology_previous_release = 'ftp://ftp.ensemblgenomes.org/pub/pan_ensembl/current/mysql/ensembl_compara_pan_homology_' .
+											get_ensembl_genome_version() . '_' . $previous_release;
+		my $ua = LWP::UserAgent->new;
+		state $pan_homology_previous_release_accessible = $ua->head($pan_homology_previous_release)->is_success;
+		return $previous_release if $pan_homology_previous_release_accessible;
+		return $release;
     } else {
-	carp "Unable to get EnsEMBL version\n";
+		cluck "Unable to get EnsEMBL version\n";
     }
 }
 
@@ -40,20 +46,19 @@ sub get_version {
 my $version;
 sub get_ensembl_genome_version {
     my $attempts = 0;
-    until ($version || $attempts == 10) {    
-	my $url = 'http://rest.ensemblgenomes.org/info/eg_version?';
-	my $version_json = `wget -q --header='Content-type:application/json' '$url' -O -`;
-	($version) = $version_json =~ /"version":"(\d+)"/; 
-	return $version if $version;
+    until ($attempts == 10 || $version) {    
+		my $url = 'http://rest.ensemblgenomes.org/info/eg_version?';
+		my $version_json = `wget -q --header='Content-type:application/json' '$url' -O -`;
+		($version) = $version_json =~ /"version":"(\d+)"/; 
 	
-	$attempts++;
-	sleep 60;
+		$attempts++;
+		sleep 60;
     }
     
     if ($version) {
-	return $version;
+		return $version;
     } else {
-	carp "Unable to get EnsEMBL Genomes version\n";
+		cluck "Unable to get EnsEMBL Genomes version\n";
     }
 }
 
