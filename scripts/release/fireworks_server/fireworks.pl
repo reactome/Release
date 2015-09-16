@@ -1,18 +1,7 @@
 #!/usr/local/bin/perl  -w
 use strict;
 
-# I think it's more user-friendly if the user will not have to practise any
-# symlink tricks. Hence the BEGIN block. If the location of the script or
-# libraries changes, this will have to be changed.
-
-BEGIN {
-    my @a = split('/',$0);
-    pop @a;
-    push @a, ('..','..','..');
-    my $libpath = join('/', @a);
-    unshift (@INC, "$libpath/modules");
-    $ENV{PATH} = "$libpath/scripts:$libpath/scripts/release:" . $ENV{PATH};
-}
+use lib '/usr/local/gkb/modules';
 
 use GKB::Config;
 
@@ -59,7 +48,7 @@ sub run {
     my $fireworks_package = "java -jar -Xms5120M -Xmx10240M fireworks.jar";
     my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
     my $reactome_graph_binary = "ReactomeGraphs.bin";
-    create_reactome_graph_binary($fireworks_package, $credentials, $opt_r, $reactome_graph_binary);
+    create_reactome_graph_binary_file($fireworks_package, $credentials, $opt_r, $reactome_graph_binary);
 
     my $json_dir = "json";
     create_fireworks_json($fireworks_package, $credentials, $reactome_graph_binary, $json_dir);
@@ -74,6 +63,7 @@ sub clone_fireworks_repository_from_github {
     
     my $present_dir = getcwd();
     chdir $directory;
+    system "rm -fr Fireworks" if -d "Fireworks";
     my $return_value = system("git clone https://github.com/reactome/Fireworks");
     chdir $present_dir;
     
