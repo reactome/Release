@@ -35,7 +35,7 @@ $release_port ||= $GKB::Config::GK_DB_PORT;
 $release_db ||= $GKB::Config::GK_DB_NAME;
 
 if ($release_db eq $GKB::Config::GK_DB_NAME) {
-    print "Enter name of release database (leave blank for default of $opt_release_db):";
+    print "Enter name of release database (leave blank for default of $release_db):";
     my $db = <STDIN>;
     chomp $db;
     $release_db = $db if $db;
