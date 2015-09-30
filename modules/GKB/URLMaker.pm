@@ -22,11 +22,15 @@ sub new {
 
 sub urlify {
     my $self = shift;
+    my $force_pwb_link = $self->force_pwb_link();
     my $url;
     unless ($url = $self->_get_cached_url) {
 	$url = $self->script_name . '?';
 	while (my ($name,$ar) = each %{$self->{'param'}}) {
 	    $url .= join('&', map {"$name=$_"} @{$ar}) . '&';
+	}
+	if ($force_pwb_link) {
+	    $url .= 'PWB_REDIRECT=1&';
 	}
 	$self->_set_cached_url($url);
     }
@@ -35,6 +39,13 @@ sub urlify {
 	$url .= 'ID=' . $_->db_id . '&';
     }
     return $url;
+}
+
+sub force_pwb_link {
+    my $self = shift;
+    my $link = shift;
+    $self->{force_pwb_link} = 1 if $link;
+    return $self->{force_pwb_link};
 }
 
 sub urlify_db_ids {

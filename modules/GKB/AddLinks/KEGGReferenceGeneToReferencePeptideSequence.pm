@@ -122,6 +122,7 @@ sub buildPart {
         $underline_species =~ s/ +/_/g;
         my $kegg_reference_database = $self->builder_params->reference_database->get_kegg_reference_database($underline_species);
     
+
         # Remove KEGG gene identifiers to make sure the mapping is up-to-date, keep others
         # this isn't really necessary as long as the script is run on the slice only
         # But a good thing to have if you need to run the script a second time.
@@ -182,7 +183,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
     # Run the UniProt IDs against KEGG web services, pulling back information
     # on the associated KEGG gene IDs, in tab-delimited format.
     my $output = $self->bconv($query_string);
-    say "OUTPUT $output";
+
     if ($output eq '') {
         $logger->warn("output is empty!!\n");
         return;
@@ -219,7 +220,6 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         # that may have been collected for this UniProt ID.  Use a
         # hash, to avoid duplication.
         $kegg_gene_ids{$kegg_gene_id} = $kegg_gene_id;
-	say "KEGG gene ID $kegg_gene_id";
         $uniprot_to_kegg_gene{$uniprot_identifier} = \%kegg_gene_ids;
     }
 
@@ -236,6 +236,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         $underline_species =~ s/ +/_/g;
         my $reference_database_kegg = $self->builder_params->reference_database->get_kegg_reference_database($underline_species);
         my $reference_database_kegg_db_id = $reference_database_kegg->db_id();
+
         $reference_peptide_sequence_identifier = $reference_peptide_sequence->identifier->[0];
         chomp($reference_peptide_sequence_identifier);
 
@@ -245,7 +246,8 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         }
 
         if (!(defined $uniprot_to_kegg_gene{$reference_peptide_sequence_identifier})) {
-#            print STDERR "KEGGReferenceGeneToReferencePeptideSequence.process_accumulated_reference_peptide_sequences_chunk: WARNING - we dont seem to have any KEGG gene IDs for UniProt identifier $reference_peptide_sequence_identifier!!\n";
+	    # DEBUG
+            print STDERR "KEGGReferenceGeneToReferencePeptideSequence.process_accumulated_reference_peptide_sequences_chunk: WARNING - we dont seem to have any KEGG gene IDs for UniProt identifier $reference_peptide_sequence_identifier!!\n";
             next;
         }
 
@@ -255,11 +257,17 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         # Get the KEGG gene ID(s) associated with the current UniProt ID
         # and loop over them
         foreach $kegg_gene_id (sort(keys(%{$uniprot_to_kegg_gene{$reference_peptide_sequence_identifier}}))) {
+
             # Try to get KEGG gene associated information from the KEGG RESTful server.
             $kegg_entry = undef;
-            if (defined $kegg_gene_id && !($kegg_gene_id eq '')) {
+	    if ($underline_species ne 'Homo_sapiens') {
+		$logger->info("$underline_species is not human, skipping");
+		next;
+	    }
+            elsif (defined $kegg_gene_id && !($kegg_gene_id eq '')) {
                 $kegg_entry = $self->bget("hsa:$kegg_gene_id"); # TODO: this will only fetch human genes
-            } else {
+            } 
+	    else {
                 $logger->warn("kegg_gene_id is not defined or is empty, skipping\n");
                 next;
             }
@@ -312,8 +320,10 @@ sub process_accumulated_reference_peptide_sequences_chunk {
             my $kegg_ref_dna_instance = $self->get_KEGG_ReferenceDNASequence($kegg_gene_id, $kegg_name, \@enzymes, $reference_peptide_sequence->species);
 	    unless ($kegg_ref_dna_instance->db_id()) {
 		print "ERROR! NO DB_ID ", $kegg_ref_dna_instance->displayName, "\n";
-		next;
+		$kegg_ref_dna_instance->inflated(1);
+		$dba->store($kegg_ref_dna_instance, 1);
 	    }
+
 	    $kegg_ref_dna_instance->inflate();
 	    $kegg_ref_dna_instance->displayName("KEGG Gene:$kegg_gene_id");
 	    $dba->update($kegg_ref_dna_instance);
@@ -332,6 +342,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         # Remove original KEGG gene identifiers to make sure the mapping is
         # up-to-date, keep non-KEGG reference genes.
         foreach (@{$reference_peptide_sequence->referenceGene}) {
+	    next unless $_->referenceDatabase->[0];
             if ($_->referenceDatabase->[0]->db_id() != $reference_database_kegg_db_id) {
                 push(@reference_genes, $_);
             }
@@ -411,6 +422,9 @@ sub get_KEGG_ReferenceDNASequence {
         $instance = $self->builder_params->miscellaneous->get_reference_dna_sequence($species, $reference_database_kegg, $kegg_id, $kegg_name);
     }
     
+    # Make sure it has the refdb set
+    $instance->referenceDatabase($reference_database_kegg);
+    
     # TODO: Do we really want to put the xrefs a ReferenceDNASequence
     # instance, or would it be better to put them into the corresponding
     # ReferenceGeneProduct instance?
@@ -419,6 +433,7 @@ sub get_KEGG_ReferenceDNASequence {
     }
     
     my $previous_cross_references = $instance->crossReference;
+    
         
     # Make a note of existing cross references of the same type
     my %reference_database_db_id_hash = ();
