@@ -172,12 +172,21 @@ sub is_popular_search_engine_mode {
     return $FORMAT_POPULAR_SEARCH_ENGINE_FLAG && !($DB =~ /gk_central/ || $DB =~ /_slice_/);
 }
 
+
+
 sub urlmaker {
     my $self = shift;
     if (@_) {
 	$self->{'urlmaker'} = shift;
     }
     return $self->{'urlmaker'};
+}
+
+sub force_pwb_link {
+    my $self = shift;
+    my $link = shift;
+    $self->{force_pwb_link} = 1 if $link;
+    return $self->{force_pwb_link};
 }
 
 sub print_query_form {
@@ -1089,6 +1098,17 @@ sub handle_mouse_click {
     }
 }
 
+sub look_for_deleted {
+    my $self = shift;
+    my $ar = shift;
+    my @ids = $self->cgi->param('ID');
+    my $deleted = $self->dba->fetch_instance( -CLASS => '_Deleted',
+				    -QUERY => [['deletedInstanceDB_ID',\@ids]]);
+    if ($deleted) {
+	push @$ar, @$deleted;
+    }
+}
+
 sub handle_query_form {
     my ($self) = @_;
     $self->debug && print qq(<PRE>), (caller(0))[3], qq(</PRE>\n);
@@ -1102,6 +1122,11 @@ sub handle_query_form {
 		push @{$ar}, $i;
 	    }
 	}
+	
+	if (@$ar == 0) {
+	    $self->look_for_deleted($ar);
+	}
+
 	return $ar;
     }
     my @query = $self->cgi->param('QUERY');
@@ -1175,10 +1200,10 @@ sub print_view {
 		return;
     }
     
-	my $classic = $self->cgi->param('CLASSIC');
-	if (!(defined $classic && $classic =~ /1/)) {
-		$classic = $self->cgi->cookie('ClassicView');
-	}
+    my $classic = $self->cgi->param('CLASSIC');
+    if (!(defined $classic && $classic =~ /1/)) {
+	$classic = $self->cgi->cookie('ClassicView');
+    }
 
 # For some reason, if this code is present, IE7 always breaks when
 # displaying fly pathways under the fly server.  TODO: find out why!
@@ -1948,6 +1973,11 @@ sub print_TOC {
     push @fpis, @curated_orthologues;
     # order alphabetically
     @fpis = sort {uc($a->displayName) cmp uc($b->displayName)} @fpis;
+
+    if ($self->force_pwb_link()) {
+	$self->urlmaker->force_pwb_link(1);
+    }
+
     foreach my $fp (@fpis) {
 		$self->urlmaker || $self->throw("Need URLMaker object.");
 		print $fp->prettyfy(-URLMAKER => $self->urlmaker,
@@ -2699,6 +2729,9 @@ sub create_protege_project_wo_orthologues {
     
     my $instances = $self->dba->fetch_instance_by_attribute($self->dba->ontology->root_class,
 							    [[$DB_ID_NAME, $ar]]);
+	
+	return unless @$instances;
+	
     $logger->info($instances->[0]->extended_displayName, "\n");
     my $ca = GKB::ClipsAdaptor->new(
 	-ONTOLOGY => $self->dba->ontology,

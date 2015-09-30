@@ -21,7 +21,6 @@ Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::Instance);
 
-
 sub new {
     my ($pkg,@args) = @_;
     my ($self,$urlmaker,$subclassify,$wu) = $pkg->SUPER::_rearrange
@@ -1923,6 +1922,7 @@ sub top_browsing_view {
 					    -DEPTH => 1,
 					    -DEFAULT_CLASS => 'sidebar',
 					    -ATTRIBUTE_LABELS => {'hasComponent' => '', 'hasMember' => '', 'hasSpecialisedForm' => '', 'hasEvent' => ''});
+    $treemaker->force_pwb_link(1);
     my $authors = GKB::Utils::get_authors_recursively($self);
     my $authors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$authors}) || '&nbsp';
     my $reviewers = GKB::Utils::get_reviewers_recursively($self);
@@ -1932,18 +1932,18 @@ sub top_browsing_view {
     my $editors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$editors}) || '&nbsp';
     
     my $out = qq(<TR CLASS="contents"><TD CLASS="sidebar" WIDTH="33%">);
-	if ($doi_flag) {
-    	$out .= $self->displayName();
-    	$out .= qq(</TD>);
-    	my $doi = "";
-    	if (defined $self->doi && scalar(@{$self->doi})>0 && defined $self->doi->[0]) {
-    		$doi = $self->doi->[0];
-    	}
-    	$out .= qq(<TD>$doi</TD>);
-	} else {
-    	$out .= $treemaker->tree;
-    	$out .= qq(</TD>);
+    if ($doi_flag) {
+	$out .= $self->displayName();
+	$out .= qq(</TD>);
+	my $doi = "";
+	if (defined $self->doi && scalar(@{$self->doi})>0 && defined $self->doi->[0]) {
+	    $doi = $self->doi->[0];
 	}
+	$out .= qq(<TD>$doi</TD>);
+    } else {
+	$out .= $treemaker->tree;
+	$out .= qq(</TD>);
+    }
     $out .= qq(<TD CLASS="author">$authors_str</TD>);
 
     my $tmp = $self->ReleaseDate->[0];

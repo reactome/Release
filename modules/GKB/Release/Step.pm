@@ -256,7 +256,7 @@ sub run {
 	set_environment($self->host);
 	return unless source_code_passes_tests();
 	
-	$self->run_commands();
+	$self->run_commands($self->gkb);
 	
 	my @errors = $self->post_step_tests();
 	$self->archive_files($version);

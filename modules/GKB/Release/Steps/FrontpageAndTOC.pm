@@ -6,9 +6,8 @@ use GKB::Release::Utils;
 use Moose;
 extends qw/GKB::Release::Step/;
 
-#has '+gkb' => ();
 has '+passwords' => ( default => sub { ['sudo'] } );
-has '+directory' => ( default => "$release/toc" );
+#has '+directory' => ( default => "$release/toc" );
 has '+mail' => ( default => sub { 
 					my $self = shift;
 					return {

@@ -83,6 +83,19 @@ sub buildPart {
     $self->timer->start($self->timer_message);
     my $dba = $self->builder_params->refresh_dba();
     $dba->matching_instance_handler(new GKB::MatchingInstanceHandler::Simpler);
+
+
+    my $mapping_file = $self->get_mapping_file();
+    my %pro_id;
+    open MAP, $mapping_file or die "Could not open $mapping_file: $!";
+    while (<MAP>) {
+	chomp;
+	my ($pro,$uniprot) = split;
+	$pro =~ s/PR://;
+	$uniprot =~ s/UniProtKB://;
+	$pro_id{$uniprot} = $pro;
+    }
+    close MAP;
     
     my $reference_peptide_sequences = $self->fetch_reference_peptide_sequences(1);
     
@@ -94,8 +107,15 @@ sub buildPart {
 
     my $pro_reference_database = $self->builder_params->reference_database->get_pro_reference_database();
     foreach my $reference_peptide_sequence (@{$reference_peptide_sequences}) {
-	$logger->info("i->Identifier=" . $reference_peptide_sequence->Identifier->[0] . "\n");
+	my $identifier = $reference_peptide_sequence->Identifier->[0];
+	$logger->info("i->Identifier=$identifier\n");
 	
+	# If there is no PRO ID, skip this protein
+	unless ($pro_id{$identifier}) {
+	    $logger->info("No PRO ID for $identifier, skipping");
+	    next; 
+	}
+
 	# Remove identifiers to make sure the mapping is up-to-date, keep others
 	# this isn't really necessary as long as the script is run on the slice only
 	# But a good thing to have if you need to run the script a second time.
@@ -114,6 +134,68 @@ sub buildPart {
     $self->timer->stop($self->timer_message);
     $self->timer->print();
 }
+
+
+# Get file from data provider website mapping genes to proteins
+sub get_mapping_file {
+    my ($self) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
+
+    my $cmd;
+    my $tmp_dir = $self->get_tmp_dir();
+    my $filename = "uniprotmapping.txt";
+    my $path = "$tmp_dir/$filename";
+    my $old_path = "$path.old";
+
+    # If the file is outdated, move it to a backup location - we
+    # might need it again later.
+    if ((-e $path) && int(-M $path) > 14) {
+        $logger->info("$path is older than 14 days\n");
+        if ((-s $path > 0)) {
+            $cmd = "mv $path $old_path";
+            if (system($cmd) != 0) {
+                $logger->warn("$cmd failed\n");
+            }
+        }
+    }
+
+    if (!(-e $path) || (-s $path == 0)) {
+        # Get file from PRO mapping uniprot IDs to PRO IDs
+        # is no pre-existing file less than two weeks old. 
+        $cmd = "wget -O $path ftp://ftp.pir.georgetown.edu/databases/ontology/pro_obo/PRO_mappings/uniprotmapping.txt";
+
+        $logger->info("cmd=$cmd\n");
+        if (system($cmd) != 0) {
+            $logger->warn("$cmd failed\n");
+            if ((-e $old_path)) {
+                my $cmd = "cp $path.old $path";
+                if (system($cmd) != 0) {
+                    $logger->warn("$cmd failed\n");
+                }
+            } else {
+                # If there is no pre-existing file on the disk, then
+                # give up completely.
+                return undef;
+            }
+        }
+        $cmd = "touch $path";
+        if (system($cmd) != 0) {
+            $logger->warn("$cmd failed\n");
+        }
+    }
+
+    # Remove the backup, since we now have a valid file.
+    if (-e $path) {
+        $cmd = "rm -f $old_path";
+        if (system($cmd) != 0) {
+            $logger->warn("$cmd failed\n");
+        }
+    }
+
+    return $path;
+}
+
 
 1;
 
