@@ -6,6 +6,7 @@ use CGI::Carp 'fatalsToBrowser';
 use Data::Dumper;
 use GKB::StableIdentifierDatabase;
 use GKB::FrontPage3;
+use GKB::WebUtils;
 
 my $CGI = CGI->new();
 my $stable = GKB::StableIdentifierDatabase->new();
@@ -33,6 +34,12 @@ if ($id) {
 }
 elsif ($query) {
     $url = "$query_url/'$query'";
+}
+
+if ($id && $CGI->param('PWB_REDIRECT')) {
+    my $wu = GKB::WebUtils->new_from_cgi(-CGI => $CGI);
+    my $instance = $wu->dba->fetch_instance_by_db_id($id)->[0];
+    $url = $wu->build_pathway_browser_url($instance);
 }
 
 print $CGI->redirect($url);

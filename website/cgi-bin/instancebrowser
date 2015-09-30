@@ -63,12 +63,18 @@ if ($CGI->param('CLASS')) {
     $wu->print_view($instances,0);
 } elsif ($CGI->param('ID')) {
     $instances = $wu->handle_query_form;
+    my $warning;
     if (@{$instances} == 1) {
 	if ($instances->[0]->class eq 'Person') {
 	    my $id = $CGI->param('ID');
 	    print $CGI->redirect("/cgi-bin/author_contributions?DB_ID=$id");
 	    exit;
 	} 
+
+	if ($instances->[0]->class eq '_Deleted') {
+	    $warning = 'This instance was delete from the database.  See below for the reason and links'.
+                       ' to any replacement instance(s)'; 
+	}
 
 	if (! $CGI->param('FORMAT')) {
 	    $CGI->param('FORMAT','instancebrowser');
@@ -79,6 +85,9 @@ if ($CGI->param('CLASS')) {
 	}
     }
     do_header();
+    if ($warning) {
+	print "<h2><font color=red>$warning</font></h2>";
+    }
     $wu->print_view($instances);
 } elsif ($CGI->param('SUBMIT')) {
     $instances = $wu->handle_query_form;
@@ -109,6 +118,10 @@ $DBA && $DBA->db_handle->disconnect;
 sub handle_error {
     print qq(<PRE>@_</PRE>);
     print qq(</TD></TR>\n</TABLE>\n);
+}
+
+sub handle_warning {
+    print qq(<b><p><font color=red>@_</font></p></b>);
 }
 
 sub do_header {
