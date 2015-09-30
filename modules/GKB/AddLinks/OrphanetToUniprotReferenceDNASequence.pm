@@ -130,29 +130,43 @@ sub buildPart {
 	}
     }
 
-
+    
     my $putative_orphanet_gene_hash = $mapping_hash->{"GeneList"};
-    my $orphanet_gene_hash;
+    my $orphanet_gene_array;
+
 
     unless (ref $putative_orphanet_gene_hash eq 'HASH') {
 	if (ref $putative_orphanet_gene_hash eq 'ARRAY') {
             $putative_orphanet_gene_hash = $putative_orphanet_gene_hash->[0];
-	    $orphanet_gene_hash = $putative_orphanet_gene_hash->{Gene};
+	    $orphanet_gene_array = $putative_orphanet_gene_hash->{Gene};
         }
 	else {
 	    die "I don't know what this thing is:\n", Dumper $putative_orphanet_gene_hash;
 	}
     }
+    else {
+	$orphanet_gene_array = $putative_orphanet_gene_hash->{Gene};
+    }
 
-    foreach my $orphanet_gene_id (sort(keys(%{$orphanet_gene_hash}))) {
-	my $orphanet_gene = $orphanet_gene_hash->{$orphanet_gene_id};
+
+    #foreach my $orphanet_gene_id (sort(keys(%{$orphanet_gene_hash}))) {
+    for my $orphanet_gene (@$orphanet_gene_array) {
+	my $orphanet_gene_id = $orphanet_gene->{id};
 	my $external_reference_list = $orphanet_gene->{"ExternalReferenceList"};
 	my $external_reference = $external_reference_list->{"ExternalReference"};
-	foreach my $external_reference_id (sort(keys(%{$external_reference}))) {
-	    if ($external_reference_id eq "Reference" || $external_reference_id eq "Source") {
-	        next;
-	    }
-	    my $external_reference_object = $external_reference->{$external_reference_id};
+	#foreach my $external_reference_id (sort(keys(%{$external_reference}))) {
+	#print "REF ", ref $external_reference, "\n", Dumper $external_reference;
+	if (ref $external_reference ne 'ARRAY') {
+	    print STDERR "WHAT??\n",  Dumper $external_reference;
+	    next;
+	}
+	for my $external_reference_object (@$external_reference) {
+#	    print Dumper $external_reference_object;
+	    my $external_reference_id = $external_reference_object->{id};
+#	    if ($external_reference_id eq "Reference" || $external_reference_id eq "Source") {
+#	        next;
+#	    }
+#	    my $external_reference_object = $external_reference->{$external_reference_id};
 	    if (!(scalar($external_reference_object) =~ /HASH/)) {
 	        next;
 	    }
@@ -166,11 +180,17 @@ sub buildPart {
 	}
     }
 
+    print Dumper \%gene;
+
+
     my $attribute = 'referenceGene';
     $self->set_instance_edit_note("${attribute}s inserted by OrphanetToUniprotReferenceDNASequence");
     
     # Retrieve all UniProt entries from Reactome
     my $reference_peptide_sequences = $self->fetch_reference_peptide_sequences(1);
+
+    my $count = @$reference_peptide_sequences;
+    print "I have $count reference_peptide_sequences\n";
 
     my $gene_db = $self->builder_params->reference_database->get_orphanet_reference_database();
     my $reference_peptide_sequence;
@@ -196,6 +216,12 @@ sub buildPart {
 	foreach my $gene_id (@{$gene{$identifier}}) {
 	    $logger->info("$gene_id");
 	    my $rds = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_peptide_sequence->Species, $gene_db, $gene_id);
+	    # Make sure the rdb has the refdb set 
+	    #$rds->inflate;
+	    #$rds->referenceDatabase($gene_id);
+	    #$dba->update_attribuite($rds,'referenceDatabase');
+	    # DEBUG
+	    print "created ReferenceDNASequence ", $rds->displayName, "\n";
 	    $self->check_for_identical_instances($rds);
 	    $reference_peptide_sequence->add_attribute_value($attribute, $rds);
 	    $self->increment_insertion_stats_hash($reference_peptide_sequence->db_id);
