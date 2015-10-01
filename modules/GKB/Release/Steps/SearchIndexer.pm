@@ -7,7 +7,7 @@ use Moose;
 extends qw/GKB::Release::Step/;
 
 has '+gkb' => ( default => "gkbdev" );
-has '+passwords' => ( default => sub { ['mysql'] } );
+has '+passwords' => ( default => sub { ['mysql', 'sudo'] } );
 has '+directory' => ( default => "$release/search_indexer" );
 has '+mail' => ( default => sub { 
 					my $self = shift;
@@ -26,7 +26,7 @@ override 'run_commands' => sub {
 	my $host = $self->host;
 
     my @args = ("-db", $db, "-host", $host, "-user", $user, "-pass", $pass, "-r", $version);
-    $self->cmd("Running search indexer",[["perl SearchIndexer.pm @args > search.out 2> search.err"]]);
+    $self->cmd("Running search indexer",[["echo $sudo | sudo -S perl search_indexer.pl @args > search.out 2> search.err"]]);
 };
 
 1;

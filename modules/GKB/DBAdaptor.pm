@@ -1,6 +1,5 @@
 package GKB::DBAdaptor;
 
-
 =head1 NAME
 
 GKB::DBAdaptor -- Database adaptor for GKB

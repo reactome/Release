@@ -1,6 +1,9 @@
 #!/usr/bin/perl -w
 use strict;
+
 use lib "/usr/local/gkb/modules";
+
+use Carp;
 use GKB::Config;
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
@@ -48,5 +51,5 @@ sub run_or_die {
     
     $logger->info("Executing: $cmd\n");
     my $retval = system $cmd;
-    $logger->error_die($!) if $retval;
+    $logger->logcroak($!) if $retval;
 }

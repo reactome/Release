@@ -102,7 +102,7 @@ for my $release (@keys) {
 	if ($release == $highest_release) {	
 	    $evt->[0] = a(
 	    {
-		-href => '/PathwayBrowser/#'.$evt->[0],
+		-href => '/cgi-bin/eventbrowser?ST_ID='.$evt->[0],
 		-target => '_BLANK'
 	    },
 	    $evt->[0]
