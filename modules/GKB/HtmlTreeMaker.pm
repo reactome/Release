@@ -100,6 +100,14 @@ sub new {
     return $self;
 }
 
+sub force_pwb_link {
+    my $self = shift;
+    my $link = shift;
+    $self->{force_pwb_link} = 1 if $link;
+    $self->urlmaker->force_pwb_link($self->{force_pwb_link});
+    return $self->{force_pwb_link};
+}
+
 sub tree {
     my ($self) = @_;
 
@@ -136,6 +144,7 @@ sub _node_hyperlink {
 	$class_str = qq( CLASS="$class");
     }
     $self->urlmaker || $self->throw("Need URLMaker object.");
+
     my $hyperlink = qq($ {att_str}<A$ {class_str} HREF=\") . $self->urlmaker->urlify($node) . qq(\">) . $node->displayName . qq(</A>);
     if (defined $node->doi && scalar(@{$node->doi})>0 && defined $node->doi->[0]) {
     	$hyperlink .=  "<A CLASS=\"DOI\" ONMOUSEOVER='ddrivetip(\"" . $node->doi->[0] . "\",\"#FFFFFF\",250)' ONMOUSEOUT='hideddrivetip()'> (DOI)</A>";
@@ -315,6 +324,7 @@ sub _participant_in_event_tree_node_hyperlink {
 	return qq($att_str$tmp);
 #	return qq($ {att_str}<A CLASS="$class">) . &GKB::Utils::hyperlinked_collapsed_Events($self->urlmaker,$ar) . qq(</A>);
     }
+    
     return qq($ {att_str}<A HREF=\") . $self->urlmaker->urlify($node) . qq(\">) . $node->displayName . qq(</A>);
 }
 

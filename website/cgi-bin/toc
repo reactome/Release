@@ -29,6 +29,7 @@ $CGI = CGI->new();
 print $CGI->header(-charset => 'UTF-8');
 eval {
     $WU = GKB::WebUtils->new_from_cgi(-CGI => $CGI);
+    $WU->force_pwb_link(1);
     $DBA = $WU->dba;
     $WU->urlmaker->script_name('/cgi-bin/eventbrowser');
 

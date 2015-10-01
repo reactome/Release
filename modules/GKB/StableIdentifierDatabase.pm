@@ -14,13 +14,7 @@ use Data::Dumper;
 use constant DB  => 'stable_identifiers';
 use constant Q1  => 'SELECT instanceId FROM StableIdentifier WHERE identifier = ?';
 use constant Q2  => 'SELECT DB_ID,identifier,identifierVersion FROM StableIdentifier WHERE instanceId = ?';
-use constant Q3  => '
-SELECT h.class, r.release_num, n.name, r.database_name
-FROM History h, Name n, ReactomeRelease r 
-WHERE h.ST_ID = ?
-AND h.name = n.DB_ID
-AND r.DB_ID = h.ReactomeRelease
-ORDER BY h.ReactomeRelease';
+use constant Q3  => 'SELECT class,reactomeRelease,name FROM History WHERE ST_ID = ? ORDER BY reactomeRelease';
 
 sub new {
     my $class = shift;
@@ -90,8 +84,8 @@ sub get_history {
 	$query->execute($st_db_id);
 
 	while (my $event = $query->fetchrow_arrayref) {
-	    my ($class,$release,$actual_name,$database) = @$event;
-	    push @events, [$actual_name,$class,$release,$database];
+	    my ($class,$release,$actual_name) = @$event;
+	    push @events, [$actual_name,$class,$release];
 	}
     }
 
