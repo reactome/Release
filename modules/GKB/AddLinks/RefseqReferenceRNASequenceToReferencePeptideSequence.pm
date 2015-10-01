@@ -82,7 +82,7 @@ sub buildPart {
 
     $logger->info("entered\n");
 
-    $self->insert_xrefs('referenceTranscript', 'RefSeqDNA', 1);
+    $self->insert_xrefs('referenceTranscript', 'RefSeqRNA', 1);
 }
 
 1;

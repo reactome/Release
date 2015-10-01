@@ -34,12 +34,13 @@ eval {
 	}
     }
     @ids = sort {$a <=> $b}  @ids;
-
-    my $basename = join('_', $PROJECT_NAME, @ids, $$);
+	
+    my $basename = join('_', $PROJECT_NAME, @ids);
 
     $wu->create_protege_project_wo_orthologues($basename,\@ids);
 
-    print $wu->cgi->redirect("/img-tmp/$basename.tar.gz");
+    
+	print $wu->cgi->redirect("/img-tmp/$basename.tar.gz");
 };
 if ($@) {
     print <<__HERE__;
