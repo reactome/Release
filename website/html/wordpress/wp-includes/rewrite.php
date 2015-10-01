@@ -420,17 +420,19 @@ class WP_Rewrite {
 	 * Permalink structure for posts.
 	 *
 	 * @since 1.5.0
+	 * @access private
 	 * @var string
 	 */
-	public $permalink_structure;
+	var $permalink_structure;
 
 	/**
 	 * Whether to add trailing slashes.
 	 *
 	 * @since 2.2.0
+	 * @access private
 	 * @var bool
 	 */
-	public $use_trailing_slashes;
+	var $use_trailing_slashes;
 
 	/**
 	 * Base for the author permalink structure (example.com/$author_base/authorname).
@@ -499,18 +501,10 @@ class WP_Rewrite {
 	 * Pagination permalink base.
 	 *
 	 * @since 3.1.0
-	 * @var string
-	 */
-	public $pagination_base = 'page';
-
-	/**
-	 * Comments pagination permalink base.
-	 *
-	 * @since 4.2.0
 	 * @access private
 	 * @var string
 	 */
-	var $comments_pagination_base = 'comment-page';
+	var $pagination_base = 'page';
 
 	/**
 	 * Feed permalink base.
@@ -528,7 +522,7 @@ class WP_Rewrite {
 	 * @access private
 	 * @var string
 	 */
-	var $comment_feed_structure;
+	var $comments_feed_structure;
 
 	/**
 	 * Feed request permalink structure.
@@ -548,9 +542,10 @@ class WP_Rewrite {
 	 *
 	 * @see WP_Rewrite::init()
 	 * @since 1.5.0
+	 * @access private
 	 * @var string
 	 */
-	public $front;
+	var $front;
 
 	/**
 	 * The prefix for all permalink structures.
@@ -562,9 +557,10 @@ class WP_Rewrite {
 	 * @see WP_Rewrite::init()
 	 * @see WP_Rewrite::using_index_permalinks()
 	 * @since 1.5.0
+	 * @access private
 	 * @var string
 	 */
-	public $root = '';
+	var $root = '';
 
 	/**
 	 * The name of the index file which is the entry point to all requests.
@@ -750,9 +746,10 @@ class WP_Rewrite {
 	 * Supported default feeds.
 	 *
 	 * @since 1.5.0
+	 * @access private
 	 * @var array
 	 */
-	public $feeds = array( 'feed', 'rdf', 'rss', 'rss2', 'atom' );
+	var $feeds = array( 'feed', 'rdf', 'rss', 'rss2', 'atom' );
 
 	/**
 	 * Whether permalinks are being used.
@@ -1265,7 +1262,7 @@ class WP_Rewrite {
 		//build a regex to match the trackback and page/xx parts of URLs
 		$trackbackregex = 'trackback/?$';
 		$pageregex = $this->pagination_base . '/?([0-9]{1,})/?$';
-		$commentregex = $this->comments_pagination_base . '-([0-9]{1,})/?$';
+		$commentregex = 'comment-page-([0-9]{1,})/?$';
 
 		//build up an array of endpoint regexes to append => queries to append
 		if ( $endpoints ) {
@@ -1291,7 +1288,6 @@ class WP_Rewrite {
 		$trackbackindex = $index;
 		//build a list from the rewritecode and queryreplace arrays, that will look something like
 		//tagname=$matches[i] where i is the current $i
-		$queries = array();
 		for ( $i = 0; $i < $num_tokens; ++$i ) {
 			if ( 0 < $i )
 				$queries[$i] = $queries[$i - 1] . '&';
@@ -1332,7 +1328,7 @@ class WP_Rewrite {
 			$num_toks = preg_match_all('/%.+?%/', $struct, $toks);
 
 			//get the 'tagname=$matches[i]'
-			$query = ( ! empty( $num_toks ) && isset( $queries[$num_toks - 1] ) ) ? $queries[$num_toks - 1] : '';
+			$query = ( isset($queries) && is_array($queries) && !empty($num_toks) ) ? $queries[$num_toks - 1] : '';
 
 			//set up $ep_mask_specific which is used to match more specific URL types
 			switch ( $dirs[$j] ) {
@@ -1385,11 +1381,11 @@ class WP_Rewrite {
 				$rewrite = array_merge($rewrite, array($pagematch => $pagequery));
 
 			//only on pages with comments add ../comment-page-xx/
-			if ( EP_PAGES & $ep_mask || EP_PERMALINK & $ep_mask ) {
+			if ( EP_PAGES & $ep_mask || EP_PERMALINK & $ep_mask )
 				$rewrite = array_merge($rewrite, array($commentmatch => $commentquery));
-			} elseif ( EP_ROOT & $ep_mask && get_option('page_on_front') ) {
+			else if ( EP_ROOT & $ep_mask && get_option('page_on_front') )
 				$rewrite = array_merge($rewrite, array($rootcommentmatch => $rootcommentquery));
-			}
+
 			//do endpoints
 			if ( $endpoints ) {
 				foreach ( (array) $ep_query_append as $regex => $ep) {
@@ -2044,21 +2040,7 @@ class WP_Rewrite {
 	 * @access public
 	 * @param bool $hard Whether to update .htaccess (hard flush) or just update rewrite_rules option (soft flush). Default is true (hard).
 	 */
-	public function flush_rules( $hard = true ) {
-		static $do_hard_later;
-
-		// Prevent this action from running before everyone has registered their rewrites
-		if ( ! did_action( 'wp_loaded' ) ) {
-			add_action( 'wp_loaded', array( $this, 'flush_rules' ) );
-			$do_hard_later = ( isset( $do_hard_later ) ) ? $do_hard_later || $hard : $hard;
-			return;
-		}
-
-		if ( isset( $do_hard_later ) ) {
-			$hard = $do_hard_later;
-			unset( $do_hard_later );
-		}
-
+	public function flush_rules($hard = true) {
 		delete_option('rewrite_rules');
 		$this->wp_rewrite_rules();
 		/**
@@ -2188,6 +2170,7 @@ class WP_Rewrite {
 	 * @since 1.5.0
 	 * @access public
 	 *
+	 * @return WP_Rewrite
 	 */
 	public function __construct() {
 		$this->init();

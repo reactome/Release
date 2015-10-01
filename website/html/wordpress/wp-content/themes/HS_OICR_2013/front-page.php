@@ -4,7 +4,7 @@
      </div>
 -->
      <div class="grid_15">     
-     <div class="buttonswrap"><!--set left column with buttons-->
+     <div class="buttonswrap"><!--set left colum with buttons-->
 	  <div class="grid_5 alpha">
 	    <a class="button icon browse" href="/PathwayBrowser/"><span>Browse Pathways</span></a>
  	 </div>
@@ -13,8 +13,8 @@
   	</div>
 
     <div class="grid_5 omega">
-    <a class="button icon cytoscape" href="http://wiki.reactome.org/index.php/Reactome_FI_Cytoscape_Plugin"><span>ReactomeFIViz app</span></a>
 
+    <a class="button icon cytoscape" href="http://wiki.reactome.org/index.php/Reactome_FI_Cytoscape_Plugin"><span>Reactome FI Network</span></a>
     </div>
   
  	 <div class="clear"></div> <!--clear the first row of buttons -->

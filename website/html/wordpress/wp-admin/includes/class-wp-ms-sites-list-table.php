@@ -9,28 +9,18 @@
  */
 class WP_MS_Sites_List_Table extends WP_List_Table {
 
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.1.0
-	 * @access public
-	 *
-	 * @see WP_List_Table::__construct() for more information on default arguments.
-	 *
-	 * @param array $args An associative array of arguments.
-	 */
-	public function __construct( $args = array() ) {
+	function __construct( $args = array() ) {
 		parent::__construct( array(
 			'plural' => 'sites',
 			'screen' => isset( $args['screen'] ) ? $args['screen'] : null,
 		) );
 	}
 
-	public function ajax_user_can() {
+	function ajax_user_can() {
 		return current_user_can( 'manage_sites' );
 	}
 
-	public function prepare_items() {
+	function prepare_items() {
 		global $s, $mode, $wpdb;
 
 		$current_site = get_current_site();
@@ -48,10 +38,10 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 			$s = trim($s, '*');
 		}
 
-		/*
-		 * If the network is large and a search is not being performed, show only
-		 * the latest blogs with no paging in order to avoid expensive count queries.
-		 */
+		$like_s = esc_sql( like_escape( $s ) );
+
+		// If the network is large and a search is not being performed, show only the latest blogs with no paging in order
+		// to avoid expensive count queries.
 		if ( !$s && wp_is_large_network() ) {
 			if ( !isset($_REQUEST['orderby']) )
 				$_GET['orderby'] = $_REQUEST['orderby'] = '';
@@ -68,8 +58,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 					preg_match( '/^[0-9]{1,3}\.[0-9]{1,3}\.?$/', $s ) ||
 					preg_match( '/^[0-9]{1,3}\.$/', $s ) ) {
 			// IPv4 address
-			$sql = $wpdb->prepare( "SELECT blog_id FROM {$wpdb->registration_log} WHERE {$wpdb->registration_log}.IP LIKE %s", $wpdb->esc_like( $s ) . $wild );
-			$reg_blog_ids = $wpdb->get_col( $sql );
+			$reg_blog_ids = $wpdb->get_col( "SELECT blog_id FROM {$wpdb->registration_log} WHERE {$wpdb->registration_log}.IP LIKE ( '{$like_s}$wild' )" );
 
 			if ( !$reg_blog_ids )
 				$reg_blog_ids = array( 0 );
@@ -80,18 +69,17 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 				AND {$wpdb->blogs}.blog_id IN (" . implode( ', ', $reg_blog_ids ) . ")";
 		} else {
 			if ( is_numeric($s) && empty( $wild ) ) {
-				$query .= $wpdb->prepare( " AND ( {$wpdb->blogs}.blog_id = %s )", $s );
+				$query .= " AND ( {$wpdb->blogs}.blog_id = '{$like_s}' )";
 			} elseif ( is_subdomain_install() ) {
-				$blog_s = str_replace( '.' . $current_site->domain, '', $s );
-				$blog_s = $wpdb->esc_like( $blog_s ) . $wild . $wpdb->esc_like( '.' . $current_site->domain );
-				$query .= $wpdb->prepare( " AND ( {$wpdb->blogs}.domain LIKE %s ) ", $blog_s );
+				$blog_s = str_replace( '.' . $current_site->domain, '', $like_s );
+				$blog_s .= $wild . '.' . $current_site->domain;
+				$query .= " AND ( {$wpdb->blogs}.domain LIKE '$blog_s' ) ";
 			} else {
-				if ( $s != trim('/', $current_site->path) ) {
-					$blog_s = $wpdb->esc_like( $current_site->path . $s ) . $wild . $wpdb->esc_like( '/' );
-				} else {
-					$blog_s = $wpdb->esc_like( $s );
-				}
-				$query .= $wpdb->prepare( " AND  ( {$wpdb->blogs}.path LIKE %s )", $blog_s );
+				if ( $like_s != trim('/', $current_site->path) )
+					$blog_s = $current_site->path . $like_s . $wild . '/';
+				else
+					$blog_s = $like_s;
+				$query .= " AND  ( {$wpdb->blogs}.path LIKE '$blog_s' )";
 			}
 		}
 
@@ -132,11 +120,11 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 		) );
 	}
 
-	public function no_items() {
+	function no_items() {
 		_e( 'No sites found.' );
 	}
 
-	protected function get_bulk_actions() {
+	function get_bulk_actions() {
 		$actions = array();
 		if ( current_user_can( 'delete_sites' ) )
 			$actions['delete'] = __( 'Delete' );
@@ -146,10 +134,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 		return $actions;
 	}
 
-	/**
-	 * @param string $which
-	 */
-	protected function pagination( $which ) {
+	function pagination( $which ) {
 		global $mode;
 
 		parent::pagination( $which );
@@ -158,7 +143,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 			$this->view_switcher( $mode );
 	}
 
-	public function get_columns() {
+	function get_columns() {
 		$blogname_columns = ( is_subdomain_install() ) ? __( 'Domain' ) : __( 'Path' );
 		$sites_columns = array(
 			'cb'          => '<input type="checkbox" />',
@@ -184,7 +169,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 		return $sites_columns;
 	}
 
-	protected function get_sortable_columns() {
+	function get_sortable_columns() {
 		return array(
 			'blogname'    => 'blogname',
 			'lastupdated' => 'lastupdated',
@@ -192,7 +177,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 		);
 	}
 
-	public function display_rows() {
+	function display_rows() {
 		global $mode;
 
 		$status_list = array(
@@ -202,20 +187,15 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 			'mature'   => array( 'site-mature', __( 'Mature' ) )
 		);
 
-		if ( 'list' == $mode ) {
-			$date = __( 'Y/m/d' );
-		} else {
-			$date = __( 'Y/m/d g:i:s a' );
-		}
-
+		$class = '';
 		foreach ( $this->items as $blog ) {
-			$class = '';
+			$class = ( 'alternate' == $class ) ? '' : 'alternate';
 			reset( $status_list );
 
 			$blog_states = array();
 			foreach ( $status_list as $status => $col ) {
 				if ( get_blog_status( $blog['blog_id'], $status ) == 1 ) {
-					$class = " class='{$col[0]}'";
+					$class = $col[0];
 					$blog_states[] = $col[1];
 				}
 			}
@@ -230,7 +210,7 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 					$blog_state .= "<span class='post-state'>$state$sep</span>";
 				}
 			}
-			echo "<tr{$class}>";
+			echo "<tr class='$class'>";
 
 			$blogname = ( is_subdomain_install() ) ? str_replace( '.' . get_current_site()->domain, '', $blog['domain'] ) : $blog['path'];
 
@@ -327,6 +307,10 @@ class WP_MS_Sites_List_Table extends WP_List_Table {
 
 					case 'lastupdated':
 						echo "<td class='$column_name column-$column_name'$style>";
+							if ( 'list' == $mode )
+								$date = 'Y/m/d';
+							else
+								$date = 'Y/m/d \<\b\r \/\> g:i:s a';
 							echo ( $blog['last_updated'] == '0000-00-00 00:00:00' ) ? __( 'Never' ) : mysql2date( $date, $blog['last_updated'] ); ?>
 						</td>
 					<?php

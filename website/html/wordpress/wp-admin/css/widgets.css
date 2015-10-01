@@ -16,9 +16,6 @@
 
 .widget-top a.widget-action,
 .widget-top a.widget-action:hover {
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	outline: none;
 	text-decoration: none;
 }
 
@@ -49,7 +46,7 @@
 
 .deleting .widget-title,
 .deleting .widget-top a.widget-action:after {
-	color: #a0a5aa;
+	color: #aaa;
 }
 
 /* Widget Dragging Helpers */
@@ -62,7 +59,7 @@
 }
 
 .widget-placeholder {
-	border: 1px dashed #b4b9be;
+	border: 1px dashed #bbb;
 	margin: 0 auto 10px;
 	height: 45px;
 	width: 100%;
@@ -271,10 +268,8 @@ div#widgets-right .closed .widgets-sortables {
 }
 
 .sidebar-name .spinner {
-	float: none;
-	position: relative;
-	top: -2px;
 	margin: -5px 5px;
+	float: none;
 }
 
 /* Dragging a widget over a closed sidebar */
@@ -371,7 +366,7 @@ div#widgets-right .closed .widgets-sortables {
 }
 
 .js #removing-widget {
-	color: #00a0d2;
+	color: #2ea2cc;
 }
 
 .widget-control-noform,
@@ -477,7 +472,7 @@ div#widgets-right .widget-top:hover,
 }
 
 .widgets-chooser li.widgets-chooser-selected {
-	background: #00a0d2;
+	background: #2ea2cc;
 	color: #fff;
 }
 

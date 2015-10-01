@@ -221,17 +221,12 @@ function wp_load_core_site_options( $site_id = null ) {
  * to set whether an option is autoloaded, then you need to use the add_option().
  *
  * @since 1.0.0
- * @since 4.2.0 The `$autoload` parameter was added.
  *
- * @param string      $option   Option name. Expected to not be SQL-escaped.
- * @param mixed       $value    Option value. Must be serializable if non-scalar. Expected to not be SQL-escaped.
- * @param string|bool $autoload Optional. Whether to load the option when WordPress starts up. For existing options,
- *                              `$autoload` can only be updated using `update_option()` if `$value` is also changed.
- *                              Accepts 'yes' or true to enable, 'no' or false to disable. For non-existent options,
- *                              the default value is 'yes'.
+ * @param string $option Option name. Expected to not be SQL-escaped.
+ * @param mixed $value Option value. Must be serializable if non-scalar. Expected to not be SQL-escaped.
  * @return bool False if value was not updated and true if value was updated.
  */
-function update_option( $option, $value, $autoload = null ) {
+function update_option( $option, $value ) {
 	global $wpdb;
 
 	$option = trim($option);
@@ -273,15 +268,8 @@ function update_option( $option, $value, $autoload = null ) {
 	if ( $value === $old_value )
 		return false;
 
-	/** This filter is documented in wp-includes/option.php */
-	if ( apply_filters( 'default_option_' . $option, false ) === $old_value ) {
-		// Default setting for new options is 'yes'.
-		if ( null === $autoload ) {
-			$autoload = 'yes';
-		}
-
-		return add_option( $option, $value, '', $autoload );
-	}
+	if ( false === $old_value )
+		return add_option( $option, $value );
 
 	$serialized_value = maybe_serialize( $value );
 
@@ -296,15 +284,7 @@ function update_option( $option, $value, $autoload = null ) {
 	 */
 	do_action( 'update_option', $option, $old_value, $value );
 
-	$update_args = array(
-		'option_value' => $serialized_value,
-	);
-
-	if ( null !== $autoload ) {
-		$update_args['autoload'] = ( 'no' === $autoload || false === $autoload ) ? 'no' : 'yes';
-	}
-
-	$result = $wpdb->update( $wpdb->options, $update_args, array( 'option_name' => $option ) );
+	$result = $wpdb->update( $wpdb->options, array( 'option_value' => $serialized_value ), array( 'option_name' => $option ) );
 	if ( ! $result )
 		return false;
 
@@ -366,8 +346,7 @@ function update_option( $option, $value, $autoload = null ) {
  * @param string         $option      Name of option to add. Expected to not be SQL-escaped.
  * @param mixed          $value       Optional. Option value. Must be serializable if non-scalar. Expected to not be SQL-escaped.
  * @param string         $deprecated  Optional. Description. Not used anymore.
- * @param string|bool    $autoload    Optional. Whether to load the option when WordPress starts up.
- *                                    Default is enabled. Accepts 'no' to disable for legacy reasons.
+ * @param string|bool    $autoload    Optional. Default is enabled. Whether to load the option when WordPress starts up.
  * @return bool False if option was not added and true if option was added.
  */
 function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' ) {
@@ -390,12 +369,11 @@ function add_option( $option, $value = '', $deprecated = '', $autoload = 'yes' )
 	// Make sure the option doesn't already exist. We can check the 'notoptions' cache before we ask for a db query
 	$notoptions = wp_cache_get( 'notoptions', 'options' );
 	if ( !is_array( $notoptions ) || !isset( $notoptions[$option] ) )
-		/** This filter is documented in wp-includes/option.php */
-		if ( apply_filters( 'default_option_' . $option, false ) !== get_option( $option ) )
+		if ( false !== get_option( $option ) )
 			return false;
 
 	$serialized_value = maybe_serialize( $value );
-	$autoload = ( 'no' === $autoload || false === $autoload ) ? 'no' : 'yes';
+	$autoload = ( 'no' === $autoload ) ? 'no' : 'yes';
 
 	/**
 	 * Fires before an option is added.
@@ -649,20 +627,18 @@ function get_transient( $transient ) {
  */
 function set_transient( $transient, $value, $expiration = 0 ) {
 
-	$expiration = (int) $expiration;
-
 	/**
 	 * Filter a specific transient before its value is set.
 	 *
 	 * The dynamic portion of the hook name, `$transient`, refers to the transient name.
 	 *
 	 * @since 3.0.0
-	 * @since 4.2.0 Added `$expiration` parameter.
 	 *
-	 * @param mixed $value      New value of transient.
-	 * @param int   $expiration Time until expiration in seconds.
+	 * @param mixed $value New value of transient.
 	 */
-	$value = apply_filters( 'pre_set_transient_' . $transient, $value, $expiration );
+	$value = apply_filters( 'pre_set_transient_' . $transient, $value );
+
+	$expiration = (int) $expiration;
 
 	if ( wp_using_ext_object_cache() ) {
 		$result = wp_cache_set( $transient, $value, 'transient', $expiration );

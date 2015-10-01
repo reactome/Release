@@ -71,19 +71,22 @@ unset($menu_page, $compat);
 $_wp_submenu_nopriv = array();
 $_wp_menu_nopriv = array();
 // Loop over submenus and remove pages for which the user does not have privs.
-foreach ($submenu as $parent => $sub) {
-	foreach ($sub as $index => $data) {
-		if ( ! current_user_can($data[1]) ) {
-			unset($submenu[$parent][$index]);
-			$_wp_submenu_nopriv[$parent][$data[2]] = true;
+foreach ( array( 'submenu' ) as $sub_loop ) {
+	foreach ($$sub_loop as $parent => $sub) {
+		foreach ($sub as $index => $data) {
+			if ( ! current_user_can($data[1]) ) {
+				unset(${$sub_loop}[$parent][$index]);
+				$_wp_submenu_nopriv[$parent][$data[2]] = true;
+			}
 		}
-	}
-	unset($index, $data);
+		unset($index, $data);
 
-	if ( empty($submenu[$parent]) )
-		unset($submenu[$parent]);
+		if ( empty(${$sub_loop}[$parent]) )
+			unset(${$sub_loop}[$parent]);
+	}
+	unset($sub, $parent);
 }
-unset($sub, $parent);
+unset($sub_loop);
 
 /*
  * Loop over the top-level menu.
@@ -94,13 +97,11 @@ foreach ( $menu as $id => $data ) {
 	if ( empty($submenu[$data[2]]) )
 		continue;
 	$subs = $submenu[$data[2]];
-	$first_sub = reset( $subs );
+	$first_sub = array_shift($subs);
 	$old_parent = $data[2];
 	$new_parent = $first_sub[2];
-	/*
-	 * If the first submenu is not the same as the assigned parent,
-	 * make the first submenu the new parent.
-	 */
+	// If the first submenu is not the same as the assigned parent,
+	// make the first submenu the new parent.
 	if ( $new_parent != $old_parent ) {
 		$_wp_real_parent_file[$old_parent] = $new_parent;
 		$menu[$id][2] = $new_parent;
@@ -163,7 +164,7 @@ foreach ( $menu as $id => $data ) {
 	 */
 	if ( ! empty( $submenu[$data[2]] ) && 1 == count ( $submenu[$data[2]] ) ) {
 		$subs = $submenu[$data[2]];
-		$first_sub = reset( $subs );
+		$first_sub = array_shift($subs);
 		if ( $data[2] == $first_sub[2] )
 			unset( $submenu[$data[2]] );
 	}
@@ -316,7 +317,7 @@ if ( !user_can_access_admin_page() ) {
 	 */
 	do_action( 'admin_page_access_denied' );
 
-	wp_die( __( 'You do not have sufficient permissions to access this page.' ), 403 );
+	wp_die( __('You do not have sufficient permissions to access this page.') );
 }
 
 $menu = add_menu_classes($menu);

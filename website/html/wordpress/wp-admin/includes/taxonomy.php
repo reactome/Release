@@ -11,17 +11,14 @@
 //
 
 /**
- * Check whether a category exists.
+ * {@internal Missing Short Description}}
  *
  * @since 2.0.0
  *
- * @see term_exists()
- *
- * @param int|string $cat_name Category name.
- * @param int        $parent   Optional. ID of parent term.
- * @return mixed
+ * @param unknown_type $cat_name
+ * @return unknown
  */
-function category_exists( $cat_name, $parent = null ) {
+function category_exists($cat_name, $parent = 0) {
 	$id = term_exists($cat_name, 'category', $parent);
 	if ( is_array($id) )
 		$id = $id['term_id'];
@@ -29,12 +26,12 @@ function category_exists( $cat_name, $parent = null ) {
 }
 
 /**
- * Get category object for given ID and 'edit' filter context.
+ * {@internal Missing Short Description}}
  *
  * @since 2.0.0
  *
- * @param int $id
- * @return object
+ * @param unknown_type $id
+ * @return unknown
  */
 function get_category_to_edit( $id ) {
 	$category = get_term( $id, 'category', OBJECT, 'edit' );
@@ -43,13 +40,13 @@ function get_category_to_edit( $id ) {
 }
 
 /**
- * Add a new category to the database if it does not already exist.
+ * {@internal Missing Short Description}}
  *
  * @since 2.0.0
  *
- * @param int|string $cat_name
- * @param int        $parent
- * @return int|WP_Error
+ * @param unknown_type $cat_name
+ * @param unknown_type $parent
+ * @return unknown
  */
 function wp_create_category( $cat_name, $parent = 0 ) {
 	if ( $id = category_exists($cat_name, $parent) )
@@ -59,22 +56,22 @@ function wp_create_category( $cat_name, $parent = 0 ) {
 }
 
 /**
- * Create categories for the given post.
+ * {@internal Missing Short Description}}
  *
  * @since 2.0.0
  *
- * @param array $categories List of categories to create.
- * @param int   $post_id    Optional. The post ID. Default empty.
- * @return List of categories to create for the given post.
+ * @param unknown_type $categories
+ * @param unknown_type $post_id
+ * @return unknown
  */
-function wp_create_categories( $categories, $post_id = '' ) {
+function wp_create_categories($categories, $post_id = '') {
 	$cat_ids = array ();
-	foreach ( $categories as $category ) {
-		if ( $id = category_exists( $category ) ) {
+	foreach ($categories as $category) {
+		if ($id = category_exists($category))
 			$cat_ids[] = $id;
-		} elseif ( $id = wp_create_category( $category ) ) {
-			$cat_ids[] = $id;
-		}
+		else
+			if ($id = wp_create_category($category))
+				$cat_ids[] = $id;
 	}
 
 	if ( $post_id )
@@ -87,71 +84,58 @@ function wp_create_categories( $categories, $post_id = '' ) {
  * Updates an existing Category or creates a new Category.
  *
  * @since 2.0.0
- * @since 2.5.0 $wp_error parameter was added.
- * @since 3.0.0 The 'taxonomy' argument was added.
  *
- * @param array $catarr {
- *     Array of arguments for inserting a new category.
- *
- *     @type int        $cat_ID               Categoriy ID. A non-zero value updates an existing category.
- *                                            Default 0.
- *     @type string     $taxonomy             Taxonomy slug. Defualt 'category'.
- *     @type string     $cat_nam              Category name. Default empty.
- *     @type string     $category_description Category description. Default empty.
- *     @type string     $category_nicename    Category nice (display) name. Default empty.
- *     @type int|string $category_parent      Category parent ID. Default empty.
- * }
- * @param bool  $wp_error Optional. Default false.
- * @return int|object The ID number of the new or updated Category on success. Zero or a WP_Error on failure,
- *                    depending on param $wp_error.
+ * @param mixed $catarr See defaults below. Set 'cat_ID' to a non-zero value to update an existing category. The 'taxonomy' key was added in 3.0.0.
+ * @param bool $wp_error Optional, since 2.5.0. Set this to true if the caller handles WP_Error return values.
+ * @return int|object The ID number of the new or updated Category on success. Zero or a WP_Error on failure, depending on param $wp_error.
  */
-function wp_insert_category( $catarr, $wp_error = false ) {
-	$cat_defaults = array( 'cat_ID' => 0, 'taxonomy' => 'category', 'cat_name' => '', 'category_description' => '', 'category_nicename' => '', 'category_parent' => '' );
-	$catarr = wp_parse_args( $catarr, $cat_defaults );
+function wp_insert_category($catarr, $wp_error = false) {
+	$cat_defaults = array('cat_ID' => 0, 'taxonomy' => 'category', 'cat_name' => '', 'category_description' => '', 'category_nicename' => '', 'category_parent' => '');
+	$catarr = wp_parse_args($catarr, $cat_defaults);
+	extract($catarr, EXTR_SKIP);
 
-	if ( trim( $catarr['cat_name'] ) == '' ) {
-		if ( ! $wp_error ) {
+	if ( trim( $cat_name ) == '' ) {
+		if ( ! $wp_error )
 			return 0;
-		} else {
-			return new WP_Error( 'cat_name', __( 'You did not enter a category name.' ) );
-		}
+		else
+			return new WP_Error( 'cat_name', __('You did not enter a category name.') );
 	}
 
-	$catarr['cat_ID'] = (int) $catarr['cat_ID'];
+	$cat_ID = (int) $cat_ID;
 
 	// Are we updating or creating?
-	$update = ! empty ( $catarr['cat_ID'] );
+	if ( !empty ($cat_ID) )
+		$update = true;
+	else
+		$update = false;
 
-	$name = $catarr['cat_name'];
-	$description = $catarr['category_description'];
-	$slug = $catarr['category_nicename'];
-	$parent = (int) $catarr['category_parent'];
-	if ( $parent < 0 ) {
-		$parent = 0;
-	}
+	$name = $cat_name;
+	$description = $category_description;
+	$slug = $category_nicename;
+	$parent = $category_parent;
 
-	if ( empty( $parent )
-		|| ! term_exists( $parent, $catarr['taxonomy'] )
-		|| ( $catarr['cat_ID'] && term_is_ancestor_of( $catarr['cat_ID'], $parent, $catarr['taxonomy'] ) ) ) {
+	$parent = (int) $parent;
+	if ( $parent < 0 )
 		$parent = 0;
-	}
+
+	if ( empty( $parent ) || ! term_exists( $parent, $taxonomy ) || ( $cat_ID && term_is_ancestor_of( $cat_ID, $parent, $taxonomy ) ) )
+		$parent = 0;
 
 	$args = compact('name', 'slug', 'parent', 'description');
 
-	if ( $update ) {
-		$catarr['cat_ID'] = wp_update_term( $catarr['cat_ID'], $catarr['taxonomy'], $args );
-	} else {
-		$catarr['cat_ID'] = wp_insert_term( $catarr['cat_name'], $catarr['taxonomy'], $args );
+	if ( $update )
+		$cat_ID = wp_update_term($cat_ID, $taxonomy, $args);
+	else
+		$cat_ID = wp_insert_term($cat_name, $taxonomy, $args);
+
+	if ( is_wp_error($cat_ID) ) {
+		if ( $wp_error )
+			return $cat_ID;
+		else
+			return 0;
 	}
 
-	if ( is_wp_error( $catarr['cat_ID'] ) ) {
-		if ( $wp_error ) {
-			return $catarr['cat_ID'];
-		} else {
-			return 0;
-		}
-	}
-	return $catarr['cat_ID']['term_id'];
+	return $cat_ID['term_id'];
 }
 
 /**
@@ -189,74 +173,66 @@ function wp_update_category($catarr) {
 //
 
 /**
- * Check whether a post tag with a given name exists.
+ * {@internal Missing Short Description}}
  *
  * @since 2.3.0
  *
- * @param int|string $tag_name
- * @return mixed
+ * @param unknown_type $tag_name
+ * @return unknown
  */
 function tag_exists($tag_name) {
 	return term_exists($tag_name, 'post_tag');
 }
 
 /**
- * Add a new tag to the database if it does not already exist.
+ * {@internal Missing Short Description}}
  *
  * @since 2.3.0
  *
- * @param int|string $tag_name
- * @return array|WP_Error
+ * @param unknown_type $tag_name
+ * @return unknown
  */
 function wp_create_tag($tag_name) {
 	return wp_create_term( $tag_name, 'post_tag');
 }
 
 /**
- * Get comma-separated list of tags available to edit.
+ * {@internal Missing Short Description}}
  *
  * @since 2.3.0
  *
- * @param int    $post_id
- * @param string $taxonomy Optional. The taxonomy for which to retrieve terms. Default 'post_tag'.
- * @return string|bool|WP_Error
+ * @param unknown_type $post_id
+ * @return unknown
  */
 function get_tags_to_edit( $post_id, $taxonomy = 'post_tag' ) {
 	return get_terms_to_edit( $post_id, $taxonomy);
 }
 
 /**
- * Get comma-separated list of terms available to edit for the given post ID.
+ * {@internal Missing Short Description}}
  *
  * @since 2.8.0
  *
- * @param int    $post_id
- * @param string $taxonomy Optional. The taxonomy for which to retrieve terms. Default 'post_tag'.
- * @return string|bool|WP_Error
+ * @param unknown_type $post_id
+ * @return unknown
  */
 function get_terms_to_edit( $post_id, $taxonomy = 'post_tag' ) {
 	$post_id = (int) $post_id;
 	if ( !$post_id )
 		return false;
 
-	$terms = get_object_term_cache( $post_id, $taxonomy );
-	if ( false === $terms ) {
-		$terms = wp_get_object_terms( $post_id, $taxonomy );
-		wp_cache_add( $post_id, $terms, $taxonomy . '_relationships' );
-	}
+	$tags = wp_get_post_terms($post_id, $taxonomy, array());
 
-	if ( ! $terms ) {
+	if ( !$tags )
 		return false;
-	}
-	if ( is_wp_error( $terms ) ) {
-		return $terms;
-	}
-	$term_names = array();
-	foreach ( $terms as $term ) {
-		$term_names[] = $term->name;
-	}
 
-	$terms_to_edit = esc_attr( join( ',', $term_names ) );
+	if ( is_wp_error($tags) )
+		return $tags;
+
+	foreach ( $tags as $tag )
+		$tag_names[] = $tag->name;
+	$tags_to_edit = join( ',', $tag_names );
+	$tags_to_edit = esc_attr( $tags_to_edit );
 
 	/**
 	 * Filter the comma-separated list of terms available to edit.
@@ -265,22 +241,21 @@ function get_terms_to_edit( $post_id, $taxonomy = 'post_tag' ) {
 	 *
 	 * @see get_terms_to_edit()
 	 *
-	 * @param array  $terms_to_edit An array of terms.
+	 * @param array  $tags_to_edit An array of terms.
 	 * @param string $taxonomy     The taxonomy for which to retrieve terms. Default 'post_tag'.
 	 */
-	$terms_to_edit = apply_filters( 'terms_to_edit', $terms_to_edit, $taxonomy );
+	$tags_to_edit = apply_filters( 'terms_to_edit', $tags_to_edit, $taxonomy );
 
-	return $terms_to_edit;
+	return $tags_to_edit;
 }
 
 /**
- * Add a new term to the database if it does not already exist.
+ * {@internal Missing Short Description}}
  *
  * @since 2.8.0
  *
- * @param int|string $tag_name
- * @param string $taxonomy Optional. The taxonomy for which to retrieve terms. Default 'post_tag'.
- * @return array|WP_Error
+ * @param unknown_type $tag_name
+ * @return unknown
  */
 function wp_create_term($tag_name, $taxonomy = 'post_tag') {
 	if ( $id = term_exists($tag_name, $taxonomy) )

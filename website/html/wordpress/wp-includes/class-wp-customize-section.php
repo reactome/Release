@@ -1,20 +1,12 @@
 <?php
 /**
- * WordPress Customize Section classes
+ * Customize Section Class.
+ *
+ * A UI container for controls, managed by the WP_Customize_Manager.
  *
  * @package WordPress
  * @subpackage Customize
  * @since 3.4.0
- */
-
-/**
- * Customize Section class.
- *
- * A UI container for controls, managed by the WP_Customize_Manager class.
- *
- * @since 3.4.0
- *
- * @see WP_Customize_Manager
  */
 class WP_Customize_Section {
 
@@ -171,6 +163,8 @@ class WP_Customize_Section {
 		$this->instance_number = self::$instance_count;
 
 		$this->controls = array(); // Users cannot customize the $controls array.
+
+		return $this;
 	}
 
 	/**
@@ -181,7 +175,7 @@ class WP_Customize_Section {
 	 *
 	 * @return bool Whether the section is active to the current preview.
 	 */
-	final public function active() {
+	public final function active() {
 		$section = $this;
 		$active = call_user_func( $this->active_callback, $this );
 
@@ -236,7 +230,7 @@ class WP_Customize_Section {
 	 *
 	 * @return bool False if theme doesn't support the section or user doesn't have the capability.
 	 */
-	final public function check_capabilities() {
+	public final function check_capabilities() {
 		if ( $this->capability && ! call_user_func_array( 'current_user_can', (array) $this->capability ) ) {
 			return false;
 		}
@@ -255,7 +249,7 @@ class WP_Customize_Section {
 	 *
 	 * @return string Contents of the section.
 	 */
-	final public function get_content() {
+	public final function get_content() {
 		ob_start();
 		$this->maybe_render();
 		$template = trim( ob_get_contents() );
@@ -268,7 +262,7 @@ class WP_Customize_Section {
 	 *
 	 * @since 3.4.0
 	 */
-	final public function maybe_render() {
+	public final function maybe_render() {
 		if ( ! $this->check_capabilities() ) {
 			return;
 		}
@@ -320,87 +314,10 @@ class WP_Customize_Section {
 }
 
 /**
- * Customize Themes Section class.
- *
- * A UI container for theme controls, which behaves like a backwards Panel.
- *
- * @since 4.2.0
- *
- * @see WP_Customize_Section
- */
-class WP_Customize_Themes_Section extends WP_Customize_Section {
-
-	/**
-	 * Customize section type.
-	 *
-	 * @since 4.2.0
-	 * @access public
-	 * @var string
-	 */
-	public $type = 'themes';
-
-	/**
-	 * Render the themes section, which behaves like a panel.
-	 *
-	 * @since 4.2.0
-	 * @access protected
-	 */
-	protected function render() {
-		$classes = 'accordion-section control-section control-section-' . $this->type;
-		?>
-		<li id="accordion-section-<?php echo esc_attr( $this->id ); ?>" class="<?php echo esc_attr( $classes ); ?>">
-			<h3 class="accordion-section-title">
-				<?php
-				if ( $this->manager->is_theme_active() ) {
-					/* translators: %s: theme name */
-					printf( __( '<span>Active theme</span> %s' ), $this->title );
-				} else {
-					/* translators: %s: theme name */
-					printf( __( '<span>Previewing theme</span> %s' ), $this->title );
-				}
-				?>
-
-				<button type="button" class="button change-theme"><?php _ex( 'Change', 'theme' ); ?></button>
-			</h3>
-			<div class="customize-themes-panel control-panel-content themes-php">
-				<h2>
-					<?php _e( 'Themes' ); ?>
-					<span class="title-count theme-count"><?php echo count( $this->controls ) + 1 /* Active theme */; ?></span>
-				</h2>
-
-				<h3 class="accordion-section-title customize-section-title">
-					<?php
-					if ( $this->manager->is_theme_active() ) {
-						/* translators: %s: theme name */
-						printf( __( '<span>Active theme</span> %s' ), $this->title );
-					} else {
-						/* translators: %s: theme name */
-						printf( __( '<span>Previewing theme</span> %s' ), $this->title );
-					}
-					?>
-					<button type="button" class="button customize-theme"><?php _e( 'Customize' ); ?></button>
-				</h3>
-
-				<div class="theme-overlay" tabindex="0" role="dialog" aria-label="<?php esc_attr_e( 'Theme Details' ); ?>"></div>
-
-				<div id="customize-container"></div>
-				<?php if ( count( $this->controls ) > 4 ) : ?>
-					<p><label for="themes-filter">
-						<span class="screen-reader-text"><?php _e( 'Search installed themes...' ); ?></span>
-						<input type="text" id="themes-filter" placeholder="<?php esc_attr_e( 'Search installed themes...' ); ?>" />
-					</label></p>
-				<?php endif; ?>
-				<div class="theme-browser rendered">
-					<ul class="themes accordion-section-content">
-					</ul>
-				</div>
-			</div>
-		</li>
-<?php }
-}
-
-/**
  * Customizer section representing widget area (sidebar).
+ *
+ * @package WordPress
+ * @subpackage Customize
  *
  * @since 4.1.0
  *

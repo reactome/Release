@@ -23,7 +23,7 @@
  *
  *     $out = do_shortcode( $content );
  *
- * @link https://codex.wordpress.org/Shortcode_API
+ * @link http://codex.wordpress.org/Shortcode_API
  *
  * @package WordPress
  * @subpackage Shortcodes
@@ -100,7 +100,7 @@ function add_shortcode($tag, $func) {
  *
  * @uses $shortcode_tags
  *
- * @param string $tag Shortcode tag to remove hook for.
+ * @param string $tag shortcode tag to remove hook for.
  */
 function remove_shortcode($tag) {
 	global $shortcode_tags;
@@ -130,10 +130,9 @@ function remove_all_shortcodes() {
  *
  * @since 3.6.0
  *
- * @global array $shortcode_tags List of shortcode tags and their callback hooks.
- *
- * @param string $tag Shortcode tag to check.
- * @return bool Whether the given shortcode exists.
+ * @global array $shortcode_tags
+ * @param string $tag
+ * @return boolean
  */
 function shortcode_exists( $tag ) {
 	global $shortcode_tags;
@@ -146,10 +145,8 @@ function shortcode_exists( $tag ) {
  * @since 3.6.0
  *
  * @global array $shortcode_tags
- *
- * @param string $content Content to search for shortcodes.
- * @param string $tag     Shortcode tag to check.
- * @return bool Whether the passed content contains the given shortcode.
+ * @param string $tag
+ * @return boolean
  */
 function has_shortcode( $content, $tag ) {
 	if ( false === strpos( $content, '[' ) ) {
@@ -181,9 +178,9 @@ function has_shortcode( $content, $tag ) {
  *
  * @since 2.5.0
  *
- * @global array $shortcode_tags List of shortcode tags and their callback hooks.
+ * @uses $shortcode_tags
  *
- * @param string $content Content to search for shortcodes.
+ * @param string $content Content to search for shortcodes
  * @return string Content with shortcodes filtered out.
  */
 function do_shortcode($content) {
@@ -314,7 +311,7 @@ function shortcode_parse_atts($text) {
 				$atts[strtolower($m[3])] = stripcslashes($m[4]);
 			elseif (!empty($m[5]))
 				$atts[strtolower($m[5])] = stripcslashes($m[6]);
-			elseif (isset($m[7]) && strlen($m[7]))
+			elseif (isset($m[7]) and strlen($m[7]))
 				$atts[] = stripcslashes($m[7]);
 			elseif (isset($m[8]))
 				$atts[] = stripcslashes($m[8]);
@@ -402,3 +399,5 @@ function strip_shortcode_tag( $m ) {
 
 	return $m[1] . $m[6];
 }
+
+add_filter('the_content', 'do_shortcode', 11); // AFTER wpautop()
