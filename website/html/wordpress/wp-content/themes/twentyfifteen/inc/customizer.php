@@ -327,8 +327,7 @@ function twentyfifteen_get_color_scheme_css( $colors ) {
 	.hentry,
 	.page-header,
 	.page-content,
-	.comments-area,
-	.widecolumn {
+	.comments-area {
 		background-color: {$colors['box_background_color']};
 	}
 
@@ -459,9 +458,7 @@ function twentyfifteen_get_color_scheme_css( $colors ) {
 	.site-info a,
 	.wp-caption-text,
 	.gallery-caption,
-	.comment-list .reply a,
-	.widecolumn label,
-	.widecolumn .mu_register label {
+	.comment-list .reply a {
 		color: {$colors['textcolor']}; /* Fallback for IE7 and IE8 */
 		color: {$colors['secondary_textcolor']};
 	}

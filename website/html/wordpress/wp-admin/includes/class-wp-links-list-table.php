@@ -9,28 +9,18 @@
  */
 class WP_Links_List_Table extends WP_List_Table {
 
-	/**
-	 * Constructor.
-	 *
-	 * @since 3.1.0
-	 * @access public
-	 *
-	 * @see WP_List_Table::__construct() for more information on default arguments.
-	 *
-	 * @param array $args An associative array of arguments.
-	 */
-	public function __construct( $args = array() ) {
+	function __construct( $args = array() ) {
 		parent::__construct( array(
 			'plural' => 'bookmarks',
 			'screen' => isset( $args['screen'] ) ? $args['screen'] : null,
 		) );
 	}
 
-	public function ajax_user_can() {
+	function ajax_user_can() {
 		return current_user_can( 'manage_links' );
 	}
 
-	public function prepare_items() {
+	function prepare_items() {
 		global $cat_id, $s, $orderby, $order;
 
 		wp_reset_vars( array( 'action', 'cat_id', 'link_id', 'orderby', 'order', 's' ) );
@@ -49,18 +39,18 @@ class WP_Links_List_Table extends WP_List_Table {
 		$this->items = get_bookmarks( $args );
 	}
 
-	public function no_items() {
+	function no_items() {
 		_e( 'No links found.' );
 	}
 
-	protected function get_bulk_actions() {
+	function get_bulk_actions() {
 		$actions = array();
 		$actions['delete'] = __( 'Delete' );
 
 		return $actions;
 	}
 
-	protected function extra_tablenav( $which ) {
+	function extra_tablenav( $which ) {
 		global $cat_id;
 
 		if ( 'top' != $which )
@@ -72,22 +62,20 @@ class WP_Links_List_Table extends WP_List_Table {
 				'selected' => $cat_id,
 				'name' => 'cat_id',
 				'taxonomy' => 'link_category',
-				'show_option_all' => __( 'All categories' ),
+				'show_option_all' => __( 'View all categories' ),
 				'hide_empty' => true,
 				'hierarchical' => 1,
 				'show_count' => 0,
 				'orderby' => 'name',
 			);
-
-			echo '<label class="screen-reader-text" for="cat_id">' . __( 'Filter by category' ) . '</label>';
 			wp_dropdown_categories( $dropdown_options );
-			submit_button( __( 'Filter' ), 'button', 'filter_action', false, array( 'id' => 'post-query-submit' ) );
+			submit_button( __( 'Filter' ), 'button', false, false, array( 'id' => 'post-query-submit' ) );
 ?>
 		</div>
 <?php
 	}
 
-	public function get_columns() {
+	function get_columns() {
 		return array(
 			'cb'         => '<input type="checkbox" />',
 			'name'       => _x( 'Name', 'link name' ),
@@ -99,7 +87,7 @@ class WP_Links_List_Table extends WP_List_Table {
 		);
 	}
 
-	protected function get_sortable_columns() {
+	function get_sortable_columns() {
 		return array(
 			'name'    => 'name',
 			'url'     => 'url',
@@ -108,8 +96,10 @@ class WP_Links_List_Table extends WP_List_Table {
 		);
 	}
 
-	public function display_rows() {
+	function display_rows() {
 		global $cat_id;
+
+		$alt = 0;
 
 		foreach ( $this->items as $link ) {
 			$link = sanitize_bookmark( $link );
@@ -120,10 +110,11 @@ class WP_Links_List_Table extends WP_List_Table {
 
 			$visible = ( $link->link_visible == 'Y' ) ? __( 'Yes' ) : __( 'No' );
 			$rating  = $link->link_rating;
+			$style = ( $alt++ % 2 ) ? '' : ' class="alternate"';
 
 			$edit_link = get_edit_bookmark_link( $link );
 ?>
-		<tr id="link-<?php echo $link->link_id; ?>">
+		<tr id="link-<?php echo $link->link_id; ?>" <?php echo $style; ?>>
 <?php
 
 			list( $columns, $hidden ) = $this->get_column_info();
@@ -184,18 +175,16 @@ class WP_Links_List_Table extends WP_List_Table {
 	 					?><td <?php echo $attributes ?>><?php echo $rating; ?></td><?php
 						break;
 					default:
+						/**
+						 * Fires for each registered custom link column.
+						 *
+						 * @since 2.1.0
+						 *
+						 * @param string $column_name Name of the custom column.
+						 * @param int    $link_id     Link ID.
+						 */
 						?>
-						<td <?php echo $attributes ?>><?php
-							/**
-							 * Fires for each registered custom link column.
-							 *
-							 * @since 2.1.0
-							 *
-							 * @param string $column_name Name of the custom column.
-							 * @param int    $link_id     Link ID.
-							 */
-							do_action( 'manage_link_custom_column', $column_name, $link->link_id );
-						?></td>
+						<td <?php echo $attributes ?>><?php do_action( 'manage_link_custom_column', $column_name, $link->link_id ); ?></td>
 						<?php
 						break;
 				}

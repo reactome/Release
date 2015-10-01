@@ -1,6 +1,6 @@
 /* global deleteUserSetting, setUserSetting, switchEditors, tinymce, tinyMCEPreInit */
 /**
- * Distraction-Free Writing
+ * Distraction Free Writing
  * (wp-fullscreen)
  *
  * Access the API globally using the window.wp.editor.fullscreen variable.
@@ -267,7 +267,7 @@
 			$saveMessage = $('#wp-fullscreen-save .wp-fullscreen-saved-message'),
 			$errorMessage = $('#wp-fullscreen-save .wp-fullscreen-error-message');
 
-		$spinner.addClass( 'is-active' );
+		$spinner.show();
 		$errorMessage.hide();
 		$saveMessage.hide();
 		$hidden.val('wp-fullscreen-save-post');
@@ -282,7 +282,7 @@
 			data: $('form#post').serialize(),
 			dataType: 'json'
 		}).done( function( response ) {
-			$spinner.removeClass( 'is-active' );
+			$spinner.hide();
 
 			if ( response && response.success ) {
 				$saveMessage.show();
@@ -298,7 +298,7 @@
 				$errorMessage.show();
 			}
 		}).fail( function() {
-			$spinner.removeClass( 'is-active' );
+			$spinner.hide();
 			$errorMessage.show();
 		});
 
@@ -510,9 +510,8 @@
 				}
 			});
 
-			$( window ).on( 'keydown.wp-fullscreen', function( event ) {
-				// Turn fullscreen off when Esc is pressed.
-				if ( 27 === event.keyCode && s.visible ) {
+			$document.on( 'keydown.wp-fullscreen', function( event ) {
+				if ( 27 === event.which && s.visible ) { // Esc
 					api.off();
 					event.stopImmediatePropagation();
 				}

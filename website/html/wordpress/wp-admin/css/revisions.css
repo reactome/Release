@@ -42,7 +42,7 @@
 .revisions-tickmarks > div {
 	position: absolute;
 	height: 100%;
-	border-left: 1px solid #a0a5aa;
+	border-left: 1px solid #aaa;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -73,15 +73,12 @@
 }
 
 .revisions .loading-indicator {
-	position: absolute;
+	position: fixed;
 	vertical-align: middle;
 	opacity: 0;
 	width: 100%;
-	width: -webkit-calc( 100% - 30px );
-	width: calc( 100% - 30px );
 	top: 50%;
-	top: -webkit-calc( 50% - 10px );
-	top: calc( 50% - 10px );
+	margin-left: -90px;
 	-webkit-transition: opacity 0.5s;
 	transition: opacity 0.5s;
 	filter: alpha(opacity=0); /* ie8 and earlier */
@@ -408,7 +405,7 @@ table.diff .diff-addedline ins {
 	z-index: 10000;
 }
 
-.arrow:after {
+.arrow::after {
 	z-index: 9999;
 	background-color: #fff;
 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -450,7 +447,7 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 	margin-right: -10px;
 }
 
-/* jQuery UI Slider */
+ /* jQuery UI Slider */
 .wp-slider.ui-slider {
 	position: relative;
 	border: 1px solid #d7d7d7;
@@ -467,15 +464,13 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
 	position: absolute;
 	width: 18px;
 	z-index: 2;
-	-ms-touch-action: none;
-	touch-action: none;
 }
 
 .wp-slider .ui-slider-handle,
 .wp-slider .ui-slider-handle.ui-state-hover,
 .wp-slider .ui-slider-handle.focus {
-	background: #00a0d2;
-	border: 1px solid #0073aa;
+	background: #2ea2cc;
+	border: 1px solid #0074a2;
 	-webkit-box-shadow: inset 0 1px 0 #78c8e6, 0 1px 0 rgba(0,0,0,.15);
 	box-shadow: inset 0 1px 0 #78c8e6, 0 1px 0 rgba(0,0,0,.15);
 }
@@ -554,6 +549,7 @@ div.revisions-controls > .wp-slider > .ui-slider-handle {
  * HiDPI Displays
  */
 @media print,
+  (-o-min-device-pixel-ratio: 5/4),
   (-webkit-min-device-pixel-ratio: 1.25),
   (min-resolution: 120dpi) {
 	.revision-tick.completed-false {

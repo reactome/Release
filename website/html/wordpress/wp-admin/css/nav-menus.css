@@ -101,6 +101,10 @@ ul.add-menu-item-tabs li {
 	margin-top: 1px;
 }
 
+.menu-edit p {
+	margin: .3em 0 .6em;
+}
+
 .menu-edit #post-body-content h3 {
 	margin: 1em 0 10px;
 }
@@ -212,16 +216,8 @@ ul.add-menu-item-tabs li {
 	margin-top: -2px;
 }
 
-.widefat .menu-locations tr + tr td {
-	padding-top: 0;
-}
-
-.widefat .menu-locations td {
-	vertical-align: middle;
-}
-
-.menu-location-title label {
-	font-weight: bold;
+.widefat td.menu-location-menus {
+	padding-bottom: 5px;
 }
 
 .menu-location-menus select {
@@ -263,7 +259,7 @@ ul.add-menu-item-tabs li {
 }
 
 .js .input-with-default-title {
-	color: #a0a5aa;
+	color: #aaa;
 	font-style: italic;
 }
 
@@ -349,6 +345,11 @@ ul.add-menu-item-tabs li {
 	float: right;
 }
 
+.postbox .spinner {
+	display: none;
+	vertical-align: middle;
+}
+
 .button-controls {
 	clear:both;
 	margin: 10px 0;
@@ -401,11 +402,6 @@ ul.add-menu-item-tabs li {
 /* Menu item types */
 .quick-search {
 	width: 190px;
-}
-
-.quick-search-wrap .spinner {
-	float: none;
-	margin: 0 5px;
 }
 
 .nav-menus-php .list-wrap {
@@ -475,7 +471,6 @@ ul.add-menu-item-tabs li {
 	position: relative;
 	padding: 10px 15px;
 	height: auto;
-	min-height: 20px;
 	width: 382px;
 	line-height: 30px;
 	overflow: hidden;
@@ -512,10 +507,6 @@ ul.add-menu-item-tabs li {
 	margin-right: 13em;
 }
 
-.menu-item-handle .menu-item-title.no-title {
-	color: #999;
-}
-
 /* Sortables */
 li.menu-item.ui-sortable-helper dl {
 	margin-top: 0;
@@ -531,7 +522,7 @@ li.menu-item.ui-sortable-helper .menu-item-transport dl {
 	margin-top: 13px;
 }
 
-/* WARNING: The factor of 30px is hardcoded into the nav-menus JavaScript. */
+/* WARNING: The factor of 30px is hardcoded into the nav-menus javascript. */
 .menu-item-depth-0 { margin-left: 0px; }
 .menu-item-depth-1 { margin-left: 30px; }
 .menu-item-depth-2 { margin-left: 60px; }
@@ -675,6 +666,7 @@ body.menu-max-depth-11 { min-width: 1280px !important; }
 
 .description-thin {
 	width: 190px;
+	height: 40px;
 }
 
 .description-wide {
@@ -712,14 +704,14 @@ body.menu-max-depth-11 { min-width: 1280px !important; }
 }
 
 .nav-menus-php .submitbox .submitcancel {
-	border-bottom: 1px solid #0073aa;
+	border-bottom: 1px solid #0074a2;
 	padding: 1px 2px;
-	color: #0073aa;
+	color: #0074a2;
 	text-decoration: none;
 }
 
 .nav-menus-php .submitbox .submitcancel:hover {
-	background: #0073aa;
+	background: #0074a2;
 	color: #fff;
 }
 
@@ -828,15 +820,11 @@ body.menu-max-depth-11 { min-width: 1280px !important; }
 	.menu-item-settings .description-thin,
 	.menu-item-settings .description-wide {
 		width: 100%;
+		height: auto;
 	}
 
 	.menu-item-settings input {
 		width: 100%;
-	}
-
-	.menu-item-settings input[type="checkbox"],
-	.menu-item-settings input[type="radio"] {
-		width: 25px;
 	}
 
 	.menu-settings dl {

@@ -504,7 +504,7 @@ class ftp_base {
 		return $this->_list(($arg?" ".$arg:"").($pathname?" ".$pathname:""), "LIST", "rawlist");
 	}
 
-	function nlist($pathname="", $arg="") {
+	function nlist($pathname="") {
 		return $this->_list(($arg?" ".$arg:"").($pathname?" ".$pathname:""), "NLST", "nlist");
 	}
 
@@ -903,4 +903,5 @@ if ( ! $mod_sockets && function_exists( 'dl' ) && is_callable( 'dl' ) ) {
 	$mod_sockets = extension_loaded( 'sockets' );
 }
 
-require_once dirname( __FILE__ ) . "/class-ftp-" . ( $mod_sockets ? "sockets" : "pure" ) . ".php";
+require_once "class-ftp-" . ( $mod_sockets ? "sockets" : "pure" ) . ".php";
+?>

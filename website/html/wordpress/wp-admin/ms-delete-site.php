@@ -12,7 +12,8 @@ require_once( dirname( __FILE__ ) . '/admin.php' );
 if ( !is_multisite() )
 	wp_die( __( 'Multisite support is not enabled.' ) );
 
-if ( ! current_user_can( 'delete_site' ) )
+// @todo Create a delete blog cap.
+if ( ! current_user_can( 'manage_options' ) )
 	wp_die(__( 'You do not have sufficient permissions to delete this site.'));
 
 if ( isset( $_GET['h'] ) && $_GET['h'] != '' && get_option( 'delete_blog_hash' ) != false ) {
@@ -25,7 +26,6 @@ if ( isset( $_GET['h'] ) && $_GET['h'] != '' && get_option( 'delete_blog_hash' )
 }
 
 $blog = get_blog_details();
-$user = wp_get_current_user();
 
 $title = __( 'Delete Site' );
 $parent_file = 'tools.php';
@@ -42,11 +42,9 @@ if ( isset( $_POST['action'] ) && $_POST['action'] == 'deleteblog' && isset( $_P
 
 	$url_delete = esc_url( admin_url( 'ms-delete-site.php?h=' . $hash ) );
 
-	$content = __( "Howdy ###USERNAME###,
-
+	$content = __( "Dear User,
 You recently clicked the 'Delete Site' link on your site and filled in a
 form on that page.
-
 If you really want to delete your site, click the link below. You will not
 be asked to confirm again so only click this link if you are absolutely certain:
 ###URL_DELETE###
@@ -67,7 +65,6 @@ Webmaster
 	 */
 	$content = apply_filters( 'delete_site_email_content', $content );
 
-	$content = str_replace( '###USERNAME###', $user->user_login, $content );
 	$content = str_replace( '###URL_DELETE###', $url_delete, $content );
 	$content = str_replace( '###SITE_NAME###', $current_site->site_name, $content );
 

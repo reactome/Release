@@ -17,8 +17,9 @@ class WP_Locale {
 	 *
 	 * @since 2.1.0
 	 * @var array
+	 * @access private
 	 */
-	public $weekday;
+	var $weekday;
 
 	/**
 	 * Stores the translated strings for the one character weekday names.
@@ -30,32 +31,36 @@ class WP_Locale {
 	 *
 	 * @since 2.1.0
 	 * @var array
+	 * @access private
 	 */
-	public $weekday_initial;
+	var $weekday_initial;
 
 	/**
 	 * Stores the translated strings for the abbreviated weekday names.
 	 *
 	 * @since 2.1.0
 	 * @var array
+	 * @access private
 	 */
-	public $weekday_abbrev;
+	var $weekday_abbrev;
 
 	/**
 	 * Stores the translated strings for the full month names.
 	 *
 	 * @since 2.1.0
 	 * @var array
+	 * @access private
 	 */
-	public $month;
+	var $month;
 
 	/**
 	 * Stores the translated strings for the abbreviated month names.
 	 *
 	 * @since 2.1.0
 	 * @var array
+	 * @access private
 	 */
-	public $month_abbrev;
+	var $month_abbrev;
 
 	/**
 	 * Stores the translated strings for 'am' and 'pm'.
@@ -64,8 +69,9 @@ class WP_Locale {
 	 *
 	 * @since 2.1.0
 	 * @var array
+	 * @access private
 	 */
-	public $meridiem;
+	var $meridiem;
 
 	/**
 	 * The text direction of the locale language.
@@ -74,14 +80,15 @@ class WP_Locale {
 	 *
 	 * @since 2.1.0
 	 * @var string
+	 * @access private
 	 */
-	public $text_direction = 'ltr';
+	var $text_direction = 'ltr';
 
 	/**
 	 * @var array
 	 */
-	public $number_format;
-
+	var $number_format;
+	
 	/**
 	 * Sets up the translated strings and object properties.
 	 *
@@ -318,6 +325,7 @@ class WP_Locale {
 	 * @uses WP_Locale::register_globals()
 	 * @since 2.1.0
 	 *
+	 * @return WP_Locale
 	 */
 	function __construct() {
 		$this->init();

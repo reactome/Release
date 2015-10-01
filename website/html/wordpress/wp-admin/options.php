@@ -26,10 +26,9 @@ wp_reset_vars(array('action', 'option_page'));
 
 $capability = 'manage_options';
 
-// This is for back compat and will eventually be removed.
-if ( empty($option_page) ) {
+if ( empty($option_page) ) // This is for back compat and will eventually be removed.
 	$option_page = 'options';
-} else {
+else
 
 	/**
 	 * Filter the capability required when using the Settings API.
@@ -42,10 +41,9 @@ if ( empty($option_page) ) {
 	 * @param string $capability The capability used for the page, which is manage_options by default.
 	 */
 	$capability = apply_filters( "option_page_capability_{$option_page}", $capability );
-}
 
 if ( !current_user_can( $capability ) )
-	wp_die( __( 'Cheatin&#8217; uh?' ), 403 );
+	wp_die(__('Cheatin&#8217; uh?'));
 
 // Handle admin email change requests
 if ( is_multisite() ) {
@@ -69,10 +67,10 @@ if ( is_multisite() ) {
 }
 
 if ( is_multisite() && !is_super_admin() && 'update' != $action )
-	wp_die( __( 'Cheatin&#8217; uh?' ), 403 );
+	wp_die(__('Cheatin&#8217; uh?'));
 
 $whitelist_options = array(
-	'general' => array( 'blogname', 'blogdescription', 'gmt_offset', 'date_format', 'time_format', 'start_of_week', 'timezone_string', 'WPLANG' ),
+	'general' => array( 'blogname', 'blogdescription', 'gmt_offset', 'date_format', 'time_format', 'start_of_week', 'timezone_string' ),
 	'discussion' => array( 'default_pingback_flag', 'default_ping_status', 'default_comment_status', 'comments_notify', 'moderation_notify', 'comment_moderation', 'require_name_email', 'comment_whitelist', 'comment_max_links', 'moderation_keys', 'blacklist_keys', 'show_avatars', 'avatar_rating', 'avatar_default', 'close_comments_for_old_posts', 'close_comments_days_old', 'thread_comments', 'thread_comments_depth', 'page_comments', 'comments_per_page', 'default_comments_page', 'comment_order', 'comment_registration' ),
 	'media' => array( 'thumbnail_size_w', 'thumbnail_size_h', 'thumbnail_crop', 'medium_size_w', 'medium_size_h', 'large_size_w', 'large_size_h', 'image_default_size', 'image_default_align', 'image_default_link_type' ),
 	'reading' => array( 'posts_per_page', 'posts_per_rss', 'rss_use_excerpt', 'show_on_front', 'page_on_front', 'page_for_posts', 'blog_public' ),
@@ -107,6 +105,7 @@ if ( !is_multisite() ) {
 	}
 } else {
 	$whitelist_options['general'][] = 'new_admin_email';
+	$whitelist_options['general'][] = 'WPLANG';
 
 	/**
 	 * Filter whether the post-by-email functionality is enabled.
@@ -151,8 +150,8 @@ if ( 'update' == $action ) {
 		$options = $whitelist_options[ $option_page ];
 	}
 
+	// Handle custom date/time formats
 	if ( 'general' == $option_page ) {
-		// Handle custom date/time formats.
 		if ( !empty($_POST['date_format']) && isset($_POST['date_format_custom']) && '\c\u\s\t\o\m' == wp_unslash( $_POST['date_format'] ) )
 			$_POST['date_format'] = $_POST['date_format_custom'];
 		if ( !empty($_POST['time_format']) && isset($_POST['time_format_custom']) && '\c\u\s\t\o\m' == wp_unslash( $_POST['time_format'] ) )
@@ -163,24 +162,12 @@ if ( 'update' == $action ) {
 			$_POST['gmt_offset'] = preg_replace('/UTC\+?/', '', $_POST['gmt_offset']);
 			$_POST['timezone_string'] = '';
 		}
-
-		// Handle translation install.
-		if ( ! empty( $_POST['WPLANG'] ) && ( ! is_multisite() || is_super_admin() ) ) { // @todo: Skip if already installed
-			require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
-
-			if ( wp_can_install_language_pack() ) {
-				$language = wp_download_language_pack( $_POST['WPLANG'] );
-				if ( $language ) {
-					$_POST['WPLANG'] = $language;
-				}
-			}
-		}
 	}
 
 	if ( $options ) {
 		foreach ( $options as $option ) {
 			if ( $unregistered )
-				_deprecated_argument( 'options.php', '2.7', sprintf( __( 'The <code>%1$s</code> setting is unregistered. Unregistered settings are deprecated. See https://codex.wordpress.org/Settings_API' ), $option, $option_page ) );
+				_deprecated_argument( 'options.php', '2.7', sprintf( __( 'The <code>%1$s</code> setting is unregistered. Unregistered settings are deprecated. See http://codex.wordpress.org/Settings_API' ), $option, $option_page ) );
 
 			$option = trim( $option );
 			$value = null;
@@ -191,14 +178,6 @@ if ( 'update' == $action ) {
 				$value = wp_unslash( $value );
 			}
 			update_option( $option, $value );
-		}
-
-		// Switch translation in case WPLANG was changed.
-		$language = get_option( 'WPLANG' );
-		if ( $language ) {
-			load_default_textdomain( $language );
-		} else {
-			unload_textdomain( 'default' );
 		}
 	}
 
@@ -225,7 +204,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' ); ?>
   <form name="form" action="options.php" method="post" id="all-options">
   <?php wp_nonce_field('options-options') ?>
   <input type="hidden" name="action" value="update" />
-  <input type="hidden" name="option_page" value="options" />
+  <input type='hidden' name='option_page' value='options' />
   <table class="form-table">
 <?php
 $options = $wpdb->get_results( "SELECT * FROM $wpdb->options ORDER BY option_name" );
@@ -236,7 +215,7 @@ foreach ( (array) $options as $option ) :
 		continue;
 	if ( is_serialized( $option->option_value ) ) {
 		if ( is_serialized_string( $option->option_value ) ) {
-			// This is a serialized string, so we should display it.
+			// this is a serialized string, so we should display it
 			$value = maybe_unserialize( $option->option_value );
 			$options_to_update[] = $option->option_name;
 			$class = 'all-options';
@@ -251,19 +230,18 @@ foreach ( (array) $options as $option ) :
 		$class = 'all-options';
 	}
 	$name = esc_attr( $option->option_name );
-	?>
+	echo "
 <tr>
-	<th scope="row"><label for="<?php echo $name ?>"><?php echo esc_html( $option->option_name ); ?></label></th>
-<td>
-<?php if ( strpos( $value, "\n" ) !== false ) : ?>
-	<textarea class="<?php echo $class ?>" name="<?php echo $name ?>" id="<?php echo $name ?>" cols="30" rows="5"><?php
-		echo esc_textarea( $value );
-	?></textarea>
-	<?php else: ?>
-		<input class="regular-text <?php echo $class ?>" type="text" name="<?php echo $name ?>" id="<?php echo $name ?>" value="<?php echo esc_attr( $value ) ?>"<?php disabled( $disabled, true ) ?> />
-	<?php endif ?></td>
-</tr>
-<?php endforeach; ?>
+	<th scope='row'><label for='$name'>" . esc_html( $option->option_name ) . "</label></th>
+<td>";
+	if ( strpos( $value, "\n" ) !== false )
+		echo "<textarea class='$class' name='$name' id='$name' cols='30' rows='5'>" . esc_textarea( $value ) . "</textarea>";
+	else
+		echo "<input class='regular-text $class' type='text' name='$name' id='$name' value='" . esc_attr( $value ) . "'" . disabled( $disabled, true, false ) . " />";
+	echo "</td>
+</tr>";
+endforeach;
+?>
   </table>
 
 <input type="hidden" name="page_options" value="<?php echo esc_attr( implode( ',', $options_to_update ) ); ?>" />

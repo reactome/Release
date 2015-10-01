@@ -20,7 +20,7 @@ define( 'WPINC', 'wp-includes' );
 // Include files required for initialization.
 require( ABSPATH . WPINC . '/load.php' );
 require( ABSPATH . WPINC . '/default-constants.php' );
-require( ABSPATH . '/wp-secrets.php'); 
+require( ABSPATH . '/wp-secrets.php');
 
 /*
  * These can't be directly globalized in version.php. When updating,
@@ -193,7 +193,7 @@ do_action( 'muplugins_loaded' );
 if ( is_multisite() )
 	ms_cookie_constants(  );
 
-// Define constants after multisite is loaded.
+// Define constants after multisite is loaded. Cookie-related constants may be overridden in ms_network_cookies().
 wp_cookie_constants();
 
 // Define and enforce our SSL constants
@@ -368,7 +368,7 @@ if ( is_multisite() ) {
  * AJAX requests should use wp-admin/admin-ajax.php. admin-ajax.php can handle requests for
  * users not logged in.
  *
- * @link https://codex.wordpress.org/AJAX_in_Plugins
+ * @link http://codex.wordpress.org/AJAX_in_Plugins
  *
  * @since 3.0.0
  */
