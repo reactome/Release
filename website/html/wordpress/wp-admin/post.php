@@ -23,7 +23,7 @@ elseif ( isset( $_POST['post_ID'] ) )
 else
  	$post_id = $post_ID = 0;
 
-global $post_type, $post_type_object, $post;
+$post = $post_type = $post_type_object = null;
 
 if ( $post_id )
 	$post = get_post( $post_id );
@@ -95,9 +95,7 @@ if ( ! $sendback ||
 		$sendback = admin_url( 'upload.php' );
 	} else {
 		$sendback = admin_url( 'edit.php' );
-		if ( ! empty( $post_type ) ) {
-			$sendback = add_query_arg( 'post_type', $post_type, $sendback );
-		}
+		$sendback .= ( ! empty( $post_type ) ) ? '?post_type=' . $post_type : '';
 	}
 } else {
 	$sendback = remove_query_arg( array('trashed', 'untrashed', 'deleted', 'ids'), $sendback );
@@ -130,6 +128,7 @@ case 'post-quickdraft-save':
 	edit_post();
 	wp_dashboard_quick_press();
 	exit;
+	break;
 
 case 'postajaxpost':
 case 'post':
@@ -137,6 +136,7 @@ case 'post':
 	$post_id = 'postajaxpost' == $action ? edit_post() : write_post();
 	redirect_post( $post_id );
 	exit();
+	break;
 
 case 'edit':
 	$editing = true;
@@ -231,13 +231,13 @@ case 'editpost':
 	$post_id = edit_post();
 
 	// Session cookie flag that the post was saved
-	if ( isset( $_COOKIE['wp-saving-post'] ) && $_COOKIE['wp-saving-post'] === $post_id . '-check' ) {
-		setcookie( 'wp-saving-post', $post_id . '-saved', time() + DAY_IN_SECONDS );
-	}
+	if ( isset( $_COOKIE['wp-saving-post-' . $post_id] ) )
+		setcookie( 'wp-saving-post-' . $post_id, 'saved' );
 
 	redirect_post($post_id); // Send user on their way while we keep working
 
 	exit();
+	break;
 
 case 'trash':
 	check_admin_referer('trash-post_' . $post_id);
@@ -261,6 +261,7 @@ case 'trash':
 
 	wp_redirect( add_query_arg( array('trashed' => 1, 'ids' => $post_id), $sendback ) );
 	exit();
+	break;
 
 case 'untrash':
 	check_admin_referer('untrash-post_' . $post_id);
@@ -279,6 +280,7 @@ case 'untrash':
 
 	wp_redirect( add_query_arg('untrashed', 1, $sendback) );
 	exit();
+	break;
 
 case 'delete':
 	check_admin_referer('delete-post_' . $post_id);
@@ -304,6 +306,7 @@ case 'delete':
 
 	wp_redirect( add_query_arg('deleted', 1, $sendback) );
 	exit();
+	break;
 
 case 'preview':
 	check_admin_referer( 'update-post_' . $post_id );
@@ -312,9 +315,11 @@ case 'preview':
 
 	wp_redirect($url);
 	exit();
+	break;
 
 default:
 	wp_redirect( admin_url('edit.php') );
 	exit();
+	break;
 } // end switch
 include( ABSPATH . 'wp-admin/admin-footer.php' );

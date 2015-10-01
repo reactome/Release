@@ -16,64 +16,48 @@
  */
 class WP_Upgrader_Skin {
 
-	public $upgrader;
-	public $done_header = false;
-	public $done_footer = false;
-	public $result = false;
-	public $options = array();
+	var $upgrader;
+	var $done_header = false;
+	var $result = false;
 
-	public function __construct($args = array()) {
+	function __construct($args = array()) {
 		$defaults = array( 'url' => '', 'nonce' => '', 'title' => '', 'context' => false );
 		$this->options = wp_parse_args($args, $defaults);
 	}
 
-	/**
-	 * @param WP_Upgrader $upgrader
-	 */
-	public function set_upgrader(&$upgrader) {
+	function set_upgrader(&$upgrader) {
 		if ( is_object($upgrader) )
 			$this->upgrader =& $upgrader;
 		$this->add_strings();
 	}
 
-	public function add_strings() {
+	function add_strings() {
 	}
 
-	public function set_result($result) {
+	function set_result($result) {
 		$this->result = $result;
 	}
 
-	public function request_filesystem_credentials( $error = false, $context = false, $allow_relaxed_file_ownership = false ) {
+	function request_filesystem_credentials($error = false) {
 		$url = $this->options['url'];
-		if ( ! $context ) {
-			$context = $this->options['context'];
-		}
-		if ( !empty($this->options['nonce']) ) {
+		$context = $this->options['context'];
+		if ( !empty($this->options['nonce']) )
 			$url = wp_nonce_url($url, $this->options['nonce']);
-		}
-
-		$extra_fields = array();
-
-		return request_filesystem_credentials( $url, '', $error, $context, $extra_fields, $allow_relaxed_file_ownership );
+		return request_filesystem_credentials($url, '', $error, $context); //Possible to bring inline, Leaving as is for now.
 	}
 
-	public function header() {
-		if ( $this->done_header ) {
+	function header() {
+		if ( $this->done_header )
 			return;
-		}
 		$this->done_header = true;
 		echo '<div class="wrap">';
 		echo '<h2>' . $this->options['title'] . '</h2>';
 	}
-	public function footer() {
-		if ( $this->done_footer ) {
-			return;
-		}
-		$this->done_footer = true;
+	function footer() {
 		echo '</div>';
 	}
 
-	public function error($errors) {
+	function error($errors) {
 		if ( ! $this->done_header )
 			$this->header();
 		if ( is_string($errors) ) {
@@ -88,7 +72,7 @@ class WP_Upgrader_Skin {
 		}
 	}
 
-	public function feedback($string) {
+	function feedback($string) {
 		if ( isset( $this->upgrader->strings[$string] ) )
 			$string = $this->upgrader->strings[$string];
 
@@ -105,8 +89,8 @@ class WP_Upgrader_Skin {
 			return;
 		show_message($string);
 	}
-	public function before() {}
-	public function after() {}
+	function before() {}
+	function after() {}
 
 	/**
 	 * Output JavaScript that calls function to decrement the update counts.
@@ -120,26 +104,14 @@ class WP_Upgrader_Skin {
 		if ( ! $this->result || is_wp_error( $this->result ) || 'up_to_date' === $this->result ) {
 			return;
 		}
-
-		if ( defined( 'IFRAME_REQUEST' ) ) {
-			echo '<script type="text/javascript">
-					if ( window.postMessage && JSON ) {
-						window.parent.postMessage( JSON.stringify( { action: "decrementUpdateCount", upgradeType: "' . $type . '" } ), window.location.protocol + "//" + window.location.hostname );
+		echo '<script type="text/javascript">
+				(function( wp ) {
+					if ( wp && wp.updates.decrementCount ) {
+						wp.updates.decrementCount( "' . $type . '" );
 					}
-				</script>';
-		} else {
-			echo '<script type="text/javascript">
-					(function( wp ) {
-						if ( wp && wp.updates.decrementCount ) {
-							wp.updates.decrementCount( "' . $type . '" );
-						}
-					})( window.wp );
-				</script>';
-		}
+				})( window.wp );
+			</script>';
 	}
-
-	public function bulk_header() {}
-	public function bulk_footer() {}
 }
 
 /**
@@ -150,11 +122,11 @@ class WP_Upgrader_Skin {
  * @since 2.8.0
  */
 class Plugin_Upgrader_Skin extends WP_Upgrader_Skin {
-	public $plugin = '';
-	public $plugin_active = false;
-	public $plugin_network_active = false;
+	var $plugin = '';
+	var $plugin_active = false;
+	var $plugin_network_active = false;
 
-	public function __construct($args = array()) {
+	function __construct($args = array()) {
 		$defaults = array( 'url' => '', 'plugin' => '', 'nonce' => '', 'title' => __('Update Plugin') );
 		$args = wp_parse_args($args, $defaults);
 
@@ -166,7 +138,7 @@ class Plugin_Upgrader_Skin extends WP_Upgrader_Skin {
 		parent::__construct($args);
 	}
 
-	public function after() {
+	function after() {
 		$this->plugin = $this->upgrader->plugin_info();
 		if ( !empty($this->plugin) && !is_wp_error($this->result) && $this->plugin_active ){
 			echo '<iframe style="border:0;overflow:hidden" width="100%" height="170px" src="' . wp_nonce_url('update.php?action=activate-plugin&networkwide=' . $this->plugin_network_active . '&plugin=' . urlencode( $this->plugin ), 'activate-plugin_' . $this->plugin) .'"></iframe>';
@@ -204,31 +176,25 @@ class Plugin_Upgrader_Skin extends WP_Upgrader_Skin {
  * @since 3.0.0
  */
 class Bulk_Upgrader_Skin extends WP_Upgrader_Skin {
-	public $in_loop = false;
-	/**
-	 * @var string|false
-	 */
-	public $error = false;
+	var $in_loop = false;
+	var $error = false;
 
-	public function __construct($args = array()) {
+	function __construct($args = array()) {
 		$defaults = array( 'url' => '', 'nonce' => '' );
 		$args = wp_parse_args($args, $defaults);
 
 		parent::__construct($args);
 	}
 
-	public function add_strings() {
+	function add_strings() {
 		$this->upgrader->strings['skin_upgrade_start'] = __('The update process is starting. This process may take a while on some hosts, so please be patient.');
 		$this->upgrader->strings['skin_update_failed_error'] = __('An error occurred while updating %1$s: <strong>%2$s</strong>');
 		$this->upgrader->strings['skin_update_failed'] = __('The update of %1$s failed.');
-		$this->upgrader->strings['skin_update_successful'] = __( '%1$s updated successfully.' ) . ' <a onclick="%2$s" href="#" class="hide-if-no-js"><span>' . __( 'Show Details' ) . '</span><span class="hidden">' . __( 'Hide Details' ) . '</span></a>';
+		$this->upgrader->strings['skin_update_successful'] = __('%1$s updated successfully.').' <a onclick="%2$s" href="#" class="hide-if-no-js"><span>'.__('Show Details').'</span><span class="hidden">'.__('Hide Details').'</span>.</a>';
 		$this->upgrader->strings['skin_upgrade_end'] = __('All updates have been completed.');
 	}
 
-	/**
-	 * @param string $string
-	 */
-	public function feedback($string) {
+	function feedback($string) {
 		if ( isset( $this->upgrader->strings[$string] ) )
 			$string = $this->upgrader->strings[$string];
 
@@ -249,19 +215,18 @@ class Bulk_Upgrader_Skin extends WP_Upgrader_Skin {
 			echo "<p>$string</p>\n";
 	}
 
-	public function header() {
+	function header() {
 		// Nothing, This will be displayed within a iframe.
 	}
 
-	public function footer() {
+	function footer() {
 		// Nothing, This will be displayed within a iframe.
 	}
-	public function error($error) {
+	function error($error) {
 		if ( is_string($error) && isset( $this->upgrader->strings[$error] ) )
 			$this->error = $this->upgrader->strings[$error];
 
 		if ( is_wp_error($error) ) {
-			$messages = array();
 			foreach ( $error->get_error_messages() as $emessage ) {
 				if ( $error->get_error_data() && is_string( $error->get_error_data() ) )
 					$messages[] = $emessage . ' ' . esc_html( strip_tags( $error->get_error_data() ) );
@@ -273,15 +238,15 @@ class Bulk_Upgrader_Skin extends WP_Upgrader_Skin {
 		echo '<script type="text/javascript">jQuery(\'.waiting-' . esc_js($this->upgrader->update_current) . '\').hide();</script>';
 	}
 
-	public function bulk_header() {
+	function bulk_header() {
 		$this->feedback('skin_upgrade_start');
 	}
 
-	public function bulk_footer() {
+	function bulk_footer() {
 		$this->feedback('skin_upgrade_end');
 	}
 
-	public function before($title = '') {
+	function before($title = '') {
 		$this->in_loop = true;
 		printf( '<h4>' . $this->upgrader->strings['skin_before_update_header'] . ' <span class="spinner waiting-' . $this->upgrader->update_current . '"></span></h4>',  $title, $this->upgrader->update_current, $this->upgrader->update_count);
 		echo '<script type="text/javascript">jQuery(\'.waiting-' . esc_js($this->upgrader->update_current) . '\').css("display", "inline-block");</script>';
@@ -289,7 +254,7 @@ class Bulk_Upgrader_Skin extends WP_Upgrader_Skin {
 		$this->flush_output();
 	}
 
-	public function after($title = '') {
+	function after($title = '') {
 		echo '</p></div>';
 		if ( $this->error || ! $this->result ) {
 			if ( $this->error )
@@ -309,34 +274,57 @@ class Bulk_Upgrader_Skin extends WP_Upgrader_Skin {
 		$this->flush_output();
 	}
 
-	public function reset() {
+	function reset() {
 		$this->in_loop = false;
 		$this->error = false;
 	}
 
-	public function flush_output() {
+	function flush_output() {
 		wp_ob_end_flush_all();
 		flush();
+	}
+
+	/**
+	 * Output JavaScript that sends message to parent window to decrement the update counts.
+	 *
+	 * @since 3.9.0
+	 *
+	 * @param string $type Type of update count to decrement. Likely values include 'plugin',
+	 *                     'theme', 'translation', etc.
+	 */
+	protected function decrement_update_count( $type ) {
+		if ( ! $this->result || is_wp_error( $this->result ) || 'up_to_date' === $this->result ) {
+			return;
+		}
+		echo '<script type="text/javascript">
+				if ( window.postMessage && JSON ) {
+					window.parent.postMessage( JSON.stringify( { action: "decrementUpdateCount", upgradeType: "' . $type . '" } ), window.location.protocol + "//" + window.location.hostname );
+				}
+			</script>';
 	}
 }
 
 class Bulk_Plugin_Upgrader_Skin extends Bulk_Upgrader_Skin {
-	public $plugin_info = array(); // Plugin_Upgrader::bulk() will fill this in.
+	var $plugin_info = array(); // Plugin_Upgrader::bulk() will fill this in.
 
-	public function add_strings() {
+	function __construct($args = array()) {
+		parent::__construct($args);
+	}
+
+	function add_strings() {
 		parent::add_strings();
 		$this->upgrader->strings['skin_before_update_header'] = __('Updating Plugin %1$s (%2$d/%3$d)');
 	}
 
-	public function before($title = '') {
+	function before($title = '') {
 		parent::before($this->plugin_info['Title']);
 	}
 
-	public function after($title = '') {
+	function after($title = '') {
 		parent::after($this->plugin_info['Title']);
 		$this->decrement_update_count( 'plugin' );
 	}
-	public function bulk_footer() {
+	function bulk_footer() {
 		parent::bulk_footer();
 		$update_actions =  array(
 			'plugins_page' => '<a href="' . self_admin_url('plugins.php') . '" title="' . esc_attr__('Go to plugins page') . '" target="_parent">' . __('Return to Plugins page') . '</a>',
@@ -361,23 +349,27 @@ class Bulk_Plugin_Upgrader_Skin extends Bulk_Upgrader_Skin {
 }
 
 class Bulk_Theme_Upgrader_Skin extends Bulk_Upgrader_Skin {
-	public $theme_info = array(); // Theme_Upgrader::bulk() will fill this in.
+	var $theme_info = array(); // Theme_Upgrader::bulk() will fill this in.
 
-	public function add_strings() {
+	function __construct($args = array()) {
+		parent::__construct($args);
+	}
+
+	function add_strings() {
 		parent::add_strings();
 		$this->upgrader->strings['skin_before_update_header'] = __('Updating Theme %1$s (%2$d/%3$d)');
 	}
 
-	public function before($title = '') {
+	function before($title = '') {
 		parent::before( $this->theme_info->display('Name') );
 	}
 
-	public function after($title = '') {
+	function after($title = '') {
 		parent::after( $this->theme_info->display('Name') );
 		$this->decrement_update_count( 'theme' );
 	}
 
-	public function bulk_footer() {
+	function bulk_footer() {
 		parent::bulk_footer();
 		$update_actions =  array(
 			'themes_page' => '<a href="' . self_admin_url('themes.php') . '" title="' . esc_attr__('Go to themes page') . '" target="_parent">' . __('Return to Themes page') . '</a>',
@@ -409,10 +401,10 @@ class Bulk_Theme_Upgrader_Skin extends Bulk_Upgrader_Skin {
  * @since 2.8.0
  */
 class Plugin_Installer_Skin extends WP_Upgrader_Skin {
-	public $api;
-	public $type;
+	var $api;
+	var $type;
 
-	public function __construct($args = array()) {
+	function __construct($args = array()) {
 		$defaults = array( 'type' => 'web', 'url' => '', 'plugin' => '', 'nonce' => '', 'title' => '' );
 		$args = wp_parse_args($args, $defaults);
 
@@ -422,12 +414,12 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 		parent::__construct($args);
 	}
 
-	public function before() {
+	function before() {
 		if ( !empty($this->api) )
 			$this->upgrader->strings['process_success'] = sprintf( __('Successfully installed the plugin <strong>%s %s</strong>.'), $this->api->name, $this->api->version);
 	}
 
-	public function after() {
+	function after() {
 
 		$plugin_file = $this->upgrader->plugin_info();
 
@@ -445,13 +437,12 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
 			unset( $install_actions['activate_plugin'] );
 		}
 
-		if ( 'import' == $from ) {
+		if ( 'import' == $from )
 			$install_actions['importers_page'] = '<a href="' . admin_url('import.php') . '" title="' . esc_attr__('Return to Importers') . '" target="_parent">' . __('Return to Importers') . '</a>';
-		} elseif ( $this->type == 'web' ) {
+		else if ( $this->type == 'web' )
 			$install_actions['plugins_page'] = '<a href="' . self_admin_url('plugin-install.php') . '" title="' . esc_attr__('Return to Plugin Installer') . '" target="_parent">' . __('Return to Plugin Installer') . '</a>';
-		} else {
+		else
 			$install_actions['plugins_page'] = '<a href="' . self_admin_url('plugins.php') . '" title="' . esc_attr__('Return to Plugins page') . '" target="_parent">' . __('Return to Plugins page') . '</a>';
-		}
 
 		if ( ! $this->result || is_wp_error($this->result) ) {
 			unset( $install_actions['activate_plugin'], $install_actions['network_activate'] );
@@ -485,10 +476,10 @@ class Plugin_Installer_Skin extends WP_Upgrader_Skin {
  * @since 2.8.0
  */
 class Theme_Installer_Skin extends WP_Upgrader_Skin {
-	public $api;
-	public $type;
+	var $api;
+	var $type;
 
-	public function __construct($args = array()) {
+	function __construct($args = array()) {
 		$defaults = array( 'type' => 'web', 'url' => '', 'theme' => '', 'nonce' => '', 'title' => '' );
 		$args = wp_parse_args($args, $defaults);
 
@@ -498,12 +489,12 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 		parent::__construct($args);
 	}
 
-	public function before() {
+	function before() {
 		if ( !empty($this->api) )
 			$this->upgrader->strings['process_success'] = sprintf( $this->upgrader->strings['process_success_specific'], $this->api->name, $this->api->version);
 	}
 
-	public function after() {
+	function after() {
 		if ( empty($this->upgrader->result['destination_name']) )
 			return;
 
@@ -530,9 +521,7 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
 
 		$install_actions = array();
 		$install_actions['preview']  = '<a href="' . esc_url( $preview_link ) . '" class="hide-if-customize" title="' . esc_attr( sprintf( __('Preview &#8220;%s&#8221;'), $name ) ) . '">' . __('Preview') . '</a>';
-		if ( current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' ) ) {
-			$install_actions['preview'] .= '<a href="' . wp_customize_url( $stylesheet ) . '" class="hide-if-no-customize load-customize" title="' . esc_attr( sprintf( __('Preview &#8220;%s&#8221;'), $name ) ) . '">' . __('Live Preview') . '</a>';
-		}
+		$install_actions['preview'] .= '<a href="' . wp_customize_url( $stylesheet ) . '" class="hide-if-no-customize load-customize" title="' . esc_attr( sprintf( __('Preview &#8220;%s&#8221;'), $name ) ) . '">' . __('Live Preview') . '</a>';
 		$install_actions['activate'] = '<a href="' . esc_url( $activate_link ) . '" class="activatelink" title="' . esc_attr( sprintf( __('Activate &#8220;%s&#8221;'), $name ) ) . '">' . __('Activate') . '</a>';
 
 		if ( is_network_admin() && current_user_can( 'manage_network_themes' ) )
@@ -570,9 +559,9 @@ class Theme_Installer_Skin extends WP_Upgrader_Skin {
  * @since 2.8.0
  */
 class Theme_Upgrader_Skin extends WP_Upgrader_Skin {
-	public $theme = '';
+	var $theme = '';
 
-	public function __construct($args = array()) {
+	function __construct($args = array()) {
 		$defaults = array( 'url' => '', 'theme' => '', 'nonce' => '', 'title' => __('Update Theme') );
 		$args = wp_parse_args($args, $defaults);
 
@@ -581,7 +570,7 @@ class Theme_Upgrader_Skin extends WP_Upgrader_Skin {
 		parent::__construct($args);
 	}
 
-	public function after() {
+	function after() {
 		$this->decrement_update_count( 'theme' );
 
 		$update_actions = array();
@@ -604,14 +593,11 @@ class Theme_Upgrader_Skin extends WP_Upgrader_Skin {
 			$activate_link = wp_nonce_url( $activate_link, 'switch-theme_' . $stylesheet );
 
 			if ( get_stylesheet() == $stylesheet ) {
-				if ( current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' ) ) {
+				if ( current_user_can( 'edit_theme_options' ) )
 					$update_actions['preview']  = '<a href="' . wp_customize_url( $stylesheet ) . '" class="hide-if-no-customize load-customize" title="' . esc_attr( sprintf( __('Customize &#8220;%s&#8221;'), $name ) ) . '">' . __('Customize') . '</a>';
-				}
 			} elseif ( current_user_can( 'switch_themes' ) ) {
 				$update_actions['preview']  = '<a href="' . esc_url( $preview_link ) . '" class="hide-if-customize" title="' . esc_attr( sprintf( __('Preview &#8220;%s&#8221;'), $name ) ) . '">' . __('Preview') . '</a>';
-				if ( current_user_can( 'edit_theme_options' ) && current_user_can( 'customize' ) ) {
-					$update_actions['preview'] .= '<a href="' . wp_customize_url( $stylesheet ) . '" class="hide-if-no-customize load-customize" title="' . esc_attr( sprintf( __('Preview &#8220;%s&#8221;'), $name ) ) . '">' . __('Live Preview') . '</a>';
-				}
+				$update_actions['preview'] .= '<a href="' . wp_customize_url( $stylesheet ) . '" class="hide-if-no-customize load-customize" title="' . esc_attr( sprintf( __('Preview &#8220;%s&#8221;'), $name ) ) . '">' . __('Live Preview') . '</a>';
 				$update_actions['activate'] = '<a href="' . esc_url( $activate_link ) . '" class="activatelink" title="' . esc_attr( sprintf( __('Activate &#8220;%s&#8221;'), $name ) ) . '">' . __('Activate') . '</a>';
 			}
 
@@ -644,23 +630,21 @@ class Theme_Upgrader_Skin extends WP_Upgrader_Skin {
  * @since 3.7.0
  */
 class Language_Pack_Upgrader_Skin extends WP_Upgrader_Skin {
-	public $language_update = null;
-	public $done_header = false;
-	public $done_footer = false;
-	public $display_footer_actions = true;
+	var $language_update = null;
+	var $done_header = false;
+	var $display_footer_actions = true;
 
-	public function __construct( $args = array() ) {
+	function __construct( $args = array() ) {
 		$defaults = array( 'url' => '', 'nonce' => '', 'title' => __( 'Update Translations' ), 'skip_header_footer' => false );
 		$args = wp_parse_args( $args, $defaults );
 		if ( $args['skip_header_footer'] ) {
 			$this->done_header = true;
-			$this->done_footer = true;
 			$this->display_footer_actions = false;
 		}
 		parent::__construct( $args );
 	}
 
-	public function before() {
+	function before() {
 		$name = $this->upgrader->get_name_for_update( $this->language_update );
 
 		echo '<div class="update-messages lp-show-latest">';
@@ -668,17 +652,17 @@ class Language_Pack_Upgrader_Skin extends WP_Upgrader_Skin {
 		printf( '<h4>' . __( 'Updating translations for %1$s (%2$s)&#8230;' ) . '</h4>', $name, $this->language_update->language );
 	}
 
-	public function error( $error ) {
+	function error( $error ) {
 		echo '<div class="lp-error">';
 		parent::error( $error );
 		echo '</div>';
 	}
 
-	public function after() {
+	function after() {
 		echo '</div>';
 	}
 
-	public function bulk_footer() {
+	function bulk_footer() {
 		$this->decrement_update_count( 'translation' );
 		$update_actions = array();
 		$update_actions['updates_page'] = '<a href="' . self_admin_url( 'update-core.php' ) . '" title="' . esc_attr__( 'Go to WordPress Updates page' ) . '" target="_parent">' . __( 'Return to WordPress Updates' ) . '</a>';
@@ -694,6 +678,8 @@ class Language_Pack_Upgrader_Skin extends WP_Upgrader_Skin {
 
 		if ( $update_actions && $this->display_footer_actions )
 			$this->feedback( implode( ' | ', $update_actions ) );
+
+		parent::footer();
 	}
 }
 
@@ -710,33 +696,29 @@ class Language_Pack_Upgrader_Skin extends WP_Upgrader_Skin {
 class Automatic_Upgrader_Skin extends WP_Upgrader_Skin {
 	protected $messages = array();
 
-	public function request_filesystem_credentials( $error = false, $context = '', $allow_relaxed_file_ownership = false ) {
-		if ( $context ) {
+	function request_filesystem_credentials( $error = false, $context = '' ) {
+		if ( $context )
 			$this->options['context'] = $context;
-		}
 		// TODO: fix up request_filesystem_credentials(), or split it, to allow us to request a no-output version
 		// This will output a credentials form in event of failure, We don't want that, so just hide with a buffer
 		ob_start();
-		$result = parent::request_filesystem_credentials( $error, $context, $allow_relaxed_file_ownership );
+		$result = parent::request_filesystem_credentials( $error );
 		ob_end_clean();
 		return $result;
 	}
 
-	public function get_upgrade_messages() {
+	function get_upgrade_messages() {
 		return $this->messages;
 	}
 
-	/**
-	 * @param string|array|WP_Error $data
-	 */
-	public function feedback( $data ) {
-		if ( is_wp_error( $data ) ) {
+	function feedback( $data ) {
+		if ( is_wp_error( $data ) )
 			$string = $data->get_error_message();
-		} elseif ( is_array( $data ) ) {
+		else if ( is_array( $data ) )
 			return;
-		} else {
+		else
 			$string = $data;
-		}
+
 		if ( ! empty( $this->upgrader->strings[ $string ] ) )
 			$string = $this->upgrader->strings[ $string ];
 
@@ -765,19 +747,19 @@ class Automatic_Upgrader_Skin extends WP_Upgrader_Skin {
 		$this->messages[] = $string;
 	}
 
-	public function header() {
+	function header() {
 		ob_start();
 	}
 
-	public function footer() {
+	function footer() {
 		$output = ob_get_contents();
 		if ( ! empty( $output ) )
 			$this->feedback( $output );
 		ob_end_clean();
 	}
 
-	public function bulk_header() {}
-	public function bulk_footer() {}
-	public function before() {}
-	public function after() {}
+	function bulk_header() {}
+	function bulk_footer() {}
+	function before() {}
+	function after() {}
 }

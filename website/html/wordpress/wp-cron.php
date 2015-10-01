@@ -26,16 +26,7 @@ if ( !defined('ABSPATH') ) {
 	require_once( dirname( __FILE__ ) . '/wp-load.php' );
 }
 
-/**
- * Retrieves the cron lock.
- *
- * Returns the uncached `doing_cron` transient.
- *
- * @ignore
- * @since 3.3.0
- *
- * @return string|false Value of the `doing_cron` transient, 0|false otherwise.
- */
+// Uncached doing_cron transient fetch
 function _get_cron_lock() {
 	global $wpdb;
 
@@ -103,7 +94,7 @@ foreach ( $crons as $timestamp => $cronhooks ) {
 			/**
 			 * Fires scheduled events.
 			 *
-			 * @ignore
+			 * @internal
 			 * @since 2.1.0
 			 *
 			 * @param string $hook Name of the hook that was scheduled to be fired.

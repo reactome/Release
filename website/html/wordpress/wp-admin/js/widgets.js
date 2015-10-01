@@ -50,12 +50,10 @@ wpWidgets = {
 						css[ margin ] = widgetWidth - ( targetWidth + 30 ) + 'px';
 						widget.css( css );
 					}
-					widget.addClass( 'open' );
 					inside.slideDown('fast');
 				} else {
 					inside.slideUp('fast', function() {
 						widget.attr( 'style', '' );
-						widget.removeClass( 'open' );
 					});
 				}
 				e.preventDefault();
@@ -66,9 +64,7 @@ wpWidgets = {
 				wpWidgets.save( target.closest('div.widget'), 1, 1, 0 );
 				e.preventDefault();
 			} else if ( target.hasClass('widget-control-close') ) {
-				widget = target.closest('div.widget');
-				widget.removeClass( 'open' );
-				wpWidgets.close( widget );
+				wpWidgets.close( target.closest('div.widget') );
 				e.preventDefault();
 			}
 		});
@@ -233,7 +229,7 @@ wpWidgets = {
 			},
 			drop: function(e,ui) {
 				ui.draggable.addClass('deleting');
-				$('#removing-widget').hide().children('span').empty();
+				$('#removing-widget').hide().children('span').html('');
 			},
 			over: function(e,ui) {
 				ui.draggable.addClass('deleting');
@@ -247,7 +243,7 @@ wpWidgets = {
 			out: function(e,ui) {
 				ui.draggable.removeClass('deleting');
 				$('div.widget-placeholder').show();
-				$('#removing-widget').hide().children('span').empty();
+				$('#removing-widget').hide().children('span').html('');
 			}
 		});
 
@@ -321,7 +317,7 @@ wpWidgets = {
 		};
 
 		if ( sidebarId ) {
-			$( '#' + sidebarId ).find( '.spinner:first' ).addClass( 'is-active' );
+			$( '#' + sidebarId ).find('.spinner:first').css('display', 'inline-block');
 		}
 
 		$('div.widgets-sortables').each( function() {
@@ -331,7 +327,7 @@ wpWidgets = {
 		});
 
 		$.post( ajaxurl, data, function() {
-			$( '.spinner' ).removeClass( 'is-active' );
+			$('.spinner').hide();
 		});
 	},
 
@@ -340,7 +336,7 @@ wpWidgets = {
 			data = widget.find('form').serialize(), a;
 
 		widget = $(widget);
-		$( '.spinner', widget ).addClass( 'is-active' );
+		$('.spinner', widget).show();
 
 		a = {
 			action: 'save-widget',
@@ -377,7 +373,7 @@ wpWidgets = {
 					widget.remove();
 				}
 			} else {
-				$( '.spinner' ).removeClass( 'is-active' );
+				$('.spinner').hide();
 				if ( r && r.length > 2 ) {
 					$( 'div.widget-content', widget ).html( r );
 					wpWidgets.appendTitle( widget );
