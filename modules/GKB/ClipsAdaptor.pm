@@ -479,6 +479,7 @@ sub _store_instance {
     my ($self,$i) = @_;
     $i->{'stored_by_ClipsAdaptor'} && return;
     my $ar = $self->_store_instance_get_attribute_instances($i);
+	
     $self->store_instances($ar);
 }
 
@@ -636,12 +637,14 @@ sub create_protege_project {
 #    ($instance_ar && @{$instance_ar} && $instance_ar->[0]->isa("GKB::Instance")) ||
 #	$self->throw("Need a reference to an array of GKB::Instances. Got '$instance_ar'");
     $basename ||= "PROJECT_$$";
+	
     if ($tgz) {
-	$dir = File::Spec->tmpdir;
-	chdir $dir;
+		$dir = File::Spec->tmpdir;
+		chdir $dir;
     } else {
-	$dir ||= File::Spec->curdir;
+		$dir ||= File::Spec->curdir;
     }
+
     my $ontology = ($dba) ? $dba->ontology : $instance_ar->[0]->ontology;
     (my $pprj_fc = $ontology->pprj_file_content) =~ s/\w+\.pins/$basename\.pins/gms;
     $pprj_fc =~ s/\w+\.pont/$basename\.pont/gms;
@@ -650,13 +653,14 @@ sub create_protege_project {
     $self->_initialize_io(-FILE => ">$pprjfile");
     $self->_print($pprj_fc);
     $self->close;
-    #my $pontfile = File::Spec->catfile($dir, "$basename.pont");
+
     my $pontfile = "$basename.pont";
     $self->_initialize_io(-FILE => ">$pontfile");
     $self->_print($ontology->pont_file_content);
     $self->close;
-    #my $pinsfile = File::Spec->catfile($dir, "$basename.pins");
+	
     my $pinsfile = "$basename.pins";
+    print STDERR "DIR=$dir/$pinsfile\n";
     $self->_initialize_io(-FILE => ">$pinsfile");
     $self->_print($ontology->pins_file_stub, "\n");
     if ($shallow) {
@@ -665,12 +669,13 @@ sub create_protege_project {
 	$self->store_instances($instance_ar);
     }
     $self->close;
+    
     if ($tgz) {
 	require Archive::Tar;
 	# For whatever reason I'm unable to write the gzipped stuff to STDOUT.
 	# Hence the creation of .tar.gz file possibly followed by reading from it and deleting it. Not good.
 	Archive::Tar->create_archive("$basename.tar.gz",9,$pprjfile,$pontfile,$pinsfile);
-	unlink($pprjfile,$pontfile,$pinsfile);
+	#unlink($pprjfile,$pontfile,$pinsfile);
 	if ($outfh) {
 	    local *IN;
 	    open (IN, "$basename.tar.gz");
@@ -681,8 +686,9 @@ sub create_protege_project {
 	} else {
 	    use File::Copy;
 	    use GKB::Config;
-	    move("$basename.tar.gz","$GK_TMP_IMG_DIR/$basename.tar.gz");
+	    move("$basename.tar.gz","$GK_TMP_IMG_DIR/protege/$basename.tar.gz");
 	}
+	return "$GK_TMP_IMG_DIR/protege/$basename.tar.gz";
     }
 }
 
