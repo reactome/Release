@@ -1,25 +1,9 @@
 #!/usr/local/bin/perl -w 
 
-# The following block sets the script to pick up libraries from ../../modules.
-# The point here is to avoid having the change 'use lib "/path/to/GKB/modules";'
-# on different server setups.
-BEGIN {
-    my ($path) = $0 =~ /^(\S+)$/;
-    my @a = split('/',$path);
-    pop @a;
-    if (@a && !$a[0]) {
-	$#a = $#a - 2;
-    } else {
-	push @a, ('..','..');
-    }
-    push @a, 'modules';
-    my $libpath = join('/', @a);
-    unshift (@INC, $libpath);
-}
-#use lib "/tmp/libs/bioperl-1.0";
-#use lib "/tmp/libs/my_perl_stuff";
-
 use strict;
+
+use lib "/usr/local/gkb/modules";
+
 use GKB::WebUtils;
 use GKB::Config;
 
@@ -35,12 +19,15 @@ eval {
     }
     @ids = sort {$a <=> $b}  @ids;
 	
-    my $basename = join('_', $PROJECT_NAME, @ids);
-
-    $wu->create_protege_project_wo_orthologues($basename,\@ids);
-
+    my $id = [$ids[0]];
+    my $basename = join('_', $PROJECT_NAME, @$id);
     
-	print $wu->cgi->redirect("/img-tmp/$basename.tar.gz");
+    my $tarball = "/img-tmp/protege/$basename.tar.gz";
+    unless (-z $tarball || ! -e $tarball) {
+	$wu->create_protege_project_wo_orthologues($basename,$id);
+    }
+    
+    print $wu->cgi->redirect($tarball);
 };
 if ($@) {
     print <<__HERE__;
