@@ -8,15 +8,11 @@ use strict;
 #
 # -sp	limiting species (defaults to all species without this option)
 
-BEGIN {
-    my @a = split('/',$0);
-    pop @a;
-    push @a, ('..','..','modules');
-    my $libpath = join('/', @a);
-    unshift (@INC, $libpath);
-}
+
 # Set the umask so that the files are group writeable
 umask(002);
+
+use lib '/usr/local/gkb/modules';
 
 use Getopt::Long;
 use GKB::Config;

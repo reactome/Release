@@ -1,18 +1,7 @@
 #!/usr/local/bin/perl  -w
 use strict;
 
-# I think it's more user-friendly if the user will not have to practise any
-# symlink tricks. Hence the BEGIN block. If the location of the script or
-# libraries changes, this will have to be changed.
-
-BEGIN {
-    my @a = split('/',$0);
-    pop @a;
-    push @a, ('..','..','..');
-    my $libpath = join('/', @a);
-    unshift (@INC, "$libpath/modules");
-    $ENV{PATH} = "$libpath/scripts:$libpath/scripts/release:" . $ENV{PATH};
-}
+use lib '/usr/local/gkb/modules';
 
 use GKB::Config;
 use GKB::DBAdaptor;
@@ -218,6 +207,13 @@ my @cmds = (
     ],
     
     [
+     "ensembl to pathway map",
+     1,
+     0,
+     "perl ensembl2pathway.pl $opt_user, $opt_pass ${opt_db}_dn $opt_r",
+    ],
+
+    [
      "$species_file_stem.mitab.interactions",
      1,
      0,
@@ -240,8 +236,10 @@ my @cmds = (
      "SBML_dumpers",
      1,
      0,
-     "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' | gzip -c > $release_nr/$species_file_stem.sbml.gz",
-     "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' | gzip -c > $release_nr/$species_file_stem.2.sbml.gz",
+     "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' > $release_nr/$species_file_stem.sbml",
+	 "gzip $release_nr/$species_file_stem.sbml",
+     "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' -o $release_nr/$species_file_stem.2.sbml",
+	 "gzip $release_nr/$species_file_stem.2.sbml",
     ],
     
     [
@@ -395,8 +393,8 @@ my @cmds = (
 
 my $broken_command_counter = 0;
 foreach my $cmd (@cmds) {
-    print $cmd->[3],"\n";
-#    $broken_command_counter += run($cmd);
+    #print $cmd->[3],"\n";
+    $broken_command_counter += run($cmd);
 }
 
 if ($broken_command_counter > 0) {
