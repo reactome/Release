@@ -15,8 +15,10 @@ $ftp->put("archive/gene_reactome$version.xml");
 $ftp->delete("gene_reactome$previous_version.xml");
 $ftp->put("archive/protein_reactome$version.ft");
 $ftp->delete("protein_reactome$previous_version.ft");
-$ftp->put("archive/omim_reactome$version.ft");
-$ftp->delete("omim_reactome$previous_version.ft");
+
+# OMIM no longer processed by NCBI (October 8, 2015 -- Joel Weiser)
+#$ftp->put("archive/omim_reactome$version.ft");
+#$ftp->delete("omim_reactome$previous_version.ft");
 
 say 'The following files are in the NCBI holdings directory';
 say foreach $ftp->ls();

@@ -30,7 +30,8 @@ override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
     
     # Run entrez scripts
-    foreach my $script (qw/gene protein omim/) {
+	# OMIM no longer processed by NCBI (October 8, 2015 -- Joel Weiser)
+    foreach my $script (qw/gene protein/) {
     	$self->cmd("Running $script script", [['./1' . $script . "entrez.pl -user $user -pass $pass -db $db"]]);
     }
 
