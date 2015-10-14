@@ -37,9 +37,9 @@ my @new_instance_edit_ids = array_minus(
     @{get_instance_edit_ids_from_db($previous_db)}
 );
 
+my @new_instance_edits = get_instances_from_db_by_ids($recent_db, \@new_instance_edit_ids);
 
 foreach my $attribute (qw/authored reviewed revised/) {
-    my @new_instance_edits = get_instances_from_db_by_ids($recent_db, \@new_instance_edit_ids);    
     foreach my $new_instance_edit (@new_instance_edits) {
         foreach my $instance (@{$new_instance_edit->reverse_attribute_value($attribute)}) {
             report(join("\t", $instance->displayName, $instance->class, $instance->db_id, $attribute, get_author($new_instance_edit)) . "\n", $output);
@@ -50,15 +50,17 @@ foreach my $attribute (qw/authored reviewed revised/) {
 close($output);
 
 sub prompt {
-    my $question = shift;
-    print $question;
-    my $pass = shift;
-    ReadMode 'noecho' if $pass; # Don't show keystrokes if it is a password
+    my $query = shift;
+    my $is_password = shift;
+    
+    print $query;
+    
+    ReadMode 'noecho' if $is_password; # Don't show keystrokes if it is a password
     my $return = ReadLine 0;
     chomp $return;
     
     ReadMode 'normal';
-    print "\n" if $pass;
+    print "\n" if $is_password;
     return $return;
 }
 
@@ -113,9 +115,14 @@ sub get_author {
 sub usage_instructions{
     return <<END;
     
-This script counts and reports the number of new events between an old
-and new test slice as well as a break down by curator reporting the number
-of new events as well as the event names.
+This script compares two versions of the test_reactome_XX database
+and reports database objects which have a new instance edit (i.e. present
+in the recent database but not the older one) in the authored, reviewed,
+or reported attributes.
+
+The output will be a tab delimited file reporting the instance name,
+class, database id, attribute with the new instance edit, and the
+author of the new instance edit.
 
 Usage: perl $0
     
