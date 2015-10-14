@@ -120,9 +120,10 @@ and reports database objects which have a new instance edit (i.e. present
 in the recent database but not the older one) in the authored, reviewed,
 or reported attributes.
 
-The output will be a tab delimited file reporting the instance name,
-class, database id, attribute with the new instance edit, and the
-author of the new instance edit.
+The output will be a tab delimited file (by default, same name as the
+script but ending in .txt) reporting the instance name, class, database
+id, attribute with the new instance edit, and theauthor of the new
+instance edit.
 
 Usage: perl $0
     
