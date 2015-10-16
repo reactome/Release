@@ -42,7 +42,7 @@ my @new_instance_edits = get_instances_from_db_by_ids($recent_db, \@new_instance
 foreach my $attribute (qw/authored reviewed revised/) {
     foreach my $new_instance_edit (@new_instance_edits) {
         foreach my $instance (@{$new_instance_edit->reverse_attribute_value($attribute)}) {
-            report(join("\t", $instance->displayName, $instance->class, $instance->db_id, $attribute, get_author($new_instance_edit)) . "\n", $output);
+            report(join("\t", $instance->displayName, $instance->class, $instance->db_id, $attribute, get_authors($new_instance_edit)) . "\n", $output);
         }
     }
 }
@@ -104,12 +104,12 @@ sub report {
     }
 }
 
-sub get_author {
+sub get_authors {
     my $instance_edit = shift;
     
     return 'Unknown' unless ($instance_edit->author->[0]);
     
-    return $instance_edit->author->[0]->displayName;
+    return join(';', map {$_->displayName} @{$instance_edit->author});
 }
 
 sub usage_instructions{
@@ -122,7 +122,7 @@ or reported attributes.
 
 The output will be a tab delimited file (by default, same name as the
 script but ending in .txt) reporting the instance name, class, database
-id, attribute with the new instance edit, and theauthor of the new
+id, attribute with the new instance edit, and the author(s) of the new
 instance edit.
 
 Usage: perl $0
