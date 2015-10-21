@@ -382,11 +382,19 @@ my @cmds = (
     ],
     
     [
-     "PathwaySummationMappingfile",
+     "PathwaySummationMappingFile",
      1,
      1,
      "perl pathway2summation.pl $reactome_db_options",
      "mv pathway2summation.txt $release_nr"
+    ],
+    
+    [
+     "StableIdToUniProtAccessionMappingFile",
+     1,
+     0,
+     "perl st_id_2_uniprot.pl $reactome_db_options",
+     "mv st_id_2_uniprot.txt $release_nr"
     ]
 );
 
