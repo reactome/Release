@@ -35,6 +35,9 @@ my $dba = GKB::DBAdaptor->new(
     -port    => 3306
 );
 
+(my $output_file = $0) =~ s/.pl$/.txt/;
+open (my $output, ">", $output_file); 
+
 my $sth = $dba->prepare('SELECT DB_ID FROM DatabaseObject WHERE _class = ?');
 $sth->execute($class || 'EntityWithAccessionedSequence');
 my @db_ids;
@@ -50,10 +53,12 @@ for my $db_id (@db_ids) {
     if ($uniprot && $uniprot =~ /^uniprot:/i) {
         $uniprot =~ s/^[^:]+://;
         ($uniprot) = split(/\s+/, $uniprot);
-        say join("\t",$st_id,$uniprot);
+        say $output join("\t",$st_id,$uniprot);
     }
     
 }
+
+close($output);
 
 sub usage_instructions {
     return <<END;
