@@ -12,7 +12,8 @@ my $CGI = CGI->new();
 my $stable = GKB::StableIdentifierDatabase->new();
 
 my $query_url  = '/content/query?q=';
-my $detail_url = '/cgi-bin/instancebrowser?ID=';
+#my $detail_url = '/cgi-bin/instancebrowser?ID=';
+my $detail_url = '/content/detail/';
 
 my $id = $CGI->param('ID') || $CGI->param('DB_ID');
 my $st_id = $CGI->param('STID') || $CGI->param('ST_ID');
