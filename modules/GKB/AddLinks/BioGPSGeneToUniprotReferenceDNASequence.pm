@@ -2,16 +2,15 @@
 
 GKB::AddLinks::BioGPSGeneToUniprotReferenceDNASequence
 
-=head1 SYNOPSIS
-
 =head1 DESCRIPTION
 
 Creates links for BioGPS genes and inserts them into the referenceGene slot of
-ReferenceGeneProducts.
+ReferenceGeneProducts using the 'buildPart' method defined in the parent class
+GeneToUniprotReferenceDNASequence.
 
 =head1 SEE ALSO
 
-GKB::DBAdaptor
+GKB::AddLinks::GeneToUniprotReferenceDNASequence
 
 =head1 AUTHOR
 
