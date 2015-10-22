@@ -7,7 +7,8 @@ use CGI::Carp 'fatalsToBrowser';
 use GKB::FrontPage3;
 
 my $stable = GKB::StableIdentifierDatabase->new();
-my $browser = '/cgi-bin/instancebrowser?ID=';
+#my $browser = '/cgi-bin/instancebrowser?ID=';
+my $browser = '/content/detail/';
 
 my $CGI = CGI->new();
 
