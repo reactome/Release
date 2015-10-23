@@ -91,12 +91,12 @@
    <div style='background:gainsboro;border:1px solid gray; text-align:center' id='hideMe'>
      <div style='font-size:small;padding:10px'>
        <span style='font-size:larger;color:red'>
-	 <!--THIS SITE IS USED FOR $dev-->
+	 THIS SITE IS USED FOR $dev
 	 The Reactome web site and services will be offline for maintenance Saturday, 24 October from 6AM-6PM EDT.
        </span><br/>
-<!--       <span style='font-size:smaller;color:red'>
+       <span style='font-size:smaller;color:red'>
 	 IT IS NOT STABLE, IS LINKED TO AN INCOMPLETE DATA SET, AND IS NOT MONITORED FOR PERFORMANCE.
-	 WE STRONGLY RECOMMEND THE USE OF OUR <a href='http://www.reactome.org'>PUBLIC SITE</a> -->
+	 WE STRONGLY RECOMMEND THE USE OF OUR <a href='http://www.reactome.org'>PUBLIC SITE</a>
        </span>
      </div>
    </div>";
