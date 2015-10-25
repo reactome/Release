@@ -86,7 +86,7 @@
         $dev = 'RELEASE TESTING';
     }
   
-   $dev = '';
+
    if ($dev) {
    echo "
    <div style='background:gainsboro;border:1px solid gray; text-align:center' id='hideMe'>
@@ -103,16 +103,6 @@
 
 
  }
-
-
-   echo "                                                                                                                                         
-   <div style='background:yellow;border:1px solid gray; text-align:center' id='hideMe'>                                                        
-     <div style='font-size:small;padding:10px'>                                                                                                   
-       <span style='font-size:larger;color:red'>                                                                                                                                                                                                      
-         The Reactome web site and services will be offline for emergency maintenance Saturday, 24 October from 6AM-6PM EDT.                                                                           
-       </span>                                                                                                                                    
-     </div>                                                                                                                                       
-   </div>";
 
 ?>
 
