@@ -77,6 +77,7 @@
 <?php
    $host_name = php_uname('n');
    $dev = '';
+   $more = '';
 
     if ( preg_match('/dev/', $host_name) ) {
         $dev = 'SOFTWARE DEVELOPMENT AND TESTING';
@@ -85,6 +86,11 @@
     if ( preg_match('/release/', $host_name) ) {
         $dev = 'RELEASE TESTING';
     }
+
+    if ( preg_match('/curator/', $host_name) ) {
+       $dev = 'CURATION AND TESTING';
+    }
+
   
 
    if ($dev) {
