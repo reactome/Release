@@ -122,7 +122,6 @@ Options:
 -pass [db_pass]         Password for source database (default is password for $GKB::Config::GK_DB_USER user)
 -host [db_host]         Host for source database (default is $GKB::Config::GK_DB_HOST)
 -db [db_name]           Source database (default is $GKB::Config::GK_DB_NAME)
--output [output_file]   File name for script output (script will prompt user if omitted)
 -help                   Prints these instructions
     
 END
