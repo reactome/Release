@@ -236,16 +236,17 @@ while (<UP>) {
 
     my ($lngth) = /\<sequence.*length\=\"(\d+)\"/ms;
     my ($checksum) = /\<sequence.*checksum=\"([0-9A-F]+)\"/ms;
+    
     my $gn_str = "";
     my @gene_name;
-
-    if (/\<gene\>(.*)\<\/gene\>/ms) {
+    while (/\<gene\>(.*?)\<\/gene\>/gms) {
         $gn_str = $1;
         $gn_str =~ s/\<\/name\>//g;
         $gn_str =~ s/\<name.*\"\>//g;
         $gn_str =~ s/ //g;
-        @gene_name = split( /\n/, $gn_str );
-        shift @gene_name;
+        my @names = split( /\n/, $gn_str );
+        shift @names;
+        push @gene_name, @names;
     }
 
 	my $name = $gene_name[0] ? $gene_name[0] : $rec_name; 	
