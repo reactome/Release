@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use lib '/usr/local/gkbdev/modules';
+use lib '/usr/local/gkb/modules';
 
 use constant {
     GKB_DEV_ALIAS => 'gkbdev',
@@ -75,7 +75,9 @@ unless ($TEST_MODE) {
     $version = prompt("Enter current version number:");
     die "Current version number must be an integer" unless $version && $version =~ /^\d+$/;
     $prevver = $version - 1;
-}    
+} else {
+    print "REMINDER: You are in TEST MODE.  To enable normal operation, edit \$TEST_MODE in the GKB::Config::Release module and restart this script\n";
+}
 set_version_for_config_variables($version);
 
 
