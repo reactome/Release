@@ -3,6 +3,7 @@ use strict;
 
 use lib "/usr/local/reactomes/Reactome/development/GKB/modules";
 
+use GKB::Config;
 use GKB::DBAdaptor;
 use GKB::EnsEMBLMartUtils qw/:all/;
 use GKB::Utils;
@@ -10,6 +11,10 @@ use GKB::Utils;
 use Data::Dumper;
 use Getopt::Long;
 use Try::Tiny;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_sp);
 
@@ -34,12 +39,12 @@ my $dba = GKB::DBAdaptor->new
 # Fetch the species
 $opt_sp ||= 'Homo sapiens';
 my $sp = $dba->fetch_instance_by_attribute('Species',[['name',[$opt_sp]]])->[0]
-    || die "No species '$opt_sp' found.\n";
+    || $logger->error_die("No species '$opt_sp' found.\n");
 my $sp_mart_name;
 if ($sp->displayName =~ /^(\w)\w+ (\w+)$/) {
     $sp_mart_name = lc("$1$2");
 } else {
-    die "Can't form species abbreviation for mart from '" . $sp->displayName . "'.\n";
+    $logger->error_die("Can't form species abbreviation for mart from '" . $sp->displayName . "'.\n");
 }
 
 my $registry = get_registry();
@@ -56,6 +61,7 @@ IDENTIFIER:foreach my $identifier (get_identifiers($sp_mart_name)) {
     try {
         $query->addAttribute($identifier);
     } catch {
+        $logger->warn("could not add attribute $identifier for $sp_mart_name");
         next IDENTIFIER;
     };
     $query->formatter("TSV");
