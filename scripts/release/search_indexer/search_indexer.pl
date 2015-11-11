@@ -39,20 +39,20 @@ sub run {
     $opt_pass ||= $GKB::Config::GK_DB_PASS;
     $opt_port ||= $GKB::Config::GK_DB_PORT;
     
-    my $solr_url  = "http://reactomerelease.oicr.on.ca:8983/solr/#/reactome";
+    my $solr_url  = "http://localhost:8983/solr/reactome";
     my $solr_dir  = '/usr/local/reactomes/Reactome/production/Solr/cores';
     
 	my $tomcat = '/etc/init.d/tomcat7';
 	
     my $solr_user = $GKB::Config::GK_SOLR_USER;
-    my $solr_pass = $GKB::Config::GK_SOLR_PASS;
+    my $solr_pass = quotemeta($GKB::Config::GK_SOLR_PASS);
 	
     my $repository_path = git_clone_search_repository('/tmp');
 	update_solr_conf("$repository_path/indexer/solrconf", $solr_dir, $tomcat);
 	my $link = 'search';
     make_symbolic_link($repository_path, $link);
     my $jar_path = build_search_jar("$link/indexer");
-    my $args = "-d $opt_db -u $opt_user -p $opt_pass -s $solr_url -e $solr_user -a $solr_pass -c $link/indexer/src/main/resources/controlledvocabulary.csv -r $opt_r";
+    my $args = "-d $opt_db -u $opt_user -p $opt_pass -s $solr_url -e $solr_user -a $solr_pass -r $opt_r";
     create_gzipped_ebeye_xml($jar_path, $args, 'ebeye.xml');
     archive_solr_core_version($solr_dir, $opt_r);
     remove_cloned_repository($repository_path);
