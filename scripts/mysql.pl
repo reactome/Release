@@ -7,13 +7,12 @@ use List::Util 'min';
 # A script to monitor/restart the mysql server
 # Sheldon McKay <sheldon.mckay@gmail.com>
 
-# Threshold Parameters
 use constant MAXCPU => 200;
 use constant MAXCON => 50;
+use constant PID => '/var/run/mysqld/mysqld.pid';
 
 # You need to be root to run this script!
 die "Sorry, root permission required.\n" unless $> == 0;
-
 
 my $instances = get_running_instances();
 warn ("$instances running instances\n")  if $instances && $instances > 1;
@@ -31,46 +30,29 @@ report(usage()) && exit 0 if $help;
 $passwd || die "You need to provide the mysql password\n", usage();
 
 
-my $proc = my @pids = get_mysql_pids();
-
 my @reasons;
-if ($proc) {
-    my $cpu_usage = 0;
-    for my $pid (@pids) {
-	my $cpu = get_cpu_usage($pid);
-	$cpu_usage += $cpu;
-    }
-    
-    my $connections = get_mysql_connections();
-    
-    my ($is,$s) = @pids > 1 ? ('are','es') : ('is','');
-    
-    report("MySQL Server: $is $proc process$s; $cpu_usage\% CPU; $connections active connections.");
 
-    if ($connections > MAXCON) {
-	push @reasons, "Too many connections";
-    }
-    
-    if ($cpu_usage > MAXCPU) {
-	push @reasons, "Too much CPU usage";
-    }
-    
-    push @reasons, "Forced restart" if $force;
-    
+my $mpid = get_mpid();
+my $cpu_usage = get_cpu_usage($mpid);
+my $connections = get_mysql_connections();
+
+report("MySQL Server: $cpu_usage\% CPU; $connections active connections.");
+
+if ($connections > MAXCON) {
+    push @reasons, "Too many connections";
 }
-else {
-    push @reasons, "No mysql server running";
+
+if ($cpu_usage > MAXCPU) {
+    push @reasons, "Too much CPU usage";
 }
+
+push @reasons, "Forced restart" if $force;
+
+
 
 if (!$norestart && @reasons > 0) {
     restart_mysql(@reasons);
 }
-
-my $proc = get_mysql_pids();
-unless ($proc) {
-    restart_mysql("No mysql server restart");
-}
-
 
 sub restart_mysql {
     my @reasons = @_;
@@ -79,14 +61,21 @@ sub restart_mysql {
     my $log = "/tmp/mysql_log$$.txt";
     system "echo '$timestamp' > $log";
 
-    my $mpid = `ps aux |grep mysqld |grep -v grep | awk '{ print \$2 }'`;
-    chomp $mpid;
-    $mpid = int($mpid);
-    print "MY COMMAND WOULD BE: kill -9 $mpid";
+    my $mpid = get_mpid();
+    print "I need to kill process $mpid\n";
     kill('KILL',$mpid);
-    start_mysql($log);
-    $mpid = `ps aux |grep mysqld |grep -v grep | awk '{ print \$2 }'`;
-    print "MY PID is NOW $mpid\n";
+    sleep 2;
+#    start_mysql($log);
+    $mpid = get_mpid();
+    print "PMID is now $mpid\n";
+}
+
+sub get_mpid {
+    open MPID, PID or die "Could not open "+PID+" $!\n";
+    while (<MPID>) {
+	chomp;
+	return $_;
+    }
 }
 
 sub start_mysql {
@@ -116,7 +105,6 @@ q(Usage: ./mysql.pl [options]
 );
 }
 
-
 sub get_mysql_connections {
     #print STDERR "mysqladmin -uroot -p$passwd processlist";
     my $connections = `mysqladmin -uroot -p$passwd processlist | wc -l`;
@@ -136,6 +124,7 @@ sub get_running_instances {
     open PID, "ps aux |grep  $instance | grep -v grep |" or die $!;
     my @pids;
     while (<PID>) {
+	print "PROCESS: $_";
 	my ($pid) = (split)[1];
 	push @pids, $pid;
     }
@@ -143,7 +132,7 @@ sub get_running_instances {
 }
 
 sub get_mysql_pids {
-    open PID, "ps aux |grep mysqld |grep 3306 | grep -v grep |" or die $!;
+    open MPID, "ps aux |grep mysqld | grep 'port=3306' |";
     my @pids;
     while (<PID>) {
 	/mysqld/ || next;
