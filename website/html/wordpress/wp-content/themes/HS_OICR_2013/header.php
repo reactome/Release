@@ -23,9 +23,9 @@
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 
 <!-- css for the search -->
-<link rel="stylesheet" href="/content/resources/css/main.css" type="text/css">
-<link rel="stylesheet" href="/content/resources/css/ebi-fluid.css" type="text/css" media="screen">
-<link rel="stylesheet" href="/content/resources/css/autocomplete.css" type="text/css">
+<link rel="stylesheet" href="/content/resources/css/main.css?v=3" type="text/css">
+<link rel="stylesheet" href="/content/resources/css/ebi-fluid.css?v=3" type="text/css" media="screen">
+<link rel="stylesheet" href="/content/resources/css/autocomplete.css?v=3" type="text/css">
 <!-- /css for the search -->
 
 <!--[if lt IE 9]>
