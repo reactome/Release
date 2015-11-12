@@ -7,7 +7,7 @@ use List::Util 'min';
 # A script to monitor/restart the mysql server
 # Sheldon McKay <sheldon.mckay@gmail.com>
 
-# Threshold Paramaters
+# Threshold Parameters
 use constant MAXCPU => 200;
 use constant MAXCON => 50;
 
@@ -80,7 +80,9 @@ sub restart_mysql {
     my $log = "/tmp/mysql_log$$.txt";
     system "echo '$timestamp' > $log";
 
-    system "ps aux |grep mysql |grep -v grep | grep -v mysql.pl | awk '{ print \$2 }' | xargs kill -9 >>$log 2>&1";
+    my $mpid = `ps aux |grep mysqld |grep -v grep | awk '{ print \$2 }'`;
+    chomp $mpid;
+    system "kill -9 $mpid";
     
     system "/etc/init.d/mysql start >> $log 2>&1";
     system "cat $log";
