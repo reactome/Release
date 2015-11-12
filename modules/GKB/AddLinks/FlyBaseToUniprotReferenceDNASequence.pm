@@ -225,7 +225,7 @@ sub get_mapping_file {
 	# is no pre-existing file less than two weeks old.
 #	$cmd = "wget -t 5 -P $tmp_dir http://flybase.org/static_pages/downloads/FB2008_10/genes/$filename.gz";
 #	$cmd = "wget -t 5 -P $tmp_dir -O $filename.gz ftp://flybase.org/releases/current/precomputed_files/genes/$wildcard_filename.gz";
-	$cmd = "wget -t 5 -O $compressed_path ftp://flybase.org/releases/current/precomputed_files/genes/$wildcard_filename.gz";
+	$cmd = "wget -t 5 -O $compressed_path ftp://ftp.flybase.net/releases/current/precomputed_files/genes/$wildcard_filename.gz";
 	$logger->info("cmd=$cmd\n");
 	if (system($cmd) != 0) {
 	    $logger->warn("$cmd failed\n");
