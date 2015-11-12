@@ -46,7 +46,6 @@ if ($proc) {
     my ($is,$s) = @pids > 1 ? ('are','es') : ('is','');
     
     report("MySQL Server: $is $proc process$s; $cpu_usage\% CPU; $connections active connections.");
-    
 
     if ($connections > MAXCON) {
 	push @reasons, "Too many connections";
@@ -82,12 +81,20 @@ sub restart_mysql {
 
     my $mpid = `ps aux |grep mysqld |grep -v grep | awk '{ print \$2 }'`;
     chomp $mpid;
-    system "kill -9 $mpid";
-    
+    $mpid = int($mpid);
+    print "MY COMMAND WOULD BE: kill -9 $mpid";
+    kill('KILL',$mpid);
+    restart($log);
+    $mpid = `ps aux |grep mysqld |grep -v grep | awk '{ print \$2 }'`;
+    print "MY PID is NOW $mpid\n";
+}
+
+sub start_mysql {
+    my $log = shift;
     system "/etc/init.d/mysql start >> $log 2>&1";
     system "cat $log";
     system "cat $log | mail -s 'MYSQL RESTART ALERT' sheldon.mckay\@gmail.com";
-    #unlink $log;
+    unlink $log;
 }
 
 sub usage {
