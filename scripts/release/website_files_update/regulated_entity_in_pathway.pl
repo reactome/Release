@@ -11,12 +11,13 @@ use List::MoreUtils qw/uniq/;
 use Getopt::Long;
 use Term::ReadKey;
 
-my ($user, $pass, $host, $db, $help);
+my ($user, $pass, $host, $db, $output_file, $help);
 GetOptions(
   'user=s' => \$user,
   'pass=s' => \$pass,
   'host=s' => \$host,
   'db=s'   => \$db,
+  'output=s' => \$output_file,
   'help'   => \$help
 );
 
@@ -25,15 +26,16 @@ if ($help) {
     exit;
 }
 
-(my $output_file = $0) =~ s/.pl$/.txt/;
-$output_file = prompt('Enter name for the output file:') if ($output_file eq $0);
-open (my $output, ">", $output_file);
-report("Regulation author\tRegulated entity id\tRegulated entity name\tRegulator\tDiagrams\tTo be checked\n", $output);
+open (my $output, ">", $output_file) if $output_file;
+report("Regulation author\tRegulated entity id\tRegulated entity name\tRegulated entity is disease\t" .
+       "Regulated entity do release\tRegulator\tDiagrams\tReason to check\n", $output);
 
 my %seen;
 my $regulations = get_dba($user, $pass, $host, $db)->fetch_instance(-CLASS => 'Regulation');
 foreach my $regulation (@{$regulations}) {
-    my $regulator_display_name = $regulation->regulator->[0]->displayName if $regulation->regulator->[0];
+    my $regulator_display_name = $regulation->regulator->[0] ?
+                                 $regulation->regulator->[0]->displayName :
+                                 '';
     my $regulation_author = get_authors($regulation->created->[0]);
     
     foreach my $regulated_entity (@{$regulation->regulatedEntity}) {
@@ -41,6 +43,8 @@ foreach my $regulation (@{$regulations}) {
     
         my $regulated_entity_display_name = $regulated_entity->displayName;
         my $regulated_entity_db_id = $regulated_entity->db_id;
+        my $regulated_entity_is_disease = $regulated_entity->disease->[0] ? 'YES' : 'NO';
+        my $regulated_entity_do_release = do_release($regulated_entity) ? 'YES' : 'NO';
         
         my @diagrams;
         foreach my $pathway (get_pathways($regulated_entity)) {
@@ -53,16 +57,17 @@ foreach my $regulation (@{$regulations}) {
                 $regulation_author,
                 $regulated_entity_db_id,
                 $regulated_entity_display_name,
+                $regulated_entity_is_disease,
+                $regulated_entity_do_release,
                 $regulator_display_name,
                 join(';', map {$_->displayName . '(' . $_->db_id . ')'} @diagrams),
-                @diagrams == 1 ? 'NO' : 'YES'
+                get_reason_to_check(@diagrams)
             ) . "\n",   
             $output
         );
     }
 }
-
-close($output);
+close($output) if $output_file;
 
 sub prompt {
     my $query = shift;
@@ -96,13 +101,9 @@ sub get_dba {
 
 sub report {
     my $message = shift;
-    my @file_handles = @_;
+    my $file_handle = shift // *STDOUT;
     
-    push @file_handles, *STDOUT;
-    
-    foreach my $file_handle (@file_handles) {
-        print $file_handle $message;
-    }
+    print $file_handle $message;
 }
 
 sub get_authors {
@@ -129,12 +130,31 @@ sub is_chimeric {
     return $instance->isChimeric->[0] && $instance->isChimeric->[0] eq 'TRUE';
 }
 
+sub do_release {
+    my $instance = shift;
+    
+    return $instance->_doRelease->[0] && $instance->_doRelease->[0] eq 'TRUE';
+}
+
 sub get_pathways {
     my $instance = shift;
     
     return unless $instance;
     return @{$instance->reverse_attribute_value('hasEvent')} if $instance->is_a('Event');
     return map {@{$_->reverse_attribute_value('hasEvent')}} @{$instance->reverse_attribute_value('catalystActivity')} if $instance->is_a('CatalystActivity');
+}
+
+sub get_pathways_with_diagram {
+    my $base_pathway = shift;
+    
+    my $base_pathway_diagram = $base_pathway->reverse_attribute_value('representedPathway')->[0];
+    return $base_pathway if ($base_pathway_diagram);
+    
+    my @pathways_with_diagram;    
+    push @pathways_with_diagram, get_pathways_with_diagram($_) foreach
+        @{$base_pathway->reverse_attribute_value('hasEvent')};
+        
+    return @pathways_with_diagram;
 }
 
 sub get_diagrams {
@@ -150,18 +170,29 @@ sub get_diagrams {
     return @diagrams;
 }
 
+sub get_reason_to_check {
+    my @diagrams = @_;
+    
+    return 'no diagram' unless @diagrams;
+    return 'more than one diagram' if scalar @diagrams > 1;
+    return 'more than one represented pathway in diagram instance'
+        if ($diagrams[0] && $diagrams[0]->representedPathway->[1]);
+    return '';        
+}
+
 sub usage_instructions{
     return <<END;
 
 This script gets all regulated entities from a database
-and reports those that occur in more than one diagram.
+and reports the diagrams in which they are present.
 
-The output will be a tab delmited file (by default, same
-name as the script but ending in .txt) reporting the
+The output will be a tab delmited file reporting the
 regulation instance author, regulated entity database id,
-regulated entity display name, regulator display name,
-diagrams (display name and db id) where the regulated
-entity occurs, and whether curators must decide which
+regulated entity display name, whether a regulated entity
+has a disease tag, whether a regulated entity's 'do release'
+flag is set to true, regulator display name, diagrams (display
+name and db id) where the regulated entity occurs, and if
+there is a reason curators must manually decide which
 diagrams should show the regulation.
     
 Usage: perl $0
@@ -172,6 +203,7 @@ Options:
 -pass [db_pass]         Password for source database (default is password for $GKB::Config::GK_DB_USER user)
 -host [db_host]         Host for source database (default is $GKB::Config::GK_DB_HOST)
 -db [db_name]           Source database (default is $GKB::Config::GK_DB_NAME)
+-output [output_file]   File name for script output (default is STDOUT)
 -help                   Prints these instructions
     
 END

@@ -178,7 +178,7 @@ while (<UP>) {
     }
 
     my $ac = shift @ac;
-    $sec_ac{$ac} = join( '|', @ac ) if $ac;
+    $sec_ac{$ac} = join( '|', @ac );
 
     #Taxonomy check
 
@@ -188,13 +188,13 @@ while (<UP>) {
     my %species_cache;
     my $species_instance;
     foreach my $tax_set ( sort keys %species ) {
-        if ( $oname && $oname =~ /$species{$tax_set}/ ) {
+        if ( $oname =~ /$species{$tax_set}/ ) {
             $taxon = $species{$tax_set};
             $species_instance = species_instance( $taxon, \%species_cache );
         }
     }
 
-    next if ( length($taxon) < 2 && (not defined $ac || not defined $reactome_gp{$ac}) );
+    next if ( length($taxon) < 2 && not defined $reactome_gp{$ac} );
 
     $total_xml++;
 
@@ -236,16 +236,17 @@ while (<UP>) {
 
     my ($lngth) = /\<sequence.*length\=\"(\d+)\"/ms;
     my ($checksum) = /\<sequence.*checksum=\"([0-9A-F]+)\"/ms;
+    
     my $gn_str = "";
     my @gene_name;
-
-    if (/\<gene\>(.*)\<\/gene\>/ms) {
+    while (/\<gene\>(.*?)\<\/gene\>/gms) {
         $gn_str = $1;
         $gn_str =~ s/\<\/name\>//g;
         $gn_str =~ s/\<name.*\"\>//g;
         $gn_str =~ s/ //g;
-        @gene_name = split( /\n/, $gn_str );
-        shift @gene_name;
+        my @names = split( /\n/, $gn_str );
+        shift @names;
+        push @gene_name, @names;
     }
 
 	my $name = $gene_name[0] ? $gene_name[0] : $rec_name; 	
