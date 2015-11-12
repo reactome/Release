@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use lib '/usr/local/gkbdev/modules';
+use lib '/usr/local/gkb/modules';
 
 use constant {
     GKB_DEV_ALIAS => 'gkbdev',
@@ -26,7 +26,7 @@ my @options = (
     ['GoaPrepare', GKB_DEV_ALIAS, "-prepares GOA submission file"],
     ['ExternalResourceLinks', GKB_DEV_ALIAS, "-creates external resource links"],
     ['GenerateOrthoInferenceStableIds', GKB_DEV_ALIAS, "-assign stable identifiers to ortho-predicted instances"],    	
-    ['Skypainter', GKB_DEV_ALIAS, "-creates skypainter database"],
+    ['OtherIdentifiers', GKB_DEV_ALIAS, "-add other identifiers to the release database"],
     ['Orthodiagrams', GKB_DEV_ALIAS, "-create diagrams for predicted pathways"],
     ['AnalysisCore', GKB_DEV_ALIAS, "-creates analysis binary and mapping files for export"],
     ['SearchIndexer', GKB_DEV_ALIAS, "-creates search index content and ebeye.xml"],
@@ -75,7 +75,9 @@ unless ($TEST_MODE) {
     $version = prompt("Enter current version number:");
     die "Current version number must be an integer" unless $version && $version =~ /^\d+$/;
     $prevver = $version - 1;
-}    
+} else {
+    print "REMINDER: You are in TEST MODE.  To enable normal operation, edit \$TEST_MODE in the GKB::Config::Release module and restart this script\n";
+}
 set_version_for_config_variables($version);
 
 

@@ -7,6 +7,7 @@ use GKB::Config;
 
 use autodie qw/:all/;
 use Cwd;
+use File::Copy;
 use Getopt::Long;
 use common::sense;
 
@@ -41,11 +42,15 @@ sub run {
     $opt_port ||= $GK_DB_PORT;
 
     my $tmp_dir = "/tmp";
-    
     clone_fireworks_repository_from_github($tmp_dir);
-    create_symbolic_link_to_fireworks_repository();
+	
+	my $link_name = 'fireworks';
+    create_symbolic_link_to_fireworks_repository($tmp_dir, $link_name);
+	
+	my $fireworks_jar_file = 'fireworks.jar';
+	create_fireworks_jar_file($fireworks_jar_file, $link_name);
 
-    my $fireworks_package = "java -jar -Xms5120M -Xmx10240M fireworks.jar";
+    my $fireworks_package = "java -jar -Xms5120M -Xmx10240M $fireworks_jar_file";
     my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
     my $reactome_graph_binary = "ReactomeGraphs.bin";
     create_reactome_graph_binary_file($fireworks_package, $credentials, $opt_r, $reactome_graph_binary);
@@ -71,7 +76,23 @@ sub clone_fireworks_repository_from_github {
 }
 
 sub create_symbolic_link_to_fireworks_repository {
-    return (system("rm -rf fireworks; ln -s Fireworks fireworks") == 0);
+    my $directory = shift;
+	my $link_name = shift;
+	
+	return (system("rm -rf $link_name; ln -s $directory/Fireworks $link_name") == 0);
+}
+
+sub create_fireworks_jar_file {
+	my $jar_file = shift;
+	my $symbolic_link_to_repository = shift;
+	
+	my $present_dir = getcwd();
+	chdir "$symbolic_link_to_repository/Server";
+	system("mvn clean package");
+	my $return_value = copy("target/Reactome Fireworks Layout-jar-with-dependencies.jar", "$present_dir/$jar_file");
+	chdir $present_dir;
+	
+	return ($return_value == 0);
 }
 
 sub create_reactome_graph_binary_file {
