@@ -84,7 +84,7 @@ sub restart_mysql {
     $mpid = int($mpid);
     print "MY COMMAND WOULD BE: kill -9 $mpid";
     kill('KILL',$mpid);
-    restart($log);
+    start_mysql($log);
     $mpid = `ps aux |grep mysqld |grep -v grep | awk '{ print \$2 }'`;
     print "MY PID is NOW $mpid\n";
 }
