@@ -30,19 +30,20 @@ override 'run_commands' => sub {
     if ($gkbdir eq "gkbdev") {
         $self->cmd("Creating download directory",[["perl create_download_directory.pl -host $host -port 3306 -user $user -pass $pass -r $version -db $db > create_download_directory.$version.out"]]);
         $self->cmd("Creating BioSystems export file",[["perl create_reactome2biosystems.pl -host $host -port 3306 -user $user -pass $pass -r $version -db $db > create_reactome2biosystems.$version.out"]]);
-	$self->cmd("Moving download directory to website folder",
-	    [
-		["mkdir -p $download_dir/$version"],
-		["mv $version/* $download_dir/$version"],
-		["rmdir $version"]
-	    ]);
+        $self->cmd("Moving download directory to website folder",
+            [
+            	["mkdir -p $download_dir/$version"],
+            	["mv $version/* $download_dir/$version"],
+            	["rmdir $version"]
+            ]
+        );
     } elsif ($gkbdir eq "gkb") {
-	my $archive_live = replace_gkb_alias_in_dir("$html/download/archive", 'gkb');
-	$self->cmd("Archiving version $prevver download directory", [["tar zcvf - $html/download/$prevver | ssh $live_server 'cat > $archive_live/$prevver.tgz'"]]);
+        my $archive_live = replace_gkb_alias_in_dir("$html/download/archive", 'gkb');
+        $self->cmd("Archiving version $prevver download directory", [["tar zcvf - $html/download/$prevver | ssh $live_server 'cat > $archive_live/$prevver.tgz'"]]);
     	$self->cmd("Copying current download directory from $host",[["scp -r $html/download/$version $live_server:$download_dir"]]);
-	$self->cmd("Removing version $prevver download directory from $live_server (archive still available)",
-	    [["rm -r $download_dir/$prevver"]], {'ssh' => $live_server}
-	);
+        $self->cmd("Removing version $prevver download directory from $live_server (archive still available)",
+            [["rm -r $download_dir/$prevver"]], {'ssh' => $live_server}
+        );
         
         my $analysis_dir = '/usr/local/reactomes/Reactome/production/AnalysisService/input';
         my $analysis_binary = "analysis_v$version.bin";
@@ -53,10 +54,10 @@ override 'run_commands' => sub {
             ]
         );
 	
-	my $solr_dir = '/usr/local/reactomes/Reactome/production/Solr';
+        my $solr_dir = '/usr/local/reactomes/Reactome/production/Solr';
         $self->cmd("Copying solr index from $host",
             [
-             ["rsync -avh -e ssh $solr_dir $live_server:$solr_dir"]
+                ["rsync -avhO -e ssh $solr_dir/ $live_server:$solr_dir"]
             ]
         );
     }

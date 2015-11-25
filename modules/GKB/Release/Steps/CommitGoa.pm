@@ -28,8 +28,8 @@ override 'run_commands' => sub {
     my $go_submission = "$release/goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome";
     $self->cmd("Committing gene association file to GO SVN",
     	[
-			["rm -f $go_submission/gene_association.reactome"],
-    		["mv $release/goa_prepare/gene_association.reactome $go/gene-associations/submission"],
+			["rm -f $go_submission"],
+    		["mv $release/goa_prepare/gene_association.reactome $go_submission"],
     	    ["gzip -f $go_submission"],
     	    ["svn commit -m \"Reactome release $version\" $go_submission.gz"]
     	]
