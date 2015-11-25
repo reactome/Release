@@ -104,8 +104,8 @@ sub convert_list {
 	if ($output_db eq 'RefSeqPeptide') {
 	    return $self->convert_list_uniprot_to_refseq_peptide($input_ids, $species);
 	}
-	if ($output_db eq 'RefSeqDNA') {
-	    return $self->convert_list_uniprot_to_refseq_dna($input_ids, $species);
+	if ($output_db eq 'RefSeqRNA') {
+	    return $self->convert_list_uniprot_to_refseq_rna($input_ids, $species);
 	}
 	if ($output_db eq 'ENSEMBL') {
 	    return $self->convert_list_uniprot_to_ensembl($input_ids, $species);
@@ -199,7 +199,7 @@ sub convert_list_uniprot_to_pdb {
 
 # Also able to handle input IDs with a version number, separated from
 # the main UniProt ID by a hyphen.
-sub convert_list_uniprot_to_refseq_dna {
+sub convert_list_uniprot_to_refseq_rna {
     my ($self, $input_ids, $species) = @_;
 
     my @input_variant_ids = ();
@@ -213,7 +213,7 @@ sub convert_list_uniprot_to_refseq_dna {
     }
 
     my $output_id_hash = {};
-    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'refseq_dna', $species))) {
+    if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'refseq_mrna', $species))) {
     	return undef;
     }
 
