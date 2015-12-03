@@ -8,8 +8,11 @@ use constant OR => 1;
 use lib '/usr/local/gkb/modules';
 
 use autodie qw/:all/;
-use List::MoreUtils qw/any/;
+use Carp;
+use Data::Dumper;
+use List::MoreUtils qw/any uniq/;
 use Getopt::Long;
+use Try::Tiny;
 
 use GKB::Config;
 use GKB::DBAdaptor;
@@ -50,6 +53,7 @@ if ($selected_pathways eq 'all') {
 	push @reactions, @{get_reaction_like_events($pathway)};
     }
 }
+@reactions = grep {!$_->disease->[0]} @reactions;
 
 exit unless @reactions;
 
@@ -76,6 +80,7 @@ add_line_count($output_file);
 
 sub populate_graph {
     my $reaction = shift;
+    my $reaction_id = get_label($reaction);
     
     my @inputs = @{$reaction->input};
     my @outputs = @{$reaction->output};
@@ -83,18 +88,32 @@ sub populate_graph {
     my @regulations = @{$reaction->reverse_attribute_value('regulatedEntity')};
     
     foreach my $parent (@inputs, @catalysts, @regulations) {
-	$parent2child{$parent->db_id}->{$reaction->db_id}++;
-	$child2parent{$reaction->db_id}->{$parent->db_id}++;
-	$id2instance{$parent->db_id} = $parent;
+        my $parent_id = get_label($parent);
+        $parent2child{$parent_id}{$reaction_id}++;
+        $child2parent{$reaction_id}{$parent_id}++;
+        $id2instance{$parent_id} = $parent;
+        
+        process_if_set_or_complex($parent,
+            sub {
+                my $component = $_[0];
+                my $component_id = get_label($component);
+                my $complex_or_set_id = get_label($_[1]);
+                                
+                $parent2child{$component_id}{$complex_or_set_id}++;
+                $child2parent{$complex_or_set_id}{$component_id}++;
+                $id2instance{$component_id} = $component;
+            }
+        )
     }
     
     foreach my $child (@outputs) {
-	$parent2child{$reaction->db_id}->{$child->db_id}++;
-	$child2parent{$child->db_id}->{$reaction->db_id}++;
-	$id2instance{$child->db_id} = $child;
+        my $child_id = get_label($child);
+        $parent2child{$reaction_id}{$child_id}++;
+        $child2parent{$child_id}{$reaction_id}++;
+        $id2instance{$child_id} = $child;
     }
     
-    $id2instance{$reaction->db_id} = $reaction;
+    $id2instance{$reaction_id} = $reaction;
 }
 
 sub add_reaction_to_logic_table {
@@ -109,10 +128,10 @@ sub add_reaction_to_logic_table {
     process_inputs($reaction, \@catalysts);
     
     foreach my $output (@outputs) {
-	my $output_name = $output->name->[0];
-	my $reaction_like_events_with_output = get_reactions_with_output($output, $all_reactions);
-	
-	process_output($output, $reaction_like_events_with_output);
+        my $output_name = $output->name->[0];
+        my $reaction_like_events_with_output = get_reactions_with_output($output, $all_reactions);
+        
+        process_output($output, $reaction_like_events_with_output);
     }
     
     my @regulations = @{$reaction->reverse_attribute_value('regulatedEntity')};
@@ -124,7 +143,7 @@ sub process_inputs {
     my $inputs = shift;
     
     foreach my $input (@$inputs) {
-	process_if_set_or_complex($input) unless is_an_output_in_binding_reaction($input);
+	process_if_set_or_complex($input) unless is_an_output($input);
 	process_input($reaction, $input);
     }
 }
@@ -142,14 +161,27 @@ sub process_output {
     
     my $logic = scalar @$associated_reactions > 1 ? OR : AND;
     foreach my $reaction (@$associated_reactions) {
-	next if output_is_ancestral_input($output) && $reaction->catalystActivity->[0];	
-	
-	record(get_label($reaction), get_label($output), 1, $logic);
+        if (output_is_component_of_ancestral_input($output, $reaction)) {
+            foreach my $child_reaction_id (get_child_reaction_ids($output)) {
+                record(get_label($reaction), $child_reaction_id, 1, $logic);
+            }
+            next;
+        } 
+        record(get_label($reaction), get_label($output), 1, $logic);
     }
 }
 
 sub process_if_set_or_complex {
     my $physical_entity = shift;
+    my $action = shift //
+        sub {
+                record(
+                    get_label($_[0]),
+                    get_label($_[1]),
+                    $_[2],
+                    $_[3]
+                );
+            };
     
     my @elements;
     my $logic;
@@ -163,8 +195,8 @@ sub process_if_set_or_complex {
     }
     
     foreach my $element (@elements) {	
-	record(get_label($element), get_label($physical_entity), 1, $logic);
-	process_if_set_or_complex($element);
+        $action->($element, $physical_entity, 1, $logic);
+        process_if_set_or_complex($element, $action);
     }
 }
 
@@ -174,7 +206,7 @@ sub process_regulations {
     
     foreach my $regulation (@$regulations) {
 	my $regulator = $regulation->regulator->[0];
-	process_if_set_or_complex($regulator) unless is_an_output_in_binding_reaction($regulator);
+	process_if_set_or_complex($regulator) unless is_an_output($regulator);
 	
 	my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
 	record(get_label($regulator), get_label($reaction), $value, AND);
@@ -187,17 +219,22 @@ sub record {
     my $value = shift;
     my $logic = shift;
     
+    $parent =~ s/\s+/_/g;
+    $child =~ s/\s+/_/g;
+    
     $interactions{$child}{$logic}{$parent}{$value}++;
 }
 
 sub get_label {
     my $instance = shift;
+        
+    my $label = $instance->referenceEntity->[0] ?
+    $instance->referenceEntity->[0]->db_id :
+    $instance->db_id;
     
-    #if (is_set_or_complex($instance) || $instance->is_a('ReactionlikeEvent')) {
-#	return $instance->db_id;
-#    }
+    $label .= "_RLE" if $instance->is_a('ReactionlikeEvent');
     
-    return $instance->name->[0];
+    return $label;
 }
 
 sub get_dba {
@@ -215,27 +252,56 @@ sub get_reaction_like_events {
 						      -OUT_CLASSES => ['ReactionlikeEvent']);
 }
 
+sub output_is_component_of_ancestral_input {
+    my $output = shift;
+    my $parent_reaction = shift;
+    
+    my @ancestors = get_ancestors([$parent_reaction]);
+    my @ancestor_complexes = grep {$_->is_a('Complex')} @ancestors;
+    my @ancestor_components = map {get_components($_)} @ancestor_complexes;
+    
+    return any {$output->db_id == $_->db_id} @ancestor_components;
+}
+
+sub get_components {
+    my $complex = shift;
+    
+    return unless $complex && $complex->is_a('Complex');
+        
+    my @components;
+    foreach my $component (@{$complex->hasComponent}) {
+        push @components, ($component, get_components($component));
+    }
+    return @components;
+}
+
+sub get_child_reaction_ids {
+    my $input = shift;
+    
+    return grep {/_RLE$/} keys %{$parent2child{get_label($input)}}
+}
+
 sub output_is_ancestral_input {
     my $output = shift;
 
-    return grep({$output->db_id == $_->db_id} get_ancestors([$output]));
+    return grep({get_label($output) eq get_label($_)} get_ancestors([$output]));
 }
 
 sub get_ancestors {
     my $children = shift;
     my $seen_ancestors = shift;
-    
+
     return () unless @$children;
     
     my @parents;
     foreach my $child (@$children) {
-	my @reaction_ids = keys %{$child2parent{$child->db_id}};
-	foreach my $reaction_id (@reaction_ids) {
-	    push @parents, map({$id2instance{$_}} grep({!$seen_ancestors->{$_}++} keys %{$child2parent{$reaction_id}}));
-	}
+        my @parent_ids = keys %{$child2parent{get_label($child)}};
+        foreach my $parent_id (@parent_ids) {
+            push @parents, $id2instance{$parent_id} unless $seen_ancestors->{$parent_id}++ || !$id2instance{$parent_id};
+        }
     }
     
-    push @parents, get_ancestors(\@parents, $seen_ancestors);
+    push @parents, get_ancestors(\@parents, $seen_ancestors) if @parents;
     
     return @parents;
 }
@@ -257,12 +323,12 @@ sub is_binding_reaction {
     scalar @{$reaction->input} > scalar @{$reaction->output};
 }
 
-sub is_an_output_in_binding_reaction {
+sub is_an_output {
     my $entity = shift;
     
-    my @reactions_with_entity_as_output = map({$id2instance{$_}} keys %{$child2parent{$entity->db_id}});
+    my @parents_of_entity = map({$id2instance{$_}} keys %{$child2parent{get_label($entity)}});
 
-    return any {is_binding_reaction($_)} @reactions_with_entity_as_output;
+    return @parents_of_entity;
 }
 
 sub get_reactions_with_output {
@@ -271,12 +337,12 @@ sub get_reactions_with_output {
     
     my %reaction_output_id_2_reactions;
     foreach my $reaction (@$reactions) {
-	foreach my $reaction_output_id (map {$_->db_id} @{$reaction->output}) {
-	    push @{$reaction_output_id_2_reactions{$reaction_output_id}}, $reaction;
-	}
+        foreach my $reaction_output_id (uniq map {get_label($_)} @{$reaction->output}) {
+            push @{$reaction_output_id_2_reactions{$reaction_output_id}}, $reaction;
+        }
     }
     
-    return \@{$reaction_output_id_2_reactions{$output->db_id}};
+    return \@{$reaction_output_id_2_reactions{get_label($output)}};
 }
 
 sub report_interactions {
@@ -291,11 +357,13 @@ sub report_interactions {
 		}
 	}
 	
+    my %seen;
 	foreach my $child (keys %{$interactions}) {
 		foreach my $logic (keys %{$interactions{$child}}) {
 			foreach my $parent (keys %{$interactions{$child}{$logic}}) {
 				foreach my $value (keys %{$interactions{$child}{$logic}{$parent}}) {
-					print $fh join("\t", $parent, $child, $logic, $value) . "\n";
+					next if $seen{$child}{$logic}{$parent}{$value}++;
+                    print $fh join("\t", $parent, $child, $value, $logic) . "\n";
 				}
 			}
 		}
