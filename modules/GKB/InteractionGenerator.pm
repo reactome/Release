@@ -43,14 +43,18 @@ disclaimers of warranty.
 
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use strict;
+
 use Carp qw(cluck confess);
 use Getopt::Long qw(:config pass_through);
 use Bio::Root::Root;
 use Data::Dumper;
 use File::Basename;
+use List::MoreUtils qw/all any/;
+
 use GKB::Config;
 use GKB::IntAct;
 use GKB::Utils;
+
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 
@@ -112,52 +116,52 @@ sub new {
 }
 
 sub set_title_headers_flag {
-	my ($self, $title_headers_flag) = @_;
-	
-	$self->title_headers_flag($title_headers_flag);
+    my ($self, $title_headers_flag) = @_;
+
+    $self->title_headers_flag($title_headers_flag);
 }
 
 sub set_interaction_count_headers_flag {
-	my ($self, $interaction_count_headers_flag) = @_;
-	
-	$self->interaction_count_headers_flag($interaction_count_headers_flag);
+    my ($self, $interaction_count_headers_flag) = @_;
+
+    $self->interaction_count_headers_flag($interaction_count_headers_flag);
 }
 
 sub set_table_headers_flag {
-	my ($self, $table_headers_flag) = @_;
-	
-	$self->table_headers_flag($table_headers_flag);
+    my ($self, $table_headers_flag) = @_;
+
+    $self->table_headers_flag($table_headers_flag);
 }
 
 sub set_column_groups {
-	my ($self, $column_groups) = @_;
-	
-	if (defined $column_groups->{$COLUMN_GROUP_INTACT} && $column_groups->{$COLUMN_GROUP_INTACT} == 1) {
-		$self->add_intact_ids_flag(1);
-	}
-	
-	$self->column_groups($column_groups);
+    my ($self, $column_groups) = @_;
+
+    if (defined $column_groups->{$COLUMN_GROUP_INTACT} && $column_groups->{$COLUMN_GROUP_INTACT} == 1) {
+	$self->add_intact_ids_flag(1);
+    }
+
+    $self->column_groups($column_groups);
 }
 
 sub set_dba {
-	my ($self, $dba) = @_;
-	
-	$self->dba($dba);
+    my ($self, $dba) = @_;
+
+    $self->dba($dba);
 }
 
 # If you want to use line-caching, then you should set this initially to {}.
 sub set_line_cache {
-	my ($self, $line_cache) = @_;
-	
-	$self->line_cache($line_cache);
+    my ($self, $line_cache) = @_;
+
+    $self->line_cache($line_cache);
 }
 
 # Only show lines that also have IntAct IDs. This only has an
 # effect if column_groups contains COLUMN_GROUP_INTACT.
 sub set_display_only_intact_lines {
-	my ($self, $display_only_intact_lines) = @_;
-	
-	$self->display_only_intact_lines($display_only_intact_lines);
+    my ($self, $display_only_intact_lines) = @_;
+
+    $self->display_only_intact_lines($display_only_intact_lines);
 }
 
 sub find_interactors_for_ReferenceSequences {
@@ -166,9 +170,9 @@ sub find_interactors_for_ReferenceSequences {
 
     my $count;
     unless ($rs_num && $rs_count) {
-	$rs_count = @$rss;
-	$rs_num = 1;
-	$count++;
+		$rs_count = @$rss;
+		$rs_num = 1;
+		$count++;
     }
 
     # skip if the refseq is not in IntAct
@@ -176,7 +180,10 @@ sub find_interactors_for_ReferenceSequences {
 
     my $logger = get_logger(__PACKAGE__);
     
-    my %interactions;
+    my %interactions = (
+        'normal' => {},
+        'pathogenic' => {}
+    );
     
     if (defined $participating_protein_count_cutoff) {
     	$logger->info("participating_protein_count_cutoff=$participating_protein_count_cutoff");
@@ -186,11 +193,14 @@ sub find_interactors_for_ReferenceSequences {
     $logger->info("total number of ReferenceSequences=$rs_count");
     
     foreach my $rs (@{$rss}) {
-	$rs_num++ if $count;
-    	if ($rs_num%100 == 0) {
+		$rs_num++ if $count;
+    	if ($rs_num % 100 == 0) {
     	    $logger->info("rs_num=$rs_num (" . ($rs_num*100)/$rs_count . "%)");
+#print Dumper \%interactions;
+#<STDIN>;
     	}
-	if (defined $mitab) {
+	
+		if (defined $mitab) {
             $self->find_mitab_interactors_for_ReferenceSequence($rs,\%interactions, $participating_protein_count_cutoff);
         } else {
             $self->find_interactors_for_ReferenceSequence($rs,\%interactions, $participating_protein_count_cutoff);
@@ -202,536 +212,705 @@ sub find_interactors_for_ReferenceSequences {
 sub find_interactors_for_ReferenceSequence {
     my ($self, $rs, $interactions, $participating_protein_count_cutoff) = @_;
     
-    my $logger = get_logger(__PACKAGE__);
+    #$interactions ||= {};
     
-    $interactions ||= {};
-    my $participating_protein_count;
-    
-    # Keep ReferenceGeneProduct for backward compatibility
-    my $out_classes = 'ReferenceGeneProduct';
-    if (!($self->dba->ontology->is_valid_class($out_classes))) {
-    	$out_classes = 'ReferencePeptideSequence';
+    my $direct_complexes = $self->find_interactors_in_direct_complex($rs, $interactions, $participating_protein_count_cutoff);
+    $self->find_interactors_in_reactions_and_indirect_complexes($rs, $interactions, $participating_protein_count_cutoff, $direct_complexes);
+
+    return $interactions;
+}
+
+sub find_interactors_in_reactions_and_indirect_complexes {
+    my ($self, $rs, $interactions, $participating_protein_count_cutoff, $direct_complexes) = @_;
+
+    my $pes = $rs->follow_class_attributes(
+		-INSTRUCTIONS =>
+			{
+			'ReferenceSequence' => {'reverse_attributes' => ['referenceEntity']},
+			'PhysicalEntity' => {'reverse_attributes' => ['hasComponent', 'hasMember']}
+			},
+		-OUT_CLASSES => ['PhysicalEntity']
+    );
+
+    my %seen;
+    map {$seen{$_->db_id} = $_} @{$pes};
+
+    foreach my $pe (@{$pes}) {
+		# Only count interaction via reaction if the other ReferenceSequence not in
+		# the same complex with the given ReferenceSequence.
+	
+		# Handle input and output separately to make it easier.
+		$self->add_interactors_from_reactions($rs, 'input', $pe, $interactions, $participating_protein_count_cutoff);
+		$self->add_interactors_from_reactions($rs, 'output', $pe, $interactions, $participating_protein_count_cutoff);
+		if ($pe->is_a('Complex') and !$direct_complexes->{$pe->db_id}) {
+			# Skip the component(s) which were on the path from the given ReferenceSequence
+			# to this Complex. This way we don't count other (alternative) instances as interactors.
+			# Also, of the nested complexes only the smallest is reported as interaction context.
+			# However, if the given ReferencesSequence is "present" in multiple sub-complexes, i.e
+			# something like:
+			#
+			# C1--p->C2--p->A
+			#   |      |
+			#   |      |-p->B
+			#   |
+			#   |-p->C3--p->A
+			#          |
+			#          |-p->B
+			#          |
+			#          |-p->C
+			#
+			# then also the super-complex, in this case C1 will be reported as context for
+			# A:B interaction
+	    
+			my $participating_protein_count = $self->participating_protein_count_from_complexes([$pe]);
+			foreach my $component (grep {! $seen{$_->db_id}++} @{$pe->HasComponent}) {
+				foreach my $rps (@{$self->get_reference_entities_from_physical_entity($component, ['Complex','EntitySet'])}) {
+				    $self->add_interactors($interactions, $rs, $rps,
+						{
+						    'complex_context' => {$pe->db_id => $pe}
+						},
+						{
+						    'protein_count' => $participating_protein_count,
+						    'protein_count_cutoff' => $participating_protein_count_cutoff
+						}
+					);
+				}
+			}
+		}
     }
-    
-    my %neighbouring_reaction_instructions = 
-	(
-	 -INSTRUCTIONS =>
-	 {
-#	     'EquivalentEventSet' => {'attributes' => [qw(hasMember)]},
-#	     'ConceptualEvent' => {'attributes' => [qw(hasMember)]},
-	     'Reaction' => {'attributes' => [qw(input output catalystActivity)]},
-	     'CatalystActivity' => {'attributes' => [qw(physicalEntity)]},
-	     'Complex' => {'attributes' => [qw(hasComponent)]},
-	     'EntitySet' => {'attributes' => [qw(hasMember)]},
-	     'EntityWithAccessionedSequence' => {'attributes' => [qw(referenceEntity)]}},
-	 -OUT_CLASSES => [$out_classes]
-	 );
+}
+
+sub find_interactors_in_direct_complex {
+    my ($self, $rs, $interactions, $participating_protein_count_cutoff) = @_;
+
+    # Find immediate complexes containing those entities.
+    my %direct_complexes;
+    foreach my $pe (get_physical_entities($rs)) {
+		foreach my $complex (@{$pe->reverse_attribute_value('hasComponent')}) {
+		    my $participating_protein_count = $self->participating_protein_count_from_complexes([$complex]);
+		    $direct_complexes{$complex->db_id} = $complex;
+	    
+		    # Skip the original component
+		    foreach my $component (grep {$_ != $pe} @{$complex->HasComponent}) {
+				my $rss = $component->follow_class_attributes(
+				    -INSTRUCTIONS =>
+						{
+						    'EntitySet' => {'attributes' => ['hasMember']},
+							'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}
+						},
+					-OUT_CLASSES => [$self->get_out_classes()]
+				);
+				foreach my $rs2 (@{$rss}) {
+
+				    $self->add_interactors($interactions, $rs, $rs2,
+						{
+						    'direct_complex_context' => {$complex->db_id => $complex}
+						},
+						{
+						    'protein_count' => $participating_protein_count,
+						    'protein_count_cutoff' => $participating_protein_count_cutoff
+						}
+					);
+				}
+			}
+		}
+    }
+
+    return \%direct_complexes;
+}
+
+sub get_reference_entities_from_physical_entity {
+    my $self = shift;
+    my $physical_entity = shift;
+    my $containers = shift;
+
+	#print $physical_entity->displayName . "\n";
+	
+    return $physical_entity->follow_class_attributes(
+		-INSTRUCTIONS => search_ewas_and_containers(@{$containers}),
+		-OUT_CLASSES => [$self->get_out_classes()]
+    );
+}
+
+sub search_ewas_and_containers {
+    my (@containers_to_search) = @_;
+
+    # Get and return sub-hash of 'get_searchable_containers' based
+    # on keys passed as parameters
+    my %search_entries;
+    @search_entries{@containers_to_search} = @{get_searchable_containers()}{@containers_to_search};
+    $search_entries{'EntityWithAccessionedSequence'} = {'attributes' => ['referenceEntity']};
+
+    return \%search_entries;
+}
+
+sub get_searchable_containers {
+    return {
+		'Complex' => {'attributes' => [qw(hasComponent)]},
+		'EntitySet' => {'attributes' => [qw(hasMember)]},
+		'Polymer' => {'attributes' => [qw(repeatedUnit)]}
+    };
+}
+
+sub get_physical_entities {
+    my $rs = shift;
 
     # Find PhysicalEntities referring to this ReferenceEntity
     my @pes = grep {$_->is_a('PhysicalEntity')} @{$rs->reverse_attribute_value('referenceEntity')};
     my @tmp;
     # Add Generics of those PhysicalEntities
     foreach my $pe (@pes) {
-		my $ar = $pe->follow_class_attributes
-		    (-INSTRUCTIONS =>
-		     {'PhysicalEntity' => {'reverse_attributes' => ['hasMember']}},
-		     -OUT_CLASSES => ['PhysicalEntity']
-		     );
+		my $ar = $pe->follow_class_attributes(
+			-INSTRUCTIONS =>
+				{
+				    'PhysicalEntity' => {'reverse_attributes' => ['hasMember']}
+				},
+			-OUT_CLASSES => ['PhysicalEntity']
+		);
 		push @tmp, @{$ar};
     }
     @pes = @tmp;
-    # Find immediate complexes containing those entities.
-    my %direct_complexes;
-    foreach my $pe (@pes) {
-	foreach my $complex (@{$pe->reverse_attribute_value('hasComponent')}) {
-	    $participating_protein_count = $self->participating_protein_count_from_complexes([$complex]);
-	    $direct_complexes{$complex->db_id} = $complex;
-	    # Skip the original component
-	    foreach my $component (grep {$_ != $pe} @{$complex->HasComponent}) {
-		my $rss = $component->follow_class_attributes
-		    (-INSTRUCTIONS =>
-		     {'EntitySet' => {'attributes' => ['hasMember']},
-		      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-		     -OUT_CLASSES => [$out_classes]
-		     );
-		foreach my $rs2 (@{$rss}) {
-		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rs2);
-		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-			if ($self->add_intact_ids_flag) {
-			    if (!(defined $participating_protein_count_cutoff) || $participating_protein_count <= $participating_protein_count_cutoff) {
-				$logger->info("participating_protein_count=$participating_protein_count");
-				
-				$self->_insert_intact_ids($interactions->{$t1->db_id}->{$t2->db_id});
-			    }
+
+    return @pes;
+}
+
+sub add_interactors_from_reactions {
+    my $self = shift;
+    my $rs = shift;
+    my $attribute = shift;
+    my $physical_entity = shift;
+    my $interactions = shift;
+    my $participating_protein_count_cutoff = shift;
+
+    foreach my $reaction (@{get_reactions_by_reverse_attribute_from_physical_entity($physical_entity, [$attribute])}) {
+		my $participating_protein_count = $self->participating_protein_count_from_reactions([$reaction]);
+		foreach my $physical_entity_from_reaction (grep {$_ != $physical_entity} @{get_physical_entities_by_attribute_from_reaction($reaction, [$attribute])}) {
+			foreach my $rps (@{$self->get_reference_entities_from_physical_entity($physical_entity_from_reaction, ['Complex','EntitySet'])}) {
+				#print $rps->displayName . "\n";
+				$self->add_interactors($interactions, $rs, $rps,
+				    {
+						'reaction_context' => {$reaction->db_id => $reaction}
+				    },
+				    {
+						'protein_count' => $participating_protein_count,
+						'protein_count_cutoff' => $participating_protein_count_cutoff
+				    }
+				);
 			}
-		    }
-		    $interactions->{$t1->db_id}->{$t2->db_id}->{'direct_complex_context'}->{$complex->db_id} = $complex;
 		}
-	    }
-	}
+		# neighbouring, i.e. preceding/following reactions
+		foreach my $neighbouring_reaction (@{$reaction->PrecedingEvent}, @{$reaction->reverse_attribute_value('precedingEvent')}) {
+		    $participating_protein_count = $self->participating_protein_count_from_reactions([$reaction,$neighbouring_reaction]);
+			foreach my $rps (@{$neighbouring_reaction->follow_class_attributes($self->get_neighbouring_reaction_instructions());}) {
+				$self->add_interactors($interactions, $rs, $rps,
+				    {
+						'neighbouring_reaction_context' => [[$reaction, $neighbouring_reaction]]
+				    },
+				    {
+						'protein_count' => $participating_protein_count,
+						'protein_count_cutoff' => $participating_protein_count_cutoff
+				    }
+				);
+			}
+		}
+    }
+}
+
+sub get_reactions_by_reverse_attribute_from_physical_entity {
+	my $physical_entity = shift;
+	my $attributes = shift;
+	
+	return $physical_entity->follow_class_attributes(
+		-INSTRUCTIONS =>
+		    {
+				'PhysicalEntity' => {'reverse_attributes' => [@{$attributes},'physicalEntity']},
+				'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}
+		    },
+		-OUT_CLASSES => ['Reaction']
+    );
+}
+
+sub get_physical_entities_by_attribute_from_reaction {
+	my $reaction = shift;
+	my $attributes = shift;
+	
+	return $reaction->follow_class_attributes(
+		-INSTRUCTIONS =>
+			{
+				'Reaction' => {'attributes' => [@{$attributes},'catalystActivity']},
+				'CatalystActivity' => {'attributes' => ['physicalEntity']}
+			},
+		-OUT_CLASSES => ['PhysicalEntity']
+	);
+}
+
+sub get_neighbouring_reaction_instructions {
+	my $self = shift;	
+	return (
+		-INSTRUCTIONS =>
+			{
+#	    		'EquivalentEventSet' => {'attributes' => [qw(hasMember)]},
+#	    		'ConceptualEvent' => {'attributes' => [qw(hasMember)]},
+				'Reaction' => {'attributes' => [qw(input output catalystActivity)]},
+				'CatalystActivity' => {'attributes' => [qw(physicalEntity)]},
+				'Complex' => {'attributes' => [qw(hasComponent)]},
+				'EntitySet' => {'attributes' => [qw(hasMember)]},
+				'EntityWithAccessionedSequence' => {'attributes' => [qw(referenceEntity)]}
+			},
+		-OUT_CLASSES => [$self->get_out_classes()]
+    );
+}
+
+sub add_interactors {
+    my $self = shift;
+    my $interactions = shift;
+    my $interactor1 = shift;
+    my $interactor2 = shift;
+    my $context2instances = shift;
+    my $intact = shift;
+    
+    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($interactor1, $interactor2);
+    
+    while (my($context, $instance_collection) = each (%{$context2instances})) {
+		foreach my $instance (get_instances($instance_collection)) {
+            if (same_species($t1, $t2)) {
+                #print $t1->displayName . "\n";
+                #print $t2->displayName . "\n";
+                #print "\n";
+                #print "context: $context\n";
+                #print "instance: $instance\n";
+                next if excludable_interaction($context, $instance);
+                $self->associate_interactors_with_instance_in_context($interactions->{'normal'}, $t1, $t2, $context, $instance, $intact);
+            } else {
+                $self->attempt_to_record_pathogenic_relationship($interactions->{'pathogenic'}, $t1, $t2, $context, $instance, $intact);
+            }
+        }
+    }
+}
+
+sub get_instances {
+    my $instance_collection = shift;
+    
+    if (ref($instance_collection) eq 'HASH') {
+        my @key_value_pairs;
+        while (my ($key, $value) = each %{$instance_collection}) {
+            push @key_value_pairs, {$key => $value};
+        }
+        return @key_value_pairs;
+    } elsif (ref($instance_collection) eq 'ARRAY') {
+        return @{$instance_collection};
     }
     
-    my $pes = $rs->follow_class_attributes
-	(-INSTRUCTIONS =>
-	 {'ReferenceSequence' => {'reverse_attributes' => ['referenceEntity']},
-	  'PhysicalEntity' => {'reverse_attributes' => ['hasComponent', 'hasMember']}},
-	 -OUT_CLASSES => ['PhysicalEntity']
-	 );
+    return $instance_collection;    
+}
 
-    my %pes;
-    map {$pes{$_->db_id} = $_} @{$pes};
+sub associate_interactors_with_instance_in_context {
+    my $self = shift;
+    my $interactions = shift;
+    my $interactor1 = shift;
+    my $interactor2 = shift;
+    my $context = shift;
+    my $instance = shift;
+    my $intact = shift;
 
-    foreach my $pe (@{$pes}) {
-		#print $pe->extended_displayName, "\n";
-		# Only count interaction via reaction if the other ReferenceSequence not in
-		# the same complex with the given ReferenceSequence.
+    my $logger = get_logger(__PACKAGE__);
+    
+    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($interactor1, $interactor2);
+    
+    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
+        $interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
 	
-		# Handle input and output separately to make it easier.
-	
-		# input
-	my $reactions = $pe->follow_class_attributes
-	    (-INSTRUCTIONS =>
-	     {'PhysicalEntity' => {'reverse_attributes' => ['input','physicalEntity']},
-	      'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}},
-	     -OUT_CLASSES => ['Reaction']
-	     );
-	foreach my $r (@{$reactions}) {
-	    $participating_protein_count = $self->participating_protein_count_from_reactions([$r]);
-	    my $pes1 = $r->follow_class_attributes
-		(-INSTRUCTIONS =>
-		 {'Reaction' => {'attributes' => ['input','catalystActivity']},
-		  'CatalystActivity' => {'attributes' => ['physicalEntity']}},
-		 -OUT_CLASSES => ['PhysicalEntity']
-		 );
-	    foreach my $pe1 (@{$pes1}) {
-		next if ($pe1 == $pe);
-		my $rpss = $pe1->follow_class_attributes
-		    (-INSTRUCTIONS =>
-		     {'Complex' => {'attributes' => [qw(hasComponent)]},
-		      'EntitySet' => {'attributes' => [qw(hasMember)]},
-		      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-		     -OUT_CLASSES => [$out_classes]
-		     );
-		foreach my $rps (@{$rpss}) {
-		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-			if ($self->add_intact_ids_flag) {
-			    if (!(defined $participating_protein_count_cutoff) || $participating_protein_count <= $participating_protein_count_cutoff) {
+		if ($self->add_intact_ids_flag && $intact) {
+			if (!(defined $intact->{'protein_count_cutoff'}) || $intact->{'protein_count'} <= $intact->{'protein_count_cutoff'}) {
 				$self->_insert_intact_ids($interactions->{$t1->db_id}->{$t2->db_id});
-			    }
 			}
-		    }
-		    #		    $interactions->{$t1->db_id}->{$t2->db_id}->{'context'}->{$r->db_id} = $r;
-		    $interactions->{$t1->db_id}->{$t2->db_id}->{'reaction_context'}->{$r->db_id} = $r;
+		}	
+    }
+
+    my $interactor_pair = $interactions->{$interactor1->db_id}->{$interactor2->db_id};
+
+    if ((ref($interactor_pair->{$context}) eq 'HASH' || !ref($interactor_pair->{$context})) && (ref($instance) eq 'HASH')) {
+		while (my ($key, $value) = each (%{$instance})) {
+			$interactor_pair->{$context}->{$key} = $value;
 		}
-	    }
-	    # neighbouring, i.e. preceding/following reactions
-	    foreach my $nr (@{$r->PrecedingEvent}, @{$r->reverse_attribute_value('precedingEvent')}) {
-		$participating_protein_count = $self->participating_protein_count_from_reactions([$r,$nr]);
-		my $rpss = $nr->follow_class_attributes(%neighbouring_reaction_instructions);
-		foreach my $rps (@{$rpss}) {
-		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-			if ($self->add_intact_ids_flag) {
-			    if (!(defined $participating_protein_count_cutoff) || $participating_protein_count <= $participating_protein_count_cutoff) {
-				$self->_insert_intact_ids($interactions->{$t1->db_id}->{$t2->db_id});
-			    }
-			}
-		    }
-		    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'neighbouring_reaction_context'}}, [$r,$nr];
+    } elsif (ref($interactor_pair->{$context}) eq 'ARRAY' || !ref($interactor_pair->{$context})) {
+		push @{$interactor_pair->{$context}}, $instance;
+    } else {
+		$logger->logcluck("Unable to associate " . $interactor1->db_id . " and " . $interactor2->db_id . " in context " . $context);
+    }
+}
+
+sub get_out_classes {
+    my $self = shift;
+
+    my $out_classes = 'ReferenceGeneProduct';
+    unless ($self->dba->ontology->is_valid_class($out_classes)) {
+		$out_classes = 'ReferencePeptideSequence';
+    }
+
+    return $out_classes;
+}
+
+
+sub find_mitab_interactors_for_ReferenceSequence {
+    my ($self, $rs, $interactions) = @_;
+    $interactions ||= {};
+    
+    # Find immediate complexes containing those entities.        
+    foreach my $pe (get_physical_entities($rs)) {
+        foreach my $complex (@{$pe->reverse_attribute_value('hasComponent')}) {
+			# $participating_protein_count = $self->participating_protein_count_from_complexes([$complex]);
+            # Check other components in the complex for interactors. Skip the original component (otherwise e.g. set members with rs are counted as interactors. However, this excludes dimeric interactions, so they are handled separately below)     
+			foreach my $component (grep {$_ != $pe} @{$complex->HasComponent}) {
+                foreach my $rs2 (@{$self->get_reference_entities_from_physical_entity($component, ['EntitySet'])}) {
+					$self->add_interactors($interactions, $rs, $rs2,
+						{
+						    'complex_context' => [$complex, @{$self->get_upstream_complexes_or_polymers($complex)}],
+							'reaction_context' => get_reaction_for_complex_or_polymer($complex)
+						}
+					);						
 				}
-	    }
-	}
+			}
 	
-	# output
-	$reactions = $pe->follow_class_attributes
-	    (-INSTRUCTIONS =>
-	     {'PhysicalEntity' => {'reverse_attributes' => ['output','physicalEntity']},
-	      'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}},
-	     -OUT_CLASSES => ['Reaction']
-	     );
-	foreach my $r (@{$reactions}) {
-	    $participating_protein_count = $self->participating_protein_count_from_reactions([$r]);
-	    my $pes1 = $r->follow_class_attributes
-		(-INSTRUCTIONS =>
-		 {'Reaction' => {'attributes' => ['output','catalystActivity']},
-		  'CatalystActivity' => {'attributes' => ['physicalEntity']}},
-		 -OUT_CLASSES => ['PhysicalEntity']
-		 );
-	    foreach my $pe1 (@{$pes1}) {
-		next if ($pe1 == $pe);
-		#next if ($pe1 == $pe);
-		my $rpss = $pe1->follow_class_attributes
-		    (-INSTRUCTIONS =>
-		     {'Complex' => {'attributes' => [qw(hasComponent)]},
-		      'EntitySet' => {'attributes' => [qw(hasMember)]},
-		      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-		     -OUT_CLASSES => [$out_classes]
-		     );
-		foreach my $rps (@{$rpss}) {
-		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-			if ($self->add_intact_ids_flag) {
-			    if (!(defined $participating_protein_count_cutoff) || $participating_protein_count <= $participating_protein_count_cutoff) {
-				$self->_insert_intact_ids($interactions->{$t1->db_id}->{$t2->db_id});
+			$self->add_interactors($interactions, $rs, $rs,
+			    {
+				    'complex_context' => [$complex, @{$self->get_upstream_complexes_or_polymers($complex)}],
+				    'reaction_context' => get_reaction_for_complex_or_polymer($complex)
 			    }
-			}
-		    }
-		    $interactions->{$t1->db_id}->{$t2->db_id}->{'reaction_context'}->{$r->db_id} = $r;
+			) if ($self->homomeric_in_complex($rs, $complex));
 		}
-	    }
-	    # neighbouring, i.e. preceding/following reactions
-	    foreach my $nr (@{$r->PrecedingEvent}, @{$r->reverse_attribute_value('precedingEvent')}) {
-		$participating_protein_count = $self->participating_protein_count_from_reactions([$r,$nr]);
-		my $rpss = $nr->follow_class_attributes(%neighbouring_reaction_instructions);
-		foreach my $rps (@{$rpss}) {
-		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-			if ($self->add_intact_ids_flag) {
-			    if (!(defined $participating_protein_count_cutoff) || $participating_protein_count <= $participating_protein_count_cutoff) {
-				$self->_insert_intact_ids($interactions->{$t1->db_id}->{$t2->db_id});
-			    }
-			}
-		    }
-		    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'neighbouring_reaction_context'}}, [$r,$nr];
-		}
-	    }
-	}
-	
-	if ($pe->is_a('Complex') and ! $direct_complexes{$pe->db_id}) {
-	    # Skip the component(s) which were on the path from the given ReferenceSequence
-	    # to this Complex. This way we don't count other (alternative) instances as interactors.
-	    # Also, of the nested complexes only the smallest is reported as interaction context.
-	    # However, if the given ReferencesSequence is "present" in multiple sub-complexes, i.e
-	    # something like:
-	    #
-	    # C1--p->C2--p->A
-	    #   |      |
-	    #   |      |-p->B
-	    #   |
-	    #   |-p->C3--p->A
-	    #          |
-	    #          |-p->B
-	    #          |
-	    #          |-p->C
-	    #
-	    # then also the super-complex, in this case C1 will be reported as context for
-	    # A:B interaction
-	    
-	    $participating_protein_count = $self->participating_protein_count_from_complexes([$pe]);
-	    my %seen = %pes;
-	    foreach my $pe1 (grep {! $seen{$_->db_id}++} @{$pe->HasComponent}) {
-		my $rpss = $pe1->follow_class_attributes
-		    (-INSTRUCTIONS =>
-		     {'Complex' => {'attributes' => [qw(hasComponent)]},
-		      'EntitySet' => {'attributes' => [qw(hasMember)]},
-		      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-		     -OUT_CLASSES => [$out_classes]
-		     );
-		foreach my $rps (@{$rpss}) {
-		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-			if ($self->add_intact_ids_flag) {
-			    if (!(defined $participating_protein_count_cutoff) || $participating_protein_count <= $participating_protein_count_cutoff) {
-				$self->_insert_intact_ids($interactions->{$t1->db_id}->{$t2->db_id});
-			    }
-			}
-		    }
-		    $interactions->{$t1->db_id}->{$t2->db_id}->{'complex_context'}->{$pe->db_id} = $pe;
-		}
-	    }
-	}
     }
     
+    #Check whether this ReferenceSequence is directly involved in a Polymer (i.e. not within a Complex, which would have been handled already) 
+
+    foreach my $polymer (@{get_polymers_from_reference_entity($rs)}) {
+		$self->add_interactors($interactions, $rs, $rs,
+		    {
+				'complex_context' => [$polymer, @{$self->get_upstream_complexes_or_polymers($polymer)}],
+				'reaction_context' => [@{get_reaction_for_complex_or_polymer($polymer)}]
+		    }
+		);
+    }
+    
+	my @physical_entities = @{get_physical_entities_from_reference_entity($rs)};
+	my %seen;
+	map {$seen{$_->db_id} = $_} @physical_entities;
+	
+    foreach my $complex (grep {$_->is_a('Complex')} @physical_entities) {
+		# $participating_protein_count = $self->participating_protein_count_from_complexes([$pe]);
+		foreach my $component (grep {! $seen{$_->db_id}++} @{$complex->HasComponent}) {
+			foreach my $rps (grep { $_ != $rs } @{$self->get_reference_entities_from_physical_entity($component,['Complex','EntitySet','Polymer'])}) {
+				$self->add_interactors($interactions, $rs, $rps,
+					{
+						'complex_context' => [$complex, @{$self->get_upstream_complexes_or_polymers($complex)}],
+						'reaction_context' => get_reaction_for_complex_or_polymer($complex)
+					}
+				);
+			}			
+        }
+	}
+    
+    #Get reactions                          
+    foreach my $physical_entity (@physical_entities) {
+		#find other entities(=interactors) in each reaction  
+		foreach my $reaction (@{get_reactions_by_reverse_attribute_from_physical_entity($physical_entity, ['input', 'output'])}) {
+			$self->associate_interactors_in_reaction($interactions, $reaction, $rs, \%seen, {'reaction_context' => [$reaction]});
+	
+			# neighbouring, i.e. preceding/following reactions                                          
+			foreach my $neighbouring_reaction (@{$reaction->PrecedingEvent}, @{$reaction->reverse_attribute_value('precedingEvent')}) {
+				# $participating_protein_count = $self->participating_protein_count_from_reactions([$r,$nr]);
+				$self->associate_interactors_in_reaction($interactions, $neighbouring_reaction, $rs, \%seen, {'neighbouring_reaction_context' => [[$reaction, $neighbouring_reaction]]});
+			}
+		}
+
+		foreach my $instance (@{get_upstream_instances_from_physical_entity($physical_entity)}) {
+			foreach my $regulation (@{$instance->reverse_attribute_value('regulatedEntity')}, @{$instance->reverse_attribute_value('regulator')}) {
+				foreach my $regulated_entity_or_regulator (@{get_regulated_entities_and_regulators($regulation)}) {
+					next if $seen{$regulated_entity_or_regulator->db_id}; #add only interactions here that haven't been seen yet in a complex context                                                 
+					foreach my $rps (grep { $_ != $rs } @{$self->get_reference_entities_from_physical_entity($regulated_entity_or_regulator,['Complex','EntitySet','Polymer'])}) {
+						$self->add_interactors($interactions, $rs, $rps,
+							{
+								'regulation_context' => [$regulation]
+							}
+						);
+					}
+				}
+			}
+		}
+    }
     return $interactions;
 }
 
-sub find_mitab_interactors_for_ReferenceSequence {
-    my ($self, $rs, $interactions, $participating_protein_count_cutoff) = @_;
-    $interactions ||= {};
-    my $participating_protein_count;
-    
-    # Keep ReferencePeptideSequence for backward compatibility                           
-    my $out_classes = 'ReferenceGeneProduct';
-    if (!($self->dba->ontology->is_valid_class($out_classes))) {
-        $out_classes = 'ReferencePeptideSequence';
-    }
-    
-    # Find PhysicalEntities referring to this ReferenceEntity
-    my @pes = grep {$_->is_a('PhysicalEntity')} @{$rs->reverse_attribute_value('referenceEntity')};
-    my @tmp;
-    # Add Generics of those PhysicalEntities                                    
-    foreach my $pe (@pes) {
-        my $ar = $pe->follow_class_attributes
-            (-INSTRUCTIONS =>
-             {'PhysicalEntity' => {'reverse_attributes' => ['hasMember']}},
-             -OUT_CLASSES => ['PhysicalEntity']
-             );
-        push @tmp, @{$ar};
-    }
-    @pes = @tmp;
-    
-    # Find immediate complexes containing those entities.        
-    foreach my $pe (@pes) {
-        foreach my $complex (@{$pe->reverse_attribute_value('hasComponent')}) {
-#            $participating_protein_count = $self->participating_protein_count_from_complexes([$complex]);
-            # Check other components in the complex for interactors. Skip the original component (otherwise e.g. set members with rs are counted as interactors. However, this excludes dimeric interactions, so they are handled separately below)     
-	    foreach my $component (grep {$_ != $pe} @{$complex->HasComponent}) {
-                my $rss = $component->follow_class_attributes
-                    (-INSTRUCTIONS =>
-                     {'EntitySet' => {'attributes' => ['hasMember']},
-                      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-                     -OUT_CLASSES => [$out_classes]
-                     );
-                foreach my $rs2 (@{$rss}) {
-                    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rs2);
-                    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-                        $interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-                    }
-                    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'complex_context'}}, $complex;
-                    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'complex_context'}}, @{$self->get_upstream_complexes_or_polymers($complex)};
-                    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'reaction_context'}}, @{$self->get_reaction_for_complex_or_polymer($complex)};
-                }
-            }
+sub homomeric_in_complex {
+	my $self = shift;
+	my $reference_entity = shift;
+	my $complex = shift;
+	
+	#Check for homomers                                                     
+	my %seen_d;
+	my $comps = $complex->follow_class_attributes3(
+		-INSTRUCTIONS => search_ewas_and_containers('Complex', 'EntitySet'),
+		-OUT_CLASSES => [$self->get_out_classes()]
+	);
 	    
-#Check for dimers                                                      
-	    my %seen_d;
-            my $comps = $complex->follow_class_attributes3 #follows attributes stochiometrically                      
-		(-INSTRUCTIONS =>
-                 {'Complex' => {'attributes' => ['hasComponent']},
-                  'EntitySet' => {'attributes' => ['hasMember']},
-                  'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-                 -OUT_CLASSES => [$out_classes]);
-	    foreach my $comp (@{$comps}) {
+	foreach my $comp (@{$comps}) {
 		$seen_d{$comp->db_id}++;
-	    }
-	    if ($seen_d{$rs->db_id} > 1) { #indicates dimer or multimer                           
-		unless ($interactions->{$rs->db_id}->{$rs->db_id}) {
-		    $interactions->{$rs->db_id}->{$rs->db_id}->{'interactors'} = [$rs,$rs];
-		}
-		push @{$interactions->{$rs->db_id}->{$rs->db_id}->{'complex_context'}}, $complex;
-		push @{$interactions->{$rs->db_id}->{$rs->db_id}->{'complex_context'}}, @{$self->get_upstream_complexes_or_polymers($complex)};
-		push @{$interactions->{$rs->db_id}->{$rs->db_id}->{'reaction_context'}}, @{$self->get_reaction_for_complex_or_polymer($complex)};
-	    }
 	}
-    }
-    
-#Check whether this ReferenceSequence is directly involved in a Polymer (i.e. not within a Complex, which would have been handled already) 
-    my $polys  = $rs->follow_class_attributes
-        (-INSTRUCTIONS =>
-         {'ReferenceEntity' => {'reverse_attributes' => ['referenceEntity']},
-          'PhysicalEntity' => {'reverse_attributes' => ['hasMember', 'repeatedUnit']}},
-         -OUT_CLASSES => ['Polymer']
-         );
-    foreach my $polymer (@{$polys}) {
-	unless ($interactions->{$rs->db_id}->{$rs->db_id}) {
-	    $interactions->{$rs->db_id}->{$rs->db_id}->{'interactors'} = [$rs,$rs];
-	}
-	push @{$interactions->{$rs->db_id}->{$rs->db_id}->{'complex_context'}}, $polymer;
-	push @{$interactions->{$rs->db_id}->{$rs->db_id}->{'complex_context'}}, @{$self->get_upstream_complexes_or_polymers($polymer)};
-	push @{$interactions->{$rs->db_id}->{$rs->db_id}->{'reaction_context'}}, @{$self->get_reaction_for_complex_or_polymer($polymer)};
-    }
-    
-#get all upstream PhysicalEntities to check for further complex interactors            
-    my $pes = $rs->follow_class_attributes
-        (-INSTRUCTIONS =>
-         {'ReferenceSequence' => {'reverse_attributes' => ['referenceEntity']},
-          'PhysicalEntity' => {'reverse_attributes' => ['hasComponent', 'hasMember', 'repeatedUnit']}},
-         -OUT_CLASSES => ['PhysicalEntity']
-         );
-    
-    my %pes;
-    map {$pes{$_->db_id} = $_} @{$pes};
-    
-    my %seen = %pes;
-    foreach my $pe (@{$pes}) {
-	if ($pe->is_a('Complex')) {
-#	    $participating_protein_count = $self->participating_protein_count_from_complexes([$pe]);
-	    foreach my $pe1 (grep {! $seen{$_->db_id}++} @{$pe->HasComponent}) {
-                my $rpss = $pe1->follow_class_attributes
-                    (-INSTRUCTIONS =>
-                     {'Complex' => {'attributes' => [qw(hasComponent)]},
-                      'EntitySet' => {'attributes' => [qw(hasMember)]},
-                      'Polymer' => {'attributes' => [qw(repeatedUnit)]},
-                      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-                     -OUT_CLASSES => [$out_classes]
-                     );
-                foreach my $rps (@{$rpss}) {
-                    next if ($rs == $rps); #no self-mers at this stage     
-		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-                    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-                        $interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-                    }
-                    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'complex_context'}}, $pe;
-                    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'complex_context'}}, @{$self->get_upstream_complexes_or_polymers($pe)};
-                    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'reaction_context'}}, @{$self->get_reaction_for_complex_or_polymer($pe)};
-                }
-            }
-	}
-    }
-    
-    #Get reactions                          
-    foreach my $pe (@{$pes}) {
-        my $reactions = $pe->follow_class_attributes
-            (-INSTRUCTIONS =>
-             {'PhysicalEntity' => {'reverse_attributes' => ['input','output','physicalEntity']}, #do input and output at once     
-	      'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}},
-             -OUT_CLASSES => ['Reaction'] #only bona fide Reactions for interactions based on reaction context only  
-	     );
-        #find other entities(=interactors) in each reaction  
-	foreach my $r (@{$reactions}) {
-#            $participating_protein_count = $self->participating_protein_count_from_reactions([$r]);
-            my $pes1 = $r->follow_class_attributes
-                (-INSTRUCTIONS =>
-		 {'ReactionlikeEvent' => {'attributes' => ['input','output','catalystActivity']}, #do input and output at once  
-		  'CatalystActivity' => {'attributes' => ['physicalEntity']}},
-                 -OUT_CLASSES => ['PhysicalEntity']
-                 );
-            foreach my $pe1 (@{$pes1}) {
-		next if $seen{$pe1->db_id}; #add only interactions here that haven't been seen yet in a complex context (also avoids recording interactions between set members - basically one needs to avoid going down the same branch that one has come up on)
-		my $rpss = $pe1->follow_class_attributes
-                    (-INSTRUCTIONS =>
-                     {'Complex' => {'attributes' => ['hasComponent']},
-                      'EntitySet' => {'attributes' => ['hasMember']},
-                      'Polymer' => {'attributes' => ['repeatedUnit']},
-                      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-                     -OUT_CLASSES => [$out_classes]
-                     );
-                foreach my $rps (@{$rpss}) {
-                    next if ($rs == $rps); #again, no self-mers at this point         
-		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-                    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-                        $interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-                    }
-                    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'reaction_context'}}, $r;
-                }
-            }
+	
+	return ($seen_d{$reference_entity->db_id} > 1); #indicates dimer or multimer      
+}
 
-# neighbouring, i.e. preceding/following reactions                                          
-	    foreach my $nr (@{$r->PrecedingEvent}, @{$r->reverse_attribute_value('precedingEvent')}) {
-#		$participating_protein_count = $self->participating_protein_count_from_reactions([$r,$nr]);
+sub get_physical_entities_from_reference_entity {
+	my $reference_entity = shift;
+	#get all upstream PhysicalEntities to check for further complex interactors            
+    return $reference_entity->follow_class_attributes(
+		-INSTRUCTIONS =>
+		    {
+				'ReferenceSequence' => {'reverse_attributes' => ['referenceEntity']},
+				'PhysicalEntity' => {'reverse_attributes' => ['hasComponent', 'hasMember', 'repeatedUnit']}
+		    },
+        -OUT_CLASSES => ['PhysicalEntity']
+    );
+}
 
-		my $pes2 = $nr->follow_class_attributes
-		    (-INSTRUCTIONS =>
-		     {'ReactionlikeEvent' => {'attributes' => ['input','output','catalystActivity']},
-		      'CatalystActivity' => {'attributes' => ['physicalEntity']}},
-		     -OUT_CLASSES => ['PhysicalEntity']
-		     );
-		foreach my $pe2 (@{$pes2}) {
-		    next if $seen{$pe2->db_id}; #add only interactions here that haven't been seen yet in a complex context                                                                                                  
-		    my $rpss = $pe2->follow_class_attributes
-			(-INSTRUCTIONS =>
-			 {'Complex' => {'attributes' => ['hasComponent']},
-			  'EntitySet' => {'attributes' => ['hasMember']},
-			  'Polymer' => {'attributes' => ['repeatedUnit']},
-			  'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-			 -OUT_CLASSES => [$out_classes]
-			 );
-		    foreach my $rps (@{$rpss}) {
-			next if ($rs == $rps); #again, no self-mers at this point
-			my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-			my %reaction = ($rs->db_id => $r, $rps->db_id => $nr);
-			my ($u1, $u2) = ($reaction{$t1->db_id}, $reaction{$t2->db_id}); #to keep the reaction order in parallel with the (sorted) protein identifier order
-			unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-			    $interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-			}
-			push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'neighbouring_reaction_context'}}, [$u1,$u2];
-		    }
-		}
-	    }
-	}
-#check for associations via Regulation
-	my $upstream_instances = $pe->follow_class_attributes
-	    (-INSTRUCTIONS =>
-             {'PhysicalEntity' => {'reverse_attributes' => ['input','output','physicalEntity']},
-	      'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}},
-             -OUT_CLASSES => ['ReactionlikeEvent', 'CatalystActivity', 'PhysicalEntity']);
-	foreach my $i (@{$upstream_instances}) {
-	    foreach my $regulation (@{$i->reverse_attribute_value('regulatedEntity')}) {
-		my $regulators = $regulation->follow_class_attributes
-		    (-INSTRUCTIONS => 
-		     {'Regulation' => {'attributes' => [qw(regulator)]},
-		      'ReactionlikeEvent' => {'attributes' => ['input','output','catalystActivity']},
-                      'CatalystActivity' => {'attributes' => ['physicalEntity']}},
-                     -OUT_CLASSES => ['PhysicalEntity']
-                     );
-		foreach my $pe2 (@{$regulators}) {
-                    next if $seen{$pe2->db_id}; #add only interactions here that haven't been seen yet in a complex context                                                 
-                    my $rpss = $pe2->follow_class_attributes
-                        (-INSTRUCTIONS =>
-			 {'Complex' => {'attributes' => [qw(hasComponent)]},
-			  'EntitySet' => {'attributes' => [qw(hasMember)]},
-			  'Polymer' => {'attributes' => [qw(repeatedUnit)]},
-			  'EntityWithAccessionedSequence' => {'attributes' => [qw(referenceEntity)]}},
-			 -OUT_CLASSES => [$out_classes]);
-		    foreach my $rps (@{$rpss}) {
-			next if ($rs == $rps); #again, no self-mers at this point   
-			my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-			unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-			    $interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-			}
-			push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'regulation_context'}}, $regulation;
-		    }
-		}
-	    }
-	    foreach my $regulation (@{$i->reverse_attribute_value('regulator')}) { #need to do this separately so that one doesn't go down on the branch one has come up on
-                my $regulatedEntities = $regulation->follow_class_attributes
-                    (-INSTRUCTIONS =>
-                     {'Regulation' => {'attributes' => [qw(regulatedEntity)]},
-		      'ReactionlikeEvent' => {'attributes' => ['input','output','catalystActivity']},
-                      'CatalystActivity' => {'attributes' => ['physicalEntity']}},
-                     -OUT_CLASSES => ['PhysicalEntity']
-                     );
-                foreach my $pe2 (@{$regulatedEntities}) {
-                    next if $seen{$pe2->db_id}; #add only interactions here that haven't been seen yet in a complex context    
-                    my $rpss = $pe2->follow_class_attributes
-                        (-INSTRUCTIONS =>
-			 {'Complex' => {'attributes' => [qw(hasComponent)]},
-			  'EntitySet' => {'attributes' => [qw(hasMember)]},
-			  'Polymer' => {'attributes' => [qw(repeatedUnit)]},
-			  'EntityWithAccessionedSequence' => {'attributes' => [qw(referenceEntity)]}},
-			 -OUT_CLASSES => [$out_classes]);
-		    foreach my $rps (@{$rpss}) {
-			next if ($rs == $rps); #again, no self-mers at this point    
-			my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-			unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-			    $interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-			}
-			push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'regulation_context'}}, $regulation;
-		    }
-		}
-	    }
-	}
-    }
-    return $interactions;
+sub get_polymers_from_reference_entity {
+    my $reference_entity = shift;
+	
+	return $reference_entity->follow_class_attributes(
+		-INSTRUCTIONS =>
+		    {
+				'ReferenceEntity' => {'reverse_attributes' => ['referenceEntity']},
+				'PhysicalEntity' => {'reverse_attributes' => ['hasMember', 'repeatedUnit']}
+		    },
+        -OUT_CLASSES => ['Polymer']
+    );
+}
+
+sub get_upstream_instances_from_physical_entity {
+	my $physical_entity = shift;
+	
+	#check for associations via Regulation
+	return $physical_entity->follow_class_attributes(
+			-INSTRUCTIONS =>
+				{
+					'PhysicalEntity' => {'reverse_attributes' => ['input','output','physicalEntity']},
+					'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}
+				},
+			-OUT_CLASSES => ['ReactionlikeEvent', 'CatalystActivity', 'PhysicalEntity']
+	);
+}
+
+sub get_regulated_entities_and_regulators {
+	my $regulation = shift;
+	return $regulation->follow_class_attributes(
+		-INSTRUCTIONS =>
+			{
+				'Regulation' => {'attributes' => [qw(regulator)]},
+				'ReactionlikeEvent' => {'attributes' => ['input','output','catalystActivity']},
+				'CatalystActivity' => {'attributes' => ['physicalEntity']}
+			},
+		-OUT_CLASSES => ['PhysicalEntity']
+	);
+}
+
+sub associate_interactors_in_reaction {
+    my $self = shift;
+	my $interactions = shift;
+    my $reaction = shift;
+	my $rs = shift;
+	my $seen_PEs = shift;
+    my $context2instances = shift;
+    
+    foreach my $physical_entity (@{get_physical_entities_by_attribute_from_reaction($reaction, ['input','output'])}) {
+		next if $seen_PEs->{$physical_entity->db_id}; #add only interactions here that haven't been seen yet in a complex context (also avoids recording interactions between set members - basically one needs to avoid going down the same branch that one has come up on)
+        foreach my $rps (@{$self->get_reference_entities_from_physical_entity($physical_entity, ['Complex', 'EntitySet', 'Polymer'])}) {
+			next if ($rs == $rps); #again, no self-mers at this point         
+            $self->add_interactors($interactions, $rs, $rps, $context2instances);
+        }
+    }    
 }
 
 sub get_reaction_for_complex_or_polymer {
-    my ($self, $complex) = @_;
-    my $reactions = $complex->follow_class_attributes
-        (-INSTRUCTIONS =>
-         {'PhysicalEntity' => {'reverse_attributes' => ['input','output','physicalEntity', 'hasMember', 'hasComponent', 'repeatedUnit']},
-          'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}},
-         -OUT_CLASSES => ['ReactionlikeEvent']
-         );
+    my ($complex) = @_;
+    my $reactions = $complex->follow_class_attributes(
+		-INSTRUCTIONS =>
+			{
+				'PhysicalEntity' => {'reverse_attributes' => ['input','output','physicalEntity', 'hasMember', 'hasComponent', 'repeatedUnit']},
+				'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}
+			},
+		-OUT_CLASSES => ['ReactionlikeEvent']
+    );
     return $reactions;
 }
 
 sub get_upstream_complexes_or_polymers {
     my ($self, $complex) = @_;
-    my $complexes = $complex->follow_class_attributes
-        (-INSTRUCTIONS =>
-         {'PhysicalEntity' => {'reverse_attributes' => ['hasMember', 'hasComponent', 'repeatedUnit']}},
+    my $complexes = $complex->follow_class_attributes(
+		-INSTRUCTIONS =>
+			{
+				'PhysicalEntity' => {'reverse_attributes' => ['hasMember', 'hasComponent', 'repeatedUnit']}
+			},
          -OUT_CLASSES => ['Complex', 'Polymer']
-         );
+    );
     return $complexes;
 
+}
+
+sub attempt_to_record_pathogenic_relationship {
+    my $self = shift;
+    my $interactions = shift;
+    my $interactor1 = shift;
+    my $interactor2 = shift;
+    my $source_type = shift;
+    my $source = shift;
+    my $intact = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    my $source_ids = get_source_ids($source);
+
+    if (unacceptable_source_for_pathogen_relationship($source_type, $source)) {
+        $logger->info("skipping inter-species interaction $interactor1->{db_id} and $interactor2->{db_id} from $source_type $source_ids\n");
+        return;
+    }
+    
+    $self->associate_interactors_with_instance_in_context($interactions, $interactor1, $interactor2, $source_type, $source, $intact);
+}
+
+sub get_source_ids {
+    my $source = shift;
+    
+    if (ref($source) eq 'HASH') {
+        return (keys %{$source})[0]; # In this case, the source is a single key (db_id) and value (source instance) pair
+    } elsif(ref($source) eq 'ARRAY') {
+        return join(';', map({$_->db_id} @{$source}));
+    } else {
+        return $source->db_id;
+    }
+}
+
+sub same_species {
+    my $instance1 = shift;
+    my $instance2 = shift;
+    
+    return get_species_id($instance1) == get_species_id($instance2);
+}
+
+sub get_species_id {
+    my $instance = shift;
+    
+    return unless $instance && $instance->species->[0];
+    
+    return $instance->species->[0]->db_id;
+}
+
+sub unacceptable_source_for_pathogen_relationship {
+    my $context = shift;
+    my $source = shift;
+    my $source_instance = get_instance_from_source($source);
+    
+    return {
+        'complex_context' => sub {
+            return multi_species($_[0]) ||
+            !in_any_reaction_with_related_species($_[0])
+        },
+        'reaction_context' => sub {
+            return !has_related_species($_[0])
+        },
+        'neighbouring_reaction_context' => sub {
+            return
+            !has_related_species($_[0]->[0]) &&
+            !has_related_species($_[0]->[1])
+        },
+        'regulation_context' => sub {
+            return 1; # regulation is inappropriate for host-pathogen relationships
+        }
+    }->{standardize_context($context)}->($source_instance);
+}
+
+sub excludable_interaction {
+    my $context = shift;
+    my $source = shift;
+    my $source_instance = get_instance_from_source($source);
+    
+    return {
+        'complex_context' => sub {
+            return multi_species($_[0]) ||
+            all_reactions_have_multiple_or_related_species(
+                get_reaction_for_complex_or_polymer($_[0]));
+        },
+        'reaction_context' => sub {
+            return has_multiple_or_related_species($_[0]);
+        },
+        'neighbouring_reaction_context' => sub {
+            return
+            has_multiple_or_related_species($_[0]->[0]) || 
+            has_multiple_or_related_species($_[0]->[1]) ||
+            !same_species($_[0]->[0], $_[0]->[1]);
+        },
+        'regulation_context' => sub {
+            return
+            has_multiple_or_related_species($_[0]->regulatedEntity->[0]) ||
+            has_multiple_or_related_species($_[0]->regulator->[0]);
+        }
+    }->{standardize_context($context)}->($source_instance);
+}
+
+sub get_instance_from_source {
+    my $source = shift;
+    
+    return ref($source) eq 'HASH' ?
+        (values %$source)[0] :
+        $source;
+}
+
+sub standardize_context {
+    my $context = shift;
+    
+    return 'complex_context' if $context eq 'direct_complex_context';
+    return $context;
+}
+
+sub multi_species {
+    my $instance = shift;
+    
+    return $instance &&
+           ($instance->species->[1] ||
+           is_chimeric($instance));
+}
+
+sub is_chimeric {
+    my $instance = shift;
+    
+    return $instance &&
+           $instance->isChimeric->[0] &&
+           $instance->isChimeric->[0] eq 'TRUE';        
+}
+
+sub has_related_species {
+    my $instance = shift;
+    
+    return $instance && $instance->relatedSpecies->[0];
+}
+
+sub has_multiple_or_related_species {
+    my $instance = shift;
+    
+    return multi_species($instance) || has_related_species($instance);
+}
+
+sub all_reactions_have_multiple_or_related_species {
+    my $reactions = shift;
+        
+    return @$reactions && all {has_multiple_or_related_species($_)} @$reactions;
+}
+
+sub in_any_reaction_with_related_species {
+    my $physical_entity = shift;
+    
+    my $reactions = get_reactions_by_reverse_attribute_from_physical_entity($physical_entity, ['input','output']);
+    
+    return any {has_related_species($_)} @$reactions;
 }
 
 sub stableIdentifier_or_id {
@@ -751,23 +930,23 @@ sub stableIdentifier_or_class_and_id {
 sub get_refdb {
     my ($i) = @_;
     my %psi_cv = (
-                  #'Dictybase' => ?,                                         
-                 'EMBL' => 'EMBL',
-                  'ENSEMBL' => 'ensembl',
-                  'Entrez' => 'refseq',
-                  'Entrez Gene' => 'entrez gene/locuslink',
-                  'Flybase' => 'flybase',
-                  #'GeneDB' => ?,                                                                                               
-                  #'PlasmoDB' => ?,                                          
-		  'RefSeq' => 'refseq',
-                  'SGD' => 'sgd',
-                  #'TIGR' => ?,                                                  
-                  #'TIGR cna' => ?,                                                               
-		  #'TIGR eha' => ?,                                                                             
-		  #'TIGR osa' => ?,                                                                
-		  'UniProt' => 'uniprotkb',
-                  'Wormbase' => 'wormbase'
-                  );
+        #'Dictybase' => ?,                                         
+        'EMBL' => 'EMBL',
+        'ENSEMBL' => 'ensembl',
+        'Entrez' => 'refseq',
+        'Entrez Gene' => 'entrez gene/locuslink',
+        'Flybase' => 'flybase',
+        #'GeneDB' => ?,                                                                                               
+        #'PlasmoDB' => ?,                                          
+		'RefSeq' => 'refseq',
+        'SGD' => 'sgd',
+        #'TIGR' => ?,                                                  
+        #'TIGR cna' => ?,                                                               
+		#'TIGR eha' => ?,                                                                             
+		#'TIGR osa' => ?,                                                                
+		'UniProt' => 'uniprotkb',
+        'Wormbase' => 'wormbase'
+    );
 
     my $refdb = $i->ReferenceDatabase->[0]->Name->[0];
     if ($psi_cv{$refdb}) {
@@ -782,113 +961,129 @@ sub get_refdb {
 #test whether non mitab still produces the same result             
 #adjust refdb names for non-human                                             
 sub print_psi_mitab_interaction {
-    my ($self, $hr) = @_;
-#first line                                                                              
-    print "unique id A\tunique id B\talternative id A\talternative id B\taliases for A (empty)\taliases for B (empty)\tinteraction detection method\tfirst author\tId of publication\tNCBI taxon A\tNCBI taxon B\tinteraction type\tsource db\tinteraction in source db (NA)\tconfidence score (NA)\tpathway id(s)\treaction ids(s)\tcomplex/polymer id(s)\tregulation id(s)\n";
+    my ($self, $hr, $file_handle) = @_;
+    $file_handle ||= *STDOUT;
+	
+	#first line                                                                              
+    print $file_handle "unique id A\tunique id B\talternative id A\talternative id B\taliases for A (empty)\taliases for B (empty)\tinteraction detection method\tfirst author\tId of publication\tNCBI taxon A\tNCBI taxon B\tinteraction type\tsource db\tinteraction in source db (NA)\tconfidence score (NA)\tpathway id(s)\treaction ids(s)\tcomplex/polymer id(s)\tregulation id(s)\n";
     foreach my $db_id1 (keys %{$hr}) {
         foreach my $db_id2 (keys %{$hr->{$db_id1}}) {
             my @row;
-#add columns 1 and 2                                                      
-	    foreach my $i (@{$hr->{$db_id1}->{$db_id2}->{'interactors'}}) {
+
+			#add columns 1 and 2                                                      
+			foreach my $i (@{$hr->{$db_id1}->{$db_id2}->{'interactors'}}) {
                 my $refdb = get_refdb($i);
-		my $identifier = ($i->is_valid_attribute('variantIdentifier') && $i->VariantIdentifier->[0])?$i->VariantIdentifier->[0]:$i->Identifier->[0];
+				my $identifier = ($i->is_valid_attribute('variantIdentifier') && $i->VariantIdentifier->[0])?$i->VariantIdentifier->[0]:$i->Identifier->[0];
                 push @row, ($refdb.":".$identifier);
             }
-#add columns 3 and 4                                                                 
-	    foreach my $i (@{$hr->{$db_id1}->{$db_id2}->{'interactors'}}) {
+
+			#add columns 3 and 4                                                                 
+			foreach my $i (@{$hr->{$db_id1}->{$db_id2}->{'interactors'}}) {
                 my $refdb = get_refdb($i);
                 my $gene_name = $i->GeneName->[0];
                 my $alt_name = $gene_name?$refdb.":".$i->Identifier->[0]."_".$i->GeneName->[0]."(shortlabel)":'-';
                 push @row, $alt_name;
             }
-#add columns 5 and 6                                                            
-	    foreach my $i (@{$hr->{$db_id1}->{$db_id2}->{'interactors'}}) {
+			
+			#add columns 5 and 6                                                            
+		    foreach my $i (@{$hr->{$db_id1}->{$db_id2}->{'interactors'}}) {
                 push @row, "-";
             }
-#add column 7 - interaction detection method                                                       
-	    $row[6] = 'psi-mi:"MI:0364"(inferred by curator)';
-#add columns 8 and 9 - Reactome literature reference                                                 
-	    $row[7] = 'Vastrik et al. (2007)';
+			
+			#add column 7 - interaction detection method                                                       
+			$row[6] = 'psi-mi:"MI:0364"(inferred by curator)';
+			
+			#add columns 8 and 9 - Reactome literature reference                                                 
+			$row[7] = 'Vastrik et al. (2007)';
             $row[8] = 'pubmed:17367534';
-#add columns 10 and 11                                                           
-	    $row[9] = "taxid:".$hr->{$db_id1}->{$db_id2}->{'interactors'}->[0]->Species->[0]->CrossReference->[0]->Identifier->[0];
+		
+			#add columns 10 and 11                                                           
+			$row[9] = "taxid:".$hr->{$db_id1}->{$db_id2}->{'interactors'}->[0]->Species->[0]->CrossReference->[0]->Identifier->[0];
             $row[10] = "taxid:".$hr->{$db_id1}->{$db_id2}->{'interactors'}->[1]->Species->[0]->CrossReference->[0]->Identifier->[0];
-	    next unless ($row[9] eq $row[10]); #exclude multi-species interactions
-#set column 12 to default (may be overridden for neighbouring reactions)                    
-	    $row[11] = 'psi-mi:"MI:0915"(physical association)';
-#add column 13 - source db                                                                          
-	    $row[12] = 'psi-mi:"MI:0467"(reactome)';
-#add columns 14 and 15 - interaction id in source db and confidence score - leave empty        
-	    $row[13] = "-";
+			next unless ($row[9] eq $row[10]); #exclude multi-species interactions
+			
+			#set column 12 to default (may be overridden for neighbouring reactions)                    
+			$row[11] = 'psi-mi:"MI:0915"(physical association)';
+		
+			#add column 13 - source db                                                                          
+			$row[12] = 'psi-mi:"MI:0467"(reactome)';
+			
+			#add columns 14 and 15 - interaction id in source db and confidence score - leave empty        
+			$row[13] = "-";
             $row[14] = "-";
-#default for regulation column is empty
-	    $row[18] = '-';
+			
+			#default for regulation column is empty
+		    $row[18] = '-';
 
-#fill complex column                                                         
-	    my %seen_complex;
+			#fill complex column                                                         
+			my %seen_complex;
             my @tmp_complex ;
             foreach my $complex (@{$hr->{$db_id1}->{$db_id2}->{'complex_context'}}) {
                 next if $seen_complex{$complex->db_id}++;
                 push @tmp_complex, 'reactome:'.$self->stableIdentifier_or_id($complex);
             }
             my $tmp_c = $self->stringify_ids(\@tmp_complex,1); #mitab flag set to 1                   
-	    $row[17] = $tmp_c?$tmp_c:'-';
-#fill reaction column                                                           
-	    my %seen_reaction;
+			$row[17] = $tmp_c?$tmp_c:'-';
+			
+			#fill reaction column                                                           
+			my %seen_reaction;
             my @tmp_reaction;
             my @tmp_reaction_ids;
-	    if ($hr->{$db_id1}->{$db_id2}->{'reaction_context'}) {
-		foreach my $reaction (@{$hr->{$db_id1}->{$db_id2}->{'reaction_context'}}) {
-		    next unless (defined $reaction);
-		    next if $seen_reaction{$reaction->db_id}++;
-		    push @tmp_reaction, 'reactome:'.$self->stableIdentifier_or_id($reaction);
-		    push @tmp_reaction_ids, $reaction->db_id;
-		}
-	    } elsif ($hr->{$db_id1}->{$db_id2}->{'neighbouring_reaction_context'} || $hr->{$db_id1}->{$db_id2}->{'regulation_context'}) { #neighbouring reaction or regulation context will only be relevant if there is no reaction context - they are meant to be mutually exclusive
-#override column 12
-		#next;
-		$row[11] = 'psi-mi:"MI:0914"(association)';
-		foreach my $reaction_pair (@{$hr->{$db_id1}->{$db_id2}->{'neighbouring_reaction_context'}}) {
-		    next unless ($reaction_pair->[0]);
-		    my $pair_id = 'reactome:'.$self->stableIdentifier_or_id($reaction_pair->[0]).'|'.'reactome:'.$self->stableIdentifier_or_id($reaction_pair->[1]); #keep same separator as for multiple reactions in physical association context to avoid parsing problems (for now report pairs of reactions - if preferred one could just list each reaction once, without attempting to keep the pairs together)
-		    next if $seen_reaction{$pair_id}++;
-		    push @tmp_reaction, $pair_id;
-		    push @tmp_reaction_ids, ($reaction_pair->[0]->db_id, $reaction_pair->[1]->db_id);
-		}
-		if ($hr->{$db_id1}->{$db_id2}->{'regulation_context'}) {
-		    my %seen_regulation;
-		    my @tmp_regulation;
-		    foreach my $regulation (@{$hr->{$db_id1}->{$db_id2}->{'regulation_context'}}) {
-			next unless (defined $regulation);
-			next if $seen_regulation{$regulation->db_id}++;
-			push @tmp_regulation, 'reactome:'.$self->stableIdentifier_or_id($regulation);
-			#get direct Reactions and Reactions via CatalystActivities that are involved in Regulations (don't follow regulators that are PhysicalEntities upwards, as such reactions would come from a different context than the regulation in question)
-			my $reactions = $regulation->follow_class_attributes
-			    (-INSTRUCTIONS =>
-			     {'Regulation' => {'attributes' => [qw(regulator regulatedEntity)]},
-			      'CatalystActivity' => {'reverse_attributes' => [qw(catalystActivity)]}},
-			     -OUT_CLASSES => ['ReactionlikeEvent']);
-			foreach my $reaction (@{$reactions}) {
-			    push @tmp_reaction, 'reactome:'.$self->stableIdentifier_or_id($reaction);
-			    push @tmp_reaction_ids, $reaction->db_id;
-			}			
-		    }
-		    my $tmp_reg = $self->stringify_ids(\@tmp_regulation,1);
-		    $row[18] = $tmp_reg?$tmp_reg:'-';
-		}
-	    }
-	    my $tmp_r = $self->stringify_ids(\@tmp_reaction,1);
-	    $row[16] = $tmp_r?$tmp_r:'-';
-#fill pathway column
-	    my $pathway_ids = $self->pathway_db_ids_from_reaction_db_ids(\@tmp_reaction_ids, 1);
-	    my $tmp_p = $self->stringify_ids($pathway_ids,1);
-	    $row[15] = $tmp_p?$tmp_p:'-';
+			if ($hr->{$db_id1}->{$db_id2}->{'reaction_context'}) {
+				foreach my $reaction (@{$hr->{$db_id1}->{$db_id2}->{'reaction_context'}}) {
+					next unless (defined $reaction);
+					next if $seen_reaction{$reaction->db_id}++;
+					push @tmp_reaction, 'reactome:'.$self->stableIdentifier_or_id($reaction);
+					push @tmp_reaction_ids, $reaction->db_id;
+				}
+			} elsif ($hr->{$db_id1}->{$db_id2}->{'neighbouring_reaction_context'} || $hr->{$db_id1}->{$db_id2}->{'regulation_context'}) { #neighbouring reaction or regulation context will only be relevant if there is no reaction context - they are meant to be mutually exclusive
+				#override column 12
+				#next;
+				$row[11] = 'psi-mi:"MI:0914"(association)';
+				foreach my $reaction_pair (@{$hr->{$db_id1}->{$db_id2}->{'neighbouring_reaction_context'}}) {
+				    next unless ($reaction_pair->[0]);
+				    my $pair_id = 'reactome:'.$self->stableIdentifier_or_id($reaction_pair->[0]).'|'.'reactome:'.$self->stableIdentifier_or_id($reaction_pair->[1]); #keep same separator as for multiple reactions in physical association context to avoid parsing problems (for now report pairs of reactions - if preferred one could just list each reaction once, without attempting to keep the pairs together)
+				    next if $seen_reaction{$pair_id}++;
+				    push @tmp_reaction, $pair_id;
+				    push @tmp_reaction_ids, ($reaction_pair->[0]->db_id, $reaction_pair->[1]->db_id);
+				}
+				if ($hr->{$db_id1}->{$db_id2}->{'regulation_context'}) {
+					my %seen_regulation;
+					my @tmp_regulation;
+					foreach my $regulation (@{$hr->{$db_id1}->{$db_id2}->{'regulation_context'}}) {
+						next unless (defined $regulation);
+						next if $seen_regulation{$regulation->db_id}++;
+						push @tmp_regulation, 'reactome:'.$self->stableIdentifier_or_id($regulation);
+						#get direct Reactions and Reactions via CatalystActivities that are involved in Regulations (don't follow regulators that are PhysicalEntities upwards, as such reactions would come from a different context than the regulation in question)
+						my $reactions = $regulation->follow_class_attributes(
+							-INSTRUCTIONS =>
+								{
+									'Regulation' => {'attributes' => [qw(regulator regulatedEntity)]},
+									'CatalystActivity' => {'reverse_attributes' => [qw(catalystActivity)]}
+								},
+							-OUT_CLASSES => ['ReactionlikeEvent']
+						);
+						foreach my $reaction (@{$reactions}) {
+							push @tmp_reaction, 'reactome:'.$self->stableIdentifier_or_id($reaction);
+							push @tmp_reaction_ids, $reaction->db_id;
+						}			
+					}
+					my $tmp_reg = $self->stringify_ids(\@tmp_regulation,1);
+					$row[18] = $tmp_reg?$tmp_reg:'-';
+				}
+			}
+			my $tmp_r = $self->stringify_ids(\@tmp_reaction,1);
+			$row[16] = $tmp_r?$tmp_r:'-';
+
+			#fill pathway column
+		    my $pathway_ids = $self->pathway_db_ids_from_reaction_db_ids(\@tmp_reaction_ids, 1);
+		    my $tmp_p = $self->stringify_ids($pathway_ids,1);
+		    $row[15] = $tmp_p?$tmp_p:'-';
 	    
-            $self->print_array(\@row);
+            $self->print_array(\@row, $file_handle);
         }
     }
 }
-
 
 # Returns an array with one element for each unique pair of proteins.
 # Each element is a reference to an array, with the following (sub)elements:
@@ -1133,23 +1328,25 @@ sub insert_intact_xrefs_into_instance {
 
 # Print all interactions, with optional headers.
 sub print_interaction_report {
-    my ($self, $interactions) = @_;
+    my ($self, $interactions, $file_handle) = @_;
+    $file_handle ||= *STDOUT;
     
-    $self->print_headers($interactions);
-    $self->print_interactions($interactions);
+    $self->print_headers($interactions, $file_handle);
+    $self->print_interactions($interactions, $file_handle);
 }
 
 # Print the header lines that appear at the top of the o/p file.  They
 # all begin with a hash symbol.
 sub print_headers {
-    my ($self, $interactions) = @_;
+    my ($self, $interactions, $file_handle) = @_;
+    $file_handle ||= *STDOUT;
     
     if (defined $self->title_headers_flag && $self->title_headers_flag == 1) {
-    	print "# List of Interactions Generated from Reactome Data\n";
+    	print $file_handle "# List of Interactions Generated from Reactome Data\n";
     }
     
     if (defined $self->interaction_count_headers_flag && $self->interaction_count_headers_flag == 1) {
-    	print '# ', scalar(@{$interactions}), "\tunique interactions\n";
+    	print $file_handle '# ', scalar(@{$interactions}), "\tunique interactions\n";
     }
     
     if (defined $self->table_headers_flag && $self->table_headers_flag == 1) {
@@ -1209,24 +1406,26 @@ sub print_headers {
     		$line .= "IntActIDs";
     	}
     	
-    	print "# $line\n";
+    	print $file_handle "# $line\n";
     }
 }
 
 # Print the supplied list of interactions
 sub print_interactions {
-    my ($self, $interactions) = @_;
+    my ($self, $interactions, $file_handle) = @_;
+    $file_handle ||= *STDOUT;
     
 	my $interaction;
     foreach $interaction (@{$interactions}) {
-    	$self->print_interaction($interaction);
+    	$self->print_interaction($interaction, $file_handle);
     }
 }
 
 # Print a single interaction
 sub print_interaction {
-    my ($self, $interaction) = @_;
-        
+    my ($self, $interaction, $file_handle) = @_;
+    $file_handle ||= *STDOUT;
+    
     my @intact_id = ();
 	if ($self->column_groups->{$COLUMN_GROUP_INTACT}) {
 		my $intact_id_string = $self->stringify_intact_ids($interaction->[6]);
@@ -1260,7 +1459,7 @@ sub print_interaction {
 			@context_name = ("direct_complex");
 		}
 		foreach $context (@{$interaction->[2]}) {
-			$self->print_array([@interactors, @context_name, @{$self->_interaction_context_info($context, 2)}, @intact_id]);
+			$self->print_array([@interactors, @context_name, @{$self->_interaction_context_info($context, 2)}, @intact_id], $file_handle);
 		}
 	}
 	if ($interaction->[3]) {
@@ -1268,7 +1467,7 @@ sub print_interaction {
 			@context_name = ("indirect_complex");
 		}
 		foreach $context (@{$interaction->[3]}) {
-			$self->print_array([@interactors, @context_name, @{$self->_interaction_context_info($context, 3)}, @intact_id]);
+			$self->print_array([@interactors, @context_name, @{$self->_interaction_context_info($context, 3)}, @intact_id], $file_handle);
 		}
 	}
 	if ($interaction->[4]) {
@@ -1276,7 +1475,7 @@ sub print_interaction {
 			@context_name = ("reaction");
 		}
 		foreach $context (@{$interaction->[4]}) {
-			$self->print_array([@interactors, @context_name, @{$self->_interaction_context_info($context, 4)}, @intact_id]);
+			$self->print_array([@interactors, @context_name, @{$self->_interaction_context_info($context, 4)}, @intact_id], $file_handle);
 		}
 	}
 	if ($interaction->[5]) {
@@ -1312,260 +1511,23 @@ sub print_interaction {
 				@participating_protein_count = ($self->participating_protein_count_from_reactions($reactions));
 			}
 
-			$self->print_array([@interactors, @context_name, @source_id_info, @source_stable_id_info, @decorated_source_id_info, @source_lit_refs, @participating_protein_count, @intact_id]);
+			$self->print_array([@interactors, @context_name, @source_id_info, @source_stable_id_info, @decorated_source_id_info, @source_lit_refs, @participating_protein_count, @intact_id], $file_handle);
 		}
 	}
 }
 
-# Imre's original version
-#sub _find_interactors_for_ReferenceSequence {
-#    my ($rs,$interactions) = @_;
-#    $interactions ||= {};
-#
-#    my %neighbouring_reaction_instructions = 
-#	(
-#	 -INSTRUCTIONS =>
-#	 {
-##	     'EquivalentEventSet' => {'attributes' => [qw(hasMember)]},
-##	     'ConceptualEvent' => {'attributes' => [qw(hasMember)]},
-#	     'Reaction' => {'attributes' => [qw(input output catalystActivity)]},
-#	     'CatalystActivity' => {'attributes' => [qw(physicalEntity)]},
-#	     'Complex' => {'attributes' => [qw(hasComponent)]},
-#	     'EntitySet' => {'attributes' => [qw(hasMember)]},
-#	     'EntityWithAccessionedSequence' => {'attributes' => [qw(referenceEntity)]}},
-#	 -OUT_CLASSES => ['ReferencePeptideSequence']
-#	 );
-#
-#    # Find PhysicalEntities referring to this ReferenceEntity
-#    my @pes = grep {$_->is_a('PhysicalEntity')} @{$rs->reverse_attribute_value('referenceEntity')};
-#    my @tmp;
-#    # Add Generics of those PhysicalEntities
-#    foreach my $pe (@pes) {
-#	my $ar = $pe->follow_class_attributes
-#	    (-INSTRUCTIONS =>
-#	     {'PhysicalEntity' => {'reverse_attributes' => ['hasMember']}},
-#	     -OUT_CLASSES => ['PhysicalEntity']
-#	     );
-#	push @tmp, @{$ar};
-#    }
-#    @pes = @tmp;
-#    # Find immediate complexes containing those entities.
-#    my %direct_complexes;
-#    foreach my $pe (@pes) {
-#	#print $pe->extended_displayName, "\n";
-#	foreach my $complex (@{$pe->reverse_attribute_value('hasComponent')}) {
-#	    $direct_complexes{$complex->db_id} = $complex;
-#	    # Skip the original component
-#	    foreach my $component (grep {$_ != $pe} @{$complex->HasComponent}) {
-#		my $rss = $component->follow_class_attributes
-#		    (-INSTRUCTIONS =>
-#		     {'EntitySet' => {'attributes' => ['hasMember']},
-#		      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-#		     -OUT_CLASSES => ['ReferencePeptideSequence']
-#		     );
-#		foreach my $rs2 (@{$rss}) {
-#		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rs2);
-#		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-#			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-#		    }
-#		    $interactions->{$t1->db_id}->{$t2->db_id}->{'direct_complex_context'}->{$complex->db_id} = $complex;
-#		}
-#	    }
-#	}
-#    }
-#
-#    my $pes = $rs->follow_class_attributes
-#	(-INSTRUCTIONS =>
-#	 {'ReferenceSequence' => {'reverse_attributes' => ['referenceEntity']},
-#	  'PhysicalEntity' => {'reverse_attributes' => ['hasComponent', 'hasMember']}},
-#	 -OUT_CLASSES => ['PhysicalEntity']
-#	 );
-#
-#    my %pes;
-#    map {$pes{$_->db_id} = $_} @{$pes};
-#
-#    #print $rs->extended_displayName, "\n";
-#    foreach my $pe (@{$pes}) {
-#	#print $pe->extended_displayName, "\n";
-#	# Only count interaction via reaction if the other ReferenceSequence not in
-#	# the same complex with the given ReferenceSequence.
-#
-#	# Handle input and output separately to make it easier.
-#
-#	# input
-#	my $reactions = $pe->follow_class_attributes
-#	    (-INSTRUCTIONS =>
-#	     {'PhysicalEntity' => {'reverse_attributes' => ['input','physicalEntity']},
-#	      'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}},
-#	     -OUT_CLASSES => ['Reaction']
-#	     );
-#	foreach my $r (@{$reactions}) {
-##	    print "\tinput\t", $r->extended_displayName, "\n";
-#	    my $pes1 = $r->follow_class_attributes
-#		(-INSTRUCTIONS =>
-#		 {'Reaction' => {'attributes' => ['input','catalystActivity']},
-#		  'CatalystActivity' => {'attributes' => ['physicalEntity']}},
-#		 -OUT_CLASSES => ['PhysicalEntity']
-#		 );
-#	    foreach my $pe1 (@{$pes1}) {
-#		next if ($pe1 == $pe);
-#		my $rpss = $pe1->follow_class_attributes
-#		    (-INSTRUCTIONS =>
-#		     {'Complex' => {'attributes' => [qw(hasComponent)]},
-#		      'EntitySet' => {'attributes' => [qw(hasMember)]},
-#		      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-#		     -OUT_CLASSES => ['ReferencePeptideSequence']
-#		     );
-#		foreach my $rps (@{$rpss}) {
-#		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-#		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-#			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-#		    }
-##		    $interactions->{$t1->db_id}->{$t2->db_id}->{'context'}->{$r->db_id} = $r;
-#		    $interactions->{$t1->db_id}->{$t2->db_id}->{'reaction_context'}->{$r->db_id} = $r;
-#		}
-#	    }
-#	    # neighbouring, i.e. preceding/following reactions
-#	    foreach my $nr (@{$r->PrecedingEvent}, @{$r->reverse_attribute_value('precedingEvent')}) {
-#		my $rpss = $nr->follow_class_attributes(%neighbouring_reaction_instructions);
-#		foreach my $rps (@{$rpss}) {
-#		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-#		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-#			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-#		    }
-#		    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'neighbouring_reaction_context'}}, [$r,$nr];
-#		}
-#	    }
-#	}
-#
-#	# output
-#	$reactions = $pe->follow_class_attributes
-#	    (-INSTRUCTIONS =>
-#	     {'PhysicalEntity' => {'reverse_attributes' => ['output','physicalEntity']},
-#	      'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}},
-#	     -OUT_CLASSES => ['Reaction']
-#	     );
-#	foreach my $r (@{$reactions}) {
-##	    print "\toutput\t", $r->extended_displayName, "\n";
-#	    my $pes1 = $r->follow_class_attributes
-#		(-INSTRUCTIONS =>
-#		 {'Reaction' => {'attributes' => ['output','catalystActivity']},
-#		  'CatalystActivity' => {'attributes' => ['physicalEntity']}},
-#		 -OUT_CLASSES => ['PhysicalEntity']
-#		 );
-#	    foreach my $pe1 (@{$pes1}) {
-#		next if ($pe1 == $pe);
-#		my $rpss = $pe1->follow_class_attributes
-#		    (-INSTRUCTIONS =>
-#		     {'Complex' => {'attributes' => [qw(hasComponent)]},
-#		      'EntitySet' => {'attributes' => [qw(hasMember)]},
-#		      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-#		     -OUT_CLASSES => ['ReferencePeptideSequence']
-#		     );
-#		foreach my $rps (@{$rpss}) {
-#		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-#		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-#			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-#		    }
-#		    $interactions->{$t1->db_id}->{$t2->db_id}->{'reaction_context'}->{$r->db_id} = $r;
-#		}
-#	    }
-#	    # neighbouring, i.e. preceding/following reactions
-#	    foreach my $nr (@{$r->PrecedingEvent}, @{$r->reverse_attribute_value('precedingEvent')}) {
-#		my $rpss = $nr->follow_class_attributes(%neighbouring_reaction_instructions);
-#		foreach my $rps (@{$rpss}) {
-#		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-#		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-#			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-#		    }
-#		    push @{$interactions->{$t1->db_id}->{$t2->db_id}->{'neighbouring_reaction_context'}}, [$r,$nr];
-#		}
-#	    }
-#	}
-#
-#	if ($pe->is_a('Complex') and ! $direct_complexes{$pe->db_id}) {
-#	    # Skip the component(s) which were on the path from the given ReferenceSequence
-#	    # to this Complex. This way we don't count other (alternative) instances as interactors.
-#	    # Also, of the nested complexes only the smallest is reported as interaction context.
-#	    # However, if the given ReferencesSequence is "present" in multiple sub-complexes, i.e
-#	    # something like:
-#	    #
-#	    # C1--p->C2--p->A
-#            #   |      |
-#	    #   |      |-p->B
-#	    #   |
-#            #   |-p->C3--p->A
-#	    #          |
-#	    #          |-p->B
-#            #          |
-#            #          |-p->C
-#	    #
-#	    # then also the super-complex, in this case C1 will be reported as context for
-#	    # A:B interaction
-#
-#	    my %seen = %pes;
-#	    foreach my $pe1 (grep {! $seen{$_->db_id}++} @{$pe->HasComponent}) {
-#		my $rpss = $pe1->follow_class_attributes
-#		    (-INSTRUCTIONS =>
-#		     {'Complex' => {'attributes' => [qw(hasComponent)]},
-#		      'EntitySet' => {'attributes' => [qw(hasMember)]},
-#		      'EntityWithAccessionedSequence' => {'attributes' => ['referenceEntity']}},
-#		     -OUT_CLASSES => ['ReferencePeptideSequence']
-#		     );
-#		foreach my $rps (@{$rpss}) {
-#		    my ($t1,$t2) = sort {$a->db_id <=> $b->db_id} ($rs,$rps);
-#		    unless ($interactions->{$t1->db_id}->{$t2->db_id}) {
-#			$interactions->{$t1->db_id}->{$t2->db_id}->{'interactors'} = [$t1,$t2];
-#		    }
-#		    $interactions->{$t1->db_id}->{$t2->db_id}->{'complex_context'}->{$pe->db_id} = $pe;
-#		}
-#	    }
-#	}
-#    }
-##    print "\n";
-#    return $interactions;
-#}
-
-# Imre's original version
-#sub print_interaction_report {
-#    my ($self, $split_interaction_array) = @_;
-#    foreach my $ar (@{$split_interaction_array}) {
-#	my $interactor1 = $ar->[0];
-#	my $interactor2 = $ar->[1];
-#	my $tstr = _interactor_info($interactor1) . "\t" . _interactor_info($interactor2) . "\t";
-#	if ($ar->[2]) {
-#	    foreach my $c (@{$ar->[2]}) {
-#		print $tstr, _interaction_context_info($c, 'direct_complex'), "\n";
-#	    }
-#	}
-#	if ($ar->[3]) {
-#	    foreach my $c (@{$ar->[3]}) {
-#		print $tstr, _interaction_context_info($c, 'indirect_complex'), "\n";
-#	    }
-#	}
-#	if ($ar->[4]) {
-#	    foreach my $c (@{$ar->[4]}) {
-#		print $tstr, _interaction_context_info($c, 'reaction'), "\n";
-#	    }
-#	}
-#	if ($ar->[5]) {
-#	    foreach my $ar2 (@{$ar->[5]}) {
-#		print $tstr, "neighbouring_reaction\t", $ar2->[0]->stableIdentifier_or_class_and_id, "<->", $ar2->[1]->stableIdentifier_or_class_and_id, "\t\n";
-#	    }
-#	}
-#    }
-#}
-
 # Prints a single line of text.
 sub print_array {
-    my ($self, $array) = @_;
+    my ($self, $array, $file_handle) = @_;
+    $file_handle ||= *STDOUT;
     
-    $self->print_line(join("\t", @{$array}));
+    $self->print_line(join("\t", @{$array}), $file_handle);
 }
 
 # Prints a single line of text.
 sub print_line {
-    my ($self, $line) = @_;
+    my ($self, $line, $file_handle) = @_;
+    $file_handle ||= *STDOUT;
     
     my $logger = get_logger(__PACKAGE__);
     
@@ -1591,7 +1553,7 @@ sub print_line {
     	}
     }
     
-    print "$line\n";
+    print $file_handle "$line\n";
     
     if (defined $self->line_cache) {
     	$self->line_cache->{$line} = 1;
@@ -1908,114 +1870,6 @@ sub pathway_db_ids_from_reaction_db_ids {
     return \@pathway_db_ids;
 }
 
-## Take a string containing a comma-separated list of reaction IDs and
-## return a string containing comma-separated pathway IDs for pathways
-## that contain the reactions.
-#sub pathway_ids_from_reaction_ids {
-#    my ($self, $source_reaction_ids) = @_;
-#    
-#    my $source_pathway_ids = "";
-#    my $dba = $self->dba;
-#    
-#	if (!(defined $dba)) {
-#		return $source_pathway_ids;
-#	}
-#	
-#	# Find the pathways referring to the reactions
-#	my @reaction_ids = split(/,/, $source_reaction_ids);
-#	my $pathway_instances;
-#	my $reaction_instance;
-#	my %pathway_id_hash = ();
-#	foreach my $reaction_id (@reaction_ids) {
-#					
-#		print STDERR "InteractionGenerator.pathway_ids_from_reaction_ids: reaction_id=$reaction_id\n";
-#					
-#		$reaction_instance = $self->instance_from_id($reaction_id);
-#		if (!(defined $reaction_instance)) {
-#			print STDERR "InteractionGenerator.pathway_ids_from_reaction_ids: WARNING - reaction with ID $reaction_id does not seem to exist!\n";
-#			next;
-#		}
-#		$pathway_instances = $dba->fetch_instance(-CLASS => 'Pathway', -QUERY => [['hasEvent',[$reaction_instance->db_id()],0]]);
-#					
-#		print STDERR "InteractionGenerator.pathway_ids_from_reaction_ids: scalar(pathway_instances)=" . scalar(@{$pathway_instances}) . "\n";
-#					
-#		if (defined $pathway_instances && scalar(@{$pathway_instances})>0) {
-#			# Use a hash to avoid duplications
-#			$pathway_id_hash{$pathway_instances->[0]->db_id()} = $pathway_instances->[0]->db_id();
-#		}
-#	}
-#    
-#	my $pathway_id;
-#	foreach $pathway_id (sort(keys(%pathway_id_hash))) {
-#		if (!($source_pathway_ids eq "")) {
-#			$source_pathway_ids .= ",";
-#		}
-#		$source_pathway_ids .= $pathway_id;
-#	}
-#	
-#    return $source_pathway_ids;
-#}
-#
-## Given a DB_ID or a stable ID, finds the corresponding instance.
-#sub instance_from_id {
-#    my ($self, $id) = @_;
-#    
-#    my $instance = undef;
-#    if (!(defined $id)) {
-#    	print STDERR "InteractionGenerator.instance_from_id: WARNING - id is undef!\n";
-#    	return $instance;
-#    }
-#    my $dba = $self->dba;
-#	if (!(defined $dba)) {
-#    	print STDERR "InteractionGenerator.instance_from_id: WARNING - dba is undef!\n";
-#		return $instance;
-#	}
-#	my $instances;
-#    if ($id =~ /^REACT_/) {
-#    	if ($id =~ /REACT_6310/) {
-#    		print STDERR "InteractionGenerator.instance_from_id: id=|$id|\n";
-#    	}
-#    	
-#    	my $stable_id = $id;
-#    	$stable_id =~ s/\.[0-9]+\s*$//;
-#    	
-#    	if ($id =~ /REACT_6310/) {
-#    		print STDERR "InteractionGenerator.instance_from_id: stable_id=|$stable_id|\n";
-#    	}
-#    	
-#    	$instances = $dba->fetch_instance(-CLASS => 'StableIdentifier', -QUERY => [['identifier',[$stable_id],0]]);
-#    	
-#    	if ($id =~ /REACT_6310/) {
-#    		print STDERR "InteractionGenerator.instance_from_id: scalar(instances=" . scalar(@{$instances}) . "\n";
-#    	}
-#    	
-#    	if (defined $instances && scalar(@{$instances})>0) {
-#	    	if ($id =~ /REACT_6310/) {
-#	    		print STDERR "InteractionGenerator.instance_from_id: found a StableIdentifier instance\n";
-#	    	}
-#	    	
-#    		$instance = $instances->[0];
-#    		$instances = $dba->fetch_instance(-CLASS => 'DatabaseObject', -QUERY => [['stableIdentifier',[$instance->db_id()],0]]);
-#	    	if (defined $instances && scalar(@{$instances})>0) {
-#		    	if ($id =~ /REACT_6310/) {
-#		    		print STDERR "InteractionGenerator.instance_from_id: found corresponding DatabaseObject instance\n";
-#		    	}
-#	    	
-#	    		$instance = $instances->[0];
-#	    	} else {
-#	    		$instance = undef;
-#	    	}
-#    	}
-#    } else {
-#    	$instances = $dba->fetch_instance_by_db_id($id);
-#    	if (defined $instances && scalar(@{$instances})>0) {
-#    		$instance = $instances->[0];
-#    	}
-#    }
-#    
-#    return $instance;
-#}
-
 sub literature_refs_from_context {
     my ($self, $context) = @_;
     
@@ -2130,18 +1984,17 @@ sub stringify_ids {
     my $id;
     my $id_string = "";
     foreach $id (@{$ids}) {
-	if (!($id_string eq "")) {
-	    if ($mitab) {
-		$id_string .= "|";
-	    } else {
-		$id_string .= ",";
-	    }
-	}
-	$id_string .= $id;
+		if (!($id_string eq "")) {
+		    if ($mitab) {
+				$id_string .= "|";
+			} else {
+				$id_string .= ",";
+			}
+		}
+		$id_string .= $id;
     }
 
     return $id_string;
 }
-
 
 1;
