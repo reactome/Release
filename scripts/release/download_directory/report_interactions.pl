@@ -1,30 +1,51 @@
 #!/usr/local/bin/perl
+use strict;
 
 # Make sure you don't have "competing" libraries...
 # for use @CSHL
 use lib "/usr/local/gkb/modules";
 
+use GKB::Config;
 use GKB::DBAdaptor;
 use GKB::Instance;
 use GKB::Utils;
-use Getopt::Long;
 use GKB::InteractionGenerator;
-use strict;
 
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_sp,$opt_useDB_ID,$opt_db_ids,$opt_col_grps,$opt_headers,$opt_uniq,$opt_xrefs,$opt_intact, $opt_mitab);
+use autodie;
+use Getopt::Long;
 
-(@ARGV) || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -sp 'species name' -useDB_ID -db_ids 'id1,id2,..' -col_grps 'group1,group2,..' -headers 'header1,header2,..' -uniq -xrefs -intact -mitab -debug\n";
+our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_sp,$opt_output,$opt_useDB_ID,$opt_db_ids,$opt_col_grps,$opt_headers,$opt_uniq,$opt_xrefs,$opt_intact, $opt_mitab,$opt_pathogenic);
 
-&GetOptions("user:s", "host:s", "pass:s", "port:i", "db:s", "debug", "sp:s", "useDB_ID", "db_ids:s", "col_grps:s", "headers:s", "uniq", "xrefs", "intact", "mitab");
+(@ARGV) || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -sp 'species name' -o 'output filename' -useDB_ID -db_ids 'id1,id2,..' -col_grps 'group1,group2,..' -headers 'header1,header2,..' -uniq -xrefs -intact -mitab -pathogenic -debug\n";
 
-$opt_db || die "Need database name (-db).\n";    
+&GetOptions(
+    "user:s",
+    "host:s",
+    "pass:s",
+    "port:i",
+    "db:s",
+    "debug",
+    "sp:s",
+    "output:s",
+    "useDB_ID",
+    "db_ids:s",
+    "col_grps:s",
+    "headers:s",
+    "uniq",
+    "xrefs",
+    "intact",
+    "mitab",
+    "pathogenic"
+);
+
+$opt_db || die "Need database name (-db).\n";
 
 my $dba = GKB::DBAdaptor->new
     (
-     -user   => $opt_user,
-     -host   => $opt_host,
-     -pass   => $opt_pass,
-     -port   => $opt_port,
+     -user   => $opt_user || $GKB::Config::GK_DB_USER,
+     -host   => $opt_host || $GKB::Config::GK_DB_HOST,
+     -pass   => $opt_pass || $GKB::Config::GK_DB_PASS,
+     -port   => $opt_port || $GKB::Config::GK_DB_PORT,
      -dbname => $opt_db,
      -DEBUG => $opt_debug
      );
@@ -107,20 +128,37 @@ unless (@{$reference_peptide_sequences}) {
 
 $opt_useDB_ID and $GKB::Instance::USE_STABLE_ID_IN_DUMPING = 0;
 
+open(my $output_fh, '>', $opt_output) if $opt_output;
+$output_fh ||= *STDOUT;
+open(my $pathogenic_output_fh, '>', "pathogenic_$opt_output") if $opt_output && $opt_pathogenic;
+$pathogenic_output_fh ||= *STDOUT;
+
 # This will also get IntAct IDs for interactions, but only for
 # those arising from reactions or complexes involving 3 or
 # fewer proteins.
 
 my $interactions_hash = $interaction_generator->find_interactors_for_ReferenceSequences($reference_peptide_sequences, 3, $opt_mitab);
+my $normal_interactions_hash = $interactions_hash->{'normal'};
+my $pathogenic_interactions_hash = $interactions_hash->{'pathogenic'};
 if ($opt_xrefs) {
     # Insert IntAct cross-references into database.
-    $interaction_generator->insert_intact_xrefs($interactions_hash, 3);
+    $interaction_generator->insert_intact_xrefs($normal_interactions_hash, 3);
+    if ($opt_pathogenic) {    
+        $interaction_generator->insert_intact_xrefs($pathogenic_interactions_hash, 3);
+    }
 }
 
-
 if (defined $opt_mitab) {
-    $interaction_generator->print_psi_mitab_interaction($interactions_hash);
+    $interaction_generator->print_psi_mitab_interaction($normal_interactions_hash, $output_fh);
+    if ($opt_pathogenic) {
+        $interaction_generator->print_psi_mitab_interaction($pathogenic_interactions_hash, $pathogenic_output_fh);
+    }
 } else {
-    my $interactions_array = $interaction_generator->interaction_hash_2_split_array($interactions_hash);
-    $interaction_generator->print_interaction_report($interactions_array);
+    my $normal_interactions_array = $interaction_generator->interaction_hash_2_split_array($normal_interactions_hash);
+    $interaction_generator->print_interaction_report($normal_interactions_array, $output_fh);
+    
+    if ($opt_pathogenic) {
+        my $pathogenic_interactions_array = $interaction_generator->interaction_hash_2_split_array($pathogenic_interactions_hash);
+        $interaction_generator->print_interaction_report($pathogenic_interactions_array, $pathogenic_output_fh);
+    }
 }
