@@ -193,32 +193,35 @@ my @cmds = (
      "$species_file_stem.interactions.stid", 
      1, 
      0,  #set to 0 if STDOUT is redirected in command
-     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' ".
-     "| sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz"
+     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -output $release_nr/$species_file_stem.interactions.stid.unsorted.txt.gz -pathogenic",
+     "sort $release_nr/$species_file_stem.interactions.stid.unsorted.txt.gz | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz",
+     "sort $release_nr/pathogenic_$species_file_stem.interactions.stid.unsorted.txt.gz | uniq | gzip -c > $release_nr/pathogenic_$species_file_stem.interactions.stid.txt.gz"
     ],
     
     [
      "$species_file_stem.interactions.intact",
      1,
      0,
-     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -col_grps ids,context,".
-     "source_ids,source_st_ids,participating_protein_count,lit_refs,intact -headers title,table | ".
-     "sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.intact.txt.gz"
+     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -output $release_nr/$species_file_stem.interactions.intact.unsorted.txt.gz -pathogenic".
+     "-col_grps ids,context,source_ids,source_st_ids,participating_protein_count,lit_refs,intact -headers title,table",
+     "sort $release_nr/$species_file_stem.interactions.intact.unsorted.txt.gz | uniq | gzip -c > $release_nr/$species_file_stem.interactions.intact.txt.gz",
+     "sort $release_nr/pathogenic_$species_file_stem.interactions.intact.unsorted.txt.gz | uniq | gzip -c > $release_nr/pathogenic_$species_file_stem.interactions.intact.txt.gz"
     ],
     
-    [
-     "ensembl to pathway map",
-     1,
-     0,
-     "perl ensembl2pathway.pl $opt_user, $opt_pass ${opt_db}_dn $opt_r",
-    ],
-
     [
      "$species_file_stem.mitab.interactions",
      1,
      0,
-     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -mitab | ".
-     "gzip -c > $release_nr/$species_file_stem.mitab.interactions.txt.gz"
+     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -mitab -output $release_nr/$species_file_stem.mitab.interactions.txt.gz -pathogenic",
+     "gzip $release_nr/$species_file_stem.mitab.interactions.txt.gz",
+     "gzip $release_nr/pathogenic_$species_file_stem.mitab.interactions.txt.gz"
+    ],
+    
+    [
+     "FireworksServer",
+     1,
+     1,
+     "cp -r ../fireworks_server/json $release_nr/fireworks"
     ],
     
     [
@@ -230,6 +233,13 @@ my @cmds = (
      "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
      "mysqldump --opt $mysqldump_wordpress_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
      "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
+    ],
+    
+    [
+     "ensembl to pathway map",
+     1,
+     0,
+     "perl ensembl2pathway.pl $opt_user, $opt_pass ${opt_db}_dn $opt_r",
     ],
     
     [
@@ -254,7 +264,7 @@ my @cmds = (
      "interactions_for_all_species",
      1,
      1,
-     "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options"
+     "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options -skip_human"
     ],
     
     [
@@ -268,7 +278,7 @@ my @cmds = (
      "gene_association.reactome",
      1,
      0,
-     "cp ../goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome ".
+     "cp ../goa_prepare/gene_association.reactome ".
      "$release_nr/gene_association.reactome",
     ],
     
@@ -365,13 +375,6 @@ my @cmds = (
      1,
      1,
      "cp ../analysis_core/*.txt $release_nr"
-    ],
-    
-    [
-     "FireworksServer",
-     1,
-     1,
-     "cp -r ../fireworks_server/json $release_nr/fireworks"
     ],
     
     [
