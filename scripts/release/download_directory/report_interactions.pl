@@ -12,6 +12,7 @@ use GKB::Utils;
 use GKB::InteractionGenerator;
 
 use autodie;
+use File::Basename;
 use Getopt::Long;
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_sp,$opt_output,$opt_useDB_ID,$opt_db_ids,$opt_col_grps,$opt_headers,$opt_uniq,$opt_xrefs,$opt_intact, $opt_mitab,$opt_pathogenic);
@@ -130,7 +131,8 @@ $opt_useDB_ID and $GKB::Instance::USE_STABLE_ID_IN_DUMPING = 0;
 
 open(my $output_fh, '>', $opt_output) if $opt_output;
 $output_fh ||= *STDOUT;
-open(my $pathogenic_output_fh, '>', "pathogenic_$opt_output") if $opt_output && $opt_pathogenic;
+my ($output_file, $output_path) = fileparse($opt_output) if $opt_output;
+open(my $pathogenic_output_fh, '>', "$output_path/pathogenic_$output_file") if $opt_output && $opt_pathogenic;
 $pathogenic_output_fh ||= *STDOUT;
 
 # This will also get IntAct IDs for interactions, but only for
