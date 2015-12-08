@@ -32,6 +32,7 @@ my @options = (
     ['SearchIndexer', GKB_DEV_ALIAS, "-creates search index content and ebeye.xml"],
     ['BioModels', GKB_DEV_ALIAS, "-creates BioModels cross-references"],
     ['FireworksServer', GKB_DEV_ALIAS, "-creates fireworks JSON for pathways in each species"],
+    ['InstallReleaseDB', GKB_DEV_ALIAS, "-installs test_reactome_XX for use as the default database"],
     ['SimplifiedDatabase', GKB_DEV_ALIAS, "-creates simplified database from release database"],
     ['UpdateGkCurrent', GKB_DEV_ALIAS, "-populate gk_current database with new release content"],
     ['FrontpageAndTOC', GKB_DEV_ALIAS, "-create frontpage images and cached toc file"],
