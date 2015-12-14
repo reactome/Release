@@ -12,7 +12,7 @@ has '+directory' => ( default => "$release/install_release_db" );
 has '+mail' => ( default => sub { 
 					my $self = shift;
 					return {
-						'to' => 'curation',
+						'to' => 'curation,internal',
 						'subject' => $self->name,
 						'body' => '',
 						'attachment' => 'install_release_db.out'
