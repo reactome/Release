@@ -15,7 +15,7 @@ has '+mail' => ( default => sub {
 						'to' => 'curation',
 						'subject' => $self->name,
 						'body' => '',
-						'attachment' => ''
+						'attachment' => 'install_release_db.out'
 					};
 				}
 );
@@ -23,7 +23,10 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
 
-    $self->cmd("Installing $db for the $self->{host} server",[["echo $sudo | sudo -S ./install_release_db.sh $db > $self->{name}.out 2> $self->{name}.err"]]);
+    $self->cmd("Installing $db for the $self->{host} server",[
+        ["echo $sudo | sudo -S ./install_release_db.sh $db > $self->{name}.out 2> $self->{name}.err"],
+        ["grep -v '^\[sudo\] password for' $self->{name}.err | cat > $self->{name}.err"]
+    ]);
 };
 
 1;
