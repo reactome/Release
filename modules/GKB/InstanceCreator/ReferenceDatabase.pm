@@ -168,8 +168,8 @@ my %reference_database_info_hash = (
     },
     'Rhea' => {
         'Name'      => ['Rhea'],
-        'URL'       => 'http://www.ebi.ac.uk/rhea//',
-        'AccessUrl' => 'http://www.ebi.ac.uk/rhea/reaction.xhtml?id=###ID###'
+        'URL'       => 'http://www.rhea-db.org/',
+        'AccessUrl' => 'http://www.rhea-db.org/reaction?id=###ID###'
     },
     'UniProt' => {
         'Name'      => [ 'UniProt', 'SwissProt' ],
