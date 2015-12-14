@@ -259,10 +259,14 @@ sub run {
 	$self->run_commands($self->gkb);
 	
 	my @errors = $self->post_step_tests();
-	$self->archive_files($version);
-
-	$self->mail->{'body'} .= "Errors Reported\n\n" . join("\n", @errors) if @errors;
+	if (@errors) {
+		$self->mail->{'body'} = "Errors Reported\n\n" . join("\n", @errors);
+	} else {
+		$self->mail->{'body'} .= "$self->{name} step has completed successfully";
+	}
 	$self->mail_now();
+	
+	$self->archive_files($version);
 }
 
 sub source_code_passes_tests {
@@ -364,7 +368,7 @@ sub mail_now {
 	my $from = _get_sender_address($params);
     my $to = _get_recipient_addresses($params);
     my $subject = $params->{'subject'};
-	my $body = $params->{'body'} . "\nThe $subject section has finished";
+	my $body = $params->{'body'};
     
     my $mail = {
     	From => $from,
