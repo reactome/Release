@@ -12,6 +12,7 @@ use Carp;
 use Data::Dumper;
 use List::MoreUtils qw/any uniq/;
 use Getopt::Long;
+use Readonly;
 use Try::Tiny;
 
 use GKB::Config;
@@ -159,15 +160,19 @@ sub process_output {
     my $output = shift;
     my $associated_reactions = shift;
     
-    my $logic = scalar @$associated_reactions > 1 ? OR : AND;
-    foreach my $reaction (@$associated_reactions) {
-        if (output_is_component_of_ancestral_input($output, $reaction)) {
-            foreach my $child_reaction_id (get_child_reaction_ids($output)) {
-                record(get_label($reaction), $child_reaction_id, 1, $logic);
-            }
-            next;
-        } 
-        record(get_label($reaction), get_label($output), 1, $logic);
+    my @reactions_to_output = grep {!output_is_component_of_ancestral_input($output, $_)} @$associated_reactions;
+    my $reaction_to_output_logic = scalar @reactions_to_output > 1 ? OR : AND;
+    foreach my $reaction (@reactions_to_output) {
+        record(get_label($reaction), get_label($output), 1, $reaction_to_output_logic);
+    }
+    
+    my @reactions_to_reaction = grep {output_is_component_of_ancestral_input($output, $_)} @$associated_reactions;
+    my $reaction_to_reaction_logic = scalar @reactions_to_reaction > 1 ? OR : AND;
+    foreach my $reaction (@reactions_to_reaction) {
+        foreach my $child_reaction_id (get_child_reaction_ids($output)) {
+            record(get_label($reaction), $child_reaction_id, 1, $reaction_to_reaction_logic) if is_preceding_event($child_reaction_id, $reaction);
+            #print join("\t", get_label($reaction), $child_reaction_id) . "\n" unless is_preceding_event($child_reaction_id, $reaction);
+        }
     }
 }
 
@@ -232,6 +237,8 @@ sub get_label {
     $instance->referenceEntity->[0]->db_id :
     $instance->db_id;
     
+    $label = $instance->name->[0] . '_' . $label if $instance->hasModifiedResidue->[0];
+    $label = $instance->displayName . '_' . $label if $instance->is_a('SimpleEntity');
     $label .= "_RLE" if $instance->is_a('ReactionlikeEvent');
     
     return $label;
@@ -260,7 +267,7 @@ sub output_is_component_of_ancestral_input {
     my @ancestor_complexes = grep {$_->is_a('Complex')} @ancestors;
     my @ancestor_components = map {get_components($_)} @ancestor_complexes;
     
-    return any {$output->db_id == $_->db_id} @ancestor_components;
+    return any {get_label($output) eq get_label($_)} @ancestor_components;
 }
 
 sub get_components {
@@ -273,6 +280,14 @@ sub get_components {
         push @components, ($component, get_components($component));
     }
     return @components;
+}
+
+sub is_preceding_event {
+    my $child_reaction_id = shift;
+    my $parent_reaction = shift;
+    
+    my @events_parent_precedes = @{$parent_reaction->reverse_attribute_value('precedingEvent')};
+    return any {$_->db_id . '_RLE' eq $child_reaction_id} @events_parent_precedes;
 }
 
 sub get_child_reaction_ids {
@@ -363,6 +378,7 @@ sub report_interactions {
 			foreach my $parent (keys %{$interactions{$child}{$logic}}) {
 				foreach my $value (keys %{$interactions{$child}{$logic}{$parent}}) {
 					next if $seen{$child}{$logic}{$parent}{$value}++;
+                    next if on_skip_list($parent, $child);
                     print $fh join("\t", $parent, $child, $value, $logic) . "\n";
 				}
 			}
@@ -384,6 +400,34 @@ sub introduce_dummy_nodes {
 	
 	$interactions{"$child\_AND"}{AND()} = $AND_parents;
 	$interactions{"$child\_OR"}{OR()} = $OR_parents;
+}
+
+sub on_skip_list {
+    my $parent = shift;
+    my $child = shift;
+    
+    my $parent_id = get_id_from_label($parent);
+    my $child_id = get_id_from_label($child);
+    
+    Readonly my $ANYTHING => -1;
+    my %skip_list = (
+        5693589 => [1638790],
+        5686410 => [1638790],
+        5649637 => [3785704],
+        $ANYTHING => [114964],
+        1369085 => [$ANYTHING]
+    );
+    
+    return 1 if any {$_ == $child_id} @{$skip_list{$ANYTHING}};
+    return any {($_ == $ANYTHING) || ($_ == $child_id)} @{$skip_list{$parent_id}};
+}
+
+sub get_id_from_label {
+    my $label = shift;
+    
+    my ($id) =~ /^(\d+)_RLE$|_(\d+)$/;
+    
+    return $id;
 }
 
 sub add_line_count {
