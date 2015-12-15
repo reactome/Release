@@ -184,6 +184,7 @@ use autodie;
 use Capture::Tiny ':all';
 use File::Basename;
 use File::stat;
+use List::MoreUtils qw/uniq/;
 use Net::OpenSSH;
 
 use GKB::Release::Utils;
@@ -261,7 +262,9 @@ sub run {
 	my @errors = $self->post_step_tests();
 	if (@errors) {
 		$self->mail->{'body'} = "Errors Reported\n\n" . join("\n", @errors);
+		$self->mail->{'to'} = 'automation';
 	} else {
+		$self->mail->{'body'} .= "\n\n" if $self->mail->{'body'};
 		$self->mail->{'body'} .= "$self->{name} step has completed successfully";
 	}
 	$self->mail_now();
@@ -506,20 +509,18 @@ sub _file_size_ok {
 sub _get_sender_address {
 	my $params = shift;
 	
-	return $params->{'from'} || $maillist{'automation'};
+	my $from = $params->{'from'};
+	
+	return $maillist{$from} || $from || $maillist{'automation'};
 }
 
 sub _get_recipient_addresses {
 	my $params = shift;
 	
-	my @recipients = split ",", $params->{'to'};
-
-    my $to = _get_sender_address($params);
-    foreach my $recipient (@recipients) {
-        $to .= "," . $maillist{$recipient}; 
-    }
+	my @recipients = map({$maillist{$_}} split ",", $params->{'to'});
+    push @recipients, _get_sender_address($params);
 	
-	return $to;
+	return join(',', uniq @recipients);
 }
 
 sub _add_body_and_attachment {
