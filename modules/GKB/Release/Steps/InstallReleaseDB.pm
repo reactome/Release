@@ -14,7 +14,7 @@ has '+mail' => ( default => sub {
 					return {
 						'to' => 'curation,internal',
 						'subject' => $self->name,
-						'body' => '',
+						'body' => "$db installed on $self->{host} server",
 						'attachment' => 'install_release_db.out'
 					};
 				}
