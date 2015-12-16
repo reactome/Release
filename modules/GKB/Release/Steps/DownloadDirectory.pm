@@ -7,7 +7,7 @@ use Moose;
 extends qw/GKB::Release::Step/;
 
 #has '+gkb' => ();
-has '+passwords' => ( default => sub { ['mysql'] } );
+has '+passwords' => ( default => sub { ['mysql', 'sudo'] } );
 has '+directory' => ( default => "$release/download_directory" );
 has '+mail' => ( default => sub { 
 					my $self = shift;
@@ -49,15 +49,17 @@ override 'run_commands' => sub {
         my $analysis_binary = "analysis_v$version.bin";
         $self->cmd("Copying analyis binary from $host",
             [
-             ["scp $analysis_dir/$analysis_binary $live_server:$analysis_dir"],
-             ["ssh $live_server 'cd $analysis_dir;rm analysis.bin; ln -s $analysis_binary analysis.bin'"]
+                ["scp $analysis_dir/$analysis_binary $live_server:$analysis_dir"],
+                ["ssh $live_server 'cd $analysis_dir;rm analysis.bin; ln -s $analysis_binary analysis.bin'"]
             ]
         );
 	
         my $solr_dir = '/usr/local/reactomes/Reactome/production/Solr';
         $self->cmd("Copying solr index from $host",
             [
-                ["rsync -avhO -e ssh $solr_dir/ $live_server:$solr_dir"]
+                ["rsync -avhO -e ssh $solr_dir/ $live_server:$solr_dir"],
+                ["ssh -t $live_server 'echo $sudo | sudo -S chown -R solr:gkb $solr_dir'"],
+                ["ssh -t $live_server 'echo $sudo | sudo -S service solr restart'"]
             ]
         );
     }
