@@ -397,7 +397,7 @@ sub get_physical_entities_in_reaction_like_event {
     my @regulations = @{$reaction_like_event->reverse_attribute_value('regulatedEntity')};
     my @regulators = map {@{$_->regulator}} @regulations;
     push @physical_entities, grep {$_->is_a('PhysicalEntity')} @regulators;
-    push @physical_entities, map {$_->physicalEntity->[0]} grep {$_->is_a('catalystActivity'} @regulators;
+    push @physical_entities, map {$_->physicalEntity->[0]} grep {$_->is_a('catalystActivity')} @regulators;
     
     my %physical_entities = map {$_->db_id => $_} grep {$_} @physical_entities;
     
