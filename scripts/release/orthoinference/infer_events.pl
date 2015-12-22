@@ -178,18 +178,6 @@ my @all_human_events;
 my $count_leaves = 0;
 my $count_inferred_leaves = 0;
 
-#exclude selected pathways from inference
-my @list;
-foreach my $pwy_id (162906, 168254, 977225) {  #human-viral pathways, amyloids
-    push @list, get_reaction_ids($pwy_id);  #inference is done on reaction level, therefore extract all downstream reactions and store them in @list.
-}
-open(my $skip_list_fh, '<', 'normal_event_skip_list.txt');
-while (my $reaction_db_id = <$skip_list_fh>) {
-	chomp $reaction_db_id;
-	push @list, $reaction_db_id;
-}
-close $skip_list_fh;
-
 #define reactions to be considered for inference (by default all ReactionlikeEvents)
     my $reaction_ar;
     if (@ARGV) { #list of event ids, for which downstream reactions should be inferred - NOTE : make sure these events are from the source species
@@ -228,52 +216,6 @@ foreach my $attribute ("compartment", "species", "referenceEntity") {
 #start looping over all events to be considered for inference
 foreach my $rxn (@{$reaction_ar}) {
     $logger->info("considering reaction DB_ID=" . $rxn->db_id);
-
-#exclude some events based on a number of criteria
-    if (grep {$rxn->db_id == $_} @list) {
-		$logger->info("skipping reaction on skip list - " . $rxn->db_id);
-		next;
-	}
-    
-	if (is_chimeric($rxn)) {
-        $logger->info("skipping chimeric reaction - " . $rxn->db_id);
-        next;
-    }
-	
-	if ($rxn->Species->[1]) {
-		$logger->info("skipping reaction with multiple species - " . $rxn->db_id); #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway
-		next;
-	}
-	
-	if ($rxn->relatedSpecies->[0]) {
-		$logger->info("skipping reaction with related species - " . $rxn->db_id);
-		next;
-	}
-	
-    if ($rxn->disease->[0]) {
-		$logger->info("skipping disease reaction - " . $rxn->db_id);
-		next;
-	}
-	
-	if ($rxn->inferredFrom->[0]) {
-		$logger->info("skipping manually inferred reaction - " . $rxn->db_id); # manually inferred reactions should not be used for inference
-		next;
-	}
-	
-    next if ($rxn->is_a('ReactionlikeEvent') && $rxn->reverse_attribute_value('hasMember')->[0]); #Reactions under hasMember are basically covered by the higher-level event, including them would be a duplication
-	
-	my @species = get_species_from_reaction_like_event_entities($rxn);
-	if (scalar @species > 1) {
-		$logger->info("skipping reaction with multiple species in entities - " . $rxn->db_id);
-		next;
-	}
-	
-	if (scalar @species == 1 && $species[0]->db_id != $source_species->db_id) {
-		$logger->info("skipping reaction with only one species that differs from source species - " . $rxn->db_id);
-		next;
-	}
-	
-	
 
 #checks whether the event exists already in the target species - two scenarios
 #are possible: the from-species event was itself inferred from the target
@@ -359,6 +301,22 @@ close($eli);
 
 $logger->info("end\n");
 
+sub get_skip_list {
+    #exclude selected pathways from inference
+    my @list;
+    foreach my $pwy_id (162906, 168254, 977225) {  #human-viral pathways, amyloids
+        push @list, get_reaction_ids($pwy_id);  #inference is done on reaction level, therefore extract all downstream reactions and store them in @list.
+    }
+    open(my $skip_list_fh, '<', 'normal_event_skip_list.txt');
+    while (my $reaction_db_id = <$skip_list_fh>) {
+    	chomp $reaction_db_id;
+    	push @list, $reaction_db_id;
+    }
+    close $skip_list_fh;
+    
+    return @list;
+}
+
 #creates and returns an instance of a given class, ready to be used and with the appropriate InstanceEdit in the 'created' slot
 sub create_instance {
     my ($class) = @_;
@@ -434,6 +392,12 @@ sub get_physical_entities_in_reaction_like_event {
     push @physical_entities, @{$reaction_like_event->input};
     push @physical_entities, @{$reaction_like_event->output};
     push @physical_entities, map($_->physicalEntity->[0], @{$reaction_like_event->catalystActivity});
+    
+    
+    my @regulations = @{$reaction_like_event->reverse_attribute_value('regulatedEntity')};
+    my @regulators = map {@{$_->regulator}} @regulations;
+    push @physical_entities, grep {$_->is_a('PhysicalEntity')} @regulators;
+    push @physical_entities, map {$_->physicalEntity->[0]} grep {$_->is_a('catalystActivity'} @regulators;
     
     my %physical_entities = map {$_->db_id => $_} grep {$_} @physical_entities;
     
@@ -559,10 +523,10 @@ sub infer_gse {
     $inf_gse = check_for_identical_instances($inf_gse);
 #set inferredFrom attribute for entities with species
     if ($inf_gse->is_valid_attribute('species') && $inf_gse->Species->[0]) { #skip assignment for species-less ES like NTP, otherwise it refers to itself
-	$inf_gse->InferredFrom;
-	$inf_gse->add_attribute_value_if_necessary('inferredFrom', $gse);
-	$dba->update_attribute($inf_gse, 'inferredFrom');
-	$gse->InferredTo;
+    	$inf_gse->InferredFrom;
+        $inf_gse->add_attribute_value_if_necessary('inferredFrom', $gse);
+        $dba->update_attribute($inf_gse, 'inferredFrom');
+        $gse->InferredTo;
         $gse->add_attribute_value_if_necessary('inferredTo', $inf_gse);
         $dba->update_attribute($gse, 'inferredTo');
     }
@@ -602,45 +566,45 @@ sub orthologous_entity {
         unless ($orthologous_entity{$i}) {
 	    my $inf_ent;
 	    if ($i->is_a('GenomeEncodedEntity')) {
-		$inf_ent = create_homol_gee($i, $override);
+            $inf_ent = create_homol_gee($i, $override);
 	    } elsif ($i->is_a('Complex') || $i->is_a('Polymer')) {
-		$inf_ent = infer_complex_polymer($i, $override);
+            $inf_ent = infer_complex_polymer($i, $override);
 	    } elsif ($i->is_a('EntitySet')) {
-		$inf_ent = infer_gse($i, $override);
+            $inf_ent = $i->species->[0] ? infer_gse($i, $override) : $i;
 	    } elsif ($i->is_a('SimpleEntity')) {
-		# SimpleEntity was causing the script to die, so I included
-		# a case for this.  My assumption was that small molecules can
-		# be inferred unchanged to other species.  I don't know if
-		# the assumption makes sense or if it produces correct results,
-		# but it stops the script from dying. David Croft.
-		# TODO: somebody needs to look into this.
-		$inf_ent = $i;
+            # SimpleEntity was causing the script to die, so I included
+            # a case for this.  My assumption was that small molecules can
+            # be inferred unchanged to other species.  I don't know if
+            # the assumption makes sense or if it produces correct results,
+            # but it stops the script from dying. David Croft.
+            # TODO: somebody needs to look into this.
+            $inf_ent = $i;
 	    } else {
-		$logger->error_die("Unknown PhysicalEntity class: " . $i->class . ", instance name: " . $i->extended_displayName . "\n");
+            $logger->error_die("Unknown PhysicalEntity class: " . $i->class . ", instance name: " . $i->extended_displayName . "\n");
 	    }
-	    $override && return $inf_ent; #should not be assigned to $orthologous_entity, otherwise this will be taken as orthologous entity even when the source species entity comes in again without override being set
+            $override && return $inf_ent; #should not be assigned to $orthologous_entity, otherwise this will be taken as orthologous entity even when the source species entity comes in again without override being set
             $orthologous_entity{$i} = $inf_ent;
         }
         return $orthologous_entity{$i};
     } else {
-	my ($comp, $flag) = check_intracellular($i->Compartment);
-	if ($flag) { #indicates compartment has changed to intracellular
-	    $i->inflate;
-	    my $clone = $i->clone;
-	    $clone->Created($instance_edit);
-	    $clone->Modified(undef);
-	    $clone->StableIdentifier(undef);
-	    $clone->Compartment(@{$comp});
-	    # The following call is buggy for SmallMolecule with empty ReferenceEntity which will fetch
-	    # identifical identity with different names. For example, two SimpleEntity instances, 200739 and 174404
-	    # are used as input/output in reaction 200676. However, in E. coli, the predicted reaction has the same
-	    # SmallMolecule instance is used as input and output, which is obviously wrong. Need to be fixed - Commented
-	    # by Guanming
-	    $clone = check_for_identical_instances($clone);
-	    return $clone;
-	} else {
-	    return $i;
-	}
+        my ($comp, $flag) = check_intracellular($i->Compartment);
+        if ($flag) { #indicates compartment has changed to intracellular
+            $i->inflate;
+            my $clone = $i->clone;
+            $clone->Created($instance_edit);
+            $clone->Modified(undef);
+            $clone->StableIdentifier(undef);
+            $clone->Compartment(@{$comp});
+            # The following call is buggy for SmallMolecule with empty ReferenceEntity which will fetch
+            # identifical identity with different names. For example, two SimpleEntity instances, 200739 and 174404
+            # are used as input/output in reaction 200676. However, in E. coli, the predicted reaction has the same
+            # SmallMolecule instance is used as input and output, which is obviously wrong. Need to be fixed - Commented
+            # by Guanming
+            $clone = check_for_identical_instances($clone);
+            return $clone;
+        } else {
+            return $i;
+        }
     }
 }
 
@@ -674,6 +638,8 @@ sub new_inferred_instance {
 #returns an event instance if inference successful, undef if unsuccessful. However, if the incoming reaction does not contain any EntityWithAccessionedSequence, it returns 1. In this case the event is not counted as an eligible event.
 sub infer_event {
     my ($event) = @_;
+    
+    return if skip_event($event);
     
     my $logger = get_logger(__PACKAGE__);
     
@@ -745,6 +711,60 @@ sub infer_event {
     print $inf $inf_e->db_id, "\t", $inf_e->displayName, "\n";
 
     return $inf_e;
+}
+
+#Argument: Reaction to be inferred
+#checks exclusion criteria for using reaction for inference
+#returns 1 if inference of reaction should be skipped
+sub skip_event {
+    my ($event) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    my @list = get_skip_list();
+    
+    if (grep {$event->db_id == $_} @list) {
+		$logger->info("skipping reaction on skip list - " . $event->db_id);
+		return 1;
+	}
+    
+	if (is_chimeric($event)) {
+        $logger->info("skipping chimeric reaction - " . $event->db_id);
+        return 1;
+    }
+	
+	if ($event->Species->[1]) {
+		$logger->info("skipping reaction with multiple species - " . $event->db_id); #multispecies events should not be inferred - TODO: once isChimeric attribute is consistently filled in, one may only want to exclude chimeric reactions for inference while inferring e.g. Toll receptor pathway
+		return 1;
+	}
+	
+	if ($event->relatedSpecies->[0]) {
+		$logger->info("skipping reaction with related species - " . $event->db_id);
+		return 1;
+	}
+	
+    if ($event->disease->[0]) {
+		$logger->info("skipping disease reaction - " . $event->db_id);
+		return 1;
+	}
+	
+	if ($event->inferredFrom->[0]) {
+		$logger->info("skipping manually inferred reaction - " . $event->db_id); # manually inferred reactions should not be used for inference
+		return 1;
+	}
+	
+    return 1 if ($event->is_a('ReactionlikeEvent') && $event->reverse_attribute_value('hasMember')->[0]); #Reactions under hasMember are basically covered by the higher-level event, including them would be a duplication
+	
+	my @species = get_species_from_reaction_like_event_entities($event);
+	if (scalar @species > 1) {
+		$logger->info("skipping reaction with multiple species in entities - " . $event->db_id);
+		return 1;
+	}
+	
+	if (scalar @species == 1 && $species[0]->db_id != $source_species->db_id) {
+		$logger->info("skipping reaction with only one species that differs from source species - " . $event->db_id);
+		return 1;
+	}
 }
 
 #Argument: Event instance to be inferred, inferred event instance, attribute name
