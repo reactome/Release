@@ -44,3 +44,24 @@ override 'run_commands' => sub {
 	]
     );
 };
+
+override 'post_step_tests' => sub {
+    my ($self) = shift;
+    
+    my @errors = super();
+    push @errors, _check_stable_id_count($db, "test_reactome_$prevver");
+    
+    return @errors;
+};
+
+sub _check_stable_id_count {
+    my $current_db = shift;
+    my $previous_db = shift;
+
+    my $current_stable_id_count = scalar @{get_dba($current_db)->stableIdentifier};
+    my $previous_stable_id_count = scalar @{get_dba($previous_db)->stableIdentifier};
+    
+    my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
+    return "Stable id count has gone down from $current_stable_id_count for version $version " .
+        " from $previous_stable_id_count for version $prevver" if $stable_id_count_change < 0;
+}
