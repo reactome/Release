@@ -19,6 +19,7 @@ my @options = (
     ['Orthopair', GKB_DEV_ALIAS, "-runs orthopair script"],
     ['UpdateSourceCode', GKB_DEV_ALIAS, "-updates source code"],
     ['ClearData', GKB_DEV_ALIAS, "-clear data from a previous run \[NB: do not do this if this is the first run\]"],
+    ['CVSUpdate', GKB_DEV_ALIAS, "-CVS update of the images directory on the release, live, and curator servers"],
     ['GenerateStableIds', GKB_DEV_ALIAS, "-generates stable ids"],
     ['Myisam', GKB_DEV_ALIAS, "-convert database to myisam format"],
     ['OrthoInference', GKB_DEV_ALIAS, "-computational prediction for other species"],
