@@ -42,20 +42,18 @@ override 'post_step_tests' => sub {
     push @errors, _check_stable_id_count($slicedb, "test_slice_$prevver");
     
     return @errors;
-}
+};
 
 sub _check_stable_id_count {
-    my $current_slice = shift;
-    my $previous_slice = shift;
-    
-    my $current_slice_dba = get_dba($current_slice);
-    my $previous_slice_dba = get_dba($previous_slice);
-    
-    my $current_stable_id_count = scalar @{$current_slice_dba->stableIdentifier};
-    my $previous_stable_id_count = scalar @{$previous_slice_dba->stableIdentifier};
+    my $current_db = shift;
+    my $previous_db = shift;
+
+    my $current_stable_id_count = scalar @{get_dba($current_db)->stableIdentifier};
+    my $previous_stable_id_count = scalar @{get_dba($previous_db)->stableIdentifier};
     
     my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
     return "Stable id count has gone down from $current_stable_id_count for version $version " .
         " from $previous_stable_id_count for version $prevver" if $stable_id_count_change < 0;
 }
+
 1;
