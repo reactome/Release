@@ -511,7 +511,8 @@ sub _get_sender_address {
 	
 	my $from = $params->{'from'};
 	
-	return $maillist{$from} || $from || $maillist{'automation'};
+	return $maillist{$from} // $from if $from;
+	return $maillist{'automation'};
 }
 
 sub _get_recipient_addresses {

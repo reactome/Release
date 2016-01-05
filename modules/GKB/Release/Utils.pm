@@ -82,7 +82,12 @@ use warnings;
 
 use v5.10;
 
+use lib '/usr/local/gkb/modules';
+
+use GKB::Config;
+use GKB::DBAdaptor;
 use GKB::Release::Config;
+
 
 use Term::ReadKey;
 use autodie;
@@ -94,7 +99,19 @@ use base 'Exporter';
 # Purpose: A module to provide utility functions for the Reactome release pipeline.
 
 #Exports all subroutines
-our @EXPORT = qw/set_environment prompt releaselog replace_gkb_alias_in_dir/;
+our @EXPORT = qw/get_dba set_environment prompt releaselog replace_gkb_alias_in_dir/;
+
+sub get_dba {
+	my $db = shift;
+	
+	return GKB::DBAdaptor->new(
+		-dbname => $db,
+		-user => $GKB::Config::GK_DB_USER,
+		-pass => $GKB::Config::GK_DB_PASS,
+		-host => $GKB::Config::GK_DB_HOST,
+		-port => 3306
+	);
+}
 
 # C shell environment
 sub set_environment {
