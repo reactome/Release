@@ -12,9 +12,6 @@ use lib '/usr/local/gkb/modules';
 use GKB::DBAdaptor;
 use GKB::Config;
 
-use lib '.';
-use GKB::StableIdentifierDatabase;
-
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
@@ -34,11 +31,6 @@ GetOptions(
 
 # DB adaptors
 my %dba = get_api_connections(); 
-my $stable = GKB::StableIdentifierDatabase->new(
-    database_name => $release_db,
-    release_num => $release_num);
-
-
 
 # Get list of all curated instances that have or need ST_IDs
 my @db_ids = get_db_ids($release_db);
@@ -74,7 +66,6 @@ for my $db_id (@db_ids) {
 		$st_id->identifierVersion(1);
 		$st_id->displayName("$identifier.1");
 		store($st_id,'update');
-		$stable->log_exists($st_id);
 		say("Stable ID updated for ".$instance->db_id." (".$instance->displayName.")");
 	    }
 	}
@@ -181,8 +172,6 @@ sub create_stable_id {
     $instance->stableIdentifier($st_id);
     store($instance,'update');
 
-    $stable->add_stable_id_to_history($st_id,$instance);
-    $stable->log_ortho($st_id);
     return $st_id;
 }
 
