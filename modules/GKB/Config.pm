@@ -1,74 +1,76 @@
 package GKB::Config;
-
 use strict;
+
 use Cwd 'abs_path';
 use GKB::Secrets;
 
-use vars qw(@ISA     @EXPORT
-            $GK_ORPHAN_USER
-            $GK_ORPHAN_PASS
-            $GK_SOLR_USER
-            $GK_SOLR_PASS 
-	    $GK_DB_NAME
-	    $GK_IDB_NAME
-	    $GK_DB_HOST 
-	    $GK_DB_USER
-	    $GK_DB_PASS
-	    $GK_DB_PORT
-	    $GK_ENTITY_DB_NAME
-            $GK_ROOT_DIR
-	    $GK_JAVA_CODEBASE
-	    $GK_FETCH_SCRIPT
-	    $GK_TMP_IMG_DIR
-	    $COMPARA_DIR
-	    $ENSEMBL_API_DIR
-	    $HTML_PAGE_WIDTH
-	    $PROJECT_NAME
-	    $PROJECT_ABBREVIATION
-	    $PROJECT_LOGO_URL
-	    $PROJECT_HELP_URL
-	    $PROJECT_HELP_TITLE
-	    $PROJECT_FUNDING
-	    $PROJECT_LOGOS
-	    $PROJECT_TITLE
-	    $PROJECT_COPYRIGHT
-	    $SKY_REPLACEMENT_IMAGE
-	    $DEFAULT_IMAGE_FORMAT
-	    $FRONTPAGE_IMG_DIR
-	    $REACTIONMAP_WIDTH
-	    $SHOW_REACTIONMAP_IN_EVENTBROWSER
-	    $DB_BACKUP_DIR
-	    $NEWS_FILE
-            $LAST_RELEASE_DATE
-            $CONFIRMED_REACTION_COLOR
-            $MANUALLY_INFERRED_REACTION_COLOR
-            $ELECTRONICALLY_INFERRED_REACTION_COLOR
-            $REACTION_CONNECTOR_COLOR
-            $DEFAULT_REACTION_COLOR
-	    $LINK_TO_SURVEY
-	    $DEFAULT_VIEW_FORMAT
-            $NO_SCHEMA_VALIDITY_CHECK
-            $WARNING
-	    $CACHE_GENERATED_DOCUMENTS
-            $JAVA_PATH
-            $WWW_USER
-	    $MART_URL
-	    $MART_DB_NAME
-	    $WIKI_URL
-	    $USER_GUIDE_URL
-	    $LOG_DIR
-	    $WORDPRESS_ROOT_URL
-	    $DATA_MODEL_URL
-	    $NAVIGATION_BAR_MENUS
-	    $DISPLAY_VIEW_SWITCH_TOOLBAR
-	    $USE_REACTOME_GWT
-	    $REACTOME_VERSION
-	    $GLOBAL_META_TAGS
-	    $PATHWAY_OF_THE_MONTH
-	    $SERVLET_CONTAINER_DEPLOY_DIR
-	    $LIBSBML_LD_LIBRARY_PATH
-	    $LOG_CONF
-	    );
+use vars qw(
+	@ISA
+	@EXPORT
+    $GK_ORPHAN_USER
+    $GK_ORPHAN_PASS
+    $GK_SOLR_USER
+    $GK_SOLR_PASS 
+	$GK_DB_NAME
+	$GK_IDB_NAME
+	$GK_DB_HOST 
+	$GK_DB_USER
+	$GK_DB_PASS
+	$GK_DB_PORT
+	$GK_ENTITY_DB_NAME
+    $GK_ROOT_DIR
+	$GK_JAVA_CODEBASE
+	$GK_FETCH_SCRIPT
+	$GK_TMP_IMG_DIR
+	$COMPARA_DIR
+	$ENSEMBL_API_DIR
+	$HTML_PAGE_WIDTH
+	$PROJECT_NAME
+	$PROJECT_ABBREVIATION
+	$PROJECT_LOGO_URL
+	$PROJECT_HELP_URL
+	$PROJECT_HELP_TITLE
+	$PROJECT_FUNDING
+	$PROJECT_LOGOS
+	$PROJECT_TITLE
+	$PROJECT_COPYRIGHT
+	$SKY_REPLACEMENT_IMAGE
+	$DEFAULT_IMAGE_FORMAT
+	$FRONTPAGE_IMG_DIR
+	$REACTIONMAP_WIDTH
+	$SHOW_REACTIONMAP_IN_EVENTBROWSER
+	$DB_BACKUP_DIR
+	$NEWS_FILE
+    $LAST_RELEASE_DATE
+    $CONFIRMED_REACTION_COLOR
+    $MANUALLY_INFERRED_REACTION_COLOR
+    $ELECTRONICALLY_INFERRED_REACTION_COLOR
+    $REACTION_CONNECTOR_COLOR
+    $DEFAULT_REACTION_COLOR
+	$LINK_TO_SURVEY
+	$DEFAULT_VIEW_FORMAT
+    $NO_SCHEMA_VALIDITY_CHECK
+    $WARNING
+	$CACHE_GENERATED_DOCUMENTS
+    $JAVA_PATH
+    $WWW_USER
+	$MART_URL
+	$MART_DB_NAME
+	$WIKI_URL
+	$USER_GUIDE_URL
+	$LOG_DIR
+	$WORDPRESS_ROOT_URL
+	$DATA_MODEL_URL
+	$NAVIGATION_BAR_MENUS
+	$DISPLAY_VIEW_SWITCH_TOOLBAR
+	$USE_REACTOME_GWT
+	$REACTOME_VERSION
+	$GLOBAL_META_TAGS
+	$PATHWAY_OF_THE_MONTH
+	$SERVLET_CONTAINER_DEPLOY_DIR
+	$LIBSBML_LD_LIBRARY_PATH
+	$LOG_CONF
+);
 
 use Exporter();
 @ISA=qw(Exporter);
@@ -272,12 +274,14 @@ log4perl.rootLogger=TRACE, FullLog, ErrorLog
 
 log4perl.appender.FullLog=Log::Log4perl::Appender::File
 log4perl.appender.FullLog.filename='.get_name().'.log
+log4perl.appender.FullLog.create_at_logtime=1
 log4perl.appender.FullLog.mode=append
 log4perl.appender.FullLog.layout=PatternLayout
 log4perl.appender.FullLog.layout.ConversionPattern=%p %l %d - %m%n
 
 log4perl.appender.ErrorLog=Log::Log4perl::Appender::File
 log4perl.appender.ErrorLog.filename='.get_name().'.err
+log4perl.appender.ErrorLog.create_at_logtime=1
 log4perl.appender.ErrorLog.mode=append
 log4perl.appender.ErrorLog.layout=PatternLayout
 log4perl.appender.ErrorLog.layout.ConversionPattern=%p %l %d - %m%n
