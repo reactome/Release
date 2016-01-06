@@ -31,6 +31,8 @@ use constant SPECIES => {
     'Human immunodeficiency virus 1'        => 'HIV'
 };
 
+#say Dumper \@ARGV;
+
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
@@ -50,6 +52,7 @@ GetOptions(
     "release:i" => \$release_num
     );
 
+$ghost ||= 'localhost';
 ($release_db && $prev_release_db && $gk_central && $ghost && $user && $pass && $release_num) || say "$usage\n";
 
 
@@ -58,25 +61,39 @@ check_db_names();
 
 my %st_id_classes = map {$_ => 1} classes_with_stable_ids();
 
+
+say "hello 1";
 # DB adaptors
 my %dba = get_api_connections(); 
 
+say "hello 2";
+
 # Get list of all instances that have or need ST_IDs
+say "getting db_ids";
 my @db_ids = get_db_ids($release_db);
+say "Got ".scalar(@db_ids)." db ids";
 
 # Evaluate each instance
 for my $db_id (@db_ids) {
+    say $db_id;
     my $instance   = get_instance($db_id, $release_db);
     my $identifier = identifier($instance);
     my $class      = $instance->class;
     my $name       = $instance->displayName;
     my $stable_id  = stable_id($instance);
 
-#    if (should_be_incremented($instance)) {
-#	increment_stable_id($stable_id);
-#    }
+    if (should_be_incremented($instance)) {
+	say "$db_id $class $name should be incremented";
+	increment_stable_id($stable_id);
+    }
+    
+    if (is_updated($instance)) {
+	say "$stable_id $class $name should be updated";
+	add_updated_flag($instance);
+    }
 
-    #$logger->info(join("\t","STABLE_ID",$db_id,$class,$name,$stable_id->displayName)."\n");
+    
+    $logger->info(join("\t","STABLE_ID",$db_id,$class,$name,$stable_id->displayName)."\n");
 }
 
 remove_orphan_stable_ids();
@@ -93,9 +110,46 @@ sub stable_id {
 	$st_id = create_stable_id($instance,$identifier,1);
     }
     
-    attached($st_id->db_id,$instance);
-    add_stable_id_to_history($st_id,$instance);
+#    attached($st_id->db_id,$instance);
+
     return $st_id;
+}
+
+sub is_updated {
+    my $instance = shift;
+
+    return 0 unless $instance->is_a('Event');
+
+    my $db_id = $instance->db_id();
+    my $prev_instance = get_instance($db_id,$prev_release_db);
+
+    unless ($prev_instance) {
+        $logger->info($instance->displayName  . " is new, no need for updated flag.\n");
+        return 0;
+    }
+
+    if ($instance->attribute_value('releaseStatus')->[0]) {
+        say $instance->displayName ." ". $instance->attribute_value('releaseStatus')->[0];
+        return 1;
+    }
+
+    my $revised2 = @{$instance->attribute_value('revised')} || 0;
+    my $revised1 = @{$prev_instance->attribute_value('revised')} || 0;
+    my $reviewed2 = @{$instance->attribute_value('reviewed')} || 0;
+    my $reviewed1 = @{$prev_instance->attribute_value('reviewed')} || 0;
+
+    if ($reviewed2 > $reviewed1 || $revised2 > $revised1) {
+        return 1;
+    }
+
+    # Check if any children in the hierarchy are updated
+    elsif (my @children = @{$instance->attribute_value('hasEvent')}) {
+        for my $child (@children) {
+            if (is_updated($child)) {
+                return 1;
+            }
+        }
+    }
 }
 
 sub should_be_incremented {
@@ -129,13 +183,8 @@ sub check_db_names {
 }
 
 sub get_api_connections {
-    my $r_53 = GKB::DBAdaptor->new(
-        -dbname  => 'test_reactome_53',
-        -user    => $user,
-        -pass    => $pass
-        );
 
-
+    say "Release DB is $release_db";
     my $r_dba = GKB::DBAdaptor->new(
         -dbname  => $release_db,
         -user    => $user,
@@ -150,22 +199,14 @@ sub get_api_connections {
 
     my $g_dba = GKB::DBAdaptor->new(
         -dbname  => $gk_central,
-        -host    => $ghost,
+        -host    => $ghost || 'localhost',
         -user    => $user,
         -pass    => $pass
-        );
-
-    my $s_dbh = DBI->connect(
-        "dbi:mysql:stable_identifiers",
-        $user,
-        $pass
         );
 
     return ( $release_db      => $r_dba,
              $prev_release_db => $p_dba,
              $gk_central      => $g_dba,
-             'history'        => $s_dbh,
-             53               => $r_53
         );
 }
 
@@ -196,10 +237,17 @@ sub increment_stable_id {
     $instance->displayName("$identifier.$new_version");
     
     store($instance,'update');
-    log_incrementation($instance);
+}
 
-    my $sth = $dba{history}->prepare("UPDATE StableIdentifier SET identifierVersion = $new_version");
-    $sth->execute();
+sub add_updated_flag {
+    my $instance = shift;
+    $instance->inflate();
+
+    $logger->info("Adding updated flag to ".$instance->displayName.".");
+
+    $instance->attribute_value('releaseStatus','UPDATED');
+
+    store($instance,'update');
 }
 
 sub attached {
@@ -220,7 +268,8 @@ sub attached {
     while (my $result = $sth->fetchrow_arrayref) {
 	my $id = $result->[0];
 	if ($id) {
-	    $parent = get_instance($id,$dba{$release_db});
+	    #say"calling get_instance $release_db";
+	    $parent = get_instance($id,$release_db);
 	    if ($parent) {
 		$attached{$st_id} = $parent;
 		return $parent;
@@ -242,11 +291,6 @@ sub remove_orphan_stable_ids {
 	for my $db ($release_db,$gk_central) {
 	    my $st_id =  get_instance($db_id,$db) || next;
 
-	    my $history_id = add_stable_id_to_history($st_id);
-	    #$history_id || Bio::Root::Root->throw("Problem getting/setting history for " . $st_id->displayName());
-
-	    log_deletion($st_id) unless $deleted;
-
 	    $logger->info("Deleting orphan stable identifier ".$st_id->displayName."\n");
 
 	    $dba{$db}->delete($st_id);
@@ -255,127 +299,10 @@ sub remove_orphan_stable_ids {
     }
 }
 
-#####################################################################
-##  This set of functions deals with the stable identifier history db
-sub has_history {
-    my $instance = shift;
-    my $identifier = $instance->attribute_value('identifier')->[0]; 
-    
-    if ($history{$identifier}) {
-	return  $history{$identifier};
-    }
-
-    my $dbh = $dba{history};
-    my $sth = $dbh->prepare("SELECT DB_ID FROM StableIdentifier WHERE identifier = ?");
-    $sth->execute($identifier);
-    my $ary = $sth->fetchrow_arrayref || [];
-    my $db_id = $ary->[0];
-
-    if ($db_id) {
-	$history{$identifier} = $db_id;
-	return $db_id;
-    }
-    else {
-	return undef;
-    }
-}
-
-sub add_stable_id_to_history {
-    my $instance  = shift;
-    my $parent    = shift;
-    my $parent_id = $parent ? $parent->db_id : 'NULL';
-
-    my $history_id = has_history($instance);
-    if ($history_id) {
-	return $history_id;
-    }
-
-    my $dbh = $dba{history};
-    my $identifier = $instance->attribute_value('identifier')->[0];
-    my $version = $instance->attribute_value('identifierVersion')->[0];
-
-    # We need a parent ID for all non-orphans, try to get one if it is missing
-    # The parent DB_ID unifies all ST_IDs for an event
-    unless ($parent_id) {
-       # ($parent_id) = $identifier =~ /R-\S{3}-(\d+)$/;
-    }
-
-    # It is possible this stable ID has been used before.  If so,
-    # we will pick up the last known version 
-    my $sth = $dbh->prepare("SELECT DB_ID, identifierVersion FROM StableIdentifier WHERE identifier = ?");
-    $sth->execute($identifier);
-    my ($st_db_id,$st_version) = eval{@{$sth->fetchrow_arrayref}};
-    
-    # This means we will revive the old stable ID
-    if ($st_db_id) {
-	# bump the version
-	$instance->inflate();
-	$instance->attribute_value('identifierVersion',$st_version + 1);
-	store($instance,'update');
-	log_reactivation($instance);
-
-	if ($parent_id) {
-	    $sth =  $dbh->prepare("UPDATE StableIdentifier SET instanceId = ? WHERE DB_ID = ?");
-	    $sth->execute($parent_id,$st_db_id);
-	}
-
-	return $st_db_id;
-    }
-    else {
-	$sth = $dbh->prepare('INSERT INTO StableIdentifier VALUES (NULL, ?, ?, ?)');
-	$sth->execute($identifier,$version,$parent_id);
-
-	$sth = $dbh->prepare("SELECT DB_ID FROM StableIdentifier WHERE identifier = ?");
-	$sth->execute($identifier);
-
-	my $db_id = eval{$sth->fetchrow_arrayref->[0]};
-	
-	if ($db_id) {
-	    $history{$identifier} = $db_id;
-	    log_creation($instance) if $identifier =~ /R-[A-Z]{3}-\d+/; # only create new ones
-	}
-	else {
-	    return undef;
-	}
-    }
-}
-
-sub log_renaming {
-    add_change_to_history(@_,'renamed');
-}
-
-sub log_deletion {
-    add_change_to_history(@_,'deleted');
-}
-
-sub log_creation {
-    add_change_to_history(@_,'created');
-}
-
-sub log_incrementation {
-    add_change_to_history(@_,'incremented');
-}
-
-sub log_reactivation {
-    add_change_to_history(@_,'reactivated');
-}
-
-sub add_change_to_history {
-    my ($st_id,$change) = @_;
-    my $parent = attached($st_id->db_id);
-    $logger->info("Logging $change event for " . $st_id->displayName . " in history database\n");
-    my $st_db_id = has_history($st_id,$parent) || add_stable_id_to_history($st_id,$parent) || return;
-    my $dbh = $dba{history};
-    my $sth = $dbh->prepare('INSERT INTO Changed values (NULL, ?, ?, ?, NOW())');
-    $sth->execute($st_db_id,$change,$release_num);
-}
-##
-##################################################################### 
-
 sub get_instance {
     my $db_id = int shift || die "DB_ID must always be an integer";
     my $db    = shift;
-    
+    #say "problem fetching $db_id from $db" unless $dba{$db};
     my $instance = $dba{$db}->fetch_instance_by_db_id($db_id)->[0];
     return $instance;
 }
@@ -451,7 +378,6 @@ sub create_stable_id {
     $logger->info("creating new ST_ID " . $st_id->displayName . " for " . $instance->displayName);
     
     store($st_id,'store');
-    add_stable_id_to_history($st_id,$instance);
     
     # Attach the stable ID to its parent instance
     $instance->stableIdentifier($st_id);
@@ -478,7 +404,7 @@ sub store {
     my $force = $action eq 'store' ? 1 : 0;
 
     unless (@dbs > 0) {
-	@dbs =($gk_central,$release_db,53);
+	@dbs =($gk_central,$release_db);
     }
     for my $db (@dbs) {
         my $stored = eval {$dba{$db}->$action($instance,$force)};
@@ -512,7 +438,7 @@ sub max_db_id {
 # Get the largest DB_ID from slice or gk_central
 sub new_db_id {
     my $max_id = 0;
-    for my $db ($gk_central,$release_db,53) {
+    for my $db ($gk_central,$release_db) {
 	my $id = max_db_id($db);
 	$max_id = $id if $id > $max_id;
     }
