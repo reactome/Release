@@ -37,6 +37,19 @@ override 'run_commands' => sub {
     	]
     );
     
+    $self->cmd("saving stable ids to history database",
+        [
+            ["perl save_stable_id_history.pl -db $db -sdb stable_identifiers -user $user -pass $pass -release $version " .
+	     " > save_stable_id_history_$version.out 2>&1"]
+        ]
+	);
+
+    $self->cmd("Mapping old ortho ST_IDs back to current set",
+	       [
+            ["perl retrofit_orthos.pl -dbname $db -user $user -pass > retrofit_orths.pl_$version.out 2>&1"]
+        ]
+        );
+
     $self->cmd("Backing up $db and stable_identifiers databases",
 	[
 	    ["mysqldump --opt -u$user -p$pass $db > $db.afterOrthoStableIDs.dump"],
