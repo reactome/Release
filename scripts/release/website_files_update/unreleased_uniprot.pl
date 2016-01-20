@@ -32,26 +32,41 @@ GetOptions(
 
 $reaction_file || die usage_instructions();
 
-my @uniprot_from_reactions = get_uniprot_ids_from_reactions($reaction_file);
+my %uniprot_id_to_reactions_map = get_uniprot_id_to_reactions_map($reaction_file);
+my @uniprot_from_reactions = keys %uniprot_id_to_reactions_map;
 my @uniprot_from_release_db = get_uniprot_ids_from_release_db($db, $host);
 
 my @unreleased_uniprot_ids = array_minus(@uniprot_from_reactions, @uniprot_from_release_db);
 
 (my $outfile = $0) =~ s/\.pl/\.txt/;
 open(my $out, '>' , $outfile);
-print $out "$_\n" foreach sort @unreleased_uniprot_ids;
+foreach my $uniprot_id (sort @unreleased_uniprot_ids) {
+    my @reactions = uniq sort @{$uniprot_id_to_reactions_map{$uniprot_id}};
+    print $out $uniprot_id . "\t" . join(';', @reactions) . "\n";
+}
 close $out;
 
-sub get_uniprot_ids_from_reactions {
+sub get_uniprot_id_to_reactions_map {
     my $reaction_file = shift;
     
-    my @reaction_ids = read_file($reaction_file);
+    my %uniprot_id_to_reactions_map;
     my $gk_central_dba = get_dba('gk_central', 'reactomecurator.oicr.on.ca');
-    my @reaction_instances = map {$gk_central_dba->fetch_instance_by_db_id($_)->[0]} @reaction_ids;
-    my @reference_gene_product_instances = map {@{find_rps($_, $gk_central_dba)}} @reaction_instances;
-    my @uniprot_ids = map {$_->identifier->[0]} @reference_gene_product_instances;
+    my @reaction_ids = read_file($reaction_file);
+    foreach my $reaction_id (@reaction_ids) {
+        chomp $reaction_id;
+        my @uniprot_ids = map {$_->identifier->[0]} @{find_rps(get_reaction_instance($reaction_id, $gk_central_dba), $gk_central_dba)};
+        foreach my $uniprot_id (@uniprot_ids) {
+            push @{$uniprot_id_to_reactions_map{$uniprot_id}}, $reaction_id;
+        }
+    }
+    return %uniprot_id_to_reactions_map;
+}
+
+sub get_reaction_instance {
+    my $reaction_id = shift;
+    my $dba = shift;
     
-    return uniq @uniprot_ids;
+    return $dba->fetch_instance_by_db_id($reaction_id)->[0];
 }
 
 sub get_uniprot_ids_from_release_db {
