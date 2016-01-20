@@ -87,6 +87,9 @@ This script updates the wordpress front-page file located at
 $FRONT_PAGE_FILE by changing the current version and release
 date.
 
+It then copies the updated file to reactomedev, reactomecurator,
+and reactomeprd1.
+
 Usage: perl $0 [options]
 
 -new_version [reactome_version] (REQUIRED e.g. 55)
