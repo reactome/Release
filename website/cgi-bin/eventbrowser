@@ -3,21 +3,35 @@ use lib "/usr/local/gkb/modules";
 use common::sense;
 use CGI qw(:standard);
 use CGI::Carp 'fatalsToBrowser';
+use GKB::Config;
 use Data::Dumper;
 use GKB::StableIdentifierDatabase;
 use GKB::FrontPage3;
 use GKB::WebUtils;
+use GKB::DBAdaptor;
 
 my $CGI = CGI->new();
 my $stable = GKB::StableIdentifierDatabase->new();
 
 my $query_url  = '/content/query?q=';
-#my $detail_url = '/cgi-bin/instancebrowser?ID=';
+my $instance_browser_url = '/cgi-bin/instancebrowser?ID=';
 my $detail_url = '/content/detail/';
 
 my $id = $CGI->param('ID') || $CGI->param('DB_ID');
 my $st_id = $CGI->param('STID') || $CGI->param('ST_ID');
 my $query = $CGI->param('QUERY') || $CGI->param('EXACT');
+my $db = $CGI->param('DB') || $GK_DB_NAME;
+
+my $DBA = GKB::DBAdaptor->new
+    (
+     -dbname => $db,
+     -user   => $GK_DB_USER,
+     -host   => $GK_DB_HOST,
+     -pass   => $GK_DB_PASS,
+     -port   => $GK_DB_PORT,
+     -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+    );
+
 
 unless ($id || $st_id || $query) {
     handle_error("eventbrowser: I do not have any search terms");
@@ -31,7 +45,13 @@ if ($st_id) {
 my $url;
 
 if ($id) {
-    $url = "$detail_url$id";
+    my $instance = $DBA->fetch_instance_by_db_id($id)->[0] || die "Could not get instance for $id";
+    if ($instance->is_a('Event') || $instance->is_a('PhysicalEntity') || $instance->is_a('Regulation')){
+	$url = "$detail_url$id";
+    }
+    else {
+	$url = "$instance_browser_url$id;DB=$db";
+    }
 }
 elsif ($query) {
     $url = "$query_url/'$query'";
