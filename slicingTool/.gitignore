@@ -4,3 +4,6 @@
 *.log
 archive
 *.protected
+*.bak
+log
+*.gz
