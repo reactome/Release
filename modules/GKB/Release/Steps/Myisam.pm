@@ -1,5 +1,7 @@
 package GKB::Release::Steps::Myisam;
 
+use Capture::Tiny qw/:all/;
+
 use GKB::Release::Config;
 use GKB::Release::Utils;
 
@@ -23,7 +25,22 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
 
-    $self->cmd("Converting database to myisam",[["perl innodb2myisam.pl -user $user -pass $pass -dbfrom test_slice_$version -dbto test_slice_$version\_myisam > myisam.out 2> myisam.err"]]);
+    $self->cmd("Converting database to myisam",[["perl innodb2myisam.pl -user $user -pass $pass -dbfrom $slicedb -dbto $slicedb\_myisam > myisam.out 2> myisam.err"]]);
 };
+
+override 'post_step_tests' => sub {
+    my ($self) = shift;
+    
+    my @errors = super();
+    push @errors, _check_myisam_db_exists();
+
+    return @errors;
+};
+
+sub _check_myisam_db_exists {
+    return capture_stderr {
+        system("mysql -u$user -p$pass -e 'use $slicedb\_myisam'");
+    };
+}
 
 1;
