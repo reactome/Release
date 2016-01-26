@@ -155,7 +155,6 @@ our %hosts = (
    
 our %maillist = (
     'internal' => 'internal@reactome.org',
-    'release' => 'croft@ebi.ac.uk',
     'curation' => 'lmatthews.nyumc@gmail.com',
     'automation' => 'joel.weiser@oicr.on.ca',
     'outreach' => 'robin.haw@oicr.on.ca'
