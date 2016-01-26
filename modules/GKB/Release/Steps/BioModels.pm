@@ -38,4 +38,48 @@ override 'run_commands' => sub {
     }
 };
 
+override 'post_step_tests' => sub {
+    my $self = shift;
+    
+    my @errors = super();
+    push @errors, _check_referrer_count_for_biomodels_reference_database();
+    return @errors;
+};
+
+sub _check_referrer_count_for_biomodels_reference_database {
+    my @errors;
+    my $current_biomodels_referrer_count = _get_biomodels_referrer_count($db, \@errors);
+    my $previous_biomodels_referrer_count = _get_biomodels_referrer_count("test_reactome_$prevver", \@errors);
+    return if @errors;
+    
+    if ($current_biomodels_referrer_count == 0) {
+        return "Biomodels reference database has no referrers";
+    }
+      
+    if ($current_biomodels_referrer_count < $previous_biomodels_referrer_count) {
+        return "Biomodels reference database has fewer referrers compared to the previous release: $version - $current_biomodels_referrer_count; $prevver - $previous_biomodels_referrer_count";
+    }
+
+    releaselog("Biomodels external links added successfully: $version - $current_biomodels_referrer_count; $prevver - $previous_biomodels_referrer_count");
+}
+
+sub _get_biomodels_referrer_count {
+    my $database_name = shift;
+    my $errors = shift;
+    
+    my $biomodels_reference_database_name = 'BioModels Database';
+    my $biomodels_reference_database_instances = get_dba($database_name)->fetch_instance_by_attribute('ReferenceDatabase', [['_displayName', [$biomodels_reference_database_name]]]);
+    if (!$biomodels_reference_database_instances || (scalar @{$biomodels_reference_database_instances} == 0)) {
+        push @{$errors}, "Reference database '$biomodels_reference_database_name' does not exist";
+        return;
+    }
+    
+    if (scalar @{$biomodels_reference_database_instances} > 1) {
+        push @{$errors}, "There is more than one reference database instance for $biomodels_reference_database_name.  Please verify its referrer count manually";
+        return;
+    }
+    
+    return scalar @{$biomodels_reference_database_instances->[0]->reverse_attribute_value('referenceDatabase')};
+}
+
 1;

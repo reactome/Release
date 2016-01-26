@@ -1,5 +1,7 @@
 package GKB::Release::Steps::OrthoInference;
 
+use GKB::Config_Species;
+
 use GKB::Release::Config;
 use GKB::Release::Utils;
 
@@ -38,5 +40,37 @@ override 'run_commands' => sub {
 	]
     );
 };
+
+override 'post_step_tests' => sub {
+    my $self = shift;
+    
+    my @errors = super();
+    push @errors, _check_orthoinferred_instance_count_for_all_species();
+    return @errors;
+};
+
+sub _check_orthoinferred_instance_count_for_all_species {
+    my @errors;
+    foreach my $species (@species) {
+        my $species_name = $species_info{$species}->{'name'}->[0];
+        my $current_species_count = _get_species_count($db, $species_name);
+        my $previous_species_count = _get_species_count("test_reactome_$prevver", $species_name);
+        
+        if ($current_species_count < $previous_species_count) {
+            push @errors, "$species_name has fewer instances compared to the previous release: $version - $current_species_count; $prevver - $previous_species_count";
+            next;
+        }
+        releaselog("$species_name orthoinference successful: $version - $current_species_count; $prevver - $previous_species_count");
+    }
+    return @errors;
+}
+
+sub _get_species_count {
+    my $db = shift;
+    my $species_name = shift;
+    
+    my $species_instance = get_dba($db)->fetch_instance_by_attribute('species', [['_displayName', [$species_name]]])->[0];
+    return scalar @{$species_instance->reverse_attribute_value('species')};
+}
 
 1;
