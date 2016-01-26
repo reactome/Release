@@ -52,8 +52,8 @@ sub _check_pathway_diagram_count {
     my $current_db = shift;
     my $previous_db = shift;
 
-    my $current_pathway_diagram_count = scalar @{get_dba($current_db)->fetch_instance(-CLASS => 'PathwayDiagram')};
-    my $previous_pathway_diagram_count = scalar @{get_dba($previous_db)->fetch_instance(-CLASS => 'PathwayDiagram')};
+    my $current_pathway_diagram_count = get_dba($current_db)->class_instance_count('PathwayDiagram');
+    my $previous_pathway_diagram_count = get_dba($previous_db)->class_instance_count('PathwayDiagram');
     
     my $pathway_diagram_count_change = $current_pathway_diagram_count - $previous_pathway_diagram_count;
     return "Pathway Diagram count has gone down from $current_pathway_diagram_count for version $version " .
