@@ -29,5 +29,25 @@ override 'run_commands' => sub {
     $self->cmd("Populating gk_current with $db.dump",[["perl restore_database.pl @args > gk_current.out 2> gk_current.err"]]);
 };
 
+override 'post_step_tests' => sub {
+    my ($self) = shift;
+    
+    my @errors = super();
+    push @errors, _check_database_object_counts_are_equal($db, 'gk_current');
+    
+    return @errors;
+};
+
+sub _check_database_object_counts_are_equal {
+    my $db = shift;
+    my $gk_current = shift;
+
+    my $db_object_count = get_dba($db)->class_instance_count('DatabaseObject');
+    my $gk_current_object_count = get_dba($gk_current)->class_instance_count('DatabaseObject');
+    
+    return "Database object count for $gk_current ($gk_current_object_count) is different from $db ($db_object_count)"
+    unless ($db_object_count == $gk_current_object_count);
+}
+
 1;
 
