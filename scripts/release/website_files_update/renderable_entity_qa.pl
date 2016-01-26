@@ -31,6 +31,8 @@ $host ||= 'reactomecurator.oicr.on.ca';
 my $dba = get_dba($db, $host);
 my @pathway_diagram_instances = @{$dba->fetch_instance(-CLASS => 'PathwayDiagram')};
 
+my %seen;
+
 (my $outfile = $0) =~ s/\.pl/\.txt/;
 open(my $out, '>' , $outfile);
 print $out "Pathway Diagram DB ID\tInstance DB ID\tInstance Render Type\tInstance Schema Class\tInstance Author\n";
@@ -50,7 +52,8 @@ foreach my $pathway_diagram_instance (@pathway_diagram_instances) {
         my $node_db_id = $node->getAttribute("reactomeId");
         my $node_instance = $dba->fetch_instance_by_db_id($node_db_id)->[0];
         unless ($node_instance) {
-            print $out "$pathway_diagram_db_id\t$node_db_id\t$render_type\tN/A\tN/A\n";
+            my $record = "$pathway_diagram_db_id\t$node_db_id\t$render_type\tN/A\tN/A\n";
+            print $out $record unless $seen{$record}++;
             next;
         }
         my $node_schema_class = $node_instance->class;
@@ -58,7 +61,8 @@ foreach my $pathway_diagram_instance (@pathway_diagram_instances) {
         
         if (!get_schema_class_to_render_type_map()->{$node_schema_class} ||
             none {$_ eq $render_type} @{get_schema_class_to_render_type_map()->{$node_schema_class}}) {
-            print $out "$pathway_diagram_db_id\t$node_db_id\t$render_type\t$node_schema_class\t$node_author\n";
+            my $record = "$pathway_diagram_db_id\t$node_db_id\t$render_type\t$node_schema_class\t$node_author\n";
+            print $out $record unless $seen{$record}++;
 		}
     }
 }
@@ -69,10 +73,10 @@ sub get_dba {
     my ($db, $host) = @_;
     
     return GKB::DBAdaptor->new(
-        -dbname => $db || $GKB::Config::GK_DB_NAME,
+        -dbname => $db,
         -user => $GKB::Config::GK_DB_USER,
         -pass => $GKB::Config::GK_DB_PASS,
-        -host => $host || $GKB::Config::GK_DB_HOST
+        -host => $host
     );
 }
 
@@ -115,8 +119,8 @@ Instance Schema Class, and Instance Author
 
 Usage: perl $0 [options]
 
--host db_host (default: $GKB::Config::GK_DB_HOST)
--db db_name (default: $GKB::Config::GK_DB_NAME)
+-host db_host (default: reactomecurator.oicr.on.ca)
+-db db_name (default: gk_central)
 -help
 
 END
