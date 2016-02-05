@@ -21,16 +21,12 @@ if ($help) {
     exit;
 }
 
-my $recent_version = prompt('Enter recent Reactome version: (e.g. 54):');
-my $previous_version = prompt('Enter previous Reactome version: (e.g. 53):');
-
-my $recent_db = "test_reactome_$recent_version";
-my $previous_db = "test_reactome_$previous_version";
+my $recent_db = prompt('Enter more recent database: (e.g. test_slice_54):');
+my $previous_db = prompt('Enter older database: (e.g. test_slice_53):');
 
 (my $output_file = $0) =~ s/.pl$/.txt/;
 $output_file = prompt('Enter name for the output file:') if ($output_file eq $0);
 open (my $output, ">", $output_file); 
-report("Current release is version $recent_version\n", $output);
 
 my @new_instance_edit_ids = array_minus(
     @{get_instance_edit_ids_from_db($recent_db)},
@@ -115,10 +111,9 @@ sub get_authors {
 sub usage_instructions{
     return <<END;
     
-This script compares two versions of the test_reactome_XX database
-and reports database objects which have a new instance edit (i.e. present
-in the recent database but not the older one) in the authored, reviewed,
-or reported attributes.
+This script compares two databases and reports database objects which
+have a new instance edit (i.e. present in the recent database but not
+the older one) in the authored, reviewed, or reported attributes.
 
 The output will be a tab delimited file (by default, same name as the
 script but ending in .txt) reporting the instance name, class, database
