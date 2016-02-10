@@ -116,6 +116,8 @@ sub get_project {
 sub get_proper_render_type {
     my $instance = shift;
     
+    return 'Protein' if is_protein_without_reference_entity($instance);
+    
     my %schema_class_to_render_type = (
         'EntityCompartment' => 'Compartment',
         'Compartment' => 'Compartment',
@@ -141,6 +143,17 @@ sub get_proper_render_type {
     return $render_type unless ref($render_type);
     return $render_type->{$instance->referenceEntity->[0]->class} if ((ref($render_type) eq 'HASH') && ($instance->referenceEntity->[0]));
     return;
+}
+
+sub is_protein_without_reference_entity {
+    my $instance = shift;
+    
+    return unless $instance;
+    returnany {$_ == $instance->db_id} get_id_list_for_proteins_without_reference_entities();
+}
+
+sub get_id_list_for_proteins_without_reference_entities {
+    return (1599370, 6788097);
 }
 
 sub usage_instructions {
