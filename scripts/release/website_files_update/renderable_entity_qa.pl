@@ -9,14 +9,14 @@ use GKB::Utils;
 use autodie;
 use Data::Dumper;
 use Getopt::Long;
-use List::MoreUtils qw/none/;
 use XML::LibXML;
 
-my ($db, $host, $help);
+my ($db, $host, $fix, $help);
 
 GetOptions(
     "db:s" => \$db,
     "host:s" => \$host,
+    "fix" => \$fix,
     "help" => \$help
 );
 
@@ -35,8 +35,8 @@ my %seen;
 
 (my $outfile = $0) =~ s/\.pl/\.txt/;
 open(my $out, '>' , $outfile);
-print $out "Pathway Diagram DB ID\tInstance DB ID\tInstance Render Type\tInstance Schema Class\tInstance Author\n";
-foreach my $pathway_diagram_instance (@pathway_diagram_instances) {
+print $out "Pathway Diagram DB ID\tInstance DB ID\tInstance Render Type\tInstance Schema Class\tInstance Author\tSpecies\tProject\n";
+DIAGRAM:foreach my $pathway_diagram_instance (@pathway_diagram_instances) {
     my $pathway_diagram_db_id = $pathway_diagram_instance->db_id;
     my $xml = $pathway_diagram_instance->storedATXML->[0];
     unless ($xml) {
@@ -46,24 +46,44 @@ foreach my $pathway_diagram_instance (@pathway_diagram_instances) {
     my $dom = XML::LibXML->load_xml(string => $xml);
     my $root_element = $dom->getDocumentElement;    
     
+    my $updated;
     foreach my $node ($root_element->getElementsByTagName('Nodes')->[0]->childNodes()) {
-        my ($render_type) = $node->nodeName =~ /Renderable(.*)/;
-        next unless $render_type;
+        my $node_name = $node->nodeName;
+        my ($current_render_type) = $node_name =~ /Renderable(.*)/;
+        next unless $current_render_type;
+        
         my $node_db_id = $node->getAttribute("reactomeId");
         my $node_instance = $dba->fetch_instance_by_db_id($node_db_id)->[0];
         unless ($node_instance) {
-            my $record = "$pathway_diagram_db_id\t$node_db_id\t$render_type\tN/A\tN/A\n";
+            my $record = "$pathway_diagram_db_id\t$node_db_id\t$current_render_type\tN/A\tN/A\tN/A\tN/A\n";
             print $out $record unless $seen{$record}++;
             next;
         }
-        my $node_schema_class = $node_instance->class;
-        my $node_author = get_author($node_instance);
         
-        if (!get_schema_class_to_render_type_map()->{$node_schema_class} ||
-            none {$_ eq $render_type} @{get_schema_class_to_render_type_map()->{$node_schema_class}}) {
-            my $record = "$pathway_diagram_db_id\t$node_db_id\t$render_type\t$node_schema_class\t$node_author\n";
+        my $node_schema_class = $node_instance->class;
+        my $node_author = get_author($node_instance) ? get_author($node_instance)->displayName : 'Unknown';
+        my $node_project = get_project($node_instance);
+        my $node_species = $node_instance->species->[0] ? $node_instance->species->[0]->name->[0] : '';
+                
+        my $proper_render_type = get_proper_render_type($node_instance);
+        unless ($proper_render_type) {
+            print STDERR "No render type known for instance $node_db_id [$node_schema_class]\n";
+            next;
+        }
+        
+        if ($current_render_type ne $proper_render_type) {
+            $node_name =~ s/(Renderable).*/$1$proper_render_type/;
+            $node->setNodeName($node_name);
+            $updated = 1;
+            my $record = "$pathway_diagram_db_id\t$node_db_id\t$current_render_type\t$node_schema_class\t$node_author\t$node_species\t$node_project\n";
             print $out $record unless $seen{$record}++;
 		}
+    }
+    
+    if ($updated && $fix) {    
+        $pathway_diagram_instance->storedATXML(undef);
+        $pathway_diagram_instance->storedATXML($dom->toString);
+        $dba->update_attribute($pathway_diagram_instance, 'storedATXML');
     }
 }
 close $out;
@@ -83,26 +103,44 @@ sub get_dba {
 sub get_author {
     my $instance = shift;
     
-    return $instance->created->[0]->author->[0]->displayName if $instance->created->[0] && $instance->created->[0]->author->[0];
-    return $instance->modified->[-1]->author->[0]->displayName if $instance->modified->[-1] && $instance->modified->[-1]->author->[0];
-    return 'Unknown';
+    return $instance->created->[0]->author->[0] if $instance->created->[0] && $instance->created->[0]->author->[0];
+    return $instance->modified->[-1]->author->[0] if $instance->modified->[-1] && $instance->modified->[-1]->author->[0];
 }
 
-sub get_schema_class_to_render_type_map {
-    return {
-        'EntityCompartment' => ['Compartment'],
-        'Compartment' => ['Compartment'],
-        'GO_CellularComponent' => ['Compartment'],
-        'SimpleEntity' => ['Chemical'],
-        'EntityWithAccessionedSequence' => ['Protein', 'Gene', 'RNA'],
-        'Complex' => ['Complex'],
-        'DefinedSet' => ['EntitySet'],
-        'OpenSet' => ['EntitySet'],
-        'CandidateSet' => ['EntitySet'],
-        'Polymer' => ['Entity'],
-        'OtherEntity' => ['Entity'],
-        'GenomeEncodedEntity' => ['Entity']
-    };
+sub get_project {
+    my $instance = shift;
+    
+    return get_author($instance) && get_author($instance)->project->[0] ? get_author($instance)->project->[0] : 'Unknown';
+}
+
+sub get_proper_render_type {
+    my $instance = shift;
+    
+    my %schema_class_to_render_type = (
+        'EntityCompartment' => 'Compartment',
+        'Compartment' => 'Compartment',
+        'GO_CellularComponent' => 'Compartment',
+        'SimpleEntity' => 'Chemical',
+        'EntityWithAccessionedSequence' =>
+            {
+                'ReferenceGeneProduct' => 'Protein',
+                'ReferenceIsoform' => 'Protein',
+                'ReferenceDNASequence' => 'Gene',
+                'ReferenceRNASequence' => 'RNA'
+            },
+        'Complex' => 'Complex',
+        'DefinedSet' => 'EntitySet',
+        'OpenSet' => 'EntitySet',
+        'CandidateSet' => 'EntitySet',
+        'Polymer' => 'Entity',
+        'OtherEntity' => 'Entity',
+        'GenomeEncodedEntity' => 'Entity'
+    );
+    
+    my $render_type = $schema_class_to_render_type{$instance->class};
+    return $render_type unless ref($render_type);
+    return $render_type->{$instance->referenceEntity->[0]->class} if ((ref($render_type) eq 'HASH') && ($instance->referenceEntity->[0]));
+    return;
 }
 
 sub usage_instructions {
@@ -117,10 +155,15 @@ as this script with a .txt extension.  The file has five columns:
 Pathway Diagram DB ID, Instance DB ID, Instance Render Type,
 Instance Schema Class, and Instance Author
 
+If the 'fix' option is used, the schema class of instances with
+a mis-matched render type will be used to determine the correct
+render type and fix the node's XML stored in the database.
+
 Usage: perl $0 [options]
 
--host db_host (default: reactomecurator.oicr.on.ca)
--db db_name (default: gk_central)
+-host "db_host" (default: reactomecurator.oicr.on.ca)
+-db "db_name" (default: gk_central)
+-fix
 -help
 
 END
