@@ -9,6 +9,7 @@ use GKB::Utils;
 use autodie;
 use Data::Dumper;
 use Getopt::Long;
+use List::MoreUtils qw/any/;
 use XML::LibXML;
 
 my ($db, $host, $fix, $help);
@@ -149,7 +150,7 @@ sub is_protein_without_reference_entity {
     my $instance = shift;
     
     return unless $instance;
-    returnany {$_ == $instance->db_id} get_id_list_for_proteins_without_reference_entities();
+    return any {$_ == $instance->db_id} get_id_list_for_proteins_without_reference_entities();
 }
 
 sub get_id_list_for_proteins_without_reference_entities {
