@@ -25,14 +25,27 @@ override 'run_commands' => sub {
 
 	my $host = $self->host;
  	
-   	$self->cmd("Backing up databases and generating stable ids",
-		[
-	    	["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE $slicedb > $slicedb.dump"],
-    		["mysqldump --opt -u $user -h $gkcentral_host -p$pass --lock-tables=FALSE $gkcentral > $gkcentral\_$version\_before_st_id.dump"],
-    		["perl update_stable_ids.pl -ghost $gkcentral_host -user $user -pass $pass -sdb $slicedb -pdb test_slice_$prevver -release $version -gdb $gkcentral > generate_stable_ids_$version.out 2> generate_stable_ids_$version.err"],
-            ["mysqldump --opt -u $user -h $gkcentral_host -p$pass --lock-tables=FALSE $gkcentral > $gkcentral\_$version\_after_st_id.dump"]
-    	]
-    );
+   	$self->cmd("Backing up databases",
+		   [
+		    ["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE $slicedb > $slicedb.dump"],
+		    ["mysqldump --opt -u $user -h $gkcentral_host -p$pass --lock-tables=FALSE $gkcentral > ".
+		     "$gkcentral\_$version\_before_st_id.dump"]
+		   ]
+	    );
+	$self->cmd("Updating stable IDs",
+		   [
+		    ["perl update_stable_ids.pl -ghost $gkcentral_host -user $user -pass $pass -sdb $slicedb ".
+		     "-pdb test_slice_$prevver -release $version -gdb $gkcentral > generate_stable_ids_$version.out ".
+		     "2> generate_stable_ids_$version.err"]
+		   ]
+	    );
+        $self->cmd("Backing up databases",
+                [
+		 ["mysqldump --opt -u $user -h $gkcentral_host -p$pass --lock-tables=FALSE $gkcentral ".
+		  "> $gkcentral\_$version\_after_st_id.dump"],
+		 ["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE $slicedb > $slicedb\_after_st_id.dump"],
+		]
+	    );
 };
 
 override 'post_step_tests' => sub {
