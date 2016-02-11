@@ -62,20 +62,15 @@ check_db_names();
 my %st_id_classes = map {$_ => 1} classes_with_stable_ids();
 
 
-say "hello 1";
 # DB adaptors
 my %dba = get_api_connections(); 
-
-say "hello 2";
 
 # Get list of all instances that have or need ST_IDs
 say "getting db_ids";
 my @db_ids = get_db_ids($release_db);
-say "Got ".scalar(@db_ids)." db ids";
 
 # Evaluate each instance
 for my $db_id (@db_ids) {
-    say $db_id;
     my $instance   = get_instance($db_id, $release_db);
     my $identifier = identifier($instance);
     my $class      = $instance->class;
@@ -88,10 +83,9 @@ for my $db_id (@db_ids) {
     }
     
     if (is_updated($instance)) {
-	say "$stable_id $class $name should be updated";
+	say "$db_id $class $name should be updated";
 	add_updated_flag($instance);
     }
-
     
     $logger->info(join("\t","STABLE_ID",$db_id,$class,$name,$stable_id->displayName)."\n");
 }
@@ -129,7 +123,7 @@ sub is_updated {
     }
 
     if ($instance->attribute_value('releaseStatus')->[0]) {
-        say $instance->displayName ." ". $instance->attribute_value('releaseStatus')->[0];
+        #say $instance->displayName ." ". $instance->attribute_value('releaseStatus')->[0];
         return 1;
     }
 
