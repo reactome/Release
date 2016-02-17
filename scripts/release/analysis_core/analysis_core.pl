@@ -56,7 +56,7 @@ my $present_dir = getcwd();
 
 chdir $tmp_dir;
 system("git clone https://github.com/reactome/AnalysisTools");
-system("rm -rf AnalysisTools; ln -s AnalysisTools $present_dir/analysis");
+system("ln -sf $tmp_dir/AnalysisTools $present_dir/analysis");
 
 chdir "$present_dir/analysis/Core";
 system("mvn clean package");
