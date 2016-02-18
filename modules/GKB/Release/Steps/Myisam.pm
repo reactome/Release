@@ -32,7 +32,8 @@ override 'post_step_tests' => sub {
     my ($self) = shift;
     
     my @errors = super();
-    push @errors, _check_myisam_db_exists();
+    my $myisam_db_error = _check_myisam_db_exists();
+    push @errors, $myisam_db_error if $myisam_db_error;
 
     return @errors;
 };
