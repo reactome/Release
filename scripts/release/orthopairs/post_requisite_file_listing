@@ -1,4 +1,4 @@
-{version}/atha_gene_protein_mapping.txt	816808	1
+{version}/atha_gene_protein_mapping.txt	683046	1
 {version}/btau_gene_protein_mapping.txt	680814	1
 {version}/cele_gene_protein_mapping.txt	668550	1
 {version}/cfam_gene_protein_mapping.txt	727343	1
@@ -7,7 +7,7 @@
 {version}/drer_gene_protein_mapping.txt	1025237	1
 {version}/ggal_gene_protein_mapping.txt	532578	1
 {version}/hsap_atha_homol_mapping.txt	215622	1
-{version}/hsap_atha_mapping.txt	1199455	1
+{version}/hsap_atha_mapping.txt	1026905	1
 {version}/hsap_btau_homol_mapping.txt	782828	1
 {version}/hsap_btau_mapping.txt	1617240	1
 {version}/hsap_cele_homol_mapping.txt	324234	1
@@ -21,13 +21,13 @@
 {version}/hsap_drer_homol_mapping.txt	795948	1
 {version}/hsap_drer_mapping.txt	2448532	1
 {version}/hsap_ggal_homol_mapping.txt	571417	1
-{version}/hsap_ggal_mapping.txt	1934396	1
+{version}/hsap_ggal_mapping.txt	1348532	1
 {version}/hsap_mmus_homol_mapping.txt	817682	1
-{version}/hsap_mmus_mapping.txt	2536103	1
+{version}/hsap_mmus_mapping.txt	1857845	1
 {version}/hsap_osat_homol_mapping.txt	248552	1
-{version}/hsap_osat_mapping.txt	1345477	1
+{version}/hsap_osat_mapping.txt	1085040	1
 {version}/hsap_pfal_homol_mapping.txt	63048	1
-{version}/hsap_pfal_mapping.txt	307929	1
+{version}/hsap_pfal_mapping.txt	238729	1
 {version}/hsap_protein_gene_mapping.txt	1771320	1
 {version}/hsap_rnor_homol_mapping.txt	819465	1
 {version}/hsap_rnor_mapping.txt	1700116	1
@@ -42,8 +42,8 @@
 {version}/hsap_xtro_homol_mapping.txt	655971	1
 {version}/hsap_xtro_mapping.txt	1718976	1
 {version}/mmus_gene_protein_mapping.txt	823399	1
-{version}/osat_gene_protein_mapping.txt	1241479	1
-{version}/pfal_gene_protein_mapping.txt	169278	1
+{version}/osat_gene_protein_mapping.txt	1092278	1
+{version}/pfal_gene_protein_mapping.txt	127959	1
 {version}/rnor_gene_protein_mapping.txt	782063	1
 {version}/scer_gene_protein_mapping.txt	145387	1
 {version}/spom_gene_protein_mapping.txt	130351	1
