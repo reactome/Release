@@ -100,7 +100,7 @@ sub get_mapping_table_from_mart {
     
     my $mart_url = $species_info{$species_key}->{'mart_url'};
     if (!(defined $mart_url) || $mart_url eq '') {
-       $mart_url = "http://www.biomart.org/biomart/martservice";
+       $mart_url = "http://www.ensembl.org/biomart/martservice";
     }
     
     my $mart_virtual_schema = $species_info{$species_key}->{'mart_virtual_schema'};
