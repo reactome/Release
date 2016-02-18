@@ -52,7 +52,9 @@ override 'post_step_tests' => sub {
     my ($self) = shift;
     
     my @errors = super();
-    push @errors, _check_stable_id_count($slicedb, "test_slice_$prevver");
+    my $stable_id_count_error = _check_stable_id_count($slicedb, "test_slice_$prevver");
+
+    push @errors, $stable_id_count_error if $stable_id_count_error;
     
     return @errors;
 };
