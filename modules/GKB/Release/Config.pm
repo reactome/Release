@@ -105,10 +105,10 @@ our $gkcentral = "gk_central";
 our $gkcentral_host = "reactomecurator.oicr.on.ca";
 
 if ($TEST_MODE) {
-    $gkcentral = "test_gk_central";
+    $gkcentral = "test_gk_central2";
     $gkcentral_host = "reactomerelease.oicr.on.ca";
-    $version = 999;
-    $prevver = 46;
+    $version = 1001;
+    $prevver = 55;
 }
 
 # Set directory paths
