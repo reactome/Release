@@ -101,6 +101,7 @@ our $prevver;
 # Set database names
 our $db = "test_reactome_{version}"; # Test Reactome Database (e.g. test_reactome_38)
 our $slicedb = "test_slice_{version}"; # Slice Database (e.g. test_slice_38)
+our $stable_id_db = "stable_identifiers";
 our $gkcentral = "gk_central";
 our $gkcentral_host = "reactomecurator.oicr.on.ca";
 
@@ -165,7 +166,7 @@ our $log_conf = dirname(__FILE__)."/releaselog.conf";
 our @EXPORT = qw/
     $TEST_MODE
     $user $pass $sudo $date $version $prevver
-    $db $slicedb $gkcentral $gkcentral_host
+    $db $slicedb $stable_id_db $gkcentral $gkcentral_host
     $gkbdev $scripts $release $website $html $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server %hosts %maillist
     $log_conf
