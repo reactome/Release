@@ -245,6 +245,12 @@ echo -e "\nStarting the tomcat server..."
 echo -e "\nStarting the apache web server..."
 /etc/init.d/$APACHE restart
 
+
+# set up solr
+echo -e "\nSetting up Solr..."
+/usr/local/gkb/scripts/install_solr.sh -i reactome_pass
+
+
 # auto start on reboot
 echo -e "\nSetting up automatic tomcat start on boot"
 sudo update-rc.d tomcat7 defaults
