@@ -42,8 +42,8 @@ use vars '@ISA';
 
 use constant REFPROTEINS  => url(-base => 1) . '/ReactomeRESTfulAPI/RESTfulWS/getUniProtRefSeqs';
 use constant REFMOLECULES => url(-base => 1) . '/ReactomeRESTfulAPI/RESTfulWS/getReferenceMolecules';
-use constant METABOLITES  => 'http://www.hmdb.ca/downloads/hmdb_metabolites.zip';
-use constant PROTEINS     => 'http://www.hmdb.ca/downloads/hmdb_proteins.zip';
+use constant METABOLITES  => 'http://www.hmdb.ca/system/downloads/current/hmdb_metabolites.zip';
+use constant PROTEINS     => 'http://www.hmdb.ca/system/downloads/current/hmdb_proteins.zip';
 
 sub new {
     my $class = shift;
