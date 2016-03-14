@@ -80,7 +80,7 @@ Usage: perl $0 [options]
 
 Options:
 
--db [db_name]   Source database (default is $GKB::Config:GK_DB_NAME)
+-db [db_name]   Source database (default is $GKB::Config::GK_DB_NAME)
 -help           Display these instructions
 
 END
