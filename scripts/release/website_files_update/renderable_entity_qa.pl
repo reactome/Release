@@ -58,6 +58,7 @@ DIAGRAM:foreach my $pathway_diagram_instance (@pathway_diagram_instances) {
         unless ($node_instance) {
             my $record = "$pathway_diagram_db_id\t$node_db_id\t$current_render_type\tN/A\tN/A\tN/A\tN/A\n";
             print $out $record unless $seen{$record}++;
+            
             next;
         }
         
@@ -65,17 +66,22 @@ DIAGRAM:foreach my $pathway_diagram_instance (@pathway_diagram_instances) {
         my $node_author = get_author($node_instance) ? get_author($node_instance)->displayName : 'Unknown';
         my $node_project = get_project($node_instance);
         my $node_species = $node_instance->species->[0] ? $node_instance->species->[0]->name->[0] : '';
-                
+                        
+        if ($current_render_type eq "Pathway") {
+            $root_element->getElementsByTagName('Nodes')->[0]->removeChild($node);
+            $updated = 1;
+            
+            print STDERR "Removing RenderablePathway node for instance $node_db_id [$node_schema_class]\n";
+        }
+        
         my $proper_render_type = get_proper_render_type($node_instance);
         unless ($proper_render_type) {
             print STDERR "No render type known for instance $node_db_id [$node_schema_class]\n";
-            next;
-        }
-        
-        if ($current_render_type ne $proper_render_type) {
+        } elsif ($current_render_type ne $proper_render_type) {
             $node_name =~ s/(Renderable).*/$1$proper_render_type/;
             $node->setNodeName($node_name);
             $updated = 1;
+            
             my $record = "$pathway_diagram_db_id\t$node_db_id\t$current_render_type\t$node_schema_class\t$node_author\t$node_species\t$node_project\n";
             print $out $record unless $seen{$record}++;
 		}
