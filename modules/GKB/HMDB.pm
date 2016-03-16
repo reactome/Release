@@ -42,8 +42,8 @@ use vars '@ISA';
 
 use constant REFPROTEINS  => url(-base => 1) . '/ReactomeRESTfulAPI/RESTfulWS/getUniProtRefSeqs';
 use constant REFMOLECULES => url(-base => 1) . '/ReactomeRESTfulAPI/RESTfulWS/getReferenceMolecules';
-use constant METABOLITES  => 'http://www.hmdb.ca/downloads/hmdb_metabolites.zip';
-use constant PROTEINS     => 'http://www.hmdb.ca/downloads/hmdb_proteins.zip';
+use constant METABOLITES  => 'http://www.hmdb.ca/system/downloads/current/hmdb_metabolites.zip';
+use constant PROTEINS     => 'http://www.hmdb.ca/system/downloads/current/hmdb_proteins.zip';
 
 sub new {
     my $class = shift;
@@ -136,7 +136,7 @@ sub get_xml_files {
     # Download and unpack the XML (there are 40+K) only
     # if it was not already done within the past week
     my $id_file = "$dir/ids.txt";
-    unless (-e $id_file && -M $id_file < 7) {
+    unless (-s $id_file && -M $id_file < 7) {
 	system "rm -fr $dir" if -d $dir;
 	mkdir $dir or die $!;
 	chdir $dir;

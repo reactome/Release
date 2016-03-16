@@ -14,8 +14,11 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-my $help;
-GetOptions('help' => \$help);
+my ($db, $help);
+GetOptions(
+    'db:s' => \$db,
+    'help' => \$help
+);
 
 if ($help) {
     print usage_instructions();
@@ -27,7 +30,7 @@ open my $skip_list_fh, ">", "$skip_list_file";
 
 my %seen;
  
-my @disease_pathways = @{get_dba()->fetch_instance_by_remote_attribute('Pathway', [['disease', 'IS NOT NULL',[]]])};
+my @disease_pathways = @{get_dba($db)->fetch_instance_by_remote_attribute('Pathway', [['disease', 'IS NOT NULL',[]]])};
 foreach my $disease_pathway (@disease_pathways) {
     foreach my $pathway_event (@{get_events($disease_pathway)}) {
 	next unless $pathway_event->is_a('ReactionlikeEvent');
@@ -40,10 +43,12 @@ foreach my $disease_pathway (@disease_pathways) {
 
 
 sub get_dba {
+    my $db = shift;
+    
     return GKB::DBAdaptor->new (
 	-user => $GKB::Config::GK_DB_USER,
 	-pass => $GKB::Config::GK_DB_PASS,
-	-dbname => $GKB::Config::GK_DB_NAME
+	-dbname => $db || $GKB::Config::GK_DB_NAME
     );
 }
 
@@ -71,7 +76,12 @@ is created listing database identifiers of normal reaction like events.
 This is used as a QA check of which normal events in disease pathways we
 want the orthoinference release step to skip.
 
-Usage: perl $0
+Usage: perl $0 [options]
+
+Options:
+
+-db [db_name]   Source database (default is $GKB::Config::GK_DB_NAME)
+-help           Display these instructions
 
 END
 }
