@@ -152,12 +152,33 @@ sub get_xml_files {
 	    die "Could not find $zip";
 	}
 
+    if ($class eq 'proteins') {    
+        my ($protein_xml_file) = $zip =~ /(.*)\.zip$/;
+        $protein_xml_file .= '.xml';
+        $self->split_protein_xml_file($protein_xml_file);
+    }
 	$self->filter_xml_files($dir,$class);
     }
 
     chdir $cwd;
 
     return $dir;
+}
+
+sub split_protein_xml_file {
+    my $self = shift;
+    my $protein_xml_file = shift;
+    
+    open(my $merged_file, '<', $protein_xml_file) || die $!;
+    local $/ = "\<\/protein\>\n";
+    while (my $xml = <$merged_file>) {
+        my ($accession) = $xml =~ /<accession>(\w+)\<\/accession>/;
+        open(my $xml_file, '>', "$accession.xml") || die $!;
+        print $xml_file $xml;
+        close $xml_file;
+    }
+    close $merged_file;
+    system "rm -f $protein_xml_file";
 }
 
 # We only want xml files that have chebi_ids or uniprot Ids in them
