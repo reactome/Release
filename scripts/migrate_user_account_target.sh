@@ -6,10 +6,12 @@ then
     exit 1
 fi
 
-# mkdir /nfs/reactome/reactome/tmp/newsusers.bak
-# cp /etc/passwd /etc/shadow /etc/group /etc/gshadow /root/newsusers.bak
-# cd /path/to/location
-# cat passwd.mig >> /etc/passwd
-# cat group.mig >> /etc/group
-# cat shadow.mig >> /etc/shadow
-# /bin/cp gshadow.mig /etc/gshadow
+HOST=$(hostname -i)
+mkdir -p /home/smckay/accounts/$HOST/newsusers.bak
+cp /etc/passwd /etc/shadow /etc/group /etc/gshadow /home/smckay/accounts/$HOST/newsusers.bak
+cd /home/smckay/home/accounts/$HOST/
+
+cat passwd.mig | grep -v oicradmin |grep -v solr >> /etc/passwd
+cat group.mig >> /etc/group
+cat shadow.mig >> /etc/shadow
+/bin/cp gshadow.mig /etc/gshadow
