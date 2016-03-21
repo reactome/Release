@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>Protege Exporter</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $.ajax(
+                    {
+                        url: "/cgi-bin/protegeexporter?DB=test_reactome_54&ID=1640170",
+                        beforeSend: function(xhr) {
+                            $('body').css('cursor', 'wait');
+                        },
+                        success: function(response, status, request) {
+                            window.location.replace("/img-tmp/Reactome_1640170.tar.gz");
+                        },
+                        error: function(xhr, status, error) {
+                            alert("request failed: " +
+                                "status: " + status +
+                                "error" + error);
+                        },
+                        complete: function(xhr, status) {
+                            $('body').css('cursor', 'default');
+                        }
+                    }
+                );   
+            });
+        </script>
+    </head>
+    <body>
+        <p>The protege download is being fetched.  This may take a few minutes</p>
+    </body>
+</html>
