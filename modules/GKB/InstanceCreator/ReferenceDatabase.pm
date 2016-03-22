@@ -398,6 +398,8 @@ sub get_reference_database {
 sub get_predefined_reference_database {
     my ( $self, $name ) = @_;
 
+    my $logger = get_logger(__PACKAGE__);
+    
     # Workaround to avoid creating multiple RefSeq databases for DNA, Peptide.
     my $local_name = $name;
     if ( $local_name =~ /^RefSeq/ ) {
@@ -408,6 +410,7 @@ sub get_predefined_reference_database {
     # Can speed things up a lot if this subroutine is called
     # frequently.
     if ( defined $self->reference_database_cache->{$local_name} ) {
+        $logger->info("Returning cached reference database for $local_name");
         return $self->reference_database_cache->{$local_name};
     }
 
@@ -421,6 +424,7 @@ sub get_predefined_reference_database {
     my $reference_database = undef;
     if ( defined $reference_databases && scalar( @{$reference_databases} ) > 0 )
     {
+        $logger->info("Returning existing reference database for $local_name");
         $reference_database = $reference_databases->[0];
         $reference_database->inflate();
     }
@@ -437,6 +441,8 @@ sub get_predefined_reference_database {
 # that also contain species.
 sub rearrange_reference_database_names {
     my ( $self, $reference_database, $name ) = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
 
     if ( !( $self->is_multiple_species_database($name) ) ) {
         return;
@@ -452,6 +458,9 @@ sub rearrange_reference_database_names {
             push( @new_names, $local_name );
         }
     }
+    
+    $logger->info("Reference database receiving display name $name");
+    
     $reference_database->name(undef);
     $reference_database->name(@new_names);
     $self->dba->update_attribute( $reference_database, 'name' );
