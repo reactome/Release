@@ -20,6 +20,7 @@ $version (Reactome release version)
 $prevver (previous Reactome release version)
 $db (Reactome release database -- i.e. test_reactome_XX)
 $slicedb (Reactome slice database -- i.e. test_slice_XX)
+$stable_id_db (Reactome stable identifier database)
 $gkcentral (Reactome curator database)
 $gkcentral_host (host server for Reactome database)
 $gkbdev (directory for Release Git repository)
@@ -106,6 +107,7 @@ our $gkcentral = "gk_central";
 our $gkcentral_host = "reactomecurator.oicr.on.ca";
 
 if ($TEST_MODE) {
+    $stable_id_db = "test_stable_identifiers",
     $gkcentral = "test_gk_central2";
     $gkcentral_host = "reactomerelease.oicr.on.ca";
     $version = 1001;
