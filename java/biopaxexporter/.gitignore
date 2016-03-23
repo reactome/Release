@@ -1,3 +1,6 @@
 *.owl
 *.xml
 !*.class
+5*
+*.gz
+archive
