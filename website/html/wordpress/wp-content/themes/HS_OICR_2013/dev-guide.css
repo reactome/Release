@@ -30,7 +30,7 @@ table, tr, td {
 }
 
 .devMainTool img {
-    height: 75px;
+    height: 50px;
 }
 
 .devSectionTitle span {
@@ -55,7 +55,7 @@ table, tr, td {
   font-weight:bold;
   color:#295CAB;
   text-align:center;
-  font-size:large;
+  font-size:small;
 }
 
 .devButton {
