@@ -16,6 +16,23 @@ table, tr, td {
 
 /* ########### /RESET/ ########### */
 
+.devMainTool {
+    align:center;
+    width: 300px;
+    float: left;
+    font-size: small;
+}
+
+.devMainTool button {
+    width: 150px;
+    height: 150px;
+    margin-left:75px;
+}
+
+.devMainTool img {
+    height: 75px;
+}
+
 .devSectionTitle span {
     font-weight:bold;
     font-size: 24px;
@@ -30,20 +47,20 @@ table, tr, td {
 
 .devTool {
   float:left;
-  width:250px;
-  margin-left: 40px;
+  width:200px;
+  margin-left: 35px;
 }
 
 .devToolDescription{
   font-weight:bold;
   color:#295CAB;
   text-align:center;
-  font-size:x-large;
+  font-size:large;
 }
 
 .devButton {
-  width:250px;
-  height:200px;
+  width:150px;
+  height:100px;
   color:white;
   background-color:#295CAB;
   border-radius:15px;
@@ -51,7 +68,7 @@ table, tr, td {
 }
 
 .devButton div {
-  font-size: x-large;
+  font-size: small;
 }
 
 .devButton:hover {
@@ -65,8 +82,8 @@ table, tr, td {
 }
 
 .devSectionButton {
-  width:200px;
-  height:200px;
+  width:150px;
+  height:150px;
   color:white;
   background-color:#295CAB;
   border-radius:15px;
@@ -74,7 +91,11 @@ table, tr, td {
 }
 
 .devSectionButton div {
-  font-size: large;
+  font-size: x-small;
+}
+
+.devSectionButton img {
+  height: 75px;
 }
 
 .devSectionButton:hover {
