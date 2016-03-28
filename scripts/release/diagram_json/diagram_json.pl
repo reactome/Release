@@ -101,7 +101,7 @@ sub execute_diagram_core_jar_file {
     my $diagram_core_jar_file = shift;
     my $options = shift;
     
-    return (system("java -jar $diagram_core_jar_file Convert $options") == 0);
+    return (system("java -jar -Xms5120M -Xmx10240M $diagram_core_jar_file Convert $options") == 0);
 }
 
 sub remove_symbolic_link_to_diagram_core_repository {
