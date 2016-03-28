@@ -25,7 +25,9 @@ override 'run_commands' => sub {
 
     my $host = $self->host;
 
-    $self->cmd("Committing version $version inference statistics files to GitHub", [["perl commit_stats_files.pl -version $version > commit_stats_files.out 2> commit_stats_files.err"]]);
+    $self->cmd("Committing version $version inference statistics files to GitHub", [
+        ["perl commit_stats_files.pl -version $version -stats_file_dir $release/website_files_update > commit_stats_files.out 2> commit_stats_files.err"]
+    ]);
 };
 
 1;
