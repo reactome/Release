@@ -112,8 +112,7 @@ sub remove_symbolic_link_to_diagram_core_repository {
 sub remove_diagram_core_repository {
     my $directory = shift;
     
-    chdir $directory;
-    return (system("rm -rf diagram-core") == 0);
+    return (system("rm -rf $directory/diagram-core") == 0);
 }
 
 sub move_output_directory_to_download_directory {
@@ -122,5 +121,5 @@ sub move_output_directory_to_download_directory {
     
     make_path($current_download_directory, { mode => 0775 });
     system("ln -sf $current_download_directory current");
-    system("mv --backup=existing $output_directory $current_download_directory");
+    return (system("mv --backup=existing $output_directory $current_download_directory") == 0);
 }
