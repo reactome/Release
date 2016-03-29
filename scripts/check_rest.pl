@@ -29,7 +29,8 @@ if ($response->{success}) {
     else {
 	say STDERR "Error, restarting $stamp";
 	say $content;
-	system "/etc/init.d/tomcat7 restart";
+	#system "/etc/init.d/tomcat7 restart"; # NO NO NO!!!
+	system "touch /usr/local/reactomes/Reactome/production/apache-tomcat/webapps/ReactomeRESTfulAPI.war";
     }
 }
 else {
