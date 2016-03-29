@@ -371,10 +371,19 @@ sub process_catalyst_activities {
 }
 
 sub process_GO_instances {
-    my @instances = @_;
+    my @go_instances = @_;
+    
+    my $logger = get_logger(__PACKAGE__);
     
     my @records;
-    push @records, [$_->referenceDatabase->[0]->displayName, $_->accession->[0], $_->displayName] foreach (@instances);
+    foreach my $go_instance (@go_instances) {
+        next unless $go_instance;
+        try {
+            push @records, [$go_instance->referenceDatabase->[0]->displayName, $go_instance->accession->[0], $go_instance->displayName];
+        } catch {
+            $logger->logcarp("Problem processing GO instance: $_");
+        };
+    }
     return @records;
 }
 
