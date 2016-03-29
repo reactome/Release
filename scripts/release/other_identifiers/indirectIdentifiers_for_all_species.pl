@@ -1,4 +1,5 @@
 #!/usr/local/bin/perl -w
+use strict;
 
 BEGIN {
     my ($path) = $0 =~ /^(\S+)$/;
@@ -14,12 +15,12 @@ BEGIN {
     unshift (@INC, $libpath);
 }
 
-use strict;
+use File::Path;
 use Getopt::Long;
+
 use GKB::Utils;
 use GKB::Instance;
 use GKB::Config;
-use Data::Dumper;
 
 $GKB::Config::NO_SCHEMA_VALIDITY_CHECK = undef;
 
@@ -47,6 +48,7 @@ my $dba = GKB::DBAdaptor->new
 my @species = $dba->species_for_ref_dbs('ENSEMBL','UniProt');
 print STDERR "My species:\n",Dumper \@species;
 
+make_path('output', { mode => 0775});
 my @cmds = (
 	    qq(./retrieve_indirectIdentifiers_from_mart.pl @params),
 	    qq(./indirectIdentifiers_from_mart.pl @params),
