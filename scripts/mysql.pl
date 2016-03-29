@@ -8,7 +8,7 @@ use List::Util 'min';
 # Sheldon McKay <sheldon.mckay@gmail.com>
 
 use constant MAXCPU => 200;
-use constant MAXCON => 50;
+use constant MAXCON => 150;
 use constant PID => '/var/run/mysqld/mysqld.pid';
 
 # You need to be root to run this script!
@@ -39,7 +39,7 @@ my $connections = get_mysql_connections();
 report("MySQL Server: $cpu_usage\% CPU; $connections active connections.");
 
 if ($connections > MAXCON) {
-    push @reasons, "Too many connections";
+    push @reasons, "Because $connections connections is too many";
 }
 
 if ($cpu_usage > MAXCPU) {
