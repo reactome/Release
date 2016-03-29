@@ -11,6 +11,12 @@
 <body>
   <div id="pancancer-header"></div>
   <div class="content">
+    <h2 class="header1">MySQL Server load (last 6 hours)</h2>
+    <div id="chart00"></div>
+    <br clear="all">
+    <h2 class="header1">Web site usage (last 6 hours)</h2>
+    <p style="margin-top:-18px;font-size:small">Web site components with > 20 hits/minute</p>
+    <div id="chart0"></div>
     <h2 class="header1">MySQL Server load (last 24 hours)</h2>
     <div id="chart1"></div>
     <br clear="all">
@@ -26,6 +32,8 @@
   </div>
   <script type="text/javascript">
       $('document').ready(function(){
+      drawChart00();
+      drawChart0();
       drawChart1();
       drawChart2();
       drawChart3();
