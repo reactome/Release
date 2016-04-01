@@ -224,7 +224,7 @@ sub get_rows_from_protein {
     return unless $taxon;
     return if $taxon ~~ get_microbial_species_to_exclude();
 	
-    my $reference_record = get_prot_reference($catalyst_activity);
+    my @references = get_prot_reference($catalyst_activity);
     my @rows;
     foreach my $go (@{$go_accessions}) {
         my $accession = $go->{'accession'};
@@ -232,9 +232,11 @@ sub get_rows_from_protein {
         
         my $event_with_accession = $go->{'event'} || $event;
         
-        my $evidence_code = get_annotation_dispatch_table()->{$ontology_letter}->{'evidence_code'}->($reference_record);
-        
-        push @rows, get_row($DB, $uni, $object_symbol, '', "GO:$accession", $reference_record->[1] || get_reaction_id($event_with_accession), $evidence_code, '', $ontology_letter, '', '', $object_type, "taxon:$taxon");
+        my $evidence_code = get_annotation_dispatch_table()->{$ontology_letter}->{'evidence_code'}->(\@references);
+        my @identifiers = (@references) ? @references : (get_reaction_id($event_with_accession));
+        foreach my $identifier (@identifiers) {
+            push @rows, get_row($DB, $uni, $object_symbol, '', "GO:$accession", $identifier, $evidence_code, '', $ontology_letter, '', '', $object_type, "taxon:$taxon");
+        }
     }
     return @rows;
 }
@@ -362,9 +364,9 @@ sub get_annotation_dispatch_table {
                 ];
 			},
 			'evidence_code' => sub {
-				my $reference = shift;
+				my $references = shift;
                 
-                return $reference->[0];
+                return (grep { defined } @{$references}) ? 'EXP' : 'TAS';
 			}
 		},
         'P' => {
@@ -415,31 +417,8 @@ sub get_prot_reference {
 	my $prot = shift;
     
     return unless $prot;
-
-    my @pubmed_identifiers = map { "PMID:" . $_->PubMedIdentifier->[0] } (@{$prot->LiteratureReference});
-	return ["EXP", join('|', @pubmed_identifiers)];
+    return map { "PMID:" . $_->PubMedIdentifier->[0] } (@{$prot->LiteratureReference});
 }
-
-sub check_reference {  #if a reaction has only one lit-ref, the code used is EXP plus the pubmed id. If more than one or no litrefs are attached, the code is TAS and the Reactome stable id is given as reference
-    my ($ev) = @_;
-    if ($ev->LiteratureReference->[1] || !$ev->LiteratureReference->[0]) {
-		return "TAS", "REACTOME:".$ev->StableIdentifier->[0]->Identifier->[0];
-		return "TAS", get_stable_identifier($ev);
-    } else {
-		my $pubmed = $ev->LiteratureReference->[0]->PubMedIdentifier->[0];
-		$pubmed || return "TAS", "REACTOME:".$ev->StableIdentifier->[0]->Identifier->[0]; #this is probably a book reference that doesn't have a pubmed id - use TAS evidence code for now
-		return "EXP", "PMID:".$pubmed;
-    }
-}
-
-=head
-Obs - only needed for the first time
-sub get_stable_identifier {
-    my ($ev) = @_;
-    my $ev2 = $dbc->fetch_instance_by_db_id($ev->db_id, $ev->class)->[0];
-    return $ev2->StableIdentifier->[0]->Identifier->[0].".".$ev2->StableIdentifier->[0]->IdentifierVersion->[0];
-}
-=cut
 
 sub find_proteins {
     my ($rxn) = @_;
