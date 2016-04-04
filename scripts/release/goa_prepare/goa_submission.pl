@@ -229,6 +229,7 @@ sub get_rows_from_protein {
     foreach my $go (@{$go_accessions}) {
         my $accession = $go->{'accession'};
         next unless $accession;
+        next if $accession eq "0005515"; # skip protein binding annotations because they require an "IPI" evidence code
         
         my $event_with_accession = $go->{'event'} || $event;
         
