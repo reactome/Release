@@ -79,6 +79,7 @@ perl -pe 's/^.+(\/content\/[A-Za-z]+)\b.+$/$1/' $year\_search.txt |
 perl -pe 's/^.+\/content\/?\s+.+$/\//' | sort | uniq -c | sort -nr > $year\_search_breakdown.txt
 echo completed $year\_search_breakdown.txt
 
+# Unique IPs for search
 cut -f1 -d' ' $year\_search.txt | sort | uniq -c | sort -nr > $year\_search_hits_by_ip.txt
 echo completed $year\_search_hits_by_ip.txt
 
