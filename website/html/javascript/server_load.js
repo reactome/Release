@@ -65,17 +65,6 @@ function drawChart0() {
     }
 
     var options = {
-        vAxes: {0: {viewWindowMode:'explicit',
-                    gridlines: {color: 'transparent'},
-                    format:"decimal"
-                   },
-                1: {
-                    gridlines: {color: 'transparent'},
-                },
-               },
-        series: {0:{targetAxisIndex:0},
-                 1:{targetAxisIndex:1}
-                },
         hAxis: {slantedText: true, slantedTextAngle: 45},
         legend: { position: 'top'},
         width: 1000,
@@ -109,6 +98,7 @@ function drawChart00() {
     chart_data.addColumn('string', 'Date');
     chart_data.addColumn('number', '% CPU');
     chart_data.addColumn('number', 'connections');
+    chart_data.addColumn('number', 'restarts');
 
     for (var i = 0; i < data.length; i++) {
         date = data[i][0];
@@ -121,28 +111,35 @@ function drawChart00() {
 
         cpu  = parseFloat(data[i][1]);
         conn = parseInt(data[i][2]);
-        chart_data.addRow([date,cpu,conn]);
+	if (cpu == 0 && conn == 150) {
+	    chart_data.addRow([date,null,null,150]);
+	}
+	else {
+            chart_data.addRow([date,cpu,conn,null]);
+	}
     }
 
     var options = {
         vAxes: {0: {viewWindowMode:'explicit',
                     gridlines: {color: 'transparent'},
-                    format: 'decimal'
+                    format: 'decimal',
+		    viewWindow: {min: 0, max: 50}
                    },
                 1: {
                     gridlines: {color: 'transparent'},
                 },
                },
-        series: {0:{targetAxisIndex:0},
-                 1:{targetAxisIndex:1}
+        series: {0:{targetAxisIndex:0, color: 'blue'},
+                 1:{targetAxisIndex:1, pointShape: 'circle', color: 'green'},
+                 2:{targetAxisIndex:1, pointShape: 'star', pointSize: 15, lineWidth: 0, color: 'red'},
                 },
         hAxis: {slantedText: true, slantedTextAngle: 45},
         legend: { position: 'top'},
         width: 1000,
-        height: 275,
+        height: 400,
         pointSize: 5,
         theme: 'material',
-        chartArea:{left:50,top:50,height:'80%'}
+        chartArea:{left:50,top:50,height:'70%'}
     };
 
     $('#chart00').empty();
@@ -171,43 +168,48 @@ function drawChart1() {
     chart_data.addColumn('string', 'Date');
     chart_data.addColumn('number', '% CPU');
     chart_data.addColumn('number', 'connections');
+    chart_data.addColumn('number', 'restarts');
 
     for (var i = 0; i < data.length; i++) {
         date = data[i][0];
-	var stuff = date.split(' ');
-	//times = stuff[3].split(':');
-	times = stuff.pop().split(':');
-	times.pop();
-	time  = times.join(':');
-	date = stuff[0] + ' ' + time;
+        var stuff = date.split(' ');
 
-	cpu  = parseFloat(data[i][1]);
-	conn = parseInt(data[i][2]);
-        chart_data.addRow([date,cpu,conn]);
+        times = stuff.pop().split(':');
+        times.pop();
+        time  = times.join(':');
+        date = stuff[0] + ' ' + time;
+
+        cpu  = parseFloat(data[i][1]);
+        conn = parseInt(data[i][2]);
+        if (cpu == 0 && conn == 150) {
+            chart_data.addRow([date,null,null,150]);
+        }
+        else {
+            chart_data.addRow([date,cpu,conn,null]);
+        }
     }
 
     var options = {
-	//title: 'MySQL server load',
-	vAxes: {0: {viewWindowMode:'explicit',
+        vAxes: {0: {viewWindowMode:'explicit',
                     gridlines: {color: 'transparent'},
-		    //title: '% CPU usage',
-		    format:'decimal'
+                    format: 'decimal',
+                    viewWindow: {min: 0, max: 50}
                    },
                 1: {
-		    gridlines: {color: 'transparent'},
-		    //title: 'connections'
-		   },
+                    gridlines: {color: 'transparent'},
+                },
                },
-        series: {0:{targetAxisIndex:0},
-                 1:{targetAxisIndex:1}
+        series: {0:{targetAxisIndex:0, color: 'blue'},
+                 1:{targetAxisIndex:1, pointShape: 'circle', color: 'green'},
+                 2:{targetAxisIndex:1, pointShape: 'star', pointSize: 15, lineWidth: 0, color: 'red'},
                 },
         hAxis: {slantedText: true, slantedTextAngle: 45},
         legend: { position: 'top'},
         width: 1000,
-        height: 275,
+        height: 400,
         pointSize: 5,
-	theme: 'material',
-        chartArea:{left:50,top:50,height:'80%'}
+        theme: 'material',
+        chartArea:{left:50,top:50,height:'70%'}
     };
 
     $('#chart1').empty();
@@ -234,38 +236,46 @@ function drawChart3() {
     chart_data.addColumn('string', 'Date');
     chart_data.addColumn('number', '% CPU');
     chart_data.addColumn('number', 'connections');
+    chart_data.addColumn('number', 'restarts');
 
     for (var i = 0; i < data.length; i++) {
         date = data[i][0];
         var stuff = date.split(' ');
-        //times = stuff[3].split(':');
+
         times = stuff.pop().split(':');
-	times.pop();
+        times.pop();
         time  = times.join(':');
         date = stuff[0] + ' ' + time;
 
         cpu  = parseFloat(data[i][1]);
         conn = parseInt(data[i][2]);
-        chart_data.addRow([date,cpu,conn]);
+        if (cpu == 0 && conn == 150) {
+            chart_data.addRow([date,null,null,150]);
+        }
+        else {
+            chart_data.addRow([date,cpu,conn,null]);
+        }
     }
 
     var options = {
         vAxes: {0: {viewWindowMode:'explicit',
                     gridlines: {color: 'transparent'},
-                    format:"decimal"
+                    format: 'decimal',
+                    viewWindow: {min: 0, max: 50}
                    },
                 1: {
                     gridlines: {color: 'transparent'},
                 },
                },
-        series: {0:{targetAxisIndex:0},
-                 1:{targetAxisIndex:1}
+        series: {0:{targetAxisIndex:0, color: 'blue'},
+                 1:{targetAxisIndex:1, pointShape: 'circle', color: 'green'},
+                 2:{targetAxisIndex:1, pointShape: 'star', pointSize: 15, lineWidth: 0, color: 'red'},
                 },
         hAxis: {slantedText: true, slantedTextAngle: 45},
         legend: { position: 'top'},
         width: 1000,
         height: 400,
-        pointSize: 2,
+        pointSize: 5,
         theme: 'material',
         chartArea:{left:50,top:50,height:'70%'}
     };
