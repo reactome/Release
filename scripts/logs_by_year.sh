@@ -83,5 +83,22 @@ echo completed $year\_search_breakdown.txt
 cut -f1 -d' ' $year\_search.txt | sort | uniq -c | sort -nr > $year\_search_hits_by_ip.txt
 echo completed $year\_search_hits_by_ip.txt
 
-echo Done!
+# get the PathwayBrowser hits
+echo "Processing PathwayBrowser..."
+grep '/PathwayBrowser' $year\_transfer_log.txt |grep -v '\.png\|\.gif\|favicon\|javascript' > $year\_PathwayBrowser.txt
+echo completed $year\_PathwayBrowser.txt
+
+# get the counted, unique IPs
+cut -f1 -d' ' $year\_PathwayBrowser.txt | sort | uniq -c | sort -nr > $year\_PathwayBrowser_hits_by_ip.txt
+echo completed $year\_PathwayBrowser_hits_by_ip.txt
+
+# Break down the PathwayBrowser hits
+perl -pe 's/^.+(PathwayBrowser\/[^\/ \%]+).+$/$1/' $year\_PathwayBrowser.txt | \
+perl -pe 's!.+/PathwayBrowser/?.+$!/!' | grep -v  'content/detail' | \
+perl -pe 's!\#?R-[A-Z]\S+|\#?REACT_\S+!\#Stable_id!g' | \
+perl -pe 's!PathwayBrowser/!/!' | sort  | \
+uniq -c |sort -nr  > $year\_PathwayBrowser_breakdown.txt
+echo completed $year\_PathwayBrowser_breakdown.txt
+
+echo "Done!"
 exit
