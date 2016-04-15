@@ -1,0 +1,90 @@
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans|Raleway' rel='stylesheet' type='text/css'>
+	<style>
+	  html, body, #map-canvas {
+	    height: 100%;
+	    margin: 0px;
+	    padding: 0px;
+	    font-family: 'Raleway', sans-serif;
+	    z-index: 1;
+	  }
+
+	  .linkbar {
+	    font-size:small;
+          }
+
+	  #draggable {
+	    z-index:100; 
+	    background-color: rgba(200,200,255,.7); 
+	    width: 180px;
+	    padding: 20px;
+	    position:absolute;
+	    top:40px;
+	    right:5px;
+	    cursor: move;
+	    border: black 1px solid;
+	  }
+
+	  #radius-label, #opacity-label, #max-label {
+	    margin-top: 10px;
+	  }
+
+	  #radius-slider, #opacity-slider, #max-slider {
+	    width:150px;
+	    margin-top: 10px;
+	  }
+
+	  #project {
+	    font-size: 10pt;
+	    font-weight: bold;
+	    margin-bottom: 10px;
+	  }
+
+	  #radius-slider .ui-slider-handle, 
+	  #opacity-slider .ui-slider-handle,
+	  #max-slider .ui-slider-handle {
+	    cursor:pointer;
+	  }
+  </style>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=visualization&key=AIzaSyDNNmyYSS6rEXKADTyzDRPl0xd0SSdDnZA"></script>
+  <script src="https://code.jquery.com/jquery-git2.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+  <script src="/who/heatmap.js"></script>
+  <script type="text/javascript">
+  function loadHeatmapData() {
+      CSV_DATA // Data will be inserted here
+
+      $("#max-label").html("max: "+numberWithCommas(max));
+      $("#max-slider").slider("option","max",max);
+      $("#max-slider").slider("option","value",max);
+
+      loadHeatmap(csv);
+}
+  </script>
+</head>
+<body>
+
+  <div id="map-canvas"> </div>
+  <div id="draggable">
+    <div class="linkbar">
+      <pre style="margin-top:-10px">TIME_STAMP</pre>
+      <a href="/who/now.html">now</a> |
+      <a href="/who/hour.html">hour</a> | 
+      <a href="/who/day.html">day</a> |
+      <a href="/who/month.html">month</a> |
+      <a href="/who/year.html">year</a>
+    </div><br>
+    <a href="javascript:changeGradient()" class="linkbar">change color gradient</a>
+    <div id="radius-label">radius: 10</div>
+    <div id="radius-slider"></div>
+    
+    <div id="opacity-label">opacity: 0.5</div>
+    <div id="opacity-slider"></div>
+    
+    <div id="max-label">max: -</div>
+    <div id="max-slider"></div>
+  </div>
+  
+</body>
+

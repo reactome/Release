@@ -47,8 +47,9 @@ function drawChart0() {
         site_counts = data[i][1];
 
         var stuff = date.split(' ');
-        times = stuff[3].split(':');
-        times.pop();
+        //times = stuff[4].split(':');
+        times = stuff.pop().split(':');
+	times.pop();
         time  = times.join(':');
         date = stuff[0] + ' ' + time;
 
@@ -64,17 +65,16 @@ function drawChart0() {
     }
 
     var options = {
-         vAxis: {title:'hits/10 min', viewWindow: {min: 0, max: 1500}},
         hAxis: {slantedText: true, slantedTextAngle: 45},
         legend: { position: 'top'},
         width: 1000,
-        height: 325,
-        pointSize: 5,
+	height: 400,
+        pointSize: 2,
         theme: 'material',
-        chartArea:{left:50,top:50,height:'65%'}
+        chartArea:{left:50,top:50,height:'70%'}
     };
 
-    $('#chart2').empty();
+    $('#chart0').empty();
     var chart = new google.visualization.LineChart(document.getElementById('chart0'));
     chart.draw(chart_data, options);
 }
@@ -96,44 +96,53 @@ function drawChart00() {
 
     var chart_data = new google.visualization.DataTable();
     chart_data.addColumn('string', 'Date');
-    chart_data.addColumn('number', 'CPU');
+    chart_data.addColumn('number', '% CPU');
     chart_data.addColumn('number', 'connections');
+    chart_data.addColumn('number', 'restarts');
 
     for (var i = 0; i < data.length; i++) {
         date = data[i][0];
         var stuff = date.split(' ');
-        times = stuff[3].split(':');
-        times.pop();
+        //times = stuff[3].split(':');
+        times = stuff.pop().split(':');
+	times.pop();
         time  = times.join(':');
         date = stuff[0] + ' ' + time;
 
-        cpu  = parseFloat(data[i][1])/100;
+        cpu  = parseFloat(data[i][1]);
         conn = parseInt(data[i][2]);
-        chart_data.addRow([date,cpu,conn]);
+	if (cpu == 0 && conn == 150) {
+	    chart_data.addRow([date,null,null,150]);
+	}
+	else {
+            chart_data.addRow([date,cpu,conn,null]);
+	}
     }
 
     var options = {
         vAxes: {0: {viewWindowMode:'explicit',
                     gridlines: {color: 'transparent'},
-                    format:"#%"
+                    format: 'decimal',
+		    viewWindow: {min: 0, max: 50}
                    },
                 1: {
                     gridlines: {color: 'transparent'},
                 },
                },
-        series: {0:{targetAxisIndex:0},
-                 1:{targetAxisIndex:1}
+        series: {0:{targetAxisIndex:0, color: 'blue'},
+                 1:{targetAxisIndex:1, pointShape: 'circle', color: 'green'},
+                 2:{targetAxisIndex:1, pointShape: 'star', pointSize: 15, lineWidth: 0, color: 'red'},
                 },
         hAxis: {slantedText: true, slantedTextAngle: 45},
         legend: { position: 'top'},
         width: 1000,
-        height: 275,
+        height: 400,
         pointSize: 5,
         theme: 'material',
-        chartArea:{left:50,top:50,height:'80%'}
+        chartArea:{left:50,top:50,height:'70%'}
     };
 
-    $('#chart1').empty();
+    $('#chart00').empty();
     var chart = new google.visualization.LineChart(document.getElementById('chart00'));
     chart.draw(chart_data, options);
 }
@@ -157,44 +166,50 @@ function drawChart1() {
 
     var chart_data = new google.visualization.DataTable();
     chart_data.addColumn('string', 'Date');
-    chart_data.addColumn('number', 'CPU');
+    chart_data.addColumn('number', '% CPU');
     chart_data.addColumn('number', 'connections');
+    chart_data.addColumn('number', 'restarts');
 
     for (var i = 0; i < data.length; i++) {
         date = data[i][0];
-	var stuff = date.split(' ');
-	times = stuff[3].split(':');
-	times.pop();
-	time  = times.join(':');
-	date = stuff[0] + ' ' + time;
+        var stuff = date.split(' ');
 
-	cpu  = parseFloat(data[i][1])/100;
-	conn = parseInt(data[i][2]);
-        chart_data.addRow([date,cpu,conn]);
+        times = stuff.pop().split(':');
+        times.pop();
+        time  = times.join(':');
+        date = stuff[0] + ' ' + time;
+
+        cpu  = parseFloat(data[i][1]);
+        conn = parseInt(data[i][2]);
+        if (cpu == 0 && conn == 150) {
+            chart_data.addRow([date,null,null,150]);
+        }
+        else {
+            chart_data.addRow([date,cpu,conn,null]);
+        }
     }
 
     var options = {
-	//title: 'MySQL server load',
-	vAxes: {0: {viewWindowMode:'explicit',
+        vAxes: {0: {viewWindowMode:'explicit',
                     gridlines: {color: 'transparent'},
-		    //title: '% CPU usage',
-		    format:"#%"
+                    format: 'decimal',
+                    viewWindow: {min: 0, max: 50}
                    },
                 1: {
-		    gridlines: {color: 'transparent'},
-		    //title: 'connections'
-		   },
+                    gridlines: {color: 'transparent'},
+                },
                },
-        series: {0:{targetAxisIndex:0},
-                 1:{targetAxisIndex:1}
+        series: {0:{targetAxisIndex:0, color: 'blue'},
+                 1:{targetAxisIndex:1, pointShape: 'circle', color: 'green'},
+                 2:{targetAxisIndex:1, pointShape: 'star', pointSize: 15, lineWidth: 0, color: 'red'},
                 },
         hAxis: {slantedText: true, slantedTextAngle: 45},
         legend: { position: 'top'},
         width: 1000,
-        height: 275,
+        height: 400,
         pointSize: 5,
-	theme: 'material',
-        chartArea:{left:50,top:50,height:'80%'}
+        theme: 'material',
+        chartArea:{left:50,top:50,height:'70%'}
     };
 
     $('#chart1').empty();
@@ -219,42 +234,48 @@ function drawChart3() {
 
     var chart_data = new google.visualization.DataTable();
     chart_data.addColumn('string', 'Date');
-    chart_data.addColumn('number', 'CPU');
+    chart_data.addColumn('number', '% CPU');
     chart_data.addColumn('number', 'connections');
+    chart_data.addColumn('number', 'restarts');
 
     for (var i = 0; i < data.length; i++) {
         date = data[i][0];
         var stuff = date.split(' ');
-        times = stuff[3].split(':');
+
+        times = stuff.pop().split(':');
         times.pop();
         time  = times.join(':');
         date = stuff[0] + ' ' + time;
 
-        cpu  = parseFloat(data[i][1])/100;
+        cpu  = parseFloat(data[i][1]);
         conn = parseInt(data[i][2]);
-        chart_data.addRow([date,cpu,conn]);
+        if (cpu == 0 && conn == 150) {
+            chart_data.addRow([date,null,null,150]);
+        }
+        else {
+            chart_data.addRow([date,cpu,conn,null]);
+        }
     }
 
     var options = {
-        //title: 'MySQL server load',                                                                                                                                                                                                         
         vAxes: {0: {viewWindowMode:'explicit',
                     gridlines: {color: 'transparent'},
-                    //title: '% CPU usage',                                                                                                                                                                                                   
-                    format:"#%"
+                    format: 'decimal',
+                    viewWindow: {min: 0, max: 50}
                    },
                 1: {
                     gridlines: {color: 'transparent'},
-                    //title: 'connections'                                                                                                                                                                                                    
                 },
                },
-        series: {0:{targetAxisIndex:0},
-                 1:{targetAxisIndex:1}
+        series: {0:{targetAxisIndex:0, color: 'blue'},
+                 1:{targetAxisIndex:1, pointShape: 'circle', color: 'green'},
+                 2:{targetAxisIndex:1, pointShape: 'star', pointSize: 15, lineWidth: 0, color: 'red'},
                 },
         hAxis: {slantedText: true, slantedTextAngle: 45},
         legend: { position: 'top'},
         width: 1000,
         height: 400,
-        pointSize: 2,
+        pointSize: 5,
         theme: 'material',
         chartArea:{left:50,top:50,height:'70%'}
     };
@@ -311,8 +332,9 @@ function drawChart2() {
 	site_counts = data[i][1];
 
         var stuff = date.split(' ');
-        times = stuff[3].split(':');
-        times.pop();
+        //times = stuff[4].split(':');
+        times = stuff.pop().split(':');
+	times.pop();
         time  = times.join(':');
         date = stuff[0] + ' ' + time;
 
@@ -392,8 +414,8 @@ function drawChart4() {
         site_counts = data[i][1];
 
         var stuff = date.split(' ');
-        times = stuff[3].split(':');
-        times.pop();
+        //times = stuff[4].split(':');
+        times = stuff.pop().split(':');
         time  = times.join(':');
         date = stuff[0] + ' ' + time;
 
