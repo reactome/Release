@@ -37,6 +37,11 @@ while (<MLOG>) {
 
     next if $age > 24*3600*2;
 
+    if (/restart/) {
+	push @$mysql, [$stamp,0,150];
+	next;
+    }
+
     my ($cpu,$conn) = /([.0-9]+)% CPU; (\d+) active connections/;
     $stamp =~ s/\s+\d+$//;
     push @$mysql, [$stamp,$cpu,$conn];
