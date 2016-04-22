@@ -1,0 +1,31 @@
+#!/usr/local/bin/perl
+
+use lib '/usr/local/gkb/modules';
+
+umask(002);
+
+use strict;
+use CGI qw(:standard);
+use GKB::DBAdaptor;
+use GKB::PrettyInstance;
+use GKB::WebUtils;
+use GKB::Config;
+use Data::Dumper;
+use Carp;
+use GKB::FrontPage3;
+
+
+my $front_page = GKB::FrontPage3->new("$PROJECT_NAME (User Map)", "/stylesheet.css");
+my $header = $front_page->get_header();
+my $footer = $front_page->get_footer();
+my $enclosing_div_start = $front_page->get_enclosing_div_start();
+my $enclosing_div_end = $front_page->get_enclosing_div_end();
+
+
+$NO_SCHEMA_VALIDITY_CHECK = 1;
+
+my ($CGI,$DB,$WU,$DBA);
+
+
+print header(-charset => 'UTF-8');
+print $header, '<iframe src="/who/hour.html" width="100%" height="500px"></iframe>', $footer;
