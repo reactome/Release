@@ -3,6 +3,7 @@ use common::sense;
 use Getopt::Long;
 use Data::Dumper;
 use List::Util 'min';
+use Try::Tiny;
 
 # A script to monitor/restart the mysql server
 # Sheldon McKay <sheldon.mckay@gmail.com>
@@ -34,13 +35,21 @@ my @reasons;
 
 my $mpid = get_mpid();
 my $cpu_usage = get_cpu_usage($mpid);
-my $connections = get_mysql_connections();
+my $connections;
+
+try {
+    $connections = get_mysql_connections();
+} catch {
+    push @reasons, "Unable to get number of connections";
+    $connections = 0;
+};
 
 report("MySQL Server: $cpu_usage\% CPU; $connections active connections.");
 
 if ($connections > MAXCON) {
     push @reasons, "Because $connections connections is too many";
 }
+
 
 if ($cpu_usage > MAXCPU) {
     push @reasons, "Too much CPU usage";
@@ -82,7 +91,7 @@ sub start_mysql {
     my $log = shift;
     system "/etc/init.d/mysql start >> $log 2>&1";
     system "cat $log";
-    system "cat $log | mail -s 'MYSQL RESTART ALERT' sheldon.mckay\@gmail.com";
+    system "cat $log | mail -s 'MYSQL RESTART ALERT' reactome-developer\@reactome.org";
     unlink $log;
 }
 
@@ -109,6 +118,8 @@ sub get_mysql_connections {
     #print STDERR "mysqladmin -uroot -p$passwd processlist";
     my $connections = `mysqladmin -uroot -p$passwd processlist | wc -l`;
     chomp $connections;
+    die unless (defined $connections) && $connections =~ /^\d+$/;
+    
     return $connections;
 }
 
