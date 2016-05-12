@@ -47,30 +47,20 @@ my $outdated_molecule_identifier_counter = 0;
 $dba->execute('START TRANSACTION');
 foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	$reference_molecule = $dba->fetch_instance_by_db_id($reference_molecule_db_id)->[0];
-	if (!(defined $reference_molecule)) {
-		next;
-	}	
-#	print STDERR "$0: reference_molecule=$reference_molecule\n";
+	next unless $reference_molecule;
+    next unless $reference_molecule->referenceDatabase->[0] &&
+                $reference_molecule->referenceDatabase->[0]->displayName =~ /ChEBI/;
 
 	$identifier = $reference_molecule->identifier->[0];
-	if (!(defined $identifier) || $identifier eq '') {
-		next;
-	}
-	
-#	print STDERR "$0: identifier=$identifier\n";
+	next unless $identifier;
 
 	$molecule_identifier_counter++;
 
 	($up_to_date_identifier, $chebi_name) = $chebi->get_up_to_date_identifier_and_name($identifier);
-	
-	if (!(defined $up_to_date_identifier)) {
-		next;
-	}
+	next unless $up_to_date_identifier;
 	
 	$up_to_date_identifier =~ s/^CHEBI://;
 	
-#	print STDERR "$0: old identifier: $identifier, new identifier: $up_to_date_identifier\n";
-
 	if ($chebi_name) {
 		my @simple_entities = @{$reference_molecule->reverse_attribute_value('referenceEntity')};
 		foreach my $simple_entity (@simple_entities) {
