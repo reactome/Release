@@ -49,33 +49,33 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	$reference_molecule = $dba->fetch_instance_by_db_id($reference_molecule_db_id)->[0];
 	if (!(defined $reference_molecule)) {
 		next;
-	}	
+	}
 #	print STDERR "$0: reference_molecule=$reference_molecule\n";
 
 	$identifier = $reference_molecule->identifier->[0];
 	if (!(defined $identifier) || $identifier eq '') {
 		next;
 	}
-	
+
 #	print STDERR "$0: identifier=$identifier\n";
 
 	$molecule_identifier_counter++;
 
-	($up_to_date_identifier, $chebi_name) = $chebi->get_up_to_date_identifier_and_name($identifier);
-	
+	($up_to_date_identifier, $chebi_name, $chebi_formula) = $chebi->get_up_to_date_identifier_name_formulae($identifier);
+
 	if (!(defined $up_to_date_identifier)) {
 		next;
 	}
-	
+
 	$up_to_date_identifier =~ s/^CHEBI://;
-	
+
 #	print STDERR "$0: old identifier: $identifier, new identifier: $up_to_date_identifier\n";
 
 	if ($chebi_name) {
 		my @simple_entities = @{$reference_molecule->reverse_attribute_value('referenceEntity')};
 		foreach my $simple_entity (@simple_entities) {
 			my @names = @{$simple_entity->name};
-			
+
 			if (lc $names[0] eq lc $reference_molecule->name->[0]) {
 				my $index = get_index($chebi_name, \@names);
 				next if $index == 0;
@@ -83,29 +83,29 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 				unshift @names, $chebi_name;
 			} else {
 				next if $names[1] && lc $names[1] eq lc $chebi_name && $names[2] && lc $names[2] eq lc $reference_molecule->name->[0];
-				
+
 				my $index = get_index($chebi_name, \@names);
 				splice @names, $index, 1 if $index != -1;
-				splice @names, 1, 0, $chebi_name; 
-				
+				splice @names, 1, 0, $chebi_name;
+
 				$index = get_index($reference_molecule->name->[0], \@names);
 				splice @names, $index, 1 if $index != -1;
 				$#names >= 2 ?
 					splice @names, 2, 0, $reference_molecule->name->[0] :
 					push @names, $reference_molecule->name->[0];
 			}
-			
+
 			$simple_entity->name(undef);
 			$simple_entity->name(@names);
 			$dba->update_attribute($simple_entity, "name");
 			print 'Simple entity ' . $simple_entity->db_id . ':' . $simple_entity->_displayName->[0] . " names updated\n";
 		}
 	}
-	
+
 	if ($identifier eq $up_to_date_identifier && $reference_molecule->name->[0] eq $chebi_name) {
 		next;
 	}
-		
+
 	my $report_line = "$0: old name: " . $reference_molecule->name->[0] . " ($identifier), new name: $chebi_name ($up_to_date_identifier)\n";
 	if ($identifier eq $up_to_date_identifier &&
 	    lc $reference_molecule->name->[0] eq lc $chebi_name) {
@@ -113,23 +113,26 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	} else {
 		print OUT $report_line;
 	}
-	
-	
+
+
 	# Apply the correction to the database
 	$reference_molecule->identifier(undef);
 	$reference_molecule->name(undef);
 	$reference_molecule->identifier($up_to_date_identifier);
 	$reference_molecule->name($chebi_name);
+    $reference_molecule->formula(undef);
+    $reference_molecule->formula($chebi_formula);
 	$dba->update_attribute($reference_molecule, "identifier");
 	$dba->update_attribute($reference_molecule, "name");
-	
+    $dba->update_attribute($reference_molecule, "formula");
+
 	my $display_name = "$chebi_name [ChEBI:$up_to_date_identifier]";
 	$reference_molecule->_displayName(undef);
 	$reference_molecule->_displayName($display_name);
-	$dba->update_attribute($reference_molecule, "_displayName");		
-	
+	$dba->update_attribute($reference_molecule, "_displayName");
+
 	$outdated_molecule_identifier_counter++;
-	
+
 }
 $dba->execute('COMMIT');
 
@@ -143,7 +146,7 @@ sub get_index {
 	my $ar_ref = shift;
 	my @array = @$ar_ref;
 	$_=lc($_) for @array;
-		
+
 	my %index;
 	@index{@array} = (0..$#array);
 	return $index{lc($search)} // -1;
