@@ -6,6 +6,7 @@ use lib '/usr/local/gkb/modules';
 
 use autodie qw/:all/;
 use Getopt::Long;
+Getopt::Long::Configure("pass_through");
 
 use GKB::Config;
 use GKB::DBAdaptor;
@@ -14,15 +15,24 @@ use GKB::DBAdaptor;
 #Log::Log4perl->init(\$LOG_CONF);
 #my $logger = get_logger(__PACKAGE__);
 
-my $help;
-GetOptions('help' => \$help);
+my ($db, $help);
+GetOptions(
+    'db=s' => \$db,
+    'help' => \$help
+);
+
+if (@ARGV) {
+    die "\"@ARGV\" are invalid options.  Please see usage instructions:\n\n" . usage_instructions();
+}
 
 if ($help) {
     print usage_instructions();
     exit;
 }
 
-my $dba = get_dba();
+$db ||= $GKB::Config::GK_DB_NAME;
+print "Checking $db\n";
+my $dba = get_dba($db);
 
 my @stable_identifier_instances = @{$dba->fetch_instance(-CLASS => 'StableIdentifier')};
 my %unique_stable_ids;
@@ -56,10 +66,11 @@ report("$0 has finished");
 close $out;
 
 sub get_dba {
+    my $db = shift;
     return GKB::DBAdaptor->new (
-	-user => $GKB::Config::GK_DB_USER,
-	-pass => $GKB::Config::GK_DB_PASS,
-	-dbname => $GKB::Config::GK_DB_NAME
+        -user => $GKB::Config::GK_DB_USER,
+        -pass => $GKB::Config::GK_DB_PASS,
+        -dbname => $db
     );
 }
 
@@ -73,15 +84,23 @@ sub report {
 
 sub usage_instructions {
     return <<END;
-For all stable identifiers in $GKB::Config::GK_DB_NAME, the following
-types of issues will be reported:
+For all stable identifiers in a database (default is $GKB::Config::GK_DB_NAME),
+the following types of issues will be reported:
 
 A stable id instance has an empty identifier slot
 A stable id is duplicated
 A stable id is used by more than one instance in the database
 A stable id is not used
 
-Usage: perl $0
+The output file will be the name of this script with
+a .txt extension.
+
+Usage: perl $0 [options]
+
+Options:
+
+-db [db_name]   Source database (default is $GKB::Config::GK_DB_NAME)
+-help           Display these instructions
 
 END
 }
