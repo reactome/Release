@@ -72,6 +72,8 @@ my %st_id_classes = map {$_ => 1} classes_with_stable_ids();
 # Get list of all instances that have or need ST_IDs
 my @db_ids = get_db_ids($release_db);
 
+get_api_connections()->{$release_db}->execute("START TRANSACTION");
+get_api_connections()->{$gk_central}->execute("START TRANSACTION") if $gk_central;
 # Evaluate each instance
 for my $db_id (@db_ids) {
     my $instance   = get_instance($db_id, $release_db);
@@ -81,6 +83,8 @@ for my $db_id (@db_ids) {
 
     $logger->info(join("\t","STABLE_ID",$db_id,$class,$name,$stable_id->displayName)."\n");
 }
+get_api_connections()->{$release_db}->execute("COMMIT");
+get_api_connections()->{$gk_central}->execute("COMMIT") if $gk_central;
 
 sub back_up_databases {
     my @dbs = @_;
