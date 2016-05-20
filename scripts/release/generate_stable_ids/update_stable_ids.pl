@@ -63,6 +63,8 @@ back_up_databases(
     [$user, $pass, $release_db, 'localhost']
 );
 
+get_api_connections()->{$release_db}->execute("START TRANSACTION");
+get_api_connections()->{$gk_central}->execute("START TRANSACTION");
 # Evaluate each instance
 for my $db_id (get_db_ids($release_db)) {
     my $instance   = get_instance($db_id, $release_db);
@@ -85,6 +87,8 @@ for my $db_id (get_db_ids($release_db)) {
     $logger->info(join("\t","STABLE_ID",$db_id,$class,$name,$stable_id->displayName)."\n");
 }
 remove_orphan_stable_ids();
+get_api_connections()->{$release_db}->execute("COMMIT");
+get_api_connections()->{$gk_central}->execute("COMMIT");
 
 sub is_updated {
     my $instance = shift;
