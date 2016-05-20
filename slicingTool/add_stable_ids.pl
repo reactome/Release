@@ -1,7 +1,10 @@
 #!/usr/local/bin/perl  -w
 use strict;
+
 use common::sense;
 use autodie;
+
+use Carp;
 use Cwd;
 use Getopt::Long;
 use Data::Dumper;
@@ -10,6 +13,8 @@ use Log::Log4perl qw/get_logger/;
 use lib '/usr/local/gkb/modules';
 use GKB::DBAdaptor;
 use GKB::Config;
+use GKB::Instance;
+use GKB::Utils_esther;
 
 # A few bare SQL queries
 use constant DB_IDS => 'SELECT DB_ID FROM DatabaseObject WHERE _class = ?';
@@ -52,19 +57,17 @@ GetOptions(
     "release:i" => \$release_num
     );
 
-$ghost ||= 'localhost';
-($release_db && $prev_release_db && $gk_central && $ghost && $user && $pass && $release_num) || say "$usage\n";
-
+($release_db && $prev_release_db && $user && $pass && $release_num) || say "$usage\n";
 
 # Make sure our requested DBs are slice DBs
 check_db_names();
 
+back_up_databases(
+    [$user, $pass, $gk_central, $ghost],
+    [$user, $pass, $release_db, 'localhost']
+);
+
 my %st_id_classes = map {$_ => 1} classes_with_stable_ids();
-
-
-# DB adaptors
-my %dba = get_api_connections(); 
-
 
 # Get list of all instances that have or need ST_IDs
 my @db_ids = get_db_ids($release_db);
@@ -72,27 +75,55 @@ my @db_ids = get_db_ids($release_db);
 # Evaluate each instance
 for my $db_id (@db_ids) {
     my $instance   = get_instance($db_id, $release_db);
-    my $identifier = identifier($instance);
     my $class      = $instance->class;
     my $name       = $instance->displayName;
-    my $stable_id  = stable_id($instance);
+    my $stable_id  = stable_id($db_id);
 
     $logger->info(join("\t","STABLE_ID",$db_id,$class,$name,$stable_id->displayName)."\n");
+}
+
+sub back_up_databases {
+    my @dbs = @_;
+    
+    foreach my $db (@dbs) {
+        my ($user, $pass, $name, $host) = @$db;
+        next unless $name && $host;
+        $user ||= $GKB::Config::GK_DB_USER;
+        $pass ||= $GKB::Config::GK_DB_PASS;
+        
+        my $back_up_successful = (system("mysqldump -h $host -u $user -p$pass $name > $name.dump") == 0);
+        die "Unable to back-up $db at $host for $user" unless $back_up_successful;
+    }   
 }
 
 # If stable ID exists, return instance.  If not, 
 # create and store new ST_ID instance and return that.
 sub stable_id {
-    my $instance = shift;
-    my $identifier = identifier($instance);
+    my $db_id = shift;
 
-    my $st_id = fetch_stable_id($instance);
+    my $st_id = fetch_stable_id($db_id, $release_db);
 
     unless ( $st_id ) {
-	$st_id = create_stable_id($instance,$identifier,1);
+        $st_id = create_stable_id($db_id, $release_db);
+        create_stable_id($db_id, $gk_central) if $gk_central;
     }
     
     return $st_id;
+}
+
+
+sub get_instance_edit {
+    state $db_to_instance_edit;
+    my $db = shift;
+    
+    return $db_to_instance_edit->{$db} if $db_to_instance_edit->{$db};
+    
+    (my $dba = get_api_connections()->{$db}) // confess "No database adaptor for $db database available to create instance edit";
+    my $date = `date \+\%F`;
+    chomp $date;
+    $db_to_instance_edit->{$db} = GKB::Utils_esther::create_instance_edit($dba, 'Weiser', 'JD', $date);
+        
+    return $db_to_instance_edit->{$db};
 }
 
 sub check_db_names {
@@ -102,34 +133,39 @@ sub check_db_names {
 }
 
 sub get_api_connections {
+    state $api_connections;
+    return $api_connections if $api_connections;
 
     my $r_dba = GKB::DBAdaptor->new(
         -dbname  => $release_db,
         -user    => $user,
         -pass    => $pass
-        );
+    );
 
     my $p_dba = GKB::DBAdaptor->new(
         -dbname  => $prev_release_db,
         -user    => $user,
         -pass    => $pass
-        );
+    );
 
     my $g_dba = GKB::DBAdaptor->new(
         -dbname  => $gk_central,
-        -host    => $ghost || 'localhost',
+        -host    => $ghost,
         -user    => $user,
         -pass    => $pass
-        );
+    ) if $gk_central && $ghost;
 
-    return ( $release_db      => $r_dba,
-             $prev_release_db => $p_dba,
-             $gk_central      => $g_dba,
-        );
+    $api_connections = {
+        $release_db => $r_dba,
+        $prev_release_db => $p_dba,
+        $gk_central => $g_dba,
+    };
+    
+    return $api_connections;
 }
 
 sub get_db_ids {
-    my $sth = $dba{$release_db}->prepare(DB_IDS);
+    my $sth = get_api_connections()->{$release_db}->prepare(DB_IDS);
     my @db_ids;
     for my $class (classes_with_stable_ids()) {
 	$sth->execute($class);
@@ -144,7 +180,12 @@ sub get_db_ids {
 sub get_instance {
     my $db_id = int shift || die "DB_ID must always be an integer";
     my $db    = shift;
-    my $instance = $dba{$db}->fetch_instance_by_db_id($db_id)->[0];
+    
+    state $instance_cache;
+    return $instance_cache->{$db}->{$db_id} if $instance_cache->{$db}->{$db_id};
+    
+    my $instance = get_api_connections()->{$db}->fetch_instance_by_db_id($db_id)->[0];
+    $instance_cache->{$db}->{$db_id} = $instance;
     return $instance;
 }
 
@@ -156,15 +197,6 @@ sub classes_with_stable_ids {
     Reaction BlackBoxEvent PositiveRegulation CandidateSet NegativeRegulation OpenSet Requirement Polymer
     Depolymerisation EntitySet Polymerisation FailedReaction
     /;
-}
-
-# Add the necessary attributes to our stable ID instance 
-sub set_st_id_attributes {
-    my ($instance,$identifier,$version) = @_;
-    $instance->attribute_value('identifier',$identifier);
-    $instance->attribute_value('identifierVersion',$version);
-    $instance->attribute_value('_class','StableIdentifier');
-    $instance->attribute_value('_displayName',"$identifier.$version");
 }
 
 sub identifier {
@@ -209,81 +241,42 @@ sub abbreviate {
 
 # Make a new ST_ID instance from scratch
 sub create_stable_id {
-    my ($instance,$identifier,$version,$db_id) = @_;
+    my $db_id = shift;
+    my $db_name = shift;
+
+    my $instance = get_instance($db_id, $db_name);    
     $instance->inflate();
 
-    $db_id ||= new_db_id($gk_central);
-    my $st_id = $dba{$gk_central}->instance_from_hash({},'StableIdentifier',$db_id);
-    set_st_id_attributes($st_id,$identifier,$version);
+    my $identifier = identifier($instance);
+    my $version = 1;
 
-    $logger->info("creating new ST_ID " . $st_id->displayName . " for " . $instance->displayName);
+    my $stable_id_instance = GKB::Instance->new(
+        -CLASS => 'StableIdentifier',
+        -ONTOLOGY => get_api_connections()->{$db_name}->ontology
+    );
+    $stable_id_instance->inflated(1);
+    $stable_id_instance->identifier($identifier);
+    $stable_id_instance->identifierVersion($version);
+    $stable_id_instance->_displayName("$identifier.$version");
+    $stable_id_instance->created(get_instance_edit($db_name));
     
-    store($st_id,'store');
+    get_api_connections()->{$db_name}->store($stable_id_instance);
     
     # Attach the stable ID to its parent instance
-    $instance->stableIdentifier($st_id);
-    store($instance,'update');
-
-    return $st_id;
+    $instance->stableIdentifier($stable_id_instance);
+    $instance->Modified(@{$instance->Modified});
+    $instance->add_attribute_value('modified', get_instance_edit($db_name));
+    get_api_connections()->{$db_name}->update_attribute($instance, 'stableIdentifier');
+    get_api_connections()->{$db_name}->update_attribute($instance, 'modified');
+    
+    return $stable_id_instance;
 }
-
-
-#########################################################################
-## failure tolerant(?) wrapper for the GKInstance store and update methods
-my $attempt = 1;
-sub store {
-    my $instance = shift;
-    my $action   = shift;
-    my @dbs = @_;
-
-    if ($attempt > 2) {
-	$logger->warn("Oops, I tried to $action $attempt times, there must be a good reason it failed, giving up");
-	$attempt = 1;
-	return undef;
-    }
-
-    my $force = $action eq 'store' ? 1 : 0;
-
-    unless (@dbs > 0) {
-	@dbs =($gk_central,$release_db);
-    }
-    for my $db (@dbs) {
-        my $stored = eval {$dba{$db}->$action($instance,$force)};
-	unless ($stored) {
-	    $logger->warn("Oops, the $action operation (attempt $attempt) failed for $db:\n$@_\nI'll try again!");
-	    sleep 1;
-	    $attempt++;
-            store($instance,$action,$db);
-	}
-	else {
-	    $attempt = 1;
-	}
-    }
-}
-##
-######################################################################### 
 
 sub fetch_stable_id {
-    my $instance = shift;
-    return $instance->attribute_value('stableIdentifier')->[0];
-}
-
-sub max_db_id {
-    my $db = shift;
-    my $sth = $dba{$db}->prepare(MAX_ID);
-    $sth->execute;
-    my $max_db_id = $sth->fetchrow_arrayref->[0];
-    return $max_db_id;
-}
-
-# Get the largest DB_ID from slice or gk_central
-sub new_db_id {
-    my $max_id = 0;
-    for my $db ($gk_central,$release_db) {
-	my $id = max_db_id($db);
-	$max_id = $id if $id > $max_id;
-    }
-    return $max_id + 1;
+    my $db_id = shift;
+    my $db_name = shift;
+    
+    return get_instance($db_id, $db_name)->attribute_value('stableIdentifier')->[0];
 }
 
 sub fetch_species {
