@@ -83,7 +83,7 @@ $curated_user ||= $GKB::Config::GK_DB_USER;
 $curated_pass ||= $GKB::Config::GK_DB_PASS;
 $curated_port ||= $GKB::Config::GK_DB_PORT;
 $curated_db ||= 'gk_central';
-$curated_host = 'reactomecurator.oicr.on.ca';
+$curated_host ||= 'reactomecurator.oicr.on.ca';
 
 my $curated_dba = GKB::DBAdaptor->new
     (
