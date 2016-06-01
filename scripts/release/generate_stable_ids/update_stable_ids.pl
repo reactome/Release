@@ -86,7 +86,7 @@ for my $db_id (get_db_ids($release_db)) {
     
     $logger->info(join("\t","STABLE_ID",$db_id,$class,$name,$stable_id->displayName)."\n");
 }
-remove_orphan_stable_ids();
+#remove_orphan_stable_ids();
 get_api_connections()->{$release_db}->execute("COMMIT");
 get_api_connections()->{$gk_central}->execute("COMMIT");
 
@@ -155,21 +155,22 @@ sub increment_stable_id {
     my $db_id = shift;
     my $db_name = shift;
     
-    my $instance = get_instance($db_id, $db_name);
-    $instance->inflate();
-    my $identifier =  $instance->attribute_value('identifier')->[0];
-    my $version  = $instance->attribute_value('identifierVersion')->[0];
+    my $stable_id_instance = stable_id($db_id, $db_name);
+							  
+	$stable_id_instance->inflate();
+	my $identifier =  $stable_id_instance->attribute_value('identifier')->[0];
+    my $version  = $stable_id_instance->attribute_value('identifierVersion')->[0];
     my $new_version = $version + 1;
 
-    $logger->info("Incrementing ".$instance->displayName." version from $version to $new_version\n");
+    $logger->info("Incrementing ".$stable_id_instance->displayName." version from $version to $new_version\n");
 
-    $instance->attribute_value('identifierVersion',$new_version);
-    $instance->displayName("$identifier.$new_version");
-    $instance->Modified(@{$instance->Modified});
-    $instance->add_attribute_value('modified', get_instance_edit($db_name));
+    $stable_id_instance->attribute_value('identifierVersion',$new_version);
+    $stable_id_instance->displayName("$identifier.$new_version");
+    $stable_id_instance->Modified(@{$stable_id_instance->Modified});
+    $stable_id_instance->add_attribute_value('modified', get_instance_edit($db_name));
     
     foreach my $attribute ('identifierVersion', '_displayName', 'modified') {
-        get_api_connections()->{$db_name}->update_attribute($instance, $attribute);
+        get_api_connections()->{$db_name}->update_attribute($stable_id_instance, $attribute);
     }    
 }
 
@@ -220,24 +221,24 @@ sub attached {
 }
 
 # If the stable ID is not attached to an event, put it in the attic
-sub remove_orphan_stable_ids {
-    my $sth = get_api_connections()->{$gk_central}->prepare(ALL_ST);
-    $sth->execute();
-    while (my $res = $sth->fetchrow_arrayref) {
-        my $db_id = $res->[0] || next;
-        next if attached($db_id);
-
-        my $deleted;
-        for my $db ($release_db,$gk_central) {
-            my $st_id = get_instance($db_id,$db) || next;
-
-            $logger->info("Deleting orphan stable identifier ".$st_id->displayName."\n");
-
-            get_api_connections()->{$db}->delete($st_id);
-            $deleted++;
-        }
-    }
-}
+#sub remove_orphan_stable_ids {
+#    my $sth = get_api_connections()->{$gk_central}->prepare(ALL_ST);
+#    $sth->execute();
+#    while (my $res = $sth->fetchrow_arrayref) {
+#        my $db_id = $res->[0] || next;
+#        next if attached($db_id);
+#
+#        my $deleted;
+#        for my $db ($release_db,$gk_central) {
+#            my $st_id = get_instance($db_id,$db) || next;
+#
+#            $logger->info("Deleting orphan stable identifier ".$st_id->displayName." in $db\n");
+#
+#            get_api_connections()->{$db}->delete($st_id);
+#            $deleted++;
+#        }
+#    }
+#}
 
 sub classes_with_stable_ids {
     # derived from:
@@ -357,8 +358,9 @@ sub back_up_databases {
 # create and store new ST_ID instance and return that.
 sub stable_id {
     my $db_id = shift;
+	my $db_name = shift // $release_db;
 
-    my $st_id = fetch_stable_id($db_id, $release_db);
+    my $st_id = fetch_stable_id($db_id, $db_name);
 
     unless ( $st_id ) {
         $st_id = create_stable_id($db_id, $release_db);
