@@ -5,7 +5,7 @@ use strict;
 # sheldon.mckay@gmail.com
 
 use constant THRESHOLD => 90;
-use constant EMAIL     => 'sheldon.mckay@gmail.com,Joel.Weiser@oicr.on.ca'; 
+use constant EMAIL     => 'Joel.Weiser@oicr.on.ca'; 
 
 chomp(my $host = `hostname`);
 my @df = `df`;

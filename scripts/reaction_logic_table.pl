@@ -31,14 +31,17 @@ GetOptions(
     'output=s' => \$output_file,
     'all_reactions' => \$all_reactions
 );
-
+=head
 unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
     print usage_instructions();
     exit;
 }
+=cut
 
 my @reactions;
 my $dba = get_dba({'host' => 'reactomecurator.oicr.on.ca', 'db' => 'gk_central'});
+
+=head
 if ($selected_pathways eq 'all') {    
     @reactions = @{$dba->fetch_instance(-CLASS => 'ReactionlikeEvent', [['species',['48887']]])};
 } else {
@@ -59,14 +62,16 @@ if ($selected_pathways eq 'all') {
     }
 }
 @reactions = grep {!$_->disease->[0]} @reactions;
-@reactions = grep {$_->_doRelease->[0] =~ /TRUE/i} @reactions unless $all_reactions;
+@reactions = grep {$_->_doRelease->[0] && $_->_doRelease->[0] =~ /TRUE/i} @reactions unless $all_reactions;
 exit unless @reactions;
 
 my %interactions;
+=cut
 my %parent2child;
 my %child2parent;
 my %id2instance;
 
+=head
 foreach my $reaction (@reactions) {
     populate_graph($reaction);
 }
@@ -74,13 +79,33 @@ foreach my $reaction (@reactions) {
 foreach my $reaction (@reactions) {
     add_reaction_to_logic_table($reaction, \@reactions);
 }
+=cut
+
 
 ($output_file = $0) =~ s/.pl$/.tsv/ unless $output_file;
 open my $logic_table_fh, ">", "$output_file";
-report_interactions(\%interactions, $logic_table_fh);
+
+my %interactions;
+my @groups = (
+    [5658216, 5658219, 5672717],
+    [3222570],
+    [1963588, 5658216],
+    [113595, 1963587, 1963588],
+    [5658216, 5658219, 5672717, 2685662],
+    [5683605, 113595]
+);
+foreach my $group (@groups) {
+    foreach my $instance_id (@$group) {
+        my $instance = $dba->fetch_instance_by_db_id($instance_id)->[0];
+        process_if_set_or_complex($instance);
+    }
+    report_interactions(\%interactions, $logic_table_fh);
+    print $logic_table_fh "-" x 80,"\n";
+    %interactions = ();
+}
 close $logic_table_fh;
 
-add_line_count($output_file);
+#add_line_count($output_file);
 `dos2unix -q $output_file`;
 
 sub populate_graph {
@@ -89,10 +114,11 @@ sub populate_graph {
     
     my @inputs = @{$reaction->input};
     my @outputs = @{$reaction->output};
-    my @catalysts =  map({$_->physicalEntity->[0]} @{$reaction->catalystActivity});
-    my @regulators = map({$_->regulator->[0]} @{$reaction->reverse_attribute_value('regulatedEntity')});
+    my @catalysts =  grep { defined } map({$_->physicalEntity->[0]} @{$reaction->catalystActivity});
+    my @regulators = grep { defined } map({$_->regulator->[0]} @{$reaction->reverse_attribute_value('regulatedEntity')});
     
     foreach my $parent (@inputs, @catalysts, @regulators) {
+        confess $reaction_id unless $parent;
         my $parent_id = get_label($parent);
         $parent2child{$parent_id}{$reaction_id}++;
         $child2parent{$reaction_id}{$parent_id}++;
@@ -127,7 +153,7 @@ sub add_reaction_to_logic_table {
     
     my @inputs = @{$reaction->input};
     my @outputs = @{$reaction->output};
-    my @catalysts =  map($_->physicalEntity->[0], @{$reaction->catalystActivity});
+    my @catalysts =  grep { defined } map($_->physicalEntity->[0], @{$reaction->catalystActivity});
     
     process_inputs($reaction, \@inputs);
     process_inputs($reaction, \@catalysts);
@@ -262,15 +288,16 @@ sub get_label {
     my $instance = shift;
     state %label_cache;
     
+    confess unless $instance;
+    
     return $label_cache{$instance->db_id} if $label_cache{$instance->db_id};
         
     my $label = $instance->referenceEntity->[0] ?
-    $instance->referenceEntity->[0]->db_id :
+    $instance->displayName . '_' . $instance->referenceEntity->[0]->db_id :
     $instance->db_id;
     
-    $label = $instance->displayName . '_' . $label if $instance->hasModifiedResidue->[0];
-    $label = $instance->name->[0] . '_' . $label if $instance->is_a('SimpleEntity');
     $label .= "_RLE" if $instance->is_a('ReactionlikeEvent');
+    $label =~ s/[ \,+]/_/g;
     
     $label_cache{$instance->db_id} = $label;
     
@@ -456,8 +483,8 @@ sub on_skip_list {
         1369085 => [$ANYTHING]
     );
     
-    return 1 if any {$_ == $child_id} @{$skip_list{$ANYTHING}};
-    return any {($_ == $ANYTHING) || ($_ == $child_id)} @{$skip_list{$parent_id}};
+    return 1 if any {$_ eq $child_id} @{$skip_list{$ANYTHING}};
+    return any {($_ == $ANYTHING) || ($_ eq $child_id)} @{$skip_list{$parent_id}};
 }
 
 sub get_id_from_label {

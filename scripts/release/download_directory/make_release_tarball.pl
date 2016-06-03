@@ -30,8 +30,8 @@ my $rhome = "$base/GKB/scripts/release/download_directory/$release";
 mkdir $rhome unless -d $rhome;
 
 # Make sure that ancillary data are up-to-date
-check_analysis_data($base);
-check_solr_data($base);
+#check_analysis_data($base);
+#check_solr_data($base);
 
 my $unwanted_webapps = join(' ',(
 "reactome/apache-tomcat/webapps/Analysis",
@@ -54,6 +54,9 @@ my @cmds = (
     qq(cp -r $repo/website reactome/GKB),
     qq(cp -r $repo/modules reactome/GKB),
     qq(mkdir reactome/GKB/third_party_install),
+    qq(cd $repo/third_party_install),
+    qq(tar czvf config.tar.gz etc usr),
+    qq(cd $cwd),
     qq(cp $repo/third_party_install/config.tar.gz reactome/GKB/third_party_install),
     qq(rm -f reactome/GKB/website/html/stats*),
     qq(cp $base/GKB/scripts/release/website_files_update/stats.* reactome/GKB/website/html),
@@ -70,6 +73,7 @@ my @cmds = (
     qq(mkdir -p reactome/GKB/website/html/download/$release),
     qq(cp $repo/website/html/download/*html reactome/GKB/website/html/download/),
     qq(cp -r $rhome/fireworks reactome/GKB/website/html/download/$release), 
+    qq(cp -r $rhome/diagrams reactome/GKB/website/html/download/$release),
     qq(cp $base/AnalysisService/input/analysis.bin reactome/AnalysisService/input),
     qq(mkdir -p reactome/RESTful/temp),
     qq(rm -fr reactome/GKB/modules/*ensem*)
@@ -89,7 +93,7 @@ for my $cmd (@cmds) {
     sleep 1;
 }
 
-cleanse_solr_data();
+#cleanse_solr_data();
 chdir 'reactome';
 
 $logger->info("CWD: ", `pwd`);
