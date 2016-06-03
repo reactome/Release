@@ -56,11 +56,12 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 
 	$molecule_identifier_counter++;
 
-	($up_to_date_identifier, $chebi_name) = $chebi->get_up_to_date_identifier_and_name($identifier);
+	($up_to_date_identifier, $chebi_name, $chebi_formula) = $chebi->get_up_to_date_identifier_name_formulae($identifier);
 	next unless $up_to_date_identifier;
 	
 	$up_to_date_identifier =~ s/^CHEBI://;
 	
+
 	if ($chebi_name) {
 		my @simple_entities = @{$reference_molecule->reverse_attribute_value('referenceEntity')};
 		foreach my $simple_entity (@simple_entities) {
@@ -110,14 +111,15 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	$reference_molecule->name(undef);
 	$reference_molecule->identifier($up_to_date_identifier);
 	$reference_molecule->name($chebi_name);
+	$reference_molecule->formula(undef);
+	$reference_molecule->formula($chebi_formula);
 	$dba->update_attribute($reference_molecule, "identifier");
 	$dba->update_attribute($reference_molecule, "name");
-	
+	$dba->update_attribute($reference_molecule, "formula");
 	my $display_name = "$chebi_name [ChEBI:$up_to_date_identifier]";
 	$reference_molecule->_displayName(undef);
 	$reference_molecule->_displayName($display_name);
-	$dba->update_attribute($reference_molecule, "_displayName");		
-	
+	$dba->update_attribute($reference_molecule, "_displayName");
 	$outdated_molecule_identifier_counter++;
 	
 }
