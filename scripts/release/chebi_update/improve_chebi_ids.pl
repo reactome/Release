@@ -56,7 +56,7 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 
 	$molecule_identifier_counter++;
 
-	($up_to_date_identifier, $chebi_name, $chebi_formula) = $chebi->get_up_to_date_identifier_and_name($identifier);
+	($up_to_date_identifier, $chebi_name, $chebi_formula) = $chebi->get_up_to_date_identifier_name_formulae($identifier);
 	next unless $up_to_date_identifier;
 	
 	$up_to_date_identifier =~ s/^CHEBI://;
