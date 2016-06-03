@@ -62,11 +62,11 @@ while (my $i = shift @{$ar}) {
 	if (@invalid) {
 	    @valid ? $i->attribute_value($att,@valid) : $i->attribute_value($att,undef);
 	    foreach (@valid) {
-                print join("\t",$i->extended_displayName,$att,$_->extended_displayName), "\n";
+                print join("\t","INVALID",$i->extended_displayName,$att,$_->extended_displayName), "\n";
             }
 	    $needs_update = 1;
 	    foreach (@invalid) {
-		print join("\t",$i->extended_displayName,$att,$_->extended_displayName), "\n";
+		print join("\t","VALID",$i->extended_displayName,$att,$_->extended_displayName), "\n";
 	    }
 	    $opt_fix && $dba->update_attribute($i,$att);
 	}

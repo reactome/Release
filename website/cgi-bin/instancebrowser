@@ -125,7 +125,7 @@ sub handle_warning {
 }
 
 sub do_header {
-    print $CGI->header(-charset => 'UTF-8');
+    print $CGI->header();
     if (defined $header) {
 	print $header;
     } else {
