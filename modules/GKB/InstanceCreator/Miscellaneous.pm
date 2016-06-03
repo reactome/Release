@@ -206,11 +206,14 @@ sub get_person {
 # You may leave the name argument out.
 sub get_reference_dna_sequence {
     my ($self, $species, $reference_database, $identifier, $name) = @_;
-
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my $dba = $self->dba;
     my $reference_dna_sequence = $self->reference_dna_sequence_cache->{$reference_database->db_id()}->{$identifier};
     if (defined $reference_dna_sequence) {
     	# We already have a copy in the cache
+        $logger->info("Returning cached sequence for $identifier");
     	return $reference_dna_sequence;
     }
 
@@ -222,9 +225,12 @@ sub get_reference_dna_sequence {
     );
     #my $dbid = $reference_database->db_id();
     #print ("searching with identifier: $identifier and db_id: $dbid\n") ;
+
+    $logger->info("Attempting to fetch sequence for $identifier");
     my $reference_dna_sequences = $dba->fetch_instance_by_remote_attribute('ReferenceDNASequence', \@query);
     if (defined $reference_dna_sequences && scalar(@{$reference_dna_sequences})>0) {
-    	# Yep, it's in there!
+    	$logger->info("Successfully fetched sequence for $identifier");
+        # Yep, it's in there!
     	$reference_dna_sequence = $reference_dna_sequences->[0];
     	$reference_dna_sequence->inflate();
     	$self->reference_dna_sequence_cache->{$reference_database->db_id()}->{$identifier} = $reference_dna_sequence;
@@ -234,19 +240,20 @@ sub get_reference_dna_sequence {
     # Not cached, not in the database - make a new one.
     $reference_dna_sequence = GKB::Instance->new(-ONTOLOGY => $dba->ontology, -CLASS => 'ReferenceDNASequence', -DBA => $dba,);
     $reference_dna_sequence->inflated(1);
-
+    
     $reference_dna_sequence->created($self->get_instance_edit_for_effective_user());
     $reference_dna_sequence->Identifier($identifier);
     $reference_dna_sequence->ReferenceDatabase($reference_database);
+
     if (defined $species) {
-	my @species_list = ($species);
-	if (scalar($species) =~ /ARRAY/) {
-	    @species_list = @{$species};
-	}
-	$reference_dna_sequence->Species(@species_list);
+        my @species_list = ($species);
+        if (scalar($species) =~ /ARRAY/) {
+            @species_list = @{$species};
+        }
+        $reference_dna_sequence->Species(@species_list);
     }
     if (defined $name) {
-	$reference_dna_sequence->name($name);
+        $reference_dna_sequence->name($name);
     }
 
     # Calling inflate here does not seem to be necessary, and was actually causing problems. It's *already* called

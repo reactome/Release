@@ -5351,3 +5351,73 @@ EC:6.6 > GO:ligase activity, forming nitrogen-metal bonds ; GO:0051002
 EC:6.6.1 > GO:ligase activity, forming nitrogen-metal bonds, forming coordination complexes ; GO:0051003
 EC:6.6.1.1 > GO:magnesium chelatase activity ; GO:0016851
 EC:6.6.1.2 > GO:cobaltochelatase activity ; GO:0051116
+vity ; GO:0018710
+EC:6.4.1.7 > GO:2-oxoglutarate carboxylase activity ; GO:0034029
+EC:6.5 > GO:ligase activity, forming phosphoric ester bonds ; GO:0016886
+EC:6.5.1.- > GO:DNA ligase activity ; GO:0003909
+EC:6.5.1.- > GO:RNA ligase activity ; GO:0008452
+EC:6.5.1.- > GO:2'-5'-RNA ligase activity ; GO:0008664
+EC:6.5.1.1 > GO:DNA ligase (ATP) activity ; GO:0003910
+EC:6.5.1.2 > GO:DNA ligase (NAD+) activity ; GO:0003911
+EC:6.5.1.3 > GO:RNA ligase (ATP) activity ; GO:0003972
+EC:6.5.1.4 > GO:RNA-3'-phosphate cyclase activity ; GO:0003963
+EC:6.6 > GO:ligase activity, forming nitrogen-metal bonds ; GO:0051002
+EC:6.6.1 > GO:ligase activity, forming nitrogen-metal bonds, forming coordination complexes ; GO:0051003
+EC:6.6.1.1 > GO:magnesium chelatase activity ; GO:0016851
+EC:6.6.1.2 > GO:cobaltochelatase activity ; GO:0051116
+O:lipoate-protein ligase activity ; GO:0016979
+EC:6.3.4.- > GO:biotin-protein ligase activity ; GO:0018271
+EC:6.3.4.- > GO:tRNA(Ile)-lysidine synthase activity ; GO:0032267
+EC:6.3.4.- > GO:biotin-[pyruvate-carboxylase] ligase activity ; GO:0071734
+EC:6.3.4.1 > GO:GMP synthase activity ; GO:0003921
+EC:6.3.4.10 > GO:biotin-[propionyl-CoA-carboxylase (ATP-hydrolyzing)] ligase activity ; GO:0004080
+EC:6.3.4.11 > GO:biotin-[methylcrotonoyl-CoA-carboxylase] ligase activity ; GO:0004078
+EC:6.3.4.12 > GO:glutamate-methylamine ligase activity ; GO:0047943
+EC:6.3.4.13 > GO:phosphoribosylamine-glycine ligase activity ; GO:0004637
+EC:6.3.4.14 > GO:biotin carboxylase activity ; GO:0004075
+EC:6.3.4.15 > GO:biotin-[acetyl-CoA-carboxylase] ligase activity ; GO:0004077
+EC:6.3.4.16 > GO:carbamoyl-phosphate synthase (ammonia) activity ; GO:0004087
+EC:6.3.4.17 > GO:formate-dihydrofolate ligase activity ; GO:0047897
+EC:6.3.4.18 > GO:5-(carboxyamino)imidazole ribonucleotide synthase activity ; GO:0034028
+EC:6.3.4.2 > GO:CTP synthase activity ; GO:0003883
+EC:6.3.4.3 > GO:formate-tetrahydrofolate ligase activity ; GO:0004329
+EC:6.3.4.4 > GO:adenylosuccinate synthase activity ; GO:0004019
+EC:6.3.4.5 > GO:argininosuccinate synthase activity ; GO:0004055
+EC:6.3.4.6 > GO:urea carboxylase activity ; GO:0004847
+EC:6.3.4.7 > GO:ribose-5-phosphate-ammonia ligase activity ; GO:0050260
+EC:6.3.4.8 > GO:imidazoleacetate-phosphoribosyldiphosphate ligase activity ; GO:0047483
+EC:6.3.4.9 > GO:biotin-[methylmalonyl-CoA-carboxytransferase] ligase activity ; GO:0004079
+EC:6.3.5 > GO:carbon-nitrogen ligase activity, with glutamine as amido-N-donor ; GO:0016884
+EC:6.3.5.- > GO:cobyrinate a,c-diamide synthase activity ; GO:0043775
+EC:6.3.5.1 > GO:NAD+ synthase (glutamine-hydrolyzing) activity ; GO:0003952
+EC:6.3.5.10 > GO:adenosylcobyric acid synthase (glutamine-hydrolyzing) activity ; GO:0051921
+EC:6.3.5.2 > GO:GMP synthase (glutamine-hydrolyzing) activity ; GO:0003922
+EC:6.3.5.3 > GO:phosphoribosylformylglycinamidine synthase activity ; GO:0004642
+EC:6.3.5.4 > GO:asparagine synthase (glutamine-hydrolyzing) activity ; GO:0004066
+EC:6.3.5.5 > GO:carbamoyl-phosphate synthase (glutamine-hydrolyzing) activity ; GO:0004088
+EC:6.3.5.6 > GO:asparaginyl-tRNA synthase (glutamine-hydrolyzing) activity ; GO:0050566
+EC:6.3.5.7 > GO:glutaminyl-tRNA synthase (glutamine-hydrolyzing) activity ; GO:0050567
+EC:6.3.5.9 > GO:hydrogenobyrinic acid a,c-diamide synthase (glutamine-hydrolysing) activity ; GO:0043802
+EC:6.4 > GO:ligase activity, forming carbon-carbon bonds ; GO:0016885
+EC:6.4.1.- > GO:CoA carboxylase activity ; GO:0016421
+EC:6.4.1.- > GO:acetophenone carboxylase activity ; GO:0018524
+EC:6.4.1.- > GO:phenylphosphate carboxylase activity ; GO:0018862
+EC:6.4.1.1 > GO:pyruvate carboxylase activity ; GO:0004736
+EC:6.4.1.2 > GO:acetyl-CoA carboxylase activity ; GO:0003989
+EC:6.4.1.3 > GO:propionyl-CoA carboxylase activity ; GO:0004658
+EC:6.4.1.4 > GO:methylcrotonoyl-CoA carboxylase activity ; GO:0004485
+EC:6.4.1.5 > GO:geranoyl-CoA carboxylase activity ; GO:0047925
+EC:6.4.1.6 > GO:acetone carboxylase activity ; GO:0018710
+EC:6.4.1.7 > GO:2-oxoglutarate carboxylase activity ; GO:0034029
+EC:6.5 > GO:ligase activity, forming phosphoric ester bonds ; GO:0016886
+EC:6.5.1.- > GO:DNA ligase activity ; GO:0003909
+EC:6.5.1.- > GO:RNA ligase activity ; GO:0008452
+EC:6.5.1.- > GO:2'-5'-RNA ligase activity ; GO:0008664
+EC:6.5.1.1 > GO:DNA ligase (ATP) activity ; GO:0003910
+EC:6.5.1.2 > GO:DNA ligase (NAD+) activity ; GO:0003911
+EC:6.5.1.3 > GO:RNA ligase (ATP) activity ; GO:0003972
+EC:6.5.1.4 > GO:RNA-3'-phosphate cyclase activity ; GO:0003963
+EC:6.6 > GO:ligase activity, forming nitrogen-metal bonds ; GO:0051002
+EC:6.6.1 > GO:ligase activity, forming nitrogen-metal bonds, forming coordination complexes ; GO:0051003
+EC:6.6.1.1 > GO:magnesium chelatase activity ; GO:0016851
+EC:6.6.1.2 > GO:cobaltochelatase activity ; GO:0051116
