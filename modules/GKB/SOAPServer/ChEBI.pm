@@ -53,7 +53,7 @@ sub AUTOLOAD {
     $self->throw("invalid attribute method: ->$attr()") unless $ok_field{$attr};
     $self->{$attr} = shift if @_;
     return $self->{$attr};
-}  
+}
 
 sub new {
     my($pkg) = @_;
@@ -77,13 +77,13 @@ sub getCompleteEntity {
     $logger->info("identifier=|$identifier|\n");
 
 #	my $params = ['chebiId', "CHEBI:$identifier"];
-#	
+#
 #	return $self->call("getCompleteEntity", $params);
 
     # Setup method and parameters
     my $method = SOAP::Data->name('getCompleteEntity')->attr({xmlns => $uri});
     my @params = ( SOAP::Data->name(chebiId => "CHEBI:$identifier"));
-	
+
     # Call method
     my $som = $self->soap->call($method => @params);
 
@@ -92,10 +92,10 @@ sub getCompleteEntity {
 
     # Retrieve for example all ChEBI identifiers for the ontology parents
     my @stuff = $som->valueof('//chebiId');
-    
+
     $logger->info("amount of stuff=" . scalar(@stuff) . "\n");
     $logger->info("stuff=|@stuff|\n");
- 
+
     return \@stuff;
 }
 
@@ -103,7 +103,7 @@ sub getCompleteEntity {
 # returns it if available.
 sub getLiteEntity {
     my ($self, $identifier) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
 
     # Setup method and parameters
@@ -116,7 +116,7 @@ sub getLiteEntity {
 #				 );
     my @params = ( SOAP::Data->name(search => 'group'),
     SOAP::Data->name(searchCategory => 'CHEBI NAME'));
-    
+
     # Call method
     my $som = $self->soap->call($method => @params);
 
@@ -138,13 +138,13 @@ sub get_up_to_date_identifier_and_name {
     my ($self, $identifier) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
 #	$logger->info("ChEBI.getUpToDateIdentifiers: identifier=|$identifier|\n");
 
     # Setup method and parameters
     my $method = SOAP::Data->name('getCompleteEntity')->attr({xmlns => $uri});
     my @params = ( SOAP::Data->name(chebiId => "CHEBI:$identifier"));
-	
+
     # Call method
     my $som = $self->soap->call($method => @params);
 
@@ -175,5 +175,50 @@ sub get_up_to_date_identifier_and_name {
 
     return ($up_to_date_identifier, $chebi_name);
 }
-1;
 
+sub get_up_to_date_identifier_name_formulae {
+    my ($self, $identifier) = @_;
+
+    my $logger = get_logger(__PACKAGE__);
+
+#	$logger->info("ChEBI.getUpToDateIdentifiers: identifier=|$identifier|\n");
+
+    # Setup method and parameters
+    my $method = SOAP::Data->name('getCompleteEntity')->attr({xmlns => $uri});
+    my @params = ( SOAP::Data->name(chebiId => "CHEBI:$identifier"));
+
+    # Call method
+    my $som = $self->soap->call($method => @params);
+
+#	$logger->info("som=" . Dumper($som) . "\n");
+
+    # Retrieve ChEBI ID(s)
+    my @stuff = $som->valueof('//chebiId');
+
+#	$logger->info("ChEBI IDs: @stuff\n");
+
+    # Assume that the first identifier in the list is the actual compound,
+    # and everything else comes higher up in the ChEBI ontology
+    my $up_to_date_identifier = undef;
+    if (scalar(@stuff) > 0) {
+    	$up_to_date_identifier = $stuff[0];
+    }
+
+    # Retrieve ChEBI name
+    @stuff = $som->valueof('//chebiAsciiName');
+
+    # Assume that the first identifier in the list is the actual compound,
+    # and everything else comes higher up in the ChEBI ontology
+    my $chebi_name = undef;
+    if (scalar(@stuff) > 0) {
+    	$chebi_name = $stuff[0];
+    }
+
+    # Extract formulae
+    my @formulae_list = $som->valueof('//Formulae');
+    # Weirdness... They will return a list of hashes which will have two keys: "source" and "data". For the actual Formula, you want the value keyed by "data".
+    my $formula = $formulae_list[0]{'data'};
+
+    return ($up_to_date_identifier, $chebi_name, $formula);
+}
+1;
