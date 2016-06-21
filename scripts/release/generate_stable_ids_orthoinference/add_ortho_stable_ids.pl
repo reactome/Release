@@ -71,7 +71,7 @@ foreach my $db_id (get_db_ids($release_db)) {
             $st_id->Modified(@{$st_id->Modified});
             $st_id->add_attribute_value('modified', get_instance_edit($release_db));
                 
-            foreach my $attribute (qw/identifier identifierVersion displayName modified/) {
+            foreach my $attribute (qw/identifier identifierVersion _displayName modified/) {
                 get_api_connections()->{$release_db}->update_attribute($st_id, $attribute);
             }
             $logger->info("Stable ID updated for " . $orthologous_instance->db_id . " (" . $orthologous_instance->displayName . ")");
@@ -206,7 +206,8 @@ sub create_stable_id {
 
     my $stable_id_instance = GKB::Instance->new(
         -CLASS => 'StableIdentifier',
-        -ONTOLOGY => get_api_connections()->{$db_name}->ontology
+        -ONTOLOGY => get_api_connections()->{$db_name}->ontology,
+        -DBA => get_api_connections()->{$db_name}
     );
     $stable_id_instance->inflated(1);
     $stable_id_instance->identifier($identifier);
@@ -231,5 +232,5 @@ sub fetch_stable_id {
     my $db_id = shift;
     my $db_name = shift;
     
-    return get_instance($db_id, $db_name)->attribute_value('stableIdentifier')->[0];
+    return get_instance($db_id, $db_name)->stableIdentifier->[0];
 }
