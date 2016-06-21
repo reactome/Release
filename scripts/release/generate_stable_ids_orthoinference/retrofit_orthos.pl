@@ -50,7 +50,7 @@ while (my $ar = $sth->fetchrow_arrayref) {
     }
     if ($old_ids->[0]) {
         $stable_id->inflate;
-        $stable_id->oldIdentifier($old_ids);
+        $stable_id->oldIdentifier(@{$old_ids});
         $stable_id->Modified(@{$stable_id->Modified});
         $stable_id->add_attribute_value('modified', get_instance_edit($db));
         get_api_connections()->{$db}->update_attribute($stable_id, 'oldIdentifier');
