@@ -211,11 +211,13 @@ sub identifier {
 
 sub species {
     my $instance = shift;
-    my $name = $instance->displayName;
-    return $species{$name} if $species{$name};
+    my $db_id = $instance->db_id;
+    
+    return $species{$db_id} if $species{$db_id};
+    
     my $long = make_decision_on_species($instance);
-    $species{$name} = abbreviate($long);
-    return $species{$name};
+    $species{$db_id} = abbreviate($long);
+    return $species{$db_id};
 }
 
 sub abbreviate {
