@@ -63,7 +63,7 @@ sub AUTOLOAD {
     $self->throw("invalid attribute method: ->$attr()") unless $ok_field{$attr};
     $self->{$attr} = shift if @_;
     return $self->{$attr};
-}  
+}
 
 sub new {
     my($pkg, $dba) = @_;
@@ -83,7 +83,7 @@ sub new {
 # Set the DBAdaptor
 sub set_dba {
     my ($self, $dba) = @_;
-    
+
     $self->dba($dba);
 }
 
@@ -95,9 +95,9 @@ sub set_dba {
 #
 sub set_instance_edit_for_effective_user {
     my ($self, $instance_edit) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     if (!(defined $instance_edit)) {
 	$logger->warn("instance_edit is undef!\n");
 	return;
@@ -127,13 +127,13 @@ sub get_instance_edit_for_effective_user {
 #	$self->throw("oh yuk");
     	return undef;
     }
-    
+
     eval {
 	# This sometimes breaks catastrophically, I don't know why,
 	# hence the eval.
 	$instance_edit_for_effective_user = $dba->create_InstanceEdit_for_effective_user();
     };
-    
+
     if (!(defined $instance_edit_for_effective_user)) {
 	# For some reason, no instance edit could be created for the
 	# current user.  Use a croft instance edit instead.
@@ -168,7 +168,7 @@ sub get_person {
 	$logger->error("dba is null!\n");
     	return undef;
     }
-    
+
     # Get a list of all persons with the given name and initial
     my @query = ( [ 'surname', '=', [$name] ], [ 'initial', '=', [$initial] ] );
     my $persons = $dba->fetch_instance_by_remote_attribute( 'Person', \@query );
@@ -184,14 +184,14 @@ sub get_person {
 	$person->Surname($name);
 	$person->Initial($initial);
 	$person->Firstname($initial);
-	
+
 	my @query = ( [ 'name', '=', ['EBI'] ] ); # TODO: this needs to be generalized
 	my $affiliations = $dba->fetch_instance_by_remote_attribute( 'Affiliation', \@query );
-	
+
 	if (defined $affiliations && scalar(@{$affiliations})>0) {
 	    $person->Affiliation($affiliations->[0]);
 	}
-	
+
 	$dba->store($person);
     }
 
@@ -207,10 +207,13 @@ sub get_person {
 sub get_reference_dna_sequence {
     my ($self, $species, $reference_database, $identifier, $name) = @_;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my $dba = $self->dba;
     my $reference_dna_sequence = $self->reference_dna_sequence_cache->{$reference_database->db_id()}->{$identifier};
     if (defined $reference_dna_sequence) {
     	# We already have a copy in the cache
+        $logger->info("Returning cached sequence for $identifier");
     	return $reference_dna_sequence;
     }
 
@@ -220,45 +223,45 @@ sub get_reference_dna_sequence {
     	['identifier',  '=', [$identifier]],
     	['referenceDatabase.DB_ID', '=', [$reference_database->db_id()]]
     );
+    #my $dbid = $reference_database->db_id();
+    #print ("searching with identifier: $identifier and db_id: $dbid\n") ;
+
+    $logger->info("Attempting to fetch sequence for $identifier");
     my $reference_dna_sequences = $dba->fetch_instance_by_remote_attribute('ReferenceDNASequence', \@query);
     if (defined $reference_dna_sequences && scalar(@{$reference_dna_sequences})>0) {
-    	# Yep, it's in there!
+    	$logger->info("Successfully fetched sequence for $identifier");
+        # Yep, it's in there!
     	$reference_dna_sequence = $reference_dna_sequences->[0];
     	$reference_dna_sequence->inflate();
     	$self->reference_dna_sequence_cache->{$reference_database->db_id()}->{$identifier} = $reference_dna_sequence;
     	return $reference_dna_sequence;
     }
-    
+
     # Not cached, not in the database - make a new one.
-
-    #$reference_dna_sequence = GKB::Instance->new(-ONTOLOGY => $dba->ontology, -CLASS => 'ReferenceDNASequence');
-    #$reference_dna_sequence->inflated(1); 
+    $reference_dna_sequence = GKB::Instance->new(-ONTOLOGY => $dba->ontology, -CLASS => 'ReferenceDNASequence', -DBA => $dba,);
+    $reference_dna_sequence->inflated(1);
     
-    # Changed instance creation method to the one below.  For some reason,
-    # the new ReferenceDNASequence instances were missing a DBA and DB_ID and 
-    # causing a fatal exception downstream.
-    my $db_id = $self->max_db_id() + 1;
-    $reference_dna_sequence = $dba->instance_from_hash({},'ReferenceDNASequence',$db_id);
-
     $reference_dna_sequence->created($self->get_instance_edit_for_effective_user());
     $reference_dna_sequence->Identifier($identifier);
     $reference_dna_sequence->ReferenceDatabase($reference_database);
+
     if (defined $species) {
-	my @species_list = ($species);
-	if (scalar($species) =~ /ARRAY/) {
-	    @species_list = @{$species};
-	}
-	$reference_dna_sequence->Species(@species_list);
+        my @species_list = ($species);
+        if (scalar($species) =~ /ARRAY/) {
+            @species_list = @{$species};
+        }
+        $reference_dna_sequence->Species(@species_list);
     }
     if (defined $name) {
-	$reference_dna_sequence->name($name);
+        $reference_dna_sequence->name($name);
     }
 
-    $reference_dna_sequence->inflate();
+    # Calling inflate here does not seem to be necessary, and was actually causing problems. It's *already* called
+    # when the entity is found in the database (as it should be), but when creating something new it should not be called - only store()
+    # should be called!
+#    $reference_dna_sequence->inflate();
     $dba->store($reference_dna_sequence);
-
     $self->reference_dna_sequence_cache->{$reference_database->db_id()}->{$identifier} = $reference_dna_sequence;
-    
     return $reference_dna_sequence;
 }
 
@@ -272,14 +275,14 @@ sub max_db_id {
 
 sub get_reference_rna_sequence {
     my ($self, $reference_database, $crossreference_database, $identifier) = @_;
-    
+
     my $dba = $self->dba;
     my $reference_rna_sequence = $self->reference_rna_sequence_cache->{$identifier};
     if (defined $reference_rna_sequence) {
     	# We already have a copy in the cache
     	return $reference_rna_sequence;
     }
-    
+
     # Look to see if we can find the ReferenceRNASequence entry in
     # the database
     my @query = (
@@ -294,7 +297,7 @@ sub get_reference_rna_sequence {
 	$self->reference_rna_sequence_cache->{$identifier} = $reference_rna_sequence;
 	return $reference_rna_sequence;
     }
-    
+
     # Not cached, not in the database - make a new one.
     $reference_rna_sequence = GKB::Instance->new(-ONTOLOGY => $dba->ontology, -CLASS => 'ReferenceRNASequence');
     $reference_rna_sequence->inflated(1);
@@ -313,4 +316,3 @@ sub get_reference_rna_sequence {
 }
 
 1;
-

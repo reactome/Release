@@ -199,30 +199,30 @@ sub create_reference_peptide_sequence_hash_variant_ids {
     foreach my $i (@{$reference_peptide_sequences}) {
     	$species = $i->species->[0]->name->[0];
     	if ($i->is_valid_attribute('VariantIdentifier')) {
-	    # ReferenceIsoform (new data model) and ReferencePeptideSequence
-	    # (old data model) both know about variant identifiers, but in
-	    # the case of ReferencePeptideSequence, there may be no variant
-	    # identifier present, because the instance is the base form of
-	    # the protein.  So we need to check that the variant identifier
-	    # exists before progressing further.
-	    if (defined $i->VariantIdentifier && scalar(@{$i->VariantIdentifier})>0) {
-	    	$variant_identifier = $i->VariantIdentifier->[0];
-		if (defined $variant_identifier && !($variant_identifier eq '')) {
-		    # This code is complicated in order to allow for backwards
-		    # compatibility; if instance $i is a ReferencePeptideSequence
-		    # (old data model), then assume that the -1 isoform is the
-		    # same as the base sequence.  If the instance is ReferenceIsoform,
-		    # then we can safely use the -1 isoform, because we know that
-		    # an instance of the base protein already exists.
-		    if ($i->isa('ReferenceIsoform') || ($variant_identifier =~ /-/ && !($variant_identifier =~ /-1$/))) {
-			push(@{$accs->{$species}->{uc($variant_identifier)}}, $i);
-			next;
-		    }
-		}
-	    }
-	}
-	# If no variant ID could be found, use the plain vanilla identifier.
-	push(@{$accs->{$species}->{uc($i->Identifier->[0])}}, $i);
+            # ReferenceIsoform (new data model) and ReferencePeptideSequence
+            # (old data model) both know about variant identifiers, but in
+            # the case of ReferencePeptideSequence, there may be no variant
+            # identifier present, because the instance is the base form of
+            # the protein.  So we need to check that the variant identifier
+            # exists before progressing further.
+            if (defined $i->VariantIdentifier && scalar(@{$i->VariantIdentifier})>0) {
+            	$variant_identifier = $i->VariantIdentifier->[0];
+                if (defined $variant_identifier && !($variant_identifier eq '')) {
+                    # This code is complicated in order to allow for backwards
+                    # compatibility; if instance $i is a ReferencePeptideSequence
+                    # (old data model), then assume that the -1 isoform is the
+                    # same as the base sequence.  If the instance is ReferenceIsoform,
+                    # then we can safely use the -1 isoform, because we know that
+                    # an instance of the base protein already exists.
+                    if ($i->isa('ReferenceIsoform') || ($variant_identifier =~ /-/ && !($variant_identifier =~ /-1$/))) {
+                        push(@{$accs->{$species}->{uc($variant_identifier)}}, $i);
+                        next;
+                    }
+                }
+            }
+        }
+        # If no variant ID could be found, use the plain vanilla identifier.
+        push(@{$accs->{$species}->{uc($i->Identifier->[0])}}, $i);
     }
 
     return $accs;
@@ -250,17 +250,17 @@ sub check_for_identical_instances {
     
     if ($count_ii == 0) {
 #    	print STDERR "Builder.check_for_identical_instances: adding InstanceEdit\n";
-	$instance->created($self->instance_edit());
-	my $ID = $dba->store($instance);
-	return $instance;
+        $instance->created($self->instance_edit());
+        my $ID = $dba->store($instance);
+        return $instance;
     } elsif ($count_ii == 1) {
     	$logger->info("an identical instance has been found in the database\n");
-	$instance->db_id($instance->identical_instances_in_db->[0]->db_id);
-	return $instance->identical_instances_in_db->[0];
+        $instance->db_id($instance->identical_instances_in_db->[0]->db_id);
+        return $instance->identical_instances_in_db->[0];
     } else {
     	$logger->info("multiple identical instances have been found in the database\n");
-	$dba->store_if_necessary($instance);
-	return $instance;
+        $dba->store_if_necessary($instance);
+        return $instance;
     }
 }
 
