@@ -24,6 +24,7 @@ if ($war && !(-e $war && ! -z $war)) {
 }
 
 say "Backing up $target...";
+system "./backup.pl $war";
 
 say "Deploying $war to $dest...";
 system "sudo chown -R tomcat7:gkb $path"; 

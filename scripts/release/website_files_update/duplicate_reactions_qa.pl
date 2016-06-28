@@ -31,16 +31,14 @@ my @reaction_like_events =
         has_value_for_any_attribute($_, get_defining_attributes_for_reaction_class($dba))
     } @{$dba->fetch_instance(-CLASS => 'ReactionlikeEvent')};
 my @reaction_like_event_buckets = (\@reaction_like_events);
-foreach my $attribute (get_defining_attributes_for_reaction_class($dba), 'compartment') {
-   @reaction_like_event_buckets = get_buckets_by_attribute_ids($attribute, @reaction_like_event_buckets);
+foreach my $attribute (get_defining_attributes_for_reaction_class($dba), 'compartment','species') {
+   @reaction_like_event_buckets = grep { scalar @{$_} > 1 } get_buckets_by_attribute_ids($attribute, @reaction_like_event_buckets);
 }
 
 (my $output_file = $0) =~ s/\.pl$/.txt/;
 open(my $fh, '>', $output_file);
-foreach my $bucket (@reaction_like_event_buckets) {
-    next unless scalar @{$bucket} > 1;
-    
-    print $fh "Duplicated reactions: " . join(',', map {$_->db_id} @{$bucket}) . "\n";
+foreach my $bucket (@reaction_like_event_buckets) {    
+    print $fh join('|', map {$_->db_id} @{$bucket}) . "\n";
 }
 close $fh;
                                   

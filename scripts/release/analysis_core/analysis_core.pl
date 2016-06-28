@@ -16,7 +16,7 @@ BEGIN {
 
 use GKB::Config;
 
-use autodie;
+use autodie qw/:all/;
 use Cwd;
 use Getopt::Long;
 use common::sense;
@@ -54,6 +54,7 @@ my $tmp_dir = "/tmp";
 my $present_dir = getcwd();
 
 chdir $tmp_dir;
+system("rm -rf $tmp_dir/AnalysisTools");
 system("git clone https://github.com/reactome/AnalysisTools");
 system("ln -sf $tmp_dir/AnalysisTools $present_dir/analysis");
 
@@ -63,7 +64,7 @@ system("mv target/tools-jar-with-dependencies.jar analysis_core.jar");
 
 my $analysis_core = "java -jar -Xms5120M -Xmx10240M analysis_core.jar";
 my $credentials = "-d $opt_db -u $opt_user -p $opt_pass";
-system("$analysis_core build $credentials -o $present_dir/analysis_v$opt_r.bin");
+system("$analysis_core build $credentials -o $present_dir/analysis_v$opt_r.bin -g $present_dir/interactors.db");
 my $analysis_dir = '/usr/local/reactomes/Reactome/development/AnalysisService/input';
 link("$present_dir/analysis_v$opt_r.bin", "$analysis_dir/analysis_v$opt_r.bin");
 unlink("$analysis_dir/analysis.bin");

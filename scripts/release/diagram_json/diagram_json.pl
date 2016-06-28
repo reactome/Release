@@ -109,6 +109,7 @@ sub remove_symbolic_link_to_diagram_core_repository {
     
     return unlink $link_name;
 }
+
 sub remove_diagram_core_repository {
     my $directory = shift;
     

@@ -47,29 +47,20 @@ my $outdated_molecule_identifier_counter = 0;
 $dba->execute('START TRANSACTION');
 foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	$reference_molecule = $dba->fetch_instance_by_db_id($reference_molecule_db_id)->[0];
-	if (!(defined $reference_molecule)) {
-		next;
-	}	
-#	print STDERR "$0: reference_molecule=$reference_molecule\n";
+	next unless $reference_molecule;
+    next unless $reference_molecule->referenceDatabase->[0] &&
+                $reference_molecule->referenceDatabase->[0]->displayName =~ /ChEBI/;
 
 	$identifier = $reference_molecule->identifier->[0];
-	if (!(defined $identifier) || $identifier eq '') {
-		next;
-	}
-	
-#	print STDERR "$0: identifier=$identifier\n";
+	next unless $identifier;
 
 	$molecule_identifier_counter++;
 
-	($up_to_date_identifier, $chebi_name) = $chebi->get_up_to_date_identifier_and_name($identifier);
-	
-	if (!(defined $up_to_date_identifier)) {
-		next;
-	}
+	($up_to_date_identifier, $chebi_name, $chebi_formula) = $chebi->get_up_to_date_identifier_name_formulae($identifier);
+	next unless $up_to_date_identifier;
 	
 	$up_to_date_identifier =~ s/^CHEBI://;
 	
-#	print STDERR "$0: old identifier: $identifier, new identifier: $up_to_date_identifier\n";
 
 	if ($chebi_name) {
 		my @simple_entities = @{$reference_molecule->reverse_attribute_value('referenceEntity')};
@@ -120,14 +111,15 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 	$reference_molecule->name(undef);
 	$reference_molecule->identifier($up_to_date_identifier);
 	$reference_molecule->name($chebi_name);
+	$reference_molecule->formula(undef);
+	$reference_molecule->formula($chebi_formula);
 	$dba->update_attribute($reference_molecule, "identifier");
 	$dba->update_attribute($reference_molecule, "name");
-	
+	$dba->update_attribute($reference_molecule, "formula");
 	my $display_name = "$chebi_name [ChEBI:$up_to_date_identifier]";
 	$reference_molecule->_displayName(undef);
 	$reference_molecule->_displayName($display_name);
-	$dba->update_attribute($reference_molecule, "_displayName");		
-	
+	$dba->update_attribute($reference_molecule, "_displayName");
 	$outdated_molecule_identifier_counter++;
 	
 }
