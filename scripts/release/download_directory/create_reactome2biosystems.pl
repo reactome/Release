@@ -13,7 +13,7 @@ use strict;
 BEGIN {
     my @a = split('/',$0);
     pop @a;
-    push @a, ('..','..');
+    push @a, ('..', '..','..');
     my $libpath = join('/', @a);
     unshift (@INC, "$libpath/modules");
     $ENV{PATH} = "$libpath/scripts:$libpath/scripts/release:" . $ENV{PATH};

@@ -100,7 +100,7 @@ sub get_mapping_table_from_mart {
     
     my $mart_url = $species_info{$species_key}->{'mart_url'};
     if (!(defined $mart_url) || $mart_url eq '') {
-       $mart_url = "http://www.ensembl.org/biomart/martservice";
+       $mart_url = "http://useast.ensembl.org/biomart/martservice";
     }
     
     my $mart_virtual_schema = $species_info{$species_key}->{'mart_virtual_schema'};
@@ -270,7 +270,7 @@ sub is_mart_output_erroneous {
 
     my $logger = get_logger(__PACKAGE__);
 
-    if (!(defined $mart_output)) {
+    unless ($mart_output) {
         $logger->warn("mart_output is undef!!\n");
         return 1;
     }

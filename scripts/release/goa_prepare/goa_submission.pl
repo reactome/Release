@@ -71,14 +71,16 @@ open(my $output, ">", "gene_association.reactome");
 print $output "!gaf-version: 2.1\n"; # Header line for GO
 
 # Each output line is processed and written to the output file
+my %seen;
 foreach my $row (@rows) {
+    next if $seen{$row}++;
     if (replace_EXP_evidence_code_with_NAS($row)) {
 		my $date = $date{$row};
 		$row =~ s/EXP/NAS/; # Replace NAS code with EXP code
 		$date{$row} = $date; #otherwise date is lost
     }
     
-    print $output join("\t", $row, $date{$row}, 'Reactome') . "\n";  #the date has to be added after the check, otherwise duplicate entries are created simply due to different modification dates
+    print $output join("\t", $row, $date{$row}, 'Reactome', '', '') . "\n";  #the date has to be added after the check, otherwise duplicate entries are created simply due to different modification dates
 }
 close($output);
 
@@ -193,9 +195,8 @@ sub process_protein {
 	return unless $protein->Species->[0]->CrossReference->[0]; # Must have access to the species name 
     
     foreach my $row (get_rows_from_protein($protein, $parameters)) {
-        return if exists $rows->{$row};
+        $rows->{$row}++;
         get_date(get_instance_with_accession($protein, $parameters), $row);
-        $rows->{$row} = undef;
     }
 }
 

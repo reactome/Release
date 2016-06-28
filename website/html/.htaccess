@@ -1,11 +1,23 @@
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
 RewriteEngine On
+
 RewriteBase /
 RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
+
+
+#RewriteCond %{HTTP_HOST} !=localhost
+#RewriteCond %{HTTP_HOST} !=127.0.0.1
+#RewriteCond %{REMOTE_ADDR} !=127.0.0.1
+#RewriteCond %{REMOTE_ADDR} !=::1
+
+
+RewriteRule "http://localhost:7080/ReactomeRESTfulAPI/RESTfulWS" "http://reactomews.oicr.on.ca/ReactomeRESTfulAPI/RESTfulWS" [R]
+
+
 </IfModule>
 
 # END WordPress

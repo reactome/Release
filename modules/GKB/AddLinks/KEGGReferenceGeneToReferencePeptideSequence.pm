@@ -110,7 +110,7 @@ sub buildPart {
     # the total number of KEGG web services calls that have to be made.
     my $reference_peptide_sequence_count = 0;
     my @reference_peptide_sequences_chunk;
-    my $chunk_size = 50;
+    my $chunk_size = 1000;
     my $species;
     foreach my $reference_peptide_sequence (@{$reference_peptide_sequences}) {
         if (!(defined $reference_peptide_sequence->species->[0])) {
@@ -152,18 +152,26 @@ sub buildPart {
     $self->timer->print();
 }
 
+sub uniprot_to_kegg_gene {
+    my $self = shift;
+    my $hash = shift;
+    $self->{uniprot_to_kegg_gene} = $hash if $hash;
+    return $self->{uniprot_to_kegg_gene};
+}
+
 # No return value.
 sub process_accumulated_reference_peptide_sequences_chunk {
     my ($self, $reference_peptide_sequences_chunk) = @_;
-    
     my $logger = get_logger(__PACKAGE__);
-    
-    if (scalar(@{$reference_peptide_sequences_chunk})<1) {
-        # Nothing to process
-        return;
-    }
-
     my $dba = $self->builder_params->get_dba();
+    my %uniprot_to_kegg_gene = ();
+
+    # We only need to do this the first time
+    if (scalar(@{$reference_peptide_sequences_chunk})<1) {
+	# Nothing to process
+	return;
+    }
+    
     # Create a query from the accumulated ReferencePeptideSequnces, using
     # the identifier attributes, and assuming that the identifiers are
     # UniProt accession numbers.
@@ -171,58 +179,60 @@ sub process_accumulated_reference_peptide_sequences_chunk {
     my $reference_peptide_sequence;
     my $reference_peptide_sequence_identifier;
     foreach $reference_peptide_sequence (@{$reference_peptide_sequences_chunk}) {
-        $reference_peptide_sequence_identifier = $reference_peptide_sequence->identifier->[0];
-        chomp($reference_peptide_sequence_identifier);
-        
-        if (!( $query_string eq '')) {
-            $query_string .= "+";
-        }
-        $query_string .= "uniprot:$reference_peptide_sequence_identifier";
+	$reference_peptide_sequence_identifier = $reference_peptide_sequence->identifier->[0];
+	chomp($reference_peptide_sequence_identifier);
+	
+	if (!( $query_string eq '')) {
+	    #$query_string .= "+";
+	    $query_string .= ' ';
+	}
+	#$query_string .= "uniprot:$reference_peptide_sequence_identifier";
+	$query_string .= $reference_peptide_sequence_identifier;
     }
-
-    # Run the UniProt IDs against KEGG web services, pulling back information
+    
+    # Run the UniProt IDs against UniProt web services, pulling back information
     # on the associated KEGG gene IDs, in tab-delimited format.
     my $output = $self->bconv($query_string);
-
+    
     if ($output eq '') {
-        $logger->warn("output is empty!!\n");
-        return;
+	$logger->warn("output is empty!!\n");
+	return;
     }
     
     # Extract UniProt IDs and corresponding KEGG gene IDs from output.  There
     # should be one line per UniProt ID, in a possibly arbitrary order, thus
     # we use a hash to store the information pulled out of it.
-    my %uniprot_to_kegg_gene = ();
+    
     my @lines = split(/\n/, $output);
-    my $line;
+    
     my @cols;
     my $kegg_gene_id;
     my $uniprot_identifier;
-    foreach $line (@lines) {
-        @cols = split(/\t/, $line);
-        if (scalar(@cols)<2) {
-            $logger->warn("expected 2 cols, got " . scalar(@cols) . ", line=$line, skipping\n");
-            next;
-        }
-        
-        $uniprot_identifier = $cols[0];
-        $uniprot_identifier =~ s/^[a-z]+://;
-        $kegg_gene_id = $cols[1];
-        $kegg_gene_id =~ s/^[a-z]+://;
-        my %kegg_gene_ids = ();
-        if (defined $uniprot_to_kegg_gene{$uniprot_identifier}) {
-            # Get any KEGG gene IDs for this UniProt ID, if it has
-            # already been encountered.
-            %kegg_gene_ids = %{$uniprot_to_kegg_gene{$uniprot_identifier}};
-        }
-        
-        # Add the extracted KEGG gene ID to any other KEGG gene IDs
-        # that may have been collected for this UniProt ID.  Use a
-        # hash, to avoid duplication.
-        $kegg_gene_ids{$kegg_gene_id} = $kegg_gene_id;
-        $uniprot_to_kegg_gene{$uniprot_identifier} = \%kegg_gene_ids;
+    for my $line (@lines) {
+	@cols = split(/\t/, $line);
+	if (scalar(@cols)<2) {
+	    $logger->warn("expected 2 cols, got " . scalar(@cols) . ", line=$line, skipping\n");
+	    next;
+	}
+	$uniprot_identifier = $cols[0];
+	$uniprot_identifier =~ s/^[a-z]+://;
+	$kegg_gene_id = $cols[1];
+	$kegg_gene_id =~ s/^[a-z]+://;
+	my %kegg_gene_ids = ();
+	if (defined $uniprot_to_kegg_gene{$uniprot_identifier}) {
+	    # Get any KEGG gene IDs for this UniProt ID, if it has
+	    # already been encountered.
+	    %kegg_gene_ids = %{$uniprot_to_kegg_gene{$uniprot_identifier}};
+	}
+	
+	# Add the extracted KEGG gene ID to any other KEGG gene IDs
+	# that may have been collected for this UniProt ID.  Use a
+	# hash, to avoid duplication.
+	$kegg_gene_ids{$kegg_gene_id} = $kegg_gene_id;
+	$uniprot_to_kegg_gene{$uniprot_identifier} = \%kegg_gene_ids;
     }
-
+    
+    
     # Create KEGG gene instances for each UniProt ID
     my $reference_peptide_sequence_count = 0;
     my $kegg_name;
@@ -231,13 +241,13 @@ sub process_accumulated_reference_peptide_sequences_chunk {
     my $reference_gene;
     my $j;
     my $ec_num;
-    foreach $reference_peptide_sequence (@{$reference_peptide_sequences_chunk}) {
-        my $underline_species = $reference_peptide_sequence->species->[0]->_displayName->[0];
+    for my $reference_peptide_sequence (@{$reference_peptide_sequences_chunk}) {
+	my $underline_species = $reference_peptide_sequence->species->[0]->_displayName->[0];
         $underline_species =~ s/ +/_/g;
         my $reference_database_kegg = $self->builder_params->reference_database->get_kegg_reference_database($underline_species);
         my $reference_database_kegg_db_id = $reference_database_kegg->db_id();
 
-        $reference_peptide_sequence_identifier = $reference_peptide_sequence->identifier->[0];
+        my $reference_peptide_sequence_identifier = $reference_peptide_sequence->identifier->[0];
         chomp($reference_peptide_sequence_identifier);
 
         if (!( defined $reference_peptide_sequence_identifier ) || $reference_peptide_sequence_identifier eq '') {
@@ -256,7 +266,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
 
         # Get the KEGG gene ID(s) associated with the current UniProt ID
         # and loop over them
-        foreach $kegg_gene_id (sort(keys(%{$uniprot_to_kegg_gene{$reference_peptide_sequence_identifier}}))) {
+        for my $kegg_gene_id (sort(keys(%{$uniprot_to_kegg_gene{$reference_peptide_sequence_identifier}}))) {
 
             # Try to get KEGG gene associated information from the KEGG RESTful server.
             $kegg_entry = undef;
@@ -271,6 +281,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
                 $logger->warn("kegg_gene_id is not defined or is empty, skipping\n");
                 next;
             }
+
             if (!(defined $kegg_entry)) {
                 $logger->warn("Possible problem when trying to get kegg_entry, skipping\n");
                 next;
@@ -278,7 +289,7 @@ sub process_accumulated_reference_peptide_sequences_chunk {
 
             # Chop the KEGG entry into lines and parse out
             # things of interest
-            @lines = split( /\n/, $kegg_entry );
+            my @lines = split( /\n/, $kegg_entry );
 
             # This loop puts EC-number-related DatabaseIdentifier instances
             # into the gene's cross reference slot.
@@ -288,8 +299,8 @@ sub process_accumulated_reference_peptide_sequences_chunk {
             @enzymes = ();
             my $line_num = 0;
             for ($line_num = 0; $line_num < scalar(@lines); $line_num++) {
-                $line = $lines[$line_num];
-
+                my $line = $lines[$line_num];
+		say "KEGG $line"; #DEBUG
                 # Loop over the lines until we find the DEFINITION line; extract
                 # the desired information from this line and then break out of
                 # the loop.
@@ -321,14 +332,14 @@ sub process_accumulated_reference_peptide_sequences_chunk {
 	    unless ($kegg_ref_dna_instance->db_id()) {
 		print "ERROR! NO DB_ID ", $kegg_ref_dna_instance->displayName, "\n";
 		$kegg_ref_dna_instance->inflated(1);
-		$dba->store($kegg_ref_dna_instance, 1);
+		$dba->update($kegg_ref_dna_instance, 1);
 	    }
 
-	    $kegg_ref_dna_instance->inflate();
+	    $kegg_ref_dna_instance->inflated(1);
 	    $kegg_ref_dna_instance->displayName("KEGG Gene:$kegg_gene_id");
 	    $dba->update($kegg_ref_dna_instance);
             push(@reference_genes, $kegg_ref_dna_instance);
-            
+            say STDERR "REF DNA SEQ: ", $kegg_ref_dna_instance->displayName, " DB_ID ", $kegg_ref_dna_instance->db_id;
             $id_hash{$kegg_gene_id}++;
         }
 
@@ -352,7 +363,8 @@ sub process_accumulated_reference_peptide_sequences_chunk {
         $reference_peptide_sequence->inflate;
         $reference_peptide_sequence->referenceGene(undef);
 
-        $reference_peptide_sequence->add_attribute_value('referenceGene', @reference_genes);
+	say STDERR $reference_peptide_sequence->displayName + " gets a kegg thingy!"; #DEBUG
+	$reference_peptide_sequence->add_attribute_value('referenceGene', @reference_genes);
         $reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
 
         $dba->update($reference_peptide_sequence);
@@ -432,8 +444,9 @@ sub get_KEGG_ReferenceDNASequence {
         return $instance;
     }
     
+    say STDERR "INSTANCE " . $instance->displayName;
+
     my $previous_cross_references = $instance->crossReference;
-    
         
     # Make a note of existing cross references of the same type
     my %reference_database_db_id_hash = ();
@@ -467,6 +480,7 @@ sub get_KEGG_ReferenceDNASequence {
     }
         
     if (scalar(@new_cross_references)>0) {
+	say STDERR Dumper [map {$_->displayName, $_->class} @new_cross_references];
         # Null out pre-existing cross references and replace with the
         # list just harvested.
         $instance->crossReference(undef);
@@ -565,20 +579,50 @@ sub add_enzymes {
 
 sub bget {
     my ($self, $query) = @_;
-
     my $url = "http://rest.kegg.jp/get/$query";
+    say STDERR "MY URL IS " . $url;
     my $content = $self->fetch_content_from_url($url);
-
     return $content;
 }
 
-sub bconv {
+sub BROKEN_bconv {
     my ($self, $query) = @_;
-
     my $url = "http://rest.kegg.jp/conv/genes/$query";
     my $content = $self->fetch_content_from_url($url);
-
     return $content;
+}
+
+
+sub bconv {
+    my $self = shift;
+    my $query = shift;
+
+    my $base = 'http://www.uniprot.org';
+    my $tool = 'mapping';
+
+    my $params = {
+	from => 'GENENAME',
+	to => 'KEGG_ID',
+	format => 'tab',
+        query => $query,
+    };
+
+    my $contact = 'sheldon.mckay@gmail.com';
+    my $agent = LWP::UserAgent->new(agent => "libwww-perl $contact");
+    push @{$agent->requests_redirectable}, 'POST';
+
+    my $response = $agent->post("$base/$tool/", $params);
+    
+    while (my $wait = $response->header('Retry-After')) {
+	print STDERR "Waiting ($wait)...\n";
+	sleep $wait;
+	$response = $agent->get($response->base);
+    }
+
+    $response->is_success ?
+	return $response->content :
+	die 'Failed, got ' . $response->status_line .
+	' for ' . $response->request->uri . "\n";
 }
 
 # Given a URL as an argument, fetch the HTML
@@ -595,7 +639,6 @@ sub fetch_content_from_url {
         if(defined $response) {
             if ($response->is_success) {
                 $logger->info("Ah-ha, we have SUCCESS!!!\n");
-
                 $content = $response->content;
             } else {
                 $logger->warn("GET request failed for url=$url\n");
