@@ -1295,6 +1295,18 @@ sub build_pathway_browser_url {
     
     my $logger = get_logger(__PACKAGE__);
     
+    chomp(my $hostname = `hostname -f`);
+    if (!$hostname || $hostname !~ /reactomecurator/) {
+        croak if (!$instance->stableIdentifier->[0] || !$instance->stableIdentifier->[0]->identifier->[0]);
+        my $stable_identifier = $instance->stableIdentifier->[0]->identifier->[0];
+
+        my $url = "/PathwayBrowser/#/$stable_identifier";
+
+        $logger->info("url=$url\n");
+
+        return $url;
+    }
+    
     my $db = $self->cgi->param('DB');
 
     my $db_id = $instance->db_id();
