@@ -942,7 +942,7 @@ sub html_table2 {
 	    $out .= qq(<TR><TH><A NAME="$ {attribute}Anchor">$attribute</A></TH><TD>$str</TD></TR>\n);
 	} else {
 	    if ($self->db_id == 194550) {
-		"non-recursive attribute\n";
+		$logger->info("non-recursive attribute\n");
 	    }
 
 #	    my @values = map {(ref($_)) ? $self->prettyfy_instance($_)->hyperlinked_extended_displayName : $_} 
@@ -1911,8 +1911,10 @@ sub reactionmap_key {
 sub top_browsing_view {
     my ($self, $doi_flag) = @_;
 
+    $self->urlmaker->turn_off_pwb_link();
     my $authors = GKB::Utils::get_authors_recursively($self);
     my $authors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$authors}) || '&nbsp';
+        
     my $reviewers = GKB::Utils::get_reviewers_recursively($self);
     my $reviewers_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$reviewers}) || '&nbsp';
 
