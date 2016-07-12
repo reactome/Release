@@ -39,7 +39,7 @@ my $email  = $CGI->param("email") || '';
 my @db_id  = $CGI->param("DB_ID") || $CGI->param("ID");
 my $clear_ids = $CGI->param('clear_ids');
 
-my $DB = $CGI->param('DB') || $GK_DB_NAME;
+my $DB = $CGI->param('DB') || 'gk_central';#$GK_DB_NAME;
 $CGI->param('DB', $DB);
 
 my $DBA = GKB::DBAdaptor->new
@@ -92,10 +92,10 @@ if (@db_id > 0) {
 	my @rpaths = grep {defined $_ && ref $_} get_reviewed_pathways($id);
 	my $nothing = @apaths + @rpaths == 0;
 
-	my $person_instance = $people{$id} . " ($id)";
+	my $person_name = $instances->[0] ? $instances->[0]->displayName . " ($id)" : '';
 
 	if (@apaths > 0 ) {
-	    print h1("Pathways authored by $person_instance");
+	    print h1("Pathways authored by $person_name");
 	    my @table = th([qw/DB_ID Name/]);
 	    for my $pathway_wrapper (@apaths) {
 		for my $pathway (@$pathway_wrapper) {
@@ -109,7 +109,7 @@ if (@db_id > 0) {
 	    print table({-style => 'width:100%'},TR(\@table));
 	}
         if (@rpaths > 0 ) {
-            print h1("Pathways reviewed by $person_instance");
+            print h1("Pathways reviewed by $person_name");
             my @table = th([qw/DB_ID Name/]);
             for my $pathway_wrapper (@rpaths) {
                 for my $pathway (@$pathway_wrapper) {
@@ -124,7 +124,7 @@ if (@db_id > 0) {
         }
 
 	if ($nothing) {
-	    warning("No pathways have been reviewed or authored by $person_instance");
+	    warning("No pathways have been reviewed or authored by $person_name");
 	}
 
 	print $CGI->h1("Details on Person ", $instances->[0]->displayName);
