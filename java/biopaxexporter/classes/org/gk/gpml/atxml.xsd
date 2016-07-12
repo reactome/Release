@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="Process">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Properties"/>
+        <xs:element ref="Nodes"/>
+        <xs:element ref="Edges"/>
+        <xs:element ref="Pathways"/>
+      </xs:sequence>
+      <xs:attribute name="nextId" use="required" type="xs:integer"/>
+      <xs:attribute name="reactomeId" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Nodes">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="org.gk.render.Note"/>
+        <xs:element ref="org.gk.render.ProcessNode"/>
+        <xs:element ref="org.gk.render.RenderableChemical"/>
+        <xs:element ref="org.gk.render.RenderableCompartment"/>
+        <xs:element ref="org.gk.render.RenderableComplex"/>
+        <xs:element ref="org.gk.render.RenderableEntity"/>
+        <xs:element ref="org.gk.render.RenderablePathway"/>
+        <xs:element ref="org.gk.render.RenderableProtein"/>
+        <xs:element ref="org.gk.render.RenderableRNA"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.Note">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Properties"/>
+      </xs:sequence>
+      <xs:attribute name="bounds" use="required"/>
+      <xs:attribute name="fgColor"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="position" use="required"/>
+      <xs:attribute name="textPosition"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.ProcessNode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Properties"/>
+      </xs:sequence>
+      <xs:attribute name="bgColor"/>
+      <xs:attribute name="bounds"/>
+      <xs:attribute name="fgColor"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="lineColor"/>
+      <xs:attribute name="position" use="required"/>
+      <xs:attribute name="reactomeId" use="required" type="xs:integer"/>
+      <xs:attribute name="textPosition"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.RenderableChemical">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Properties"/>
+        <xs:element minOccurs="0" ref="Shortcuts"/>
+      </xs:sequence>
+      <xs:attribute name="bgColor"/>
+      <xs:attribute name="bounds"/>
+      <xs:attribute name="fgColor"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="lineColor"/>
+      <xs:attribute name="position" use="required"/>
+      <xs:attribute name="reactomeId" use="required" type="xs:integer"/>
+      <xs:attribute name="textPosition"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.RenderableCompartment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Properties"/>
+        <xs:element minOccurs="0" ref="Components"/>
+      </xs:sequence>
+      <xs:attribute name="bgColor" use="required"/>
+      <xs:attribute name="bounds" use="required"/>
+      <xs:attribute name="fgColor"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="lineColor"/>
+      <xs:attribute name="position" use="required"/>
+      <xs:attribute name="reactomeId" use="required" type="xs:integer"/>
+      <xs:attribute name="textPosition" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Components">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Component"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.RenderableComplex">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Properties"/>
+        <xs:choice minOccurs="0">
+          <xs:element ref="Shortcuts"/>
+          <xs:element ref="OldBounds"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="bgColor" use="required"/>
+      <xs:attribute name="bounds"/>
+      <xs:attribute name="fgColor"/>
+      <xs:attribute name="hideComponents" type="xs:boolean"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="lineColor"/>
+      <xs:attribute name="position" use="required"/>
+      <xs:attribute name="reactomeId" use="required" type="xs:integer"/>
+      <xs:attribute name="textPosition"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OldBounds">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Bounds"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Bounds">
+    <xs:complexType>
+      <xs:attribute name="bounds" use="required"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.RenderableEntity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Properties"/>
+        <xs:element minOccurs="0" ref="Shortcuts"/>
+      </xs:sequence>
+      <xs:attribute name="bounds"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="position" use="required"/>
+      <xs:attribute name="reactomeId" use="required" type="xs:integer"/>
+      <xs:attribute name="textPosition"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.RenderablePathway">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Properties"/>
+      </xs:sequence>
+      <xs:attribute name="bounds" use="required"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="position" use="required"/>
+      <xs:attribute name="reactomeId" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.RenderableProtein">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Properties"/>
+        <xs:choice minOccurs="0">
+          <xs:element ref="Shortcuts"/>
+          <xs:element ref="NodeAttachments"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="bounds"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="position" use="required"/>
+      <xs:attribute name="reactomeId" use="required" type="xs:integer"/>
+      <xs:attribute name="textPosition"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NodeAttachments">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="org.gk.render.RenderableFeature"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.RenderableFeature">
+    <xs:complexType>
+      <xs:attribute name="description" type="xs:NCName"/>
+      <xs:attribute name="label" type="xs:NCName"/>
+      <xs:attribute name="reactomeId" type="xs:integer"/>
+      <xs:attribute name="relativeX" use="required" type="xs:decimal"/>
+      <xs:attribute name="relativeY" use="required" type="xs:decimal"/>
+      <xs:attribute name="trackId" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.RenderableRNA">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Properties"/>
+      </xs:sequence>
+      <xs:attribute name="bounds"/>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="position" use="required"/>
+      <xs:attribute name="reactomeId" use="required" type="xs:integer"/>
+      <xs:attribute name="textPosition"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Edges">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="org.gk.render.RenderableInteraction"/>
+          <xs:element ref="org.gk.render.RenderableReaction"/>
+        </xs:choice>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="org.gk.render.FlowLine"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.RenderableInteraction">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Inputs"/>
+        <xs:element ref="Outputs"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="interactionType" use="required" type="xs:NCName"/>
+      <xs:attribute name="lineColor"/>
+      <xs:attribute name="lineWidth" use="required" type="xs:decimal"/>
+      <xs:attribute name="points" use="required"/>
+      <xs:attribute name="position" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.RenderableReaction">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="Inputs"/>
+        <xs:element minOccurs="0" ref="Outputs"/>
+        <xs:element minOccurs="0" ref="Catalysts"/>
+        <xs:element minOccurs="0" ref="Inhibitors"/>
+        <xs:element minOccurs="0" ref="Activators"/>
+        <xs:element minOccurs="0" ref="Properties"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="lineColor"/>
+      <xs:attribute name="lineWidth" use="required" type="xs:decimal"/>
+      <xs:attribute name="points" use="required"/>
+      <xs:attribute name="position" use="required"/>
+      <xs:attribute name="reactionType"/>
+      <xs:attribute name="reactomeId" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Catalysts">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Catalyst"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Catalyst">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="points" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Inhibitors">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Inhibitor"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Inhibitor">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="points" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Activators">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Activator"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Activator">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="points" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="org.gk.render.FlowLine">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Inputs"/>
+        <xs:element ref="Outputs"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="lineWidth" use="required" type="xs:decimal"/>
+      <xs:attribute name="points" use="required"/>
+      <xs:attribute name="position" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Pathways">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Pathway"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Pathway">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Component"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Properties">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="isChanged"/>
+        <xs:element ref="displayName"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="isChanged" type="xs:boolean"/>
+  <xs:element name="displayName" type="xs:string"/>
+  <xs:element name="Shortcuts">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Shortcut"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Shortcut">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Component">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Inputs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Input"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Input">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="points"/>
+      <xs:attribute name="stoichiometry" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Outputs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Output"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Output">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:integer"/>
+      <xs:attribute name="points"/>
+      <xs:attribute name="stoichiometry" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

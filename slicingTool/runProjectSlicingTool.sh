@@ -34,7 +34,7 @@ echo "
 echo "
  " > $LOG
 
-nohup java -Xmx8G -jar ProjectSlicingTool.jar &
+nohup java -Xmx8G -Djava.awt.headless=true -jar ProjectSlicingTool.jar &
 
 tail -f SlicingTool.log $LOG 2>/dev/null &
 
@@ -53,7 +53,7 @@ done
 killall -9 tail >/dev/null 2>&1
 
 echo "Adding new stable IDs..."
-./add_stable_ids.pl -sdb $DB -gdb gk_central -pdb $PREV_DB -ghost localhost -user $USER -pass $PASS -release $VER>>$LOG
+./add_stable_ids.pl -sdb $DB -pdb $PREV_DB -user $USER -pass $PASS -release $VER>>$LOG
 
 
 #/usr/local/gkb/scripts/install_slice_db.pl $DB

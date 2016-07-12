@@ -16,13 +16,8 @@ $| = 1;
 # A few bare SQL queries
 use constant DB_ID  => 'SELECT DB_ID FROM DatabaseObject WHERE stableIdentifier IS NOT NULL';
 use constant ORTHO  => 'SELECT s.identifier FROM History h, StableIdentifier s WHERE h.class = "ortho" AND s.DB_ID = h.ST_ID';
-use constant NAMES  => 'SELECT * FROM Name';
 use constant ST_ID  => 'SELECT * FROM StableIdentifier WHERE identifier = ?';
 use constant ALL_ST => 'SELECT * FROM StableIdentifier';
-use constant GET_NAME => 'SELECT DB_ID FROM Name WHERE name = ?';
-use constant SET_NAME => 'INSERT INTO Name (ST_ID,name) VALUES (?,?)';
-use constant GET_RELEASE => 'SELECT DB_ID FROM ReactomeRelease WHERE database_name = ?';
-use constant SET_RELEASE => 'INSERT INTO ReactomeRelease (release_num,database_name) VALUES (?,?)';
 use constant LOG_CHANGE  => 'INSERT INTO History VALUES (NULL,?,?,?,?,NOW())';
 use constant SET_PARENT  => 'UPDATE StableIdentifier SET instanceId = ? WHERE DB_ID = ?';
 use constant SET_VERSION => 'UPDATE StableIdentifier SET identifierVersion = ? WHERE DB_ID = ?';
@@ -34,7 +29,7 @@ use constant DEBUG => 0;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-our($pass,$user,$db,$stable_id_db,$release,%parent,%logged,%history,%stable_id,%ortho,$history_sql);
+our($pass,$user,$db,$stable_id_db,$release,%parent,%logged,%ortho);
 
 my $usage = "Usage:\n\t$0 -db test_reactome_xx -sdb stable_id_db_name -user db_user user -pass db_pass -release XX";
 
@@ -44,7 +39,7 @@ GetOptions(
     "db:s"    => \$db,
     "sdb:s"   => \$stable_id_db,
     "release:i" => \$release
-    );
+);
 
 $pass && $user && $db && $stable_id_db && $release || die $usage;
 
@@ -53,45 +48,54 @@ my %dba = get_api_connections();
 
 
 # load all stable id history into memory
-get_all_stable_ids();
+my %stable_id;
+get_all_stable_ids(\%stable_id);
 
 # Get list of all instances that have or need ST_IDs
-my $total = my @db_ids = get_db_ids($db);
+my @db_ids = get_db_ids($db);
+$logger->info("Total of " . scalar @db_ids . " instances");
 
-say "Total of $total instances";
-my $idx;
+my $identifier_counter;
 my $then = time();
-for my $db_id (@db_ids) {
-    my $instance   = get_instance($db_id, $db);
-    my $st_id  = $instance->stableIdentifier->[0];
-    $st_id or $logger->warn("No stable ID for $db_id") and next;
+foreach my $db_id (@db_ids) {
+    my $instance = get_instance($db_id, $db);
+    
+    my $stable_id_instance = $instance->stableIdentifier->[0];
+    if (!$stable_id_instance) {
+        $logger->warn("No stable ID for $db_id");
+        next;
+    }
 
-    my $identifier = $st_id->identifier->[0];
+    my $identifier = $stable_id_instance->identifier->[0];
+    if (!$identifier) {
+        $logger->warn("No identifier for stable id instance " . $stable_id_instance->db_id);
+        next;
+    }
+
     $parent{$identifier} = $db_id;
 
-    my $is_ortho = $identifier !~ /-$db_id$/;
-
-    unless (++$idx % 1_000) {
-	my $now = sprintf '%.1f', (time() - $then)/60;
-	say "$identifier ($idx of $total) $now minutes elapsed";
+    if ((++$identifier_counter % 1_000) == 0) {
+        my $now = sprintf '%.1f', (time() - $then)/60;
+        $logger->info("$identifier ($identifier_counter of " . scalar @db_ids . ") $now minutes elapsed");
     }
 
-    $logger->info(join("\t","STABLE_ID",$db_id,$instance->class,$st_id->displayName)."\n");
+    $logger->info(join("\t","STABLE_ID",$db_id,$instance->class,$stable_id_instance->displayName)."\n");
 
     # retrieve or create history DB entry for ST_ID
-    my $history_id = has_history($st_id);
+    has_history($stable_id_instance);
 
+    my $is_ortho = $identifier !~ /-$db_id$/;
     if ($is_ortho) {
-	ortho_parent_in_history($st_id,$db_id);
-	next;
+        ortho_parent_in_history($stable_id_instance,$db_id);
+        next;
     }
 
-    if (is_incremented($st_id)) {
-	increment_in_history($st_id);
-	next;
+    if (is_incremented($stable_id_instance)) {
+        increment_in_history($stable_id_instance);
+        next;
     }
 
-    log_exists($st_id);
+    log_exists($stable_id_instance);
 }
 
 
@@ -117,64 +121,68 @@ sub get_db_ids {
     my $sth = $dba{$db}->prepare(DB_ID);
     $sth->execute;
     while (my $db_id = $sth->fetchrow_array) {
-	push @db_ids, $db_id;
+        push @db_ids, $db_id;
     }
     return @db_ids;
 }
 
 
 sub get_all_stable_ids {
+    my $stable_id = shift;
+    
     my $sth = $dba{$stable_id_db}->prepare(ALL_ST);
     $sth->execute;
     while (my $ary = $sth->fetchrow_arrayref) {
         my ($db_id,$identifier,$version,$parent) = @$ary;
-	$stable_id{$identifier}{db_id}   = $db_id;
-	$stable_id{$identifier}{version} = $version;
-	$stable_id{$identifier}{parent}  = $parent;
-	push @{$stable_id{$parent}}, $db_id;
+        $stable_id->{$identifier}{db_id}   = $db_id;
+        $stable_id->{$identifier}{version} = $version;
+        $stable_id->{$identifier}{parent}  = $parent;
+        push @{$stable_id->{$parent}}, $db_id;
     }
+}
+
+sub handle {
+    return $dba{$stable_id_db}->prepare(ST_ID);
 }
 
 sub add_stable_id_to_memory {
     my $identifier = shift;
-    my $sth = $dba{$stable_id_db}->prepare_cached(ST_ID);
+
+    my $sth = handle();
     $sth->execute($identifier);
     while (my $ary = $sth->fetchrow_arrayref) {
         my ($db_id,$identifier,$version,$parent) = @$ary;
         $stable_id{$identifier}{db_id}   = $db_id;
         $stable_id{$identifier}{version} = $version;
         $stable_id{$identifier}{parent}  = $parent;
-	$stable_id{$identifier}{created} = 1;
+        $stable_id{$identifier}{created} = 1;
+        last;
     }
     return $stable_id{$identifier}{db_id};
 }
 
 sub has_history {
     my $instance = shift;
-    my $do_not_add = shift;
 
     my $identifier = $instance->attribute_value('identifier')->[0];
 
     if ($stable_id{$identifier}) {
-	return $stable_id{$identifier}{db_id};
+        return $stable_id{$identifier}{db_id};
+    } else {
+        return add_stable_id_to_history($instance);
     }
-    else {
-	return add_stable_id_to_history($instance);
-    }
-
-    return undef;
 }
 
 sub is_already_ortho {
     my $identifier = shift;
 
     unless (keys %ortho) {
-	$logger->info("getting list of ortho ST_IDs");
-	my $sth = $dba{$stable_id_db}->prepare_cached(ORTHO);
-	$sth->execute();
-	while ($sth->fetchrow_arrayref) {
-	    $ortho{$_->[0]}++;
-	}
+        $logger->info("getting list of ortho ST_IDs");
+        my $sth = $dba{$stable_id_db}->prepare_cached(ORTHO);
+        $sth->execute();
+        while ($sth->fetchrow_arrayref) {
+            $ortho{$_->[0]}++;
+        }
     }
 
     my $is_ortho = $ortho{$identifier};
@@ -183,24 +191,27 @@ sub is_already_ortho {
 
 sub add_stable_id_to_history {
     my $st_id  = shift;
+    
     my $identifier = $st_id->attribute_value('identifier')->[0];
-    my $parent_id  = $parent{$identifier};
+    unless ($identifier) {
+        $logger->warn("Stable ID ",$st_id->db_id, " has no identifier.");
+        return;
+    }
 
-    my $dbh = $dba{$stable_id_db};
     my $version = $st_id->attribute_value('identifierVersion')->[0];
-
-    my $sth = $dbh->prepare_cached(CREATE);
-    $sth->execute($identifier,$version,$parent_id);
+    $dba{$stable_id_db}->prepare(CREATE)->execute(
+        $identifier,
+        $version,
+        $parent{$identifier}
+    );
     $stable_id{new}{$identifier}++;
 
     my $db_id = add_stable_id_to_memory($identifier);
-    
     if ($db_id) {
-	log_creation($st_id);
-	return $db_id;
-    }
-    else {
-	die "Failure creating new stable ID";
+        log_creation($st_id);
+        return $db_id;
+    } else {
+        die "Failure creating new stable ID";
     }
 }
 
@@ -212,7 +223,7 @@ sub log_exists {
 sub log_ortho {
     my $identifier = $_[0]->identifier->[0];
     unless (is_already_ortho($identifier)) {
-	add_change_to_history($_[0],'ortho');
+        add_change_to_history($_[0],'ortho');
     }
 }
 
@@ -229,17 +240,17 @@ sub add_change_to_history {
 
     $logger->info("Logging $change event for " . $st_id->displayName . " in history database\n");
     my $st_db_id = has_history($st_id);
-
     unless ($st_db_id) {
-	$dba{$db}->throw("No history found for ".$st_id->displayName);
+        $dba{$db}->throw("No history found for ".$st_id->displayName);
     }
 
-    my $dbh = $dba{$stable_id_db};
-
-    my $name = $st_id->displayName;
-
-    my $sth = $dbh->prepare_cached(LOG_CHANGE);
-    $sth->execute($st_db_id,$name,$change,$release);
+    my $sth = $dba{$stable_id_db}->prepare_cached(LOG_CHANGE);
+    $sth->execute(
+        $st_db_id,
+        $st_id->displayName,
+        $change,
+        $release
+    );
     $logged{$st_id->identifier->[0]}++;
 
     return $st_db_id;
@@ -252,9 +263,8 @@ sub is_incremented {
     return 0 if $id_version == 1;
 
     my $version = $stable_id{$identifier}{version};
-
     if ($version < $id_version) {
-	return 1;
+        return 1;
     }
 
     return 0;
@@ -281,7 +291,7 @@ sub ortho_parent_in_history {
 
     # this is already done for new stable IDs
     if ($stable_id{new}{$identifier}) {
-	return 1;
+        return 1;
     }
 
     my $old_parent_id = $stable_id{$identifier}{parent};
@@ -289,8 +299,8 @@ sub ortho_parent_in_history {
 
     my $sth = $dba{$stable_id_db}->prepare_cached(SET_PARENT);
     for my $old_st_id (@st_id_with_old_parent) {
-	$logger->info("Updating parent instanceId from $old_parent_id to $db_id");
-	$sth->execute($db_id,$old_st_id);
+        $logger->info("Updating parent instanceId from $old_parent_id to $db_id");
+        $sth->execute($db_id,$old_st_id);
     }
     log_ortho($st_id);
 }
@@ -302,5 +312,3 @@ sub get_instance {
     my $instance = $dba{$db}->fetch_instance_by_db_id($db_id)->[0];
     return $instance;
 }
-
-

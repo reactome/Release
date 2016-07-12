@@ -284,10 +284,15 @@ sub run_commands {
 sub post_step_tests {
 	my $self = shift;
 	
+	my @errors;
+	
 	my @file_size_errors = _get_file_size_errors('post_requisite_file_listing');
 	my @output_errors = _get_output_errors();
 	
-	return (@file_size_errors, @output_errors);
+	push @errors, @file_size_errors if @file_size_errors;
+	push @errors, @output_errors if @output_errors;
+	
+	return @errors;
 }
 
 sub cmd {
@@ -444,7 +449,8 @@ sub _get_file_size_errors {
 			if ($file_size_ok) {
 				$file_listing = join("\t", $file_name_pattern, $new_file_size, $verify_file_size);
 			} else {
-				push @errors, "$file_name is too small";
+				push @errors, "$file_name is too small: " . abs(_file_size_percent_change($new_file_size, $old_file_size)) .
+								"% decrease (old file size:$old_file_size; new file size:$new_file_size)";
 			}
 		}
 	}
@@ -498,13 +504,17 @@ sub _update_listing_of_required_files {
 sub _file_size_ok {
 	my $new_file_size = shift;
 	my $old_file_size = shift;
-	my $percent_change_tolerance = shift // 10;
+	my $percent_decrease_limit = shift // -10;
 	
 	return 0 unless $new_file_size && $old_file_size;
+	return _file_size_percent_change($new_file_size, $old_file_size) > $percent_decrease_limit ? 1 : 0;
+}
+
+sub _file_size_percent_change {
+	my $new_file_size = shift;
+	my $old_file_size = shift;
 	
-	my $percent_reduction = (($old_file_size - $new_file_size) / $old_file_size) * 100;
-	
-	return $percent_reduction < $percent_change_tolerance ? 1 : 0;
+	return sprintf("%.2f", (($new_file_size - $old_file_size) / $old_file_size) * 100);
 }
 
 sub _get_sender_address {

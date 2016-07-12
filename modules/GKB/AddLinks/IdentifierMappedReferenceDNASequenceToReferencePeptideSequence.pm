@@ -124,143 +124,147 @@ sub insert_xrefs {
     my $value;
     foreach $species (keys(%{$accs})) {
     	if (defined $limiting_species && !($species eq $limiting_species)) {
-	    next;
-	}
+            $logger->warn("$species is not the same as selected species $limiting_species");
+            next;
+        }
 	
-	$logger->info("dealing with species: $species\n");
-	# Define the reference database inside the species iterator loop,
-	# because in some cases, such as ENSEMBL, different databases are
-	# used, depending on species·
-	$reference_database = $self->builder_params->reference_database->get_reference_database($output_db, $species);
-	if (!(defined $reference_database)) {
-	    next;
-	}    
-	# Get rid of old xrefs of this type, if necessary.
-	if ($overwrite_old_xrefs) {
-	    $self->remove_typed_instances_from_reference_peptide_sequence_hash($accs, $attribute, $reference_database, $species);
-	}
+        $logger->info("Dealing with species: $species\n");
+        # Define the reference database inside the species iterator loop,
+        # because in some cases, such as ENSEMBL, different databases are
+        # used, depending on species·
+        $reference_database = $self->builder_params->reference_database->get_reference_database($output_db, $species);
+        if (!(defined $reference_database)) {
+            $logger->warn("Could not get reference database for $species from $output_db");
+            next;
+        }    
+        # Get rid of old xrefs of this type, if necessary.
+        if ($overwrite_old_xrefs) {
+            $self->remove_typed_instances_from_reference_peptide_sequence_hash($accs, $attribute, $reference_database, $species);
+        }
 	
-	@input_ids = keys(%{$accs->{$species}});
-	$output_id_hash_defined_flag = 0;
-	$output_id_hash = $self->builder_params->identifier_mapper->convert_list('UniProt', \@input_ids, $output_db, $species);
-	if (defined $output_id_hash) {
-	    $output_id_hash_defined_flag = 1;
-	    foreach my $acc (keys(%{$output_id_hash})) {
-		foreach my $i (@{$accs->{$species}->{uc($acc)}}) {
-		    if (!$overwrite_old_xrefs && $self->exists_typed_instances_from_attribute($i, $attribute, $reference_database)) {
-			# Don't insert any genes if there are some there
-			# already.
-			next;
-		    }
-		    foreach my $id (@{$output_id_hash->{$acc}}) {
-		    	# Generally speaking, there will only be one
-			# ReferencePeptideSequence instance associated
-			# with a given accession, so this loop will only
-			# be entered once.
-			if ($attribute eq 'referenceGene') {
-			    $value = $self->builder_params->miscellaneous->get_reference_dna_sequence($i->species, $reference_database, $id);
-			} elsif ($attribute eq 'referenceTranscript') {
-			    if ($species eq "Homo sapiens") {
-				$value = $self->builder_params->miscellaneous->get_reference_rna_sequence($reference_database, $hapmap_reference_database, $id);
-			    }
-			} else {
-			    $value = $self->builder_params->database_identifier->get_database_identifier($reference_database, $id);
-			}
-			if ((defined $attribute) && (defined $value)) {
-			    my $add_success = 0;
-			    eval {
-				$add_success = $i->add_attribute_value_if_necessary($attribute, $value);
-			    };
-			    if ($add_success) {
-#				print STDERR $self->class_name . ".insert_xrefs: inserting $id from UniProt for $acc\n";
-				$self->increment_insertion_stats_hash($i->db_id);
-				$id_hash{$id}++;
-			    } else {
-				$logger->warn("IdentifierMappedReferenceDNASequenceToReferencePeptideSequence.insert_xrefs: WARNING - add_attribute_value_if_necessary failed\n");
-			    }
-			} else {
-			    if (!(defined $attribute) && (defined $value)) {
-				$logger->warn("IdentifierMappedReferenceDNASequenceToReferencePeptideSequence.insert_xrefs: WARNING - attribute undef, value=$value\n");
-			    } elsif ((defined $attribute) && !(defined $value)) {
-				$logger->warn("IdentifierMappedReferenceDNASequenceToReferencePeptideSequence.insert_xrefs: WARNING - attribute=$attribute=, value undef\n");
-			    } else {
-				$logger->warn("IdentifierMappedReferenceDNASequenceToReferencePeptideSequence.insert_xrefs: WARNING - both attribute and value undef\n");
-			    }
-			}
-		    }
-		}
-	    }
-	}
+        @input_ids = keys(%{$accs->{$species}});
+        $output_id_hash_defined_flag = 0;
+        $output_id_hash = $self->builder_params->identifier_mapper->convert_list('UniProt', \@input_ids, $output_db, $species);
+        $logger->warn("Unable to get mapping between UniProt and $output_db for $species") unless $output_id_hash;
+        if (defined $output_id_hash) {
+            $output_id_hash_defined_flag = 1;
+            foreach my $uniprot_accession (keys(%{$output_id_hash})) {
+            	foreach my $reference_gene_product (@{$accs->{$species}->{uc($uniprot_accession)}}) {
+            	    if (!$overwrite_old_xrefs && $self->exists_typed_instances_from_attribute($reference_gene_product, $attribute, $reference_database)) {
+                		# Don't insert any genes if there are some there
+                		# already.
+                		next;
+            	    }
+            	    foreach my $id (@{$output_id_hash->{$uniprot_accession}}) {
+            	    	# Generally speaking, there will only be one
+                		# ReferencePeptideSequence instance associated
+                		# with a given accession, so this loop will only
+                        # be entered once.
+                        if ($attribute eq 'referenceGene') {
+                            $value = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_gene_product->species, $reference_database, $id);
+                        } elsif ($attribute eq 'referenceTranscript') {
+                            if ($species eq "Homo sapiens") {
+                            	$value = $self->builder_params->miscellaneous->get_reference_rna_sequence($reference_database, $hapmap_reference_database, $id);
+                            }
+                        } else {
+                            $value = $self->builder_params->database_identifier->get_database_identifier($reference_database, $id);
+                        }
+                        
+                        if ((defined $attribute) && (defined $value)) {
+                            my $add_success = 0;
+                            eval {
+                                $add_success = $reference_gene_product->add_attribute_value_if_necessary($attribute, $value);
+                            };
+                            if ($add_success) {
+				                $logger->info("inserted $id from UniProt for $uniprot_accession in " .
+                                    $reference_gene_product->displayName . "(" . $reference_gene_product->db_id . ")\n");
+                                
+                                $self->increment_insertion_stats_hash($reference_gene_product->db_id);
+                                $id_hash{$id}++;
+                            } else {
+                                $logger->warn("add_attribute_value_if_necessary failed\n");
+                            }
+                        } else {
+                            if (!(defined $attribute) && (defined $value)) {
+                            	$logger->warn("attribute undef, value=$value\n");
+                            } elsif ((defined $attribute) && !(defined $value)) {
+                                $logger->warn("attribute=$attribute=, value undef\n");
+                            } else {
+                                $logger->warn("both attribute and value undef\n");
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-	$output_id_hash = $self->builder_params->identifier_mapper->convert_list('ENSP', \@input_ids, $output_db, $species);
-	if (defined $output_id_hash) {
-	    $output_id_hash_defined_flag = 1;
-	    foreach my $acc (keys(%{$output_id_hash})) {
-	        foreach my $i (@{$accs->{$species}->{uc($acc)}}) {
-		    if (!$overwrite_old_xrefs && $self->exists_typed_instances_from_attribute($i, $attribute, $reference_database)) {
-			# Don't insert any genes if there are some there
-			# already.
-			next;
-		    }
-		    foreach my $id (@{$output_id_hash->{$acc}}) {
-			# Generally speaking, there will only be one
-			# ReferencePeptideSequence instance associated
-			# with a given accession, so this loop will only
-			# be entered once.
-			if ($attribute eq 'referenceGene') {
-			    $value = $self->builder_params->miscellaneous->get_reference_dna_sequence($i->species, $reference_database, $id);
-			} elsif ($attribute eq 'referenceTranscript') {
-			    if ($species eq "Homo sapiens") {
-			        $value = $self->builder_params->miscellaneous->get_reference_rna_sequence($reference_database, $hapmap_reference_database, $id);
-			    }
-			} else {
-			    $value = $self->builder_params->database_identifier->get_database_identifier($reference_database, $id);
-			}
-			if ($i->add_attribute_value_if_necessary($attribute, $value)) {
-			    $logger->info("inserting $id from ENSP for $acc\n");
-			    $self->increment_insertion_stats_hash($i->db_id);
-			    $id_hash{$id}++;
-			}
-		    }
-		}
-	    }
-	}
-	if (!$output_id_hash_defined_flag) {
-	    #if (!(defined $self->termination_status)) {
-	    #	$self->termination_status("no xrefs for species: ");
-	    #}
-	    #$self->termination_status($self->termination_status . "$species, ");
-	    $logger->warn("No xrefs for species $species");
-	    next;
-	}
+        $output_id_hash = $self->builder_params->identifier_mapper->convert_list('ENSP', \@input_ids, $output_db, $species);
+        $logger->warn("Unable to get mapping between EnsEMBL Protein and $output_db for $species") unless $output_id_hash;
+        if (defined $output_id_hash) {
+            $output_id_hash_defined_flag = 1;
+            foreach my $ensembl_protein_identifier (keys(%{$output_id_hash})) {
+                foreach my $reference_gene_product (@{$accs->{$species}->{uc($ensembl_protein_identifier)}}) {
+            	    if (!$overwrite_old_xrefs && $self->exists_typed_instances_from_attribute($reference_gene_product, $attribute, $reference_database)) {
+                        # Don't insert any genes if there are some there
+                    	# already.
+                    	next;
+                    }
+                    foreach my $id (@{$output_id_hash->{$ensembl_protein_identifier}}) {
+                    	# Generally speaking, there will only be one
+                    	# ReferencePeptideSequence instance associated
+                    	# with a given accession, so this loop will only
+                    	# be entered once.
+                    	if ($attribute eq 'referenceGene') {
+                    	    $value = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_gene_product->species, $reference_database, $id);
+                    	} elsif ($attribute eq 'referenceTranscript') {
+                    	    if ($species eq "Homo sapiens") {
+                    	        $value = $self->builder_params->miscellaneous->get_reference_rna_sequence($reference_database, $hapmap_reference_database, $id);
+                    	    }
+                    	} else {
+                    	    $value = $self->builder_params->database_identifier->get_database_identifier($reference_database, $id);
+                    	}
+                        
+                    	if ($reference_gene_product->add_attribute_value_if_necessary($attribute, $value)) {
+                    	    $logger->info("inserted $id from ENSP for $ensembl_protein_identifier in " .
+                                $reference_gene_product->displayName . "( " . $reference_gene_product->db_id . ")\n");
+                            
+                    	    $self->increment_insertion_stats_hash($reference_gene_product->db_id);
+                    	    $id_hash{$id}++;
+                        }
+                    }
+                }
+            }
+        }
+        if (!$output_id_hash_defined_flag) {
+            $logger->warn("No xrefs for species $species");
+            next;
+        }
+        
+        # Update to database.
+        while (my ($acc,$ar) = each %{$accs->{$species}}) {
+            foreach my $reference_gene_product (@{$ar}) {
+                $logger->info("for protein $acc adding following to database: \t" . join(',',map {$_->displayName} @{$reference_gene_product->$attribute}));
+                if ($reference_gene_product && $self->insertion_stats_hash->{$reference_gene_product->db_id}) {
+                    $reference_gene_product->add_attribute_value('modified', $self->instance_edit);
+                    $dba->update_attribute($reference_gene_product, 'modified');
+                    $dba->update_attribute($reference_gene_product, $attribute);
+                    $species_hit_count_hash{$species}++;
+                }
+            }
+        }
+	
+        # Summary diagnostics
+        $logger->info("proteins for which references have been found, per species:\n");
+        foreach $species (sort(keys(%species_hit_count_hash))) {
+            $logger->info("$species: " . $species_hit_count_hash{$species} . "\n");
+        }
+
+        $self->print_insertion_stats_hash();
+
+        $logger->info("number of unique IDs inserted: " . scalar(keys(%id_hash)) . "\n");
     
-	# Update to database.
-	while (my ($acc,$ar) = each %{$accs->{$species}}) {
-	    foreach my $i (@{$ar}) {
-	        $logger->info("for protein $acc adding following to database: \t" . join(',',map {$_->displayName} @{$i->$attribute}));
-#		if (scalar(@{$i->$attribute})>0 && $i->$attribute->[0]) {
-	        if ($i && $self->insertion_stats_hash->{$i->db_id}) {
-		    $i->add_attribute_value('modified', $self->instance_edit);
-		    $dba->update_attribute($i, 'modified');
-		    $dba->update_attribute($i, $attribute);
-		    $species_hit_count_hash{$species}++;
-	        }
-#		}
-	    }
-	}
-	
-	# Summary diagnostics
-	$logger->info("proteins for which references have been found, per species:\n");
-	foreach $species (sort(keys(%species_hit_count_hash))) {
-	    $logger->info("$species: " . $species_hit_count_hash{$species} . "\n");
-	}
-
-	$self->print_insertion_stats_hash();
-
-	$logger->info("number of unique IDs inserted: " . scalar(keys(%id_hash)) . "\n");
-    
-	$self->timer->stop($self->timer_message);
-	$self->timer->print();
+        $self->timer->stop($self->timer_message);
+        $self->timer->print();
     }
 }
 

@@ -7,6 +7,8 @@ use constant OR => 1;
 
 use lib '/usr/local/gkb/modules';
 
+use feature qw/state/;
+
 use autodie qw/:all/;
 use Carp;
 use Data::Dumper;
@@ -23,26 +25,31 @@ Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
 
-my ($selected_pathways, $output_file);
+my ($selected_pathways, $output_file, $all_reactions);
 GetOptions(
     'pathways=s' => \$selected_pathways,
-    'output=s' => \$output_file
+    'output=s' => \$output_file,
+    'all_reactions' => \$all_reactions
 );
-
+=head
 unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
     print usage_instructions();
     exit;
 }
+=cut
 
 my @reactions;
+my $dba = get_dba({'host' => 'reactomecurator.oicr.on.ca', 'db' => 'gk_central'});
+
+=head
 if ($selected_pathways eq 'all') {    
-    @reactions = @{get_dba()->fetch_instance(-CLASS => 'ReactionlikeEvent', [['species',['48887']]])};
+    @reactions = @{$dba->fetch_instance(-CLASS => 'ReactionlikeEvent', [['species',['48887']]])};
 } else {
     my @db_ids = split(",", $selected_pathways);
     my @pathways;
     
     foreach my $db_id (@db_ids) {
-	my $pathway = get_dba()->fetch_instance_by_db_id($db_id)->[0];
+	my $pathway = $dba->fetch_instance_by_db_id($db_id)->[0];
 	unless($pathway->is_a('Pathway')) {
 	    warn("$db_id is not a pathway");
 	    next;
@@ -55,14 +62,16 @@ if ($selected_pathways eq 'all') {
     }
 }
 @reactions = grep {!$_->disease->[0]} @reactions;
-
+@reactions = grep {$_->_doRelease->[0] && $_->_doRelease->[0] =~ /TRUE/i} @reactions unless $all_reactions;
 exit unless @reactions;
 
 my %interactions;
+=cut
 my %parent2child;
 my %child2parent;
 my %id2instance;
 
+=head
 foreach my $reaction (@reactions) {
     populate_graph($reaction);
 }
@@ -70,13 +79,33 @@ foreach my $reaction (@reactions) {
 foreach my $reaction (@reactions) {
     add_reaction_to_logic_table($reaction, \@reactions);
 }
+=cut
+
 
 ($output_file = $0) =~ s/.pl$/.tsv/ unless $output_file;
 open my $logic_table_fh, ">", "$output_file";
-report_interactions(\%interactions, $logic_table_fh);
+
+my %interactions;
+my @groups = (
+    [5658216, 5658219, 5672717],
+    [3222570],
+    [1963588, 5658216],
+    [113595, 1963587, 1963588],
+    [5658216, 5658219, 5672717, 2685662],
+    [5683605, 113595]
+);
+foreach my $group (@groups) {
+    foreach my $instance_id (@$group) {
+        my $instance = $dba->fetch_instance_by_db_id($instance_id)->[0];
+        process_if_set_or_complex($instance);
+    }
+    report_interactions(\%interactions, $logic_table_fh);
+    print $logic_table_fh "-" x 80,"\n";
+    %interactions = ();
+}
 close $logic_table_fh;
 
-add_line_count($output_file);
+#add_line_count($output_file);
 `dos2unix -q $output_file`;
 
 sub populate_graph {
@@ -85,10 +114,11 @@ sub populate_graph {
     
     my @inputs = @{$reaction->input};
     my @outputs = @{$reaction->output};
-    my @catalysts =  map($_->physicalEntity->[0], @{$reaction->catalystActivity});
-    my @regulations = @{$reaction->reverse_attribute_value('regulatedEntity')};
+    my @catalysts =  grep { defined } map({$_->physicalEntity->[0]} @{$reaction->catalystActivity});
+    my @regulators = grep { defined } map({$_->regulator->[0]} @{$reaction->reverse_attribute_value('regulatedEntity')});
     
-    foreach my $parent (@inputs, @catalysts, @regulations) {
+    foreach my $parent (@inputs, @catalysts, @regulators) {
+        confess $reaction_id unless $parent;
         my $parent_id = get_label($parent);
         $parent2child{$parent_id}{$reaction_id}++;
         $child2parent{$reaction_id}{$parent_id}++;
@@ -123,7 +153,7 @@ sub add_reaction_to_logic_table {
     
     my @inputs = @{$reaction->input};
     my @outputs = @{$reaction->output};
-    my @catalysts =  map($_->physicalEntity->[0], @{$reaction->catalystActivity});
+    my @catalysts =  grep { defined } map($_->physicalEntity->[0], @{$reaction->catalystActivity});
     
     process_inputs($reaction, \@inputs);
     process_inputs($reaction, \@catalysts);
@@ -144,7 +174,7 @@ sub process_inputs {
     my $inputs = shift;
     
     foreach my $input (@$inputs) {
-	process_if_set_or_complex($input) unless is_an_output($input);
+	process_if_set_or_complex($input) unless is_a_reaction_output($input);
 	process_input($reaction, $input);
     }
 }
@@ -160,20 +190,44 @@ sub process_output {
     my $output = shift;
     my $associated_reactions = shift;
     
-    my @reactions_to_output = grep {!output_is_component_of_ancestral_input($output, $_)} @$associated_reactions;
+    my @reactions_to_output;
+    my @potential_reactions_to_reaction;
+    foreach my $associated_reaction (@$associated_reactions) {
+        if (output_is_component_of_ancestral_input($output, $associated_reaction)) {
+            push @potential_reactions_to_reaction, $associated_reaction;
+        } else {
+            push @reactions_to_output, $associated_reaction;
+        }
+    }
+    
     my $reaction_to_output_logic = scalar @reactions_to_output > 1 ? OR : AND;
     foreach my $reaction (@reactions_to_output) {
         record(get_label($reaction), get_label($output), 1, $reaction_to_output_logic);
     }
     
-    my @reactions_to_reaction = grep {output_is_component_of_ancestral_input($output, $_)} @$associated_reactions;
-    my $reaction_to_reaction_logic = scalar @reactions_to_reaction > 1 ? OR : AND;
-    foreach my $reaction (@reactions_to_reaction) {
-        foreach my $child_reaction_id (get_child_reaction_ids($output)) {
-            record(get_label($reaction), $child_reaction_id, 1, $reaction_to_reaction_logic) if is_preceding_event($child_reaction_id, $reaction);
-            #print join("\t", get_label($reaction), $child_reaction_id) . "\n" unless is_preceding_event($child_reaction_id, $reaction);
+    my %reaction_connections = get_reaction_connections($output, \@potential_reactions_to_reaction);    
+    my $reaction_to_reaction_logic = scalar keys %reaction_connections > 1 ? OR : AND;
+    foreach my $parent_reaction_id (keys %reaction_connections) {
+        foreach my $child_reaction_id (@{$reaction_connections{$parent_reaction_id}}) {
+            record($parent_reaction_id, $child_reaction_id, 1, $reaction_to_reaction_logic);
         }
     }
+
+}
+    
+sub get_reaction_connections {
+    my $output = shift;
+    my $potential_parent_reactions = shift;
+    
+    my %reaction_connections;
+    foreach my $reaction (@{$potential_parent_reactions}) {
+        foreach my $child_reaction_id (get_child_reaction_ids($output)) {
+            my $reaction_id = get_label($reaction);
+            push @{$reaction_connections{$reaction_id}}, $child_reaction_id if is_preceding_event($child_reaction_id, $reaction);
+        }
+    }
+    
+    return %reaction_connections;
 }
 
 sub process_if_set_or_complex {
@@ -198,7 +252,7 @@ sub process_if_set_or_complex {
 	push @elements, @{$physical_entity->hasComponent};
 	$logic = AND;
     }
-    
+
     foreach my $element (@elements) {	
         $action->($element, $physical_entity, 1, $logic);
         process_if_set_or_complex($element, $action);
@@ -211,7 +265,7 @@ sub process_regulations {
     
     foreach my $regulation (@$regulations) {
 	my $regulator = $regulation->regulator->[0];
-	process_if_set_or_complex($regulator) unless is_an_output($regulator);
+	process_if_set_or_complex($regulator) unless is_a_reaction_output($regulator);
 	
 	my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
 	record(get_label($regulator), get_label($reaction), $value, AND);
@@ -232,23 +286,32 @@ sub record {
 
 sub get_label {
     my $instance = shift;
+    state %label_cache;
+    
+    confess unless $instance;
+    
+    return $label_cache{$instance->db_id} if $label_cache{$instance->db_id};
         
     my $label = $instance->referenceEntity->[0] ?
-    $instance->referenceEntity->[0]->db_id :
+    $instance->displayName . '_' . $instance->referenceEntity->[0]->db_id :
     $instance->db_id;
     
-    $label = $instance->name->[0] . '_' . $label if $instance->hasModifiedResidue->[0];
-    $label = $instance->displayName . '_' . $label if $instance->is_a('SimpleEntity');
     $label .= "_RLE" if $instance->is_a('ReactionlikeEvent');
+    $label =~ s/[ \,+]/_/g;
+    
+    $label_cache{$instance->db_id} = $label;
     
     return $label;
 }
 
 sub get_dba {
+    my $parameters = shift // {};
+    
     return GKB::DBAdaptor->new (
 	-user => $GKB::Config::GK_DB_USER,
 	-pass => $GKB::Config::GK_DB_PASS,
-	-dbname => $GKB::Config::GK_DB_NAME
+    -host => $parameters->{'host'} || $GKB::Config::GK_DB_HOST,
+	-dbname => $parameters->{'db'} || $GKB::Config::GK_DB_NAME
     );
 }
 
@@ -338,12 +401,14 @@ sub is_binding_reaction {
     scalar @{$reaction->input} > scalar @{$reaction->output};
 }
 
-sub is_an_output {
+sub is_a_reaction_output {
     my $entity = shift;
     
-    my @parents_of_entity = map({$id2instance{$_}} keys %{$child2parent{get_label($entity)}});
-
-    return @parents_of_entity;
+    my @reactions_outputting_entity = grep({$_->is_a('ReactionlikeEvent')}
+                                        map({$id2instance{$_}}
+                                        keys %{$child2parent{get_label($entity)}}));
+    
+    return (scalar @reactions_outputting_entity > 0);
 }
 
 sub get_reactions_with_output {
@@ -418,14 +483,16 @@ sub on_skip_list {
         1369085 => [$ANYTHING]
     );
     
-    return 1 if any {$_ == $child_id} @{$skip_list{$ANYTHING}};
-    return any {($_ == $ANYTHING) || ($_ == $child_id)} @{$skip_list{$parent_id}};
+    return 1 if any {$_ eq $child_id} @{$skip_list{$ANYTHING}};
+    return any {($_ == $ANYTHING) || ($_ eq $child_id)} @{$skip_list{$parent_id}};
 }
 
 sub get_id_from_label {
     my $label = shift;
     
-    my ($id) =~ /^(\d+)_RLE$|_(\d+)$/;
+    my ($id) = $label =~ /^(\d+)_RLE(?:_AND|_OR)?$/;
+    ($id) = $label =~ /_(\d+)(?:_AND|_OR)?$/ unless $id;
+    $id = $label unless $id;
     
     return $id;
 }
@@ -459,8 +526,9 @@ Usage: perl $0 [options]
 
 Options
 
--pathways	comma delimited list of pathway db_ids or 'all' (required)
--output		name of output file (defaults to name of script with .tsv extension)
+-pathways [db_id list or 'all'] comma delimited list of pathway db_ids or 'all' (required)
+-output	[file name] name of output file (defaults to name of script with .tsv extension)
+-all_reactions  flag used to include unreleased reactions (default is to use only released reactions)  
 
 END
 }

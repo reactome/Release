@@ -1,5 +1,5 @@
 <?php
-/*  Copyright 2007-2015  John Havlik  (email : john.havlik@mtekk.us)
+/*  Copyright 2007-2016  John Havlik  (email : john.havlik@mtekk.us)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 require_once(dirname(__FILE__) . '/includes/block_direct_access.php');
-//Do a PHP version check, require 5.2 or newer
+//Do a PHP version check, require 5.3 or newer
 if(version_compare(phpversion(), '5.3.0', '<'))
 {
 	//Only purpose of this function is to echo out the PHP version error
@@ -42,7 +42,7 @@ if(!class_exists('mtekk_adminKit'))
  */
 class bcn_network_admin extends mtekk_adminKit
 {
-	const version = '5.2.2';
+	const version = '5.4.0';
 	protected $full_name = 'Breadcrumb NavXT Network Settings';
 	protected $short_name = 'Breadcrumb NavXT';
 	protected $access_level = 'manage_network_options';
@@ -60,6 +60,7 @@ class bcn_network_admin extends mtekk_adminKit
 	{
 		$this->breadcrumb_trail = $breadcrumb_trail;
 		$this->plugin_basename = $basename;
+		$this->full_name = __('Breadcrumb NavXT Network Settings', 'breadcrumb-navxt');
 		//Grab defaults from the breadcrumb_trail object
 		$this->opt = $this->breadcrumb_trail->opt;
 		add_action('network_admin_menu', array($this, 'add_page'));
@@ -69,7 +70,7 @@ class bcn_network_admin extends mtekk_adminKit
 	/**
 	 * admin initialization callback function
 	 * 
-	 * is bound to wpordpress action 'admin_init' on instantiation
+	 * is bound to wordpress action 'admin_init' on instantiation
 	 * 
 	 * @since  3.2.0
 	 * @return void
@@ -97,7 +98,7 @@ class bcn_network_admin extends mtekk_adminKit
 	function add_page()
 	{
 		//Add the submenu page to "settings" menu
-		$hookname = add_submenu_page('settings.php', __($this->full_name, $this->identifier), $this->short_name, $this->access_level, $this->identifier, array($this, 'net_admin_page'));
+		$hookname = add_submenu_page('settings.php', $this->full_name, $this->short_name, $this->access_level, $this->identifier, array($this, 'net_admin_page'));
 		// check capability of user to manage options (access control)
 		if(current_user_can($this->access_level))
 		{
@@ -153,17 +154,6 @@ class bcn_network_admin extends mtekk_adminKit
 	function delete_option($option)
 	{
 		return delete_site_option($option);
-	}
-	/**
-	 * Makes sure the current user can manage options to proceed
-	 */
-	function security()
-	{
-		//If the user can not manage options we will die on them
-		if(!current_user_can($this->access_level))
-		{
-			wp_die(__('Insufficient privileges to proceed.', 'breadcrumb-navxt'));
-		}
 	}
 	/**
 	 * Upgrades input options array, sets to $this->opt
@@ -271,10 +261,34 @@ class bcn_network_admin extends mtekk_adminKit
 					}
 				}
 			}
-			//Add custom post types
-			breadcrumb_navxt::find_posttypes($opts);
-			//Add custom taxonomy types
-			breadcrumb_navxt::find_taxonomies($opts);
+			//Upgrading to 5.4.0
+			if(version_compare($version, '5.4.0', '<'))
+			{
+				//Migrate users to schema.org breadcrumbs for author and search if still on the defaults for posts
+				if($opts['Hpost_post_template'] === bcn_breadcrumb::get_default_template() && $opts['Hpost_post_template_no_anchor'] === bcn_breadcrumb::default_template_no_anchor)
+				{
+					if($opts['Hpaged_template'] === 'Page %htitle%')
+					{
+						$opts['Hpaged_template'] = $this->opt['Hpaged_template'];
+					}
+					if($opts['Hsearch_template'] === 'Search results for &#39;<a title="Go to the first page of search results for %title%." href="%link%" class="%type%">%htitle%</a>&#39;' || $opts['Hsearch_template'] === 'Search results for &#039;<a title="Go to the first page of search results for %title%." href="%link%" class="%type%">%htitle%</a>&#039;')
+					{
+						$opts['Hsearch_template'] = $this->opt['Hsearch_template'];
+					}
+					if($opts['Hsearch_template_no_anchor'] === 'Search results for &#39;%htitle%&#39;' || $opts['Hsearch_template_no_anchor'] === 'Search results for &#039;%htitle%&#039;')
+					{
+						$opts['Hsearch_template_no_anchor'] = $this->opt['Hsearch_template_no_anchor'];
+					}
+					if($opts['Hauthor_template'] === 'Articles by: <a title="Go to the first page of posts by %title%." href="%link%" class="%type%">%htitle%</a>')
+					{
+						$opts['Hauthor_template'] = $this->opt['Hauthor_template'];
+					}
+					if($opts['Hauthor_template_no_anchor'] === 'Articles by: %htitle%')
+					{
+						$opts['Hauthor_template_no_anchor'] = $this->opt['Hauthor_template_no_anchor'];
+					}
+				}
+			}
 			//Set the max title length to 20 if we are not limiting the title and the length was 0
 			if(!$opts['blimit_title'] && $opts['amax_title_length'] == 0)
 			{
@@ -283,13 +297,14 @@ class bcn_network_admin extends mtekk_adminKit
 		}
 		//Save the passed in opts to the object's option array
 		$this->opt = $opts;
+		//End with resetting up the options
+		breadcrumb_navxt::setup_options($this->opt);
 	}
 	function opts_update_prebk(&$opts)
 	{
-		//Add custom post types
-		breadcrumb_navxt::find_posttypes($this->opt);
-		//Add custom taxonomy types
-		breadcrumb_navxt::find_taxonomies($this->opt);
+		//Add any new custom post types, or taxonomies
+		breadcrumb_navxt::setup_options($opts);
+		$opts = apply_filters('bcn_opts_update_prebk', $opts);
 	}
 	/**
 	 * help action hook function
@@ -310,12 +325,12 @@ class bcn_network_admin extends mtekk_adminKit
 		{
 			$general_tab = '<p>' . __('Tips for the settings are located below select options.', 'breadcrumb-navxt') .
 				'</p><h5>' . __('Resources', 'breadcrumb-navxt') . '</h5><ul><li>' .
-				sprintf(__("%sTutorials and How Tos%s: There are several guides, tutorials, and how tos available on the author's website.", 'breadcrumb-navxt'),'<a title="' . __('Go to the Breadcrumb NavXT tag archive.', 'breadcrumb-navxt') . '" href="http://mtekk.us/archives/tag/breadcrumb-navxt">', '</a>') . '</li><li>' .
-				sprintf(__('%sOnline Documentation%s: Check out the documentation for more indepth technical information.', 'breadcrumb-navxt'), '<a title="' . __('Go to the Breadcrumb NavXT online documentation', 'breadcrumb-navxt') . '" href="http://mtekk.us/code/breadcrumb-navxt/breadcrumb-navxt-doc/">', '</a>') . '</li><li>' .
-				sprintf(__('%sReport a Bug%s: If you think you have found a bug, please include your WordPress version and details on how to reproduce the bug.', 'breadcrumb-navxt'),'<a title="' . __('Go to the Breadcrumb NavXT support post for your version.', 'breadcrumb-navxt') . '" href="http://mtekk.us/archives/wordpress/plugins-wordpress/breadcrumb-navxt-' . $this::version . '/#respond">', '</a>') . '</li></ul>' . 
+				sprintf(__("%sTutorials and How Tos%s: There are several guides, tutorials, and how tos available on the author's website.", 'breadcrumb-navxt'),'<a title="' . __('Go to the Breadcrumb NavXT tag archive.', 'breadcrumb-navxt') . '" href="https://mtekk.us/archives/tag/breadcrumb-navxt">', '</a>') . '</li><li>' .
+				sprintf(__('%sOnline Documentation%s: Check out the documentation for more indepth technical information.', 'breadcrumb-navxt'), '<a title="' . __('Go to the Breadcrumb NavXT online documentation', 'breadcrumb-navxt') . '" href="https://mtekk.us/code/breadcrumb-navxt/breadcrumb-navxt-doc/">', '</a>') . '</li><li>' .
+				sprintf(__('%sReport a Bug%s: If you think you have found a bug, please include your WordPress version and details on how to reproduce the bug.', 'breadcrumb-navxt'),'<a title="' . __('Go to the Breadcrumb NavXT support post for your version.', 'breadcrumb-navxt') . '" href="https://mtekk.us/archives/wordpress/plugins-wordpress/breadcrumb-navxt-' . $this::version . '/#respond">', '</a>') . '</li></ul>' . 
 				'<h5>' . __('Giving Back', 'breadcrumb-navxt') . '</h5><ul><li>' .
 				sprintf(__('%sDonate%s: Love Breadcrumb NavXT and want to help development? Consider buying the author a beer.', 'breadcrumb-navxt'),'<a title="' . __('Go to PayPal to give a donation to Breadcrumb NavXT.', 'breadcrumb-navxt') . '" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=FD5XEU783BR8U&lc=US&item_name=Breadcrumb%20NavXT%20Donation&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted">', '</a>') . '</li><li>' .
-				sprintf(__('%sTranslate%s: Is your language not available? Contact John Havlik to get translating.', 'breadcrumb-navxt'),'<a title="' . __('Go to the Breadcrumb NavXT translation project.', 'breadcrumb-navxt') . '" href="http://translate.mtekk.us/projects/breadcrumb-navxt">', '</a>') . '</li></ul>';
+				sprintf(__('%sTranslate%s: Is your language not available? Visit the Breadcrumb NavXT translation project on WordPress.org to start translating.', 'breadcrumb-navxt'),'<a title="' . __('Go to the Breadcrumb NavXT translation project.', 'breadcrumb-navxt') . '" href="https://translate.wordpress.org/projects/wp-plugins/breadcrumb-navxt">', '</a>') . '</li></ul>';
 			
 			$screen->add_help_tab(
 				array(
@@ -324,13 +339,13 @@ class bcn_network_admin extends mtekk_adminKit
 				'content' => $general_tab
 				));
 			$quickstart_tab = '<p>' . __('For the settings on this page to take effect, you must either use the included Breadcrumb NavXT widget, or place either of the code sections below into your theme.', 'breadcrumb-navxt') .
-				'</p><h5>' . __('Breadcrumb trail with separators', 'breadcrumb-navxt') . '</h5><pre><code>&lt;div class="breadcrumbs"&gt;' . "
+				'</p><h5>' . __('Breadcrumb trail with separators', 'breadcrumb-navxt') . '</h5><pre><code>&lt;div class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/"&gt;' . "
 	&lt;?php if(function_exists('bcn_display'))
 	{
 		bcn_display();
 	}?&gt;
 &lt;/div&gt;</code></pre>" .
-				'<h5>' . __('Breadcrumb trail in list form', 'breadcrumb-navxt').'</h5><pre><code>&lt;ol class="breadcrumbs"&gt;'."
+				'<h5>' . __('Breadcrumb trail in list form', 'breadcrumb-navxt').'</h5><pre><code>&lt;ol class="breadcrumbs" typeof="BreadcrumbList" vocab="http://schema.org/"&gt;'."
 	&lt;?php if(function_exists('bcn_display_list'))
 	{
 		bcn_display_list();
@@ -394,9 +409,9 @@ class bcn_network_admin extends mtekk_adminKit
 	/**
 	 * A message function that checks for the BCN_SETTINGS_* define statement
 	 */
-    function multisite_settings_warn()
-    {
-		if(defined('MULTISITE') && MULTISITE)
+	function multisite_settings_warn()
+	{
+		if(is_multisite())
 		{
 			if(defined('BCN_SETTINGS_USE_LOCAL') && BCN_SETTINGS_USE_LOCAL)
 			{
@@ -417,10 +432,11 @@ class bcn_network_admin extends mtekk_adminKit
 			//Fall through if no settings mode was set
 			else
 			{
-				$this->message['updated fade'][] = __('Warning: No BCN_SETTINGS_* define statement found, defaulting to BCN_SETTINGS_FAVOR_NETWORK.', 'breadcrumb-navxt');
+				$this->message['updated fade'][] = __('Warning: No BCN_SETTINGS_* define statement found, defaulting to BCN_SETTINGS_USE_LOCAL.', 'breadcrumb-navxt');
+				$this->message['updated fade'][] = __('Warning: Individual site settings will override any settings set in this page.', 'breadcrumb-navxt');
 			}
 		}
-    }
+	}
 	/**
 	 * A message function that checks for deprecated settings that are set and warns the user
 	 */
@@ -443,10 +459,11 @@ class bcn_network_admin extends mtekk_adminKit
 		$this->deprecated_settings_warn();
 		//Do a check for multisite settings mode
 		$this->multisite_settings_warn();
+		do_action($this->unique_prefix . '_network_settings_pre_messages', $this->opt);
 		//Display our messages
 		$this->messages();
 		?>
-		<div class="wrap"><h2><?php _e('Breadcrumb NavXT Network Settings', 'breadcrumb-navxt'); ?></h2>
+		<div class="wrap"><h2><?php echo $this->full_name; ?></h2>
 		<?php
 		//We exit after the version check if there is an action the user needs to take before saving settings
 		if(!$this->version_check(get_site_option($this->unique_prefix . '_version')))
@@ -470,8 +487,8 @@ class bcn_network_admin extends mtekk_adminKit
 				<table class="form-table">
 					<?php
 						$this->input_check(__('Link Current Item', 'breadcrumb-navxt'), 'bcurrent_item_linked', __('Yes', 'breadcrumb-navxt'));
-						$this->input_check(__('Paged Breadcrumb', 'breadcrumb-navxt'), 'bpaged_display', __('Include the paged breadcrumb in the breadcrumb trail.', 'breadcrumb-navxt'), false, __('Indicates that the user is on a page other than the first on paginated posts/pages.', 'breadcrumb-navxt'));
-						$this->input_text(__('Paged Template', 'breadcrumb-navxt'), 'Hpaged_template', 'large-text', false, __('The template for paged breadcrumbs.', 'breadcrumb-navxt'));
+						$this->input_check(_x('Paged Breadcrumb', 'Paged as in when on an archive or post that is split into multiple pages', 'breadcrumb-navxt'), 'bpaged_display', __('Place the page number breadcrumb in the trail.', 'breadcrumb-navxt'), false, __('Indicates that the user is on a page other than the first of a paginated archive or post.', 'breadcrumb-navxt'));
+						$this->input_text(_x('Paged Template', 'Paged as in when on an archive or post that is split into multiple pages', 'breadcrumb-navxt'), 'Hpaged_template', 'large-text', false, __('The template for paged breadcrumbs.', 'breadcrumb-navxt'));
 						do_action($this->unique_prefix . '_network_settings_current_item', $this->opt);
 					?>
 				</table>
@@ -597,7 +614,8 @@ class bcn_network_admin extends mtekk_adminKit
 						<td>
 							<?php
 								//We use the value 'page' but really, this will follow the parent post hierarchy
-								$this->input_radio('Spost_' . $post_type->name . '_taxonomy_type', 'page', __('Post Parent', 'breadcrumb-navxt'));
+								$this->input_radio('Spost_' . $post_type->name . '_taxonomy_type', 'page', __('Post Parent', 'breadcrumb-navxt'), false, 'adminkit-enset');
+								$this->input_radio('Spost_' . $post_type->name . '_taxonomy_type', 'date', __('Dates', 'breadcrumb-navxt'), false, 'adminkit-enset');
 								//Loop through all of the taxonomies in the array
 								foreach($wp_taxonomies as $taxonomy)
 								{
@@ -722,7 +740,7 @@ class bcn_network_admin extends mtekk_adminKit
 										<input type="number" name="bcn_options[amax_title_length]" id="amax_title_length" min="1" step="1" value="<?php echo esc_html($this->opt['amax_title_length'], ENT_COMPAT, 'UTF-8'); ?>" class="small-text" />
 									</label>
 								</li>
-							</ul>							
+							</ul>
 						</td>
 					</tr>
 				</table>

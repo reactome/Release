@@ -229,7 +229,7 @@ class blcCurlHttp extends blcHttpCheckerBase {
         if( $parts['scheme'] == 'https' ){
         	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //Required to make HTTPS URLs work.
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); 
-            $nobody = false; //Can't use HEAD with HTTPS.
+            //$nobody = false; //Can't use HEAD with HTTPS.
         }
         
         if ( $nobody ){
@@ -353,7 +353,7 @@ class blcCurlHttp extends blcHttpCheckerBase {
 		$log .= " ===\n\n";
 
 		$log .= "Response headers\n" . str_repeat('=', 16) . "\n";
-        $log .= $this->last_headers;
+        $log .= htmlentities($this->last_headers);
 
 		if ( isset($info['request_header']) ) {
 			$log .= "Request headers\n" . str_repeat('=', 16) . "\n";
