@@ -8,21 +8,25 @@ use autodie;
 use File::HomeDir;
 use Getopt::Long;
 
-my ($user, $remote_host, $help);
+run_setup_keypair(@ARGV) unless caller();
 
-GetOptions('user=s' => \$user, 'host=s' => \$remote_host, 'help' => \$help);
+sub run_setup_keypair {
+    my ($user, $remote_host, $help);
 
-if ($help) {
-    print usage_instructions();
-    exit;
+    GetOptions('user=s' => \$user, 'host=s' => \$remote_host, 'help' => \$help);
+
+    if ($help) {
+        print usage_instructions();
+        exit;
+    }
+
+    chomp($user ||= `whoami`);
+    $remote_host ||= 'reactomeprd1.oicr.on.ca';
+    
+    my $homedir = go_to_home_dir($user);
+    generate_key_pair($homedir);
+    copy_public_key_to_server($user, $homedir, $remote_host);
 }
-
-chomp($user ||= `whoami`);
-$remote_host ||= 'reactomeprd1.oicr.on.ca';
-
-my $homedir = go_to_home_dir($user);
-generate_key_pair($homedir);
-copy_public_key_to_server($user, $homedir, $remote_host);
 
 sub go_to_home_dir {
     my $user = shift;
@@ -73,7 +77,7 @@ sub usage_instructions {
     
     Options:
     
-    -user, -u	User account for which to create key pair (default is curent user)
+    -user, -u	User account for which to create key pair (default is current user)
     -host	Remote host to receive public key (default is reactomeprd1.oicr.on.ca)
     -help	Display these instructions
 END

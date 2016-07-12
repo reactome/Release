@@ -50,7 +50,7 @@ sub _check_other_identifier_count_for_all_species {
             push @errors, "$species_name has fewer reference gene products with other identifiers compared to the previous release: $version - $current_RGP_count; $prevver - $previous_RGP_count";
             next;
         }
-        
+               
         my $current_other_identifier_count = _get_total_other_identifier_count(@current_RGPs);
         my $previous_other_identifier_count = _get_total_other_identifier_count(@previous_RGPs);
         
@@ -70,14 +70,14 @@ sub _get_RGPs_with_other_identifiers {
     my $db = shift;
     my $species_name = shift;
     
-    my $reference_gene_products = get_dba($db)->fetch_instance_by_attribute('ReferenceGeneProduct', [['_displayName', [$species_name]]]);
+    my $reference_gene_products = get_dba($db)->fetch_instance_by_remote_attribute('ReferenceGeneProduct', [['species._displayName', '=', [$species_name]]]);
     return grep {$_->otherIdentifier->[0]} @{$reference_gene_products};
 }
 
 sub _get_total_other_identifier_count {
     my @reference_gene_products = @_;
     
-    my $total_other_identifier_count;
+    my $total_other_identifier_count = 0;
     foreach my $reference_gene_product (@reference_gene_products) {
         $total_other_identifier_count += scalar @{$reference_gene_product->otherIdentifier};
     }

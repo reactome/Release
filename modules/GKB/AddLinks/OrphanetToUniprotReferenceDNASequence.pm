@@ -91,18 +91,20 @@ sub buildPart {
     my $mapping_file = $self->get_mapping_file();
     
     if (!(defined $mapping_file)) {
-	$logger->error("mapping file is undef\n");
+        $logger->error("mapping file is undef\n");
     	$self->termination_status("mapping file is undef");
     	return;		
     }
     $logger->info("mapping_file=$mapping_file\n");
+    
     if (!(-e $mapping_file)) {
     	$logger->error("missing mapping file\n");
     	$self->termination_status("missing mapping file");
     	return;		
     }
+    
     if (-s $mapping_file == 0) {
-	$logger->error("mapping file has zero length\n");
+        $logger->error("mapping file has zero length\n");
     	$self->termination_status("mapping file has zero length");
     	return;		
     }
@@ -122,12 +124,12 @@ sub buildPart {
 			     KeyAttr    => {},
 	);
     unless (ref $mapping_hash eq 'HASH') {
-	if (ref $mapping_hash eq 'ARRAY') {
-	    $mapping_hash = $mapping_hash->[0];
-	}
-	unless (ref $mapping_hash eq 'HASH'){
-	    die "I don't know what this thing is:\n", Dumper $mapping_hash;
-	}
+        if (ref $mapping_hash eq 'ARRAY') {
+            $mapping_hash = $mapping_hash->[0];
+        }
+        unless (ref $mapping_hash eq 'HASH'){
+            die "I don't know what this thing is:\n", Dumper $mapping_hash;
+        }
     }
 
     
@@ -136,48 +138,39 @@ sub buildPart {
 
 
     unless (ref $putative_orphanet_gene_hash eq 'HASH') {
-	if (ref $putative_orphanet_gene_hash eq 'ARRAY') {
+        if (ref $putative_orphanet_gene_hash eq 'ARRAY') {
             $putative_orphanet_gene_hash = $putative_orphanet_gene_hash->[0];
-	    $orphanet_gene_array = $putative_orphanet_gene_hash->{Gene};
+            $orphanet_gene_array = $putative_orphanet_gene_hash->{Gene};
+        } else {
+            die "I don't know what this thing is:\n", Dumper $putative_orphanet_gene_hash;
         }
-	else {
-	    die "I don't know what this thing is:\n", Dumper $putative_orphanet_gene_hash;
-	}
-    }
-    else {
-	$orphanet_gene_array = $putative_orphanet_gene_hash->{Gene};
+    } else {
+        $orphanet_gene_array = $putative_orphanet_gene_hash->{Gene};
     }
 
 
-    #foreach my $orphanet_gene_id (sort(keys(%{$orphanet_gene_hash}))) {
     for my $orphanet_gene (@$orphanet_gene_array) {
-	my $orphanet_gene_id = $orphanet_gene->{id};
-	my $external_reference_list = $orphanet_gene->{"ExternalReferenceList"};
-	my $external_reference = $external_reference_list->{"ExternalReference"};
-	#foreach my $external_reference_id (sort(keys(%{$external_reference}))) {
-	#print "REF ", ref $external_reference, "\n", Dumper $external_reference;
-	if (ref $external_reference ne 'ARRAY') {
-	    print STDERR "WHAT??\n",  Dumper $external_reference;
-	    next;
-	}
-	for my $external_reference_object (@$external_reference) {
-#	    print Dumper $external_reference_object;
-	    my $external_reference_id = $external_reference_object->{id};
-#	    if ($external_reference_id eq "Reference" || $external_reference_id eq "Source") {
-#	        next;
-#	    }
-#	    my $external_reference_object = $external_reference->{$external_reference_id};
-	    if (!(scalar($external_reference_object) =~ /HASH/)) {
-	        next;
-	    }
-	    my $external_reference_source = $external_reference_object->{"Source"};
-	    if ($external_reference_source eq "Reactome") {
-	        my $uniprot_id = $external_reference_object->{"Reference"}; # Assume UniProt ID
-	    	push(@{$gene{$uniprot_id}}, $orphanet_gene_id);
-	    	$logger->info("external_reference_id=$external_reference_id, uniprot_id=$uniprot_id\n");
-	        last;
-	    }
-	}
+        my $orphanet_gene_id = $orphanet_gene->{id};
+        my $external_reference_list = $orphanet_gene->{"ExternalReferenceList"};
+        my $external_reference = $external_reference_list->{"ExternalReference"};
+
+        if (ref $external_reference ne 'ARRAY') {
+            print STDERR "WHAT??\n",  Dumper $external_reference;
+            next;
+        }
+        for my $external_reference_object (@$external_reference) {
+            my $external_reference_id = $external_reference_object->{id};
+            if (!(scalar($external_reference_object) =~ /HASH/)) {
+                next;
+            }
+            my $external_reference_source = $external_reference_object->{"Source"};
+            if ($external_reference_source eq "Reactome") {
+                my $uniprot_id = $external_reference_object->{"Reference"}; # Assume UniProt ID
+            	push(@{$gene{$uniprot_id}}, $orphanet_gene_id);
+            	$logger->info("external_reference_id=$external_reference_id, uniprot_id=$uniprot_id\n");
+                last;
+            }
+        }
     }
 
     print Dumper \%gene;
@@ -196,38 +189,40 @@ sub buildPart {
     my $reference_peptide_sequence;
     my $identifier;
     foreach $reference_peptide_sequence (@{$reference_peptide_sequences}) {
-	$reference_peptide_sequence->inflate;
-	$identifier = $reference_peptide_sequence->Identifier->[0];
-	my $gene_ids_ref = $gene{$identifier};
-	if (!(defined $gene_ids_ref)) {
-	    next;
-	}
-	my @gene_ids = @{$gene_ids_ref};
+        $reference_peptide_sequence->inflate;
+        $identifier = $reference_peptide_sequence->Identifier->[0];
+        my $gene_ids_ref = $gene{$identifier};
+        if (!(defined $gene_ids_ref)) {
+            next;
+        }
+        my @gene_ids = @{$gene_ids_ref};
 
-	$logger->info("gene ID count: " . scalar(@gene_ids) . "\n");
-	$logger->info("reference_peptide_sequence->Identifier=$identifier; gene_ids=");
+        $logger->info("gene ID count: " . scalar(@gene_ids) . "\n");
+        $logger->info("reference_peptide_sequence->Identifier=$identifier; gene_ids=");
 
-	# Remove Orphanet gene identifiers to make sure the mapping is up-to-date, keep others
-	# this isn't really necessary as long as the script is run on the slice only
-	# But a good thing to have if you need to run the script a second time.
-	$self->remove_typed_instances_from_attribute($reference_peptide_sequence, $attribute, $gene_db);
+        # Remove Orphanet gene identifiers to make sure the mapping is up-to-date, keep others
+        # this isn't really necessary as long as the script is run on the slice only
+        # But a good thing to have if you need to run the script a second time.
+        $self->remove_typed_instances_from_attribute($reference_peptide_sequence, $attribute, $gene_db);
 	
-	#create ReferenceDNASequence for Orphanet gene id
-	foreach my $gene_id (@{$gene{$identifier}}) {
-	    $logger->info("$gene_id");
-	    my $rds = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_peptide_sequence->Species, $gene_db, $gene_id);
-	    # Make sure the rdb has the refdb set 
-	    #$rds->inflate;
-	    #$rds->referenceDatabase($gene_id);
-	    #$dba->update_attribuite($rds,'referenceDatabase');
-	    # DEBUG
-	    print "created ReferenceDNASequence ", $rds->displayName, "\n";
-	    $self->check_for_identical_instances($rds);
-	    $reference_peptide_sequence->add_attribute_value($attribute, $rds);
-	    $self->increment_insertion_stats_hash($reference_peptide_sequence->db_id);
-	}
-	$reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
-	$dba->update_attribute($reference_peptide_sequence, $attribute);
+        #create ReferenceDNASequence for Orphanet gene id
+        foreach my $gene_id (@{$gene{$identifier}}) {
+            $logger->info("$gene_id");
+            my $rds = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_peptide_sequence->Species, $gene_db, $gene_id);
+            # Make sure the rdb has the refdb set 
+            
+            #$rds->inflate;
+            #$rds->referenceDatabase($gene_id);
+            #$dba->update_attribuite($rds,'referenceDatabase');
+            
+            # DEBUG
+            print "created ReferenceDNASequence ", $rds->displayName, "\n";
+            #$self->check_for_identical_instances($rds);
+            $reference_peptide_sequence->add_attribute_value($attribute, $rds);
+            $self->increment_insertion_stats_hash($reference_peptide_sequence->db_id);
+        }
+        $reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
+        $dba->update_attribute($reference_peptide_sequence, $attribute);
     }
 
     $self->print_insertion_stats_hash();

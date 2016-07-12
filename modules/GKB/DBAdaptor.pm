@@ -400,6 +400,8 @@ sub new {
 	$dsn .= ";database=$db";
 	$self->db_name($db);
     }
+    
+
     my $dbh = eval { DBI->connect($dsn,$user,$password, {RaiseError => 1}); };
     if ($@ || !$dbh) {
     	my $throw_string = "Could not connect to database ";
@@ -425,25 +427,25 @@ sub new {
     $self->db_handle($dbh);
     if (!$no_ontology_flag) {
 	    # If db name defined assume that it contains the schema. Otherwise need ontology (schema).
-	    if ($db) {
-			$self->fetch_schema;
-			$self->table_type($self->fetch_table_type($SCHEMATABLE));
-			$self->fetch_parameters;
-	    } else {
-			$ontology || $self->throw("Need ontology.");
-			$ontology && $self->ontology($ontology);
-			$self->table_type($table_type || 'MyISAM');
-	    }
-	    $self->db_internal_id_type('INTEGER(10) UNSIGNED');
-	    $self->primary_key_type('INTEGER(10) NOT NULL AUTO_INCREMENT PRIMARY KEY');
-	    $cache ||= GKB::InstanceCache->new(-DEBUG => $debug);
-	    $self->instance_cache($cache);
-	    if ($do_not_index && ref $do_not_index) {
-		@{$self->{'do_not_index'}->{@{$do_not_index}}} = @{$do_not_index};
-	    }
-	    $self->matching_instance_handler($matching_instance_handler || new GKB::MatchingInstanceHandler);
+	if ($db) {
+	    $self->fetch_schema;
+	    $self->table_type($self->fetch_table_type($SCHEMATABLE));
+	    $self->fetch_parameters;
+	} else {
+	    $ontology || $self->throw("Need ontology.");
+	    $ontology && $self->ontology($ontology);
+	    $self->table_type($table_type || 'MyISAM');
+	}
+	$self->db_internal_id_type('INTEGER(10) UNSIGNED');
+	$self->primary_key_type('INTEGER(10) NOT NULL AUTO_INCREMENT PRIMARY KEY');
+	$cache ||= GKB::InstanceCache->new(-DEBUG => $debug);
+	$self->instance_cache($cache);
+	if ($do_not_index && ref $do_not_index) {
+	    @{$self->{'do_not_index'}->{@{$do_not_index}}} = @{$do_not_index};
+	}
+	$self->matching_instance_handler($matching_instance_handler || new GKB::MatchingInstanceHandler);
     }
-    $self->execute("SET NAMES 'utf8'");
+    #$self->execute("SET NAMES 'utf8'");
     return $self;
 }
 

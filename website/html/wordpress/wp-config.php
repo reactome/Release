@@ -68,3 +68,5 @@ define('FS_METHOD', 'direct');
 /** Repair Wordpress database */
 define('WP_ALLOW_REPAIR', true);
 
+/**  Allowing File Size  up to  64MB */
+define('WP_MEMORY_LIMIT' , '64M');

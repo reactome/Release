@@ -100,9 +100,9 @@ sub buildPart {
     my $dba = $self->builder_params->refresh_dba();
 
     my $limiting_species = $self->builder_params->get_species_name();
-
     # Retrieve all UniProt entries from Reactome
     my $reference_peptide_sequences = $self->fetch_reference_peptide_sequences(1);
+    $logger->info("Reference gene products fetched: " . scalar @$reference_peptide_sequences);
 
     my %species_hit_count_hash = ();
     my $attribute = 'referenceGene';
@@ -121,59 +121,65 @@ sub buildPart {
     my $reference_database;
     my $species;
     foreach $species (keys(%{$accs})) {
-    	if (defined $limiting_species && !($species eq $limiting_species)) {
-	    next;
-	}
+        if (defined $limiting_species && !($species eq $limiting_species)) {
+            $logger->warn("$species is not the same as selected species $limiting_species");
+            next;
+        }
 	
-	$logger->info("dealing with species: $species\n");
-	$reference_database = $self->get_ensembldb($species);
-	if ($reference_database eq 'none') {
-	    $logger->warn("$species is not an ensembl species\n");
-	    next;
-	}
+        $logger->info("dealing with species: $species\n");
+        $reference_database = $self->get_ensembldb($species);
+        if ($reference_database eq 'none') {
+            $logger->warn("$species is not an ensembl species\n");
+            next;
+        }
 
-	# Put this inside the loop, because the reference DB is species-dependent
-	# for ENSEMBL!
-	$self->remove_typed_instances_from_reference_peptide_sequence_hash($accs, $attribute, $reference_database, $species);
-
-	@input_ids = keys(%{$accs->{$species}});
-	$output_id_hash = $self->builder_params->identifier_mapper->convert_list('UniProt', \@input_ids, 'ENSEMBL', $species);
-	if (!(defined $output_id_hash)) {
-	    next;
-	}
-	foreach my $acc (keys(%{$output_id_hash})) {
-	    foreach my $id (@{$output_id_hash->{$acc}}) {
-		foreach my $i (@{$accs->{$species}->{uc($acc)}}) {
-		    # Generally speaking, there will only be one
-		    # ReferencePeptideSequence instance associated
-		    # with a given accession, so this loop will only
-		    # be entered once.
-		    if ($i->add_attribute_value_if_necessary($attribute, $self->builder_params->miscellaneous->get_reference_dna_sequence($i->species, $reference_database, $id))) {
-			$need_to_update{$i->db_id}++;
-			$self->increment_insertion_stats_hash($i->db_id);
-		    }
-	        }
-	    }
-	}
+        # Put this inside the loop, because the reference DB is species-dependent
+        # for ENSEMBL!
+        $self->remove_typed_instances_from_reference_peptide_sequence_hash($accs, $attribute, $reference_database, $species);
+    
+        @input_ids = keys(%{$accs->{$species}});
+        $output_id_hash = $self->builder_params->identifier_mapper->convert_list('UniProt', \@input_ids, 'ENSEMBL', $species);
+        if (!(defined $output_id_hash)) {
+            $logger->warn("No content in UniProt to EnsEMBL mapping for $species");
+            next;
+        }
+        
+        foreach my $uniprot_accession (keys(%{$output_id_hash})) {
+            foreach my $id (@{$output_id_hash->{$uniprot_accession}}) {
+            	foreach my $reference_gene_product (@{$accs->{$species}->{uc($uniprot_accession)}}) {
+            	    # Generally speaking, there will only be one
+                    # ReferencePeptideSequence instance associated
+                    # with a given accession, so this loop will only
+                    # be entered once.
+                    $logger->info("Attempting to add EnsEMBL Gene with id of $id to $attribute attribute of " . $reference_gene_product->displayName . "(" . $reference_gene_product->db_id . ")");
+                    if ($reference_gene_product->add_attribute_value_if_necessary($attribute, $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_gene_product->species, $reference_database, $id))) {   
+                        $logger->info("Adding $id was successful");
+                        $need_to_update{$reference_gene_product->db_id}++;
+                        $self->increment_insertion_stats_hash($reference_gene_product->db_id);
+                    }
+                }
+            }
+        }
 	
-	# Update to database.
-	while (my ($acc,$ar) = each %{$accs->{$species}}) {
-	    foreach my $i (@{$ar}) {
-		if ($need_to_update{$i->db_id}) {
-		    $logger->info("$acc\t" . join(',',map {$_->identifier->[0]} @{$i->referenceGene}) . "\n");
-		    $i->add_attribute_value('modified', $self->instance_edit);
-		    $dba->update_attribute($i, 'modified');
-		    $dba->update_attribute($i, $attribute);
-		    $species_hit_count_hash{$species}++;
-		}
-	    }
-	}
+        # Update to database.
+        while (my ($acc,$ar) = each %{$accs->{$species}}) {
+            foreach my $reference_gene_product (@{$ar}) {
+                if ($need_to_update{$reference_gene_product->db_id}) {
+                    $logger->info("$acc\t" . join(',',map {$_->identifier->[0]} @{$reference_gene_product->referenceGene}) . "\n");
+                    
+                    $reference_gene_product->add_attribute_value('modified', $self->instance_edit);
+                    $dba->update_attribute($reference_gene_product, 'modified');
+                    $dba->update_attribute($reference_gene_product, $attribute);
+                    $species_hit_count_hash{$species}++;
+                }
+            }
+        }
     }
 	
     # Summary diagnostics
     $logger->info("proteins for which references have been found, per species:\n");
     foreach $species (sort(keys(%species_hit_count_hash))) {
-	$logger->info("$species: " . $species_hit_count_hash{$species} . "\n");
+        $logger->info("$species: " . $species_hit_count_hash{$species} . "\n");
     }
 	
     $self->print_insertion_stats_hash();
@@ -189,21 +195,17 @@ sub get_ensembldb {
 
     my $species_database = $self->species_database;
 
-    $species_database->{$spec} && return $species_database->{$spec};
+    return $species_database->{$spec} if $species_database->{$spec};
     
     # Exclude 'strange' species names not found in ensembl anyway.
-    if (!($spec =~ /^\w+\s+\w+$/)) {
-	return 'none';
-    }
+    return unless ($spec =~ /^\w+\s+\w+$/);
 
     # Get/make ensembldb
     my $species = $spec;
     $species =~ s/(\w+) (\w+)/$1\_$2/; #needed for Ensembl URL
-
     my $ensg_database = $self->builder_params->reference_database->get_ensembl_reference_database($species);
-    if (!(defined $ensg_database)) {
-    	$ensg_database = 'none';
-    }
+    $ensg_database ||= 'none';
+    
     $species_database->{$spec} = $ensg_database;
     return $species_database->{$spec};
 }

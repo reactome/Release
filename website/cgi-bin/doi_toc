@@ -54,7 +54,9 @@ $NO_SCHEMA_VALIDITY_CHECK = 1;
 my ($CGI,$DB,$WU,$DBA);
 
 $CGI = CGI->new();
-print $CGI->header(-charset => 'UTF-8');
+#print $CGI->header(-charset => 'UTF-8');
+#NOTE: Forcing UTF-8 charset causes non-ASCII characters to render incorrectly.
+print $CGI->header();
 eval {
     $WU = GKB::WebUtils->new_from_cgi(-CGI => $CGI);
     $DBA = $WU->dba;

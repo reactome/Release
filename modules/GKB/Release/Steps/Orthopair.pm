@@ -36,9 +36,7 @@ override 'run_commands' => sub {
     for (my $i = 0; $i < 3; $i++) {
     	$self->cmd("Running orthopair script",[["./wrapper_orthopair.sh $version $ensmbl_ver > $version/wrapper_orthopair.out"]]);
 	last if files_okay();
-    } # Determine if species files are present -- script rerun if not.  After 3 times, it is considered to have failed 
-    die "Orthopair script has failed." unless files_okay();
-    
+    } # Determine if species files are present -- script rerun if not.  After 3 times, it is considered to have failed
             
     # Check orthopair files and attempt repairs if need be
     my $return = ($self->cmd("Checking orthopair files",[["perl check_orthopair_files.pl", ("-release", $version)]]))[0]->{'exit_code'};

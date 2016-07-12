@@ -20,6 +20,7 @@ $version (Reactome release version)
 $prevver (previous Reactome release version)
 $db (Reactome release database -- i.e. test_reactome_XX)
 $slicedb (Reactome slice database -- i.e. test_slice_XX)
+$stable_id_db (Reactome stable identifier database)
 $gkcentral (Reactome curator database)
 $gkcentral_host (host server for Reactome database)
 $gkbdev (directory for Release Git repository)
@@ -101,14 +102,16 @@ our $prevver;
 # Set database names
 our $db = "test_reactome_{version}"; # Test Reactome Database (e.g. test_reactome_38)
 our $slicedb = "test_slice_{version}"; # Slice Database (e.g. test_slice_38)
+our $stable_id_db = "stable_identifiers";
 our $gkcentral = "gk_central";
 our $gkcentral_host = "reactomecurator.oicr.on.ca";
 
 if ($TEST_MODE) {
-    $gkcentral = "test_gk_central";
+    $stable_id_db = "test_stable_identifiers",
+    $gkcentral = "test_gk_central2";
     $gkcentral_host = "reactomerelease.oicr.on.ca";
-    $version = 999;
-    $prevver = 46;
+    $version = 1001;
+    $prevver = 55;
 }
 
 # Set directory paths
@@ -165,7 +168,7 @@ our $log_conf = dirname(__FILE__)."/releaselog.conf";
 our @EXPORT = qw/
     $TEST_MODE
     $user $pass $sudo $date $version $prevver
-    $db $slicedb $gkcentral $gkcentral_host
+    $db $slicedb $stable_id_db $gkcentral $gkcentral_host
     $gkbdev $scripts $release $website $html $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server %hosts %maillist
     $log_conf
