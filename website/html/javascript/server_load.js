@@ -123,7 +123,7 @@ function drawChart00() {
         vAxes: {0: {viewWindowMode:'explicit',
                     gridlines: {color: 'transparent'},
                     format: 'decimal',
-		    viewWindow: {min: 0, max: 50}
+		    viewWindow: {min: 0, max: 25}
                    },
                 1: {
                     gridlines: {color: 'transparent'},
@@ -193,7 +193,7 @@ function drawChart1() {
         vAxes: {0: {viewWindowMode:'explicit',
                     gridlines: {color: 'transparent'},
                     format: 'decimal',
-                    viewWindow: {min: 0, max: 50}
+                    viewWindow: {min: 0, max: 25}
                    },
                 1: {
                     gridlines: {color: 'transparent'},
@@ -261,7 +261,7 @@ function drawChart3() {
         vAxes: {0: {viewWindowMode:'explicit',
                     gridlines: {color: 'transparent'},
                     format: 'decimal',
-                    viewWindow: {min: 0, max: 50}
+                    viewWindow: {min: 0, max: 25}
                    },
                 1: {
                     gridlines: {color: 'transparent'},
