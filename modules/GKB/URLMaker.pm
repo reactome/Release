@@ -48,6 +48,12 @@ sub force_pwb_link {
     return $self->{force_pwb_link};
 }
 
+sub turn_off_pwb_link {
+    my $self = shift;
+    
+    $self->{force_pwb_link} = 0;
+}
+
 sub urlify_db_ids {
     my $self = shift;
     my $url;
