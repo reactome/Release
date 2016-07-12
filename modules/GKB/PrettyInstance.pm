@@ -1910,19 +1910,7 @@ sub reactionmap_key {
 
 sub top_browsing_view {
     my ($self, $doi_flag) = @_;
-    my $treemaker = GKB::HtmlTreeMaker::NoReactions->new(-ROOT_INSTANCES => [$self],
-					    -URLMAKER => $self->urlmaker,
-					    -INSTRUCTIONS => {
-						'Pathway' => {'attributes' => ['hasComponent','hasEvent']},
-						'ConceptualEvent' => {'attributes' => ['hasSpecialisedForm']},
-						'EquievalentEventSet' => {'attributes' => ['hasMember']},
-						'Reaction' => {'attributes' => [qw(hasMember)]},
-						'BlackBoxEvent' => {'attributes' => ['hasComponent']},
-						},
-					    -DEPTH => 1,
-					    -DEFAULT_CLASS => 'sidebar',
-					    -ATTRIBUTE_LABELS => {'hasComponent' => '', 'hasMember' => '', 'hasSpecialisedForm' => '', 'hasEvent' => ''});
-    $treemaker->force_pwb_link(1);
+
     my $authors = GKB::Utils::get_authors_recursively($self);
     my $authors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$authors}) || '&nbsp';
     my $reviewers = GKB::Utils::get_reviewers_recursively($self);
@@ -1933,16 +1921,31 @@ sub top_browsing_view {
     
     my $out = qq(<TR CLASS="contents"><TD CLASS="sidebar" WIDTH="33%">);
     if ($doi_flag) {
-	$out .= $self->displayName();
-	$out .= qq(</TD>);
-	my $doi = "";
-	if (defined $self->doi && scalar(@{$self->doi})>0 && defined $self->doi->[0]) {
-	    $doi = $self->doi->[0];
-	}
-	$out .= qq(<TD>$doi</TD>);
+        $out .= $self->displayName();
+        $out .= qq(</TD>);
+        my $doi = "";
+        if (defined $self->doi && scalar(@{$self->doi})>0 && defined $self->doi->[0]) {
+            $doi = $self->doi->[0];
+        }
+        $out .= qq(<TD>$doi</TD>);
     } else {
-	$out .= $treemaker->tree;
-	$out .= qq(</TD>);
+        my $urlmaker_instance = $self->urlmaker->clone();
+        $urlmaker_instance->_delete_cached_url();
+        my $treemaker = GKB::HtmlTreeMaker::NoReactions->new(-ROOT_INSTANCES => [$self],
+					    -URLMAKER => $urlmaker_instance,
+					    -INSTRUCTIONS => {
+						'Pathway' => {'attributes' => ['hasComponent','hasEvent']},
+						'ConceptualEvent' => {'attributes' => ['hasSpecialisedForm']},
+						'EquievalentEventSet' => {'attributes' => ['hasMember']},
+						'Reaction' => {'attributes' => [qw(hasMember)]},
+						'BlackBoxEvent' => {'attributes' => ['hasComponent']},
+						},
+					    -DEPTH => 1,
+					    -DEFAULT_CLASS => 'sidebar',
+					    -ATTRIBUTE_LABELS => {'hasComponent' => '', 'hasMember' => '', 'hasSpecialisedForm' => '', 'hasEvent' => ''});
+        $treemaker->force_pwb_link(1);
+        $out .= $treemaker->tree;
+        $out .= qq(</TD>);
     }
     $out .= qq(<TD CLASS="author">$authors_str</TD>);
 
