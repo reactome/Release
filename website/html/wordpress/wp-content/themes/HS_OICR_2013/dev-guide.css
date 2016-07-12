@@ -255,3 +255,81 @@ table, tr, td {
 .CustomTable tr:first-child td:last-child {
     border-width: 0 0 1px 1px;
 }
+
+
+/*####### PARTNERS #########*/
+.partnersTable {
+    font-family: Arial Unicode MS, Arial, sans-serif !important;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: table;
+    font-size: medium;
+    margin-right: auto;
+    margin-left: auto; 
+}
+
+.partnersTable tr {
+    display: table-row;
+}
+
+.partnersTable thead tr {
+    background-color: #295CAB;
+    color: white;
+}
+
+.partnersTable tbody tr:hover { 
+    background-color: #BBDEFB;
+}
+
+.partnersTable th {
+    text-align: center;
+    vertical-align: middle;
+    padding: 6px;
+    border: 1px solid #ccc;
+}
+
+.partnersTable img {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.nameLabel {
+    display: inline-block;
+    vertical-align: middle;
+    color: black;
+    margin-left: 3px;
+}
+
+.partnersTable td {
+    height: 80px;
+    text-align: center;
+    vertical-align: middle !important;
+    border: 1px solid #ccc;
+    min-width: 135px;
+    padding: 5px;
+}
+
+.partnersTable td:first-child {
+    min-width: 210px;
+}
+
+.partnersTable td:nth-child(2) {
+    max-width: 600px;
+    font-size: small;
+    text-align: justify !important; 
+}
+
+.partnersTable td:nth-child(2) a {
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.odd {
+    background-color: #f1f1f1; 
+}
+
+.even {
+    background-color: #ffffff;
+}
+
