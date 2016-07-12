@@ -42,8 +42,8 @@ use vars '@ISA';
 
 use constant REFPROTEINS  => url(-base => 1) . '/ReactomeRESTfulAPI/RESTfulWS/getUniProtRefSeqs';
 use constant REFMOLECULES => url(-base => 1) . '/ReactomeRESTfulAPI/RESTfulWS/getReferenceMolecules';
-use constant METABOLITES  => 'http://www.hmdb.ca/downloads/hmdb_metabolites.zip';
-use constant PROTEINS     => 'http://www.hmdb.ca/downloads/hmdb_proteins.zip';
+use constant METABOLITES  => 'http://www.hmdb.ca/system/downloads/current/hmdb_metabolites.zip';
+use constant PROTEINS     => 'http://www.hmdb.ca/system/downloads/current/hmdb_proteins.zip';
 
 sub new {
     my $class = shift;
@@ -136,7 +136,7 @@ sub get_xml_files {
     # Download and unpack the XML (there are 40+K) only
     # if it was not already done within the past week
     my $id_file = "$dir/ids.txt";
-    unless (-e $id_file && -M $id_file < 7) {
+    unless (-s $id_file && -M $id_file < 7) {
 	system "rm -fr $dir" if -d $dir;
 	mkdir $dir or die $!;
 	chdir $dir;
@@ -152,12 +152,33 @@ sub get_xml_files {
 	    die "Could not find $zip";
 	}
 
+    if ($class eq 'proteins') {    
+        my ($protein_xml_file) = $zip =~ /(.*)\.zip$/;
+        $protein_xml_file .= '.xml';
+        $self->split_protein_xml_file($protein_xml_file);
+    }
 	$self->filter_xml_files($dir,$class);
     }
 
     chdir $cwd;
 
     return $dir;
+}
+
+sub split_protein_xml_file {
+    my $self = shift;
+    my $protein_xml_file = shift;
+    
+    open(my $merged_file, '<', $protein_xml_file) || die $!;
+    local $/ = "\<\/protein\>\n";
+    while (my $xml = <$merged_file>) {
+        my ($accession) = $xml =~ /<accession>(\w+)\<\/accession>/;
+        open(my $xml_file, '>', "$accession.xml") || die $!;
+        print $xml_file $xml;
+        close $xml_file;
+    }
+    close $merged_file;
+    system "rm -f $protein_xml_file";
 }
 
 # We only want xml files that have chebi_ids or uniprot Ids in them

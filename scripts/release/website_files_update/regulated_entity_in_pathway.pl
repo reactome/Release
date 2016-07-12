@@ -28,7 +28,7 @@ if ($help) {
 
 open (my $output, ">", $output_file) if $output_file;
 report("Regulation author\tRegulated entity id\tRegulated entity name\tRegulated entity is disease\t" .
-       "Regulated entity do release\tRegulator\tDiagrams\tReason to check\n", $output);
+       "Regulated entity do release\tRegulator\tParent Pathways\tReason to check\n", $output);
 
 my %seen;
 my $regulations = get_dba($user, $pass, $host, $db)->fetch_instance(-CLASS => 'Regulation');
@@ -45,13 +45,8 @@ foreach my $regulation (@{$regulations}) {
         my $regulated_entity_db_id = $regulated_entity->db_id;
         my $regulated_entity_is_disease = $regulated_entity->disease->[0] ? 'YES' : 'NO';
         my $regulated_entity_do_release = do_release($regulated_entity) ? 'YES' : 'NO';
-        
-        my @diagrams;
-        foreach my $pathway (get_pathways($regulated_entity)) {
-            push @diagrams, get_diagrams($pathway);
-        }
-        @diagrams = uniq @diagrams;
-        
+        my @parent_pathways = get_pathways($regulated_entity);
+     
         report(
             join("\t",
                 $regulation_author,
@@ -60,8 +55,8 @@ foreach my $regulation (@{$regulations}) {
                 $regulated_entity_is_disease,
                 $regulated_entity_do_release,
                 $regulator_display_name,
-                join(';', map {$_->displayName . '(' . $_->db_id . ')'} @diagrams),
-                get_reason_to_check(@diagrams)
+                join(';', map {$_->displayName . '(' . $_->db_id . ')'} @parent_pathways),
+                get_reason_to_check(@parent_pathways)
             ) . "\n",   
             $output
         );
@@ -171,12 +166,10 @@ sub get_diagrams {
 }
 
 sub get_reason_to_check {
-    my @diagrams = @_;
+    my @pathways = @_;
     
-    return 'no diagram' unless @diagrams;
-    return 'more than one diagram' if scalar @diagrams > 1;
-    return 'more than one represented pathway in diagram instance'
-        if ($diagrams[0] && $diagrams[0]->representedPathway->[1]);
+    return 'no pathways' unless @pathways;
+    return 'more than one pathway' if scalar @pathways > 1;
     return '';        
 }
 
@@ -184,16 +177,16 @@ sub usage_instructions{
     return <<END;
 
 This script gets all regulated entities from a database
-and reports the diagrams in which they are present.
+and reports the pathways in which they are present.
 
 The output will be a tab delmited file reporting the
 regulation instance author, regulated entity database id,
 regulated entity display name, whether a regulated entity
 has a disease tag, whether a regulated entity's 'do release'
-flag is set to true, regulator display name, diagrams (display
+flag is set to true, regulator display name, pathways (display
 name and db id) where the regulated entity occurs, and if
 there is a reason curators must manually decide which
-diagrams should show the regulation.
+pathways should show the regulation.
     
 Usage: perl $0
 

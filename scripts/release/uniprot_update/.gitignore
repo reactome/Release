@@ -2,3 +2,5 @@
 !*.pl
 !*.sh
 !*.txt
+duplicated_db_id.txt
+remove_gene_tags.pl

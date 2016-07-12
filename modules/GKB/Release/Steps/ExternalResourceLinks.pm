@@ -52,7 +52,7 @@ sub _check_referrer_count_for_all_reference_databases {
     my %current_reference_database_referrer_count = _get_reference_database_to_referrer_count($db, \@errors);
     my %previous_reference_database_referrer_count = _get_reference_database_to_referrer_count("test_reactome_$prevver", \@errors);
     
-    foreach my $reference_database_name (keys %previous_reference_database_referrer_count) {    
+    foreach my $reference_database_name (sort keys %previous_reference_database_referrer_count) {    
         my $previous_referrer_count = $previous_reference_database_referrer_count{$reference_database_name};
         my $current_referrer_count = $current_reference_database_referrer_count{$reference_database_name};
         if (!$current_referrer_count) {

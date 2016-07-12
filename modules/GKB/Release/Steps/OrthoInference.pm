@@ -21,7 +21,7 @@ has '+mail' => ( default => sub {
 					};
 				}
 );
-has '+user_input' => (default => sub {{'skip_list_verified' => {'query' => 'Has the normal event skip list been verified for version $version (y/n):'}}});
+has '+user_input' => (default => sub {{'skip_list_verified' => {'query' => "Has the normal event skip list been verified for version $version (y/n):"}}});
 
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
@@ -45,7 +45,9 @@ override 'post_step_tests' => sub {
     my $self = shift;
     
     my @errors = super();
-    push @errors, _check_orthoinferred_instance_count_for_all_species();
+    my @species_instance_count_errors = _check_orthoinferred_instance_count_for_all_species();
+    push @errors, @species_instance_count_errors if @species_instance_count_errors;
+    
     return @errors;
 };
 
@@ -53,6 +55,8 @@ sub _check_orthoinferred_instance_count_for_all_species {
     my @errors;
     foreach my $species (@species) {
         my $species_name = $species_info{$species}->{'name'}->[0];
+        next if $species_name =~ /Homo sapiens/i;
+        
         my $current_species_count = _get_species_count($db, $species_name);
         my $previous_species_count = _get_species_count("test_reactome_$prevver", $species_name);
         
@@ -69,7 +73,7 @@ sub _get_species_count {
     my $db = shift;
     my $species_name = shift;
     
-    my $species_instance = get_dba($db)->fetch_instance_by_attribute('species', [['_displayName', [$species_name]]])->[0];
+    my $species_instance = get_dba($db)->fetch_instance_by_attribute('Species', [['_displayName', [$species_name]]])->[0];
     return scalar @{$species_instance->reverse_attribute_value('species')};
 }
 

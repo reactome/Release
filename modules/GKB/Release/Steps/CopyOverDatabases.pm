@@ -24,7 +24,7 @@ override 'run_commands' => sub {
     my ($self, $gkbdir) = @_; 
     	
     # Drop and recreate live databases
-    my %databases = (gk_current => $db);
+    my %databases = (gk_current => $db, $stable_id_db => $stable_id_db);
     while (my ($database, $source) = each %databases) {
 	$self->cmd("Creating live $database database",
 	    [

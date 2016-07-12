@@ -43,8 +43,8 @@ override 'post_step_tests' => sub {
     my ($self) = shift;
     
     my @errors = super();
-    push @errors, _check_pathway_diagram_count($db, "test_reactome_$prevver");
-    
+    my $pathway_diagram_count_error = _check_pathway_diagram_count($db, "test_reactome_$prevver");
+    push @errors, $pathway_diagram_count_error if $pathway_diagram_count_error;
     return @errors;
 };
 

@@ -1,91 +1,125 @@
 #!/usr/local/bin/perl  -w
 use strict;
 
-# I think it's more user-friendly if the user will not have to practise any
-# symlink tricks. Hence the BEGIN block. If the location of the script or
-# libraries changes, this will have to be changed.
-
-BEGIN {
-    my @a = split('/',$0);
-    pop @a;
-    push @a, ('..','..','..');
-    my $libpath = join('/', @a);
-    unshift (@INC, "$libpath/modules");
-    $ENV{PATH} = "$libpath/scripts:$libpath/scripts/release:" . $ENV{PATH};
-}
+use lib '/usr/local/gkb/modules';
 
 use GKB::Config;
 
-use autodie;
+use autodie qw/:all/;
 use Cwd;
+use File::Copy;
 use Getopt::Long;
 use Net::FTP;
-use common::sense;
 
 use Log::Log4perl qw/get_logger/;
-Log::Log4perl->init(\$LOG_CONF);
-my $logger = get_logger(__PACKAGE__);
 
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_db_ids,$opt_res);
+run(@ARGV) unless caller();
 
-# Parse commandline
-my $usage = "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
-&GetOptions("user:s", "host:s", "pass:s", "port:i", "db=s");
-$opt_db || die $usage;
+sub run {
+    Log::Log4perl->init(\$LOG_CONF);
+    my $logger = get_logger(__PACKAGE__);
 
-$opt_user ||= $GKB::Config::GK_DB_USER;
-$opt_pass ||= $GKB::Config::GK_DB_PASS;
-$opt_port ||= $GKB::Config::GK_DB_PORT;
-$opt_host ||= $GKB::Config::GK_DB_HOST;
+    $GKB::Config::NO_SCHEMA_VALIDITY_CHECK = undef;
 
-my $present_dir = getcwd();
-my $biomodels_repository = 'scripts/release/biomodels/repository';
+    our($opt_user, $opt_pass, $opt_host, $opt_port, $opt_db);
+    my $usage = "Usage: $0 -user db_user -pass db_pass -host db_host -port db_port -db db_name";
 
-chdir "$GK_ROOT_DIR";
-run("
-    git stash
-    git subtree pull --prefix $biomodels_repository https://github.com/reactome/Models2Pathways.git master --squash
-    git stash pop
-    ");
+    &GetOptions("user:s", "pass:s", "host:s", "port:i", "db:s");
 
-my $url = 'ftp.ebi.ac.uk';
-my $ftp = Net::FTP->new($url, Passive => 1) or $logger->error_die("Could not create FTP object for $url");
-$ftp->login() or $logger->error_die("Could not login to $url: " . $ftp->message);
-my $dir = 'pub/databases/biomodels/releases/latest';
-$ftp->cwd($dir) or $logger->error_die("Could not change directory to $dir");
-my ($xml_tarball) = grep /sbml_files.tar.bz2/, $ftp->ls();
-$xml_tarball =~ s/.tar.bz2//;
-chdir "$present_dir";
-unless (-d $xml_tarball) {
-    run("rm -rf BioModels_Database*");
-    run("wget ftp://ftp.ebi.ac.uk/pub/databases/biomodels/releases/latest/$xml_tarball.tar.bz2");
-    run("tar xvfj $xml_tarball.tar.bz2");
+    $opt_db || die $usage;
+    
+    $opt_user ||= $GK_DB_USER;
+    $opt_pass ||= $GK_DB_PASS;
+    $opt_host ||= $GK_DB_HOST;
+    $opt_port ||= $GK_DB_PORT;
+
+    my $present_dir = getcwd();
+    
+    my $tmp_dir = "/tmp";
+    clone_biomodels_repository_from_github($tmp_dir);
+	
+	my $link_name = 'biomodels';
+    create_symbolic_link_to_biomodels_repository($tmp_dir, $link_name);
+	
+	my $biomodels_jar_file = 'biomodels.jar';
+    create_biomodels_jar_file($biomodels_jar_file, $link_name);
+
+    my $xml_tarball = download_biomodels_package();
+    execute_biomodels_jar_file($biomodels_jar_file, $xml_tarball);
+
+    remove_biomodels_repository($tmp_dir);
+
+    chdir "$present_dir";
+    system("perl add_links_to_single_resource.pl -user $opt_user -pass $opt_pass -host $opt_host -port $opt_port -db $opt_db -res BioModelsEventToDatabaseIdentifier");
+
+    $logger->info("$0 has finished its job\n");
 }
 
-chdir "$GK_ROOT_DIR/$biomodels_repository";
-run("mvn clean package");
-run("mv target/Models2Pathways-1.0-jar-with-dependencies.jar models2pathways.jar");
-
-my $execute_jar = "java -jar -Xms5120M -Xmx10240M models2pathways.jar";
-run("$execute_jar -o $present_dir/ -r /usr/local/reactomes/Reactome/production/AnalysisService/input/analysis.bin -b $present_dir/$xml_tarball/curated");
-
-chdir "$present_dir";
-run("perl add_links_to_single_resource.pl -user $opt_user -pass $opt_pass -host $opt_host -port $opt_port -db $opt_db -res BioModelsEventToDatabaseIdentifier");
-
-$logger->info("$0 has finished its job\n");
-
-# Runs command and ends program by default if non-zero exit status
-sub run {
-    my $command = shift;
-    my $warn_only = shift;
+sub clone_biomodels_repository_from_github {
+    my $directory = shift;
     
+    my $present_dir = getcwd();
+    chdir $directory;
+    system "rm -fr Models2Pathways" if -d "Models2Pathways";
+    my $return_value = system("git clone https://github.com/reactome/Models2Pathways");
+    chdir $present_dir;
+    
+    return ($return_value == 0);
+}
+
+sub create_symbolic_link_to_biomodels_repository {
+    my $directory = shift;
+	my $link_name = shift;
+	
+	return (system("rm -rf $link_name; ln -s $directory/Models2Pathways $link_name") == 0);
+}
+
+sub create_biomodels_jar_file {
+	my $jar_file = shift;
+	my $symbolic_link_to_repository = shift;
+	
     my $logger = get_logger(__PACKAGE__);
     
-    my $exit_code = system($command);
+	my $present_dir = getcwd();
+	chdir "$symbolic_link_to_repository";
+    system("mvn clean package");
+    my $return_value = copy("target/Models2Pathways-1.0-jar-with-dependencies.jar", "$present_dir/$jar_file");
+    chdir $present_dir;
+	
+	return ($return_value == 0);
+}
+
+sub download_biomodels_package {    
+    my $logger = get_logger(__PACKAGE__);
     
-    unless ($exit_code == 0) {
-	$warn_only ?
-	$logger->logcarp("$command failed") :
-	$logger->logcroak("$command failed");	
+    my $url = 'ftp.ebi.ac.uk';
+    my $ftp = Net::FTP->new($url, Passive => 1) or $logger->error_die("Could not create FTP object for $url");
+    $ftp->login() or $logger->error_die("Could not login to $url: " . $ftp->message);
+    my $dir = 'pub/databases/biomodels/releases/latest';
+    $ftp->cwd($dir) or $logger->error_die("Could not change directory to $dir");
+    my ($xml_tarball) = grep /sbml_files.tar.bz2/, $ftp->ls();
+    $xml_tarball =~ s/.tar.bz2//;
+    unless (-d $xml_tarball) {
+        system("rm -rf BioModels_Database*");
+        system("wget ftp://ftp.ebi.ac.uk/pub/databases/biomodels/releases/latest/$xml_tarball.tar.bz2");
+        system("tar xvfj $xml_tarball.tar.bz2");
     }
+    
+    return $xml_tarball;
+}
+
+sub execute_biomodels_jar_file {
+    my $biomodels_jar_file = shift;
+    my $xml_tarball = shift;
+    
+    my $present_dir = getcwd();
+    
+    system("java -jar -Xms5120M -Xmx10240M $biomodels_jar_file -o $present_dir/ -r /usr/local/reactomes/Reactome/production/AnalysisService/input/analysis.bin -b $xml_tarball/curated");
+}
+
+sub remove_biomodels_repository {
+    my $directory = shift;
+    
+    chdir $directory;
+    return (system("rm -rf Models2Pathways") == 0);
 }
