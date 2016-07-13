@@ -1,8 +1,8 @@
 #! /bin/bash
 
 # First argument to this script should be the name of the database.
-# Third argument to this script should be the host of the database.
-# Fourth argument should be either "true" or "false" - this will indicate if the script will actually execute updates.
+# Second argument to this script should be the host of the database.
+# Third argument should be either "true" or "false" - this will indicate if the script will actually execute updates.
 # Output will be a log file with date-formatted name: fix_chars_<YYYYMMDD_HH24mmss_Z>.log
 
 DATABASE_NAME=$1
