@@ -1295,6 +1295,18 @@ sub build_pathway_browser_url {
     
     my $logger = get_logger(__PACKAGE__);
     
+    chomp(my $hostname = `hostname -f`);
+    if (!$hostname || $hostname !~ /reactomecurator/) {
+        croak if (!$instance->stableIdentifier->[0] || !$instance->stableIdentifier->[0]->identifier->[0]);
+        my $stable_identifier = $instance->stableIdentifier->[0]->identifier->[0];
+
+        my $url = "/PathwayBrowser/#/$stable_identifier";
+
+        $logger->info("url=$url\n");
+
+        return $url;
+    }
+    
     my $db = $self->cgi->param('DB');
 
     my $db_id = $instance->db_id();
@@ -3444,7 +3456,7 @@ sub print_instance_name_list {
     print qq(<DIV CLASS="section"><TABLE WIDTH="$HTML_PAGE_WIDTH" CLASS="instancebrowser" CELLSPACING="0">\n);
     my $icount = scalar(@{$ar});
     print qq(<TR><TH>Found <B>$icount</B> matches:</TH></TR>\n<TR><TD>);
-    print $self->cgi->startform(-action => '/cgi-bin/eventbrowser', -name => 'checklist');
+    print $self->cgi->start_form(-action => '/cgi-bin/eventbrowser', -name => 'checklist');
     print $self->cgi->hidden(-name => 'DB',-value => $self->cgi->param('DB')), "\n";
 #    foreach my $i (sort {lc($a->displayName) cmp lc($b->displayName)} @{$ar}) {
     $self->cgi->delete('ID');
@@ -3500,7 +3512,7 @@ sub print_instance_name_list {
 			 -WEBUTILS => $self
 			 )->hyperlinked_displayName, qq(\n);
     }
-    print $self->cgi->endform, "\n";
+    print $self->cgi->end_form, "\n";
     print qq(</TD></TR></TABLE></DIV>\n);
 #    select($current_fh);
 #    print $out;
