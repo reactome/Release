@@ -1,74 +1,69 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
+use strict;
+use warnings;
+
 use lib "/usr/local/gkb/modules";
-use common::sense;
+
+use feature qw/state/;
 use CGI qw(:standard);
 use CGI::Carp 'fatalsToBrowser';
+
 use GKB::Config;
-use Data::Dumper;
 use GKB::StableIdentifierDatabase;
 use GKB::FrontPage3;
 use GKB::WebUtils;
 use GKB::DBAdaptor;
 
-my $CGI = CGI->new();
-my $stable = GKB::StableIdentifierDatabase->new();
 
-my $query_url  = '/content/query?q=';
-my $instance_browser_url = '/cgi-bin/instancebrowser?ID=';
-my $detail_url = '/content/detail/';
+my $cgi = CGI->new();
+my $url = get_url($cgi) || handle_error("$0: unable to obtain URL for redirection");
+print $cgi->redirect($url);
 
-my $id = $CGI->param('ID') || $CGI->param('DB_ID');
-my $st_id = $CGI->param('STID') || $CGI->param('ST_ID');
-my $query = $CGI->param('QUERY') || $CGI->param('EXACT');
-my $db = $CGI->param('DB') || $GK_DB_NAME;
+sub get_url {
+    my $cgi = shift;;
 
-my $DBA = GKB::DBAdaptor->new
-    (
-     -dbname => $db,
-     -user   => $GK_DB_USER,
-     -host   => $GK_DB_HOST,
-     -pass   => $GK_DB_PASS,
-     -port   => $GK_DB_PORT,
-     -debug  => defined $CGI->param('DEBUG') ? $CGI->param('DEBUG') : undef
+    my $st_id = $cgi->param('STID') || $cgi->param('ST_ID');
+    my $id = $st_id ?
+        GKB::StableIdentifierDatabase->new()->db_id_from_stable_id($st_id) :
+        $cgi->param('ID') || $cgi->param('DB_ID');
+    my $query = $cgi->param('QUERY') || $cgi->param('EXACT');
+
+    handle_error("$0: unable to extract an id or query from parameters") unless ($id || $query);
+    
+    my $db = $cgi->param('DB') || $GK_DB_NAME;
+    if ($id) {
+        my $instance = get_dba($cgi)->fetch_instance_by_db_id($id)->[0] || die "Could not get instance for $id";
+        
+        if ($cgi->param('PWB_REDIRECT')) {
+            return GKB::WebUtils->new_from_cgi(-CGI => $cgi)->build_pathway_browser_url($instance);
+        }
+        
+        if ($instance->is_a('Event') || $instance->is_a('PhysicalEntity') || $instance->is_a('Regulation')){
+            return "/content/detail/$id";
+        } else {
+            return "/cgi-bin/instancebrowser?ID=$id;DB=$db";
+        }
+    } elsif ($query) {
+        return "/content/query?q=/'$query'";
+    }
+    
+    return;
+}
+
+sub get_dba {
+    my $cgi = shift;
+  
+    state $dba = GKB::DBAdaptor->new(
+        -dbname => $cgi->param('DB') || $GK_DB_NAME,
+        -user   => $GK_DB_USER,
+        -host   => $GK_DB_HOST,
+        -pass   => $GK_DB_PASS,
+        -port   => $GK_DB_PORT,
+        -debug  => defined $cgi->param('DEBUG') ? $cgi->param('DEBUG') : undef
     );
-
-
-unless ($id || $st_id || $query) {
-    handle_error("eventbrowser: I do not have any search terms");
+    
+    return $dba;
 }
-
-if ($st_id) {
-   $id = $stable->db_id_from_stable_id($st_id)
-       || handle_error("Unable to find a Reactome Instance for Stable ID $st_id");
-}
-
-my $url;
-
-if ($id) {
-    my $instance = $DBA->fetch_instance_by_db_id($id)->[0] || die "Could not get instance for $id";
-    if ($instance->is_a('Event') || $instance->is_a('PhysicalEntity') || $instance->is_a('Regulation')){
-	$url = "$detail_url$id";
-    }
-    else {
-	$url = "$instance_browser_url$id;DB=$db";
-    }
-}
-elsif ($query) {
-    $url = "$query_url/'$query'";
-}
-
-if ($id && $CGI->param('PWB_REDIRECT')) {
-    my $wu = GKB::WebUtils->new_from_cgi(-CGI => $CGI);
-    my $instance = $wu->dba->fetch_instance_by_db_id($id)->[0];
-    $url = $wu->build_pathway_browser_url($instance);
-}
-
-print $CGI->redirect($url);
-#print header, $CGI->start_html;
-#print $CGI->h1($url);
-#print $CGI->end_html;
-
-
 
 sub handle_error {
     my ($error_message) = @_;
