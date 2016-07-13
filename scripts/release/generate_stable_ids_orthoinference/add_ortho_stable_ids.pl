@@ -118,8 +118,7 @@ sub species {
     my $name = $instance->displayName;
     my $long = eval{$instance->attribute_value('species')->[0]->displayName};
     $long or return undef;
-    $species{$name} = abbreviate($long);
-    return $species{$name};
+    return abbreviate($long);
 }
 
 sub abbreviate {

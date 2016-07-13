@@ -942,7 +942,7 @@ sub html_table2 {
 	    $out .= qq(<TR><TH><A NAME="$ {attribute}Anchor">$attribute</A></TH><TD>$str</TD></TR>\n);
 	} else {
 	    if ($self->db_id == 194550) {
-		"non-recursive attribute\n";
+		$logger->info("non-recursive attribute\n");
 	    }
 
 #	    my @values = map {(ref($_)) ? $self->prettyfy_instance($_)->hyperlinked_extended_displayName : $_} 
@@ -1910,8 +1910,31 @@ sub reactionmap_key {
 
 sub top_browsing_view {
     my ($self, $doi_flag) = @_;
-    my $treemaker = GKB::HtmlTreeMaker::NoReactions->new(-ROOT_INSTANCES => [$self],
-					    -URLMAKER => $self->urlmaker,
+
+    $self->urlmaker->turn_off_pwb_link();
+    my $authors = GKB::Utils::get_authors_recursively($self);
+    my $authors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$authors}) || '&nbsp';
+        
+    my $reviewers = GKB::Utils::get_reviewers_recursively($self);
+    my $reviewers_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$reviewers}) || '&nbsp';
+
+    my $editors = GKB::Utils::get_editors_recursively($self);
+    my $editors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$editors}) || '&nbsp';
+    
+    my $out = qq(<TR CLASS="contents"><TD CLASS="sidebar" WIDTH="33%">);
+    if ($doi_flag) {
+        $out .= $self->displayName();
+        $out .= qq(</TD>);
+        my $doi = "";
+        if (defined $self->doi && scalar(@{$self->doi})>0 && defined $self->doi->[0]) {
+            $doi = $self->doi->[0];
+        }
+        $out .= qq(<TD>$doi</TD>);
+    } else {
+        my $urlmaker_instance = $self->urlmaker->clone();
+        $urlmaker_instance->_delete_cached_url();
+        my $treemaker = GKB::HtmlTreeMaker::NoReactions->new(-ROOT_INSTANCES => [$self],
+					    -URLMAKER => $urlmaker_instance,
 					    -INSTRUCTIONS => {
 						'Pathway' => {'attributes' => ['hasComponent','hasEvent']},
 						'ConceptualEvent' => {'attributes' => ['hasSpecialisedForm']},
@@ -1922,27 +1945,9 @@ sub top_browsing_view {
 					    -DEPTH => 1,
 					    -DEFAULT_CLASS => 'sidebar',
 					    -ATTRIBUTE_LABELS => {'hasComponent' => '', 'hasMember' => '', 'hasSpecialisedForm' => '', 'hasEvent' => ''});
-    $treemaker->force_pwb_link(1);
-    my $authors = GKB::Utils::get_authors_recursively($self);
-    my $authors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$authors}) || '&nbsp';
-    my $reviewers = GKB::Utils::get_reviewers_recursively($self);
-    my $reviewers_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$reviewers}) || '&nbsp';
-
-    my $editors = GKB::Utils::get_editors_recursively($self);
-    my $editors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$editors}) || '&nbsp';
-    
-    my $out = qq(<TR CLASS="contents"><TD CLASS="sidebar" WIDTH="33%">);
-    if ($doi_flag) {
-	$out .= $self->displayName();
-	$out .= qq(</TD>);
-	my $doi = "";
-	if (defined $self->doi && scalar(@{$self->doi})>0 && defined $self->doi->[0]) {
-	    $doi = $self->doi->[0];
-	}
-	$out .= qq(<TD>$doi</TD>);
-    } else {
-	$out .= $treemaker->tree;
-	$out .= qq(</TD>);
+        $treemaker->force_pwb_link(1);
+        $out .= $treemaker->tree;
+        $out .= qq(</TD>);
     }
     $out .= qq(<TD CLASS="author">$authors_str</TD>);
 
