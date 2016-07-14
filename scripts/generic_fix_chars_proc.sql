@@ -1,6 +1,7 @@
+-- Invoke this script as: 'SET @run_update = true; \.generic_fix_chars_proc.sql'
 show variables like 'character%';
 show variables like 'collation%';
-
+-- ensure that the database is using utf8 character set and collation
 ALTER DATABASE gk_current default character set utf8;
 ALTER DATABASE gk_current default collate utf8_general_ci;
 
@@ -10,6 +11,13 @@ show variables like 'collation%';
 set autocommit = false;
 DROP PROCEDURE IF EXISTS fix_chars_in_table_col;
 DELIMITER //
+-- This procedure will map invalid character sequences to valid ones. It operates on a single column in a single table.
+-- This is used for situations where UTF8 characters were converted and
+-- saved in a non-UTF8 format, such as Ã¨ which should be converted to è.
+-- Parameters:
+-- tbl_name: The name of the table to update.
+-- col_name: The column in the table to update.
+-- update_source: A boolean: set to true if you REALLY want to update, set to false if you just want the report.
 CREATE PROCEDURE fix_chars_in_table_col(in tbl_name char(64), in col_name char(64), in update_source int)
 BEGIN
 	drop temporary table if exists special_chars;
@@ -60,17 +68,17 @@ BEGIN
 		('÷','Ã·'),		('ø','Ã¸'),		('ù','Ã¹'),		('ú','Ãº'),
 		('û','Ã»'),		('ü','Ã¼'),		('ý','Ã½'),		('þ','Ã¾'),
 		('ÿ','Ã¿'),
-        -- ('’','†™'), -- this handles the '’' ( the "prime" character), in some Summation.text fields.
-        -- Originally, the field may contain Ã¢â‚¬â„¢ which should translation to â€™ which maps to ’.
-        -- But because 'â€' *on its own* maps to '†', a secondary mapping must be done.
-        -- Another way to do this might be to rank the mappings to ensure that they are executed in a proper order. ordering them by byte length might work
-        -- for this situation.
-        -- UPDATE: I changed it to do replacements in order of character length.
-        -- 'Ã¢â‚¬Â²' - This sequence is transformed to 'â€²' which ends up as '†²'. It looks weird to me, but it seems to be the only possibly correct sequence, so...
-        (x'C383',x'C3833F'), -- this was found by manually searching.
+		-- ('’','†™'), -- this handles the '’' ( the "prime" character), in some Summation.text fields.
+		-- Originally, the field may contain Ã¢â‚¬â„¢ which should translation to â€™ which maps to ’.
+		-- But because 'â€' *on its own* maps to '†', a secondary mapping must be done.
+		-- Another way to do this might be to rank the mappings to ensure that they are executed in a proper order. ordering them by byte length might work
+		-- for this situation.
+		-- UPDATE: I changed it to do replacements in order of character length.
+		-- 'Ã¢â‚¬Â²' - This sequence is transformed to 'â€²' which ends up as '†²'. It looks weird to me, but it seems to be the only possibly correct sequence, so...
+		(x'C383',x'C3833F'), -- this was found by manually searching.
 		('í',x'C383C2AD'), /* this one was found by manually searching.
-        The sequence C383C2AD produces a Ã followed by a NBH character. In the case of 'GarcÃ­a-Trevijano', it seems likely that
-        the sequence should have been replaced with 'í' (whose hex sequence is C3AD. On its own that character sequence makes no sense.*/
+		The sequence C383C2AD produces a Ã followed by a NBH character. In the case of 'GarcÃ­a-Trevijano', it seems likely that
+		the sequence should have been replaced with 'í' (whose hex sequence is C3AD. On its own that character sequence makes no sense.*/
 		('',x'C2A0');
 		-- ('','Â­'),
 
@@ -98,20 +106,20 @@ BEGIN
 					where BINARY ',tbl_name,'.',col_name,'
 					like CONCAT(''%'',special_chars.special_char,''%'')');
 
-    -- select @summary_report_query,@detailed_report_query;
+	-- select @summary_report_query,@detailed_report_query;
 
-    prepare summary_report_statement from @summary_report_query;
-    prepare detailed_report_statement from @detailed_report_query;
+	prepare summary_report_statement from @summary_report_query;
+	prepare detailed_report_statement from @detailed_report_query;
 
-    execute summary_report_statement;
-    execute detailed_report_statement;
+	execute summary_report_statement;
+	execute detailed_report_statement;
 
-    deallocate prepare summary_report_statement;
-    deallocate prepare detailed_report_statement;
+	deallocate prepare summary_report_statement;
+	deallocate prepare detailed_report_statement;
 
 	begin
 		DECLARE done INT DEFAULT FALSE;
-        declare the_id varchar(10);
+		declare the_id varchar(10);
 		declare tmp_val text;
  		declare old_char varchar(10);
 		declare new_char varchar(10);
@@ -121,16 +129,16 @@ BEGIN
 		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 		OPEN things_to_fix_cursor;
-        -- Main loop: loop through the cursor of Person records that have name fields that need to be fixed.
+		-- Main loop: loop through the cursor of Person records that have name fields that need to be fixed.
 		things_to_fix_loop: LOOP
 			FETCH things_to_fix_cursor into the_id, tmp_val;
 			-- select the_id, tmp_firstname, tmp_initial, tmp_surname;
 
 			SELECT  special_chars.special_char, special_chars.replacement_char
 			INTO old_char , new_char
-            FROM special_chars
+			FROM special_chars
 			WHERE BINARY tmp_val LIKE CONCAT('%', special_chars.special_char, '%')
-            order by char_length(special_chars.special_char) desc
+			order by char_length(special_chars.special_char) desc
 			LIMIT 1;
 			-- 1 transaction per loop iteration,
 			-- there could be multiple DMLs per iteration if a Person has more than one different "special" char that needs to be replaced.
@@ -141,7 +149,7 @@ BEGIN
 			begin
 				DECLARE done_char_replacement int default FALSE;
 				DECLARE CONTINUE HANDLER FOR NOT FOUND SET done_char_replacement = TRUE;
-                -- keep going until there are no more replacements left to do...
+				-- keep going until there are no more replacements left to do...
 				while not done_char_replacement do
 
 					-- do the replacement.
@@ -153,10 +161,10 @@ BEGIN
 
 					-- Now, try to get the next replacement characters. If there are none, the NOT FOUND handler
 					SELECT special_chars.special_char, special_chars.replacement_char
-                    INTO old_char , new_char
+					INTO old_char , new_char
 					FROM special_chars
 					WHERE BINARY tmp_val LIKE CONCAT('%', special_chars.special_char, '%')
-                    order by char_length(special_chars.special_char) desc
+					order by char_length(special_chars.special_char) desc
 					LIMIT 1;
 				end while;
 			end;
@@ -170,24 +178,57 @@ BEGIN
 	end;
 	SELECT * FROM fixed_vals ORDER BY db_id;
 
-    if update_source then
+	if update_source then
 		begin
 			start transaction;
 			set @update_str=concat('update ',tbl_name,', fixed_vals
 									set ',tbl_name,'.',col_name,' = fixed_vals.fixed_val
-                                    where ',tbl_name,'.db_id = fixed_vals.db_id ');
-            prepare update_statement from @update_str;
-            execute update_statement ;
-            deallocate prepare update_statement ;
-            commit;
-        end;
-    end if;
+									where ',tbl_name,'.db_id = fixed_vals.db_id ');
+			prepare update_statement from @update_str;
+			execute update_statement ;
+			deallocate prepare update_statement ;
+			commit;
+		end;
+	end if;
 END //
 DELIMITER ;
-CALL fix_chars_in_table_col('Person','firstname',true);
-CALL fix_chars_in_table_col('Person','initial',true );
-CALL fix_chars_in_table_col('Person','surname',true);
-CALL fix_chars_in_table_col('Publication','title',true);
-CALL fix_chars_in_table_col('Affiliation','address',true);
-CALL fix_chars_in_table_col('DatabaseObject','_displayName',true);
-CALL fix_chars_in_table_col('Summation','text',true);
+
+-- Call the procedure. Invoke this script as: 'SET @run_update = true; \.generic_fix_chars_proc.sql'
+-- From the shell:
+-- $ mysql -u root -p -e"SET @run_update = true; `cat $(pwd)/generic_fix_chars_proc.sql`"
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'firstname\',',@run_update,');');
+PREPARE stmt from @proc_call;
+EXECUTE stmt;
+
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'initial\',',@run_update,');');
+PREPARE stmt from @proc_call;
+EXECUTE stmt;
+
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'surname\',',@run_update,');');
+PREPARE stmt from @proc_call;
+EXECUTE stmt;
+
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Publication\',\'title\',',@run_update,');');
+PREPARE stmt from @proc_call;
+EXECUTE stmt;
+
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Affiliation\',\'address\',',@run_update,');');
+PREPARE stmt from @proc_call;
+EXECUTE stmt;
+
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'DatabaseObject\',\'_displayName\',',@run_update,');');
+PREPARE stmt from @proc_call;
+EXECUTE stmt;
+
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Summation\',\'text\',',@run_update,');');
+PREPARE stmt from @proc_call;
+EXECUTE stmt;
+
+deallocate prepare stmt;
+-- CALL fix_chars_in_table_col('Person','firstname',true);
+-- CALL fix_chars_in_table_col('Person','initial',true );
+-- CALL fix_chars_in_table_col('Person','surname',true);
+-- CALL fix_chars_in_table_col('Publication','title',true);
+-- CALL fix_chars_in_table_col('Affiliation','address',true);
+-- CALL fix_chars_in_table_col('DatabaseObject','_displayName',true);
+-- CALL fix_chars_in_table_col('Summation','text',true);
