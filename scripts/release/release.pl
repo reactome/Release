@@ -36,6 +36,7 @@ my @options = (
     ['FireworksServer', GKB_DEV_ALIAS, "-creates fireworks JSON for pathways in each species"],
     ['InstallReleaseDB', GKB_DEV_ALIAS, "-installs test_reactome_XX for use as the default database"],
     ['SimplifiedDatabase', GKB_DEV_ALIAS, "-creates simplified database from release database"],
+    ["UpdateDOIs", GKB_DEV_ALIAS, "-adds DOIs to requesting pathways in release database and gk_central"],
     ['UpdateGkCurrent', GKB_DEV_ALIAS, "-populate gk_current database with new release content"],
     ['TOC', GKB_DEV_ALIAS, "-create cached toc and doi_toc files"],
     ['DownloadDirectory', GKB_DEV_ALIAS, "-update the download directory"],
