@@ -44,7 +44,7 @@ use vars qw(@ISA $AUTOLOAD %ok_field);
 use Bio::Root::Root;
 use Carp;
 use GKB::SearchUtils::ResultRenderer;
-use Search::Tools::HiLiter;
+#use Search::Tools::HiLiter;
 #use Search::Tools::RegExp;
 
 @ISA = qw(GKB::SearchUtils::ResultRenderer);
@@ -102,10 +102,10 @@ sub set_terms {
 #    my $rekw = $re->build(\@all_terms);
 # Search::Tools->parser is the new way
 # TODO: only the first search term gets highlighted
-    my $qparser    = Search::Tools->parser();
-    my $rekw      = $qparser->parse(@all_terms);
-	my $hiliter = Search::Tools::HiLiter->new('query' => $rekw );
-	$self->hiliter($hiliter);
+    #my $qparser    = Search::Tools->parser();
+    #my $rekw      = $qparser->parse(@all_terms);
+	#my $hiliter = Search::Tools::HiLiter->new('query' => $rekw );
+	#$self->hiliter($hiliter);
 }
     
 # Must return 1 if successful, 0 otherwise (e.g. if no description
@@ -157,7 +157,7 @@ sub print_description {
     	}
     	$description = $self->strip_html($description);
     	$description = $self->pad_terms($description);
-		$description = $self->hiliter->light($description);
+		#$description = $self->hiliter->light($description);
     	$description = $self->unpad_terms($description);
     	print "$description\n";
     	
@@ -181,7 +181,7 @@ sub print_title {
     	$title =~ s/^(.+: )//;
     	my $type = $1;
     	$title = $self->pad_terms($title);
-		$title = $self->hiliter->light($title);
+		#$title = $self->hiliter->light($title);
     	$title = $self->unpad_terms($title);
     	print "<div style=\"font-size:11pt;\">$type$title</div>\n";
     }
