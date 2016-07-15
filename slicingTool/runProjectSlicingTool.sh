@@ -64,10 +64,6 @@ done
 
 killall -9 tail >/dev/null 2>&1
 
-echo "Adding new stable IDs..."
-./add_stable_ids.pl -sdb $DB -pdb $PREV_DB -user $USER -pass $PASS -release $VER>>$LOG
-
-
 #/usr/local/gkb/scripts/install_slice_db.pl $DB
 
 echo "
