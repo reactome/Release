@@ -11,14 +11,12 @@ MROOT=$1
 # this value should be interpolated at release time
 RELEASE=RELEASENUM
 
-if [[ $EUID -ne 0 ]]
-then
+if [[ $EUID -ne 0 ]] ; then
     echo -e "\nSorry, you must be the root user run this script!" 1>&2
     exit 1
 fi
 
-if [[ ! -n $MROOT ]]
-then
+if [[ ! -n $MROOT ]] ; then
     echo -e "
 \nIMPORTANT: If you have already set up MySQL, provide the
            mysql 'root' user (administrator) password here.
@@ -58,7 +56,7 @@ apt-get update -yq
 
 # mysql to be install non-interactively
 export DEBIAN_FRONTEND=noninteractive
-if [[ ! -n $HAVEMYSQL ]] then
+if [[ ! -n $HAVEMYSQL ]] ; then
 	apt-get install -yq mysql-server
 fi
 
@@ -145,8 +143,9 @@ wget -nv -t 5 http://www.reactome.org/download/current/databases/gk_stable_ids.s
 wget -nv -t 5 http://www.reactome.org/download/current/databases/gk_wordpress.sql.gz
 # wget http://www.reactome.org/download/current/databases/gk_current_dn.sql.gz
 service mysql start
-
-mysqladmin -u root password $MROOT
+if [[ ! $HAVEMYSQL && -n $MROOT ]] ; then
+	mysqladmin -u root password $MROOT
+fi
 
 service  mysql restart
 mysql -uroot -p$MROOT -e 'DROP DATABASE IF EXISTS gk_current'
@@ -263,7 +262,7 @@ chown -R tomcat7:tomcat7 AnalysisService Solr RESTful
 cd $PWD
 
 echo -e "\nStarting the tomcat server..."
-/etc/init.d/tomcat7 restart || (ls -l /usr/local/reactomes/Reactome/production/apache-tomcat/logs/ && head -n 50 /usr/local/reactomes/Reactome/production/apache-tomcat/logs/catalina.out)
+/etc/init.d/tomcat7 restart
 
 echo -e "\nStarting the apache web server..."
 /etc/init.d/$APACHE restart
