@@ -10,14 +10,14 @@ VER=$(grep releaseNumber slicingTool.prop | perl -pe 's/^\S+=//');
 CURATOR_DB=$(grep dbName slicingTool.prop | grep -v '\#' |perl -pe 's/^\S+=//');
 CURATOR_HOST=$(grep dbHost slicingTool.prop | grep -v '\#' |perl -pe 's/^\S+=//');
 
-if [[ -z $CURATOR_DB || -z $CURATOR_HOST ]]
-then
-    echo -e "Missing dbName or dbHost in slicingTool.prop -- please edit the file to set them\n"
-    exit
-fi
+#if [[ -z $CURATOR_DB || -z $CURATOR_HOST ]]
+#then
+#    echo -e "Missing dbName or dbHost in slicingTool.prop -- please edit the file to set them\n"
+#    exit
+#fi
 
-echo "Fixing bad character sequences."
-bash ../scripts/fix_characters.sh $CURATOR_DB $CURATOR_HOST true
+#echo "Fixing bad character sequences."
+#bash ../scripts/fix_characters.sh $CURATOR_DB $CURATOR_HOST true
 
 if [[ -n $DB && -n $USER && -n $PASS ]]
 then
