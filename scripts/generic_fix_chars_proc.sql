@@ -1,10 +1,11 @@
 -- Invoke this script as: 'SET @run_update = true; \.generic_fix_chars_proc.sql'
+select 'Character and Collation database variables, before alter to UTF8' as message;
 show variables like 'character%';
 show variables like 'collation%';
 -- ensure that the database is using utf8 character set and collation
 ALTER DATABASE gk_current default character set utf8;
 ALTER DATABASE gk_current default collate utf8_general_ci;
-
+select 'Character and Collation database variables, AFTER alter to UTF8' as message;
 show variables like 'character%';
 show variables like 'collation%';
 --
@@ -17,9 +18,11 @@ DELIMITER //
 -- Parameters:
 -- tbl_name: The name of the table to update.
 -- col_name: The column in the table to update.
--- update_source: A boolean: set to true if you REALLY want to update, set to false if you just want the report.
+-- update_source: Update the source data? A boolean: set to true if you REALLY want to update, set to false if you just want the report.
 CREATE PROCEDURE fix_chars_in_table_col(in tbl_name char(64), in col_name char(64), in update_source int)
 BEGIN
+	select concat('Fixing characters for column ',col_name,' in table ',tbl_name) as message;
+
 	drop temporary table if exists special_chars;
 	create temporary table if not EXISTS special_chars
 	(
@@ -111,7 +114,9 @@ BEGIN
 	prepare summary_report_statement from @summary_report_query;
 	prepare detailed_report_statement from @detailed_report_query;
 
+	select concat('Summary report for ',tbl_name) as message;
 	execute summary_report_statement;
+	select concat('Detailed report for ',tbl_name) as message;
 	execute detailed_report_statement;
 
 	deallocate prepare summary_report_statement;
@@ -176,6 +181,7 @@ BEGIN
 		end loop;
 		CLOSE things_to_fix_cursor;
 	end;
+	Select 'These are the fixes that will be applied: ' as message;
 	SELECT * FROM fixed_vals ORDER BY db_id;
 
 	if update_source then
