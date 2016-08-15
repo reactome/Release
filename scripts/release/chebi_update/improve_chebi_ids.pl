@@ -37,26 +37,23 @@ open OUT, ">chebi.wiki";
 print "NOTE: This script prints stable chEBI ids to its report.  Should chEBI change its ids, this will have to be addressed\n";
 
 my $chebi = GKB::SOAPServer::ChEBI->new();
-my $identifier;
-my $up_to_date_identifier;
-my $chebi_name;
-my $reference_molecule;
+
 my $reference_molecule_db_ids = $dba->fetch_db_ids_by_class("ReferenceMolecule");
 my $molecule_identifier_counter = 0;
 my $outdated_molecule_identifier_counter = 0;
 $dba->execute('START TRANSACTION');
 foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
-	$reference_molecule = $dba->fetch_instance_by_db_id($reference_molecule_db_id)->[0];
+	my $reference_molecule = $dba->fetch_instance_by_db_id($reference_molecule_db_id)->[0];
 	next unless $reference_molecule;
     next unless $reference_molecule->referenceDatabase->[0] &&
                 $reference_molecule->referenceDatabase->[0]->displayName =~ /ChEBI/;
 
-	$identifier = $reference_molecule->identifier->[0];
+	my $identifier = $reference_molecule->identifier->[0];
 	next unless $identifier;
 
 	$molecule_identifier_counter++;
 
-	($up_to_date_identifier, $chebi_name, $chebi_formula) = $chebi->get_up_to_date_identifier_name_formulae($identifier);
+	my ($up_to_date_identifier, $chebi_name, $chebi_formula) = $chebi->get_up_to_date_identifier_name_formulae($identifier);
 	next unless $up_to_date_identifier;
 	
 	$up_to_date_identifier =~ s/^CHEBI://;
