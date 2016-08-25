@@ -88,8 +88,8 @@ sub create_fireworks_jar_file {
 	
 	my $present_dir = getcwd();
 	chdir "$symbolic_link_to_repository/Server";
-	system("mvn clean package");
-	my $return_value = copy("target/Reactome Fireworks Layout-jar-with-dependencies.jar", "$present_dir/$jar_file");
+	system("mvn clean package -U");
+	my $return_value = copy("target/fireworks-jar-with-dependencies.jar", "$present_dir/$jar_file");
 	chdir $present_dir;
 	
 	return ($return_value == 0);
@@ -110,6 +110,7 @@ sub create_fireworks_json {
     my $reactome_graph_binary = shift;
     my $json_dir = shift;
     
+    system("mkdir -p $json_dir");
     return (system("$fireworks_jar LAYOUT $credentials -g $reactome_graph_binary -f fireworks/Server/config -o $json_dir") == 0);
 }
 
