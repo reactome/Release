@@ -51,7 +51,8 @@ my %dba = get_api_connections();
 # There are 2 types of keys and one subcache.
 # The two types of keys:
 # - StableIdentifier strings: You will find things with keys like "REACT_1234" or "R-HSA-5678". These keys point to Stable Identifier objects.
-# - Instance Identifiers: You will find things keyed by their Database Object DB_IDs, such as "948573" or "2200459". These keys point to Stable Identifier record IDs in stable_identifiers.StableIdentifiers
+# - Instance Identifiers: You will find things keyed by their Database Object DB_IDs, such as "948573" or "2200459". These keys point to arrays of DB_IDs that are referred
+#   to by that instanceId.
 # The subcache:
 # - there will be a single key named "new". This key points to another hash that is keyed by Stable Identifier Strings,
 #   and these keys point to an integer which indicates how many times that Stable Identifier has been seen.
@@ -152,6 +153,11 @@ sub get_all_stable_ids {
 		$stable_id->{$identifier}{db_id}   = $db_id;
 		$stable_id->{$identifier}{version} = $version;
 		$stable_id->{$identifier}{parent}  = $parent;
+		# Keep track in an array of the DB_IDs that this instanceId are referred to by. 
+		# the fact that multiple DB_IDs exist for a single instanceId is because
+		# multiple stableIDs exist because of that time they converted from the OLD
+		# stable identifier system to the new one. Also, the old system had 
+		# stable identifier replacements done to it, resulting in this sort of situation.
 		push @{ $stable_id->{$parent} }, $db_id;
 	}
 }
@@ -339,10 +345,16 @@ sub ortho_parent_in_history {
 	}
 
 	my $old_parent_id         = $stable_id{$identifier}{parent};
-	# Here's something tricky:
+	# Here, we use the instanceId fron the stableIdentifier record
+	# to get an array of DatabaseObject IDs (DB_IDs) which are referred to
+	# by the current instanceId.
 	my @st_id_with_old_parent = @{ $stable_id{$old_parent_id} };
 
-	# This updates instanceId in StableIdentifier.
+	# For each of the DB_IDs that the instanceId referred to,
+	# Do an update:
+	# set the instanceId to $db_id where DB_ID = $old_st_id
+	# in other words: we are updating the stableIdentifier table
+	# by changing the instance to which a StableIdentifier refers to.
 	my $sth = $dba{$stable_id_db}->prepare_cached(SET_PARENT);
 	for my $old_st_id (@st_id_with_old_parent) {
 		$logger->info("Updating parent instanceId from $old_parent_id to $db_id");
