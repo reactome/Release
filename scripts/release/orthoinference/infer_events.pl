@@ -231,9 +231,14 @@ foreach my $rxn (@{$reaction_ar}) {
     my @tmp = grep {$_->Species->[0]->db_id == $taxon->db_id && !(is_chimeric($_))} (@{$rxn->OrthologousEvent}, @{$rxn->InferredFrom});
     $logger->info("scalar(tmp)=" . scalar(@tmp) . "\n");
     if ($tmp[0]) { #the event exists in the other species, need not be inferred but should be kept for the step when the event hierarchy is created, so that it can be fit in at the appropriate position in the event hierarchy
-	$inferred_event{$rxn} = $tmp[0]; #disregards multiple events here..., the first event is taken into the hash to allow building the event structure further down
-	push @all_human_events, $rxn;
-	next;
+        unless ($tmp[0]->disease->[0]) {        
+            $inferred_event{$rxn} = $tmp[0]; #disregards multiple events here..., the first event is taken into the hash to allow building the event structure further down 
+            push @all_human_events, $rxn;
+        } else {
+            $logger->info("Skipping building of hierarchy around pre-existing disease reaction " .
+                          $tmp[0]->displayName . " (" . $tmp[0]->db_id . ")");
+        }
+        next;
     }
     $logger->info("infer event for reaction=" . $rxn->extended_displayName . "\n");
     infer_event($rxn);
@@ -301,12 +306,16 @@ close($eli);
 
 $logger->info("end\n");
 
+
+
 sub get_skip_list {
-    #exclude selected pathways from inference
+    # exclude selected pathways from inference
     my @list;
     foreach my $pwy_id (162906, 168254, 977225) {  #human-viral pathways, amyloids
         push @list, get_reaction_ids($pwy_id);  #inference is done on reaction level, therefore extract all downstream reactions and store them in @list.
     }
+    
+    # exclude
     open(my $skip_list_fh, '<', 'normal_event_skip_list.txt');
     while (my $reaction_db_id = <$skip_list_fh>) {
     	chomp $reaction_db_id;
@@ -702,8 +711,14 @@ sub infer_event {
 
     if ($reg->[0]) {
 	foreach my $r (@{$reg}) {
-	    $r->RegulatedEntity($inf_e);
-	    $r = check_for_identical_instances($r); #this can only be done at this point, after inf_e has been stored
+	    my $source_regulation = $r->{source};
+        my $inferred_regulation = $r->{inferred};
+        
+        $inferred_regulation->RegulatedEntity($inf_e);
+	    $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_e has been stored
+        $source_regulation->inferredTo(@{$source_regulation->inferredTo});
+        $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
+        $dba->update_attribute($source_regulation, 'inferredTo');
 	}
     }
     $count_inferred_leaves++; #counts successfully inferred events
@@ -822,8 +837,14 @@ sub create_inf_cat {
     $homol_cat{$cat} = $inf_cat;
     if ($reg->[0]) {
 	foreach my $r (@{$reg}) {
-	    $r->RegulatedEntity($inf_cat);
-	    $r = check_for_identical_instances($r); #this can only be done after inf_cat has been stored
+	    my $source_regulation = $r->{source};
+        my $inferred_regulation = $r->{inferred};
+        
+        $inferred_regulation->RegulatedEntity($inf_cat);
+	    $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_cat has been stored
+        $source_regulation->inferredTo(@{$source_regulation->inferredTo});
+        $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
+        $dba->update_attribute($source_regulation, 'inferredTo');
 	}
     }
     return $inf_cat;
@@ -837,19 +858,24 @@ sub infer_regulation {
     my @reg;
     my $reg_ar = $i->reverse_attribute_value('regulatedEntity');
     if ($reg_ar->[0]) {
-	foreach my $reg (@{$reg_ar}) {
-	    my $regulator = infer_regulator($reg->Regulator->[0]);
-	    unless ($regulator) {
-		if ($reg->is_a('Requirement')) {
-		    return; #the event should not be inferred in this case
-		} else {
-		    next; #no Regulation object is stored, but this doesn't stop the event being inferred
-		}
-	    }
-	    my $inf_reg = new_inferred_instance($reg);
-	    $inf_reg->Regulator($regulator);
-	    push @reg, $inf_reg;
-	}
+        foreach my $reg (@{$reg_ar}) {
+            my $regulator = infer_regulator($reg->Regulator->[0]);
+            unless ($regulator) {
+                if ($reg->is_a('Requirement')) {
+                    return; #the event should not be inferred in this case
+                } else {
+                    next; #no Regulation object is stored, but this doesn't stop the event being inferred
+                }
+            }
+            my $inf_reg = new_inferred_instance($reg);
+            $inf_reg->Regulator($regulator);
+            $inf_reg->add_attribute_value_if_necessary('inferredFrom', $reg);
+
+            push @reg, {
+                source => $reg,
+                inferred => $inf_reg
+            };
+        }
     }
     return 1, \@reg;
 }
@@ -1148,39 +1174,39 @@ sub create_orthologous_generic_event {
     
     my $ar = $hum_event->reverse_attribute_value('hasEvent');
     if ($ar->[0]) {
-	$logger->info("ID_hum_event: " . $hum_event->db_id . "\n");
-	foreach my $gen_hum_event (@{$ar}) {
-	    unless ($inferred_event{$gen_hum_event}) { 
-		my $gen_inf_event = new_inferred_instance($gen_hum_event);
-		$gen_inf_event->Name(@{$gen_hum_event->Name});
-		$gen_inf_event->Summation($summation);
-		$gen_inf_event->InferredFrom($gen_hum_event);
-		$gen_inf_event->EvidenceType($evidence_type);
-		$gen_inf_event->GoBiologicalProcess(@{$gen_hum_event->GoBiologicalProcess});
-		$gen_inf_event->OrthologousEvent($gen_hum_event);
+        $logger->info("ID_hum_event: " . $hum_event->db_id . "\n");
+        foreach my $gen_hum_event (@{$ar}) {
+            unless ($inferred_event{$gen_hum_event}) { 
+                my $gen_inf_event = new_inferred_instance($gen_hum_event);
+                $gen_inf_event->Name(@{$gen_hum_event->Name});
+                $gen_inf_event->Summation($summation);
+                $gen_inf_event->InferredFrom($gen_hum_event);
+                $gen_inf_event->EvidenceType($evidence_type);
+                $gen_inf_event->GoBiologicalProcess(@{$gen_hum_event->GoBiologicalProcess});
+                $gen_inf_event->OrthologousEvent($gen_hum_event);
+                
+                if ($gen_hum_event->is_a('ReactionlikeEvent')) {
+                    infer_attributes($gen_hum_event, $gen_inf_event, 'input');
+                    infer_attributes($gen_hum_event, $gen_inf_event, 'output');
+                    infer_catalyst($gen_hum_event, $gen_inf_event);
+                }
+        
+                $inferred_event{$gen_hum_event} = $gen_inf_event;
+                $dba->store($gen_inf_event);	
+                
+                $gen_hum_event->OrthologousEvent;
+                $gen_hum_event->add_attribute_value('orthologousEvent',$gen_inf_event);
+                $dba->update_attribute($gen_hum_event, 'orthologousEvent');
+                unless ($opt_from eq 'hsap') {
+                    update_human_event($gen_inf_event);
+                }
+                push @all_human_events, $gen_hum_event;
+            }
+            create_orthologous_generic_event($gen_hum_event);
 	    
-		if ($gen_hum_event->is_a('ReactionlikeEvent')) {
-		    infer_attributes($gen_hum_event, $gen_inf_event, 'input');
-		    infer_attributes($gen_hum_event, $gen_inf_event, 'output');
-		    infer_catalyst($gen_hum_event, $gen_inf_event);
-		}
-
-		$inferred_event{$gen_hum_event} = $gen_inf_event;
-		$dba->store($gen_inf_event);	
-		
-		$gen_hum_event->OrthologousEvent;
-		$gen_hum_event->add_attribute_value('orthologousEvent',$gen_inf_event);
-		$dba->update_attribute($gen_hum_event, 'orthologousEvent');
-		unless ($opt_from eq 'hsap') {
-		    update_human_event($gen_inf_event);
-		}
-		push @all_human_events, $gen_hum_event;
-	    }
-	    create_orthologous_generic_event($gen_hum_event);
-	    
-	    $logger->info("orthologous generic event subroutine:\n");
-	    $logger->info($gen_hum_event->displayName . " => " . $inferred_event{$gen_hum_event}->displayName . "\n");
-	}
+            $logger->info("orthologous generic event subroutine:\n");
+    	    $logger->info($gen_hum_event->displayName . " => " . $inferred_event{$gen_hum_event}->displayName . "\n");
+    	}
     }
 }
 
