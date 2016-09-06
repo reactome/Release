@@ -37,7 +37,7 @@ then
     echo -e "\n"
     HAVEMYSQL=1
 fi
-
+APT=$(command -v apt-get)
 if [[ -n $APT ]] 
 then
     echo -e "\nThis is probably Debian/Ubuntu Linux"
