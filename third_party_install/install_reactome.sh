@@ -38,12 +38,12 @@ then
     HAVEMYSQL=1
 fi
 APT=$(command -v apt-get)
-if [[ -n $APT ]] 
+if [[ -n $APT ]]
 then
     echo -e "\nThis is probably Debian/Ubuntu Linux"
-else 
+else
     echo -e "\nThis is probably not Debian or Ubuntu Linux; I can't proceed";
-    exit 1 
+    exit 1
 fi
 sleep 1
 
@@ -199,18 +199,75 @@ APACHE=apache2
 
 # set up solr
 echo -e "\nSetting up Solr..."
-mkdir -p /usr/local/gkb/scripts/
-cd /usr/local/gkb/scripts/
-echo "Getting Solr installer..."
-wget https://raw.githubusercontent.com/reactome/Search/master/install_solr.sh
-echo "Executing Solr installer..."
-chmod a+x /usr/local/gkb/scripts/install_solr.sh
-apt-get install unzip
-/usr/local/gkb/scripts/install_solr.sh -i reactome_pass
 
-rm /usr/local/reactomes/Reactome/production/apache-tomcat/conf/Catalina/localhost/solr.xml
-chown -R solr:solr /usr/local/reactomes/Reactome/production/Solr
+# Integrate solr installation into this script.
 
+_SOLR_HOME="/usr/local/reactomes/Reactome/production/Solr"
+_SOLR_VERSION="5.3.1"
+_SOLR_PORT=8983
+
+
+_SOLR_CORE="reactome"
+_GIT_BRANCH="master"
+
+_CWD=$(pwd)
+
+echo "Stopping solr service"
+service solr stop
+
+echo "Deleting old solr installed instances..."
+rm -r /var/solr
+rm -r /opt/solr-*
+rm -r /opt/solr
+rm /etc/init.d/solr
+
+deluser --remove-home solr
+deluser --group solr_CWD=$(pwd)
+
+echo "Stopping solr service"
+service solr stop
+
+echo "Deleting old solr installed instances..."
+rm -r /var/solr
+rm -r /opt/solr-*
+rm -r /opt/solr
+rm /etc/init.d/solr
+
+deluser --remove-home solr
+deluser --group solr
+
+wget http://archive.apache.org/dist/lucene/solr/$_SOLR_VERSION/solr-$_SOLR_VERSION.tgz
+
+if [ ! -f solr-$_SOLR_VERSION.tgz ]; then
+     echo "Could not download Solr version $_SOLR_VERSION. Please check the specified version and try again"
+     exit 1;
+fi
+
+tar xzf solr-$_SOLR_VERSION.tgz solr-$_SOLR_VERSION/bin/install_solr_service.sh --strip-components=2
+bash ./install_solr_service.sh solr-$_SOLR_VERSION.tgz -d $_SOLR_HOME -p $_SOLR_PORT
+
+echo "Check if solr is running..."
+service solr status
+
+echo "Deleting Solr core..."
+curl http://localhost:$_SOLR_PORT/solr/admin/cores?action=UNLOAD\&core=$_SOLR_CORE\&deleteIndex=true
+
+echo "Creating Solr core..."
+su - solr -c "/opt/solr/bin/solr create -c $_SOLR_CORE -d  /usr/local/reactomes/Reactome/production/Solr/data/reactome/conf/"
+
+
+#echo "Enabling Solr admin authentication in Jetty..."
+#cp Search-$_GIT_BRANCH/solr-jetty-conf/jetty.xml /opt/solr-$_SOLR_VERSION/server/etc/
+#cp Search-$_GIT_BRANCH/solr-jetty-conf/webdefault.xml /opt/solr-$_SOLR_VERSION/server/etc/
+
+cat > realm.properties << EOF1
+$_SOLR_USER: $_SOLR_PASSWORD,solr-admin
+EOF1
+cp realm.properties /opt/solr-$_SOLR_VERSION/server/etc/
+
+echo "Restart solr service..."
+service solr restart
+echo "Solr setup is complete!"
 #####################
 # Web server setup. #
 #####################
@@ -257,7 +314,8 @@ groupadd tomcat7
 useradd -g tomcat7 -s /sbin/nologin -d /opt/tomcat/temp tomcat7
 cd /usr/local/reactomes/Reactome/production
 chown -R tomcat7:tomcat7 apache-tomcat-7.0.50
-chown -R tomcat7:tomcat7 AnalysisService Solr RESTful
+#chown -R tomcat7:tomcat7 AnalysisService Solr RESTful
+chown -R tomcat7:tomcat7 AnalysisService RESTful
 
 cd $PWD
 
@@ -270,6 +328,11 @@ echo -e "\nStarting the apache web server..."
 # auto start on reboot
 echo -e "\nSetting up automatic tomcat start on boot"
 sudo update-rc.d tomcat7 defaults
+
+mkdir -p /usr/local/reactomes/Reactome/production/ContentService/
+
+apt-get install mlocate
+updatedb
 
 echo -e "Done Installation!\n"
 set +e
