@@ -119,9 +119,14 @@ foreach my $instance (@{$curated_instances}) {
     my $stable_id = $instance->stableIdentifier->[0]->identifier->[0];
     next if $released{$stable_id};
     
-    print $out $instance->db_id . "\t" . $instance->name->[0];
-    print $out "\t" . $instance->created->[0]->author->[0]->displayName . " " . $instance->created->[0]->dateTime->[0] if $instance->created->[0] && $instance->created->[0]->author->[0];
-    print $out "\t" . $instance->modified->[-1]->author->[0]->displayName . " " . $instance->modified->[-1]->dateTime->[0] if $instance->modified->[-1] && $instance->modified->[-1]->author->[0];
+    my $instance_db_id = $instance->db_id || '';
+    my $instance_name = $instance->name->[0] || '';
+    
+    print $out $instance_db_id . "\t" . $instance_name;
+    print $out "\t";
+    print $out $instance->created->[0]->author->[0]->displayName . " " . $instance->created->[0]->dateTime->[0] if $instance->created->[0] && $instance->created->[0]->author->[0];
+    print $out "\t";
+    print $out $instance->modified->[-1]->author->[0]->displayName . " " . $instance->modified->[-1]->dateTime->[0] if $instance->modified->[-1] && $instance->modified->[-1]->author->[0];
     print $out "\n";
 }
 close $out;
