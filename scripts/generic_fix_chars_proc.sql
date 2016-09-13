@@ -2,9 +2,11 @@
 select 'Character and Collation database variables, before alter to UTF8' as message;
 show variables like 'character%';
 show variables like 'collation%';
+
 -- ensure that the database is using utf8 character set and collation
 ALTER DATABASE gk_current default character set utf8;
 ALTER DATABASE gk_current default collate utf8_general_ci;
+
 select 'Character and Collation database variables, AFTER alter to UTF8' as message;
 show variables like 'character%';
 show variables like 'collation%';
@@ -22,7 +24,6 @@ DELIMITER //
 CREATE PROCEDURE fix_chars_in_table_col(in tbl_name char(64), in col_name char(64), in update_source int)
 BEGIN
 	select concat('Fixing characters for column ',col_name,' in table ',tbl_name) as message;
-
 	drop temporary table if exists special_chars;
 	create temporary table if not EXISTS special_chars
 	(
@@ -43,9 +44,12 @@ BEGIN
 	values
 		('€','â‚¬'),	('‚','â€š'),	('ƒ','Æ’'),		('„','â€ž'),
 		('…','â€¦'),	('†','â€'),		('‡','â€¡'),	('ˆ','Ë†'),
-		('‰','â€°'),	('Š',x'C5A0'),	('‹','â€¹'),	('Œ','Å’'),
+		('‰','â€°'),	('Š',concat(0xC5,0xA0)),	('‹','â€¹'),	('Œ','Å’'),
 		('Ž','Å½'),		('‘','â€˜'),	('’','â€™'),	('“','â€œ'),
-		('”','â€'),		('•','â€¢'),	('–','â€“'),	('—','â€”'),
+		/*('”','â€'),*/
+		('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0xC2,0x9D)),
+		-- ('”',concat('Ã¢â‚¬',x'9D')),
+		('•','â€¢'),	('–','â€“'),	('—','â€”'),
 		('˜','Ëœ'),		('™','â„¢'),	('š','Å¡'),		('›','â€º'),
 		('œ','Å“'),		('ž','Å¾'),		('Ÿ','Å¸'),		('¡','Â¡'),
 		('¢','Â¢'),		('£','Â£'),		('¤','Â¤'),		('¥','Â¥'),
@@ -71,6 +75,10 @@ BEGIN
 		('÷','Ã·'),		('ø','Ã¸'),		('ù','Ã¹'),		('ú','Ãº'),
 		('û','Ã»'),		('ü','Ã¼'),		('ý','Ã½'),		('þ','Ã¾'),
 		('ÿ','Ã¿'),
+		-- Found during Lisa's review:
+		('ß','Î²'),('ß','ÃŽÂ²'), -- There are some really garbled sequences that reduce to Î² when they should be "ß".
+		-- This one was found during Lisa's review:
+		('à','Ã '), ('à', concat(0xC3,0x83,0xC6,0x92,0xC3,0x82,0xC2,0xA0), -- the first one is what it *should* be, the second one is to fix a bad example in the database.
 		-- ('’','†™'), -- this handles the '’' ( the "prime" character), in some Summation.text fields.
 		-- Originally, the field may contain Ã¢â‚¬â„¢ which should translation to â€™ which maps to ’.
 		-- But because 'â€' *on its own* maps to '†', a secondary mapping must be done.
@@ -78,11 +86,11 @@ BEGIN
 		-- for this situation.
 		-- UPDATE: I changed it to do replacements in order of character length.
 		-- 'Ã¢â‚¬Â²' - This sequence is transformed to 'â€²' which ends up as '†²'. It looks weird to me, but it seems to be the only possibly correct sequence, so...
-		(x'C383',x'C3833F'), -- this was found by manually searching.
-		('í',x'C383C2AD'), /* this one was found by manually searching.
+		(concat(0xC3,0x83),concat(0xC3,0x83,0x3F)), -- this was found by manually searching.
+		('í',concat(0xC3,0x83,0xC2,0xAD)), /* this one was found by manually searching.
 		The sequence C383C2AD produces a Ã followed by a NBH character. In the case of 'GarcÃ­a-Trevijano', it seems likely that
 		the sequence should have been replaced with 'í' (whose hex sequence is C3AD. On its own that character sequence makes no sense.*/
-		('',x'C2A0');
+		('',concat(0xC2,0xA0));
 		-- ('','Â­'),
 
 	drop temporary table if exists things_to_fix;
@@ -198,7 +206,6 @@ BEGIN
 	end if;
 END //
 DELIMITER ;
-
 -- Call the procedure. Invoke this script as: 'SET @run_update = true; \.generic_fix_chars_proc.sql'
 -- From the shell:
 -- $ mysql -u root -p -e"SET @run_update = true; `cat $(pwd)/generic_fix_chars_proc.sql`"
