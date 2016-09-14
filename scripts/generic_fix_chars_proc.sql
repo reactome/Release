@@ -43,16 +43,23 @@ BEGIN
 		(replacement_char,special_char)
 	values
 		('€','â‚¬'),	('‚','â€š'),	('ƒ','Æ’'),		('„','â€ž'),
-		('…','â€¦'),	('†','â€'),		('‡','â€¡'),	('ˆ','Ë†'),
-		('‰','â€°'),	('Š',concat(0xC5,0xA0)),	('‹','â€¹'),	('Œ','Å’'),
+		('…','â€¦'),	('†','â€ '),	('‡','â€¡'),	('ˆ','Ë†'),
+		('‰','â€°'),	('‹','â€¹'),	('Œ','Å’'),		('ÿ','Ã¿'),
 		('Ž','Å½'),		('‘','â€˜'),	('’','â€™'),	('“','â€œ'),
+		('Š',concat(0xC5,0xA0)),
+		-- Found this sequence for right-double-quote.
+		-- normally, 0xC3 0xA2 0xE2 0x82 0xAC would be reduced to â€
+		-- but 0xC2 0x9D can't be mapped to anything so the sequence "â€<0x9D>"
+		-- will not be produced (because of that extra 0xC2). So, this mapping
+		-- needed to be added explicitly.
 		('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0xC2,0x9D)),
-		('•','â€¢'),	('–','â€“'),	('—','â€”'),
+		('”',concat('Ã¢â‚¬Â',0x9D)),
+		('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0x9D)),
+		('•','â€¢'),	('–','â€“'),	('—','â€”'),	('ª','Âª'),
 		('˜','Ëœ'),		('™','â„¢'),	('š','Å¡'),		('›','â€º'),
 		('œ','Å“'),		('ž','Å¾'),		('Ÿ','Å¸'),		('¡','Â¡'),
 		('¢','Â¢'),		('£','Â£'),		('¤','Â¤'),		('¥','Â¥'),
 		('¦','Â¦'),		('§','Â§'),		('¨','Â¨'),		('©','Â©'),
-		('ª','Âª'),		('«','Â«'),
 		('¬','Â¬'),		('®','Â®'),		('¯','Â¯'),		('°','Â°'),
 		('±','Â±'),		('²','Â²'),		('³','Â³'),		('´','Â´'),
 		('µ','Âµ'),		('¶','Â¶'),		('·','Â·'),		('¸','Â¸'),
@@ -72,24 +79,20 @@ BEGIN
 		('ó','Ã³'),		('ô','Ã´'),		('õ','Ãµ'),		('ö','Ã¶'),
 		('÷','Ã·'),		('ø','Ã¸'),		('ù','Ã¹'),		('ú','Ãº'),
 		('û','Ã»'),		('ü','Ã¼'),		('ý','Ã½'),		('þ','Ã¾'),
-		('ÿ','Ã¿'),
+		('«','Â«'),
 		-- Found during Lisa's review:
 		('ß','Î²'),('ß','ÃŽÂ²'), -- There are some really garbled sequences that reduce to Î² when they should be "ß".
-		-- This one was found during Lisa's review:
-		('à','Ã '), ('à', concat(0xC3,0x83,0xC6,0x92,0xC3,0x82,0xC2,0xA0)), -- the first one is what it *should* be, the second one is to fix a bad example in the database.
-		-- ('’','†™'), -- this handles the '’' ( the "prime" character), in some Summation.text fields.
-		-- Originally, the field may contain Ã¢â‚¬â„¢ which should translation to â€™ which maps to ’.
-		-- But because 'â€' *on its own* maps to '†', a secondary mapping must be done.
-		-- Another way to do this might be to rank the mappings to ensure that they are executed in a proper order. ordering them by byte length might work
-		-- for this situation.
-		-- UPDATE: I changed it to do replacements in order of character length.
-		-- 'Ã¢â‚¬Â²' - This sequence is transformed to 'â€²' which ends up as '†²'. It looks weird to me, but it seems to be the only possibly correct sequence, so...
-		(concat(0xC3,0x83),concat(0xC3,0x83,0x3F)), -- this was found by manually searching.
-		('í',concat(0xC3,0x83,0xC2,0xAD)), /* this one was found by manually searching.
-		The sequence C383C2AD produces a Ã followed by a NBH character. In the case of 'GarcÃ­a-Trevijano', it seems likely that
+		('à', concat(0xC3,0x83,0xC2,0xA0)), -- this is the correct mapping for 'à'.
+		('à', concat(0xC3,0x83,0xC6,0x92,0xC3,0x82,0xC2,0xA0)), -- This is to fix a bad example in the database.
+		(concat(0xC3,0x83),concat(0xC3,0x83,0x3F)), -- this was found by manually searching. Maps to Ã.
+		('í', concat(0xC3,0x83,0xC2,0xAD)), /* this one was found by manually searching.
+		The sequence 0xC3 0x83 0xC2 0xAD produces a Ã followed by a NBH character. In the case of 'GarcÃ­a-Trevijano', it seems likely that
 		the sequence should have been replaced with 'í' (whose hex sequence is C3AD). On its own that character sequence makes no sense.*/
-		('',concat(0xC2,0xA0)) ;
-		-- ('','Â­'),
+		(' ', concat(0xC2,0xA0)),
+		(' ', concat(0xC3,0x82,0xC2,0xA0));
+
+	-- select 'The mappings are: ' as message;
+	-- select concat('''',special_char,'''') as special_char, concat('''',replacement_char,'''') as replacement_char from special_chars;
 
 	drop temporary table if exists things_to_fix;
 	set @create_things_to_fix = concat('CREATE temporary table if not exists things_to_fix
@@ -236,10 +239,3 @@ PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
 deallocate prepare stmt;
--- CALL fix_chars_in_table_col('Person','firstname',true);
--- CALL fix_chars_in_table_col('Person','initial',true );
--- CALL fix_chars_in_table_col('Person','surname',true);
--- CALL fix_chars_in_table_col('Publication','title',true);
--- CALL fix_chars_in_table_col('Affiliation','address',true);
--- CALL fix_chars_in_table_col('DatabaseObject','_displayName',true);
--- CALL fix_chars_in_table_col('Summation','text',true);
