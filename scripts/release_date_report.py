@@ -12,8 +12,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--host', help="hostname of the machine where the database is", required=True)
 parser.add_argument('--user', help="username to use when connecting to the database", required=True)
 parser.add_argument('--pass', help="password to use when connecting to the database", required=True)
-parser.add_argument('--name', help="the name of the database to connect to", required=True)
+parser.add_argument('--name', help="the name of the database to connect to", default="gk_current")
 parser.add_argument('--port', help="the port to use when connecting to the database", default=3306)
+parser.add_argument('--target', help="The target database to update", default="gk_current", required=False)
 
 args = vars(parser.parse_args())
 
@@ -22,6 +23,7 @@ db_user = args['user']
 db_passwd = args['pass']
 db_name = args['name']
 db_port = int(args['port'])
+db_target = args['target']
 
 if db_host is None or db_user is None or db_passwd is None or db_name is None:
     parser.print_help()
@@ -50,30 +52,31 @@ release_dates = {
     45: '2013-06-11', 46: '2013-09-18', 47: '2013-12-04', 48: '2014-03-12',
     49: '2014-06-10', 50: '2014-09-30', 51: '2014-12-11', 52: '2015-03-19',
     53: '2015-06-17', 54: '2015-09-22', 55: '2015-12-15', 56: '2016-03-23',
-    57: '2016-06-27'
+    57: '2016-06-27', 58: 'THE_MYSTERIOUS_FUTURE!'
 }
 
 with db.cursor() as cursor:
-    cursor.execute("""SELECT e.*, gk_current.DatabaseObject._displayName
-        FROM gk_current.Event AS e
-        LEFT JOIN gk_current.DatabaseObject ON gk_current.DatabaseObject.db_id = e.db_id
+    cursor.execute("""SELECT e.*, """ + db_name + """.DatabaseObject._displayName
+        FROM """ + db_name + """.Event AS e
+        LEFT JOIN """ + db_name + """.DatabaseObject ON """ + db_name + """.DatabaseObject.db_id = e.db_id
         WHERE e.releaseDate IS NULL and e.evidenceType IS NULL;""")
     #gk_current_result = cursor.fetchmany(10000)
     gk_current_result = cursor.fetchall()
-    print ( "Number of events without release date in gk_current: %d" % len(gk_current_result))
+    print ( "Number of events without release date in " + db_name + ": %d" % len(gk_current_result))
 
 # Ok, now that we have this list, we need to get a list of all database names so we can go through the databases to get release dates.
-
+# Now: Start with the OLDEST database and work towards the present. This is because it is possible that an Event might have been "unreleased".
+# We want the OLDEST place where the Event appears so that means that we need to start at the oldest database.
 with db.cursor() as cursor:
-    cursor.execute("""SELECT * from Information_Schema.schemata WHERE schema_name LIKE 'test_reactome___' ORDER BY schema_name DESC;""")
+    cursor.execute("""SELECT * from Information_Schema.schemata WHERE schema_name LIKE 'test_reactome___' ORDER BY schema_name ASC;""")
     db_names = cursor.fetchall()
 
     print ( "Number of database schemas to check for release dates: %d" % len(db_names) )
 
 # We now have a list of database names, let's go through it and for each event, check to see if exists in a database and if it has a release date.
 print(release_dates)
-for db_name in db_names:
-    name = db_name[1]
+for n in db_names:
+    name = n[1]
     db_number = int((name.split(sep="_"))[2])
 #    print("looking in %s" % name)
     i = 0
@@ -89,12 +92,12 @@ for db_name in db_names:
                 cursor.execute("SELECT db_id FROM "+name+".Event WHERE db_id = %s" , [str(db_id)] )
                 result = cursor.fetchall()
                 i += 1
-                # If there are no results, then it means that the Event was released AFTER this database,
+                # If there are results, then it means that the Event was released AFTER this database,
                 # so the release date should be that database's release date.
-                if len(result) == 0 and str(db_id) not in fixed_events:
-                    print(str(db_id) + " (" + event_results[9] + ")" + " was not in "+name+", so it will get the release date of database version "+str(db_number+1)+": "+release_dates[db_number+1])
-                    fixed_events[str(db_id)] = { 'release_date': release_dates[db_number+1],
-                                                  'db_num': db_number+1,
+                if len(result) > 0 and str(db_id) not in fixed_events:
+                    print(str(db_id) + " (" + event_results[9] + ")" + " was first found in "+name+", so it will get the release date of database version "+str(db_number)+": "+release_dates[db_number])
+                    fixed_events[str(db_id)] = { 'release_date': release_dates[db_number],
+                                                  'db_num': db_number,
                                                   'event_name': event_results[9] }
 
     print(str(i) + " DB_IDs checked in " + name)
@@ -110,47 +113,49 @@ print ("Items that still need to be fixed: "+str(len(still_to_be_fixed)))
 #print(still_to_be_fixed)
 # print(fixed_events)
 
-# this query will find the oldest release date from a set of related Pathway/Reaction events - but will be run against gk_current
-# (some of the older databases don't even have Event.releaseDate so this query wouldn't even make sense to run there).
-get_release_dates_from_subevents="""SELECT Pathway_2_hasEvent.db_id as path2eventID, Event.db_id as event_db_id,
-    Event._doRelease, Event.releaseStatus, Event.releaseDate, DatabaseObject._displayName,
-    Pathway_2_hasEvent.hasEvent_rank, Pathway_2_hasEvent.hasEvent_class,
-    min(min_date_subq.min_release_date) as min_release_date
-from Event
-inner join Pathway_2_hasEvent on Pathway_2_hasEvent.hasEvent = Event.db_id
-inner join DatabaseObject on DatabaseObject.db_id = Event.db_id
-inner join (select Pathway_2_hasEvent.db_id as path2eventID, min(releaseDate) min_release_date
-            from Event
-            inner join Pathway_2_hasEvent on Pathway_2_hasEvent.hasEvent = Event.db_id
-            group by Pathway_2_hasEvent.db_id) as min_date_subq
-    on min_date_subq.path2eventID = Pathway_2_hasEvent.db_id
-where (Pathway_2_hasEvent.hasEvent_class like '%%Reaction%%' or Pathway_2_hasEvent.hasEvent_class like '%%Pathway%%')
-    and Event.releaseDate is null and min_release_date is not null and Event.db_id in ( """ + ', '.join(still_to_be_fixed) + """ )
-group by Event.db_id
-order by Pathway_2_hasEvent.db_id, Pathway_2_hasEvent.hasEvent_rank asc ;
-"""
+if len(still_to_be_fixed) > 0:
 
-# print(get_release_dates_from_subevents)
+    # this query will find the oldest release date from a set of related Pathway/Reaction events - but will be run against gk_current
+    # (some of the older databases don't even have Event.releaseDate so this query wouldn't even make sense to run there).
+    get_release_dates_from_subevents="""SELECT Pathway_2_hasEvent.db_id as path2eventID, Event.db_id as event_db_id,
+        Event._doRelease, Event.releaseStatus, Event.releaseDate, DatabaseObject._displayName,
+        Pathway_2_hasEvent.hasEvent_rank, Pathway_2_hasEvent.hasEvent_class,
+        min(min_date_subq.min_release_date) as min_release_date
+    from Event
+    inner join Pathway_2_hasEvent on Pathway_2_hasEvent.hasEvent = Event.db_id
+    inner join DatabaseObject on DatabaseObject.db_id = Event.db_id
+    inner join (select Pathway_2_hasEvent.db_id as path2eventID, min(releaseDate) min_release_date
+                from Event
+                inner join Pathway_2_hasEvent on Pathway_2_hasEvent.hasEvent = Event.db_id
+                group by Pathway_2_hasEvent.db_id) as min_date_subq
+        on min_date_subq.path2eventID = Pathway_2_hasEvent.db_id
+    where (Pathway_2_hasEvent.hasEvent_class like '%%Reaction%%' or Pathway_2_hasEvent.hasEvent_class like '%%Pathway%%')
+        and Event.releaseDate is null and min_release_date is not null and Event.db_id in ( """ + ', '.join(still_to_be_fixed) + """ )
+    group by Event.db_id
+    order by Pathway_2_hasEvent.db_id, Pathway_2_hasEvent.hasEvent_rank asc ;
+    """
 
-with db.cursor() as cursor:
-    cursor.execute(get_release_dates_from_subevents)
-    release_dates_from_subevents = cursor.fetchall()
-    print("Found " + str(len(release_dates_from_subevents)) + " releaseDates in subevents (subpathways/Reactions)")
+    # print(get_release_dates_from_subevents)
 
-    for r in release_dates_from_subevents:
-        #print (r)
-        db_id = r[1]
-        if str(db_id) in still_to_be_fixed and db_id not in fixed_events.keys():
-            fixed_events[str(db_id)] = { 'release_date': str(r[8]),
-                                                  'db_num': 'DERIVED FROM RELATED SUBPATHWAY/REACTION',
-                                                  'event_name': r[5] }
-            print(str(db_id) + " (" + r[5] + ")" + " is getting a releaseDate based on related event/subpathway/reaction (" + str(r[0]) + ") : " + str(r[8]))
-        else:
-            # Actually, I don't think this will ever print, everything in here was already selected from the database...
-            print("Release date for " + str(db_id) + " could not be determined from related events (subpathways/reactions).")
-remaining_db_ids = len(gk_current_result) - len(fixed_events)
-print("Release dates for " + str(len(fixed_events)) + " have been found so far.")
-print(str(remaining_db_ids) + " remaining DB IDs to check.\n\n")
+    with db.cursor() as cursor:
+        cursor.execute(get_release_dates_from_subevents)
+        release_dates_from_subevents = cursor.fetchall()
+        print("Found " + str(len(release_dates_from_subevents)) + " releaseDates in subevents (subpathways/Reactions)")
+
+        for r in release_dates_from_subevents:
+            #print (r)
+            db_id = r[1]
+            if str(db_id) in still_to_be_fixed and db_id not in fixed_events.keys():
+                fixed_events[str(db_id)] = { 'release_date': str(r[8]),
+                                                      'db_num': 'DERIVED FROM RELATED SUBPATHWAY/REACTION',
+                                                      'event_name': r[5] }
+                print(str(db_id) + " (" + r[5] + ")" + " is getting a releaseDate based on related event/subpathway/reaction (" + str(r[0]) + ") : " + str(r[8]))
+            else:
+                # Actually, I don't think this will ever print, everything in here was already selected from the database...
+                print("Release date for " + str(db_id) + " could not be determined from related events (subpathways/reactions).")
+    remaining_db_ids = len(gk_current_result) - len(fixed_events)
+    print("Release dates for " + str(len(fixed_events)) + " have been found so far.")
+    print(str(remaining_db_ids) + " remaining DB IDs to check.\n\n")
 
 # This will be a list of DB_IDs of things that still need to be fixed (the set of all Events with NULL release date minus the set of things that can be fixed)
 still_to_be_fixed = set( [ str(item[0]) for item in gk_current_result ] ).difference( fixed_events.keys() )
@@ -169,9 +174,10 @@ if len(still_to_be_fixed) > 0:
     print("Release dates for " + str(len(fixed_events)) + " have been found so far.")
     print(str(remaining_db_ids) + " remaining DB IDs to check.\n\n")
 
-with open('./update_events.sql','w') as dml_file:
+with open('./update_events.sql','w') as dml_file, open('simple_list.txt','w') as simple_list:
     for fixed_event in sorted(fixed_events):
         dml_file.write("-- update Event: \""+fixed_events[fixed_event]['event_name']+"\" with ID: "+str(fixed_event)+" to use releaseDate: "+ fixed_events[fixed_event]['release_date'] +" of database version: "+str(fixed_events[fixed_event]['db_num'])+" \n")
-        dml_file.write("UPDATE gk_current.Event SET releaseDate='" + fixed_events[fixed_event]['release_date'] + "' WHERE db_id = '" + fixed_event + "'\n")
-
+        # select AUTO_INCREMENT from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'DatabaseObject' and TABLE_SCHEMA = 'test_reactome_58'
+        dml_file.write("UPDATE " + db_target + ".Event SET releaseDate='" + fixed_events[fixed_event]['release_date'] + "' WHERE db_id = '" + fixed_event + "'\n")
+        simple_list.write(fixed_event + ',' + fixed_events[fixed_event]['release_date']+ '\n')
 db.close()
