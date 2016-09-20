@@ -80,6 +80,8 @@ BEGIN
 		('÷','Ã·'),		('ø','Ã¸'),		('ù','Ã¹'),		('ú','Ãº'),
 		('û','Ã»'),		('ü','Ã¼'),		('ý','Ã½'),		('þ','Ã¾'),
 		('«','Â«'),
+		-- the alpha character
+		('α','Î±'),
 		-- Found during Lisa's review:
 		('ß','Î²'),('ß','ÃŽÂ²'), -- There are some really garbled sequences that reduce to Î² when they should be "ß".
 		('à', concat(0xC3,0x83,0xC2,0xA0)), -- this is the correct mapping for 'à'.
