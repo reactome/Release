@@ -8,6 +8,7 @@ use Cwd;
 use Getopt::Long;
 use Data::Dumper;
 use Log::Log4perl qw/get_logger/;
+use Scalar::Util 'blessed';
 
 use lib '/usr/local/gkb/modules';
 use GKB::DBAdaptor;
@@ -17,9 +18,9 @@ use GKB::Utils_esther;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-our($pass,$user,$release_db,$slice_db,%seen_id,%species,$release_num);
+our($pass,$user,$release_db,$slice_db,%seen_id,%species,$release_num,$dry_run);
 
-my $usage = "Usage: $0 -user user -pass pass -db test_release_XX -sdb test_slice_XX -release_num XX\n";
+my $usage = "Usage: $0 -user user -pass pass -db test_reactome_XX -sdb test_slice_XX -release_num XX\n";
 
 GetOptions(
     "user:s"  => \$user,
@@ -27,26 +28,40 @@ GetOptions(
     "db:s"    => \$release_db,
     "sdb:s"    => \$slice_db,
     "release_num:s" => \$release_num,
-    );
+    "dry_run" => \$dry_run
+);
 
-($release_db && $user && $pass && $release_num && $slice_db) || die $usage;
+($release_db && $release_num && $slice_db) || die $usage;
 
 back_up_databases(
     [$user, $pass, $release_db, 'localhost']
-);
+) unless $dry_run;
 
-get_api_connections()->{$release_db}->execute("START TRANSACTION");
+get_api_connections()->{$release_db}->execute("START TRANSACTION") unless $dry_run;
 # Get list of all curated instances that have or need ST_IDs
-foreach my $db_id (get_db_ids($release_db)) {
+foreach my $db_id (get_db_ids($release_db)) {    
     my $stable_id = fetch_stable_id($db_id, $release_db);
     next unless $stable_id;
     next unless $stable_id->identifier->[0] =~ /R-HSA/;
+
+    foreach my $orthologous_instance (get_orthologous_instances(get_instance($db_id, $release_db))) {
+        eval {
+            $orthologous_instance->db_id;
+        };
+        if ($@) {
+            $logger->warn("Could not get db_id for orthologous instance $orthologous_instance inferred from $db_id");
+            next;
+        }        
         
-    foreach my $orthologous_instance (get_orthologous_instances($db_id, $release_db)) {
-        my $identifier = $stable_id->identifier->[0];
         my $species = species($orthologous_instance);
+        if (!$species) {
+            $logger->warn("Could not get species for orthologous instance " . $orthologous_instance->db_id);
+            next;
+        }        
+        
+        my $identifier = $stable_id->identifier->[0];
         $identifier =~ s/HSA/$species/;
-        $logger->info("$db_id ST_ID $identifier");
+        #$logger->info("$db_id ST_ID $identifier");
 
         $seen_id{$identifier}++;
 
@@ -59,38 +74,46 @@ foreach my $db_id (get_db_ids($release_db)) {
 
         my $st_id = fetch_stable_id($orthologous_instance->db_id, $release_db);
         if (!$st_id) {
-            create_stable_id($orthologous_instance->db_id, $release_db, $identifier);
-            next;
-        }
-        
-        unless ($st_id->identifier->[0] eq $identifier) {
-            $st_id->inflate();
-            $st_id->identifier($identifier);
-            $st_id->identifierVersion(1);
-            $st_id->displayName("$identifier.1");
-            $st_id->Modified(@{$st_id->Modified});
-            $st_id->add_attribute_value('modified', get_instance_edit($release_db));
+            create_stable_id($orthologous_instance->db_id, $release_db, $identifier) unless $dry_run;
+            $logger->info("Stable ID $identifier created for inferred instance " .
+                          $orthologous_instance->db_id . ' inferred from ' . $db_id);
+        } elsif ($st_id->identifier->[0] ne $identifier) {
+            unless ($dry_run) {
+                $st_id->inflate();
+                $st_id->identifier($identifier);
+                $st_id->identifierVersion(1);
+                $st_id->displayName("$identifier.1");
+                $st_id->Modified(@{$st_id->Modified});
+                $st_id->add_attribute_value('modified', get_instance_edit($release_db));
                 
-            foreach my $attribute (qw/identifier identifierVersion _displayName modified/) {
-                get_api_connections()->{$release_db}->update_attribute($st_id, $attribute);
+                foreach my $attribute (qw/identifier identifierVersion _displayName modified/) {
+                    get_api_connections()->{$release_db}->update_attribute($st_id, $attribute);
+                }
             }
-            $logger->info("Stable ID updated for " . $orthologous_instance->db_id . " (" . $orthologous_instance->displayName . ")");
+            $logger->info("Stable ID updated to $identifier for " . $orthologous_instance->db_id . " (" . $orthologous_instance->displayName . ")");
         }
     }
 }
 
-get_api_connections()->{$release_db}->execute("COMMIT");
+get_api_connections()->{$release_db}->execute("COMMIT") unless $dry_run;
 
 sub get_orthologous_instances {
-    my $db_id = shift;
-    my $db_name = shift;
-
-    my $instance = get_instance($db_id, $db_name);
-    my $ortho_events = $instance->attribute_value('orthologousEvent');
-    push @$ortho_events, @{$instance->attribute_value('inferredTo')};
+    my $instance = shift;
     
-    return unless $ortho_events->[0];
-    return @{$ortho_events};
+    my $logger = get_logger(__PACKAGE__);
+    
+    my @orthologous_instances;
+
+    if ($instance->is_a('Event')) {
+        push @orthologous_instances, @{$instance->attribute_value('orthologousEvent')};
+    } elsif ($instance->is_a('PhysicalEntity') || $instance->is_a('Regulation')) {
+        push @orthologous_instances, @{$instance->attribute_value('inferredTo')};
+    } else {
+        $logger->warn($instance->displayName . ' (' . $instance->db_id . ') is a(n) ' .
+                      $instance->class . ' and does not receive a stable identifier');
+    }
+    
+    return @orthologous_instances;
 }
 
 sub get_db_ids {
@@ -115,10 +138,47 @@ sub classes_with_stable_ids {
 
 sub species {
     my $instance = shift;
-    my $name = $instance->displayName;
-    my $long = eval{$instance->attribute_value('species')->[0]->displayName};
-    $long or return undef;
-    return abbreviate($long);
+    
+    my $species_display_name = $instance->is_a('Regulation') ?
+        get_regulation_instance_species($instance) :
+        eval{$instance->attribute_value('species')->[0]->displayName};
+    
+    return $species_display_name ? abbreviate($species_display_name) : undef;
+}
+
+sub get_regulation_instance_species {
+    my $instance = shift;
+    
+    croak "$instance is not an instance\n" unless blessed($instance) && $instance->isa("GKB::Instance");
+    croak $instance->displayName . ' (' . $instance->db_id . ") is not a regulation instance\n" unless $instance->is_a('Regulation');
+    
+    if ($instance->regulatedEntity->[0]) {
+        return get_species_from_instance($instance->regulatedEntity->[0]);
+    } elsif ($instance->regulator->[0]) {
+        return get_species_from_instance($instance->regulator->[0]);
+    }
+    
+    return undef;
+}
+
+sub get_species_from_instance {
+    my $instance = shift;
+    
+    if ($instance->species->[0]) {
+        return $instance->species->[0]->displayName;
+    }
+    
+    if ($instance->is_a('CatalystActivity')) {
+        if ($instance->activeUnit->[0]) {
+            foreach my $active_unit (@{$instance->activeUnit}) {
+                return $active_unit->species->[0]->displayName if $active_unit->species->[0];
+            }
+        } elsif ($instance->physicalEntity->[0]) {
+            return $instance->physicalEntity->[0]->species->[0]->displayName if $instance->physicalEntity->[0]->species->[0];
+        }
+    }
+    
+    return undef;
 }
 
 sub abbreviate {
@@ -196,6 +256,8 @@ sub create_stable_id {
     my $db_id = shift;
     my $db_name = shift;
     my $identifier = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
 
     my $instance = get_instance($db_id, $db_name);    
     $instance->inflate();
