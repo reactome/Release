@@ -31,17 +31,17 @@ GetOptions(
     'output=s' => \$output_file,
     'all_reactions' => \$all_reactions
 );
-=head
+
 unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
     print usage_instructions();
     exit;
 }
-=cut
+
 
 my @reactions;
 my $dba = get_dba({'host' => 'reactomecurator.oicr.on.ca', 'db' => 'gk_central'});
 
-=head
+
 if ($selected_pathways eq 'all') {    
     @reactions = @{$dba->fetch_instance(-CLASS => 'ReactionlikeEvent', [['species',['48887']]])};
 } else {
@@ -66,12 +66,11 @@ if ($selected_pathways eq 'all') {
 exit unless @reactions;
 
 my %interactions;
-=cut
 my %parent2child;
 my %child2parent;
 my %id2instance;
 
-=head
+
 foreach my $reaction (@reactions) {
     populate_graph($reaction);
 }
@@ -79,30 +78,11 @@ foreach my $reaction (@reactions) {
 foreach my $reaction (@reactions) {
     add_reaction_to_logic_table($reaction, \@reactions);
 }
-=cut
 
 
 ($output_file = $0) =~ s/.pl$/.tsv/ unless $output_file;
 open my $logic_table_fh, ">", "$output_file";
-
-my %interactions;
-my @groups = (
-    [5658216, 5658219, 5672717],
-    [3222570],
-    [1963588, 5658216],
-    [113595, 1963587, 1963588],
-    [5658216, 5658219, 5672717, 2685662],
-    [5683605, 113595]
-);
-foreach my $group (@groups) {
-    foreach my $instance_id (@$group) {
-        my $instance = $dba->fetch_instance_by_db_id($instance_id)->[0];
-        process_if_set_or_complex($instance);
-    }
-    report_interactions(\%interactions, $logic_table_fh);
-    print $logic_table_fh "-" x 80,"\n";
-    %interactions = ();
-}
+report_interactions(\%interactions, $logic_table_fh);
 close $logic_table_fh;
 
 #add_line_count($output_file);
@@ -115,7 +95,7 @@ sub populate_graph {
     my @inputs = @{$reaction->input};
     my @outputs = @{$reaction->output};
     my @catalysts =  grep { defined } map({$_->physicalEntity->[0]} @{$reaction->catalystActivity});
-    my @regulators = grep { defined } map({$_->regulator->[0]} @{$reaction->reverse_attribute_value('regulatedEntity')});
+    my @regulators = grep { defined } map({ get_active_regulator_component($_) } @{$reaction->reverse_attribute_value('regulatedEntity')});
     
     foreach my $parent (@inputs, @catalysts, @regulators) {
         confess $reaction_id unless $parent;
@@ -160,9 +140,8 @@ sub add_reaction_to_logic_table {
     
     foreach my $output (@outputs) {
         my $output_name = $output->name->[0];
-        my $reaction_like_events_with_output = get_reactions_with_output($output, $all_reactions);
         
-        process_output($output, $reaction_like_events_with_output);
+        process_output($output, $all_reactions);
     }
     
     my @regulations = @{$reaction->reverse_attribute_value('regulatedEntity')};
@@ -174,8 +153,8 @@ sub process_inputs {
     my $inputs = shift;
     
     foreach my $input (@$inputs) {
-	process_if_set_or_complex($input) unless is_a_reaction_output($input);
-	process_input($reaction, $input);
+        process_if_set_or_complex($input) unless is_a_reaction_output($input);
+        process_input($reaction, $input);
     }
 }
 
@@ -188,14 +167,13 @@ sub process_input {
 
 sub process_output {
     my $output = shift;
-    my $associated_reactions = shift;
-    
+    my $all_reactions = shift;
+
     my @reactions_to_output;
-    my @potential_reactions_to_reaction;
-    foreach my $associated_reaction (@$associated_reactions) {
-        if (output_is_component_of_ancestral_input($output, $associated_reaction)) {
-            push @potential_reactions_to_reaction, $associated_reaction;
-        } else {
+    my @reactions_using_output_as_input = get_reactions_using_output_as_input($output, $all_reactions);
+    my @associated_reactions = get_reactions_with_output($output, $all_reactions);
+    foreach my $associated_reaction (@associated_reactions) {
+        if (any {is_preceding_event($associated_reaction, $_)} @reactions_using_output_as_input) {
             push @reactions_to_output, $associated_reaction;
         }
     }
@@ -204,30 +182,6 @@ sub process_output {
     foreach my $reaction (@reactions_to_output) {
         record(get_label($reaction), get_label($output), 1, $reaction_to_output_logic);
     }
-    
-    my %reaction_connections = get_reaction_connections($output, \@potential_reactions_to_reaction);    
-    my $reaction_to_reaction_logic = scalar keys %reaction_connections > 1 ? OR : AND;
-    foreach my $parent_reaction_id (keys %reaction_connections) {
-        foreach my $child_reaction_id (@{$reaction_connections{$parent_reaction_id}}) {
-            record($parent_reaction_id, $child_reaction_id, 1, $reaction_to_reaction_logic);
-        }
-    }
-
-}
-    
-sub get_reaction_connections {
-    my $output = shift;
-    my $potential_parent_reactions = shift;
-    
-    my %reaction_connections;
-    foreach my $reaction (@{$potential_parent_reactions}) {
-        foreach my $child_reaction_id (get_child_reaction_ids($output)) {
-            my $reaction_id = get_label($reaction);
-            push @{$reaction_connections{$reaction_id}}, $child_reaction_id if is_preceding_event($child_reaction_id, $reaction);
-        }
-    }
-    
-    return %reaction_connections;
 }
 
 sub process_if_set_or_complex {
@@ -245,12 +199,12 @@ sub process_if_set_or_complex {
     my @elements;
     my $logic;
     if ($physical_entity->is_a('EntitySet')) {
-	push @elements, @{$physical_entity->hasMember};
-	push @elements, @{$physical_entity->hasCandidate};
-	$logic = OR;
+        push @elements, @{$physical_entity->hasMember};
+        push @elements, @{$physical_entity->hasCandidate};
+        $logic = OR;
     } elsif ($physical_entity->is_a('Complex')) {
-	push @elements, @{$physical_entity->hasComponent};
-	$logic = AND;
+        push @elements, @{$physical_entity->hasComponent};
+        $logic = AND;
     }
 
     foreach my $element (@elements) {	
@@ -264,12 +218,21 @@ sub process_regulations {
     my $regulations = shift;
     
     foreach my $regulation (@$regulations) {
-	my $regulator = $regulation->regulator->[0];
-	process_if_set_or_complex($regulator) unless is_a_reaction_output($regulator);
+        foreach my $active_regulator_component (get_active_regulator_component($regulation)) {
+            process_if_set_or_complex($active_regulator_component) unless is_a_reaction_output($active_regulator_component);
 	
-	my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
-	record(get_label($regulator), get_label($reaction), $value, AND);
+            my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
+            record(get_label($active_regulator_component), get_label($reaction), $value, AND);
+        }
     }
+}
+
+sub get_active_regulator_component {
+    my $regulation = shift;
+    
+    croak unless $regulation->is_a('Regulation');
+    
+    return $regulation->activeUnit->[0] ? @{$regulation->activeUnit} : $regulation->regulator->[0];
 }
 
 sub record {    
@@ -346,11 +309,11 @@ sub get_components {
 }
 
 sub is_preceding_event {
-    my $child_reaction_id = shift;
     my $parent_reaction = shift;
+    my $child_reaction = shift;
     
     my @events_parent_precedes = @{$parent_reaction->reverse_attribute_value('precedingEvent')};
-    return any {$_->db_id . '_RLE' eq $child_reaction_id} @events_parent_precedes;
+    return any {$_->db_id == $child_reaction->db_id} @events_parent_precedes;
 }
 
 sub get_child_reaction_ids {
@@ -422,7 +385,17 @@ sub get_reactions_with_output {
         }
     }
     
-    return \@{$reaction_output_id_2_reactions{get_label($output)}};
+    return @{$reaction_output_id_2_reactions{get_label($output)}};
+}
+
+sub get_reactions_using_output_as_input {
+    my $output = shift;
+    my $reactions = shift;
+    
+    return grep {
+        my @reaction_inputs = @{$_->input};
+        any { $output->db_id == $_->db_id } @reaction_inputs;
+    } @$reactions;
 }
 
 sub report_interactions {
@@ -479,9 +452,11 @@ sub on_skip_list {
         5693589 => [1638790],
         5686410 => [1638790],
         5649637 => [3785704],
-        $ANYTHING => [114964],
         1369085 => [$ANYTHING]
     );
+    my @small_molecules = qw/114729 114735 114754 114749 114728 5316201 114733 114732 114964/;
+    $skip_list{$ANYTHING} = [@small_molecules];
+    $skip_list{$_} = [$ANYTHING] foreach @small_molecules;
     
     return 1 if any {$_ eq $child_id} @{$skip_list{$ANYTHING}};
     return any {($_ == $ANYTHING) || ($_ eq $child_id)} @{$skip_list{$parent_id}};
