@@ -74,25 +74,25 @@ apt-get install -yq \
 	libexpat1 \
 	libexpat1-dev \
 	libgd-gd2-perl \
-    libbio-perl-perl \
+	libbio-perl-perl \
 	wget
 
 cpanm -q \
-		HTTP::Tiny \
-		IO::String \
-		LWP::UserAgent \
-		MIME::Lite \
-		Net::OpenSSH \
-		XML::Simple \
-		Search::Tools \
-		Capture::Tiny \
-		WWW::SearchResult \
-		JSON \
-		PDF::API2 \
-		Log::Log4perl \
-		common::sense \
-		Email::Valid \
-		URI::Encode
+	HTTP::Tiny \
+	IO::String \
+	LWP::UserAgent \
+	MIME::Lite \
+	Net::OpenSSH \
+	XML::Simple \
+	Search::Tools \
+	Capture::Tiny \
+	WWW::SearchResult \
+	JSON \
+	PDF::API2 \
+	Log::Log4perl \
+	common::sense \
+	Email::Valid \
+	URI::Encode
 
 echo -e "\nDownloading the reactome software..."
 mkdir -p /usr/local/reactomes/Reactome/production
