@@ -925,7 +925,7 @@ sub infer_complex_polymer {
         }
     }
     my $inf_cp = new_inferred_instance($cp);
-    my $comp_name = $cp->Name->[0]." (name copied from entity in $from_name\)";
+    my $comp_name = $cp->Name->[0];
     $comp_name =~ s/([^\[])\[[\w\s\/,]+\]/$1/g; #remove bracketed text
     $inf_cp->Name($comp_name);
     $inf_cp->Summation($summation_complex);
@@ -1058,7 +1058,7 @@ sub infer_ewas {
         $inf_ewas->StartCoordinate(@{$i->StartCoordinate});
         $inf_ewas->EndCoordinate(@{$i->EndCoordinate});
         if ((defined $inf_ewas->StartCoordinate->[0]  && $inf_ewas->StartCoordinate->[0] > 1) || (defined $inf_ewas->EndCoordinate->[0] && $inf_ewas->EndCoordinate->[0] > 1)) {
-            $inf_ewas->Name($i->Name->[0] . " (the coordinates are copied over from $from_name)", $inf_id);
+            $inf_ewas->Name($i->Name->[0], $inf_id);
         }
 #infer modifications
         my @mod_res;
