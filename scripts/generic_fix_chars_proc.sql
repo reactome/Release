@@ -46,7 +46,7 @@ BEGIN
 		('…','â€¦'),	('†','â€ '),	('‡','â€¡'),	('ˆ','Ë†'),
 		('‰','â€°'),	('‹','â€¹'),	('Œ','Å’'),		('ÿ','Ã¿'),
 		('Ž','Å½'),		('‘','â€˜'),	('’','â€™'),	('“','â€œ'),
-		('Š',concat(0xC5,0xA0)),
+		-- ('Š',concat(0xC5,0xA0)),
 		-- Found this sequence for right-double-quote.
 		-- normally, 0xC3 0xA2 0xE2 0x82 0xAC would be reduced to â€
 		-- but 0xC2 0x9D can't be mapped to anything so the sequence "â€<0x9D>"
@@ -207,6 +207,7 @@ BEGIN
 			commit;
 		end;
 	end if;
+
 END //
 DELIMITER ;
 -- Call the procedure. Invoke this script as: 'SET @run_update = true; \.generic_fix_chars_proc.sql'
