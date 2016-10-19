@@ -7,6 +7,8 @@
 
 DATABASE_NAME=$1
 DATABASE_HOST=$2
-DO_UPDATE=$3
+DATABASE_USER=$3
+DATABASE_PASSWORD=$4
+DO_UPDATE=$5
 DATE_STR=$(date +%Y%m%d_%H%M%S_%Z)
-mysql --default-character-set=utf8 --table -D $DATABASE_NAME -h $DATABASE_HOST -u root -e "SET @run_update = $DO_UPDATE; `cat $(pwd)/generic_fix_chars_proc.sql`" > fix_chars_$DATE_STR.log
+mysql --default-character-set=utf8 --table -D $DATABASE_NAME -h $DATABASE_HOST -u$DATABASE_USER -p$DATABASE_PASSWORD -e "SET @run_update = $DO_UPDATE; `cat $(pwd)/generic_fix_chars_proc.sql`" > fix_chars_$DATE_STR.log
