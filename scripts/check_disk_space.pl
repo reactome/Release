@@ -5,7 +5,7 @@ use strict;
 # sheldon.mckay@gmail.com
 
 use constant THRESHOLD => 90;
-use constant EMAIL     => 'Joel.Weiser@oicr.on.ca'; 
+use constant EMAIL     => 'reactome-developer@reactome.org'; 
 
 chomp(my $host = `hostname`);
 my @df = `df`;
@@ -21,17 +21,17 @@ while (my $line = shift @df) {
 
     # broken line
     unless ($percent) {
-	$last_line = $line;
-	next;
+        $last_line = $line;
+        next;
     }
     else {
-	$last_line = '';
-	print "$line\n";
+        $last_line = '';
+        print "$line\n";
     }
 
     $percent =~ s/\%$//;
     if ($percent > THRESHOLD) {
-	report($fs,$mount,$line)
+        report($fs,$mount,$line)
     } 
 }
 
