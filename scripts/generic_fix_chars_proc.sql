@@ -91,7 +91,12 @@ BEGIN
 		The sequence 0xC3 0x83 0xC2 0xAD produces a Ã followed by a NBH character. In the case of 'GarcÃ­a-Trevijano', it seems likely that
 		the sequence should have been replaced with 'í' (whose hex sequence is C3AD). On its own that character sequence makes no sense.*/
 		(' ', concat(0xC2,0xA0)),
-		(' ', concat(0xC3,0x82,0xC2,0xA0));
+		(' ', concat(0xC3,0x82,0xC2,0xA0)),
+		-- new mappings:
+		('ÃŽÂ´','δ'), ('ÃŽÂµ','ε'),
+		('ÃƒÅ½Ã‚Â´', 'δ'),
+		('ÃƒÅ½Ã‚Â³ÃƒÅ½Ã‚Â´', 'γδ')
+		;
 
 	-- select 'The mappings are: ' as message;
 	-- select concat('''',special_char,'''') as special_char, concat('''',replacement_char,'''') as replacement_char from special_chars;
