@@ -26,9 +26,12 @@ our %EXPORT_TAGS = (all => [@EXPORT_OK],
 
 sub get_registry {
     my $action = shift // 'cached';
-    my $registry_file = shift // get_registry_file_path();
+    my $registry_file = shift;
     
-    update_registry_file($registry_file);
+    if (!$registry_file) {
+        $registry_file = get_registry_file_path();
+        update_registry_file($registry_file);
+    }
     
     my $initializer = BioMart::Initializer->new('registryFile'=>$registry_file,'action'=>$action);
 
@@ -48,14 +51,23 @@ sub get_query_runner {
 sub update_registry_file {
     my $registry_file = shift // get_registry_file_path();
     
-    my $version = get_version();
-    return unless $version =~ /^\d+$/;
+    my $ensembl_version = get_version();
+    return unless $ensembl_version =~ /^\d+$/;
+    
+    my $ensembl_genome_version = get_ensembl_genome_version();
+    return unless $ensembl_genome_version =~ /^\d+$/;
     
     my $contents = get_registry_xml_contents($registry_file);
     chomp $contents;
-    $contents =~ s/(ensembl_mart_)(\d+)/$1$version/;    
+    $contents =~ s/(ensembl_mart_)(\d+)/$1$ensembl_version/;
+    my $update = ($ensembl_version != $2);
+    $contents =~ s/(plants_mart_)(\d+)/$1$ensembl_genome_version/;
+    $update ||= ($ensembl_genome_version != $2);
+    $contents =~ s/(protists_mart_)(\d+)/$1$ensembl_genome_version/;
+    $update ||= ($ensembl_genome_version != $2);
+    $contents =~ s/(fungi_mart_)(\d+)/$1$ensembl_genome_version/;
+    $update ||= ($ensembl_genome_version != $2);
     
-    my $update = $version != $2;
     `echo '$contents' > $registry_file` if $update;
     `rm -rf *[Cc]ached*/` if $update;
     
