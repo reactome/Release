@@ -188,13 +188,13 @@ my %reference_database_info_hash = (
     },
     'ZINC_target' => {
         'Name' => ['ZINC_target'],
-        'URL'  => 'http://zinc.docking.org/',
-        'AccessUrl' => ' http://zinc.docking.org/targets/###ID###'
+        'URL'  => 'http://zinc15.docking.org/',
+        'AccessUrl' => ' http://zinc15.docking.org/orthologs/?uniprot=###ID###'
     },
     'ZINC' => {
         'Name' => ['ZINC'],
-        'URL'  => 'http://zinc.docking.org/',
-        'AccessUrl' => 'http://zinc.docking.org/substance/###ID###'
+        'URL'  => 'http://zinc15.docking.org/',
+        'AccessUrl' => 'http://zinc15.docking.org/substances/###ID###'
     },
     'HMDB_protein' => {
         'Name' => ['HMDB_protein'],
