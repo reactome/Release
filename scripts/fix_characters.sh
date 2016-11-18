@@ -2,7 +2,9 @@
 
 # First argument to this script should be the name of the database.
 # Second argument to this script should be the host of the database.
-# Third argument should be either "true" or "false" - this will indicate if the script will actually execute updates.
+# Third argument should be database user name
+# Fourth argument should be database user's password
+# Fifth argument should be either "true" or "false" - this will indicate if the script will actually execute updates, or just generate a report.
 # Output will be a log file with date-formatted name: fix_chars_<YYYYMMDD_HH24mmss_Z>.log
 
 DATABASE_NAME=$1
