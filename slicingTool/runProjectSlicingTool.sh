@@ -16,8 +16,8 @@ CURATOR_HOST=$(grep dbHost slicingTool.prop | grep -v '\#' |perl -pe 's/^\S+=//'
 #    exit
 #fi
 
-#echo "Fixing bad character sequences."
-#bash ../scripts/fix_characters.sh $CURATOR_DB $CURATOR_HOST true
+echo "Fixing bad character sequences."
+bash ../scripts/fix_characters.sh $CURATOR_DB $CURATOR_HOST $USER $PASS true
 
 if [[ -n $DB && -n $USER && -n $PASS ]]
 then
