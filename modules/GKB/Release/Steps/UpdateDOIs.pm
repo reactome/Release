@@ -33,7 +33,7 @@ override 'run_commands' => sub {
     );
     
     my @args = ("-user", $user, "-pass", $pass, "-release_db", $db, "-release_db_host", $host, "-curator_db", $gkcentral, "-curator_db_host", $gkcentral_host);
-    $self->cmd("Running script to update DOIs for $db and $gk_central",[["perl update_dois.pl @args > update_dois.out 2>> update_dois.err"]]);
+    $self->cmd("Running script to update DOIs for $db and $gkcentral",[["perl update_dois.pl @args > update_dois.out 2>> update_dois.err"]]);
 };
 
 1;
