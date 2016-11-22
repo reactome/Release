@@ -44,11 +44,11 @@ override 'run_commands' => sub {
         ]
 	);
 
-    $self->cmd("Mapping old ortho ST_IDs back to current set",
-	       [
-            ["perl retrofit_orthos.pl -dbname $db -user $user -pass > retrofit_orths.pl_$version.out 2>&1"]
-        ]
-        );
+    #$self->cmd("Mapping old ortho ST_IDs back to current set",
+	#       [
+    #        ["perl retrofit_orthos.pl -db $db -user $user -pass $pass > retrofit_orths.pl_$version.out 2>&1"]
+    #    ]
+    #);
 
     $self->cmd("Backing up $db and stable_identifiers databases",
 	[
