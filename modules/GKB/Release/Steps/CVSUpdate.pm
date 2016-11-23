@@ -28,7 +28,10 @@ override 'run_commands' => sub {
     
     die "Key pairs must be created before the CVS updates can be run automatically" unless $key_pairs_exist;
 
-    $self->cmd("Updating images directory",[["perl update_images_directory.pl > $self->{name}.out 2> $self->{name}.err"]]);
+    $self->cmd("Updating images directory",[
+       ["perl update_images_directory.pl > $self->{name}.out 2> $self->{name}.err"],
+       ["grep -v '^cvs update: move away .* it is in the way\$' $self->{name}.err | cat > $self->{name}.err"]
+    ]);
 };
 
 sub _get_key_pair_query {
