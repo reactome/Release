@@ -20,7 +20,7 @@ my @options = (
     ['UpdateSourceCode', GKB_DEV_ALIAS, "-updates source code"],
     ['ClearData', GKB_DEV_ALIAS, "-clear data from a previous run \[NB: do not do this if this is the first run\]"],
     ['CVSUpdate', GKB_DEV_ALIAS, "-CVS update of the images directory on the release, live, and curator servers"],
-    ['GenerateStableIds', GKB_DEV_ALIAS, "-generates stable ids"],
+    ['UpdateStableIds', GKB_DEV_ALIAS, "-updates stable id minor version numbers"],
     ['Myisam', GKB_DEV_ALIAS, "-convert database to myisam format"],
     ['OrthoInference', GKB_DEV_ALIAS, "-computational prediction for other species"],
     ['UpdateConfig', GKB_DEV_ALIAS, "-update configuration file to current version"],
