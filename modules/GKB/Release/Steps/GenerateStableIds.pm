@@ -1,5 +1,6 @@
-package GKB::Release::Steps::GenerateStableIds;
+package GKB::Release::Steps::UpdateStableIds;
 
+use GKB::CommonUtils;
 use GKB::NewStableIdentifiers;
 
 use GKB::Release::Config;
@@ -10,7 +11,7 @@ extends qw/GKB::Release::Step/;
 
 has '+gkb' => ( default => "gkbdev" );
 has '+passwords' => ( default => sub { ['mysql'] } );
-has '+directory' => ( default => "$release/generate_stable_ids" );
+has '+directory' => ( default => "$release/update_stable_ids" );
 has '+mail' => ( default => sub { 
 					my $self = shift;
 					return {
@@ -36,7 +37,7 @@ override 'run_commands' => sub {
 		]
 	);
     
-	$stable_identifier_to_version{$_->identifier->[0]}{'before_update'} = $_->identifierVersion->[0] foreach get_all_stable_identifier_instances(get_dba($slice_db));
+	$stable_identifier_to_version{$_->identifier->[0]}{'before_update'} = $_->identifierVersion->[0] foreach get_all_stable_identifier_instances(get_dba($slicedb));
     $self->cmd("Updating stable IDs",
 		[
 		    ["perl update_stable_ids.pl -ghost $gkcentral_host -user $user -pass $pass -sdb $slicedb ".
@@ -44,7 +45,7 @@ override 'run_commands' => sub {
 		     "2> generate_stable_ids_$version.err"]
 		]
 	);
-    $stable_identifier_to_version{$_->identifier->[0]}{'after_update'} = $_->identifierVersion->[0] foreach get_all_stable_identifier_instances(get_dba($slice_db));
+    $stable_identifier_to_version{$_->identifier->[0]}{'after_update'} = $_->identifierVersion->[0] foreach get_all_stable_identifier_instances(get_dba($slicedb));
     
     $self->cmd("Backing up databases",
         [
@@ -58,10 +59,10 @@ override 'run_commands' => sub {
 override 'pre_step_tests' => sub {
     my $self = shift;
     
-    my @instances_missing_stable_identifier = map { $_->displayName . ' (' .  $_->db_id . ') is missing a stable identifier' } get_all_instances_missing_stable_identifiers(get_dba($slicedb));
-    my @instances_with_multiple_stable_identifiers = map { $_->displayName . ' (' . $_->db_id . ') has more than one stable identifier' } get_all_instances_with_multiple_stable_identifiers(get_dba($slicedb));
+    my @instances_missing_stable_identifier = map { get_name_and_id($_) . ' is missing a stable identifier' } get_all_instances_missing_stable_identifiers(get_dba($slicedb));
+    my @instances_with_multiple_stable_identifiers = map { get_name_and_id($_) . ' has more than one stable identifier' } get_all_instances_with_multiple_stable_identifiers(get_dba($slicedb));
     my @instances_with_incorrect_stable_identifier = map {
-        $_->displayName . ' (' . $_->db_id . ') has an incorrect stable identifier: ' . $_->stableIdentifier->[0]->identifier->[0]
+        get_name_and_id($_) . ' ' . join('|', map { $_->displayName } (@{$_->species})) . ' has an incorrect stable identifier: ' . $_->stableIdentifier->[0]->identifier->[0]
     } grep { !stable_identifier_species_prefix_is_correct($_) || !stable_identifier_numeric_component_is_correct($_) } get_all_instances_with_stable_identifiers(get_dba($slicedb));
     
     my @duplicated_stable_identifiers = map { "$_ used by more than one stable identifier instance" } get_duplicated_stable_identifiers(get_dba($slicedb));
