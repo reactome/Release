@@ -52,6 +52,7 @@ my @options = (
     ['RestartTomcat', GKB_LIVE_ALIAS, "-restart tomcat for WS SOAP API"],
     ['CommitGoa', GKB_DEV_ALIAS, "-commit goa files to cvs"],
     ['NCBI', GKB_DEV_ALIAS, "-create gene,protein, and omim files as well as hapmap and ucsc"],
+    ['MSigDB_GSEA', GKB_DEV_ALIAS, "-creates Reactome_GeneSet_XX file in MSigDB format"],
     ['UncuratedProteins', GKB_DEV_ALIAS, "-creates a list of UniProt identifiers without EWAS referrers"]
 );
 
