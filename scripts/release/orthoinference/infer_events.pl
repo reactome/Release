@@ -323,6 +323,9 @@ sub get_skip_list {
     }
     close $skip_list_fh;
     
+    # Duplicate reactions
+    push @list, qw/5635860 5610767 171118 171141 188371 3788708 6797245 8870698 8941623 8941618 8941628 8941613 3788705 174079 375302 5666169 400434 444202/;
+    
     return @list;
 }
 
