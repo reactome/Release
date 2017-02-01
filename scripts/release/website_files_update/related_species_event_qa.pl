@@ -39,14 +39,14 @@ foreach my $event (@events) {
 	
 	my $event_name = $event->displayName;
 	my $event_id = $event->db_id;
-	my $event_creator = get_event_creator($event);
+	my $event_modifier = get_event_modifier($event);
 	
 	my $event_disease_tags = get_disease_tags($event);
 	my $is_chimeric = is_chimeric($event) ? 'chimeric' : 'not chimeric';
 	my $base_species = $event->species->[0]->displayName;
 	my $related_species = $event->relatedSpecies->[0]->displayName;
 	
-	report(join("\t", $event_name, $event_id, $base_species, $related_species, $event_disease_tags, $is_chimeric, $event_creator), $fh);
+	report(join("\t", $event_name, $event_id, $base_species, $related_species, $event_disease_tags, $is_chimeric, $event_modifier), $fh);
 }
 
 close($fh);

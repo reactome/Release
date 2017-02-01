@@ -26,7 +26,7 @@ override 'run_commands' => sub {
     $self->cmd("Running Chebi script",
     	[
 		    #["cvs up improve_chebi_ids.pl"],
- 			["perl improve_chebi_ids.pl -db $gkcentral -host $gkcentral_host -user $user -pass $pass > improve_chebi_ids.out"]
+ 			["perl improve_chebi_ids.pl -db $gkcentral -host $gkcentral_host -user $user -pass $pass > improve_chebi_ids.out 2> improve_chebi_ids.err"]
     	]
  	);
 };
