@@ -91,8 +91,6 @@
        $dev = 'CURATION AND TESTING';
     }
 
-  
-
    if ($dev) {
    echo "
    <div style='background:gainsboro;border:1px solid gray; text-align:center' id='hideMe'>
@@ -109,7 +107,6 @@
 
 
  }
-
 ?>
 
 <!--content-->
