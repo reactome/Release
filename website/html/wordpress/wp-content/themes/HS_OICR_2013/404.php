@@ -2,7 +2,7 @@
 
 	<div id="content">
 
-		<h2 class="center">This resource is currently unavailable -- we are working to restore it</h2>
+		<h2 class="center">The page requested is unavailable</h2>
 
 	</div>
 
