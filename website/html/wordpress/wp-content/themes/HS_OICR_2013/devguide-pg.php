@@ -19,7 +19,7 @@
   </div>
 </div><!--close breadcrumb-->
 
-<link type="text/css" rel="stylesheet" href="/wordpress/wp-content/themes/HS_OICR_2013/dev-guide.css">
+<link type="text/css" rel="stylesheet" href="/wordpress/wp-content/themes/HS_OICR_2013/dev-guide.css?v=20160701">
 
 <div id="postWrap">
   <div id="page-post">
