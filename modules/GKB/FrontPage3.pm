@@ -132,7 +132,7 @@ sub get_index_html_content {
     $host = 'reactome.org' if $host =~ /reactomeprd1/;
 
     chomp $host;
-    my $content = `wget -qO- $host`;
+    my $content = `wget --no-check-certificate -qO- $host`;
     
     return $content;
 }

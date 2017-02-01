@@ -88,7 +88,7 @@ sub buildPart {
     
     my $logger = get_logger(__PACKAGE__);
     
-    $logger->info("entered\n");
+    $logger->info("entered");
     
     $self->timer->start($self->timer_message);
     my $dba = $self->builder_params->refresh_dba();
@@ -97,12 +97,11 @@ sub buildPart {
     my $entrez_gene_reference_database = $self->builder_params->reference_database->get_entrez_gene_reference_database();
     my $target_gene_reference_database = $self->target_gene_reference_database;
     
-    $logger->info("reference_peptide_sequence count=" . scalar(@{$reference_peptide_sequences}) . "\n");
-#	print STDERR "GeneToUniprotReferenceDNASequence.buildPart: $entrez_gene_reference_database=" . $entrez_gene_reference_database . "\n";
+    $logger->info("reference_peptide_sequence count=" . scalar(@{$reference_peptide_sequences}));
 
     if (!(defined $target_gene_reference_database)) {
-	$logger->error("target_gene_reference_database not defined, aborting!\n");
-	return;
+        $logger->error("target_gene_reference_database not defined, aborting!");
+        return;
     }
 
     my $attribute = 'referenceGene';
@@ -113,7 +112,7 @@ sub buildPart {
     foreach $reference_peptide_sequence (@{$reference_peptide_sequences}) {
         $reference_peptide_sequence->inflate();
         
-    	$logger->info("dealing with " . $reference_peptide_sequence->_displayName->[0] . "\n");
+    	$logger->info("dealing with " . $reference_peptide_sequence->_displayName->[0]);
 
     	# Remove target gene identifiers to make sure the mapping is up-to-date, keep others
     	# this isn't really necessary as long as the script is run on the slice only
@@ -122,32 +121,32 @@ sub buildPart {
 
     	my $reference_genes = $reference_peptide_sequence->$attribute;
     	if (!(defined $reference_genes) || scalar(@{$reference_genes}) == 0) {
-#		print STDERR "GeneToUniprotReferenceDNASequence.buildPart: WARNING - no reference genes for " . $reference_peptide_sequence->_displayName->[0] . "\n";
-	    next;
-	}
-	$inserted_flag = 0;
-	foreach my $reference_gene (@{$reference_genes}) {
-#		print STDERR "GeneToUniprotReferenceDNASequence.buildPart: reference database: " . $reference_gene->referenceDatabase->[0]->name->[0] . "\n";
-	    if ($reference_gene->referenceDatabase->[0]->db_id() == $entrez_gene_reference_database->db_id()) {
-		my $entrez_gene_id = $reference_gene->identifier->[0];
-#		print STDERR "GeneToUniprotReferenceDNASequence.buildPart: inserting gene, entrez_gene_id=$entrez_gene_id\n";
-		my $rds = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_peptide_sequence->Species, $target_gene_reference_database, $entrez_gene_id);
-		$self->check_for_identical_instances($rds);
-		$reference_peptide_sequence->add_attribute_value($attribute, $rds);
-		$inserted_flag = 1;
-	    }
-	}
-	if (!$inserted_flag) {
-#		print STDERR "GeneToUniprotReferenceDNASequence.buildPart: WARNING - no Entrez genes for " . $reference_peptide_sequence->_displayName->[0] . "\n";
-	    next;
-	}
-	$reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
-	$dba->update_attribute($reference_peptide_sequence, 'modified');
-	
-	# Make sure the newly inserted genes also get put into the database.
-	$dba->update_attribute($reference_peptide_sequence, $attribute);
-	
-	$self->increment_insertion_stats_hash($reference_peptide_sequence->db_id);
+		    $logger->warn("no reference genes for " . $reference_peptide_sequence->_displayName->[0]);
+            next;
+        }
+        $inserted_flag = 0;
+        foreach my $reference_gene (@{$reference_genes}) {
+            next unless $reference_gene && $reference_gene->referenceDatabase->[0];
+            if ($reference_gene->referenceDatabase->[0]->db_id() == $entrez_gene_reference_database->db_id()) {
+            	my $entrez_gene_id = $reference_gene->identifier->[0];
+	        	$logger->info("inserting gene, entrez_gene_id=$entrez_gene_id");
+            	my $rds = $self->builder_params->miscellaneous->get_reference_dna_sequence($reference_peptide_sequence->Species, $target_gene_reference_database, $entrez_gene_id);
+            	$self->check_for_identical_instances($rds);
+            	$reference_peptide_sequence->add_attribute_value($attribute, $rds);
+            	$inserted_flag = 1;
+            }
+        }
+        if (!$inserted_flag) {
+	    	$logger->warn("no Entrez genes for " . $reference_peptide_sequence->_displayName->[0]);
+            next;
+        }
+        $reference_peptide_sequence->add_attribute_value('modified', $self->instance_edit);
+        $dba->update_attribute($reference_peptide_sequence, 'modified');
+        
+        # Make sure the newly inserted genes also get put into the database.
+        $dba->update_attribute($reference_peptide_sequence, $attribute);
+        
+        $self->increment_insertion_stats_hash($reference_peptide_sequence->db_id);
     }
 
     $self->print_insertion_stats_hash();
