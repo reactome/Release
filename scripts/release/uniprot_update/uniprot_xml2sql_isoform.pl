@@ -265,11 +265,11 @@ while (<UP>) {
     my %isoids;
     my $is = 0;
     if (/\<comment type\=\"alternative products\"\>/ms) {
-        while (/\<isoform\>\n\s+\<id\>([A-Z0-9\-]*)\<\/id\>/gms) {
+        while (/\<isoform\>\n\s*\<id\>([A-Z0-9\-]*)\<\/id\>/gms) {
             $isoids{$1} = 1;
             $is++;
         }
-        while (/\<isoform\>\n\s+\<id\>([A-Z0-9\-]*)\,/gms) {
+        while (/\<isoform\>\n\s*\<id\>([A-Z0-9\-]*)\,/gms) {
             $isoids{$1} = 1;
             $is++;
         }
@@ -385,11 +385,12 @@ while (<UP>) {
             $dupl_flag = 1;
             
             ## master sequence update finished
-
-            foreach my $is_ac ( sort keys %isoids ) {    #isoforms update
+            
+            $values{'Species'} ||= $sdi->species->[0]; #Inherit species instance (if not already specified) from isoform parent
+            foreach my $is_ac ( sort keys %isoids ) {    #isoforms update                
                 if ( $is_ac =~ /$ac/ ) {
                     my $isst = $dba->fetch_instance_by_attribute( 'ReferenceIsoform', [ [ 'variantIdentifier', [$is_ac] ] ] );
-                    if ( defined $isst ) {
+                    if ( scalar @{$isst} > 0 ) {
                         foreach my $isod ( @{$isst} ) {
                             my $iac = $isod->VariantIdentifier->[0];
                             next if $iac !~ /$ac/;
@@ -424,8 +425,9 @@ while (<UP>) {
                         $sdi_new->modified(undef);
                         $sdi_new->variantIdentifier($is_ac);
 
-						print "New isoform: $new_iso\t$ddd\tMaster: $sdd\n";
+						print "New isoform: $is_ac\t$ddd\tMaster: $sdd\n";
                         updateinstance($sdi_new, \%values);
+                        $new_iso++;
                     }
                 }
                 else {
