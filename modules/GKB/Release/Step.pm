@@ -273,7 +273,7 @@ sub run {
 		say releaselog("No errors from $self->{name} pre-step tests");
 	}
 	
-	#$self->run_commands($self->gkb);
+	$self->run_commands($self->gkb);
 	
 	my @post_step_test_errors = $self->post_step_tests();
 	if (@post_step_test_errors) {
