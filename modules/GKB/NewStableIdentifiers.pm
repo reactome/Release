@@ -18,11 +18,16 @@ my $logger = get_logger(__PACKAGE__);
 our @EXPORT = qw/
 stable_identifier_numeric_component_is_correct
 stable_identifier_species_prefix_is_correct
-get_all_instances_requiring_stable_identifiers
-get_all_instances_with_stable_identifiers
-get_all_instances_missing_stable_identifiers
+get_instances_requiring_stable_identifiers
+get_instances_with_stable_identifiers
+get_instances_missing_stable_identifiers
+get_instances_with_multiple_stable_identifiers
+get_instances_with_incorrect_stable_identifiers
 get_instances_attached_to_stable_identifier
 get_all_stable_identifier_instances
+get_stable_identifier_instances_without_referrers
+get_stable_identifier_instances_with_multiple_referrers
+get_identifiers_used_by_multiple_stable_identifier_instances
 get_stable_identifier_species_prefix
 get_stable_identifier_numeric_component
 get_instance_species_prefix
@@ -51,7 +56,7 @@ sub stable_identifier_species_prefix_is_correct {
     return get_instance_species_prefix($instance) eq get_stable_identifier_species_prefix($stable_identifier_instance);
 }
 
-sub get_all_instances_requiring_stable_identifiers {
+sub get_instances_requiring_stable_identifiers {
     my $dba = shift;
     
     my @events = @{$dba->fetch_instance(-CLASS => 'Event')};
@@ -61,13 +66,27 @@ sub get_all_instances_requiring_stable_identifiers {
     return (@events, @physical_entities, @regulations);
 }
 
-sub get_all_instances_missing_stable_identifiers {
+sub get_instances_missing_stable_identifiers {
     my $dba = shift;
     
     return grep {not defined $_->stableIdentifier->[0]} get_all_instances_requiring_stable_identifiers($dba);
 }
 
-sub get_all_instances_with_stable_identifiers {
+sub get_instances_with_multiple_stable_identifiers {
+    my $dba = shift;
+    
+    return grep {scalar @{$_->stableIdentifier} > 1} get_all_instances_requiring_stable_identifiers($dba);
+}
+
+sub get_instances_with_incorrect_stable_identifiers {
+    my $dba = shift;
+    
+    return grep {(scalar @{$_->stableIdentifier} == 1) &&
+                 (!stable_identifier_numeric_component_is_correct($_) || !stable_identifier_species_prefix_is_correct($_))}
+                 get_all_instances_requiring_stable_identifiers($dba);
+}
+
+sub get_instances_with_stable_identifiers {
     my $dba = shift;
     
     return grep {defined $_->stableIdentifier->[0]} get_all_instances_requiring_stable_identifiers($dba);
@@ -83,6 +102,26 @@ sub get_all_stable_identifier_instances {
     my $dba = shift;
     
     return @{$dba->fetch_instance(-CLASS => 'StableIdentifier')};
+}
+
+sub get_stable_identifier_instances_without_referrers {
+    my $dba = shift;
+    
+    return grep { scalar get_instances_attached_to_stable_identifier($_) == 0 } get_all_stable_identifier_instances($dba);
+}
+
+sub get_stable_identifier_instances_with_multiple_referrers {
+    my $dba = shift;
+    
+    return grep { scalar get_instances_attached_to_stable_identifier($_) > 1 } get_all_stable_identifier_instances($dba);
+}
+
+sub get_identifiers_used_by_multiple_stable_identifier_instances {
+    my $dba = shift;
+    
+    my %identifier_to_times_used;
+    map {$identifier_to_times_used{$_->identifier->[0]}++} get_all_stable_identifier_instances($dba);
+    return grep { $identifier_to_times_used{$_} > 1 } keys %identifier_to_times_used;
 }
 
 sub get_stable_identifier_species_prefix {
