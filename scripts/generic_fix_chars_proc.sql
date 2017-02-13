@@ -1,15 +1,18 @@
 -- Invoke this script as: 'SET @run_update = true; \.generic_fix_chars_proc.sql'
-select 'Character and Collation database variables, before alter to UTF8' as message;
-show variables like 'character%';
-show variables like 'collation%';
-
--- ensure that the database is using utf8 character set and collation
-ALTER DATABASE gk_current default character set utf8;
-ALTER DATABASE gk_current default collate utf8_general_ci;
-
-select 'Character and Collation database variables, AFTER alter to UTF8' as message;
-show variables like 'character%';
-show variables like 'collation%';
+-- select 'Character and Collation database variables, before alter to UTF8' as message;
+-- show variables like 'character%';
+-- show variables like 'collation%';
+--
+-- -- ensure that the database is using utf8 character set and collation
+-- -- NOTE: MySQL does not allow ALTER DATABASE to be called from a prepared statement, so
+-- -- these statements cannot be parameterized. This will need to be executed outside this
+-- -- script.
+-- ALTER DATABASE gk_current default character set utf8;
+-- ALTER DATABASE gk_current default collate utf8_general_ci;
+--
+-- select 'Character and Collation database variables, AFTER alter to UTF8' as message;
+-- show variables like 'character%';
+-- show variables like 'collation%';
 
 set autocommit = false;
 DROP PROCEDURE IF EXISTS fix_chars_in_table_col;
