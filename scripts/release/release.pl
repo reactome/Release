@@ -20,13 +20,13 @@ my @options = (
     ['UpdateSourceCode', GKB_DEV_ALIAS, "-updates source code"],
     ['ClearData', GKB_DEV_ALIAS, "-clear data from a previous run \[NB: do not do this if this is the first run\]"],
     ['CVSUpdate', GKB_DEV_ALIAS, "-CVS update of the images directory on the release, live, and curator servers"],
-    ['GenerateStableIds', GKB_DEV_ALIAS, "-generates stable ids"],
+    ['UpdateStableIds', GKB_DEV_ALIAS, "-updates stable id minor version numbers"],
     ['Myisam', GKB_DEV_ALIAS, "-convert database to myisam format"],
     ['OrthoInference', GKB_DEV_ALIAS, "-computational prediction for other species"],
     ['UpdateConfig', GKB_DEV_ALIAS, "-update configuration file to current version"],
-    ['GoaPrepare', GKB_DEV_ALIAS, "-prepares GOA submission file"],
     ['ExternalResourceLinks', GKB_DEV_ALIAS, "-creates external resource links"],
-    ['GenerateOrthoInferenceStableIds', GKB_DEV_ALIAS, "-assign stable identifiers to ortho-predicted instances"],    	
+    ['GenerateOrthoInferenceStableIds', GKB_DEV_ALIAS, "-assign stable identifiers to ortho-predicted instances"],
+    ['GoaPrepare', GKB_DEV_ALIAS, "-prepares GOA submission file"],
     ['OtherIdentifiers', GKB_DEV_ALIAS, "-add other identifiers to the release database"],
     ['Orthodiagrams', GKB_DEV_ALIAS, "-create diagrams for predicted pathways"],
     ['AnalysisCore', GKB_DEV_ALIAS, "-creates analysis binary and mapping files for export"],
@@ -50,8 +50,10 @@ my @options = (
     ['ClearSearchCache', GKB_LIVE_ALIAS, "-clear search cache"],
     ['RerouteRequests', GKB_LIVE_ALIAS, "-switch back to public server"],
     ['RestartTomcat', GKB_LIVE_ALIAS, "-restart tomcat for WS SOAP API"],
+    ['UpdateFrontPage', GKB_DEV_ALIAS, "-update Reactome version and release date on front page of all servers"],
     ['CommitGoa', GKB_DEV_ALIAS, "-commit goa files to cvs"],
     ['NCBI', GKB_DEV_ALIAS, "-create gene,protein, and omim files as well as hapmap and ucsc"],
+    ['MSigDB_GSEA', GKB_DEV_ALIAS, "-creates Reactome_GeneSet_XX file in MSigDB format"],
     ['UncuratedProteins', GKB_DEV_ALIAS, "-creates a list of UniProt identifiers without EWAS referrers"]
 );
 

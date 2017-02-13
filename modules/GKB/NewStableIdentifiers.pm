@@ -5,40 +5,91 @@ use warnings;
 use base 'Exporter';
 
 use Carp;
-use List::MoreUtils qw/all/;
+use List::MoreUtils qw/all any/;
 use Log::Log4perl qw/get_logger/;
 
 use lib '/usr/local/gkb/modules';
+use GKB::CommonUtils;
 use GKB::Config;
 
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
 our @EXPORT = qw/
-stable_identifier_numeric_component_is_correct 
-stable_identifier_species_prefix_is_correct 
-get_all_instances_requiring_stable_identifiers
-get_all_instances_with_stable_identifiers
+stable_identifier_numeric_component_is_correct
+stable_identifier_species_prefix_is_correct
+get_instances_requiring_stable_identifiers
+get_instances_with_stable_identifiers
+get_instances_missing_stable_identifiers
+get_instances_with_multiple_stable_identifiers
+get_instances_with_incorrect_stable_identifiers
 get_instances_attached_to_stable_identifier
+get_all_stable_identifier_instances
+get_stable_identifier_instances_without_referrers
+get_stable_identifier_instances_with_multiple_referrers
+get_identifiers_used_by_multiple_stable_identifier_instances
 get_stable_identifier_species_prefix
-get_stable_identifier_numeric_component 
+get_stable_identifier_numeric_component
 get_instance_species_prefix
 /;
 
 sub stable_identifier_numeric_component_is_correct {
+    my $instance = shift;
     
+    my $stable_identifier_instance = $instance->stableIdentifier->[0];
+    return 0 unless $stable_identifier_instance;
+    
+    if (is_electronically_inferred($instance)) {
+        my $source_instance = $instance->inferredFrom->[0];
+        return $source_instance->db_id == get_stable_identifier_numeric_component($stable_identifier_instance);
+    }
+    
+    return $instance->db_id == get_stable_identifier_numeric_component($stable_identifier_instance);
 }
 
 sub stable_identifier_species_prefix_is_correct {
+    my $instance = shift;
     
+    my $stable_identifier_instance = $instance->stableIdentifier->[0];
+    return 0 unless $stable_identifier_instance;
+    
+    return get_instance_species_prefix($instance) eq get_stable_identifier_species_prefix($stable_identifier_instance);
 }
 
-sub get_all_instances_requiring_stable_identifiers {
+sub get_instances_requiring_stable_identifiers {
     my $dba = shift;
+    
+    my @events = @{$dba->fetch_instance(-CLASS => 'Event')};
+    my @physical_entities = @{$dba->fetch_instance(-CLASS => 'PhysicalEntity')};
+    my @regulations = @{$dba->fetch_instance(-CLASS => 'Regulation')};
+    
+    return (@events, @physical_entities, @regulations);
 }
 
-sub get_all_instances_with_stable_identifiers {
+sub get_instances_missing_stable_identifiers {
     my $dba = shift;
+    
+    return grep {not defined $_->stableIdentifier->[0]} get_all_instances_requiring_stable_identifiers($dba);
+}
+
+sub get_instances_with_multiple_stable_identifiers {
+    my $dba = shift;
+    
+    return grep {scalar @{$_->stableIdentifier} > 1} get_all_instances_requiring_stable_identifiers($dba);
+}
+
+sub get_instances_with_incorrect_stable_identifiers {
+    my $dba = shift;
+    
+    return grep {(scalar @{$_->stableIdentifier} == 1) &&
+                 (!stable_identifier_numeric_component_is_correct($_) || !stable_identifier_species_prefix_is_correct($_))}
+                 get_all_instances_requiring_stable_identifiers($dba);
+}
+
+sub get_instances_with_stable_identifiers {
+    my $dba = shift;
+    
+    return grep {defined $_->stableIdentifier->[0]} get_all_instances_requiring_stable_identifiers($dba);
 }
 
 sub get_instances_attached_to_stable_identifier {
@@ -47,18 +98,60 @@ sub get_instances_attached_to_stable_identifier {
     return @{$stable_identifier_instance->reverse_attribute_value('stableIdentifier')};
 }
 
-sub get_stable_identifier_species_prefix {
-    my $identifier = shift;
+sub get_all_stable_identifier_instances {
+    my $dba = shift;
     
+    return @{$dba->fetch_instance(-CLASS => 'StableIdentifier')};
+}
+
+sub get_stable_identifier_instances_without_referrers {
+    my $dba = shift;
+    
+    return grep { scalar get_instances_attached_to_stable_identifier($_) == 0 } get_all_stable_identifier_instances($dba);
+}
+
+sub get_stable_identifier_instances_with_multiple_referrers {
+    my $dba = shift;
+    
+    return grep { scalar get_instances_attached_to_stable_identifier($_) > 1 } get_all_stable_identifier_instances($dba);
+}
+
+sub get_identifiers_used_by_multiple_stable_identifier_instances {
+    my $dba = shift;
+    
+    my %identifier_to_times_used;
+    map {$identifier_to_times_used{$_->identifier->[0]}++} get_all_stable_identifier_instances($dba);
+    return grep { $identifier_to_times_used{$_} > 1 } keys %identifier_to_times_used;
+}
+
+sub get_stable_identifier_species_prefix {
+    my $stable_identifier_instance = shift;
+    return unless $stable_identifier_instance;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    my $identifier = $stable_identifier_instance->identifier->[0];
     my ($identifier_species_prefix) = $identifier =~ /^R-(\w{3})/;
+    
+    if (!$identifier_species_prefix) {
+        $logger->warn("Unable to get prefix from $identifier");
+        return '';
+    }    
     
     return $identifier_species_prefix;
 }
 
 sub get_stable_identifier_numeric_component {
-    my $identifier = shift;
+    my $stable_identifier_instance = shift;
+    return unless $stable_identifier_instance;
     
+    my $identifier = $stable_identifier_instance->identifier->[0];
     my ($identifier_numeric_component) = $identifier =~ /^R-\w{3}-(\d+)/;
+    
+    if (!$identifier_numeric_component) {
+        $logger->warn("Unable to get numeric component from $identifier");
+        return -1;
+    }
     
     return $identifier_numeric_component;
 }
@@ -66,49 +159,82 @@ sub get_stable_identifier_numeric_component {
 sub get_instance_species_prefix {
     my $instance = shift;
     
-    if (should_use_ALL_prefix($instance)) {
-        return 'ALL';
-    } elsif (should_use_NUL_prefix($instance)) {
-        return 'NUL';
-    } elsif (is_set_without_species($instance) && scalar get_species_from_members_and_candidates($instance) == 1) {
-        my $species_instance = (get_species_from_members_and_candidates($instance))[0];
-        return get_prefix_from_species_name($species_instance);  
-    } else {
-        return get_preset_prefix($instance) || get_prefix_from_species_name($instance->species->[0]);
+    confess "$instance is not a database object" unless
+        $instance &&
+        ($instance->is_a('PhysicalEntity') || $instance->is_a('Event') || $instance->is_a('Regulation'));
+    
+    if ($instance->is_a('PhysicalEntity')) {
+        return get_species_prefix_from_physical_entity($instance);
+    } elsif ($instance->is_a('Event')) {
+        return get_species_prefix_from_event($instance);
+    } elsif ($instance->is_a('Regulation')) {
+        return get_species_prefix_from_regulation($instance);
     }
 }
 
-sub should_use_ALL_prefix {
+sub get_species_prefix_from_physical_entity {
     my $instance = shift;
     
-    return 1 if
-        is_simple_or_other_entity_without_species($instance) ||
-        (is_set_without_species($instance) && all {is_simple_or_other_entity_without_species($_)} (get_members_and_candidates($instance))) ||
-        (is_polymer_without_species($instance) && has_repeated_unit_that_should_use_ALL_prefix($instance)) || 
-        is_regulation_that_should_use_ALL_prefix($instance);
-    return 0;
+    my @species = @{$instance->species};
+    if (scalar @species == 1) {
+        return get_prefix_from_species_instance($species[0]);
+    } elsif (scalar @species > 1) {
+        return 'NUL';
+    } elsif (scalar @species == 0) {
+        my @species_within_physical_entity = get_unique_species_from_all_entities($instance);
+        
+        if (scalar @species_within_physical_entity == 1) {
+            return get_prefix_from_species_instance($species_within_physical_entity[0]);
+        } elsif (scalar @species_within_physical_entity > 1) {
+            return 'NUL';
+        } elsif (scalar @species_within_physical_entity == 0) {
+            return 'ALL';
+        }
+    }
 }
 
-sub should_use_NUL_prefix {
+sub get_species_prefix_from_event {
     my $instance = shift;
     
-    return 1 if
-        is_complex_without_species($instance) ||
-        is_GEE_without_species($instance) ||
-        (is_set_without_species($instance) && scalar get_species_from_members_and_candidates($instance) != 1) ||
-        (is_polymer_without_species($instance) && (!$instance->repeatedUnit->[0] || should_use_NUL_prefix($instance->repeatedUnit->[0]))) ||
-        is_chimeric($instance) ||
-        has_multiple_species($instance) ||
-        is_event_without_species($instance) ||
-        is_regulation_that_should_use_NUL_prefix($instance);
-    
-    return 0;
+    my @species = @{$instance->species};
+    if (scalar @species == 1) {
+        return get_prefix_from_species_instance($species[0]);
+    } else {
+        return 'NUL';
+    }    
 }
 
-sub get_preset_prefix {
+sub get_species_prefix_from_regulation {
     my $instance = shift;
     
-    return unless $instance && $instance->species->[0];
+    my $regulated_entity = $instance->regulatedEntity->[0];
+    if ($regulated_entity && $regulated_entity->is_a('Event')) {
+        return get_species_prefix_from_event($regulated_entity);
+    } elsif ($regulated_entity && $regulated_entity->is_a('CatalystActivity')) {
+        if ($regulated_entity->physicalEntity->[0]) {
+            return get_species_prefix_from_physical_entity($regulated_entity->physicalEntity->[0]);
+        } else {
+            return 'NUL';
+        }
+    } else {
+        return 'NUL';
+    }    
+}
+
+sub get_prefix_from_species_instance {
+    my $species_instance = shift;
+    
+    return unless $species_instance && $species_instance->name->[0];
+    
+    if (get_preset_prefix_from_species_name($species_instance->name->[0])) {
+        return get_preset_prefix_from_species_name($species_instance->name->[0]);
+    }
+    
+    return get_prefix_from_species_name($species_instance->name->[0]);
+}
+
+sub get_preset_prefix_from_species_name {
+    my $species_name = shift;
     
     my %species_to_prefix = (
       "Hepatitis C virus genotype 2a" => 'HEP',
@@ -121,117 +247,50 @@ sub get_preset_prefix {
       "Viruses" => 'VIR'
     );
     
-    return $species_to_prefix{$instance->species->[0]->name->[0]};
+    return $species_to_prefix{$species_name};
 }
 
 sub get_prefix_from_species_name {
-    my $species_instance = shift;
+    my $species_name = shift;
     
-    my ($first_letter_of_genus, $first_two_letters_of_species) = $species_instance->name->[0] =~ /(\w).*?(\w{2}).*?/;
+    my $logger = get_logger(__PACKAGE__);
+    
+    my ($first_letter_of_genus, $first_two_letters_of_species);
+    eval {
+        ($first_letter_of_genus, $first_two_letters_of_species) = $species_name =~ /(\w).*? (\w{2}).*?/;
+    };
+    if ($@) {
+        confess $@;
+    }
+    
+    
+    if (!$first_letter_of_genus || !$first_two_letters_of_species) {    
+        $logger->warn("Unable to get prefix for species " . $species_name);
+        return '';
+    }
     
     return uc($first_letter_of_genus . $first_two_letters_of_species);
 }
 
-sub is_simple_or_other_entity_without_species {
+sub get_all_entities {
     my $instance = shift;
     
-    return ($instance->is_a('OtherEntity') || $instance->is_a('SimpleEntity')) &&
-        (!$instance->species->[0]);
+    my @all_entities = ($instance);
+    if ($instance->is_a('Complex')) {
+        push @all_entities, map {get_all_entities($_)} @{$instance->hasComponent};
+    } elsif ($instance->is_a('EntitySet')) {
+        push @all_entities, map {get_all_entities($_)} (@{$instance->hasMember}, @{$instance->hasCandidate});
+    } elsif ($instance->is_a('Polymer')) {
+        push @all_entities, map {get_all_entities($_)} (@{$instance->repeatedUnit});
+    }
+    return @all_entities;
 }
 
-sub is_set_without_species {
+sub get_unique_species_from_all_entities {
     my $instance = shift;
     
-    return ($instance->is_a('EntitySet') && !$instance->species->[0]);
+    my @species_instances = map {@{$_->species}} get_all_entities($instance);
+    return get_unique_species(@species_instances);
 }
 
-sub get_members_and_candidates {
-    my $instance = shift;
-    
-    croak "$instance is not a set" unless $instance->is_a('EntitySet');
-    
-    return (@{$instance->hasMember}, @{$instance->hasCandidate});
-}
-
-sub is_polymer_without_species {
-    my $instance = shift;
-    
-    return ($instance->is_a('Polymer') && !$instance->species->[0]);
-}
-
-sub has_repeated_unit_that_should_use_ALL_prefix {
-    my $instance = shift;
-    
-    return $instance->repeatedUnit->[0] &&
-    (
-     is_simple_or_other_entity_without_species($instance->repeatedUnit->[0]) ||
-     is_set_without_species($instance->repeatedUnit->[0])
-    );    
-}
-
-sub is_regulation_that_should_use_ALL_prefix {
-    my $instance = shift;
-    
-    return unless $instance->is_a('Regulation');
-    
-    my $regulated_entity = $instance->regulatedEntity->[0];
-    return unless $regulated_entity;
-     
-    return
-        $regulated_entity->is_a('CatalystActivity') &&
-        $regulated_entity->[0]->physicalEntity->[0] &&
-        is_simple_or_other_entity_without_species($regulated_entity->physicalEntity->[0]);
-}
-
-sub is_complex_without_species {
-    my $instance = shift;
-    
-    return ($instance->is_a('Complex') && !$instance->species->[0]);
-}
-
-sub is_GEE_without_species {
-    my $instance = shift;
-    
-    return ($instance->is_a('GenomeEncodedEntity') && !$instance->species->[0]);
-}
-
-sub get_species_from_members_and_candidates {
-    my $instance = shift;
-    
-    my @species_from_members_and_candidates = map {@{$_->species}} get_members_and_candidates($instance);
-    my %unique_species_from_members_and_candidates = map {$_->db_id => $_} @species_from_members_and_candidates;
-    return values %unique_species_from_members_and_candidates;
-}
-
-sub is_chimeric {
-    my $instance = shift;
-    
-    return $instance->isChimeric->[0] && $instance->isChimeric->[0] eq 'TRUE';
-}
-
-sub has_multiple_species {
-    my $instance = shift;
-    
-    return scalar @{$instance->species} > 1;
-}
-sub is_event_without_species {
-    my $instance = shift;
-    
-    return ($instance->is_a('Event') && !$instance->species->[0]);
-}
-
-sub is_regulation_that_should_use_NUL_prefix {
-    my $instance = shift;
-    
-    return unless $instance->is_a('Regulation');
-    
-    my $regulated_entity = $instance->regulatedEntity->[0];
-    return if $regulated_entity;
-    
-    return (!$regulated_entity->[0]->is_a('Event') && !$regulated_entity->is_a('CatalystActivity')) ||
-            is_event_without_species($regulated_entity) ||
-            ($regulated_entity->is_a('CatalystActivity') &&
-          (!$regulated_entity->physicalEntity->[0] ||
-           (!$regulated_entity->physicalEntity->[0]->species->[0] && !is_simple_or_other_entity_without_species($regulated_entity->physicalEntity->[0])
-          )));
-}
+1;

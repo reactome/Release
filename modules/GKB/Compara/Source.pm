@@ -33,7 +33,7 @@ use Data::Dumper;
 use File::Basename;
 use GKB::Config;
 use GKB::Config_Species;
-use GKB::Compara::BioMart;
+use GKB::EnsEMBLMartUtils qw/get_species_results/;
 use Log::Log4perl qw/get_logger/;
 
 use vars qw(@ISA $AUTOLOAD %ok_field);
@@ -85,36 +85,43 @@ sub get_ok_field {
 sub prepare_source_mapping_hash { 
     my ($self, $opt_from) = @_;
     
-    my %source_mapping = ();
-    
-    my $biomart = GKB::Compara::BioMart->new();
-    my $out = $biomart->get_mapping_table_from_mart($opt_from);
-
-    my @rows = split /\n/, $out;
-    
-    foreach my $row (@rows) {
-	my @items = split /\t/, $row;
-	my $ensg = $items[0];
-	$items[1] && push @{$source_mapping{$items[1]}}, $ensg; #swissprot accession
-	$items[2] && push @{$source_mapping{$items[2]}}, $ensg; #trembl accession
-    }
-	
-	
-    # Get rid of (ensg) duplicates
-    my $utils = GKB::Compara::Utils->new();
-    foreach my $key (keys %source_mapping) {
-	my $ar = $utils->uniquify($source_mapping{$key});
-	$source_mapping{$key} = $ar; 
-    }
-	
+    my %source_mapping = get_protein_to_gene_mapping($opt_from);
+    	
     # Print source mapping hash content
-    open(my $source_fh, '>', "$opt_from\_protein_gene_mapping.txt");
-    foreach my $protein_key (sort keys %source_mapping) {
-	print $source_fh $protein_key, "\t", join (' ', @{$source_mapping{$protein_key}}), "\n";
+    my $output_file = "$opt_from\_protein_gene_mapping.txt";
+    open my $output_fh, '>', $output_file;
+    foreach my $protein_id (sort keys %source_mapping) {
+        print $output_fh $protein_id . "\t" . join(' ', sort @{$source_mapping{$protein_id}}) . "\n";
     }
-    close($source_fh);
+    close $output_fh;
     
     return %source_mapping;
+}
+
+sub get_protein_to_gene_mapping {
+    my $species = shift;
+    
+    my %protein_to_gene;
+    my @lines = split "\n", get_species_results($species);
+    foreach my $line (@lines) {
+        my ($gene_id, $swissprot_id, $trembl_id) = split "\t", $line;
+        next unless $gene_id && ($swissprot_id || $trembl_id);
+        
+        if ($swissprot_id) {
+            $protein_to_gene{$swissprot_id}{$gene_id}++;
+        }
+        if ($trembl_id) {
+            $protein_to_gene{$trembl_id}{$gene_id}++;
+        }
+    }
+    
+    my %protein_to_gene_mapping;
+    foreach my $protein_id (keys %protein_to_gene) {
+        my @gene_ids = keys %{$protein_to_gene{$protein_id}};
+        
+        $protein_to_gene_mapping{$protein_id} = \@gene_ids;
+    }
+    return %protein_to_gene_mapping;
 }
 
 1;
