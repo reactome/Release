@@ -133,23 +133,25 @@ sub get_all_species_in_entity {
 
 sub is_electronically_inferred {
     my $instance = shift;
-    
-    return 0 unless $instance->inferredFrom->[0] &&
-                    $instance->inferredFrom->[0]->species->[0] &&
-                    $instance->inferredFrom->[0]->species->[0]->displayName =~ /^Homo sapiens$/i;
                     
     my $dba = $instance->dba();
     my $db_name = $dba->db_name();
     return 0 unless $db_name =~ /^test_reactome_\d+$/ || $db_name eq 'gk_current';
     
-    my $release_instance = $dba->fetch_instance(-CLASS => '_Release')->[0];
-    return 0 unless $release_instance;
-    
-    my $release_number = $release_instance->releaseNumber->[0];
-    my $slice_dba = get_dba("test_slice_$release_number",$dba->host());
-    return 0 unless $slice_dba;
-    
-    return (defined $slice_dba->fetch_instance_by_db_id($instance->db_id)->[0]) ? 0 : 1;
+    if ($instance->is_a('Event')) {
+        return $instance->evidenceType->[0] && $instance->evidenceType->[0]->displayName =~ /electronic/i;
+    } elsif ($instance->is_a('PhysicalEntity')) {
+        # If manually inferred physical entities ever start using the inferredFrom slot, this logic
+        # can be augmented to check the event(s) to which the physical entity is/are attached
+        # to see if the event(s) are electronically inferred
+        return $instance->inferredFrom->[0] &&
+               $instance->inferredFrom->[0]->species->[0] &&
+               $instance->inferredFrom->[0]->species->[0]->displayName =~ /^Homo sapiens$/i;
+    } elsif ($instance->is_a('CatalystActivity')) {
+        return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('catalystActivity')};
+    } elsif ($instance->is_a('Regulation')) {
+        return any { is_electronically_inferred($_)} @{$instance->regulatedEntity};
+    }
 }
 
 sub has_multiple_species {
