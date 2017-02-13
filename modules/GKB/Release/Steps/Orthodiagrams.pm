@@ -33,7 +33,7 @@ override 'run_commands' => sub {
     $self->cmd("Running ELV tool to generate diagrams for predicted pathway",
         [
             ["mysqldump --opt -u $user -p$pass $db > $db\_before_pathway_diagram.dump"],
-            ["./WebELVTool/runWebELVTool.sh $host $db $user $pass 3306 $person_id > runWebELVTool.$version.out"]
+            ["./WebELVTool/runWebELVTool.sh $host $db $user $pass 3306 $person_id > runWebELVTool.$version.out 2> runWebELVTool.$version.err"]
         ]
     );
    

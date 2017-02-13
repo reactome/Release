@@ -27,6 +27,7 @@ override 'run_commands' => sub {
 
     my @args = ("-db", $db, "-host", $host, "-user", $user, "-pass", $pass, "-r", $version);
     $self->cmd("Running search indexer",[["echo $sudo | sudo -S perl search_indexer.pl @args > search.out 2> search.err"]]);
+    $self->cmd("Restarting SOLR service",[["echo $sudo | sudo -S service solr restart >> search.out 2>> search.err"]]);
 };
 
 1;

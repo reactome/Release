@@ -33,8 +33,8 @@ use Data::Dumper;
 use File::Basename;
 use GKB::Config;
 use GKB::Config_Species;
-use GKB::Compara::BioMart;
 use GKB::Compara::Utils;
+use GKB::EnsEMBLMartUtils qw/get_species_results/;
 use Log::Log4perl qw/get_logger/;
 
 Log::Log4perl->init(dirname(__FILE__) . '/compara_log.conf');
@@ -88,63 +88,50 @@ sub prepare_target_mapping_hash {
     
     my $logger = get_logger(__PACKAGE__);
     
-    my %mapping = ();
-        
-    my %seen = ();
-    my %swiss = ();
-    my %trembl = ();
-    my %ensp = ();
-	
-    my $biomart = GKB::Compara::BioMart->new();
-    my $out = $biomart->get_mapping_table_from_mart($species_key);
+    my %mapping = get_gene_to_protein_mapping($species_key);
     
-    #parsing biomart output
-    if (!(defined $out)) {
-        $logger->error("out is undef for $species_key!\n");
-        return %mapping;
-    }
-
-
-    my @rows = split /\n/, $out;
-
-    foreach my $row (@rows) {
-        my @items = split /\t/, $row;
-        my $ensg = $items[0];
-	$seen{$ensg}++;
-		
-	#sort into swissprot, trembl and ensp identifiers
-	$items[1] && push @{$swiss{$ensg}}, 'SWISS:'.$items[1];
-        $items[2] && push @{$trembl{$ensg}}, 'TREMBL:'.$items[2];
-        $items[3] && push @{$ensp{$ensg}}, 'ENSP:'.$items[3];
-    }
-	
-    #apply a hierarchy for the target protein ids: take swissprot if available, if not then trembl, if not then ENSP into the mapping hash
-
-    $logger->info("swiss size=" . scalar(keys(%swiss)) . "\n");
-    $logger->info("trembl size=" . scalar(keys(%trembl)) . "\n");
-    $logger->info("ensp size=" . scalar(keys(%ensp)) . "\n");
-
-    my $utils = GKB::Compara::Utils->new();
-    foreach my $ensg (keys %seen) {
-	if ($swiss{$ensg}->[0]) {
-	    $mapping{$ensg} = $utils->uniquify($swiss{$ensg});
-	} elsif ($trembl{$ensg}->[0]) {
-	    $mapping{$ensg} = $utils->uniquify($trembl{$ensg});
-	} else {
-	    $mapping{$ensg} = $utils->uniquify($ensp{$ensg});
-	}
-    }
-
     $logger->info("mapping size=" . scalar(keys(%mapping)) . "\n");
 
-    #print target mapping
-    open(my $target, '>', "$species_key\_gene_protein_mapping.txt") || $logger->error_die($!);
-    foreach my $gene (sort keys %mapping) {
-	print $target $gene, "\t", join (' ', @{$mapping{$gene}}), "\n";
+    my $output_file = "$species_key\_gene_protein_mapping.txt";
+    open my $output_fh, '>', $output_file;
+    foreach my $gene_id (sort keys %mapping) {
+        print $output_fh $gene_id . "\t" . join(' ', @{$mapping{$gene_id}}) . "\n";
     }
-    close($target);
+    close $output_fh;
     
     return %mapping;
+}
+
+sub get_gene_to_protein_mapping {
+    my $species = shift;
+    
+    my %gene_to_protein_identifier_type_to_protein;
+    my @lines = split "\n", get_species_results($species);
+    foreach my $line (@lines) {
+        my ($gene_id, $swissprot_id, $trembl_id, $ensembl_protein) = split "\t", $line;
+        next unless $gene_id && ($swissprot_id || $trembl_id || $ensembl_protein);
+        
+        if ($swissprot_id) {
+            $gene_to_protein_identifier_type_to_protein{$gene_id}{'swissprot'}{"SWISS:$swissprot_id"}++;
+        }
+        if ($trembl_id) {
+            $gene_to_protein_identifier_type_to_protein{$gene_id}{'trembl'}{"TREMBL:$trembl_id"}++;
+        }
+        if ($ensembl_protein) {
+            $gene_to_protein_identifier_type_to_protein{$gene_id}{'ensp'}{"ENSP:$ensembl_protein"}++;
+        }        
+    }
+    
+    my %gene_to_protein_mapping;
+    foreach my $gene_id (keys %gene_to_protein_identifier_type_to_protein) {
+        my @protein_ids = sort keys %{$gene_to_protein_identifier_type_to_protein{$gene_id}{'swissprot'}};
+        @protein_ids = sort keys %{$gene_to_protein_identifier_type_to_protein{$gene_id}{'trembl'}} unless @protein_ids;
+        @protein_ids = sort keys %{$gene_to_protein_identifier_type_to_protein{$gene_id}{'ensp'}} unless @protein_ids;
+        
+        $gene_to_protein_mapping{$gene_id} = \@protein_ids;
+    }
+    
+    return %gene_to_protein_mapping;
 }
 
 1;

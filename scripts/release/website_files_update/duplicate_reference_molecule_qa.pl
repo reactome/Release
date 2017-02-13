@@ -193,7 +193,7 @@ sub get_referrer_instances {
 }
 
 sub usage_instructions {
-    print <<END;
+    return <<END;
 For all reference molecules, duplicate instances are detected by
 the identifier slot and a log of how they would be merged is
 generated.  By default, the script is run over gk_central hosted on
@@ -207,5 +207,5 @@ Options:
 -host [db_host] Host of source database (default is reactomecurator.oicr.on.ca)
 -fix            Merge duplicate reference molecules
 -help           Display these instructions
-
+END
 }

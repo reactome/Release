@@ -837,12 +837,6 @@ sub get_reviewers_report_introduction {
     $text_unit->set_contents($text);
     push @text_units, $text_unit;
 
-    $text = "Non-ASCII characters, primarily in author names, are not displayed correctly in this document. We apologize for this inconvenience.";
-    $text_unit = GKB::DocumentGeneration::TextUnit->new();
-    $text_unit->set_type("bullet_text");
-    $text_unit->set_contents($text);
-    push @text_units, $text_unit;
-
     $text = "Each reaction (pathway event) is represented here by a simple diagram. Input molecules are shown as labelled boxes (left side) connected by plain lines to a central square. Arrowed lines connect the central square to the output molecules (right side). If relevant, catalyst molecules are represented above the central square, connected to it by a red arrowed line. Input molecules that are also the catalyst (e.g. signaling or enzyme/substrate complexes) are shown on the left and joined to the central node by a red arrowed line. The names of reactions that precede/follow in the pathway are shown as text on the far left/far right respectively.";
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("bullet_text");
@@ -885,7 +879,7 @@ website. We would appreciate your feedback on the content and navigability of
 the website. A short tutorial of the Pathway Browser can be found at the top of
 the webpage. The zoomable pathway diagram is interactive. Text descriptions are
 revealed in the panel below the diagram under the overview tab. To view a text
-description, select a participating molecules or reaction node in the diagram.
+description, select a participating molecule or reaction node in the diagram.
 Clicking on an event in the hierarchy in the left panel will highlight the
 event(s) in the diagram and a text description will be displayed in the panel
 below.

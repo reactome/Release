@@ -3968,8 +3968,7 @@ sub fetch_frontpage_species {
 sub species_for_ref_dbs {
     my $self  = shift;
     my @rdbs = @_;
-    my $query = 'SELECT DB_ID FROM DatabaseObject WHERE _displayName LIKE ? ' .
-        'AND _Protege_id is NOT NULL';
+    my $query = 'SELECT DB_ID FROM DatabaseObject WHERE _displayName LIKE ?';
 
     my @rids;
     for my $rdb (@rdbs) {

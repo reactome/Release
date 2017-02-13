@@ -181,8 +181,10 @@ disclaimers of warranty.
 use feature qw/say/;
 
 use autodie;
+use Carp;
 use Capture::Tiny ':all';
 use File::Basename;
+use File::Spec;
 use File::stat;
 use List::MoreUtils qw/uniq/;
 use Net::OpenSSH;
@@ -257,11 +259,25 @@ sub run {
 	set_environment($self->host);
 	return unless source_code_passes_tests();
 	
+	say "Running $self->{name} pre-step tests...";
+	my @pre_step_test_errors = $self->pre_step_tests();
+	if (@pre_step_test_errors) {
+		my $pre_step_test_log = File::Spec->catfile($self->directory, 'pre_step_test_errors.log');
+		open(my $pre_step_test_fh, '>', $pre_step_test_log);
+		print $pre_step_test_fh join("\n", @pre_step_test_errors);
+		close $pre_step_test_fh;
+		say releaselog("ERRORS from $self->{name} pre-step tests reported -- see $pre_step_test_log");
+		
+		return; # Prevent step from being run by stopping the run method prematurely
+    } else {
+		say releaselog("No errors from $self->{name} pre-step tests");
+	}
+	
 	$self->run_commands($self->gkb);
 	
-	my @errors = $self->post_step_tests();
-	if (@errors) {
-		$self->mail->{'body'} = "Errors Reported\n\n" . join("\n", @errors);
+	my @post_step_test_errors = $self->post_step_tests();
+	if (@post_step_test_errors) {
+		$self->mail->{'body'} = "Errors Reported\n\n" . join("\n", @post_step_test_errors);
 		$self->mail->{'to'} = 'automation';
 	} else {
 		$self->mail->{'body'} .= "\n\n" if $self->mail->{'body'};
@@ -278,7 +294,15 @@ sub source_code_passes_tests {
 }
 
 sub run_commands {
-	die "The run_commands method must be overridden!";
+	confess "The run_commands method must be overridden!";
+}
+
+# May be overriden by implementation of specific steps
+sub pre_step_tests {
+	my $self = shift;
+	
+	say releaselog("No pre-step tests to be run for " . $self->name);
+	return;
 }
 
 sub post_step_tests {
@@ -375,7 +399,7 @@ sub mail_now {
     my $params = $self->mail;
     
 	my $from = _get_sender_address($params);
-    my $to = _get_recipient_addresses($params);
+    my $to = $TEST_MODE ? $maillist{'automation'} : _get_recipient_addresses($params);
     my $subject = $params->{'subject'};
 	my $body = $params->{'body'};
     
@@ -556,7 +580,7 @@ sub _add_body_and_attachment {
        	Type => "text/plain",
         Path => $attachment_path,
         Filename => $filename 
-    );
+    ) if (-e $attachment_path);
 	
 	return $msg;
 }
