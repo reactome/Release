@@ -31,6 +31,4 @@ if [[ ! -n $BOK ]]; then
     exit 1
 fi
 
-/etc/init.d/tomcat7 restart
-
-
+sudo /etc/init.d/tomcat7 restart
