@@ -35,6 +35,8 @@ my %instances = (
     9254173 => 1, # elec inferred negative regulation
     1663719 => 0, # manually curated positive regulation
     9363542 => 1, # elec inferred positive regulation
+    111928 => 0, # manually curated positive regulation regulating a catalyst activity
+    8952721 => 1, # elec inferred positive regulation regulating a catalyst activity
     927835 => 0, # manually curated other entity
     937266 => 0, # manually curated simple entity
     8944351 => 0, # manually curated complex
@@ -53,5 +55,32 @@ foreach my $instance_id (keys %instances) {
     my $instance = $release_dba->fetch_instance_by_db_id($instance_id)->[0];
     
     is(is_electronically_inferred($instance) ? 1 : 0, $instances{$instance_id}, "testing electronic inference status for $instance_id");
+}
+
+my %electronic_inference_to_source = (
+    9719690 => [6781939, 6783290], # elec inferred EWAS with multiple sources
+    9351974 => [420855, 445788], # elec inferred defined set with multiple sources
+    9018150 => [190222, 190230], # elec inferred complex with multiple sources
+    9063027 => [193508], # elec inferred reaction
+    9099164 => [5419271], # elec inferred black box event
+    9304349 => [5229194], # elec inferred depolymerisation
+    9028516 => [936986], # elec inferred polymerisation
+    9176553 => [8849347], # elec inferred catalyst activity
+    9254173 => [71663], # elec inferred negative regulation
+    9363542 => [1663719], # elec inferred positive regulation
+    8962101 => [5672710], # elec inferred complex
+    9492442 => [1629806], # elec inferred EWAS
+    8982667 => [5652148], # elec inferred GEE
+    8986465 => [1467470], # elec inferred defined set
+    9029501 => [983323], # elec inferred polymer    
+);
+
+foreach my $electronic_inference_db_id (keys %electronic_inference_to_source) {
+    my @expected_source_db_ids = sort { $a <=> $b } @{$electronic_inference_to_source{$electronic_inference_db_id}};
+    
+    my $electronic_instance = $release_dba->fetch_instance_by_db_id($electronic_inference_db_id)->[0];
+    my @received_source_db_ids = sort { $a <=> $b } map {$_->db_id} get_source_for_electronically_inferred_instance($electronic_instance);
+    
+    is_deeply(\@received_source_db_ids, \@expected_source_db_ids, "checking source instances for electronic instance $electronic_inference_db_id");
 }
 done_testing();
