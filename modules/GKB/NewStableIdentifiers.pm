@@ -7,6 +7,7 @@ use base 'Exporter';
 use Carp;
 use List::MoreUtils qw/all any/;
 use Log::Log4perl qw/get_logger/;
+use Scalar::Util qw/blessed/;
 
 use lib '/usr/local/gkb/modules';
 use GKB::CommonUtils;
@@ -32,6 +33,45 @@ get_stable_identifier_species_prefix
 get_stable_identifier_numeric_component
 get_instance_species_prefix
 /;
+
+sub get_stable_id_QA_problems {
+    my $dba = shift;
+    my @qa_problems;    # stable id\tinstance name & id\tissue
+    
+    my %duplicate_stable_identifier_values = map { $_ => 1 } get_identifiers_used_by_multiple_stable_identifier_instances($dba);
+    foreach my $stable_identifier (get_all_stable_identifier_instances($dba)) {        
+        my $identifier = $stable_identifier->identifier->[0];
+        
+        my @attached_instances = get_instances_attached_to_stable_identifier($stable_identifier);
+        if (scalar @attached_instances == 0) {
+            push @qa_problems, join("\t", ($identifier, 'N/A', 'stable id with no referrers'));
+        } elsif (scalar @attached_instances > 1) {
+            foreach my $attached_instance (@attached_instances) {
+                push @qa_problems, join("\t", ($identifier, get_name_and_id($attached_instance), 'stable id has multiple referrers'));
+            }
+        } else {
+            if (has_incorrect_stable_identifier($attached_instance[0])) {
+                push @qa_problems, join("\t", ($identifier, get_name_and_id($attached_instance[0]), 'incorrect stable identifier'));
+            }            
+        }
+        
+        if (exists $duplicate_stable_identifier_values{$identifier}) {
+            push @qa_problems, join("\t", ($identifier, 'N/A', 'duplicate stable identifier instances'));
+        }        
+    }
+    
+    foreach my $instance (get_instances_requiring_stable_identifiers($dba)) {
+        if (is_missing_stable_identifier($instance)) {
+            push @qa_problems, join("\t", ('N/A', get_name_and_id($instance), 'missing stable identifier'));
+        } elsif (has_multiple_stable_identifiers($instance)) {
+            foreach my $identifier (map {$_->identifier->[0]} @{$instance->stableIdentifier}) {
+                push @qa_problems, join("\t", ($identifier, get_name_and_id($instance), 'multiple stable identifiers'));
+            }
+        }
+    }
+    
+    return @qa_problems;
+}
 
 sub stable_identifier_numeric_component_is_correct {
     my $instance = shift;
@@ -59,31 +99,57 @@ sub stable_identifier_species_prefix_is_correct {
 sub get_instances_requiring_stable_identifiers {
     my $dba = shift;
     
-    my @events = @{$dba->fetch_instance(-CLASS => 'Event')};
-    my @physical_entities = @{$dba->fetch_instance(-CLASS => 'PhysicalEntity')};
-    my @regulations = @{$dba->fetch_instance(-CLASS => 'Regulation')};
-    
-    return (@events, @physical_entities, @regulations);
+    return map {@{$dba->fetch_instance(-CLASS => $_)}} get_classes_requiring_stable_identifiers();
 }
 
 sub get_instances_missing_stable_identifiers {
     my $dba = shift;
     
-    return grep {not defined $_->stableIdentifier->[0]} get_all_instances_requiring_stable_identifiers($dba);
+    return grep {is_missing_stable_identifier($_)} get_all_instances_requiring_stable_identifiers($dba);
+}
+
+sub is_missing_stable_identifier {
+    my $instance = shift;
+    
+    if (!is_instance_requiring_stable_identifier($instance)) {
+        confess "'$instance' is not an instance requiring a stable identifier";
+    }
+    
+    return (scalar @{$_->stableIdentifier} == 0);
 }
 
 sub get_instances_with_multiple_stable_identifiers {
     my $dba = shift;
     
-    return grep {scalar @{$_->stableIdentifier} > 1} get_all_instances_requiring_stable_identifiers($dba);
+    return grep {has_multiple_stable_identifiers($_)} get_all_instances_requiring_stable_identifiers($dba);
+}
+
+sub has_multiple_stable_identifiers {
+    my $instance = shift;
+    
+    if (!is_instance_requiring_stable_identifier($instance)) {
+        confess "'$instance' is not an instance requiring a stable identifier";
+    }
+    
+    return (scalar @{$_->stableIdentifier} > 1);
 }
 
 sub get_instances_with_incorrect_stable_identifiers {
     my $dba = shift;
     
     return grep {(scalar @{$_->stableIdentifier} == 1) &&
-                 (!stable_identifier_numeric_component_is_correct($_) || !stable_identifier_species_prefix_is_correct($_))}
+                 has_incorrect_stable_identifier($_)}
                  get_all_instances_requiring_stable_identifiers($dba);
+}
+
+sub has_incorrect_stable_identifier {
+    my $instance = shift;
+    
+    if (!is_instance_requiring_stable_identifier($instance)) {
+        confess "'$instance' is not an instance requiring a stable identifier";
+    }
+    
+    return (!stable_identifier_numeric_component_is_correct($instance) || !stable_identifier_species_prefix_is_correct($instance));
 }
 
 sub get_instances_with_stable_identifiers {
@@ -159,9 +225,9 @@ sub get_stable_identifier_numeric_component {
 sub get_instance_species_prefix {
     my $instance = shift;
     
-    confess "$instance is not a database object" unless
-        $instance &&
-        ($instance->is_a('PhysicalEntity') || $instance->is_a('Event') || $instance->is_a('Regulation'));
+    if (!is_instance_requiring_stable_identifier($instance)) {
+        confess "$instance is not a database object requiring stable identifiers";
+    }
     
     if ($instance->is_a('PhysicalEntity')) {
         return get_species_prefix_from_physical_entity($instance);
@@ -291,6 +357,16 @@ sub get_unique_species_from_all_entities {
     
     my @species_instances = map {@{$_->species}} get_all_entities($instance);
     return get_unique_species(@species_instances);
+}
+
+sub is_instance_requiring_stable_identifier {
+    my $instance = shift;
+    
+    return (blessed $instance) && ($instance->can('is_a')) && (any {$instance->is_a($_)} get_classes_requiring_stable_identifiers());
+}
+
+sub get_classes_requiring_stable_identifiers {
+    return ('PhysicalEntity', 'Event', 'Regulation');
 }
 
 1;
