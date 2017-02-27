@@ -17,6 +17,7 @@ Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
 our @EXPORT = qw/
+get_stable_id_QA_problems
 stable_identifier_numeric_component_is_correct
 stable_identifier_species_prefix_is_correct
 get_instances_requiring_stable_identifiers
@@ -50,8 +51,8 @@ sub get_stable_id_QA_problems {
                 push @qa_problems, join("\t", ($identifier, get_name_and_id($attached_instance), 'stable id has multiple referrers'));
             }
         } else {
-            if (has_incorrect_stable_identifier($attached_instance[0])) {
-                push @qa_problems, join("\t", ($identifier, get_name_and_id($attached_instance[0]), 'incorrect stable identifier'));
+            if (has_incorrect_stable_identifier($attached_instances[0])) {
+                push @qa_problems, join("\t", ($identifier, get_name_and_id($attached_instances[0]), 'incorrect stable identifier'));
             }            
         }
         
@@ -115,7 +116,7 @@ sub is_missing_stable_identifier {
         confess "'$instance' is not an instance requiring a stable identifier";
     }
     
-    return (scalar @{$_->stableIdentifier} == 0);
+    return (scalar @{$instance->stableIdentifier} == 0);
 }
 
 sub get_instances_with_multiple_stable_identifiers {
@@ -131,7 +132,7 @@ sub has_multiple_stable_identifiers {
         confess "'$instance' is not an instance requiring a stable identifier";
     }
     
-    return (scalar @{$_->stableIdentifier} > 1);
+    return (scalar @{$instance->stableIdentifier} > 1);
 }
 
 sub get_instances_with_incorrect_stable_identifiers {
