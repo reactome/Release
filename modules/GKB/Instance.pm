@@ -6,6 +6,7 @@ use strict;
 use vars qw(@ISA $AUTOLOAD $PROTEGE_ID_BASE $USE_STABLE_ID_IN_DUMPING);
 use Bio::Root::Root;
 use GKB::Ontology;
+use Carp;
 use Data::Dumper;
 use GKB::Config qw($NO_SCHEMA_VALIDITY_CHECK);
 @ISA = qw(Bio::Root::Root);
@@ -232,8 +233,8 @@ sub add_attribute_value2 {
 
 ### Function: add_attribute_value_if_necessary
 # In case of multivalue attributes appends to existing values if the value is not among the
-# existing ones already. In case of single value attribute warns if the previous value is not
-# the same as the new and then overwrites the previous values.
+# existing ones already. In case of single value attribute, warns and overwrites if the previous
+# values is not the same as the new.
 # RETURNS: a reference to array containing the values that were actually added.
 # NOTE: Throws if attribute is not a valid attribute for class of this instance.
 ###
@@ -242,43 +243,48 @@ sub add_attribute_value_if_necessary {
     $self->class || $self->throw("Instance has to know it's class to set attribute value.");
     $attribute || $self->throw("Need attribute to store value");
     $self->is_valid_attribute($attribute) || $self->throw("Attribute '$attribute' is not valid for class " . $self->class . ".");
+    
+    my @added_values;
     if (@vals) {
-	if ($self->is_multivalue_attribute($attribute)) {
-	    no strict 'refs';
-	    my %values;
+        if ($self->is_multivalue_attribute($attribute)) {
+            no strict 'refs';
+            my %values;
 	    
-	    if ($self->is_instance_type_attribute($attribute)) {
-	      map {$values{$_->db_id}++} @{$self->{'attribute'}->{$attribute}};
-	      @vals = grep {! $values{$_->db_id}++} @vals;
-	    } else {
-	      map {$values{$_}++} @{$self->{'attribute'}->{$attribute}};
-	      @vals = grep {! $values{$_}++} @vals;
-	    }
-	    $self->add_attribute_value($attribute,@vals);
-	    use strict;
-	} else {
-	    if (defined $self->{'attribute'}->{$attribute}->[0]) {
-		if ($self->ontology->is_string_type_class_attribute($self->class,$attribute)) {
-		    unless ($self->{'attribute'}->{$attribute}->[0] eq $vals[0]) {
-			$self->warn("Replacing attribute '$attribute' value '$self->{'attribute'}->{$attribute}->[0]' with '$vals[0]'.");
-		    }
-		} elsif ($self->is_instance_type_attribute($attribute)) {
-		    unless ($self->{'attribute'}->{$attribute}->[0] == $vals[0]) {
-			$self->warn("Replacing attribute '$attribute' value '" .
-				    $self->{'attribute'}->{$attribute}->[0]->extended_displayName ."' with '" .
-				    $vals[0]->extended_displayName . "'.");
-		    }
-		} else {
-		    unless ($self->{'attribute'}->{$attribute}->[0] == $vals[0]) {
-			$self->warn("Replacing attribute '$attribute' value '$self->{'attribute'}->{$attribute}->[0]' with '$vals[0]'.");
-		    }
-		}
-	    }
-	    $self->{'attribute'}->{$attribute}->[0] = $vals[0];
-	    @vals = ($vals[0]);
-	}
+            if ($self->is_instance_type_attribute($attribute)) {
+                map {$values{$_->db_id}++} @{$self->{'attribute'}->{$attribute}};
+                @added_values = grep {! $values{$_->db_id}++} @vals;
+            } else {
+                map {$values{$_}++} @{$self->{'attribute'}->{$attribute}};
+                @added_values = grep {! $values{$_}++} @vals;
+            }
+            $self->add_attribute_value($attribute, @added_values);
+            use strict;
+        } else {
+            if (defined $self->{'attribute'}->{$attribute}->[0]) {
+                if ($self->ontology->is_string_type_class_attribute($self->class,$attribute)) {
+                    unless ($self->{'attribute'}->{$attribute}->[0] eq $vals[0]) {
+                        $self->warn("Replacing attribute '$attribute' value '$self->{'attribute'}->{$attribute}->[0]' with '$vals[0]'.");
+                        @added_values = ($vals[0]);
+                    }
+                } elsif ($self->is_instance_type_attribute($attribute)) {
+                    unless ($self->{'attribute'}->{$attribute}->[0] == $vals[0]) {
+                        $self->warn("Replacing attribute '$attribute' value '" .
+                            $self->{'attribute'}->{$attribute}->[0]->extended_displayName ."' with '" .
+                            $vals[0]->extended_displayName . "'."
+                        );
+                        @added_values = ($vals[0]);
+                    }
+                } else {
+                    unless ($self->{'attribute'}->{$attribute}->[0] == $vals[0]) {
+                        $self->warn("Replacing attribute '$attribute' value '$self->{'attribute'}->{$attribute}->[0]' with '$vals[0]'.");
+                        @added_values = ($vals[0]);
+                    }
+                }
+            }
+            $self->{'attribute'}->{$attribute}->[0] = $vals[0];
+        }
     }
-    return \@vals;
+    return \@added_values;
 }
 
 # Returns the number of instances replaced
