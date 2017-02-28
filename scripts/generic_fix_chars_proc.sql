@@ -41,7 +41,7 @@ BEGIN
 		db_id int unique key,
 		fixed_val text
 	) character set 'utf8' collate 'utf8_general_ci';
-
+	-- The original mappings came from here: http://www.i18nqa.com/debug/utf8-debug.html
 	insert into special_chars
 		(replacement_char,special_char)
 	values
