@@ -41,7 +41,7 @@ BEGIN
 		db_id int unique key,
 		fixed_val text
 	) character set 'utf8' collate 'utf8_general_ci';
-
+	-- The original mappings came from here: http://www.i18nqa.com/debug/utf8-debug.html
 	insert into special_chars
 		(replacement_char,special_char)
 	values
@@ -86,7 +86,7 @@ BEGIN
 		-- the alpha character
 		('α','Î±'),
 		-- Found during Lisa's review:
-		('ß','Î²'),('ß','ÃŽÂ²'), -- There are some really garbled sequences that reduce to Î² when they should be "ß".
+		('β','Î²'),('β','ÃŽÂ²'), -- There are some really garbled sequences that reduce to Î² when they should be "ß".
 		('à', concat(0xC3,0x83,0xC2,0xA0)), -- this is the correct mapping for 'à'.
 		('à', concat(0xC3,0x83,0xC6,0x92,0xC3,0x82,0xC2,0xA0)), -- This is to fix a bad example in the database.
 		(concat(0xC3,0x83),concat(0xC3,0x83,0x3F)), -- this was found by manually searching. Maps to Ã.
