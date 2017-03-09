@@ -91,10 +91,10 @@ sub filter_zinc_peptides {
 
     my @keep_peptides;
     for my $pep (@$peptides) {
-	my $uniprot = $pep->Identifier->[0];
-	next unless $proteins_to_keep->{$uniprot};
-	$logger->info("I am keeping $uniprot\n");
-	push @keep_peptides, $pep;
+        my $uniprot = $pep->Identifier->[0];
+        next unless $proteins_to_keep->{$uniprot};
+        $logger->info("I am keeping $uniprot\n");
+        push @keep_peptides, $pep;
     }
     return \@keep_peptides;
 }
