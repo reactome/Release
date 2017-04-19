@@ -25,10 +25,10 @@ Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
 
-my ($selected_pathways, $output_file, $all_reactions);
+my ($selected_pathways, $output_dir, $all_reactions);
 GetOptions(
     'pathways=s' => \$selected_pathways,
-    'output=s' => \$output_file,
+    'output_dir=s' => \$output_dir,
     'all_reactions' => \$all_reactions
 );
 
@@ -41,24 +41,29 @@ unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
 my @reactions;
 my $dba = get_dba({'host' => 'reactomecurator.oicr.on.ca', 'db' => 'gk_central'});
 
-
+my $output_file;
 if ($selected_pathways eq 'all') {    
     @reactions = @{$dba->fetch_instance(-CLASS => 'ReactionlikeEvent', [['species',['48887']]])};
+    $output_file = 'all';
 } else {
     my @db_ids = split(",", $selected_pathways);
     my @pathways;
     
     foreach my $db_id (@db_ids) {
-	my $pathway = $dba->fetch_instance_by_db_id($db_id)->[0];
-	unless($pathway->is_a('Pathway')) {
-	    warn("$db_id is not a pathway");
-	    next;
-	}
-	push @pathways, $pathway;
+        my $pathway = $dba->fetch_instance_by_db_id($db_id)->[0];
+    	unless($pathway->is_a('Pathway')) {
+            print("$db_id is not a pathway");
+            exit;
+        }
+        push @pathways, $pathway;
     }
+    $output_file = scalar @pathways == 1 ?
+        $pathways[0]->displayName :
+        join("_", @db_ids);
+    $output_file =~ s/['\\\/:\(\)&; ]+/_/g;
     
     foreach my $pathway (@pathways) {
-	push @reactions, @{get_reaction_like_events($pathway)};
+        push @reactions, @{get_reaction_like_events($pathway)};
     }
 }
 @reactions = grep {!$_->disease->[0]} @reactions;
@@ -72,8 +77,8 @@ foreach my $reaction (@reactions) {
 }
 
 
-($output_file = $0) =~ s/.pl$/.tsv/ unless $output_file;
-open my $logic_table_fh, ">", "$output_file";
+my $output_file_full_path = "$output_dir/$output_file.tsv";
+open my $logic_table_fh, ">", "$output_file_full_path";
 report_interactions(\%interactions, $logic_table_fh);
 close $logic_table_fh;
 
@@ -108,7 +113,7 @@ sub process_inputs {
     my $inputs = shift;
     
     foreach my $input (@$inputs) {
-        process_if_set_or_complex($input) unless is_a_reaction_output($input, $all_reactions);
+        process_if_set_complex_or_polymer($input) unless is_a_reaction_output($input, $all_reactions);
         process_input($reaction, $input);
     }
 }
@@ -135,7 +140,7 @@ sub process_output {
         push @reactions_to_output, $associated_reaction;
     }
     
-    process_if_set_or_complex($output) if $break_down;
+    process_if_set_complex_or_polymer($output) if $break_down;
     
     my $reaction_to_output_logic = scalar @reactions_to_output > 1 ? OR : AND;
     foreach my $reaction (@reactions_to_output) {
@@ -143,7 +148,7 @@ sub process_output {
     }
 }
 
-sub process_if_set_or_complex {
+sub process_if_set_complex_or_polymer {
     my $physical_entity = shift;
     my $action = shift //
         sub {
@@ -164,11 +169,14 @@ sub process_if_set_or_complex {
     } elsif ($physical_entity->is_a('Complex')) {
         push @elements, @{$physical_entity->hasComponent};
         $logic = AND;
+    } elsif ($physical_entity->is_a('Polymer')) {
+        push @elements, @{$physical_entity->repeatedUnit};
+        $logic = AND;
     }
 
     foreach my $element (@elements) {	
         $action->($element, $physical_entity, 1, $logic);
-        process_if_set_or_complex($element, $action);
+        process_if_set_complex_or_polymer($element, $action);
     }
 }
 
@@ -179,7 +187,7 @@ sub process_regulations {
     
     foreach my $regulation (@$regulations) {
         foreach my $active_regulator_component (get_active_regulator_component($regulation)) {
-            process_if_set_or_complex($active_regulator_component) unless is_a_reaction_output($active_regulator_component, $all_reactions);
+            process_if_set_complex_or_polymer($active_regulator_component) unless is_a_reaction_output($active_regulator_component, $all_reactions);
 	
             my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
             record(get_label($active_regulator_component), get_label($reaction), $value, AND);
@@ -370,7 +378,7 @@ sub on_skip_list {
         5649637 => [3785704],
         1369085 => [$ANYTHING]
     );
-    my @small_molecules = qw/114729 114735 114754 114749 114728 5316201 114733 114732 114964/;
+    my @small_molecules = qw/114729 114735 114736 114754 114749 114728 114925 5316201 114733 114732 114964/;
     $skip_list{$ANYTHING} = [@small_molecules];
     $skip_list{$_} = [$ANYTHING] foreach @small_molecules;
     

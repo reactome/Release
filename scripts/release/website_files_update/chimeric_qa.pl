@@ -8,6 +8,7 @@ use autodie qw/:all/;
 use Getopt::Long;
 use List::MoreUtils qw/any/;
 
+use GKB::CommonUtils;
 use GKB::Config;
 use GKB::DBAdaptor;
 
@@ -43,14 +44,14 @@ foreach my $event (@events) {
 	my $event_modifier = get_event_modifier($event);
 	my $event_species = get_species($event);
 	
-	report(make_record($event_name, $event_id, 'not chimeric', 'multiple species', $event_species, '', $event_modifier), $fh) if multiple_species($event) && !is_chimeric($event);
+	report(make_record($event_name, $event_id, 'not chimeric', 'multiple species', $event_species, '', $event_modifier), $fh) if has_multiple_species($event) && !is_chimeric($event);
 	report(make_record($event_name, $event_id, 'chimeric', 'not used for inference', $event_species, '', $event_modifier), $fh) if !$event->reverse_attribute_value('inferredFrom')->[0] && is_chimeric($event);
-	report(make_record($event_name, $event_id, 'chimeric', 'one species', $event_species, '', $event_modifier), $fh) if !multiple_species($event) && is_chimeric($event);
+	report(make_record($event_name, $event_id, 'chimeric', 'one species', $event_species, '', $event_modifier), $fh) if !has_multiple_species($event) && is_chimeric($event);
 	my @chimeric_components = grep {is_chimeric($_)} get_physical_entities_in_reaction_like_event($event);
 	report(make_record($event_name, $event_id , 'not chimeric', 'chimeric components', $event_species, get_db_ids(@chimeric_components), $event_modifier), $fh) if @chimeric_components && !is_chimeric($event);
 	
 	if (is_chimeric($event)) {
-		foreach my $entity (grep {multiple_species($_) && !is_chimeric($_)} get_physical_entities_in_reaction_like_event($event)) {
+		foreach my $entity (grep {has_multiple_species($_) && !is_chimeric($_)} get_physical_entities_in_reaction_like_event($event)) {
 			report(make_record($entity->displayName, $entity->db_id, 'not chimeric', 'multi-species entity in chimeric event', get_species($entity), '', $event_modifier), $fh);
 		}
 	}
@@ -58,18 +59,6 @@ foreach my $event (@events) {
 }
 
 close($fh);
-
-sub get_dba {
-    my $db = shift;
-    my $host = shift;
-    
-    return GKB::DBAdaptor->new (
-	-user => $GKB::Config::GK_DB_USER,
-	-pass => $GKB::Config::GK_DB_PASS,
-	-host => $host,
-	-dbname => $db
-    );
-}
 
 sub get_physical_entities_in_reaction_like_event {
     my $reaction_like_event = shift;
@@ -113,22 +102,6 @@ sub recurse_physical_entity_components {
     return values %components;
 }
 
-sub multiple_species {
-    my $instance = shift;
-    
-    return 0 unless $instance->species;
-    
-    return (scalar @{$instance->species} > 1);
-}
-
-sub is_chimeric {
-    my $instance = shift;
-	
-    return $instance->is_valid_attribute('isChimeric') &&
-		   $instance->isChimeric->[0] &&
-		   $instance->isChimeric->[0] =~ /^true$/i; 
-}
-
 sub make_record {
 	return join("\t", @_);
 }
@@ -146,30 +119,6 @@ sub get_db_ids {
 	return unless @instances;
 	
 	return join "|", map {$_->db_id} @instances;
-}
-
-sub get_event_modifier {
-	my $event = shift;
-	
-	return 'Unknown' unless $event;
-	
-	my $created_instance = $event->created->[0];
-	my $last_modified_instance = $event->modified->[-1];
-	my $author_instance;
-	$author_instance = $last_modified_instance->author->[0] if $last_modified_instance;
-	$author_instance ||= $created_instance->author->[0] if $created_instance;
-	
-	my $author_name = $author_instance->displayName if $author_instance;
-	
-	return $author_name || 'Unknown';
-}
-
-sub report {
-	my $message = shift;
-	my $fh = shift;
-	
-	print "$message\n";
-	print $fh "$message\n";
 }
 
 sub usage_instructions {
