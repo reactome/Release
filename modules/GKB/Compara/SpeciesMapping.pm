@@ -33,7 +33,6 @@ use Data::Dumper;
 use File::Basename;
 use GKB::Config;
 use GKB::Config_Species;
-use GKB::Compara::BioMart;
 use GKB::Compara::Target;
 use GKB::Compara::Utils;
 use Log::Log4perl qw/get_logger/;
