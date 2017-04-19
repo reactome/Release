@@ -273,7 +273,7 @@ sub run {
 		say releaselog("No errors from $self->{name} pre-step tests");
 	}
 	
-	#$self->run_commands($self->gkb);
+	$self->run_commands($self->gkb);
 	
 	my @post_step_test_errors = $self->post_step_tests();
 	if (@post_step_test_errors) {
@@ -399,7 +399,7 @@ sub mail_now {
     my $params = $self->mail;
     
 	my $from = _get_sender_address($params);
-    my $to = _get_recipient_addresses($params);
+    my $to = $TEST_MODE ? $maillist{'automation'} : _get_recipient_addresses($params);
     my $subject = $params->{'subject'};
 	my $body = $params->{'body'};
     
@@ -580,7 +580,7 @@ sub _add_body_and_attachment {
        	Type => "text/plain",
         Path => $attachment_path,
         Filename => $filename 
-    );
+    ) if (-e $attachment_path);
 	
 	return $msg;
 }
