@@ -84,14 +84,12 @@
     }
 
     if ( preg_match('/release/', $host_name) ) {
-        #$dev = 'RELEASE TESTING';
+		$dev = 'RELEASE TESTING';
     }
 
     if ( preg_match('/curator/', $host_name) ) {
-       $dev = 'CURATION AND TESTING';
+		$dev = 'CURATION AND TESTING';
     }
-
-  
 
    if ($dev) {
    echo "
@@ -109,7 +107,6 @@
 
 
  }
-
 ?>
 
 <!--content-->
