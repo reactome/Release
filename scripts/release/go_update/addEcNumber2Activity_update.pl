@@ -1,28 +1,21 @@
+#!/usr/local/bin/perl -w
+use strict;
+
 #This is the script to update EC numbers after running the script goxml2mysql_update.pl, which effectively removes all EC mappings for GO_MolecularFunctions.
 #The file for EC to GO mapping is downloadable at   http://www.geneontology.org/external2go/ec2go   (or: ftp://ftp.geneontology.org/pub/go/external2go/   )
 
-
-#!/usr/local/bin/perl  -w
-
-use lib "$ENV{HOME}/bioperl-1.0";
-use lib "$ENV{HOME}/GKB/modules";
 use lib "/usr/local/gkb/modules";
 use GKB::DBAdaptor;
 use GKB::Utils_esther;
+
 use Data::Dumper;
 use Getopt::Long;
-use strict;
+use List::MoreUtils qw/none/;
 
 @ARGV || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name < ec2go.txt\n";
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug);
 
-&GetOptions("user:s",
-	    "host:s",
-	    "pass:s",
-	    "port:i",
-	    "db=s",
-	    "debug",
-	    );
+&GetOptions("user:s","host:s","pass:s","port:i","db=s","debug");
 $opt_db || die "Need database name (-db).\n";
 
 my $dba = GKB::DBAdaptor->new
@@ -35,35 +28,56 @@ my $dba = GKB::DBAdaptor->new
      -DEBUG => $opt_debug
      );
 
-my $note = 'EC number update';
-my $instance_edit = GKB::Utils_esther::create_instance_edit($dba, 'Yung', 'CK', $note);
-my %seen;
+my $instance_edit = GKB::Utils_esther::create_instance_edit($dba, 'Weiser', 'JD', 'EC number update');
+my (%accession_to_ec_number, %seen_ec_numbers, %seen_GO_accessions);
 while(<>) {
-    /^!/ && next;
-#    print $_;
+    next if /^!/; # Skipping comments in ec2go
     chomp;
-    my ($ec) = $_ =~ /^(\S+)/;
-    $ec =~ s/EC://;
-    $seen{$ec}++;
-    print $ec, "\n";
-    my (@go) = $_ =~ /GO:(\d{7})/g;
-    my $ar = $dba->fetch_instance_by_attribute('GO_MolecularFunction',[['accession', \@go]]);
-    if (@{$ar}) {
-	foreach my $mf (@{$ar}) {
-	    my $go = $mf->Accession->[0];
-	    $seen{$go}++;
-	    $mf->add_attribute_value('ecNumber', $ec);
-	    $dba->update_attribute($mf, 'ecNumber');
-	    GKB::Utils_esther::update_modified_if_necessary($mf, $instance_edit, $dba);
-	}
-    } else {
-	print "GO_MolecularFunction @go was not found!\n";
+    
+    my ($ec_number) = $_ =~ /^EC:(\d+(?:\.\d+)*)/;
+    $seen_ec_numbers{$ec_number}++;
+    print $ec_number, "\n";
+    
+    my (@go_accessions) = $_ =~ /GO:(\d{7})/g;
+    foreach my $go_accession (@go_accessions) {
+        $seen_GO_accession{$go_accession}++;
+        push @{$accession_to_ec_number{$go_accession}}, $ec_number;
     }
 }
 
-print "\nThese ids have been seen more than once:\n";
-foreach my $id (keys %seen) {
-    next if $seen{$id} == 1;
-    print $id, "\n";
+foreach my $go_accession (keys %accession_to_ec_number) {
+    my $GO_molecular_function_instances = $dba->fetch_instance_by_attribute('GO_MolecularFunction',[['accession', [$go_accession]]);
+    if (@{$GO_molecular_function_instances}) {
+        foreach my $GO_molecular_function_instance (@{$GO_molecular_function_instances}) {
+            my @new_ec_numbers = @{$accession_to_ec_number{$go_accession}};
+            my @current_ec_numbers = @{$GO_molecular_function_instance->ecNumber};
+            next if same_values(\@new_ec_numbers, \@current_ec_numbers);
+            
+            $GO_molecular_function_instance->ecNumber(undef);
+            $GO_molecular_function_instance->ecNumber(@new_ec_numbers);
+            $dba->update_attribute($GO_molecular_function_instance, 'ecNumber');
+            GKB::Utils_esther::update_modified_if_necessary($GO_molecular_function_instance, $instance_edit, $dba);
+        }
+    } else {
+        print "GO_MolecularFunction $go_accession was not found!\n";
+    }
 }
 
+print "\nThese ec numbers have been seen more than once:\n";
+print "$_\n" foreach (grep {$seen_ec_number{$_} > 1} keys %seen_ec_numbers);
+ 
+print "\nThese GO accessions have been seen more than once:\n";
+print "$_\n" foreach (grep {$seen_GO_accessions{$_} > 1} keys %seen_GO_accessions);
+
+sub same_values {
+    my $array1 = shift;
+    my $array2 = shift;
+    
+    return 0 if scalar @{$array1} != scalar @{$array2};
+    
+    foreach my $array1_value (@{$array1}) {
+        return 0 if none {$_ eq $array1_value} @{$array2};
+    }
+    
+    return 1;
+}
