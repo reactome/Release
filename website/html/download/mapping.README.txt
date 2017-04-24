@@ -1,14 +1,13 @@
-The mapping files consist of a tab-separated table that indicates which external protein, gene or small molecule identifiers in the source database were mapped to Reactome pathway annotations. Our goal with distributing two sets of files for each different identifier type is to provide these mapping files link the source database identifier to: i) the lowest level pathway diagram or subset of the pathway, and ii) all level pathway diagrams (filename appended with 'All_Levels').
+The mapping files consist of a tab-separated table that indicates which external protein, gene or small molecule identifiers in the source database were mapped to Reactome pathway and reaction annotations. Our goal with distributing three sets of files for each different identifier type is to provide these mapping files link the source database identifier to: i) the lowest level pathway diagram or subset of the pathway, ii) all level pathway diagrams (filename appended with 'All_Levels’), and all reaction events.
 
 The columns within the mappings files follow a similar format:
 
-Column 1) Source database identifier, e.g. UniProt, ENSEMBL or ChEBI identifier
-Column 2) Reactome Pathway Stable identifier
+Column 1) Source database identifier, e.g. UniProt, ENSEMBL, NCBI Gene or ChEBI identifier
+Column 2) Reactome Stable identifier
 Column 3) URL
-Column 4) Pathway Name
+Column 4) Event (Pathway or Reaction) Name
 Column 5) Evidence Code
 Column 6) Species
-
 
 
 If you have any further questions, please email us at help@reactome.org.

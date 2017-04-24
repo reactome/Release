@@ -144,7 +144,7 @@ sub generate_type_selector {
     my $checked;
     $type_selector .= qq(<DIV CLASS="section">\n);
     $type_selector .= qq(\t<TABLE ALIGN="center" WIDTH="85%" CLASS="results_type" CELLPADDING="0" CELLSPACING="0" BORDER="0">);
-    $type_selector .= "\t\t" . $cgi->startform(-action => '/cgi-bin/search2', -method => 'GET', -enctype => 'multipart/form-data', -form_name => 'search_results_type_selector') . "\n";
+    $type_selector .= "\t\t" . $cgi->start_form(-action => '/cgi-bin/search2', -method => 'GET', -enctype => 'multipart/form-data', -form_name => 'search_results_type_selector') . "\n";
     foreach $param (@export_params) {
     	if (!($param eq 'JustShown') && !($param eq 'PreviousPathways') && !($param eq 'PreviousReactions') && !($param eq 'PreviousProteins') && !($param eq 'PreviousOthers')) {
 	    	$type_selector .= "\t\t\t" . $cgi->hidden(-name => $param,-value => $cgi->param($param)) . "\n";
@@ -200,7 +200,7 @@ sub generate_type_selector {
     $type_selector .= "\t\t\t" . $cgi->submit(-name => 'Show', -onMouseover => "ddrivetip('Show selected result types','#DCDCDC', 250)", onMouseout => "hideddrivetip()") . "\n";
     $type_selector .= qq(\t\t\t</td>\n);
     $type_selector .= qq(\t\t\t</tr>\n);
-    $type_selector .= "\t\t" . $cgi->endform . "\n";
+    $type_selector .= "\t\t" . $cgi->end_form . "\n";
     $type_selector .= qq(\t</TABLE>\n);
     $type_selector .= qq(</DIV>\n);
 
