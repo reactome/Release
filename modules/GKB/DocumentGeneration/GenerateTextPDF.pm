@@ -66,7 +66,7 @@ sub AUTOLOAD {
 # Is this the right thing to do for a subclass?
 sub new {
     my($pkg, @args) = @_;
-    
+
     # Get class variables from superclass and define any new ones
     # specific to this class.
     $pkg->get_ok_field();
@@ -132,7 +132,7 @@ sub open_filename {
     my ($self, $filename) = @_;
 
     $output_file_name = $filename;
-    
+
     # Add an appropriate extension, if it doesn't already exist
     unless ($output_file_name =~ /\.pdf$/i) {
 	$output_file_name .= ".pdf";
@@ -172,7 +172,7 @@ sub close {
 	    }
 	    CORE::close(TEMPFILE);
 	}
-	
+
 	# Get rid of temporary o/p file
 	unlink($output_file_name);
     }
@@ -271,14 +271,15 @@ sub generate_toc {
 my %font_helvetica_latin_hash = ();
 sub get_font_helvetica_latin {
     my ($self, $font_name) = @_;
-    
+
     if (!(defined $font_name)) {
     	$font_name = "Helvetica";
     }
 
     if (!(defined $font_helvetica_latin_hash{$font_name})) {
 	my $pdf = $self->pdf;
-	$font_helvetica_latin_hash{$font_name} = $pdf->corefont($font_name, -encoding => 'latin1');
+	#$font_helvetica_latin_hash{$font_name} = $pdf->corefont($font_name, -encoding => 'latin1');
+    $font_helvetica_latin_hash{$font_name} = $pdf->ttfont('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf');
     }
 
     return $font_helvetica_latin_hash{$font_name};
@@ -433,7 +434,7 @@ sub generate_page_top_header {
 # Emit a paragraph containing the supplied image file
 sub generate_image {
     my ($self, $image, $filename) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
 
     if (!(defined $image)) {
@@ -454,12 +455,12 @@ sub generate_image {
 	my $page = $self->get_current_page();
 	my $margins = $self->margins;
 	my $paragraph_size = $self->paragraph_size;
-	
+
 	# Get unscaled size of image
 	my $width;
 	my $height;
 	($width, $height) = $image->getBounds();
-	
+
 	# Find a scaling for the image, so that it ia i) visible and
 	# ii) not so big that it doesn't fit onto the page.
 	#
@@ -469,11 +470,11 @@ sub generate_image {
 	# a side.  I havn't been able to work out why this is, so until
 	# I do, the fudge factor will live on.
 	my $scale = 0.78 * $self->find_scale_to_fit_image_to_page($width, $height);
-	
+
 	# Work out where the text cursor will be once the imge has been
 	# inserted
 	my @new_position = ($position->[0] + (($paragraph_size->[0] - ($scale * $width)) / 2), $position->[1] - ($scale * $height));
-	
+
 	# Check to see if image flops over the bottom of the page
 	if ($new_position[1] < $margins->[1]) {
 		$self->generate_page_break();
@@ -481,36 +482,36 @@ sub generate_image {
 		$position = $self->position;
 		@new_position = ($position->[0] + (($paragraph_size->[0] - ($scale * $width)) / 2), $position->[1] - ($scale * $height));
 	}
-	
+
 	if ($new_position[1] < $margins->[1]) {
 	    $logger->warn("image is still flopping over edge of page!!!");
 	}
-	
+
 	my $pdf_ok = 0;
 	eval {
 		# Insert image into PDF
 		my $graphic = $page->gfx;
-		
+
 		# TODO: specify more image types!
 		my $image_file=undef;
 		if ($image_file_name =~ /\.png$/i) {
-			$image_file=$pdf->image_png($image_file_name);			
+			$image_file=$pdf->image_png($image_file_name);
 		} elsif ($image_file_name =~ /\.jpg/i || $image_file_name =~ /\.jpeg/i) {
 			$image_file=$pdf->image_jpeg($image_file_name);
 		} else {
 			$logger->warn("unknown image type for image_file_name=$image_file_name");
 		}
-	
+
 		if (defined $image_file) {
 			$graphic->image($image_file, $new_position[0], $new_position[1], $scale);
 			$pdf_ok = 1;
 		}
 	}; # eval
-	
+
 	if ($pdf_ok == 0) {
 	    $logger->warn("problem occured while trying to insert image into PDF");
 	}
-	
+
 	# Save file name for later deletion - the file needs
 	# to stay in existence until after the PDF document
 	# has been saved.
@@ -521,7 +522,7 @@ sub generate_image {
 	}
 	push @{$image_file_names}, $image_file_name;
 	$self->image_file_names($image_file_names);
-	
+
 	# Update position
 	$new_position[0] = $position->[0];
 	$self->position(\@new_position);
@@ -582,7 +583,7 @@ sub generate_vector_graphics_from_file {
     # Work out where the text cursor will be once the imge has been
     # inserted
     my @new_position = ($position->[0] + (($paragraph_size->[0] - ($scale * $width)) / 2), $position->[1] - ($scale * $height));
-    
+
     # Check to see if image flops over the bottom of the page
     if ($new_position[1] < $margins->[1]) {
 	$self->generate_page_break();
@@ -649,7 +650,7 @@ sub read_pdf_core {
 # Returns scaling value
 sub find_scale_to_fit_image_to_page {
     my ($self, $width, $height) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
 
     my $paragraph_size = $self->paragraph_size;
@@ -686,25 +687,25 @@ sub generate_page_break {
     unless ($additional_formatting{"text_block"}) {
 	my $pdf = $self->pdf;
 	my $sheet_size = $self->sheet_size;
-	
+
 	my $pg_num = $self->pg_num;
 	my $pnum_mode = $self->pnum_mode;
-	
+
 	# Bump up the page count
 	$pg_num ++;
 	$self->pg_num($pg_num);
-	
+
 	my $page;
 	if ($pnum_mode) {
 	    # gets new page based on current page number
 	    $page = $pdf->page($pg_num);
 	} else {
 	    $self->finish_page(); # write out original page
-	    $page = $pdf->page; 
+	    $page = $pdf->page;
 	}
-	
+
 	$page->mediabox($sheet_size->[0], $sheet_size->[1]);
-	
+
 	$self->page($page);
     }
 
@@ -736,7 +737,7 @@ sub generate_paragraph {
     my ($self, $text, $formatting, $recursion_depth) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     if (!(defined $recursion_depth)) {
         $recursion_depth  = 0;
     }
@@ -923,20 +924,20 @@ sub generate_paragraph {
 	} else {
 	    $self->generate_page_break();
 	}
-	
+
 	# Now go do that paragraph!
 	$new_page_count = $self->generate_paragraph($overflow_text, $formatting, $recursion_depth) + 1;
     } else {
 	# Calculate a new position, based on the actual final y position
 	# returned by generate_text_block
 	my @new_position = ($position->[0], $ypos);
-	
+
 	# Advance y position by a newline, acts as paragraph separator
 	my $y = $new_position[1] - $lead;
 	if ($y > 0 && !$no_separation) {
 	    $new_position[1] = $y;
 	}
-	
+
 	# Stash new position
 	$self->position(\@new_position);
     }
@@ -998,7 +999,7 @@ sub generate_text_block {
         unless (@words) {
 	    last;
         }
-        
+
         $xpos = $x;
 
         # while there's room on the line, add another word
@@ -1022,13 +1023,13 @@ sub generate_text_block {
             $xpos += $arg{'-indent'};
             $line_width += $arg{'-indent'};
         }
-                
-                         
+
+
         while ( @words and $line_width + (scalar(@line) * $space_width) + $word_width_hash{$words[0]} < $width ) {
             $line_width += $word_width_hash{ $words[0] };
             push(@line, shift(@words));
         }
-        
+
         # calculate the space width
         if ($arg{'-align'} eq 'fulljustify' or ($arg{'-align'} eq 'justify' and @words)) {
             if (scalar(@line) == 1) {
@@ -1041,8 +1042,8 @@ sub generate_text_block {
             $wordspace = $space_width;
         }
         $line_width += $wordspace * (scalar(@line) - 1);
-        
-        
+
+
         if ($align eq 'justify') {
             foreach my $word (@line) {
                 $text_block->translate( $xpos, $ypos );
@@ -1051,18 +1052,18 @@ sub generate_text_block {
             }
             $endw = $width;
         } else {
-    
+
             # calculate the left hand position of the line
             if ($align eq 'right') {
                 $xpos += $width - $line_width;
             } elsif ($align eq 'center') {
                 $xpos += ($width/2) - ($line_width / 2);
             }
-    
+
             # render the line
             $text_block->translate( $xpos, $ypos );
             $endw = $text_block->text( join(' ', @line) );
-        }        
+        }
         $ypos -= $lead;
         $first_line = 0;
     }
@@ -1094,7 +1095,7 @@ sub generate_bullet_text {
     if ($page != $original_page) {
 	# New page got thrown
 	$position = $self->top_left_corner()
-	
+
     }
 
     my $text_block = $page->text;
