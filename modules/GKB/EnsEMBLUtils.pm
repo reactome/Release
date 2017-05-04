@@ -5,7 +5,11 @@ use warnings;
 
 use feature qw/state/;
 
-use Carp qw/cluck/;
+use Carp qw/cluck confess/;
+use HTTP::Tiny;
+use JSON;
+use List::MoreUtils qw/any/;
+use Time::HiRes qw/time usleep/;
 use Try::Tiny;
 use LWP::UserAgent;
 
@@ -13,7 +17,7 @@ use constant GKB_MODULES => '/usr/local/gkb/modules';
 
 use parent 'Exporter';
 
-our @EXPORT_OK = qw/get_version get_ensembl_genome_version install_ensembl_api ensembl_api_installed/;
+our @EXPORT_OK = qw/get_version get_ensembl_genome_version on_EnsEMBL_primary_assembly install_ensembl_api ensembl_api_installed/;
 our %EXPORT_TAGS = (all => [@EXPORT_OK]);
 
 
@@ -62,6 +66,37 @@ sub get_ensembl_genome_version {
     }
 }
 
+my $time_last_invoked; # Time just after response from EnsEMBL
+sub on_EnsEMBL_primary_assembly {
+    my $gene_id = shift;
+    
+    my $http = HTTP::Tiny->new(verify_SSL => 0);
+        
+    my $server = 'https://rest.ensembl.org';
+    my $query = "/lookup/id/$gene_id?content-type=application/json";
+    
+    if ($time_last_invoked && (time() - $time_last_invoked < 0.5)) {
+        usleep 500;
+    }
+    my $response = $http->get($server.$query);
+    $time_last_invoked = time();
+    
+    if (!$response->{success}) {
+        cluck("Response from " . $server . $query . " failed: " . $response->{status} . ' - ' . $response->{reason} . "\n");
+        return;
+    } elsif (!(length $response->{content})) {
+        cluck("Response from " . $server . $query . " returned empty content\n");
+        return;
+    }
+    
+    my $response_content = decode_json($response->{content});
+    my $seq_region_name = $response_content->{'seq_region_name'};
+    return unless $seq_region_name;
+    
+    my @primary_assembly_regions = qw/1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y MT/;
+    return any {$_ eq $seq_region_name} @primary_assembly_regions;    
+}
+
 sub install_ensembl_api {
     my ($self, $version) = @_;
     
@@ -75,7 +110,7 @@ sub ensembl_api_installed {
     my @subdirectories = qw/bioperl-live ensembl ensembl-compara/;
     
     foreach my $subdirectory (map {$ensembl_api_dir . $_} @subdirectories) {
-	return 0 unless (-d $subdirectory);
+        return 0 unless (-d $subdirectory);
     }
     
     return 1;
