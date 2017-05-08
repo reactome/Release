@@ -30,7 +30,7 @@ if ($help || !$db) {
     exit;
 }
 
-$host	||= $GKB::Config::GK_DB_HOST;
+$host ||= $GKB::Config::GK_DB_HOST;
 
 (my $output_file = $0) =~ s/.pl$/.txt/;
 open(my $fh, '>', $output_file);
@@ -46,7 +46,7 @@ my @events = @{get_dba($db, $host)->fetch_instance(-CLASS => 'Event')};
 foreach my $event (@events) {
 	my @event_issues;
 
-	push @event_issues, get_event_issues($event) if !$event->stableIdentifier->[0]; # Find issues for new events (events without a stable identifier assigned)
+	push @event_issues, get_event_issues($event) if is_new_event($event); # Find issues for new events (events without a stable identifier assigned)
 	push @event_issues, get_reaction_like_event_issues($event) if $event->is_a('ReactionlikeEvent');
 	
 	foreach my $event_issue (@event_issues) {
@@ -112,8 +112,18 @@ sub get_event_issues {
 	push @event_issues, 'non-inferred event with no literature references' if attribute_null($event, 'inferredFrom') &&
 																			attribute_null($event, 'literatureReference');
 	push @event_issues, 'event with no summation' if attribute_null($event, 'summation');
+    push @event_issues, 'event with no species' if attribute_null($event, 'species');
 	
 	return @event_issues;
+}
+
+sub is_new_event {
+    my $event = shift;
+    
+    croak '$event is not an event instance' unless $event && $event->is_a('Event');
+    croak '$event has no stable identifier' unless $event->stableIdentifier->[0];
+    
+    return ($event->stableIdentifier->[0]->released->[0] && $event->stableIdentifier->[0]->released->[0] =~ /TRUE/i ? 0 : 1);
 }
 
 sub get_physical_entity_issues {
@@ -127,8 +137,29 @@ sub get_physical_entity_issues {
 	if (attribute_null($physical_entity, 'compartment')) {
 		push @physical_entity_issues, 'physical entity with no compartment';
 	}
-	
+    
+    my @physical_entity_components = recurse_physical_entity_components($physical_entity);
+    if (attribute_null($physical_entity, 'species') && any {$_->species->[0]} @physical_entity_components)  {
+        push @physical_entity_issues, 'physical entity with no species has components with species';
+    }
+    
 	return @physical_entity_issues;
+}
+
+# Recurse through all members/components/repeatedUnits
+sub recurse_physical_entity_components {
+    my $pe = shift;
+
+    my %components = map {$_->db_id => $_} grep {$_} @{$pe->hasMember}, @{$pe->hasComponent}, @{$pe->repeatedUnit};
+    keys %components || return ();
+    
+    for my $component (values %components) {
+		for my $sub_component (recurse_physical_entity_components($component)) { 
+			$components{$sub_component->db_id} = $sub_component;
+		}
+    }
+
+    return values %components;
 }
 
 sub get_reaction_like_event_issues {
@@ -246,37 +277,40 @@ sub report {
 
 sub usage_instructions {
     return <<END;
+
+    This script searches through all events and
+    physical entities reporting QA issues found
+    with any instances.
+
+    Specifically, the following will be reported:
 	
-	This script searches through all events and
-	physical entities reporting QA issues found
-	with any instances.
-	
-	Specifically, the following will be reported:
-	
-	* Simple Entity where species is NOT null
-	* Physical Entity where compartment is null
-	* Reaction Like Event where compartment is null (unless in its skip list file)
-	* Reaction Like Event where input is null (unless in its skip list file)
-	* Reaction Like Event where output is null (unless in its skip list file)
-	* Reaction Like Event having normal reaction but disease is null
-	* Failed Reaction where normal reaction is null
-	* Failed Reaction where output is NOT null
-	* New Event (stable identifier is null) where editor is null
-	* New Event (stable identifier is null) where author is null
-	* New Event (stable identifier is null) where reviewer is null
-	* New Event (stable identifier is null) where it is not inferred
+    * Simple Entity where species is NOT null
+    * Physical Entity where compartment is null
+    * Physical Entity where species is null but has component(s) with species
+    * Reaction Like Event where compartment is null (unless in its skip list file)
+    * Reaction Like Event where input is null (unless in its skip list file)
+    * Reaction Like Event where output is null (unless in its skip list file)
+    * Reaction Like Event having normal reaction but disease is null
+    * Failed Reaction where normal reaction is null
+    * Failed Reaction where output is NOT null
+    * New Event (stable identifier with released attribute of false or null) where editor is null
+    * New Event (stable identifier with released attribute of false or null) where author is null
+    * New Event (stable identifier with released attribute of false or null) where reviewer is null
+    * New Event (stable identifier with released attribute of false or null) where it is not inferred
 	  and there is no literature reference
+    * New Event (stable identifier with released attribute of false or null) where summation is null
+    * New Event (stable identifier with released attribute of false or null) where species is null
 	
-	The output file (name of this script with .txt extension) is
-	tab-delimited with five columns: database id, instance name,
-	instance class, instance issue, and instance last modifier.
+    The output file (name of this script with .txt extension) is
+    tab-delimited with five columns: database id, instance name,
+    instance class, instance issue, and instance last modifier.
 	
-	USAGE: perl $0 [options]
-	
-	Options:
-	
-	-db [db_name]	Source database (required)
-	-host [db_host]	Host of source database (default is $GKB::Config::GK_DB_HOST)
-	-help 		Display these instructions
+    USAGE: perl $0 [options]
+
+    Options:
+
+    -db [db_name]	Source database (required)
+    -host [db_host]	Host of source database (default is $GKB::Config::GK_DB_HOST)
+    -help           Display these instructions
 END
 }
