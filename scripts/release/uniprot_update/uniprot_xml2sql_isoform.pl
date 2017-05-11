@@ -833,7 +833,7 @@ print $wiki_fh "\{\| class\=\"wikitable\"
 \! Species
 \|\-\n";
 
-print $wiki_fh foreach (@skip_replaceable);
+print $wiki_fh $_ foreach (@skip_replaceable);
 print $wiki_fh "\|\}\n-----\n";
 
 print $wiki_fh "\{\| class\=\"wikitable\"
@@ -846,7 +846,7 @@ print $wiki_fh "\{\| class\=\"wikitable\"
 \! Species
 \|\-\n";
 
-print $wiki_fh foreach (@skip_no_replacement);
+print $wiki_fh $_ foreach (@skip_no_replacement);
 print $wiki_fh "\|\}\n";
 
 close $wiki_fh;
