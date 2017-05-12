@@ -1,0 +1,76 @@
+68637	CDC6 protein is synthesized under the control of E2F transcription factors
+190682	Connexin synthesis (generic)
+442497	Expression of Cebpa
+442516	Expression of Cebpb
+977389	Expression of Cebpd
+977286	Expression of Ebf1
+1008220	Expression of globin genes under control of the beta globin control region
+1028812	Expression of IFN-beta
+1015702	Expression of IFN-induced genes
+1031716	Expression of IFNG-stimulated genes
+994034	Expression of Interferon-alpha and beta
+442509	Expression of Klf5
+442475	Expression of Pparg
+190088	FGF10 activates Pdx1 expression in the developing early pancreatic bud
+190093	FGF10 activates Ptf1 expression in early pancreatic buds
+186507	"FOXa2/HNF3b-, MafA-, and PAX6-dependent synthesis of Pdx1 protein"
+211272	"FOXOA2-, MAFA-, and PAX6-dependent synthesis of PDX1 protein"
+168884	Hemagglutinin (HA) protein synthesis
+186617	HNF1a regulates Foxa3
+186663	HNF1a regulates Hnf4a
+186723	HNF1a regulates Hnf4g
+186469	HNF1a transactivates Glut2
+186509	HNF1a transactivates Pklr
+211482	HNF1A-dependent synthesis of FOXA3
+211476	HNF1A-dependent synthesis of GLUT2 protein
+211466	HNF1A-dependent synthesis of HNF4A
+211467	HNF1A-dependent synthesis of HNF4G protein
+211461	HNF1A-dependent synthesis of the L isoform of PKLR protein
+187197	HNF1b transactivates Hnf6
+187247	HNF1b transactivates Ptf1a
+210788	HNF1B- and FGF10-dependent synthesis of PTF1A protein
+210784	HNF1B-dependent synthesis of HNF6 protein
+186679	HNF6 positively regulates Hnf1b expression
+187246	HNF6 transactivates Onecut3 during early pancreas specification
+189119	HNF6 transactivates Onecut3 during morphogenesis
+186550	HNF6 transactivates Pdx1
+210769	HNF6- and FGF10-dependent synthesis of PDX1 protein
+210824	HNF6-dependent synthesis of HNF1B protein
+210836	HNF6-dependent synthesis of NEUROG3 protein during morphogenesis
+186583	Hnf6-dependent synthesis of Ngn3 protein during morphogenesis
+210767	HNF6-dependent synthesis of ONECUT3 protein during early pancreas specification
+210837	HNF6-dependent synthesis of ONECUT3 protein during morphogenesis
+195733	M2 protein synthesis
+186535	"MafA-, NKX2-2-, PAX6-, and PDX1-dependent synthesis of insulin precursor protein"
+195734	Neuraminidase (NA) synthesis
+186510	NeuroD1- and Pdx1-dependent synthesis of glucokinase (Gck) protein
+211346	NEUROD1- and PDX1-dependent synthesis of glucokinase (GCK) protein
+210913	NEUROG3-dependent synthesis of INSM1
+210920	NEUROG3-dependent synthesis of NEUROD1
+210921	NEUROG3-dependent synthesis of NKX2-2
+210886	NEUROG3-dependent synthesis of PAX4 protein
+187253	Ngn3 transactivates Ia1
+186544	Ngn3 transactivates NeuroD1
+186548	Ngn3 transactivates Nkx2.2
+186558	Ngn3 transactivates Pax4
+186609	PDX1 transactivates Iapp
+186511	PDX1 transactivates Lrh1
+186524	PDX1 transactivates Nkx6.1
+211301	PDX1-dependent synthesis of IAPP protein
+210780	PDX1-dependent synthesis of NKX6-1 protein
+211350	PDX1-dependent synthesis of NKX6-1 protein
+210773	PDX1-dependent synthesis of NR5A2 protein
+3223236	RAS signaling and prolonged interferon-beta stimulation promote generation of reactive oxygen species (ROS)
+189543	RBP-Jkappa transactivates Hes1 in the presence of NICD
+210834	RBPJ- and NOTCH1-dependent synthesis of HES1 protein during morphogenesis
+421508	Synthesis of ALAS1 nascent polypeptide
+421495	Synthesis of ALAS2 nascent polypeptide
+1629787	Synthesis of Cx26
+190693	Synthesis of Cx32
+191072	Synthesis of Cx43
+163743	Transcriptional activation of Acetyl-CoA carboxylase by ChREBP:MLX
+163770	Transcriptional activation of Citrate lyase monomer gene by ChREBP:MLX
+163733	Transcriptional activation of FAS monomer gene by ChREBP:MLX
+163748	Transcriptional activation of GP-acyl transferase gene by ChREBP:MLX
+163669	Transcriptional activation of pyruvate kinase gene by ChREBP:MLX
+164158	Transcriptional activation of pyruvate kinase L isoform gene by mChREBP:mMLX
