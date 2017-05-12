@@ -55,11 +55,11 @@ foreach my $event (@events) {
 		
         my $event_name = $event->displayName;
         my $event_id = $event->db_id;
-        my $event_species = $event->species->[0]->displayName;
+        my $event_species = $event->species->[0] ? $event->species->[0]->displayName : "N/A";
         my $event_related_species = join('|', map {$_->displayName} @{$event->relatedSpecies});
 		my $preceding_event_name = $preceding_event->displayName;
 		my $preceding_event_id = $preceding_event->db_id;
-        my $preceding_event_species = $preceding_event->species->[0]->displayName;
+        my $preceding_event_species = $preceding_event->species->[0] ? $preceding_event->species->[0]->displayName : "N/A";
         my $preceding_event_related_species = join('|', map {$_->displayName} @{$preceding_event->relatedSpecies});
 			
 		report(join("\t", $preceding_event_name, $preceding_event_id, $preceding_event_species, $preceding_event_related_species,
