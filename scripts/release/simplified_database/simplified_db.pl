@@ -36,7 +36,6 @@ $source_db 	||= $GKB::Config::GK_DB_NAME;
 $source_host	||= $GKB::Config::GK_DB_HOST;
 $simplified_db 	||= $source_db . "_dn";
 
-
 create_simplified_database($simplified_db, $overwrite);
 load_simplified_database_schema($simplified_db);
 
@@ -293,23 +292,12 @@ sub recurse_physical_entity_components {
     return values %components;
 }
 
-
 sub populate_id_to_external_identifier_table {
     my @instances = @_;
     
     my $logger = get_logger(__PACKAGE__);
-    
-    my %id_to_external_identifier_records;
 
-    foreach my $instance (@instances) {
-	push @{$id_to_external_identifier_records{$instance->db_id}},
-	    process_compartments($instance),
-	    process_cross_reference($instance),
-	    process_disease($instance),
-	    process_GO_biological_process($instance),
-	    process_catalyst_activities($instance),
-	    process_reference_entity($instance);
-    }
+    my $instance_count = 0;
     
     my $dbh = get_simplified_database_handle();
     
@@ -317,27 +305,45 @@ sub populate_id_to_external_identifier_table {
     
     my $sth = $dbh->prepare("INSERT INTO Id_To_ExternalIdentifier (id, referenceDatabase, externalIdentifier, description) VALUES (?, ?, ?, ?)")
 		or $logger->logconfess($dbh->errstr);
-    
-    foreach my $db_id (keys %id_to_external_identifier_records) {
-	my @records = @{$id_to_external_identifier_records{$db_id}};
-	
-	foreach my $record (@records) {
-	    my $reference_database = $record->[0];
-	    my $identifier = $record->[1];
-	    my $description = $record->[2];
+    foreach my $instance (@instances) {
+        $instance_count++;
+        
+        my $db_id = $instance->db_id;
+
+        foreach my $record (get_external_identifier_records($instance)) {
+            my $reference_database = $record->[0];
+            my $identifier = $record->[1];
+            my $description = $record->[2];
 	    
-	    try {
-		$sth->execute($db_id, $reference_database, $identifier, $description);
-	    } catch {
-		$logger->logcarp("Problem inserting external identifier $reference_database:$identifier $description for $db_id: $_")
-		unless /duplicate/i;
-	    };
-	}
+            try {
+                $sth->execute($db_id, $reference_database, $identifier, $description);
+            } catch {
+                $logger->logcarp("Problem inserting external identifier $reference_database:$identifier $description for $db_id: $_")
+                unless /duplicate/i;
+            };
+        }
+        
+        if ($instance_count % 1000 == 0) {
+            $instance->dba->instance_cache->empty;
+        }
     }
     
     $dbh->commit();
 }
 
+sub get_external_identifier_records {
+    my $instance = shift;
+    
+    my @records;
+    push @records, process_compartments($instance);
+    push @records, process_cross_reference($instance);
+    push @records, process_disease($instance);
+    push @records, process_GO_biological_process($instance);
+    push @records, process_catalyst_activities($instance);
+    push @records, process_reference_entity($instance);
+    
+    return @records;
+}
 
 sub index_external_identifiers {
     my $dbh = get_simplified_database_handle();
@@ -346,7 +352,6 @@ sub index_external_identifiers {
 	or $logger->logconfess($dbh->errstr);
     $dbh->commit();
 }
-
 
 sub process_GO_biological_process {
     my $instance = shift;
