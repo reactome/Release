@@ -1120,6 +1120,7 @@ sub get_instance_text_units {
     my $instance_authors;
     my $instance_editors;
     my $instance_reviewers;
+    my $instance_revisers;
     
     my $event_type = lc($instance->class());
     if ($instance->is_a("Event")) {
@@ -1199,10 +1200,12 @@ sub get_instance_text_units {
 		$instance_editors = $instance->edited;
 #		$instance_reviewers = GKB::Utils::get_reviewers_recursively($instance);
 		$instance_reviewers = $instance->reviewed;
+        $instance_revisers = $instance->revised;
 	
 		$self->get_literature_refs(\@text_units, $instance_authors, "Authors");
 		$self->get_literature_refs(\@text_units, $instance_editors, "Editors");
 		$self->get_literature_refs(\@text_units, $instance_reviewers, "Reviewers");
+        $self->get_literature_refs(\@text_units, $instance_revisers, "Revisers");
 
 		my $text_unit = GKB::DocumentGeneration::TextUnit->new();
 		$text_unit->set_type("vertical_space");
