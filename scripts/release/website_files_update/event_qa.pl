@@ -14,10 +14,12 @@ BEGIN {
     $ENV{PATH} = "$libpath/scripts:$libpath/scripts/release:" . $ENV{PATH};
 }
 
+use GKB::CommonUtils;
 use GKB::Config;
 use GKB::DBAdaptor;
 
 use autodie;
+use Carp;
 use Getopt::Long;
 
 
@@ -66,32 +68,41 @@ my $ar = $dba->fetch_instance(-CLASS => 'Event'); # Obtains a reference to the a
 foreach my $event (@{$ar}) {
 	next if $seen{$event->db_id}++;
 	
-	if ($event->species->[1] && !$event->reverse_attribute_value('inferredFrom')) {
-		report($event, $output, 'More than 1 species for event: ');
-		next;
-	}
-	
+    if (!$event->species->[0] || !$event->species->[0]->name->[0]) {
+        report_issue($event, $output, 'No species name: ');
+        next;
+    }
+    
 	my $pathways = get_top_level_events($event);
 	if (@$pathways) {
 		foreach my $pathway (@$pathways) {
-			report($event, $output, 'Human pathway has non human event: ') if ($pathway->species->[0]->name->[0] eq "Homo sapiens" && $event->species->[0]->name->[0] ne "Homo sapiens");
+            if (!$pathway->species->[0]) {
+                report_issue($event, $output, 'Top level pathway ' . get_name_and_id($pathway) . ' has no species for the contained event: ');
+                next;
+            }
+            
+            report_issue($event, $output, 'Human pathway ' . get_name_and_id($pathway) . ' has non-human event: ') if (is_human($pathway) && !is_human($event));
+            report_issue($event, $output, 'Non-human pathway ' . get_name_and_id($pathway) . ' has human event: ') if (!is_human($pathway) && is_human($event));
+            report_issue($event, $output, 'Non-chimeric pathway ' . get_name_and_id($pathway) . ' has chimeric event: ') if (!is_chimeric($pathway) && is_chimeric($event));
 		}
 	} else {
-		if ($event->precedingEvent->[0]) {
-			foreach my $precedingEvent (@{$event->precedingEvent}) {
-				report($event, $output, 'Human pathway has non human event: ') if ($precedingEvent->species->[0]->name->[0] eq "Homo sapiens" && $event->species->[0]->name->[0] ne "Homo sapiens");
-			}
-		} elsif ($event->reverse_attribute_value('regulator')) {
+        if ($event->reverse_attribute_value('regulator')) {
 			foreach my $regulation (@{$event->reverse_attribute_value('regulator')}) {
-				my $regulatedEntity = $regulation->regulatedEntity->[0];
-				report($event, $output, 'Human pathway has non human event: ') if ($regulatedEntity->species->[0]->name->[0] eq "Homo sapiens" && $event->species->[0]->name->[0] ne "Homo sapiens");
+				my $regulated_entity = $regulation->regulatedEntity->[0];
+
+				if (!$regulated_entity->species->[0]) {
+                    report_issue($event, $output, 'Regulated entity ' . get_name_and_id($regulated_entity) . ' has no species for regulating event: ');
+                    next;
+                }                
+                
+                report_issue($event, $output, 'Human event ' . get_name_and_id($regulated_entity) . ' is regulated by non-human event: ') if (is_human($regulated_entity) && !is_human($event));
+                report_issue($event, $output, 'Non-human event ' . get_name_and_id($regulated_entity) . ' is regulated by human event: ') if (!is_human($regulated_entity) && is_human($event));
 			}
-		} else {
-			report($event, $output, 'Orphan event: ');
+		} elsif (!$event->precedingEvent->[0] && !$event->reverse_attribute_value('precedingEvent')->[0]) {
+			report_issue($event, $output, 'Orphan event: ');
 		}
 	}
 }
-
 
 sub get_top_level_events {
     my $event = shift;
@@ -103,16 +114,16 @@ sub top_events {
     my ($events) = @_;
     my @out;
     foreach my $e (@{$events}) {
-	@{$e->reverse_attribute_value('hasEvent')} && next; # If the event has a higher level event, it is not a top-level event and is skipped
-#	@{$e->reverse_attribute_value('hasMember')} && next;
-	push @out, $e; # All top-level events collected here
+        @{$e->reverse_attribute_value('hasEvent')} && next; # If the event has a higher level event, it is not a top-level event and is skipped
+        #	@{$e->reverse_attribute_value('hasMember')} && next;
+        push @out, $e; # All top-level events collected here
     }
     # Filter out reactions
     @out = grep {$_->is_a('Pathway')} @out; 
     return \@out; # Returns top-level pathways
 }
 
-sub report {
+sub report_issue {
 	my $event = shift;
 	my $output = shift;
 	my $message = shift;
@@ -123,12 +134,16 @@ sub report {
 sub usage_instructions {
     return <<END;
     
-    This script checks all events (pathways and reactions)
-    in the database and reports the following:
+    This script checks all events (pathways and reaction like events) in the database
+    and reports the following:
     
-    Events with more than one species
-    Human pathways with non-human events
-    Orphan events (not a preceding event, regulatory event, or in the hierarchy)
+    * Events with no species
+    * Pathway with no species containing an event with a species
+    * Regulated entity with no species regulating an even with a species
+    * Human pathways with non-human events or vice-versa
+    * Non-chimeric pathways with chimeric events (converse situation is okay and not reported)
+    * Human events regulated by non-human events or vice-versa
+    * Orphan events (not a preceding/following event, regulatory event, or in the hierarchy)
     
 END
 }

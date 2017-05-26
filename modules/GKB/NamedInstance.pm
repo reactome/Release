@@ -606,20 +606,20 @@ sub set_displayName {
 #    }
     my $dn = '';
     if ($self->ReferenceDatabase->[0]) {
-	$dn =  $self->ReferenceDatabase->[0]->displayName . ':';
+        $dn =  $self->ReferenceDatabase->[0]->displayName . ':';
     }
     if ($self->Identifier->[0]) {
-	$dn .= $self->Identifier->[0];
+        $dn .= $self->Identifier->[0];
     }
     my $tmp;
-    if ($tmp = $self->Name->[0]) {
-	$dn .= ' ' . $tmp;
+    if ($tmp = $self->Name->[0] || $self->geneName->[0]) {
+        $dn .= ' ' . $tmp;
     } elsif ($tmp = $self->Description->[0]) {
-	$dn .= ' ' . $tmp;
+        $dn .= ' ' . $tmp;
     }
     if ($dn) {
-	$self->attribute_value('_displayName',$dn);
-	return $dn;
+        $self->attribute_value('_displayName',$dn);
+        return $dn;
     }
     $self->debug && $self->warn("Unable to set displayName for " . $self->id_string . ".");
     return;
