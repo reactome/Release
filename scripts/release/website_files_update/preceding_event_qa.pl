@@ -35,21 +35,35 @@ open(my $fh, '>', $output_file);
 
 my %seen;
 
+report(join("\t", 'Preceding Event Name', 'Preceding Event DB Id', 'Preceding Event Species', 'Preceding Event Related Species',
+                  'Following Event Name', 'Following Event DB Id', 'Following Event Species', 'Following Event Related Species'), $fh);
 my @events = @{get_dba($db, $host)->fetch_instance(-CLASS => 'ReactionlikeEvent')};
 foreach my $event (@events) {
 	next unless $event->precedingEvent->[0];
 	foreach my $preceding_event (@{$event->precedingEvent}) {
-		next if $seen{$preceding_event->db_id}++;
-		next if $event->species->[0] &&
-				!multiple_species($event) &&
-				$preceding_event->species->[0] &&
-				!multiple_species($preceding_event) &&
-				$event->species->[0]->displayName eq $preceding_event->species->[0]->displayName;
+		next if $seen{$event->db_id}{$preceding_event->db_id}++;
 		
+        my @event_species = @{$event->species};
+        my @preceding_event_species = @{$preceding_event->species};
+        next if (scalar @event_species == 1) &&
+				(scalar @preceding_event_species == 1) &&
+				(
+                 ($event->species->[0]->displayName eq $preceding_event->species->[0]->displayName) ||
+                 (any {$event->species->[0]->displayName eq $_->displayName} @{$preceding_event->relatedSpecies}) ||
+                 (any {$preceding_event->species->[0]->displayName eq $_->displayName} @{$event->relatedSpecies})
+                );
+		
+        my $event_name = $event->displayName;
+        my $event_id = $event->db_id;
+        my $event_species = $event->species->[0] ? $event->species->[0]->displayName : "N/A";
+        my $event_related_species = join('|', map {$_->displayName} @{$event->relatedSpecies});
 		my $preceding_event_name = $preceding_event->displayName;
 		my $preceding_event_id = $preceding_event->db_id;
+        my $preceding_event_species = $preceding_event->species->[0] ? $preceding_event->species->[0]->displayName : "N/A";
+        my $preceding_event_related_species = join('|', map {$_->displayName} @{$preceding_event->relatedSpecies});
 			
-		report(join("\t", $preceding_event_name, $preceding_event_id), $fh);
+		report(join("\t", $preceding_event_name, $preceding_event_id, $preceding_event_species, $preceding_event_related_species,
+                          $event_name, $event_id, $event_species, $event_related_species), $fh);
 	}
 }
 
@@ -102,21 +116,23 @@ sub report {
 sub usage_instructions {
     return <<END;
 	
-	This script searches through all reaction like events
-	and reports those events that are preceding events if
-	it or the event it precedes have zero or multiple species
-	or if the species between them differs.
+    This script searches through all reaction like events
+    and reports those events that are preceding events if
+    it or the event it precedes have zero or multiple species
+    or if the species between them differs.
 	
-	The output file (name of this script with .txt extension) is
-	tab-delimited with two columns: preceding event name and
-	preceding event database id.
+    The output file (name of this script with .txt extension) is
+    tab-delimited with eight columns: event name, event database id,
+    event species, event related species, preceding event name, preceding
+    event database id, preceding event species, preceding event related
+    species.
 	
-	USAGE: perl $0 [options]
+    USAGE: perl $0 [options]
 	
-	Options:
+    Options:
 	
-	-db [db_name]	Source database (default is $GKB::Config::GK_DB_NAME)
-	-host [db_host]	Host of source database (default is $GKB::Config::GK_DB_HOST)
-	-help 		Display these instructions
+    -db [db_name]	Source database (default is $GKB::Config::GK_DB_NAME)
+    -host [db_host]	Host of source database (default is $GKB::Config::GK_DB_HOST)
+    -help 		    Display these instructions
 END
 }

@@ -1,0 +1,35 @@
+5668520	26Sproteasome degrades K48polyUb-NIK
+3304394	Activated TGFBR1 cannot phosphorylate SMAD2 and SMAD3 Phosphorylation Motif Mutants
+8949659	AFG3L2 (m-AAA protease) degrades SMDT1 that is not assembled in MCU
+450466	AUF1:mRNA complex is destroyed
+2172433	Collagen type XIX degradation
+174731	Degradation of newly synthesized ApoB-48
+2176503	Degradation of SMAD2/3:SMAD4 complex
+2169046	Degradation of TGF-beta receptor complex
+2186780	Degradation of Ub-SMAD7
+2186767	Degradation of ubiquitinated SKI/SKIL
+2176452	Degradation of ubiquitinated SMAD2
+2187382	Degradation of ubiquitinated SMAD3
+2160931	Disassembly of tight junctions
+5638137	EGFRvIII cancer variant does not bind EGF ligand
+264834	Endocytosis and degradation of apoA-I
+2471621	Endostatin degradation by cathepsins
+2220978	FBXW7 WD mutants do not bind NICD1
+1454757	"Gelatin degradation by MMP1, 2, 3, 7, 8, 9, 12, 13"
+2537499	Gelatin degradation by MMP19
+2537524	Gelatin degradation by MMP19
+74730	Insulin degradation
+190829	Lysosomal degradation of gap junction plaques
+2660819	NOTCH1 t(7;9)(NOTCH1:M1580_K2555) does not bind DLL1
+2660815	NOTCH1 t(7;9)(NOTCH1:M1580_K2555) does not bind DLL4
+2660822	NOTCH1 t(7;9)(NOTCH1:M1580_K2555) does not bind JAG1
+2660816	NOTCH1 t(7;9)(NOTCH1:M1580_K2555) does not bind JAG2
+2220967	p-NICD1 PEST domain mutants do not bind FBXW7
+3315483	Phosphorylated SMAD2/3 MH2 Domain Mutants do not bind SMAD4
+4608855	PRICKLE1 is degraded by the proteasome
+3311014	SMAD4 MH2 Domain Mutants do not bind phosphorylated SMAD2 and SMAD3
+3645780	TGFBR2 KD mutants do not phosphorylate TGFBR1
+201445	Ubiquitin-dependent degradation controls basal levels of R-Smad1/5/8
+201425	Ubiquitin-dependent degradation of the Smad complex terminates BMP2 signalling
+173545	Ubiquitin-dependent degradation of the SMAD complex terminates TGF-beta signaling
+8949668	YME1L1 proteolyzes unassembled proSMDT1
