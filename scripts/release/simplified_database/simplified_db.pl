@@ -81,10 +81,10 @@ sub get_dba {
     my $host = shift;
     
     return GKB::DBAdaptor->new (
-	-user => $GKB::Config::GK_DB_USER,
-	-pass => $GKB::Config::GK_DB_PASS,
-	-host => $host,
-	-dbname => $db
+        -user => $GKB::Config::GK_DB_USER,
+        -pass => $GKB::Config::GK_DB_PASS,
+        -host => $host,
+        -dbname => $db
     );
 }
 
@@ -98,18 +98,19 @@ sub populate_pathway_table {
     $dbh->begin_work();
     
     my $sth = $dbh->prepare("INSERT INTO Pathway (id, displayName, species, stableId) VALUES (?, ?, ?, ?)")
-		or $logger->logconfess($dbh->errstr);
-		
+        or $logger->logconfess($dbh->errstr);
+
     foreach my $pathway (@pathways) {
         my $db_id = $pathway->db_id;
-	my $display_name = $pathway->displayName;
-	my $species = get_species($pathway);
-	my $stable_id = get_stable_id($pathway);
-	try {
-	    $sth->execute($db_id, $display_name, $species, $stable_id);
-	} catch {
-	    $logger->logcarp("Problem inserting pathway $db_id: $_");
-	};
+        my $display_name = $pathway->displayName;
+        my $species = get_species($pathway);
+        my $stable_id = get_stable_id($pathway);
+
+        try {
+            $sth->execute($db_id, $display_name, $species, $stable_id);
+        } catch {
+            $logger->logcarp("Problem inserting pathway $db_id: $_");
+        };
     }
     
     $dbh->commit();
@@ -125,21 +126,21 @@ sub populate_pathway_link_tables {
     $dbh->begin_work();
     
     my $reaction_statement_handle = $dbh->prepare("INSERT INTO Pathway_To_ReactionLikeEvent (pathwayId, reactionLikeEventId) VALUES (?, ?)")
-		or $logger->logconfess($dbh->errstr);
-		
+        or $logger->logconfess($dbh->errstr);
+
     my $pathway_statement_handle = $dbh->prepare("INSERT INTO PathwayHierarchy (pathwayId, childPathwayId) VALUES (?, ?)")
-		or $logger->logconfess($dbh->errstr);
-		
+        or $logger->logconfess($dbh->errstr);
+
     foreach my $pathway (@pathways) {
-	foreach my $event (@{$pathway->hasEvent}) {
-	    my $sth = $event->is_a('Pathway') ? $pathway_statement_handle : $reaction_statement_handle;
-	    
-	    try {
-		$sth->execute($pathway->db_id, $event->db_id);
-	    } catch {
-		$logger->logcarp("Problem inserting pathway " . $pathway->db_id . " with event " . $event->db_id . ": $_");
-	    };
-	}
+        foreach my $event (@{$pathway->hasEvent}) {
+            my $sth = $event->is_a('Pathway') ? $pathway_statement_handle : $reaction_statement_handle;
+    
+            try {
+                $sth->execute($pathway->db_id, $event->db_id);
+            } catch {
+                $logger->logcarp("Problem inserting pathway " . $pathway->db_id . " with event " . $event->db_id . ": $_");
+            };
+        }
     }
     
     $dbh->commit();
@@ -155,19 +156,20 @@ sub populate_reaction_like_event_table {
     $dbh->begin_work();
     
     my $sth = $dbh->prepare("INSERT INTO ReactionLikeEvent (id, displayName, species, class, stableId) VALUES (?, ?, ?, ?, ?)")
-		or $logger->logconfess($dbh->errstr);
+        or $logger->logconfess($dbh->errstr);
     
     foreach my $event (@reaction_like_events) {
-	my $db_id = $event->db_id;
-	my $display_name = $event->displayName;
-	my $species = get_species($event);
-	my $class = $event->class;
-	my $stable_id = get_stable_id($event);
-	try {
-	    $sth->execute($db_id, $display_name, $species, $class, $stable_id);
-	} catch {
-	    $logger->logcarp("Problem inserting reaction like event $db_id: $_");
-	};
+        my $db_id = $event->db_id;
+        my $display_name = $event->displayName;
+        my $species = get_species($event);
+        my $class = $event->class;
+        my $stable_id = get_stable_id($event);
+
+        try {
+            $sth->execute($db_id, $display_name, $species, $class, $stable_id);
+        } catch {
+           $logger->logcarp("Problem inserting reaction like event $db_id: $_");
+        };
     }
     
     $dbh->commit();
@@ -183,19 +185,20 @@ sub populate_physical_entity_table {
     $dbh->begin_work();
     
     my $sth = $dbh->prepare("INSERT INTO PhysicalEntity (id, displayName, species, class, stableId) VALUES (?, ?, ?, ?, ?)")
-		or $logger->logconfess($dbh->errstr);
+        or $logger->logconfess($dbh->errstr);
     
     foreach my $physical_entity (@physical_entities) {
-	my $db_id = $physical_entity->db_id;
-	my $display_name = $physical_entity->displayName;
-	my $species = get_species($physical_entity);
-	my $class = $physical_entity->class;
-	my $stable_id = get_stable_id($physical_entity);
-	try {
-	    $sth->execute($db_id, $display_name, $species, $class, $stable_id);
-	} catch {
-	    $logger->logcarp("Problem inserting physical entity $db_id: $_");
-	};
+        my $db_id = $physical_entity->db_id;
+        my $display_name = $physical_entity->displayName;
+        my $species = get_species($physical_entity);
+        my $class = $physical_entity->class;
+        my $stable_id = get_stable_id($physical_entity);
+        
+        try {
+            $sth->execute($db_id, $display_name, $species, $class, $stable_id);
+        } catch {
+            $logger->logcarp("Problem inserting physical entity $db_id: $_");
+        };
     }
     
     $dbh->commit();
@@ -211,14 +214,14 @@ sub populate_physical_entity_hierarchy_table {
     $dbh->begin_work();
     
     my $sth = $dbh->prepare("INSERT INTO PhysicalEntityHierarchy (physicalEntityId, childPhysicalEntityId) VALUES (?, ?)")
-		or $logger->logconfess($dbh->errstr);
-		
+        or $logger->logconfess($dbh->errstr);
+
     foreach my $physical_entity (@physical_entities) {
-	foreach my $child_entity (@{$physical_entity->hasComponent}, @{$physical_entity->hasMember}, @{$physical_entity->hasCandidate}) {	    
-	    try {
-		$sth->execute($physical_entity->db_id, $child_entity->db_id);
-	    };
-	}
+        foreach my $child_entity (@{$physical_entity->hasComponent}, @{$physical_entity->hasMember}, @{$physical_entity->hasCandidate}) {	    
+            try {
+                $sth->execute($physical_entity->db_id, $child_entity->db_id);
+            };
+        }
     }
     
     $dbh->commit();
@@ -234,17 +237,17 @@ sub populate_reaction_like_event_to_physical_entity_table {
     $dbh->begin_work();
     
     my $sth = $dbh->prepare("INSERT INTO ReactionLikeEvent_To_PhysicalEntity (reactionLikeEventId, physicalEntityId) VALUES (?, ?)")
-		or $logger->logconfess($dbh->errstr);
-		
+        or $logger->logconfess($dbh->errstr);
+
     foreach my $reaction_like_event (@reaction_like_events) {
-	foreach my $physical_entity (get_physical_entities_in_reaction_like_event($reaction_like_event)) {
-	    try {
-		$sth->execute($reaction_like_event->db_id, $physical_entity->db_id);
-	    } catch {
-		$logger->logcarp("Problem inserting reaction like event " . $reaction_like_event->db_id . " with physical entity " . $physical_entity->db_id . ": $_")
-		unless /duplicate/i;
-	    };
-	}
+        foreach my $physical_entity (get_physical_entities_in_reaction_like_event($reaction_like_event)) {
+            try {
+                $sth->execute($reaction_like_event->db_id, $physical_entity->db_id);
+            } catch {
+                $logger->logcarp("Problem inserting reaction like event " . $reaction_like_event->db_id . " with physical entity " . $physical_entity->db_id . ": $_")
+                unless /duplicate/i;
+            };
+        }
     }
     
     $dbh->commit();
@@ -264,12 +267,12 @@ sub get_physical_entities_in_reaction_like_event {
     
     # ...and all the sub-components of this PE
     for my $pe (values %physical_entities) {
-	my @subs = recurse_physical_entity_components($pe);
-	for my $sub (@subs) {
-	    $sub or next;
-	    #$logger->info("Adding sub component ".join(' ',$sub->class,$sub->displayName));
-	    $physical_entities{$sub->db_id} = $sub;
-	}
+        my @subs = recurse_physical_entity_components($pe);
+        for my $sub (@subs) {
+            $sub or next;
+            #$logger->info("Adding sub component ".join(' ',$sub->class,$sub->displayName));
+            $physical_entities{$sub->db_id} = $sub;
+        }
     }
 
     return values %physical_entities;
@@ -284,9 +287,9 @@ sub recurse_physical_entity_components {
     keys %components || return ();
     
     for my $component (values %components) {
-	for my $sub_component (recurse_physical_entity_components($component)) { 
-	    $components{$sub_component->db_id} = $sub_component;
-	}
+        for my $sub_component (recurse_physical_entity_components($component)) { 
+            $components{$sub_component->db_id} = $sub_component;
+        }
     }
 
     return values %components;
@@ -349,7 +352,7 @@ sub index_external_identifiers {
     my $dbh = get_simplified_database_handle();
     $dbh->begin_work();
     my $sth = $dbh->prepare("CREATE INDEX `externalIdentifier` ON Id_To_ExternalIdentifier (`externalIdentifier`)") 
-	or $logger->logconfess($dbh->errstr);
+        or $logger->logconfess($dbh->errstr);
     $dbh->commit();
 }
 
@@ -402,21 +405,23 @@ sub process_reference_entity {
     
     my @records;
     push @records, process_generic_identifier($reference_entity);
-    
+    push @records, process_cross_reference($reference_entity);
+    push @records, ['', $_, ''] foreach (@{$reference_entity->otherIdentifier}, @{$reference_entity->secondaryIdentifier});
+
     if ($reference_entity->is_a('ReferenceGeneProduct') || $reference_entity->is_a('ReferenceRNASequence')) {
-	if ($reference_entity->is_a('ReferenceGeneProduct')) {
-	    push @records, ['', $_, ''] foreach (@{$reference_entity->otherIdentifier}, @{$reference_entity->secondaryIdentifier});
-	    push @records, process_generic_identifier($_) foreach @{$reference_entity->referenceTranscript};
-	    push @records, process_cross_reference($_) foreach (get_cross_references(@{$reference_entity->referenceTranscript}));
-	}
-	
-	push @records, process_generic_identifier($_) foreach @{$reference_entity->referenceGene};	
-	push @records, process_cross_reference($_) foreach (get_cross_references(@{$reference_entity->referenceGene}));
+        if ($reference_entity->is_a('ReferenceGeneProduct')) {
+            push @records, process_generic_identifier($_) foreach @{$reference_entity->referenceTranscript};
+            push @records, process_cross_reference($_) foreach @{$reference_entity->referenceTranscript};
+        }
+
+        push @records, process_generic_identifier($_) foreach @{$reference_entity->referenceGene};	
+        push @records, process_cross_reference($_) foreach @{$reference_entity->referenceGene};
     }
 
     return @records;
 }
 
+=head
 sub get_cross_references {
     my @instances_with_cross_references = @_;
     
@@ -429,6 +434,7 @@ sub get_cross_references {
     
     return @cross_references;
 }
+=cut
 
 sub process_compartments {
     my $instance = shift;
@@ -456,11 +462,11 @@ sub process_generic_identifier {
     my @records;
     
     foreach my $instance (@instances) {
-	try {
-	    push @records, [$instance->referenceDatabase->[0]->displayName, $instance->identifier->[0], $instance->displayName];
-	} catch {
-	    $logger->warn("Can't insert a record for " . $instance->db_id);
-	}
+        try {
+            push @records, [$instance->referenceDatabase->[0]->displayName, $instance->identifier->[0], $instance->displayName];
+        } catch {
+            $logger->warn("Can't insert a record for " . $instance->db_id);
+        };
     }
     return @records;
 }
@@ -474,18 +480,18 @@ sub create_simplified_database {
     my $dbh = get_simplified_database_handle();
     
     try {
-	$dbh->do("create database $simplified_database");
+        $dbh->do("create database $simplified_database");
     } catch {
-	unless (/database exists/ && $overwrite) {
-	    my $error = /database exists/ ?
-		"$simplified_database exists.  Use the -overwrite flag if you wish to replace it." :
-		$_;
+        unless (/database exists/ && $overwrite) {
+            my $error = /database exists/ ?
+            "$simplified_database exists.  Use the -overwrite flag if you wish to replace it." :
+            $_;
 	    
-	    $logger->error_die($error);
-	}
+            $logger->error_die($error);
+        }
 	
-	$dbh->do("drop database $simplified_database");
-	create_simplified_database($simplified_database);
+        $dbh->do("drop database $simplified_database");
+        create_simplified_database($simplified_database);
     };
 }
 
