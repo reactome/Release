@@ -133,23 +133,84 @@ sub get_all_species_in_entity {
 
 sub is_electronically_inferred {
     my $instance = shift;
-    
-    return 0 unless $instance->inferredFrom->[0] &&
-                    $instance->inferredFrom->[0]->species->[0] &&
-                    $instance->inferredFrom->[0]->species->[0]->displayName =~ /^Homo sapiens$/i;
                     
     my $dba = $instance->dba();
     my $db_name = $dba->db_name();
     return 0 unless $db_name =~ /^test_reactome_\d+$/ || $db_name eq 'gk_current';
     
-    my $release_instance = $dba->fetch_instance(-CLASS => '_Release')->[0];
-    return 0 unless $release_instance;
+    if ($instance->is_a('Event')) {
+        return $instance->evidenceType->[0] && $instance->evidenceType->[0]->displayName =~ /electronic/i;
+    } elsif ($instance->is_a('PhysicalEntity')) {
+        # If manually inferred physical entities ever start using the inferredFrom slot, this logic
+        # can be augmented to check the event(s) to which the physical entity is/are attached
+        # to see if the event(s) are electronically inferred
+        return $instance->inferredFrom->[0] &&
+               $instance->inferredFrom->[0]->species->[0] &&
+               $instance->inferredFrom->[0]->species->[0]->displayName =~ /^Homo sapiens$/i;
+    } elsif ($instance->is_a('CatalystActivity')) {
+        return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('catalystActivity')};
+    } elsif ($instance->is_a('Regulation')) {
+        return any { is_electronically_inferred($_)} @{$instance->regulatedEntity};
+    }
+}
+
+sub get_source_for_electronically_inferred_instance {
+    my $instance = shift;
     
-    my $release_number = $release_instance->releaseNumber->[0];
-    my $slice_dba = get_dba("test_slice_$release_number",$dba->host());
-    return 0 unless $slice_dba;
+    return unless is_electronically_inferred($instance);
     
-    return (defined $slice_dba->fetch_instance_by_db_id($instance->db_id)->[0]) ? 0 : 1;
+    if ($instance->is_a('Event') || $instance->is_a('PhysicalEntity')) {
+        return @{$instance->inferredFrom};
+    } elsif ($instance->is_a('CatalystActivity')) {
+        my @source_physical_entities = get_source_for_electronically_inferred_instance($instance->physicalEntity->[0]);
+        
+        # The physical entity of the inferred catalyst activity may not be an electronically inferred instance
+        # but the same instance used by the source catalyst activity (e.g. simple entities without species).
+        # This is assumed when a source physical entity can't be found from the inferred catalyst activity's
+        # physical entity
+        @source_physical_entities = ($instance->physicalEntity->[0]) if scalar @source_physical_entities == 0;        
+        
+        my @potential_source_catalyst_activities =
+            grep {$instance->db_id != $_->db_id} map {@{$_->reverse_attribute_value('physicalEntity')}} @source_physical_entities;
+        return grep {$_->activity->[0]->db_id == $instance->activity->[0]->db_id} @potential_source_catalyst_activities;
+    } elsif ($instance->is_a('Regulation')) {
+        return @{$instance->inferredFrom} if @{$instance->inferredFrom}; # Only present for version 59 and onward
+        
+        my @source_regulated_entities = get_source_for_electronically_inferred($instance->regulatedEntity->[0]);
+        my @source_regulators = get_source_for_electronically_inferred($instance->regulator->[0]);
+        
+        # Source regulation instance(s) will have both a source regulated entity and
+        # a source regulator used to infer the inferred regulation instance passed
+        # to the subroutine
+        return intersection_of_database_instance_lists(
+            [map {@{$_->reverse_attribute_value('regulatedEntity')}} @source_regulated_entities],
+            [map {@{$_->reverse_attribute_value('regulator')}} @source_regulators]
+        );
+    }    
+}
+
+sub intersection_of_database_instance_lists {
+    my $first_database_instance_list = shift;
+    my $second_database_instance_list = shift;
+    
+    my %db_id_to_instance;
+    my %db_id_to_count;
+    foreach my $instance (unique_database_instances(@{$first_database_instance_list}), unique_database_instances(@{$second_database_instance_list})) {
+        $db_id_to_instance{$instance->db_id} = $_;
+        $db_id_to_count{$instance->db_id}++;
+    }
+                          
+    confess "Instance with db id $_ seen " . $db_id_to_count{$_} . " times" foreach grep {$db_id_to_count{$_} != 1 || $db_id_to_count{$_} != 2} keys %db_id_to_count;
+                          
+    return values %db_id_to_instance;
+}
+
+sub unique_database_instances {
+    my @database_instances = @_;
+    
+    my %db_id_to_instance;
+    $db_id_to_instance{$_->db_id} = $_ foreach @database_instances;
+    return values %db_id_to_instance;
 }
 
 sub has_multiple_species {
@@ -270,6 +331,7 @@ get_dba
 get_name_and_id
 get_all_species_in_entity
 is_electronically_inferred
+get_source_for_electronically_inferred_instance
 has_multiple_species
 is_chimeric
 get_unique_species

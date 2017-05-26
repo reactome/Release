@@ -18,9 +18,13 @@ use BioMart::Initializer;
 use BioMart::Query;
 use BioMart::QueryRunner;
 
+use GKB::Config;
 use GKB::Config_Species;
 use GKB::EnsEMBLUtils qw/:all/;
 use parent 'GKB::EnsEMBLUtils';
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
 
 our @EXPORT_OK = qw/get_species_results get_query get_query_runner get_registry update_registry_file get_identifiers/;
 push @EXPORT_OK, @GKB::EnsEMBLUtils::EXPORT_OK;
@@ -30,6 +34,8 @@ our %EXPORT_TAGS = (all => [@EXPORT_OK],
 
 sub get_species_results {
     my $species = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
     
     my $species_dataset = $species_info{$species}->{'mart_group'};
     my $species_virtual_schema = $species_info{$species}->{'mart_virtual_schema'} || 'default';
@@ -46,7 +52,7 @@ sub get_species_results {
             $species_results = capture_stdout {
                 system(get_wget_query($species_mart_url, $species_dataset, $species_virtual_schema));
             };
-
+            
             if ($species_results =~ /ERROR/) {
                 $species_results = capture_stdout {
                     system(get_wget_query($species_mart_url, $species_dataset, $species_virtual_schema, 'uniprot_swissprot_accession'));
@@ -55,6 +61,9 @@ sub get_species_results {
         };
 
         $results_complete = $species_results =~ /\[success\]$/;
+                            
+        $logger->info("Query attempt $query_attempts for species $species");
+        $results_complete ? $logger->info("Results obtained successfully") : $logger->warn("Problem obtaining results - got $species_results");
     }
     
     return $species_results;
@@ -74,7 +83,7 @@ sub get_xml_query {
     
     $dataset // confess "No dataset defined\n";
     $virtual_schema // confess "No virtual schema defined\n";
-    $swissprot_attribute_name //= "uniprot_swissprot";
+    $swissprot_attribute_name //= "uniprotswissprot";
     
     return <<XML;
 <?xml version="1.0" encoding="UTF-8"?>
@@ -83,7 +92,7 @@ sub get_xml_query {
 	<Dataset name = "$dataset" interface = "default" >
 		<Attribute name = "ensembl_gene_id" />
 		<Attribute name = "$swissprot_attribute_name" />
-		<Attribute name = "uniprot_sptrembl" />
+		<Attribute name = "uniprotsptrembl" />
         <Attribute name = "ensembl_peptide_id" />
 	</Dataset>
 </Query>

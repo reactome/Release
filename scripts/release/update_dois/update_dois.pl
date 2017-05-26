@@ -16,14 +16,15 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-our ($user, $pass, $release_db, $release_db_host, $curator_db, $curator_db_host);
+our ($user, $pass, $release_db, $release_db_host, $curator_db, $curator_db_host, $live_run);
 GetOptions(
     'user:s' => \$user,
     'pass:s' => \$pass,
     'release_db:s' => \$release_db,
-    'release_db_host' => \$release_db_host,
+    'release_db_host:s' => \$release_db_host,
     'curator_db:s' => \$curator_db,
-    'curator_db_host:s' => \$curator_db_host
+    'curator_db_host:s' => \$curator_db_host,
+    'live_run' => \$live_run
 );
 
 Readonly my $instance_edit_author_initials => 'JD';
@@ -43,9 +44,16 @@ my $curator_dba = get_dba({
     'db' => $curator_db || 'gk_central'
 });
 
+if (!$live_run) {
+    $logger->info("DRY RUN - " . $release_dba->db_name() . " on " . $release_dba->host() . " and " . $curator_dba->db_name() . " on " . $curator_dba->host() . " will NOT be modified");
+}
+
 chomp(my $date = `date \+\%F`);
-my $release_instance_edit = GKB::Utils_esther::create_instance_edit($release_dba, $instance_edit_author_last_name, $instance_edit_author_initials, $date);
-my $curator_instance_edit = GKB::Utils_esther::create_instance_edit($curator_dba, $instance_edit_author_last_name, $instance_edit_author_initials, $date);
+my ($release_instance_edit, $curator_instance_edit);
+if ($live_run) {
+    $release_instance_edit = GKB::Utils_esther::create_instance_edit($release_dba, $instance_edit_author_last_name, $instance_edit_author_initials, $date);
+    $curator_instance_edit = GKB::Utils_esther::create_instance_edit($curator_dba, $instance_edit_author_last_name, $instance_edit_author_initials, $date);
+}
 
 my @release_pathway_instances = @{$release_dba->fetch_instance(-CLASS => 'Pathway')};
 foreach my $release_pathway (@release_pathway_instances) {
@@ -55,6 +63,7 @@ foreach my $release_pathway (@release_pathway_instances) {
         my $stable_id = $release_pathway->stableIdentifier->[0]->displayName;
 	
         $logger->info("$doi_prefix/$stable_id for " . $release_pathway->name->[0]);
+        next unless $live_run;
 	
         try {
             $release_pathway->doi(undef);
