@@ -14,14 +14,20 @@
 	background: #f7f7f7;
 }
 
-.widget-top a.widget-action,
-.widget-top a.widget-action:hover {
-	text-decoration: none;
+.widget-top .widget-action {
+	border: 0;
+	margin: 0;
+	padding: 10px;
+	background: none;
+	cursor: pointer;
+	outline: none;
 }
 
+.widget-title h3,
 .widget-title h4 {
 	margin: 0;
 	padding: 15px;
+	font-size: 1em;
 	line-height: 1;
 	overflow: hidden;
 	white-space: nowrap;
@@ -45,8 +51,109 @@
 }
 
 .deleting .widget-title,
-.deleting .widget-top a.widget-action:after {
-	color: #aaa;
+.deleting .widget-top .widget-action .toggle-indicator:before {
+	color: #a0a5aa;
+}
+
+/* Media Widgets */
+.wp-core-ui .media-widget-control.selected .placeholder,
+.wp-core-ui .media-widget-control.selected .not-selected,
+.wp-core-ui .media-widget-control .selected {
+	display: none;
+}
+
+.media-widget-control.selected .selected {
+	display: inline-block;
+}
+
+.media-widget-buttons {
+	text-align: left;
+	margin-top: 0;
+}
+
+.media-widget-control .media-widget-buttons .button {
+	width: auto;
+	height: auto;
+	margin-top: 12px;
+	white-space: normal;
+}
+
+.media-widget-buttons .button:first-child {
+	margin-right: 8px;
+}
+
+.media-widget-control .placeholder {
+	border: 1px dashed #b4b9be;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	cursor: default;
+	line-height: 20px;
+	padding: 9px 0;
+	position: relative;
+	text-align: center;
+	width: 100%;
+}
+
+.media-widget-control .media-widget-preview {
+	text-align: center;
+}
+.media-widget-control .media-widget-preview .notice {
+	text-align: initial;
+}
+.media-frame .media-widget-embed-notice p code,
+.media-widget-control .notice p code {
+	padding: 0 3px 0 0;
+}
+.media-frame .media-widget-embed-notice {
+	margin-top: 16px;
+}
+.media-widget-control .media-widget-preview img {
+	max-width: 100%;
+}
+.media-widget-control .media-widget-preview .wp-video-shortcode {
+	background: #000;
+}
+
+.media-frame.media-widget .media-toolbar-secondary {
+	min-width: 300px;
+}
+
+.media-frame.media-widget .image-details .embed-media-settings .setting.align,
+.media-frame.media-widget .attachment-display-settings .setting.align,
+.media-frame.media-widget .embed-media-settings .setting.align,
+.media-frame.media-widget .embed-link-settings .setting.link-text,
+.media-frame.media-widget .replace-attachment,
+.media-frame.media-widget .checkbox-setting.autoplay {
+	display: none;
+}
+
+.media-widget-video-preview {
+	width: 100%;
+}
+
+.media-widget-video-link {
+	display: inline-block;
+	min-height: 132px;
+	width: 100%;
+	background: black;
+}
+
+.media-widget-video-link .dashicons {
+	font: normal 60px/1 'dashicons';
+	position: relative;
+	width: 100%;
+	top: -90px;
+	color: white;
+	text-decoration: none;
+}
+
+.media-widget-video-link.no-poster .dashicons {
+	top: 30px;
+}
+
+.media-frame #embed-url-field.invalid {
+	border: 1px solid #f00;
 }
 
 /* Widget Dragging Helpers */
@@ -59,7 +166,7 @@
 }
 
 .widget-placeholder {
-	border: 1px dashed #bbb;
+	border: 1px dashed #b4b9be;
 	margin: 0 auto 10px;
 	height: 45px;
 	width: 100%;
@@ -97,6 +204,7 @@
 	cursor: pointer;
 }
 
+.sidebar-name h2,
 .sidebar-name h3 {
 	margin: 0;
 	padding: 8px 10px;
@@ -108,7 +216,12 @@
 	padding: 0 0 15px;
 	margin: 0;
 	font-style: normal;
-	color: #777;
+	color: #72777c;
+}
+
+.widget-holder .description,
+.inactive-sidebar .description {
+	color: #555d66;
 }
 
 #widgets-right .widgets-holder-wrap .description {
@@ -139,18 +252,17 @@ div#widgets-left .inactive-sidebar.closed .sidebar-name {
 	margin-bottom: 10px;
 }
 
+div#widgets-left .sidebar-name h2,
 div#widgets-left .sidebar-name h3 {
 	padding: 10px 0;
 	margin: 0 10px 0 0;
 }
 
-div#widgets-left .sidebar-name .sidebar-name-arrow:before {
-	right: 0;
-	top: 4px;
-	padding: 4px 6px 4px 4px;
+#widgets-left .sidebar-name .sidebar-name-arrow:before {
+	padding: 9px;
 }
 
-#widgets-left #available-widgets,
+#widgets-left .widgets-holder-wrap,
 div#widgets-left .widget-holder {
 	background: transparent;
 	border: none;
@@ -220,14 +332,6 @@ div#widgets-left .inactive-sidebar .widgets-sortables {
 
 /* Widgets Right */
 
-div#widgets-right:after {
-	content: ".";
-	display: block;
-	height: 0;
-	clear: both;
-	visibility: hidden;
-}
-
 div#widgets-right .sidebars-column-1,
 div#widgets-right .sidebars-column-2 {
 	max-width: 450px;
@@ -242,13 +346,13 @@ div#widgets-right .sidebar-description {
 	margin-top: -5px;
 }
 
+div#widgets-right .sidebar-name h2,
 div#widgets-right .sidebar-name h3 {
 	padding: 15px 7px;
 }
 
 div#widgets-right .sidebar-name .sidebar-name-arrow:before {
-	right: 0;
-	top: 4px;
+	top: 2px;
 }
 
 div#widgets-right .widget-top {
@@ -267,14 +371,17 @@ div#widgets-right .closed .widgets-sortables {
 	margin-bottom: 0;
 }
 
-.sidebar-name .spinner {
-	margin: -5px 5px;
+.sidebar-name .spinner,
+.remove-inactive-widgets .spinner {
 	float: none;
+	position: relative;
+	top: -2px;
+	margin: -5px 5px;
 }
 
 /* Dragging a widget over a closed sidebar */
 #widgets-right .widgets-holder-wrap.widget-hover {
-	border-color: #777;
+	border-color: #72777c;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 	box-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
@@ -341,8 +448,14 @@ div#widgets-right .closed .widgets-sortables {
 
 .js .widgets-holder-wrap.closed .widget,
 .js .widgets-holder-wrap.closed .sidebar-description,
+.js .widgets-holder-wrap.closed .remove-inactive-widgets,
+.js .widgets-holder-wrap.closed .description,
 .js .closed br.clear {
 	display: none;
+}
+
+.js .widgets-holder-wrap.closed .widget.ui-sortable-helper {
+	display: block;
 }
 
 /* Hide Widget Settings by Default */
@@ -358,7 +471,7 @@ div#widgets-right .closed .widgets-sortables {
 /* Dragging widgets over the available widget area show's a "Deactivate" message */
 #removing-widget {
 	display: none;
-	font-weight: normal;
+	font-weight: 400;
 	padding-left: 15px;
 	font-size: 12px;
 	line-height: 1;
@@ -366,7 +479,7 @@ div#widgets-right .closed .widgets-sortables {
 }
 
 .js #removing-widget {
-	color: #2ea2cc;
+	color: #00a0d2;
 }
 
 .widget-control-noform,
@@ -451,17 +564,18 @@ div#widgets-right .widget-top:hover,
 	transition: background 0.2s ease-in-out;
 }
 
+ /* @todo looks like these hover/focus states are overridden by .widgets-chooser-selected */
 .widgets-chooser li:hover,
 .widgets-chooser li:focus {
 	background: rgba(255,255,255,0.7);
 }
 
 .widgets-chooser li:focus:before {
-	content: '\f147';
+	content: "\f147";
 	display: block;
 	-webkit-font-smoothing: antialiased;
-	font: normal 26px/1 'dashicons';
-	color: #999;
+	font: normal 26px/1 dashicons;
+	color: #555d66;
 	position: absolute;
 	top: 7px;
 	left: 5px;
@@ -472,16 +586,16 @@ div#widgets-right .widget-top:hover,
 }
 
 .widgets-chooser li.widgets-chooser-selected {
-	background: #2ea2cc;
+	background: #00a0d2;
 	color: #fff;
 }
 
 .widgets-chooser li.widgets-chooser-selected:before,
 .widgets-chooser li.widgets-chooser-selected:focus:before {
-	content: '\f147';
+	content: "\f147";
 	display: block;
 	-webkit-font-smoothing: antialiased;
-	font: normal 26px/1 'dashicons';
+	font: normal 26px/1 dashicons;
 	color: #fff;
 	position: absolute;
 	top: 7px;
@@ -499,6 +613,10 @@ div#widgets-right .widget-top:hover,
 
 #available-widgets .widget .widget-top {
 	cursor: pointer;
+}
+
+#available-widgets .widget.ui-draggable-dragging .widget-top {
+	cursor: move;
 }
 
 /* =Media Queries
