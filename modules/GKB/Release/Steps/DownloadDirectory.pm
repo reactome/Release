@@ -58,7 +58,7 @@ override 'run_commands' => sub {
             [
                 ["scp $analysis_input_dir/$analysis_binary $live_server:$analysis_input_dir"],
                 ["ssh -t $live_server 'cd $analysis_input_dir; rm analysis.bin; ln -s $analysis_binary analysis.bin'"],
-                ["ssh -t $live_server 'mv --backup=numbered $analysis_temp_dir $analysis_temp_dir.$prevver; mkdir -p $analysis_temp_dir"],
+                ["ssh -t $live_server 'mv --backup=numbered $analysis_temp_dir $analysis_temp_dir.$prevver; mkdir -p $analysis_temp_dir'"],
                 ["ssh -t $live_server 'echo $sudo | sudo -S chown -R tomcat7:gkb $analysis_dir'"]
             ]
         );
