@@ -40,31 +40,39 @@ override 'run_commands' => sub {
     } elsif ($gkbdir eq "gkb") {
         my $archive_live = replace_gkb_alias_in_dir("$html/download/archive", 'gkb');
         $self->cmd("Archiving version $prevver download directory", [["tar zcvf - $html/download/$prevver | ssh $live_server 'cat > $archive_live/$prevver.tgz'"]]);
-    	$self->cmd("Copying current download directory from $host",[["scp -r $html/download/$version $live_server:$download_dir"]]);
+    	$self->cmd("Copying current download directory from $host",
+            [
+                ["scp -r $html/download/$version $live_server:$download_dir"],
+                ["ssh -t $live_server 'echo $sudo | sudo -S chown -R www-data:gkb $download_dir'"]
+            ]
+        );
         $self->cmd("Removing version $prevver download directory from $live_server (archive still available)",
             [["rm -r $download_dir/$prevver"]], {'ssh' => $live_server}
         );
         
-        my $analysis_dir = '/usr/local/reactomes/Reactome/production/AnalysisService/input';
+        my $analysis_dir = '/usr/local/reactomes/Reactome/production/AnalysisService';
+        my $analysis_input_dir = "$analysis_dir/input";
+        my $analysis_temp_dir = "$analysis_dir/temp";
         my $analysis_binary = "analysis_v$version.bin";
-        $self->cmd("Copying analyis binary from $host",
+        $self->cmd("Copying analysis binary from $host and emptying temp directory",
             [
-                ["scp $analysis_dir/$analysis_binary $live_server:$analysis_dir"],
-                ["ssh $live_server 'cd $analysis_dir;rm analysis.bin; ln -s $analysis_binary analysis.bin'"]
+                ["scp $analysis_input_dir/$analysis_binary $live_server:$analysis_input_dir"],
+                ["ssh -t $live_server 'cd $analysis_input_dir; rm analysis.bin; ln -s $analysis_binary analysis.bin'"],
+                ["ssh -t $live_server 'mv --backup=numbered $analysis_temp_dir $analysis_temp_dir.$prevver; mkdir -p $analysis_temp_dir'"],
+                ["ssh -t $live_server 'echo $sudo | sudo -S chown -R tomcat7:gkb $analysis_dir'"]
             ]
         );
 	
-        my $solr_dir = '/usr/local/reactomes/Reactome/production/Solr';
+        my $solr_dir = '/var/solr/data/reactome/data';
         $self->cmd("Copying solr index from $host",
             [
                 ["ssh -t $live_server 'mv $solr_dir $solr_dir.$prevver'"],
                 ["scp -r $solr_dir/ $live_server:$solr_dir"],
-                ["ssh -t $live_server 'echo $sudo | sudo -S chown -R solr:gkb $solr_dir'"],
+                ["ssh -t $live_server 'echo $sudo | sudo -S chown -R solr:solr $solr_dir'"],
                 ["ssh -t $live_server 'echo $sudo | sudo -S service solr restart'"]
             ]
         );
     }
-
     
     # The command is run on the live server when $gkbdir is gkb_prod or gkb_test
     my $ssh_server = ($gkbdir eq "gkb") ? $live_server : undef;
