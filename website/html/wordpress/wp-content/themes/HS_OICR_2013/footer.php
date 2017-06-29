@@ -20,8 +20,8 @@
 </div><!--close container 24-->
 
   <!-- Next scripts are for the search -->
-    <script type="text/javascript" src="/content/resources/js/jquery.autocomplete.min.js?v=3.2"></script>
-    <script type="text/javascript" src="/content/resources/js/reactome.search.footer.js?v=3.2"></script>    
+    <script type="text/javascript" src="/content/resources/js/jquery.autocomplete.min.js?v=3.2.1"></script>
+    <script type="text/javascript" src="/content/resources/js/reactome.search.footer.js?v=3.2.1"></script>    
   <!-- Previous scripts are for the search -->
 
 </body>
