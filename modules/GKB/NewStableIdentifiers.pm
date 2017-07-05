@@ -17,7 +17,8 @@ Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
 our @EXPORT = qw/
-get_stable_id_QA_problems
+get_stable_id_QA_problems_as_list_of_strings
+get_stable_id_QA_problems_as_hash
 get_correct_stable_identifier
 stable_identifier_numeric_component_is_correct
 stable_identifier_species_prefix_is_correct
@@ -31,16 +32,40 @@ get_all_stable_identifier_instances
 get_stable_identifier_instances_without_referrers
 get_stable_identifier_instances_with_multiple_referrers
 get_duplicate_stable_identifier_instances
+get_old_stable_identifiers
+get_duplicate_old_stable_identifiers
 get_stable_identifier_species_prefix
 get_stable_identifier_numeric_component
 get_instance_species_prefix
 /;
 
-sub get_stable_id_QA_problems {
+sub get_stable_id_QA_problems_as_list_of_strings {
+    my $dba = shift;
+    my %qa_problems = get_stable_id_QA_problems_as_hash($dba);
+
+    return grep { defined } map {
+        my $qa_issue_type = $_;
+        my @entries = map {
+            my @instances_with_stable_identifier = grep { defined } @{$_->{'instance'}};
+            my @stable_identifier_instances = grep { defined } @{$_->{'st_id_instance'}};
+            my $old_identifier = $_->{'old_stable_identifier'} ? '(old id - ' . $_->{'old_stable_identifier'} . ')' : '';
+            
+            my $instance_string = (join ', ', map {get_name_and_id($_)} @instances_with_stable_identifier) || "N/A";
+            my $stable_id_string = (join ', ', map { get_name_and_id($_) } @stable_identifier_instances) || "N/A";
+            
+            "\tInstances:$instance_string\n\tStable Id Instances:$stable_id_string $old_identifier\n";
+        } @{$qa_problems{$qa_issue_type}};
+        
+        ucfirst($qa_issue_type) . "\n\n" . join("\n", @entries);
+    } keys %qa_problems;
+}
+sub get_stable_id_QA_problems_as_hash {
     my $dba = shift;
     my %qa_problems;
     
     my %duplicate_stable_identifier_instances = get_identifier_to_multiple_stable_identifier_instances_map($dba);
+    my %duplicate_old_stable_identifier_instances = get_old_identifier_to_multiple_stable_identifier_instances_map($dba);
+    
     foreach my $stable_identifier_instance (get_all_stable_identifier_instances($dba)) {        
         my @attached_instances = get_instances_attached_to_stable_identifier($stable_identifier_instance);
         if (scalar @attached_instances == 0) {
@@ -58,6 +83,18 @@ sub get_stable_id_QA_problems {
             push @{$qa_problems{'duplicate stable identifier instances'}},
                 {'st_id_instance' => $duplicate_stable_identifier_instances{$identifier}, 'instance' => [undef]};
         }
+        
+        my $old_identifier = $stable_identifier_instance->oldIdentifier->[0] // '';
+        if ($old_identifier && is_incorrect_old_stable_identifier($old_identifier)) {
+            push @{$qa_problems{'incorrect old stable identifier'}},
+            {'st_id_instance' => [$stable_identifier_instance], 'instance' => [], 'old_stable_identifier' => $old_identifier};
+        }
+        
+        if ($old_identifier && exists($duplicate_old_stable_identifier_instances{$old_identifier})) {
+            push @{$qa_problems{'duplicate old stable identifier instances'}},
+                {'st_id_instance' => $duplicate_old_stable_identifier_instances{$old_identifier}, 'instance' => [undef], 'old_stable_identifier' => $old_identifier};
+        }
+        
     }
     
     foreach my $instance (get_instances_requiring_stable_identifiers($dba)) {
@@ -159,7 +196,11 @@ sub has_incorrect_stable_identifier {
     
     return (!stable_identifier_numeric_component_is_correct($instance) || !stable_identifier_species_prefix_is_correct($instance));
 }
-
+sub is_incorrect_old_stable_identifier {
+    my $old_stable_identifier = shift;
+    
+    return $old_stable_identifier !~ /^REACT_/;
+}
 sub get_instances_with_stable_identifiers {
     my $dba = shift;
     
@@ -189,7 +230,6 @@ sub get_stable_identifier_instances_with_multiple_referrers {
     
     return grep { scalar get_instances_attached_to_stable_identifier($_) > 1 } get_all_stable_identifier_instances($dba);
 }
-
 sub get_duplicate_stable_identifier_instances {
     my $dba = shift;
     
@@ -211,6 +251,23 @@ sub get_identifier_to_multiple_stable_identifier_instances_map {
     } keys %identifier_to_stable_identifier_instances;
     
     return map {$_ => $identifier_to_stable_identifier_instances{$_}} @identifiers_with_multiple_stable_identifier_instances;
+}
+
+sub get_old_identifier_to_multiple_stable_identifier_instances_map {
+    my $dba = shift;
+    
+    my %old_identifier_to_stable_identifier_instances;
+    foreach my $stable_identifier (get_all_stable_identifier_instances($dba)) {
+        if ($stable_identifier->oldIdentifier->[0]) {
+            push @{$old_identifier_to_stable_identifier_instances{$stable_identifier->oldIdentifier->[0]}}, $stable_identifier;
+        }
+    }
+    
+    my @old_identifiers_with_multiple_stable_identifier_instances = grep {
+        scalar @{$old_identifier_to_stable_identifier_instances{$_}} > 1
+    } keys %old_identifier_to_stable_identifier_instances;
+    
+    return map {$_ => $old_identifier_to_stable_identifier_instances{$_}} @old_identifiers_with_multiple_stable_identifier_instances;
 }
 
 sub get_stable_identifier_species_prefix {
