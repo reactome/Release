@@ -48,12 +48,13 @@ sub get_stable_id_QA_problems_as_list_of_strings {
         my @entries = map {
             my @instances_with_stable_identifier = grep { defined } @{$_->{'instance'}};
             my @stable_identifier_instances = grep { defined } @{$_->{'st_id_instance'}};
-            my $old_identifier = $_->{'old_stable_identifier'} ? '(old id - ' . $_->{'old_stable_identifier'} . ')' : '';
+            my $old_identifier = $_->{'old_stable_identifier'} ? '(old id is ' . $_->{'old_stable_identifier'} . ')' : '';
+            my $proposed_stable_identifier = $_->{'proposed_stable_identifier'} ? '(proposed identifier is ' . $_->{'proposed_stable_identifier'} . ')' : '';
             
             my $instance_string = (join ', ', map {get_name_and_id($_)} @instances_with_stable_identifier) || "N/A";
             my $stable_id_string = (join ', ', map { get_name_and_id($_) } @stable_identifier_instances) || "N/A";
             
-            "\tInstances:$instance_string\n\tStable Id Instances:$stable_id_string $old_identifier\n";
+            "\tInstances:$instance_string\n\tStable Id Instances:$stable_id_string $old_identifier $proposed_stable_identifier\n";
         } @{$qa_problems{$qa_issue_type}};
         
         ucfirst($qa_issue_type) . "\n\n" . join("\n", @entries);
@@ -74,7 +75,11 @@ sub get_stable_id_QA_problems_as_hash {
             push @{$qa_problems{'stable id has multiple referrers'}}, {'st_id_instance' => [$stable_identifier_instance], 'instance' => \@attached_instances};
         } else {
             if (has_incorrect_stable_identifier($attached_instances[0])) {
-                push @{$qa_problems{'incorrect stable identifier'}}, {'st_id_instance' => [$stable_identifier_instance], 'instance' => [$attached_instances[0]]};
+                push @{$qa_problems{'incorrect stable identifier'}}, {
+                    'st_id_instance' => [$stable_identifier_instance],
+                    'instance' => [$attached_instances[0]],
+                    'proposed_stable_identifier' => get_correct_stable_identifier($attached_instances[0])
+                };
             }            
         }
         
