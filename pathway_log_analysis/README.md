@@ -31,7 +31,7 @@
 
 7) flattened pathway hierarchy for all species seen in log
 
-    cut -f2 pathway_info.txt | sort -u | ./flatten_pathway_hierarchy.pl > pathway_hierarchy.txt
+    cut -f2 pathway_info.txt | sort -u | perl flatten_pathway_hierarchy.pl > pathway_hierarchy.txt
 
 8) generate reports
  
