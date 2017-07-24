@@ -27,7 +27,7 @@
 
 6) pathway information (also filtering out non-pathway hits)
 
-    ./pathway_info.pl username password unique_hits.txt > pathway_info.txt
+    perl pathway_info.pl username password unique_hits.txt > pathway_info.txt
 
 7) flattened pathway hierarchy for all species seen in log
 
@@ -35,7 +35,7 @@
 
 8) generate reports
  
-    ./analyze_pathway_hits.pl
+    perl analyze_pathway_hits.pl
     
 
 
