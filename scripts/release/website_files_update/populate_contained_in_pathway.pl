@@ -39,17 +39,16 @@ shift @records; #discard header
 foreach my $record (@records) {    
     chomp $record;
     my @fields = split "\t", $record;
-    my $regulated_entity_id = $fields[1];
-    my $manual_check = $fields[7];
+    my $regulated_entity_id = $fields[2];
+    my $manual_check = $fields[8];
     
     my $regulated_entity_instance = $dba->fetch_instance_by_db_id($regulated_entity_id)->[0];
     my $regulation_instances = $regulated_entity_instance->reverse_attribute_value('regulatedEntity');
     
     if (!$manual_check) {
-        my $diagram = $fields[6];
-        my ($diagram_id) = $diagram =~ /\((\d+)\)$/;
-        my $diagram_instance = $dba->fetch_instance_by_db_id($diagram_id)->[0];
-        my $pathway_instance = $diagram_instance->representedPathway->[0];
+        my $pathway_with_diagram = $fields[7];
+        my ($pathway_id) = $pathway_with_diagram =~ /\((\d+)\)$/;
+        my $pathway_instance = $dba->fetch_instance_by_db_id($pathway_id)->[0];
         foreach my $regulation_instance (@{$regulation_instances}) {
             if ($regulation_instance->containedInPathway->[0]) {
                 report($regulation_instance->displayName . '(' . $regulation_instance->db_id . ')' .
@@ -57,13 +56,11 @@ foreach my $record (@records) {
                 next;
             }
             
-            
             #$regulation_instance->containedInPathway(undef);
             #$regulation_instance->containedInPathway($pathway_instance);
             #$dba->update_attribute($regulation_instance, "containedInPathway");
             report($regulation_instance->displayName . '(' . $regulation_instance->db_id . ')' .
-                  ' populated with ' . $pathway_instance->displayName . '(' .
-                  $pathway_instance->db_id . ")\n", $output);
+                  ' populated with ' . $pathway_instance->displayName . '(' . $pathway_instance->db_id . ")\n", $output);
         }
     }
 }
