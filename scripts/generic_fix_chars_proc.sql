@@ -45,6 +45,7 @@ BEGIN
 	insert into special_chars
 		(replacement_char,special_char)
 	values
+		('','tional'),
 		('€','â‚¬'),	('‚','â€š'),	('ƒ','Æ’'),		('„','â€ž'),
 		('…','â€¦'),	('†','â€ '),	('‡','â€¡'),	('ˆ','Ë†'),
 		('‰','â€°'),	('‹','â€¹'),	('Œ','Å’'),		('ÿ','Ã¿'),
@@ -123,11 +124,28 @@ BEGIN
 					order by count(distinct ',tbl_name,'.DB_ID) asc, special_char asc');
 
 	-- Before running the fix, let's see what there is that has "bad" characters.
-
-	set @detailed_report_query= CONCAT('	select distinct special_char, hex(special_char), replacement_char, ',tbl_name,'.DB_ID, ',tbl_name,'.',col_name,'
-					from ',tbl_name,', special_chars
+	set @detailed_report_query= CONCAT('	
+					select * from
+					( select distinct special_char, hex(special_char), replacement_char, ',tbl_name,'.DB_ID, ',tbl_name,'.',col_name,'
+					from special_chars, ',tbl_name,'
 					where BINARY ',tbl_name,'.',col_name,'
-					like CONCAT(''%'',special_chars.special_char,''%'')');
+					like CONCAT(''%'',special_chars.special_char,''%'') ) as records_with_special_chars
+					left join 
+					( select ',tbl_name,'.db_id, 
+					ieCreator.dateTime as created_time, ieCreator.note as creation_note, 
+					concat(Creator.firstname, \' \', Creator.initial, \' \' , Creator.surname ) as creator,
+					ieModifier.note as modified_note, ieModifier.dateTime as modified_time,
+					concat(Modifier.firstname, \' \', Modifier.initial, \' \' , Modifier.surname ) as modifier
+                    from ',tbl_name,'
+                    left join DatabaseObject as DBO on DBO.db_id = ',tbl_name,'.db_id
+					left join InstanceEdit as ieCreator on ieCreator.DB_ID = DBO.created
+					left join InstanceEdit_2_author as ie2a_creator on ie2a_creator.DB_ID = ieCreator.DB_ID
+					left join Person as Creator on ie2a_creator.author = Creator.DB_ID
+					left join DatabaseObject_2_modified on DatabaseObject_2_modified.DB_ID = DBO.DB_ID
+					left join InstanceEdit as ieModifier on DatabaseObject_2_modified.modified = ieModifier.DB_ID
+					left join InstanceEdit_2_author as ie2a_modifier on ie2a_modifier.DB_ID = ieModifier.DB_ID
+					left join Person as Modifier on ie2a_modifier.author = Modifier.DB_ID ) as object_info
+                    on object_info.db_id = records_with_special_chars.db_id;  ');
 
 	-- select @summary_report_query,@detailed_report_query;
 
@@ -206,6 +224,17 @@ BEGIN
 
 	if update_source then
 		begin
+			declare exit handler for sqlexception
+			begin
+				rollback;
+				select 'Rolling back due to sqlexception!' as message;
+			end;
+			declare exit handler for sqlwarning
+			begin
+				rollback;
+				select 'Rolling back due to sqlwarning!' as message;
+			end;
+
 			start transaction;
 			set @update_str=concat('update ',tbl_name,', fixed_vals
 									set ',tbl_name,'.',col_name,' = fixed_vals.fixed_val
@@ -222,31 +251,31 @@ DELIMITER ;
 -- Call the procedure. Invoke this script as: 'SET @run_update = true; \.generic_fix_chars_proc.sql'
 -- From the shell:
 -- $ mysql -u root -p -e"SET @run_update = true; `cat $(pwd)/generic_fix_chars_proc.sql`"
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'firstname\',',@run_update,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'firstname\',',false,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'initial\',',@run_update,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'initial\',',false,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'surname\',',@run_update,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'surname\',',false,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Publication\',\'title\',',@run_update,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Publication\',\'title\',',false,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Affiliation\',\'address\',',@run_update,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Affiliation\',\'address\',',false,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'DatabaseObject\',\'_displayName\',',@run_update,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'DatabaseObject\',\'_displayName\',',false,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Summation\',\'text\',',@run_update,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Summation\',\'text\',',false,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
