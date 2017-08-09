@@ -2015,6 +2015,7 @@ sub print_DOI_TOC {
 		#$self->urlmaker || $self->throw("Need URLMaker object.");
 		print $pathway->prettyfy(
                 #-URLMAKER => $self->urlmaker,
+                -WEBUTILS => $self,
 			    -SUBCLASSIFY => 1,
 			    -CGI => $self->cgi)->top_browsing_view(1);
     }
