@@ -58,6 +58,7 @@ BEGIN
 		('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0xC2,0x9D)),
 		('”',concat('Ã¢â‚¬Â',0x9D)),
 		('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0x9D)),
+		('-','â€‘'), -- <-- This mapping was discovered by Lisa.
 		('•','â€¢'),	('–','â€“'),	('—','â€”'),	('ª','Âª'),
 		('˜','Ëœ'),		('™','â„¢'),	('š','Å¡'),		('›','â€º'),
 		('œ','Å“'),		('ž','Å¾'),		('Ÿ','Å¸'),		('¡','Â¡'),
@@ -123,15 +124,15 @@ BEGIN
 					order by count(distinct ',tbl_name,'.DB_ID) asc, special_char asc');
 
 	-- Before running the fix, let's see what there is that has "bad" characters.
-	set @detailed_report_query= CONCAT('	
+	set @detailed_report_query= CONCAT('
 					select * from
 					( select distinct special_char, hex(special_char), replacement_char, ',tbl_name,'.DB_ID, ',tbl_name,'.',col_name,'
 					from special_chars, ',tbl_name,'
 					where BINARY ',tbl_name,'.',col_name,'
 					like CONCAT(''%'',special_chars.special_char,''%'') ) as records_with_special_chars
-					left join 
-					( select ',tbl_name,'.db_id, 
-					ieCreator.dateTime as created_time, ieCreator.note as creation_note, 
+					left join
+					( select ',tbl_name,'.db_id,
+					ieCreator.dateTime as created_time, ieCreator.note as creation_note,
 					concat(Creator.firstname, \' \', Creator.initial, \' \' , Creator.surname ) as creator,
 					ieModifier.note as modified_note, ieModifier.dateTime as modified_time,
 					concat(Modifier.firstname, \' \', Modifier.initial, \' \' , Modifier.surname ) as modifier
