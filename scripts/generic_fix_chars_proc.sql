@@ -251,31 +251,31 @@ DELIMITER ;
 -- Call the procedure. Invoke this script as: 'SET @run_update = true; \.generic_fix_chars_proc.sql'
 -- From the shell:
 -- $ mysql -u root -p -e"SET @run_update = true; `cat $(pwd)/generic_fix_chars_proc.sql`"
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'firstname\',',false,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'firstname\',',@run_update,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'initial\',',false,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'initial\',',@run_update,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'surname\',',false,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Person\',\'surname\',',@run_update,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Publication\',\'title\',',false,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Publication\',\'title\',',@run_update,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Affiliation\',\'address\',',false,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Affiliation\',\'address\',',@run_update,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'DatabaseObject\',\'_displayName\',',false,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'DatabaseObject\',\'_displayName\',',@run_update,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
-SET @proc_call = concat('CALL fix_chars_in_table_col(\'Summation\',\'text\',',false,');');
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Summation\',\'text\',',@run_update,');');
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
