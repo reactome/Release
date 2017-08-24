@@ -9,6 +9,7 @@ PREV_DB=$(grep previousSlicingDbName slicingTool.prop | grep -v '\#' |perl -pe '
 VER=$(grep releaseNumber slicingTool.prop | perl -pe 's/^\S+=//');
 CURATOR_DB=$(grep dbName slicingTool.prop | grep -v '\#' |perl -pe 's/^\S+=//');
 CURATOR_HOST=$(grep dbHost slicingTool.prop | grep -v '\#' |perl -pe 's/^\S+=//');
+RUN_CHAR_FIX=$(grep runCharacterFixer slicingTool.prop | grep -v '\#' |perl -pe 's/^\S+=//');
 
 #if [[ -z $CURATOR_DB || -z $CURATOR_HOST ]]
 #then
@@ -16,8 +17,10 @@ CURATOR_HOST=$(grep dbHost slicingTool.prop | grep -v '\#' |perl -pe 's/^\S+=//'
 #    exit
 #fi
 
-echo "Fixing bad character sequences."
-bash ../scripts/fix_characters.sh $CURATOR_DB $CURATOR_HOST $USER $PASS $(pwd) true
+if [[ $RUN_CHAR_FIX == "true" ]] ; then
+    echo "Fixing bad character sequences."
+    bash ../scripts/fix_characters.sh $CURATOR_DB $CURATOR_HOST $USER $PASS $(pwd) true
+fi
 
 if [[ -n $DB && -n $USER && -n $PASS ]]
 then
