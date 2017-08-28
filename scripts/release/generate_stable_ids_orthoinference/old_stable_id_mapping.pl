@@ -48,7 +48,7 @@ chomp(my $date = `date \+\%F`);
 my $instance_edit = GKB::Utils_esther::create_instance_edit($dba, 'Weiser', 'JD', $date);
 $logger->info('Instance edit db_id is ' . $instance_edit->db_id);
 
-my %existing_stable_identifiers;
+my %existing_stable_identifiers = map { $_->oldIdentifier->[0] => 1 } get_stable_identifier_instances_with_old_identifiers($dba);
 foreach my $instance (get_instances_with_stable_identifiers($dba)) {
     #next unless $instance->db_id == 5490313;
     my %instance_data = ('instance_id' => $instance->db_id);
