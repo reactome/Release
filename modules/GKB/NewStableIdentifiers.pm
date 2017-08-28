@@ -31,12 +31,12 @@ get_instances_attached_to_stable_identifier
 get_all_stable_identifier_instances
 get_stable_identifier_instances_without_referrers
 get_stable_identifier_instances_with_multiple_referrers
+get_stable_identifier_instances_with_old_identifiers
 get_duplicate_stable_identifier_instances
-get_old_stable_identifiers
-get_duplicate_old_stable_identifiers
 get_stable_identifier_species_prefix
 get_stable_identifier_numeric_component
 get_instance_species_prefix
+get_prefix_from_species_instance
 /;
 
 sub get_stable_id_QA_problems_as_list_of_strings {
@@ -49,15 +49,16 @@ sub get_stable_id_QA_problems_as_list_of_strings {
             my @instances_with_stable_identifier = grep { defined } @{$_->{'instance'}};
             my @stable_identifier_instances = grep { defined } @{$_->{'st_id_instance'}};
             my $old_identifier = $_->{'old_stable_identifier'} ? '(old id is ' . $_->{'old_stable_identifier'} . ')' : '';
-            my $proposed_stable_identifier = $_->{'proposed_stable_identifier'} ? '(proposed identifier is ' . $_->{'proposed_stable_identifier'} . ')' : '';
+            my $proposed_stable_identifier = $_->{'proposed_stable_identifier'} ?
+                '(proposed identifier is ' . $_->{'proposed_stable_identifier'} . ')' : '';
             
-            my $instance_string = (join ', ', map {get_name_and_id($_)} @instances_with_stable_identifier) || "N/A";
-            my $stable_id_string = (join ', ', map { get_name_and_id($_) } @stable_identifier_instances) || "N/A";
+            my $instance_string = (join ', ', map {get_name_and_id($_) . ' ' . get_instance_modifier($_)} @instances_with_stable_identifier);
+            my $stable_id_string = (join ', ', map { get_name_and_id($_) } @stable_identifier_instances);
             
-            "\tInstances:$instance_string\n\tStable Id Instances:$stable_id_string $old_identifier $proposed_stable_identifier\n";
+            "$qa_issue_type\t$instance_string\t$stable_id_string $old_identifier $proposed_stable_identifier";
         } @{$qa_problems{$qa_issue_type}};
         
-        ucfirst($qa_issue_type) . "\n\n" . join("\n", @entries);
+        join("\n", @entries);
     } keys %qa_problems;
 }
 sub get_stable_id_QA_problems_as_hash {
@@ -70,7 +71,7 @@ sub get_stable_id_QA_problems_as_hash {
     foreach my $stable_identifier_instance (get_all_stable_identifier_instances($dba)) {        
         my @attached_instances = get_instances_attached_to_stable_identifier($stable_identifier_instance);
         if (scalar @attached_instances == 0) {
-            push @{$qa_problems{'stable id with no referrers'}}, {'st_id_instance' => [$stable_identifier_instance],  'instance' => [undef]};
+            #push @{$qa_problems{'stable id with no referrers'}}, {'st_id_instance' => [$stable_identifier_instance],  'instance' => [undef]};
         } elsif (scalar @attached_instances > 1) {
             push @{$qa_problems{'stable id has multiple referrers'}}, {'st_id_instance' => [$stable_identifier_instance], 'instance' => \@attached_instances};
         } else {
@@ -86,18 +87,18 @@ sub get_stable_id_QA_problems_as_hash {
         my $identifier = $stable_identifier_instance->identifier->[0]; 
         if (exists($duplicate_stable_identifier_instances{$identifier})) {
             push @{$qa_problems{'duplicate stable identifier instances'}},
-                {'st_id_instance' => $duplicate_stable_identifier_instances{$identifier}, 'instance' => [undef]};
+                {'st_id_instance' => $duplicate_stable_identifier_instances{$identifier}, 'instance' => \@attached_instances};
         }
         
         my $old_identifier = $stable_identifier_instance->oldIdentifier->[0] // '';
         if ($old_identifier && is_incorrect_old_stable_identifier($old_identifier)) {
             push @{$qa_problems{'incorrect old stable identifier'}},
-            {'st_id_instance' => [$stable_identifier_instance], 'instance' => [], 'old_stable_identifier' => $old_identifier};
+            {'st_id_instance' => [$stable_identifier_instance], 'instance' => \@attached_instances, 'old_stable_identifier' => $old_identifier};
         }
         
         if ($old_identifier && exists($duplicate_old_stable_identifier_instances{$old_identifier})) {
             push @{$qa_problems{'duplicate old stable identifier instances'}},
-                {'st_id_instance' => $duplicate_old_stable_identifier_instances{$old_identifier}, 'instance' => [undef], 'old_stable_identifier' => $old_identifier};
+                {'st_id_instance' => $duplicate_old_stable_identifier_instances{$old_identifier}, 'instance' => \@attached_instances, 'old_stable_identifier' => $old_identifier};
         }
         
     }
@@ -201,11 +202,13 @@ sub has_incorrect_stable_identifier {
     
     return (!stable_identifier_numeric_component_is_correct($instance) || !stable_identifier_species_prefix_is_correct($instance));
 }
+
 sub is_incorrect_old_stable_identifier {
     my $old_stable_identifier = shift;
     
     return $old_stable_identifier !~ /^REACT_/;
 }
+
 sub get_instances_with_stable_identifiers {
     my $dba = shift;
     
@@ -234,7 +237,14 @@ sub get_stable_identifier_instances_with_multiple_referrers {
     my $dba = shift;
     
     return grep { scalar get_instances_attached_to_stable_identifier($_) > 1 } get_all_stable_identifier_instances($dba);
+
+
+sub get_stable_identifier_instances_with_old_identifiers {
+    my $dba = shift;
+    
+    return grep { $_->oldIdentifier->[0] } get_all_stable_identifier_instances($dba);
 }
+
 sub get_duplicate_stable_identifier_instances {
     my $dba = shift;
     
@@ -388,20 +398,28 @@ sub get_preset_prefix_from_species_name {
     my $species_name = shift;
     
     my %species_to_prefix = (
-      "Hepatitis C virus" => 'HPC',
-      "Hepatitis B Virus" => "HPB",
-      "Human herpesvirus" => "HER",
+      "Crithidia fasciculata" => 'CFS',
+      "Corynephage beta" => 'CPH',
+      "Hepatitis A virus" => 'HAV',
+      "Hepatitis B virus" => 'HBV',
+      "Hepatitis C Virus" => 'HCV',
+      "Hepatitis D virus" => 'HDV',
+      "Human herpesvirus" => 'HER',
+      "Human papillomavirus" => 'HPV',
       "Molluscum contagiosum virus" => 'MCV',
       "Mycobacterium tuberculosis" => 'MTU',
       "Neisseria meningitidis" => 'NME',
       "Influenza A virus" => 'FLU',
       "Human immunodeficiency virus" => 'HIV',
+      "Rotavirus" => 'ROT',
+      "Sendai virus" => 'SEV',
+      "Sindbis virus" => 'SIV',
       "Bacteria" => 'BAC',
       "Viruses" => 'VIR'
     );
     
     foreach my $species (keys %species_to_prefix) {
-        return $species_to_prefix{$species} if $species_name =~ /$species/;
+        return $species_to_prefix{$species} if $species_name =~ /^$species/i;
     }
 }
 
