@@ -3,29 +3,43 @@ package GKB::Release::Steps::ExternalResourceLinks;
 use GKB::Release::Config;
 use GKB::Release::Utils;
 
+use Switch;
+
 use Moose;
 extends qw/GKB::Release::Step/;
 
 has '+gkb' => ( default => "gkbdev" );
 has '+passwords' => ( default => sub { ['mysql'] } );
 has '+directory' => ( default => "$release/add_links" );
+has '+user_input' => (default => sub {
+                    {
+                        'person_id' => {'query' => 'Please enter your person instance db id:','hide_keystrokes' => 0},
+                        'configuration' => {'query' => "Please choose configuration: download only (d), insertion only (i), full (f):",'hide_keystrokes' => 0}
+                    }
+});
 has '+mail' => ( default => sub { 
 					my $self = shift;
 					return {
 						'to' => '',
 						'subject' => $self->name,
 						'body' => "",
-						'attachment' => ""
+						'attachment' => $self->directory . "/AddLinks/scripts/logs/addlinks.log"
 					};
 				}
 );
 
 override 'run_commands' => sub {
 	my ($self) = @_;
+    
+    my $person_id = $self->user_input->{'person_id'}->{'response'};
+    my $configuration = get_configuration($self->user_input->{'configuration'}->{'response'});
 
     # Backup database and run add links script
     $self->cmd("Backup database", [["mysqldump --opt -u$user -p$pass $db > $db\_before_addlinks.dump"]]);
-    my @results = $self->cmd("Running add links script", [["perl add_links.pl -db $db > add_links_$version.out"]]);
+    my @results = $self->cmd("Running add links script", [
+        ["perl setup_add_links.pl -user $user -pass $pass -db $db -person_id $person_id -configuration $configuration
+         > setup_add_links_$version.out 2> setup_add_links_$version.err"]
+    ]);
     
     my $exit_code = ($results[0])->{'exit_code'};
     # Backup the database or else drop and remake the database if the add links script fails  
@@ -45,6 +59,20 @@ override 'post_step_tests' => sub {
     push @errors, _check_referrer_count_for_all_reference_databases();
     return @errors;
 };
+
+sub get_configuration {
+    my $user_selection = shift;
+    
+    my $configuration;
+    switch($user_selection) {
+        case /^d/i { $configuration = 'download_only' }
+        case /^i/i { $configuration = 'insertion_only' }
+        case /^f/i { $configuration = 'full' }
+        else { confess "Unknown configuration" }
+    }
+    
+    return $configuration;
+}
 
 sub _check_referrer_count_for_all_reference_databases {
     my @errors;
