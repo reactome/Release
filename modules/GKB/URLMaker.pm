@@ -25,7 +25,7 @@ sub urlify {
     my $force_pwb_link = $self->force_pwb_link();
     my $url;
     
-    if (ref $_[0] && $_[0]->is_a('Pathway')) {
+    if (ref $_[0] && $_[0]->is_a('Pathway') && $_[0]->stableIdentifier->[0]) {
         my $stable_id = $_[0]->stableIdentifier->[0]->identifier->[0];
         return "http://" . get_host_name() . "/PathwayBrowser/#/$stable_id";
     }
