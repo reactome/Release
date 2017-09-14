@@ -1988,7 +1988,7 @@ sub create_url_maker {
     
     return GKB::URLMaker->new(
         -SCRIPTNAME => $script_name,
-        'DB' => $self->cgi->param('DB')
+        'DB' => scalar $self->cgi->param('DB')
     );
 }
 
