@@ -20,6 +20,7 @@ use Carp;
 use Data::Dumper;
 use File::Slurp;
 use Getopt::Long;
+use List::MoreUtils qw/any/;
 
 # Database connection
 our($user, $host, $pass, $port, $db, $date, $debug, $help);
@@ -223,7 +224,7 @@ sub get_rows_from_protein {
     		
     my $taxon = get_taxon($protein); # Species ID (by taxon number) obtained
     return unless $taxon;
-    return if $taxon ~~ get_microbial_species_to_exclude();
+    return if any {$_ == $taxon} get_microbial_species_to_exclude();
 	
     my @references = get_prot_reference($catalyst_activity);
     my @rows;
@@ -330,7 +331,7 @@ sub get_annotation_dispatch_table {
 				
                 return unless $protein;
                                 
-				if (get_taxon($protein) ~~ get_species_with_alternate_go_compartment()) {
+				if (any {$_ == get_taxon($protein) } get_species_with_alternate_go_compartment()) {
 					return unless ($protein->GO_CellularComponent->[0]);
 					return [
                         {
