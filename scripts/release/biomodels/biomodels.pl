@@ -93,7 +93,7 @@ sub download_biomodels_package {
     my $logger = get_logger(__PACKAGE__);
     
     my $url = 'ftp.ebi.ac.uk';
-    my $ftp = Net::FTP->new($url, Passive => 1) or $logger->error_die("Could not create FTP object for $url");
+    my $ftp = Net::FTP->new($url, Passive => 0) or $logger->error_die("Could not create FTP object for $url");
     $ftp->login() or $logger->error_die("Could not login to $url: " . $ftp->message);
     my $dir = 'pub/databases/biomodels/releases/latest';
     $ftp->cwd($dir) or $logger->error_die("Could not change directory to $dir");
@@ -101,7 +101,7 @@ sub download_biomodels_package {
     $xml_tarball =~ s/.tar.bz2//;
     unless (-d $xml_tarball) {
         system("rm -rf BioModels_Database*");
-        system("wget ftp://ftp.ebi.ac.uk/pub/databases/biomodels/releases/latest/$xml_tarball.tar.bz2");
+        system("wget --no-passive ftp://ftp.ebi.ac.uk/pub/databases/biomodels/releases/latest/$xml_tarball.tar.bz2");
         system("tar xvfj $xml_tarball.tar.bz2");
     }
     
