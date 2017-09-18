@@ -146,7 +146,7 @@ sub new_from_cgi {
     $self->dba($dba);
     $self->debug($debug);
     my $urlmaker = GKB::URLMaker->new(-SCRIPTNAME => $cgi->script_name,
-				      'DB' => $cgi->param('DB'));
+				      'DB' => scalar $cgi->param('DB'));
     $self->urlmaker($urlmaker);
     return $self;
 }
