@@ -43,7 +43,7 @@ eval {
         print $WU->navigation_bar;
         $WU->print_simple_query_form;
     }
-    create_TOC_if_necessary_and_print($WU,$CGI->param('DB'));
+    create_TOC_if_necessary_and_print($WU, scalar $CGI->param('DB'));
     if (defined $footer) {
         print $enclosing_div_end;
         print $footer;
