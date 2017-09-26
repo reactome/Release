@@ -80,7 +80,7 @@ my @cmds = (
     qq(mkdir -p /tmp/diagrams_and_fireworks),
     qq(cp -a /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/diagram /tmp/diagrams_and_fireworks),
     qq(cp -a /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/fireworks /tmp/diagrams_and_fireworks),
-    qq(tar -czf /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/diagrams_and_fireworks.tgz /tmp/diagrams_and_fireworks && rm -rf),
+    qq(tar -czf /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/diagrams_and_fireworks.tgz /tmp/diagrams_and_fireworks && rm -rf /tmp/diagrams_and_fireworks),
     qq(cp /usr/local/reactomes/Reactome/production/ContentService/interactors.db /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/interactors.db),
     qq(gzip /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/interactors.db),
     qq(cp /usr/local/reactomes/Reactome/production/AnalysisService/input/analysis.bin /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/analysis.bin),
