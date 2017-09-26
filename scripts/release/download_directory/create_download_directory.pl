@@ -237,13 +237,15 @@ my @cmds = (
      "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
      # Next we need to sanitize the WordPress dump. So we will restore it to a temporary database, sanitzie it to remove user's names and passwords,
      # and then dump *that* as the final database.
+     "mysql  -u $opt_user -h $opt_host  -p$pass -P $opt_port -e 'CREATE DATABASE tmp_wordpress IF NOT EXISTS' ",
      "mysql --opt $mysqldump_tmp_wordpress_db_options < $release_nr/databases/gk_wordpress.sql",
      # execute the sanitize script
      "mysql --opt $mysqldump_tmp_wordpress_db_options < ./sanitize_wordpress.sql",
      # remove the original dump file
      "rm $release_nr/databases/gk_wordpress.sql",
      # dump the sanitized database to a file
-     "mysqldump --opt $mysqldump_tmp_wordpress_db_options | gzip -c >  $release_nr/databases/gk_wordpress.sql.gz"
+     "mysqldump --opt $mysqldump_tmp_wordpress_db_options | gzip -c >  $release_nr/databases/gk_wordpress.sql.gz",
+     "mysql  -u $opt_user -h $opt_host  -p$pass -P $opt_port -e 'DROP DATABASE tmp_wordpress IF EXISTS' "
     ],
 
     [
