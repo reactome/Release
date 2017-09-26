@@ -98,6 +98,7 @@ my $mysqldump_dn_db_options = "$db\_dn";
 my $mysqldump_mart_db_options = "test_reactome_mart";
 my $mysqldump_identifier_db_options = "stable_identifiers";
 my $mysqldump_wordpress_db_options = "wordpress";
+my $mysqldump_tmp_wordpress_db_options = "tmp_wordpress";
 
 if (defined $opt_host && !($opt_host eq '')) {
     $reactome_db_options .= " -host $opt_host";
@@ -111,6 +112,7 @@ if (defined $opt_host && !($opt_host eq '')) {
     $mysqldump_dn_db_options .= " -h $opt_host";
     $mysqldump_identifier_db_options .= " -h $opt_host";
     $mysqldump_wordpress_db_options .= " -h $opt_host";
+    $mysqldump_tmp_wordpress_db_options .= " -h $opt_host";
 }
 
 $biopaxexporter_db_options .= " $db";
@@ -129,6 +131,7 @@ if (defined $opt_user && !($opt_user eq '')) {
     $mysqldump_mart_db_options .= " -u $opt_user";
     $mysqldump_identifier_db_options .= " -u $opt_user";
     $mysqldump_wordpress_db_options .= " -u $opt_user";
+    $mysqldump_tmp_wordpress_db_options .= " -u $opt_user";
 }
 
 if (defined $opt_pass && !($opt_pass eq '')) {
@@ -148,6 +151,7 @@ if (defined $opt_pass && !($opt_pass eq '')) {
 	$mysqldump_mart_db_options .= " -p$pass";
 	$mysqldump_identifier_db_options .= " -p$pass";
 	$mysqldump_wordpress_db_options .= " -p$pass";
+    $mysqldump_tmp_wordpress_db_options .= " -p$pass";
 }
 if (defined $opt_port && !($opt_port eq '')) {
 	$reactome_db_options .= " -port $opt_port";
@@ -161,6 +165,7 @@ if (defined $opt_port && !($opt_port eq '')) {
 	$mysqldump_mart_db_options .= " -P $opt_port";
 	$mysqldump_identifier_db_options .= " -P $opt_port";
 	$mysqldump_wordpress_db_options .= " -P $opt_port"
+    $mysqldump_tmp_wordpress_db_options .= " -P $opt_port"
 }
 
 $biopaxexporter_db_options .= " $release_nr";
@@ -190,13 +195,13 @@ $logger->info("opt_sp=$opt_sp\n");
 # log files foo_script.err, foo_script.out
 my @cmds = (
     [
-     "$species_file_stem.interactions.stid", 
-     1, 
+     "$species_file_stem.interactions.stid",
+     1,
      0,  #set to 0 if STDOUT is redirected in command
      "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' ".
      "| sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz"
     ],
-    
+
     [
      "$species_file_stem.interactions.intact",
      1,
@@ -205,7 +210,7 @@ my @cmds = (
      "source_ids,source_st_ids,participating_protein_count,lit_refs,intact -headers title,table | ".
      "sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.intact.txt.gz"
     ],
-    
+
     [
      "ensembl to pathway map",
      1,
@@ -220,7 +225,7 @@ my @cmds = (
      "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -mitab | ".
      "gzip -c > $release_nr/$species_file_stem.mitab.interactions.txt.gz"
     ],
-    
+
     [
      "database_dumps",
      1,
@@ -228,10 +233,21 @@ my @cmds = (
      "mkdir $release_nr/databases",
      "mysqldump --opt $mysqldump_db_options | gzip -c > $release_nr/databases/gk_current.sql.gz",
      "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
-     "mysqldump --opt $mysqldump_wordpress_db_options | gzip -c > $release_nr/databases/gk_wordpress.sql.gz",
+     "mysqldump --opt $mysqldump_wordpress_db_options  > $release_nr/databases/gk_wordpress.sql",
      "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
+     # Next we need to sanitize the WordPress dump. So we will restore it to a temporary database, sanitzie it to remove user's names and passwords,
+     # and then dump *that* as the final database.
+     "mysql  -u $opt_user -h $opt_host  -p$pass -P $opt_port -e 'CREATE DATABASE tmp_wordpress IF NOT EXISTS' ",
+     "mysql --opt $mysqldump_tmp_wordpress_db_options < $release_nr/databases/gk_wordpress.sql",
+     # execute the sanitize script
+     "mysql --opt $mysqldump_tmp_wordpress_db_options < ./sanitize_wordpress.sql",
+     # remove the original dump file
+     "rm $release_nr/databases/gk_wordpress.sql",
+     # dump the sanitized database to a file
+     "mysqldump --opt $mysqldump_tmp_wordpress_db_options | gzip -c >  $release_nr/databases/gk_wordpress.sql.gz",
+     "mysql  -u $opt_user -h $opt_host  -p$pass -P $opt_port -e 'DROP DATABASE tmp_wordpress IF EXISTS' "
     ],
-    
+
     [
      "SBML_dumpers",
      1,
@@ -241,7 +257,7 @@ my @cmds = (
      "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' -o $release_nr/$species_file_stem.2.sbml",
 	 "gzip $release_nr/$species_file_stem.2.sbml",
     ],
-    
+
     [
      "SBGN_dumper",
      1,
@@ -249,21 +265,21 @@ my @cmds = (
      "perl SBGN_dumper.pl $reactome_db_options -sp '$sbml2_species'",
      "tar -cvf - *.sbgn | gzip -c > $release_nr/$species_file_stem.sbgn.gz",
     ],
-    
+
     [
      "interactions_for_all_species",
      1,
      1,
      "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options"
     ],
-    
+
     [
     "psicquic_indexers",
      1,
      1,
      "perl psicquic_indexers.pl -release $release_nr"
     ],
-    
+
     [
      "gene_association.reactome",
      1,
@@ -271,7 +287,7 @@ my @cmds = (
      "cp ../goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome ".
      "$release_nr/gene_association.reactome",
     ],
-    
+
     [
      "runDiagramDumper",
      1,
@@ -286,7 +302,7 @@ my @cmds = (
     "zip -r diagrams.png.zip PNG",
     "mv *.zip ../../download_directory/$release_nr",
     ],
-    
+
     [
      "fetch_and_print_values",
      1,
@@ -294,19 +310,19 @@ my @cmds = (
      qq(perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" ).
      qq(-class Complex $reactome_db_options -output DB_ID -output 'species.name[0]' ).
      qq(-output _displayName > $release_nr/curated_complexes.txt 2> fetch_and_print_values.err),
-    
+
      qq(perl fetch_and_print_values.pl -query "[['inferredFrom','IS NULL',[]]]" ).
      qq(-class Complex $reactome_db_options -output 'stableIdentifier._displayName' -output ).
      qq('species.name[0]' -output _displayName > $release_nr/curated_complexes.stid.txt)
     ],
-    
+
     [
      "run_biopax",
      1,
      1,
     "./run_biopax.pl $biopaxexporter_db_options",
     ],
-    
+
     [
      "runGSEAOutput",
      1,
@@ -317,17 +333,17 @@ my @cmds = (
      "cd -",
      "mv WebELVTool/$reactome_to_msig_export_db_filename.zip $release_nr"
     ],
-    
+
     [
      "TheReactomeBookPDF",
      1,
-     0,    
+     0,
      "perl genbook_pdf.pl -depth 100 $reactome_db_options -stdout -react_rep 2 > TheReactomeBook.pdf",
      "zip TheReactomeBook.pdf.zip TheReactomeBook.pdf",
      "rm TheReactomeBook.pdf",
      "mv TheReactomeBook.pdf.zip $release_nr"
     ],
-    
+
     [
      "TheReactomeBookRTF",
      1,
@@ -337,14 +353,14 @@ my @cmds = (
      "rm -rf TheReactomeBook",
      "mv TheReactomeBook.rtf.zip $release_nr",
     ],
-    
+
     [
      "fetchEmptyProject",
      1,
      1,
      "perl fetchEmptyProject.pl reactome_data_model -outputdir $release_nr $fetch_empty_project_db_options"
     ],
-    
+
     [
      "CompiledPathwayImages",
      1,
@@ -352,35 +368,35 @@ my @cmds = (
      "perl compiled_pathway_images.pl",
      "mv compiled_pathway_images*.gz $release_nr"
     ],
-    
+
     [
      "SearchIndexer",
      1,
      1,
      "cp ../search_indexer/ebeye.xml.gz $release_nr"
     ],
-    
+
     [
      "AnalysisCore",
      1,
      1,
      "cp ../analysis_core/*.txt $release_nr"
     ],
-    
+
     [
      "FireworksServer",
      1,
      1,
      "cp -r ../fireworks_server/json $release_nr/fireworks"
     ],
-    
+
     [
      "release_tarball",
      1,
      1,
      "./make_release_tarball.pl $release_nr"
     ],
-    
+
     [
      "PathwaySummationMappingFile",
      1,
@@ -388,7 +404,7 @@ my @cmds = (
      "perl pathway2summation.pl $reactome_db_options",
      "mv pathway2summation.txt $release_nr"
     ],
-    
+
     [
      "StableIdToUniProtAccessionMappingFile",
      1,
@@ -415,7 +431,7 @@ sub run {
     my $cmd = shift;
     my ($label,$stderr,$stdout,@commands) = @$cmd;
     my $redirect = '';
-    
+
     my $logger = get_logger(__PACKAGE__);
 
     my $log = "${label}.out"  if $stdout;
@@ -430,12 +446,12 @@ sub run {
 
     my $not_good = 0;
 
-    # create the list of commands with individual logging 
+    # create the list of commands with individual logging
     my $command = join(';', map {"$_ $redirect"} @commands);
 
     $logger->info("Executing: " . hide_password($command) . "\n");
 
-    my $retval = system $command; 
+    my $retval = system $command;
     if ($retval) {
 	$logger->error("something went wrong while executing '" . hide_password($command) . " ($!)'!!\n");
 	$not_good++;
@@ -455,11 +471,11 @@ sub run {
 
 sub hide_password {
     my @input = @_;
-    
+
     my $asterisks = '*' x length $opt_pass;
-    
+
     s/$opt_pass/$asterisks/ foreach @input;
-    
+
     return $input[0] if (scalar @input == 1);
     return @input;
 }
