@@ -437,11 +437,23 @@ use strict;
 sub set_displayName {
     my ($self) = @_;
     $self->debug && print join("\t", (caller(0))[3], $self,  $self->class, ($self->db_id || $self->id)), "\n";
+    if (!$self->Name->[0]) {
+        print STDERR 'Instance ' . $self->db_id . " has no name\n";
+        return;
+    }    
     $self->attribute_value('_displayName',
-			   $self->Name->[0] .
-			   ($self->Compartment->[0] ? ' [' . join(', ', map{$_->displayName} @{$self->Compartment}) . ']' : '')
-			   );
+		$self->Name->[0] .
+		($self->Compartment->[0] ? ' [' . get_compartment_names(@{$self->Compartment}) . ']' : '')
+	);
     return $self->attribute_value('_displayName')->[0];
+}
+
+sub get_compartment_names {
+    my @compartments = @_;
+    
+    my @compartment_names = grep { defined } map{$_->displayName} @compartments;
+    
+    return @compartment_names ? join(', ', @compartment_names) : '';
 }
 
 package GKB::NamedInstance::SimpleEntity;

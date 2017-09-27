@@ -29,9 +29,7 @@ $CGI = CGI->new();
 print $CGI->header(-charset => 'UTF-8');
 eval {
     $WU = GKB::WebUtils->new_from_cgi(-CGI => $CGI);
-    $WU->force_pwb_link(1);
     $DBA = $WU->dba;
-    $WU->urlmaker->script_name('/cgi-bin/eventbrowser');
 
     if (defined $header) {
         print $header;
@@ -45,7 +43,7 @@ eval {
         print $WU->navigation_bar;
         $WU->print_simple_query_form;
     }
-    create_TOC_if_necessary_and_print($WU,$CGI->param('DB'));
+    create_TOC_if_necessary_and_print($WU, scalar $CGI->param('DB'));
     if (defined $footer) {
         print $enclosing_div_end;
         print $footer;
@@ -65,6 +63,7 @@ sub handle_error {
 
 sub create_TOC_if_necessary_and_print {
     my ($wu,$db_name) = @_;
+    
     my $dir_name = "$FRONTPAGE_IMG_DIR/$db_name";
     unless (-e $dir_name) {
 		mkdir($dir_name) || confess("Can't create '$dir_name': $!");
@@ -73,7 +72,7 @@ sub create_TOC_if_necessary_and_print {
     unless (-e $file) {
 		open (TOC, ">$file") || $wu->throw($!);
 		my $tmp = select(TOC);
-		$wu->print_TOC;
+        $wu->print_TOC;
 		close TOC;
 		select($tmp);
     }

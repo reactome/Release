@@ -72,11 +72,21 @@ my @cmds = (
     qq(rm -fr reactome/GKB/website/html/download/),
     qq(mkdir -p reactome/GKB/website/html/download/$release),
     qq(cp $repo/website/html/download/*html reactome/GKB/website/html/download/),
-    qq(cp -r $rhome/fireworks reactome/GKB/website/html/download/$release), 
+    qq(cp -r $rhome/fireworks reactome/GKB/website/html/download/$release),
     qq(cp -r $rhome/diagrams reactome/GKB/website/html/download/$release),
     qq(cp $base/AnalysisService/input/analysis.bin reactome/AnalysisService/input),
     qq(mkdir -p reactome/RESTful/temp),
-    qq(rm -fr reactome/GKB/modules/*ensem*)
+    qq(rm -fr reactome/GKB/modules/*ensem*),
+    qq(mkdir -p /tmp/diagrams_and_fireworks),
+    qq(cp -a /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/diagram /tmp/diagrams_and_fireworks),
+    qq(cp -a /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/fireworks /tmp/diagrams_and_fireworks),
+    qq(tar -czf /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/diagrams_and_fireworks.tgz /tmp/diagrams_and_fireworks && rm -rf /tmp/diagrams_and_fireworks),
+    qq(cp /usr/local/reactomes/Reactome/production/ContentService/interactors.db /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/interactors.db),
+    qq(gzip /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/interactors.db),
+    qq(cp /usr/local/reactomes/Reactome/production/AnalysisService/input/analysis.bin /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/analysis.bin),
+    qq(gzip /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/analysis.bin),
+    qq(cp -a /usr/local/reactomes/Reactome/production/Solr/data /tmp/solr_data && rm /tmp/solr_data/data/reactome/data_conf.tgz),
+    qq(tar -czf /usr/local/reactomes/Reactome/production/GKB/website/html/download/current/solr_data.tgz /tmp/solr_data/data && rm -rf /tmp/solr_data/data)
    );
 
 my @cmds2 = (
@@ -106,7 +116,7 @@ for my $cmd (@cmds2) {
 
 sub check_analysis_data {
     my $base = shift;
-    
+
     my $logger = get_logger(__PACKAGE__);
     my $data = "$base/AnalysisService/input/analysis_v$release.bin";
     unless (-e $data) {
@@ -116,7 +126,7 @@ sub check_analysis_data {
 
 sub check_solr_data {
     my $base = shift;
-    
+
     my $logger = get_logger(__PACKAGE__);
     my $data = "$base/Solr/cores/reactome_v$release.tar.gz";
     unless (-e $data) {
@@ -126,7 +136,7 @@ sub check_solr_data {
 
 sub cleanse_solr_data {
     my $logger = get_logger(__PACKAGE__);
-    
+
     while (my $path = <Solr/cores/reactome_v*>) {
 	if ($path !~ /reactome_v$release$/) {
 	    $logger->info("Removing old release $path\n");
