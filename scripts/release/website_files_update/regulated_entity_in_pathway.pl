@@ -27,7 +27,7 @@ if ($help) {
 }
 
 open (my $output, ">", $output_file) if $output_file;
-report("Regulation author\tRegulated entity id\tRegulated entity name\tRegulated entity is disease\t" .
+report("Regulation author\tRegulation instance id\tRegulated entity id\tRegulated entity name\tRegulated entity is disease\t" .
        "Regulated entity do release\tRegulator\tParent Pathways\tReason to check\n", $output);
 
 my %seen;
@@ -37,6 +37,7 @@ foreach my $regulation (@{$regulations}) {
                                  $regulation->regulator->[0]->displayName :
                                  '';
     my $regulation_author = get_authors($regulation->created->[0]);
+    my $regulation_db_id = $regulation->db_id;
     
     foreach my $regulated_entity (@{$regulation->regulatedEntity}) {
         next unless is_human($regulated_entity) && !$seen{$regulated_entity}++;
@@ -45,11 +46,12 @@ foreach my $regulation (@{$regulations}) {
         my $regulated_entity_db_id = $regulated_entity->db_id;
         my $regulated_entity_is_disease = $regulated_entity->disease->[0] ? 'YES' : 'NO';
         my $regulated_entity_do_release = do_release($regulated_entity) ? 'YES' : 'NO';
-        my @parent_pathways = get_pathways($regulated_entity);
+        my @parent_pathways = get_pathways_with_diagram($regulated_entity);
      
         report(
             join("\t",
                 $regulation_author,
+                $regulation_db_id,
                 $regulated_entity_db_id,
                 $regulated_entity_display_name,
                 $regulated_entity_is_disease,

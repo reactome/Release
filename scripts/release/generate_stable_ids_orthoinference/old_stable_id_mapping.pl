@@ -48,7 +48,7 @@ chomp(my $date = `date \+\%F`);
 my $instance_edit = GKB::Utils_esther::create_instance_edit($dba, 'Weiser', 'JD', $date);
 $logger->info('Instance edit db_id is ' . $instance_edit->db_id);
 
-my %existing_stable_identifiers;
+my %existing_stable_identifiers = map { $_->oldIdentifier->[0] => 1 } get_stable_identifier_instances_with_old_identifiers($dba);
 foreach my $instance (get_instances_with_stable_identifiers($dba)) {
     #next unless $instance->db_id == 5490313;
     my %instance_data = ('instance_id' => $instance->db_id);
@@ -64,6 +64,11 @@ foreach my $instance (get_instances_with_stable_identifiers($dba)) {
         my @source_instances = get_source_for_electronically_inferred_instance($instance);
         next unless $source_instances[0];
         
+        if (!$instance->species->[0]) {
+            $logger->warn("No species for electronically inferred instance " . $instance->db_id);
+            next;
+        }
+
         $instance_data{'type'} = $ELECTRONICALLY_INFERRED;
         $instance_data{'instance_species'} = $instance->species->[0]->displayName;
         $instance_data{'source_instance_id'} = $source_instances[0]->db_id;
@@ -78,7 +83,7 @@ foreach my $instance (get_instances_with_stable_identifiers($dba)) {
                     my $reference_identifier = $instance->referenceEntity->[0]->variantIdentifier->[0] ?
                         $instance->referenceEntity->[0]->variantIdentifier->[0] :
                         $instance->referenceEntity->[0]->identifier->[0];
-                        next unless $reference_identifier eq $1;
+                        next unless $reference_identifier && $reference_identifier eq $1;
                 }
                 
                 my @versions = sort {$a <=> $b} keys %{$instance_id_to_stable_id{$source_instances[0]->db_id}{$ELECTRONICALLY_INFERRED}{$inferred_species}{$stable_id}};

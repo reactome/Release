@@ -271,14 +271,16 @@ sub get_event_modifier {
 	
 	my $author_instance;
     foreach my $modified_instance (reverse @{$event->modified}) {
-        $author_instance ||= $modified_instance->author->[0] unless $modified_instance->author->[0] && $modified_instance->author->[0]->db_id == 140537;
+        next if $modified_instance->author->[0] && any {$modified_instance->author->[0]->db_id == $_} (140537, 1551959); # Ignore Guanming and Joel's person instance as possible author 
+        
+        $author_instance = $modified_instance->author->[0];
+        last if $author_instance;
     }
-	$author_instance ||= $event->created->[0]->author->[0];
+	$author_instance ||= $event->created->[0]->author->[0] if $event->created->[0];
 	
-	my $author_name = $author_instance->displayName if $author_instance;
-	
-	return $author_name || 'Unknown';
+	return $author_instance ? $author_instance->displayName : 'Unknown';
 }
+
 
 sub is_human {
     my $instance = shift;
