@@ -5,6 +5,7 @@ use autodie;
 use Getopt::Long;
 
 use lib '/usr/local/gkb/modules';
+use GKB::CommonUtils;
 use GKB::DBAdaptor;
 
 my ($db, $host, $help);
@@ -23,7 +24,7 @@ if ($help) {
 $db ||= 'gk_central';
 $host ||= 'reactomecurator.oicr.on.ca';
 
-my $dba = get_dba({'db' => $db, 'host' => $host});
+my $dba = get_dba($db, $host);
 my @reaction_like_events =
     grep {
         $_->_doRelease->[0] &&
@@ -38,21 +39,11 @@ foreach my $attribute (get_defining_attributes_for_reaction_class($dba), 'compar
 (my $output_file = $0) =~ s/\.pl$/.txt/;
 open(my $fh, '>', $output_file);
 foreach my $bucket (@reaction_like_event_buckets) {    
-    print $fh join('|', map {$_->db_id} @{$bucket}) . "\n";
+    print $fh join('|', map {
+        join('|', $_->db_id, $_->displayName, get_event_modifier($_))
+    } @{$bucket}) . "\n";
 }
 close $fh;
-                                  
-sub get_dba {
-    my $parameters = shift;
-    
-	return GKB::DBAdaptor->new(
-	    -dbname => $parameters->{'db'} || $GKB::Config::GK_DB_NAME,
-	    -user   => $parameters->{'user'} || $GKB::Config::GK_DB_USER,
-	    -host   => $parameters->{'host'} || $GKB::Config::GK_DB_HOST, # host where mysqld is running                                                                                                                              
-	    -pass   => $parameters->{'pass'} || $GKB::Config::GK_DB_PASS,
-	    -port   => '3306'
-	);	
-}
 
 sub get_buckets_by_attribute_ids {
     my $attribute = shift;
