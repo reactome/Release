@@ -1,6 +1,6 @@
 <?php
 /*  
-	Copyright 2009-2016  John Havlik  (email : john.havlik@mtekk.us)
+	Copyright 2009-2017  John Havlik  (email : john.havlik@mtekk.us)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -939,12 +939,21 @@ abstract class mtekk_adminKit
 	 */
 	function textbox($label, $option, $height = '3', $disable = false, $description = '')
 	{
-		$optid = $this->get_valid_id($option);?>
-		<p>
-			<label for="<?php echo $optid;?>"><?php echo $label;?></label>
-		</p>
-		<textarea rows="<?php echo $height;?>" <?php if($disable){echo 'disabled="disabled" class="large-text code disabled"';}else{echo 'class="large-text code"';}?> id="<?php echo $optid;?>" name="<?php echo $this->unique_prefix . '_options[' . $option;?>]"><?php echo htmlentities($this->opt[$option], ENT_COMPAT, 'UTF-8');?></textarea><br />
-		<?php if($description !== ''){?><p class="description"><?php echo $description;?></p><?php }
+		$optid = $this->get_valid_id($option);
+		if($disable)
+		{?>
+			<input type="hidden" name="<?php echo $this->unique_prefix . '_options[' . $option;?>]" value="<?php echo htmlentities($this->opt[$option], ENT_COMPAT, 'UTF-8');?>" />
+		<?php } ?>
+		<tr valign="top">
+			<th scope="row">
+				<label for="<?php echo $optid;?>"><?php echo $label;?></label>
+			</th>
+			<td>
+				<textarea rows="<?php echo $height;?>" <?php if($disable){echo 'disabled="disabled" class="large-text code disabled"';}else{echo 'class="large-text code"';}?> id="<?php echo $optid;?>" name="<?php echo $this->unique_prefix . '_options[' . $option;?>]"><?php echo htmlentities($this->opt[$option], ENT_COMPAT, 'UTF-8');?></textarea><br />
+					<?php if($description !== ''){?><p class="description"><?php echo $description;?></p><?php }?>
+			</td>
+		</tr>
+		<?php
 	}
 	/**
 	 * This will output a well formed tiny mce ready textbox

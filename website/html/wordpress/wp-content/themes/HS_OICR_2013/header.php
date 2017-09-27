@@ -59,7 +59,7 @@
         <input id="local-searchbox" type="search" class="search" name="q" placeholder="e.g. O95631, NTN1, signaling by EGFR, glucose" />
         <input type="hidden" name="species" value="Homo sapiens"/>
         <input type="hidden" name="species" value="Entries without species"/>
-        <input type="hidden" name="cluster" value="true"/>
+       <input type="hidden" name="cluster" value="true"/>
         <input type="submit" class="submit" value="Search">
      </form>
    <!--DO NOT DELETED THIS LINE--><!--/SearchForm-->
@@ -71,9 +71,19 @@
 </div><!--close header-->
 
 <div class="clear"></div><!--clear header-->
-
+<?php /*
+<!-- Banner for data centre maintenance -->
+<!--
+   <div style='background:gainsboro;border:1px solid gray; text-align:center' id='hideMe'>
+     <div style='font-size:small;padding:10px'>
+       <span style='font-size:larger;color:red'>
+The data centre that hosts reactome.org will be undergoing maintenance starting at 6:00 P.M. EDT on Friday September 15 and ending at 11:59 P.M. Sunday September 17 EDT. Reactome.org will be unvailable during this period. During this outage, you may wish to use our mirror-site at <a href="//reactome.ncpsb.org/">reactome.ncpsb.org</a>
+       </span>
+     </div>
+   </div>
+-->
+*/ ?>
 <!-- Conditional header for dev site --> 
-
 <?php
    $host_name = php_uname('n');
    $dev = '';
@@ -100,7 +110,7 @@
        </span><br/>
        <span style='font-size:smaller;color:red'>
 	 IT IS NOT STABLE, IS LINKED TO AN INCOMPLETE DATA SET, AND IS NOT MONITORED FOR PERFORMANCE.
-	 WE STRONGLY RECOMMEND THE USE OF OUR <a href='http://www.reactome.org'>PUBLIC SITE</a>
+	 WE STRONGLY RECOMMEND THE USE OF OUR <a href='//reactome.org'>PUBLIC SITE</a>
        </span>
      </div>
    </div>";

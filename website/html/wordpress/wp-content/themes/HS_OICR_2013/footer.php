@@ -8,10 +8,10 @@
 </div><!--close footernav-->
  </div>
  <div class="grid_4 omega">
-	<a href="https://www.facebook.com/groups/244908260192/" target="_new"><img src="<?php bloginfo('template_directory'); ?>/images/icons/facebook.png"></a>
-    <a href="https://twitter.com/intent/user?screen_name=reactome">
+	<a href="//www.facebook.com/groups/244908260192/" target="_new"><img src="<?php bloginfo('template_directory'); ?>/images/icons/facebook.png"></a>
+    <a href="//twitter.com/intent/user?screen_name=reactome">
     	<img src="<?php bloginfo('template_directory'); ?>/images/icons/twitter.png" alt="Follow Reactome"></a> 
-    <a href="https://www.youtube.com/channel/UCXKPDGH34lyyMAjPUXubykw" target="_new"><img src="<?php bloginfo('template_directory'); ?>/images/icons/youtube.png"></a>
+    <a href="//www.youtube.com/channel/UCXKPDGH34lyyMAjPUXubykw" target="_new"><img src="<?php bloginfo('template_directory'); ?>/images/icons/youtube.png"></a>
  </div>
 </div><!--close grid24-->
 
