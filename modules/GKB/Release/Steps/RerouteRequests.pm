@@ -24,7 +24,7 @@ has '+user_input' => (default => sub {{'fallback' => {'query' => 'Redirect reque
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
     
-    my $config_file = "/usr/local/gkb/website/conf/httpd.conf";
+    my $config_file = "/etc/apache2/common-sites-conf/001-reactome.conf";
     my $fallback = $self->user_input->{'fallback'}->{'response'} =~ /^y/i ? 1 : 0;
     
     $self->cmd("Rerouting requests", [["perl rerouterequests.pl $config_file $live_server $fallback"]]);    
