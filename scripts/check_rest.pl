@@ -3,7 +3,7 @@ use common::sense;
 use HTTP::Tiny;
 use JSON;
 
-use constant HOST => 'http://localhost/';
+use constant HOST => 'http://reactome.org/';
 
 die "Sorry, root permission required.\n" unless $> == 0;
 

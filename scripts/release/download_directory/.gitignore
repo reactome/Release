@@ -1,4 +1,4 @@
 *
 !*.pl
 !*.sh
-
+!sanitize_wordpress.sql

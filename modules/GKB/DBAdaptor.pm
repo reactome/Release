@@ -401,8 +401,8 @@ sub new {
 	$self->db_name($db);
     }
     
-
     my $dbh = eval { DBI->connect($dsn,$user,$password, {RaiseError => 1, mysql_enable_utf8 => 1}); };
+
     if ($@ || !$dbh) {
     	my $throw_string = "Could not connect to database ";
     	if (defined $db) {
