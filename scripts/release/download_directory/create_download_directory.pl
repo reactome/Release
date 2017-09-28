@@ -182,6 +182,7 @@ if (!(defined $opt_sp) || $opt_sp eq '') {
 } else {
 	$sbml2_species = $opt_sp;
 }
+my $sbgn_output_dir = 'sbgn';
 my $species_file_stem = lc($opt_sp);
 $species_file_stem =~ s/ +/_/g;
 
@@ -236,8 +237,9 @@ my @cmds = (
      "SBGN_dumper",
      1,
      0,
-     "perl SBGN_dumper.pl $reactome_db_options -sp '$sbml2_species'",
-     "tar -cvf - *.sbgn | gzip -c > $release_nr/$species_file_stem.sbgn.tar.gz",
+     "mkdir -p $release_nr/$sbgn_output_dir",
+     "perl SBGN_dumper.pl $reactome_db_options -sp '$sbml2_species' -output_dir $sbgn_output_dir",
+     "tar -cvf - $sbgn_output_dir/*.sbgn | gzip -c > $release_nr/$species_file_stem.sbgn.tar.gz",
     ],
 
     [
