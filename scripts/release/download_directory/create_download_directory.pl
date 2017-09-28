@@ -194,36 +194,12 @@ $logger->info("opt_sp=$opt_sp\n");
 # [eg: 'foo_script', 1, 1, "perl fool.pl"]
 # log files foo_script.err, foo_script.out
 my @cmds = (
-    [
-     "$species_file_stem.interactions.stid",
-     1,
-     0,  #set to 0 if STDOUT is redirected in command
-     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' ".
-     "| sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.stid.txt.gz"
-    ],
-
-    [
-     "$species_file_stem.interactions.intact",
-     1,
-     0,
-     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -col_grps ids,context,".
-     "source_ids,source_st_ids,participating_protein_count,lit_refs,intact -headers title,table | ".
-     "sort | uniq | gzip -c > $release_nr/$species_file_stem.interactions.intact.txt.gz"
-    ],
 
     [
      "ensembl to pathway map",
      1,
      0,
      "perl ensembl2pathway.pl $opt_user, $opt_pass ${opt_db}_dn $opt_r",
-    ],
-
-    [
-     "$species_file_stem.mitab.interactions",
-     1,
-     0,
-     "perl report_interactions.pl $reactome_db_options -sp '$opt_sp' -mitab | ".
-     "gzip -c > $release_nr/$species_file_stem.mitab.interactions.txt.gz"
     ],
 
     [
@@ -254,8 +230,6 @@ my @cmds = (
      0,
      "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' > $release_nr/$species_file_stem.sbml",
 	 "gzip $release_nr/$species_file_stem.sbml",
-     "perl SBML_dumper2.pl $reactome_db_options -sp '$sbml2_species' -o $release_nr/$species_file_stem.2.sbml",
-	 "gzip $release_nr/$species_file_stem.2.sbml",
     ],
 
     [
@@ -263,14 +237,7 @@ my @cmds = (
      1,
      0,
      "perl SBGN_dumper.pl $reactome_db_options -sp '$sbml2_species'",
-     "tar -cvf - *.sbgn | gzip -c > $release_nr/$species_file_stem.sbgn.gz",
-    ],
-
-    [
-     "interactions_for_all_species",
-     1,
-     1,
-     "perl interactions_for_all_species.pl -outputdir $release_nr $reactome_db_options"
+     "tar -cvf - *.sbgn | gzip -c > $release_nr/$species_file_stem.sbgn.tar.gz",
     ],
 
     [
@@ -284,8 +251,7 @@ my @cmds = (
      "gene_association.reactome",
      1,
      0,
-     "cp ../goa_prepare/GO_submission/go/gene-associations/submission/gene_association.reactome ".
-     "$release_nr/gene_association.reactome",
+     "cp ../goa_prepare/gene_association.reactome $release_nr/gene_association.reactome",
     ],
 
     [
@@ -370,24 +336,10 @@ my @cmds = (
     ],
 
     [
-     "SearchIndexer",
+     "BioModels",
      1,
      1,
-     "cp ../search_indexer/ebeye.xml.gz $release_nr"
-    ],
-
-    [
-     "AnalysisCore",
-     1,
-     1,
-     "cp ../analysis_core/*.txt $release_nr"
-    ],
-
-    [
-     "FireworksServer",
-     1,
-     1,
-     "cp -r ../fireworks_server/json $release_nr/fireworks"
+     "cp ../biomodels/models2pathways.tsv $release_nr"
     ],
 
     [
@@ -411,6 +363,13 @@ my @cmds = (
      0,
      "perl st_id_2_uniprot.pl $reactome_db_options",
      "mv st_id_2_uniprot.txt $release_nr"
+    ],
+    
+    [
+     "reactome_stable_ids_mapping",
+     1,
+     0,
+     "perl map_old_stable_ids.pl -release $release_nr"
     ]
 );
 
