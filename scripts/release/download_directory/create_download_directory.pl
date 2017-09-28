@@ -41,16 +41,16 @@ unless (-e $release_nr) {
 }
 
 if (!(defined $opt_host) || $opt_host eq '') {
-	$opt_host = $GK_DB_HOST;
+    $opt_host = $GK_DB_HOST;
 }
 if (!(defined $opt_user) || $opt_user eq '') {
-	$opt_user = $GK_DB_USER;
+    $opt_user = $GK_DB_USER;
 }
 if (!(defined $opt_pass) || $opt_pass eq '') {
-	$opt_pass = $GK_DB_PASS;
+    $opt_pass = $GK_DB_PASS;
 }
 if (!(defined $opt_port) || $opt_port eq '') {
-	$opt_port = $GK_DB_PORT;
+    $opt_port = $GK_DB_PORT;
 }
 
 
@@ -62,22 +62,21 @@ my $dbh = eval { DBI->connect($dsn,$opt_user,$opt_pass, {RaiseError => 1}); };
 my ($sth,@row);
 my $exists_stable_identifier_db = 0;
 if (defined $GK_IDB_NAME && !($GK_IDB_NAME eq '')) {
-	$sth = $dbh->prepare("SHOW DATABASES LIKE '$GK_IDB_NAME'");
-	$sth->execute();
-	@row = $sth->fetchrow_array();
-	$exists_stable_identifier_db = scalar(@row);
+    $sth = $dbh->prepare("SHOW DATABASES LIKE '$GK_IDB_NAME'");
+    $sth->execute();
+    @row = $sth->fetchrow_array();
+    $exists_stable_identifier_db = scalar(@row);
 }
 
 eval {
-	my $dba = GKB::DBAdaptor->new
-	    (
-	     -user   => $opt_user,
-	     -host   => $opt_host,
-	     -pass   => $opt_pass,
-	     -port   => $opt_port,
-	     -dbname => $opt_db,
-	     -DEBUG => $opt_debug
-	     );
+    my $dba = GKB::DBAdaptor->new(
+         -user   => $opt_user,
+         -host   => $opt_host,
+         -pass   => $opt_pass,
+         -port   => $opt_port,
+         -dbname => $opt_db,
+         -DEBUG => $opt_debug
+    );
 };
 if ($@) {
     $logger->error("Problems connecting to db:\n$@\n");
@@ -88,7 +87,7 @@ my $reactome_db_options = "-db $db";
 my $fetch_empty_project_db_options = "-db $db";
 my $create_ebeye_db_options = "";
 if (defined $GK_IDB_NAME && !($GK_IDB_NAME eq '')) {
-	$create_ebeye_db_options = "-db $GK_IDB_NAME";
+    $create_ebeye_db_options = "-db $GK_IDB_NAME";
 }
 my $biopaxexporter_db_options = "";
 my $reactome_to_msig_export_db_options = "";
@@ -135,36 +134,36 @@ if (defined $opt_user && !($opt_user eq '')) {
 }
 
 if (defined $opt_pass && !($opt_pass eq '')) {
-	# Put a backslash in front of characters that have special meaning to the shell
-	my $pass = $opt_pass;
-	if ($pass =~ /\$/) {
-		$pass =~ s/\$/\\\$/g;
-	}
-	$reactome_db_options .= " -pass '$pass'";
-	$fetch_empty_project_db_options .= " -pass '$pass'";
-	$create_ebeye_db_options .= " -pass '$pass'";
-	$biopaxexporter_db_options .= " '$pass'";
-	$reactome_to_msig_export_db_options .= " '$pass'";
-	$diagram_dump_options .= " '$pass'";
-	$mysqldump_db_options .= " -p$pass";
-	$mysqldump_dn_db_options .= " -p$pass";
-	$mysqldump_mart_db_options .= " -p$pass";
-	$mysqldump_identifier_db_options .= " -p$pass";
-	$mysqldump_wordpress_db_options .= " -p$pass";
+    # Put a backslash in front of characters that have special meaning to the shell
+    my $pass = $opt_pass;
+    if ($pass =~ /\$/) {
+        $pass =~ s/\$/\\\$/g;
+    }
+    $reactome_db_options .= " -pass '$pass'";
+    $fetch_empty_project_db_options .= " -pass '$pass'";
+    $create_ebeye_db_options .= " -pass '$pass'";
+    $biopaxexporter_db_options .= " '$pass'";
+    $reactome_to_msig_export_db_options .= " '$pass'";
+    $diagram_dump_options .= " '$pass'";
+    $mysqldump_db_options .= " -p$pass";
+    $mysqldump_dn_db_options .= " -p$pass";
+    $mysqldump_mart_db_options .= " -p$pass";
+    $mysqldump_identifier_db_options .= " -p$pass";
+    $mysqldump_wordpress_db_options .= " -p$pass";
     $mysqldump_tmp_wordpress_db_options .= " -p$pass";
 }
 if (defined $opt_port && !($opt_port eq '')) {
-	$reactome_db_options .= " -port $opt_port";
-	$fetch_empty_project_db_options .= " -port $opt_port";
-	$create_ebeye_db_options .= " -port $opt_port";
-	$biopaxexporter_db_options .= " $opt_port";
-	$reactome_to_msig_export_db_options .= " $opt_port";
-	$diagram_dump_options .= " $opt_port";
-	$mysqldump_db_options .= " -P $opt_port";
-	$mysqldump_dn_db_options .= " -P $opt_port";
-	$mysqldump_mart_db_options .= " -P $opt_port";
-	$mysqldump_identifier_db_options .= " -P $opt_port";
-	$mysqldump_wordpress_db_options .= " -P $opt_port"
+    $reactome_db_options .= " -port $opt_port";
+    $fetch_empty_project_db_options .= " -port $opt_port";
+    $create_ebeye_db_options .= " -port $opt_port";
+    $biopaxexporter_db_options .= " $opt_port";
+    $reactome_to_msig_export_db_options .= " $opt_port";
+    $diagram_dump_options .= " $opt_port";
+    $mysqldump_db_options .= " -P $opt_port";
+    $mysqldump_dn_db_options .= " -P $opt_port";
+    $mysqldump_mart_db_options .= " -P $opt_port";
+    $mysqldump_identifier_db_options .= " -P $opt_port";
+    $mysqldump_wordpress_db_options .= " -P $opt_port"
     $mysqldump_tmp_wordpress_db_options .= " -P $opt_port"
 }
 
@@ -178,9 +177,9 @@ $diagram_dump_options .= " $diagram_dump_filename";
 
 my $sbml2_species = "48887";
 if (!(defined $opt_sp) || $opt_sp eq '') {
-	$opt_sp = 'Homo sapiens';
+    $opt_sp = 'Homo sapiens';
 } else {
-	$sbml2_species = $opt_sp;
+    $sbml2_species = $opt_sp;
 }
 my $sbgn_output_dir = 'sbgn';
 my $species_file_stem = lc($opt_sp);
@@ -195,7 +194,6 @@ $logger->info("opt_sp=$opt_sp\n");
 # [eg: 'foo_script', 1, 1, "perl fool.pl"]
 # log files foo_script.err, foo_script.out
 my @cmds = (
-
     [
      "ensembl to pathway map",
      1,
@@ -230,7 +228,7 @@ my @cmds = (
      1,
      0,
      "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' > $release_nr/$species_file_stem.sbml",
-	 "gzip $release_nr/$species_file_stem.sbml",
+     "gzip $release_nr/$species_file_stem.sbml",
     ],
 
     [
@@ -414,17 +412,16 @@ sub run {
 
     my $retval = system $command;
     if ($retval) {
-	$logger->error("something went wrong while executing '" . hide_password($command) . " ($!)'!!\n");
-	$not_good++;
-    }
-    else {
-	$logger->info("Success!\n");
+        $logger->error("something went wrong while executing '" . hide_password($command) . " ($!)'!!\n");
+        $not_good++;
+    } else {
+        $logger->info("Success!\n");
     }
 
     if ($log || $elog) {
-	my $files = $log && $elog ? 'files are' : 'file is';
-	$files .= $log && $elog ? " $log and $elog." : $log ? " $log." : " $elog.";
-	$logger->info("The log $files\n");
+        my $files = $log && $elog ? 'files are' : 'file is';
+        $files .= $log && $elog ? " $log and $elog." : $log ? " $log." : " $elog.";
+        $logger->info("The log $files\n");
     }
 
     return $not_good;
