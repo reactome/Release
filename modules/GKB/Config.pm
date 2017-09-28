@@ -138,6 +138,7 @@ $DEFAULT_IMAGE_FORMAT = 'png';
 
 # format YYYYMMDD
 $LAST_RELEASE_DATE = 20170622;
+
 #$DEFAULT_VIEW_FORMAT = 'sidebarwithdynamichierarchy';
 $DEFAULT_VIEW_FORMAT = 'elv';
 
