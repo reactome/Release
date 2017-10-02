@@ -531,7 +531,7 @@ sub get_date {
 }
 
 sub get_species_with_alternate_go_compartment {
-	return (11676, 211044, 1491);
+	return (11676, 211044, 1491, 1392);
 }
 
 sub get_microbial_species_to_exclude {

@@ -186,7 +186,7 @@ use Capture::Tiny ':all';
 use File::Basename;
 use File::Spec;
 use File::stat;
-use List::MoreUtils qw/uniq/;
+use List::MoreUtils qw/uniq all/;
 use Net::OpenSSH;
 
 use GKB::Release::Utils;
@@ -328,9 +328,7 @@ sub cmd {
 	# Display message
 	say releaselog("NOW $message...\n"); 
 	
-	
 	my @cmd_results;
-
 	foreach my $cmdarg (@{$cmdref}) { 
 		my ($cmd, @args) = @{$cmdarg};
 		
@@ -377,6 +375,13 @@ sub cmd {
 	say releaselog("FINISHED $message\n\n");
 	
 	return @cmd_results;
+}
+
+sub cmd_successful {
+	my $self = shift;
+	my $results = shift;
+	
+	return all { $_->{'exit_code'} == 0} @$results;
 }
 
 sub archive_files {
