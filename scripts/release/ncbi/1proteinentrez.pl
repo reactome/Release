@@ -28,7 +28,7 @@ my $dba = GKB::DBAdaptor->new
     );
 
 # gets Entrez Gene
-my $gene_db = $dba->fetch_instance_by_attribute('ReferenceDatabase', [['name', ['Entrez Gene']]])||
+my $gene_db = $dba->fetch_instance_by_attribute('ReferenceDatabase', [['name', ['NCBI Gene']]])||
     die("No ReferenceDatabase with name 'Gene'.\n");
 
 #gets all Entrez Gene instances
