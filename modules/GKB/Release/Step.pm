@@ -215,6 +215,7 @@ has 'gkb' => (
 has 'directory' => (
 	is => 'rw',
 	isa => 'Str',
+	lazy => 1,
 	default => $release
 );
 
