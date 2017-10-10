@@ -179,16 +179,17 @@ sub usage_instructions{
     return <<END;
 
 This script gets all regulated entities from a database
-and reports the pathways in which they are present.
+and reports the closest pathways with diagrams in which
+they are present.
 
-The output will be a tab delmited file reporting the
-regulation instance author, regulated entity database id,
-regulated entity display name, whether a regulated entity
-has a disease tag, whether a regulated entity's 'do release'
-flag is set to true, regulator display name, pathways (display
-name and db id) where the regulated entity occurs, and if
-there is a reason curators must manually decide which
-pathways should show the regulation.
+The output will be a tab delimited file reporting the
+regulation instance author, regulation databse id, regulated
+entity database id, regulated entity display name, whether a
+regulated entity has a disease tag, whether a regulated entity's
+'do release' flag is set to true, regulator display name, pathways
+(display name and db id) where the regulated entity occurs, and if
+there is a reason curators must manually decide which pathways should
+show the regulation.
     
 Usage: perl $0
 
