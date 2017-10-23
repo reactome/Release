@@ -218,7 +218,7 @@ sub get_next_text_unit {
     $self->text_units(\@text_units);
     
     if (!(defined $text_unit)) {
-    	$logger->warn("oh grot, test_unit is undef!!!\n";);
+    	$logger->warn("oh grot, test_unit is undef!!!\n");
     }
     
     $logger->info("text_unit type=" . $text_unit->get_type() . "\n");
@@ -641,7 +641,7 @@ sub get_paragraph_text_units {
 		
 		$paragraph_nesting++;
 	    } elsif ($tag eq "/p") {
-		$logger->info("end of a paragraph\n";
+		$logger->info("end of a paragraph\n");
 		
 		if ($paragraph_nesting>0) {
 		    $paragraph_nesting--;
