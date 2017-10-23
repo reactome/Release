@@ -174,7 +174,7 @@ open(my $inf, ">", "$opt_r\/inferred_$opt_sp\_$opt_thr\.txt");
 open(my $eli, ">", "$opt_r\/eligible_$opt_sp\_$opt_thr\.txt");
 open(my $manual, ">", "$opt_r\/skip_manual_inferred_human_events_$opt_sp");
 
-my (%uni, %orthologous_entity, %inferred_cp, %inferred_gse, %homol_gee, %seen_rps, %inferred_event, %being_inferred, %homol_cat, %instances, @newly_stored_instances);
+my (%uni, %orthologous_entity, %inferred_cp, %inferred_gse, %homol_gee, %seen_rps, %inferred_event, %being_inferred, %homol_cat, %instances);
 my $a =("#"x20)."\n";
 my @inferrable_human_events;
 my @manual_human_events;
@@ -685,13 +685,13 @@ sub infer_event {
     print $eli $event->db_id, "\t", $event->displayName, "\n";
 
     $being_inferred{$event} = 1;
-    @newly_stored_instances = ();
 #fill in physical entities - this is done in the respective methods called, the test variables decide as to whether the event inference can continue successfully or whether inference should be stopped as unsuccessful
 #    print "infer input..........................\n";
     $logger->info("Inferring reaction inputs");
     my ($input_inference_successful) = infer_attributes($event, $inf_e, 'input');
     if (!$input_inference_successful) {
-        delete_newly_stored_instances();
+        $logger->info(get_info($event));
+        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
         return;
     }
         
@@ -699,7 +699,8 @@ sub infer_event {
     $logger->info("Inferring reaction outputs");
     my ($output_inference_successful) = infer_attributes($event, $inf_e, 'output');
     if (!$output_inference_successful) {
-        delete_newly_stored_instances();
+        $logger->info(get_info($event));
+        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
         return;
     }
 
@@ -707,7 +708,8 @@ sub infer_event {
     $logger->info("Inferring reaction catalyst activities");
     my ($catalyst_inference_successful) = infer_catalyst($event, $inf_e);
     if (!$catalyst_inference_successful) {
-        delete_newly_stored_instances();
+        $logger->info(get_info($event));
+        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
         return;
     }
 #    print "infer regulation.........................\n";
@@ -715,7 +717,8 @@ sub infer_event {
     my ($regulation_inference_successful, $regulation_collection) = infer_regulation($event, $inf_e); #returns undef only when Regulation class is Requirement
     $logger->info("Inferring reaction regulation instances");
     if (!$regulation_inference_successful) {
-        delete_newly_stored_instances();
+        $logger->info(get_info($event));
+        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
         return;
     }
 
@@ -814,14 +817,10 @@ sub skip_event {
 	}
 }
 
-sub delete_newly_stored_instances {
-    foreach my $inferred_instance (@newly_stored_instances) {
-        #my $source_instance = $inferred_instance->inferredFrom->[0];
-        
-        $logger->info("Deleting $opt_sp inference for " . $inferred_instance->displayName . ' (' . $inferred_instance->db_id . ')');
-        
-        $dba->delete_by_db_id($inferred_instance->db_id);
-    }
+sub get_info {
+    my $instance = shift;
+    
+    return $instance->displayName . ' (' . $instance->db_id . ")\n";
 }
 
 #Argument: Event instance to be inferred, inferred event instance, attribute name
@@ -1183,7 +1182,7 @@ sub check_for_identical_instances {
     
     $i->identical_instances_in_db(undef); #clear first
     $dba->fetch_identical_instances($i);
-    $logger->info("Checking for identical instances for " . ($i->db_id || ('unstored instance ' . $i->name->[0]));
+    $logger->info("Checking for identical instances for " . ($i->db_id || ('unstored instance ' . $i->name->[0])));
     if ($i->identical_instances_in_db && $i->identical_instances_in_db->[0]) {
         my $count_ii = @{$i->identical_instances_in_db}; #number of elements
         if ($count_ii == 1) {
@@ -1216,7 +1215,7 @@ sub store_instance {
     
     my $ID = $dba->store($instance);
     $logger->info("Stored Instance: $ID");
-    push @newly_stored_instances, $instance;
+    #push @newly_stored_instances, $instance;
 }
 
 #creates and stores the event hierarchy above a given inferred reaction, based on the hierarchy of the corresponding human events
