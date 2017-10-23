@@ -33,29 +33,18 @@ my $usage = "Usage: $0 -db db_name -user db_user -host db_host -pass db_pass -po
 $opt_r || die $usage;
 
 my $release_nr = $opt_r;
-$opt_db = $opt_db || "test_reactome_$release_nr";
+$opt_db ||= "test_reactome_$release_nr";
 my $db = $opt_db;
 
 unless (-e $release_nr) {
     mkdir($release_nr) || die "Couldn't make '$release_nr': $!";
 }
 
-if (!(defined $opt_host) || $opt_host eq '') {
-    $opt_host = $GK_DB_HOST;
-}
-if (!(defined $opt_user) || $opt_user eq '') {
-    $opt_user = $GK_DB_USER;
-}
-if (!(defined $opt_pass) || $opt_pass eq '') {
-    $opt_pass = $GK_DB_PASS;
-}
-if (!(defined $opt_port) || $opt_port eq '') {
-    $opt_port = $GK_DB_PORT;
-}
+$opt_host ||= $GK_DB_HOST;
+$opt_user ||= $GK_DB_USER;
+$opt_pass ||= $GK_DB_PASS;
+$opt_port ||= $GK_DB_PORT;
 
-
-# Check for presence of optional databases
-$opt_host ||= 'localhost';
 my $dsn = "DBI:mysql:host=$opt_host;port=$opt_port";
 my $dbh = eval { DBI->connect($dsn,$opt_user,$opt_pass, {RaiseError => 1}); };
 
@@ -163,8 +152,8 @@ if (defined $opt_port && !($opt_port eq '')) {
     $mysqldump_dn_db_options .= " -P $opt_port";
     $mysqldump_mart_db_options .= " -P $opt_port";
     $mysqldump_identifier_db_options .= " -P $opt_port";
-    $mysqldump_wordpress_db_options .= " -P $opt_port"
-    $mysqldump_tmp_wordpress_db_options .= " -P $opt_port"
+    $mysqldump_wordpress_db_options .= " -P $opt_port";
+    $mysqldump_tmp_wordpress_db_options .= " -P $opt_port";
 }
 
 $biopaxexporter_db_options .= " $release_nr";
@@ -212,7 +201,7 @@ my @cmds = (
      "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
      # Next we need to sanitize the WordPress dump. So we will restore it to a temporary database, sanitzie it to remove user's names and passwords,
      # and then dump *that* as the final database.
-     "mysql  -u $opt_user -h $opt_host  -p$pass -P $opt_port -e 'CREATE DATABASE tmp_wordpress IF NOT EXISTS' ",
+     "mysql  -u $opt_user -h $opt_host  -p$opt_pass -P $opt_port -e 'CREATE DATABASE tmp_wordpress IF NOT EXISTS' ",
      "mysql --opt $mysqldump_tmp_wordpress_db_options < $release_nr/databases/gk_wordpress.sql",
      # execute the sanitize script
      "mysql --opt $mysqldump_tmp_wordpress_db_options < ./sanitize_wordpress.sql",
@@ -220,7 +209,7 @@ my @cmds = (
      "rm $release_nr/databases/gk_wordpress.sql",
      # dump the sanitized database to a file
      "mysqldump --opt $mysqldump_tmp_wordpress_db_options | gzip -c >  $release_nr/databases/gk_wordpress.sql.gz",
-     "mysql  -u $opt_user -h $opt_host  -p$pass -P $opt_port -e 'DROP DATABASE tmp_wordpress IF EXISTS' "
+     "mysql  -u $opt_user -h $opt_host  -p$opt_pass -P $opt_port -e 'DROP DATABASE tmp_wordpress IF EXISTS' "
     ],
 
     [
