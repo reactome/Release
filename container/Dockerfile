@@ -32,7 +32,8 @@ RUN mkdir -p /usr/local/gkb
 RUN mkdir /release
 RUN mkdir /tmp/gitroot
 WORKDIR /tmp/gitroot
-RUN git clone https://github.com/reactome/Release.git && cd Release && git checkout master
+ARG RELEASE_TAG=master
+RUN git clone https://github.com/reactome/Release.git && cd Release && git checkout $RELEASE_TAG
 RUN mv /tmp/gitroot/Release/java /release/java && \
     mv /tmp/gitroot/Release/modules /usr/local/gkb/modules && \
     mv /tmp/gitroot/Release/scripts /release/scripts && \
