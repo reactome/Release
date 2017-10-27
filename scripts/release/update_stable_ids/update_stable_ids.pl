@@ -22,7 +22,7 @@ use constant DEBUG => 0;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-our($pass,$user,$release_db,$prev_release_db,$gk_central,$ghost,$release_num);
+our($pass,$user,$release_db,$prev_release_db,$gk_central,$ghost,$host,$release_num);
 
 my $usage = "Usage:\n\t" . join("\n\t", 
 				"$0 -sdb slice_db_name -gdb gk_central_db_name -pdb prev_release_db_name \\",
@@ -33,6 +33,7 @@ GetOptions(
     "pass:s"  => \$pass,
     "gdb:s"   => \$gk_central,
     "ghost:s" => \$ghost,
+    "host:s"  => \$host,
     "sdb:s"   => \$release_db,
     "pdb:s"   => \$prev_release_db,
     "release:i" => \$release_num
@@ -47,7 +48,7 @@ check_db_names();
 
 back_up_databases(
     [$user, $pass, $gk_central, $ghost],
-    [$user, $pass, $release_db, 'localhost']
+    [$user, $pass, $release_db, $host]
 );
 
 get_api_connections()->{$release_db}->execute("START TRANSACTION");
@@ -246,13 +247,15 @@ sub get_api_connections {
     my $r_dba = GKB::DBAdaptor->new(
         -dbname  => $release_db,
         -user    => $user,
-        -pass    => $pass
+        -pass    => $pass,
+        -host    => $host
     );
 
     my $p_dba = GKB::DBAdaptor->new(
         -dbname  => $prev_release_db,
         -user    => $user,
-        -pass    => $pass
+        -pass    => $pass,
+        -host    => $host
     );
 
     my $g_dba = GKB::DBAdaptor->new(

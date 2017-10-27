@@ -51,9 +51,9 @@ if (!$dbc) {
 my $db = construct_db_name($opt_sp, $opt_from, $opt_source_db, $opt_r);
 
 # Create and populate test_reactome_XX from test_slice_XX_myisam
-system("mysql -u$opt_user -p$opt_pass -e 'drop database if exists $db'") == 0 or die "$?";
-system("mysql -u$opt_user -p$opt_pass -e 'create database $db'") == 0 or die "$?";
-run("mysqldump --opt -u$opt_user -p$opt_pass -h$opt_host $source | mysql -u$opt_user -p$opt_pass -h$opt_host $db") == 0 or die "$?";
+system("mysql -u$opt_user -h$opt_host -p$opt_pass -e 'drop database if exists $db'") == 0 or die "$?";
+system("mysql -u$opt_user -h$opt_host -p$opt_pass -e 'create database $db'") == 0 or die "$?";
+run("mysqldump --opt -u$opt_user  -p$opt_pass -h$opt_host $source | mysql -u$opt_user -p$opt_pass -h$opt_host $db") == 0 or die "$?";
 
 #Human is defined as default source species
 $opt_from || ($opt_from = 'hsap');

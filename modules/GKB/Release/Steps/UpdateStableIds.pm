@@ -27,8 +27,8 @@ my %stable_identifier_to_version;
 override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
 
-	my $host = $self->host;
- 	
+	#my $host = $self->host;
+ 	my $host = $slice_host;
    	$self->cmd("Backing up databases",
 		[
 		    ["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE $slicedb > $slicedb.dump"],
@@ -41,7 +41,7 @@ override 'run_commands' => sub {
     $self->cmd("Updating stable IDs",
 		[
 		    ["perl update_stable_ids.pl -ghost $gkcentral_host -user $user -pass $pass -sdb $slicedb ".
-		     "-pdb test_slice_$prevver -release $version -gdb $gkcentral > generate_stable_ids_$version.out ".
+		     "-pdb test_slice_$prevver -host $slice_host -release $version -gdb $gkcentral > generate_stable_ids_$version.out ".
 		     "2> generate_stable_ids_$version.err"]
 		]
 	);

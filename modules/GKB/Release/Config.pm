@@ -46,7 +46,7 @@ $log_conf (configuration file for Log4perl)
 =head2 METHODS
 
 =over 12
-	
+
 =item C<set_version_for_config_variables>
 
 Replace {version} with actual numeric
@@ -56,9 +56,9 @@ exported variables in this module.
 Parameters:
 	Reactome release version (Number - required)
 
-	
+
 =back
-	
+
 =head1 SEE ALSO
 
 GKB::Release::Step
@@ -86,7 +86,7 @@ use File::Basename;
 # Created by: Joel Weiser (joel.weiser@oicr.on.ca for questions/comments)
 # Purpose: A module to set and export reactome release variables
 
-our $TEST_MODE = 0;
+our $TEST_MODE = 1;
 
 # Set user variables
 chomp(our $user = `whoami`);
@@ -104,14 +104,15 @@ our $db = "test_reactome_{version}"; # Test Reactome Database (e.g. test_reactom
 our $slicedb = "test_slice_{version}"; # Slice Database (e.g. test_slice_38)
 our $stable_id_db = "stable_identifiers";
 our $gkcentral = "gk_central";
-our $gkcentral_host = "reactomecurator.oicr.on.ca";
-
+our $gkcentral_host = "release_database";
+our $slice_host = "release_database";
 if ($TEST_MODE) {
     $stable_id_db = "test_stable_identifiers",
-    $gkcentral = "test_gk_central";
-    $gkcentral_host = "reactomerelease.oicr.on.ca";
-    $version = 999;
-    $prevver = 57;
+    $gkcentral = "gk_central";
+    $gkcentral_host = "release_database";
+    $slice_host="release_database";
+    $version = 62;
+    $prevver = 61;
 }
 
 # Set directory paths
@@ -129,7 +130,7 @@ our $logfile = "$logdir/release{version}.log";
 our $archive = "/nfs/reactome/reactome/archive/release";
 
 our %passwords = (
-    'sudo' => \$sudo, 
+    'sudo' => \$sudo,
     'mysql' => \$pass
 );
 
@@ -147,19 +148,19 @@ our %hosts = (
     $release_server => "gkbdev",
     $dev_server => "gkbdev",
     $live_server => "gkb",
-   
+
     "gkbdev" => $release_server,
     "gkb" => $live_server,
-    
-    # Alternate servers    
+
+    # Alternate servers
     "brie8.cshl.edu" => "gkbdev",
-    "reactomeclean.oicr.on.ca" => "gkbdev" 
+    "reactomeclean.oicr.on.ca" => "gkbdev"
 );
-   
+
 our %maillist = (
     'internal' => 'internal@reactome.org',
     'curation' => 'lmatthews.nyumc@gmail.com',
-    'automation' => 'joel.weiser@oicr.on.ca',
+    'automation' => 'solomon.shorser@oicr.on.ca',
     'outreach' => 'robin.haw@oicr.on.ca'
 );
 
@@ -171,12 +172,12 @@ our @EXPORT = qw/
     $db $slicedb $stable_id_db $gkcentral $gkcentral_host
     $gkbdev $scripts $release $website $html $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server %hosts %maillist
-    $log_conf
+    $log_conf $slice_host
 /;
 
 sub set_version_for_config_variables {
     my $version_number = shift;
-    
+
     s/{version}/$version_number/ foreach ($db, $slicedb, $logfile);
 }
 
