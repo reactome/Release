@@ -22,8 +22,9 @@ RUN apt-get install -y \
     libdata-dump-perl libperl6-form-perl libenum-perl libconvert-binary-c-perl libxml-dom-xpath-perl \
     libgraph-perl libconfig-tiny-perl libconfig-inifiles-perl libhash-merge-perl \
     t-coffee clustalw libunicode-casefold-perl librtf-document-perl librtf-writer-perl \
-    libmail-sendmail-perl libswitch-perl libnet-sftp-foreign-perl \
+    libmail-sendmail-perl libswitch-perl libnet-sftp-foreign-perl curl maven ftp \
     vim mysql-client iputils-ping sendmail oracle-java9-installer oracle-java9-set-default
+
 RUN cpanm --notest Bio::Perl Data::CTable File::HomeDir Spreadsheet::WriteExcel::Big \
     CGI::Session::Driver::db_file CPANPLUS::Backend Ace Test::Base Bio::Root::TestObject \
     RTF::Tokenizer Parallel::Loops Mail::Sendmail
