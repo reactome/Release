@@ -634,6 +634,31 @@ sub orthologous_entity {
     }
 }
 
+sub has_species {
+    my $instance = shift;
+    
+    if ($instance->is_a('OtherEntity')) {
+        return 0;
+    } elsif ($instance->is_a('Complex') || $instance->is_a('Polymer') || $instance->is_a('EntitySet')) {
+        return any { has_species($_) } get_contained_instances($instance);
+    } else {
+        return $instance->species->[0] ? 1 : 0;
+    }
+}
+
+sub get_contained_instances {
+    my $instance = shift;
+    if ($instance->is_a('Complex')) {
+        return @{$instance->hasComponent};
+    } elsif ($instance->is_a('EntitySet')) {
+        return (@{$instance->hasMember}, @{$instance->hasCandidate});
+    } elsif ($instance->is_a('Polymer')) {
+        return @{$instance->repeatedUnit};
+    } else {
+        return;
+    }    
+}
+
 #Argument: any instance
 #returns a new instance of the same class as the incoming instance - exception is the ReferenceIsoform class, where a ReferenceGeneProduct instance needs to be returned (no isoform information available for inferred species)
 #the inference target species is assigned where appropriate, and the compartment is copied over or, in the case of bacteria, replaced by 'intracellular' as appropriate
