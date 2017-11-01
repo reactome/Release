@@ -587,7 +587,10 @@ sub orthologous_entity {
     if ($i->is_valid_attribute('species')) {
         unless ($orthologous_entity{$i}) {
 	    my $inf_ent;
-	    if ($i->is_a('GenomeEncodedEntity')) {
+	    if (!has_species($i)) {
+            $inf_ent = $i;
+            $logger->info("Referring to instance " . $i->displayName . ' (' . $i->db_id . ') rather than creating an inference');
+        } elsif ($i->is_a('GenomeEncodedEntity')) {
             $inf_ent = create_homol_gee($i, $override);
 	    } elsif ($i->is_a('Complex') || $i->is_a('Polymer')) {
             $inf_ent = infer_complex_polymer($i, $override);
@@ -599,7 +602,8 @@ sub orthologous_entity {
             # be inferred unchanged to other species.  I don't know if
             # the assumption makes sense or if it produces correct results,
             # but it stops the script from dying. David Croft.
-            # TODO: somebody needs to look into this.
+            # TODO: somebody needs to look into this.            
+            $logger->warn($i->displayName . ' (' . $i->db_id . ') is a simple entity with a species');
             $inf_ent = $i;
 	    } else {
             $logger->error_die("Unknown PhysicalEntity class: " . $i->class . ", instance name: " . $i->extended_displayName . "\n");
