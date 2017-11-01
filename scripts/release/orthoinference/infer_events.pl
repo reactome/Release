@@ -1628,7 +1628,7 @@ sub get_uniprot_reference_database {
     my $logger = get_logger(__PACKAGE__);
 
     my $uniprot_reference_database = $dba->fetch_instance_by_attribute('ReferenceDatabase', [['name', ['UniProt'],0]])->[0];
-    $logger->info("UniProt ReferenceDatabase.extended_displayName=" . $uni_db->extended_displayName . "\n");
+    $logger->info("UniProt ReferenceDatabase.extended_displayName=" . $uniprot_reference_database->extended_displayName . "\n");
     
     return $uniprot_reference_database;
 }
