@@ -35,7 +35,7 @@ override 'run_commands' => sub {
     my $configuration = get_configuration($self->user_input->{'configuration'}->{'response'});
 
     # Backup database and run add links script
-    $self->cmd("Backup database", [["mysqldump --opt -u$user -p$pass $db > $db\_before_addlinks.dump"]]);
+    $self->cmd("Backup database", [["mysqldump --opt -h$slice_host -u$user -p$pass $db > $db\_before_addlinks.dump"]]);
     my @results = $self->cmd("Running add links script", [
         ["perl setup_add_links.pl -user $user -pass $pass -db $db -person_id $person_id -configuration $configuration
          > setup_add_links_$version.out 2> setup_add_links_$version.err"]
@@ -46,7 +46,7 @@ override 'run_commands' => sub {
     if ($exit_code == 0) {
     	$self->cmd("Backing up database $db",
     		[
-    			["mysqldump --opt -u$user -p$pass $db > $db\_after_addlinks.dump"]
+    			["mysqldump --opt -h$slice_host -u$user -p$pass $db > $db\_after_addlinks.dump"]
     		]
     	);
     }
