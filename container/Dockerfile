@@ -2,7 +2,7 @@
 FROM ubuntu:16.04
 RUN apt-get update && apt-get install -y apt-utils software-properties-common python-software-properties
 RUN add-apt-repository ppa:webupd8team/java && apt-get update
-RUN echo "oracle-java9-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
+RUN echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
 RUN apt-get install -y \
     netcat cpanminus wget make tree libterm-readline-perl-perl \
     liblog-log4perl-perl libdbi-perl libwww-search-perl \
@@ -23,7 +23,7 @@ RUN apt-get install -y \
     libgraph-perl libconfig-tiny-perl libconfig-inifiles-perl libhash-merge-perl \
     t-coffee clustalw libunicode-casefold-perl librtf-document-perl librtf-writer-perl \
     libmail-sendmail-perl libswitch-perl libnet-sftp-foreign-perl curl maven ftp \
-    vim mysql-client iputils-ping sendmail oracle-java9-installer oracle-java9-set-default
+    vim mysql-client iputils-ping sendmail oracle-java8-installer oracle-java8-set-default mlocate
 
 RUN cpanm --notest Bio::Perl Data::CTable File::HomeDir Spreadsheet::WriteExcel::Big \
     CGI::Session::Driver::db_file CPANPLUS::Backend Ace Test::Base Bio::Root::TestObject \
@@ -33,7 +33,8 @@ RUN mkdir -p /usr/local/gkb
 RUN mkdir /release
 RUN mkdir /tmp/gitroot
 WORKDIR /tmp/gitroot
-ARG RELEASE_TAG=master
+ENV AARSDR ASDRFASDF
+ARG RELEASE_TAG=release-container
 RUN git clone https://github.com/reactome/Release.git && cd Release && git checkout $RELEASE_TAG
 RUN mv /tmp/gitroot/Release/java /release/java && \
     mv /tmp/gitroot/Release/modules /usr/local/gkb/modules && \
