@@ -21,7 +21,7 @@ has '+mail' => ( default => sub {
                         };
 });
 has '+user_input' => (default => sub {
-                    {'skip_list_verified' => {'query' => "Has the normal event skip list been verified for version $version (y/n):"}}
+                    {'skip_list_verified' => {'query' => "Has the normal event skip list been verified for version $version (y/n):"}},
                     {'release_date' => {'query' => "Enter release date for version $version as yyyy-mm-dd (e.g. 2017-12-13):" }}
 });
 
