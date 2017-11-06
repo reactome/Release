@@ -1,2 +1,4 @@
 mysql_databases
+mysql_databases_*
 Secrets.pm
+logs

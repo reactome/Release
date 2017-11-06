@@ -18,7 +18,6 @@ touch logs/uniprot_update/reference_DNA_sequence_report.txt
 touch logs/uniprot_update/sequence_uniprot_report.txt
 touch logs/uniprot_update/duplicated_db_id.txt
 touch logs/uniprot_update/trembl_to_update.acc
-#touch logs/orthopairs/$RELEASE_NUMBER
 touch logs/orthopairs/compara.err
 touch logs/orthopairs/compara.log
 touch logs/go_update/ec_number.err
@@ -57,6 +56,9 @@ touch logs/orthoinference/test_reactome_${RELEASE_NUMBER}_after_ortho.dump.gz
 touch logs/orthoinference/normal_event_skip_list.txt
 
 docker run -it --name release_system --net reactome_release \
+	-p 20:20 -p 21:21 -p 22:22 -p 990:990 -p 3100-3200:3100-3200 \
+	-v $(pwd)/stable_id_mapping.stored_data:/release/scripts/release/generate_stable_ids_orthoinference/stable_id_mapping.stored_data \
+	-v $(pwd)/Secrets.pm:/release/modules/GKB/Secrets.pm \
 	-v $(pwd)/release-config.pm:/release/modules/GKB/Release/Config.pm \
 	-v $(pwd)/logs/uniprot_update/uniprot.wiki:/release/scripts/release/uniprot_update/uniprot.wiki \
 	-v $(pwd)/logs/uniprot_update/uniprot.err:/release/scripts/release/uniprot_update/uniprot.err \
@@ -95,13 +97,7 @@ docker run -it --name release_system --net reactome_release \
 	-v $(pwd)/logs/orthoinference/wrapper_ortho_inference.log:/usr/local/gkb/scripts/release/orthoinference/wrapper_ortho_inference.log \
 	-v $(pwd)/logs/orthoinference/wrapper_ortho_inference.err:/usr/local/gkb/scripts/release/orthoinference/wrapper_ortho_inference.err \
 	-v $(pwd)/logs/orthoinference/normal_event_skip_list.txt:/usr/local/gkb/scripts/release/orthoinference/normal_event_skip_list.txt \
+	-v $(pwd)/nfs_backup:/nfs \
 	reactome-release /bin/bash
 
-	# -v $(pwd)/logs/go_update/gk_central_after_uniprot_update.dump.gz:/usr/local/gkb/scripts/release/go_update/gk_central_after_uniprot_update.dump.gz \
-	# -v $(pwd)/logs/uniprot_update/gk_central.dump.gz:/release/scripts/release/uniprot_update/gk_central.dump.gz \
-	# -v $(pwd)/logs/update_stable_ids/${RELEASE_NUMBER}.dump.gz:/usr/local/gkb/scripts/release/update_stable_ids/${RELEASE_NUMBER}.dump.gz \
-	# -v $(pwd)/logs/update_stable_ids/gk_central_${RELEASE_NUMBER}_before_st_id.dump.gz:/usr/local/gkb/scripts/release/update_stable_ids/gk_central_${RELEASE_NUMBER}_before_st_id.dump.gz \
-	# -v $(pwd)/logs/update_stable_ids/gk_central.dump.gz:/usr/local/gkb/scripts/release/update_stable_ids/gk_central.dump.gz \
-	# -v $(pwd)/logs/update_stable_ids/test_slice_${RELEASE_NUMBER}_after_st_id.dump.gz:/usr/local/gkb/scripts/release/update_stable_ids/test_slice_${RELEASE_NUMBER}_after_st_id.dump.gz \
-	# -v $(pwd)/logs/update_stable_ids/test_slice_${RELEASE_NUMBER}.dump.gz:/usr/local/gkb/scripts/release/update_stable_ids/test_slice_${RELEASE_NUMBER}.dump.gz \
-	# -v $(pwd)/logs/orthoinference/test_reactome_${RELEASE_NUMBER}_after_ortho.dump.gz:/usr/local/gkb/scripts/release/orthoinference/test_reactome_${RELEASE_NUMBER}_after_ortho.dump.gz \
+# TODO: Figure out a nice way to get the dump/backup files out of the container
