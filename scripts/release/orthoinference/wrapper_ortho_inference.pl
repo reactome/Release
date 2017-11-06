@@ -74,7 +74,7 @@ foreach my $sp (@species) {
        next if $sp eq 'mtub';
     }
     $logger->info("wrapper_ortho_inference: running infer_events script\n");
-    run("perl infer_events.pl -db $db -r $opt_r -from $opt_from -sp $sp -release_date $release_date -thr 75 @ARGV $db_option_string"); #run script with 75% complex threshold
+    run("perl infer_events.pl -db $db -r $opt_r -from $opt_from -sp $sp -release_date $opt_release_date -thr 75 @ARGV $db_option_string"); #run script with 75% complex threshold
 }
 `chgrp gkb $opt_r/* 2> /dev/null`; # Allows all group members to read/write compara release files
 
