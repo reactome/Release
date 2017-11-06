@@ -705,7 +705,7 @@ foreach my $t_ac ( sort keys %reactome_gp ) {
                 $report_line .= $species;
                 $report_line .= "\n\|\-\n";
 		
-                if ($t_ac ~~ @skip_list) {
+                if (any { $t_ac eq $_ } @skip_list) {
                 	push @skip_replaceable, $report_line;
                 } else {
                 	print $wiki_fh $report_line;
@@ -743,7 +743,7 @@ foreach my $rac ( sort keys %reactome_gp ) {
         my $test = $sdi->VariantIdentifier->[0];
         next if ( defined $test );
         $pid = $sdi->db_id;
-        $species = $sdi->Species->[0]->Name->[0];
+        $species = $sdi->Species->[0] ? $sdi->Species->[0]->Name->[0] : "" ;
 
 		my $ar2 = $dba->fetch_referer_by_instance($sdi);	#CY addition
         foreach my $ref ( @{$ar2} ) {
@@ -768,7 +768,7 @@ foreach my $rac ( sort keys %reactome_gp ) {
         $report_line .= $species;
     	$report_line .= "\n\|\-\n";
 	
-        if ($rac ~~ @skip_list) {
+        if ( any { $rac eq $_ } @skip_list) {
         	push @skip_no_replacement, $report_line;
         } else {		
         	print $wiki_fh $report_line;
@@ -786,8 +786,8 @@ foreach my $iac ( sort keys %reactome_iso ) {
     foreach my $sdi ( @{$isod} ) {
     	my @referrer = ();
     	my $id = $sdi->db_id;
-    	$species = $sdi->Species->[0]->Name->[0];
-
+    	#$species = $sdi->Species->[0]->Name->[0];
+	$species = $sdi->Species->[0] ? $sdi->Species->[0]->Name->[0] : "" ;
     	my $ar2 = $dba->fetch_referer_by_instance($sdi);	#CY addition
         foreach my $ref ( @{$ar2} ) {
             my $class = $ref->_class->[0];
@@ -811,7 +811,7 @@ foreach my $iac ( sort keys %reactome_iso ) {
         	$report_line .= $species;
         	$report_line .= "\n\|\-\n";
 		
-        	if ($iac ~~ @skip_list) {
+        	if (any { $iac eq $_ } @skip_list) {
         		push @skip_no_replacement, $report_line;
         	} else {
         		print $wiki_fh $report_line;
@@ -959,7 +959,7 @@ sub update_chain_log {
 	$reference_gene_product .= " (" . $i->species->[0]->name->[0] . ")" if $i->species->[0];
 	
 	foreach my $old_chain (@old_chains) {
-		unless ($old_chain ~~ @{$new_chains}) {
+		unless ( any { $old_chain  eq $_ } @{$new_chains}) {
 			my $log_entry = "$old_chain for " . $i->db_id . " removed on $date";
 			print $sequence_report_fh $log_entry . " for $reference_gene_product\n";
 			
@@ -972,7 +972,7 @@ sub update_chain_log {
 	}
 	
 	foreach my $new_chain (@{$new_chains}) {		
-		unless ($new_chain ~~ @old_chains) {
+		unless ( any { $new_chain eq $_ } @old_chains) {
 			my $log_entry = "$new_chain for " . $i->db_id . " added on $date";
 			print $sequence_report_fh $log_entry . " for $reference_gene_product\n";
 			
