@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl -w
 use strict;
-
+use Carp;
 #This script infers reactions from one species to another based on a file of homologue pairs. The implementation at present is based on the Ensembl compara orthologue mapping, but the script can easily be adapted by adding a method returning the homologue hash. The orthopair file for the Ensembl compara system can be prepared by running the script  prepare_orthopair_files.pl under GKB/scripts/compara.
 #After the reactions have been inferred, the higher-level event hierarchy is also created based on the from-species.
 
@@ -27,7 +27,7 @@ use autodie;
 use Data::Dumper;
 use Getopt::Long;
 use DBI;
-
+use List::MoreUtils qw/any/;
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
