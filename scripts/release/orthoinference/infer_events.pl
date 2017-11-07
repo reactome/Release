@@ -540,7 +540,7 @@ sub infer_gse {
                         $inf_gse = $ar->[0]; # return single member rather than a set
                     } else { # change to defined set if multiple members but no candidates
                         $logger->info("Multiple members -- changing candidate set to defined set");
-                        $inf_defined_set = new_inferred_instance_with_class($gse, 'DefinedSet');
+                        my $inf_defined_set = new_inferred_instance_with_class($gse, 'DefinedSet');
                         $inf_defined_set->Name(@{$inf_gse->Name});
                         $inf_defined_set->HasMember(@{$ar});
                         $inf_defined_set->TotalProt($total);
