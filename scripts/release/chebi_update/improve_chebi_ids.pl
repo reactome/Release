@@ -97,7 +97,7 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
         next;
     }
 
-    my $report_line = "$0: old name: " . $reference_molecule->name->[0] . " ($identifier), new name: $chebi_name ($up_to_date_identifier)\n";
+    my $report_line = "$0: old name: " . $reference_molecule->name->[0] . " ($identifier), new name: $chebi_name ($up_to_date_identifier)\n\n";
     if ($identifier eq $up_to_date_identifier && lc $reference_molecule->name->[0] eq lc $chebi_name) {
         print $report_line;
     } else {
@@ -122,8 +122,8 @@ foreach my $reference_molecule_db_id (@{$reference_molecule_db_ids}) {
 }
 $dba->execute('COMMIT');
 
-print OUT "$0: updated $outdated_molecule_identifier_counter of $molecule_identifier_counter ChEBI identifiers (" . (100 * $outdated_molecule_identifier_counter) / $molecule_identifier_counter . "%)\n";
-print OUT "$0 has finished its job\n";
+print OUT "$0: updated $outdated_molecule_identifier_counter of $molecule_identifier_counter ChEBI identifiers (" . (100 * $outdated_molecule_identifier_counter) / $molecule_identifier_counter . "%)\n\n";
+print OUT "$0 has finished its job\n\n";
 
 # Adapted from http://www.perlmonks.org/?node_id=75660 and
 # http://www.perlmonks.org/?node_id=998136
