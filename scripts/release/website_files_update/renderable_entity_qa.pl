@@ -84,7 +84,7 @@ DIAGRAM:foreach my $pathway_diagram_instance (@pathway_diagram_instances) {
             
             my $record = "$pathway_diagram_db_id\t$node_db_id\t$current_render_type\t$node_schema_class\t$node_author\t$node_species\t$node_project\n";
             print $out $record unless $seen{$record}++;
-		}
+        }
     }
     
     if ($updated && $fix) {    
@@ -130,6 +130,7 @@ sub get_proper_render_type {
         'Compartment' => 'Compartment',
         'GO_CellularComponent' => 'Compartment',
         'SimpleEntity' => 'Chemical',
+        'ChemicalDrug' => 'Chemical',
         'EntityWithAccessionedSequence' =>
             {
                 'ReferenceGeneProduct' => 'Protein',
