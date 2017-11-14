@@ -36,7 +36,7 @@ $logger->info("starting\n");
 
 @ARGV || $logger->error_die("Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -r reactome_release -from from_species_name(e.g. hsa) -sp to_species_name(e.g.dme) -filt second_taxon_filter -thr threshold_for_complex");
 
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp, $opt_filt, $opt_thr, $opt_debug);
+our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp, $opt_release_date, $opt_filt, $opt_thr, $opt_debug);
 
 &GetOptions(
     "user:s",
@@ -47,6 +47,7 @@ our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp,
 	"r=i",
 	"from=s",
 	"sp=s",
+    "release_date:s",
 	"filt=i",
 	"thr=i",
 	"debug",
@@ -55,6 +56,7 @@ our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp,
 $opt_db || $logger->error_die("Need database name (-db).\n");
 $opt_r || $logger->error_die("Need Reactome release number, e.g. -r 32\n");
 $opt_sp || $logger->error_die("Need species (-sp), e.g. mmus.\n");
+$opt_release_date || $logger->error_die("Need release date e.g. -release_date 2017-12-13");
 $opt_from ||= 'hsap';
 
 $logger->info("opt_db=$opt_db\n");
@@ -245,7 +247,7 @@ foreach my $rxn (@{$reaction_ar}) {
         next;
     }
     $logger->info("infer event for reaction=" . $rxn->extended_displayName . "\n");
-    infer_event($rxn);
+    infer_event($rxn, $opt_release_date);
 }
 
 #creating hierarchy structure as in human event
@@ -658,7 +660,7 @@ sub new_inferred_instance {
 #a number of tests confirms whether a reaction can be inferred (checking input, output, catalyst and requirement)
 #returns an event instance if inference successful, undef if unsuccessful. However, if the incoming reaction does not contain any EntityWithAccessionedSequence, it returns 1. In this case the event is not counted as an eligible event.
 sub infer_event {
-    my ($event) = @_;
+    my ($event, $release_date) = @_;
     
     return if skip_event($event);
     
@@ -721,7 +723,8 @@ sub infer_event {
         $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
         return;
     }
-
+    
+    $inf_e->releaseDate($release_date);
     $inf_e->TotalProt($total);
     $inf_e->InferredProt($inferred);
 #    $inf_e->MaxHomologues($max);
