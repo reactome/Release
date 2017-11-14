@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl -w
 use strict;
-
+use Carp;
 #This script infers reactions from one species to another based on a file of homologue pairs. The implementation at present is based on the Ensembl compara orthologue mapping, but the script can easily be adapted by adding a method returning the homologue hash. The orthopair file for the Ensembl compara system can be prepared by running the script  prepare_orthopair_files.pl under GKB/scripts/compara.
 #After the reactions have been inferred, the higher-level event hierarchy is also created based on the from-species.
 
@@ -27,7 +27,7 @@ use autodie;
 use Data::Dumper;
 use Getopt::Long;
 use DBI;
-
+use List::MoreUtils qw/any/;
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
@@ -589,7 +589,10 @@ sub orthologous_entity {
     if ($i->is_valid_attribute('species')) {
         unless ($orthologous_entity{$i}) {
 	    my $inf_ent;
-	    if ($i->is_a('GenomeEncodedEntity')) {
+	    if (!has_species($i)) {
+            $inf_ent = $i;
+            $logger->info("Referring to instance " . $i->displayName . ' (' . $i->db_id . ') rather than creating an inference');
+        } elsif ($i->is_a('GenomeEncodedEntity')) {
             $inf_ent = create_homol_gee($i, $override);
 	    } elsif ($i->is_a('Complex') || $i->is_a('Polymer')) {
             $inf_ent = infer_complex_polymer($i, $override);
@@ -601,7 +604,8 @@ sub orthologous_entity {
             # be inferred unchanged to other species.  I don't know if
             # the assumption makes sense or if it produces correct results,
             # but it stops the script from dying. David Croft.
-            # TODO: somebody needs to look into this.
+            # TODO: somebody needs to look into this.            
+            $logger->warn($i->displayName . ' (' . $i->db_id . ') is a simple entity with a species');
             $inf_ent = $i;
 	    } else {
             $logger->error_die("Unknown PhysicalEntity class: " . $i->class . ", instance name: " . $i->extended_displayName . "\n");
@@ -630,6 +634,31 @@ sub orthologous_entity {
             return $i;
         }
     }
+}
+
+sub has_species {
+    my $instance = shift;
+    
+    if ($instance->is_a('OtherEntity')) {
+        return 0;
+    } elsif ($instance->is_a('Complex') || $instance->is_a('Polymer') || $instance->is_a('EntitySet')) {
+        return any { has_species($_) } get_contained_instances($instance);
+    } else {
+        return $instance->species->[0] ? 1 : 0;
+    }
+}
+
+sub get_contained_instances {
+    my $instance = shift;
+    if ($instance->is_a('Complex')) {
+        return @{$instance->hasComponent};
+    } elsif ($instance->is_a('EntitySet')) {
+        return (@{$instance->hasMember}, @{$instance->hasCandidate});
+    } elsif ($instance->is_a('Polymer')) {
+        return @{$instance->repeatedUnit};
+    } else {
+        return;
+    }    
 }
 
 #Argument: any instance
