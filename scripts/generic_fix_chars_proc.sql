@@ -100,7 +100,10 @@ BEGIN
 		('δ', 'ÃŽÂ´'), ('ε', 'ÃŽÂµ'),
 		('δ', 'ÃƒÅ½Ã‚Â´'),
 		('γ', 'ÃƒÅ½Ã‚Â³'),
-		('γδ', 'ÃƒÅ½Ã‚Â³ÃƒÅ½Ã‚Â´')
+		('γδ', 'ÃƒÅ½Ã‚Â³ÃƒÅ½Ã‚Â´'),
+		('-', '‒'), -- This is actually a valid dash (FIGURE DASH), but some tools render it as "ΓÇæ".
+		('-', 'ΓÇæ'),
+		('-', concat( 0xE2, 0x80, 0x92 )) -- same thing as above, but with the hex code.
 		;
 
 	-- select 'The mappings are: ' as message;
