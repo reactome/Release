@@ -177,6 +177,7 @@ sub get_instance_edit {
         chomp(my $date = `date \+\%F`);
         my $instance_edit = GKB::Utils_esther::create_instance_edit($dba, "Weiser", 'JD', $date);
         $db_to_instance_edit->{$db_name} = $instance_edit;
+        print STDERR "Created instance edit with db id " . $instance_edit->db_id . "\n";
     }
     
     return $db_to_instance_edit->{$db_name};
