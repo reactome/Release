@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl -w
 use strict;
-
+use Carp;
 #This script infers reactions from one species to another based on a file of homologue pairs. The implementation at present is based on the Ensembl compara orthologue mapping, but the script can easily be adapted by adding a method returning the homologue hash. The orthopair file for the Ensembl compara system can be prepared by running the script  prepare_orthopair_files.pl under GKB/scripts/compara.
 #After the reactions have been inferred, the higher-level event hierarchy is also created based on the from-species.
 
@@ -27,7 +27,7 @@ use autodie;
 use Data::Dumper;
 use Getopt::Long;
 use DBI;
-
+use List::MoreUtils qw/any/;
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
@@ -36,7 +36,7 @@ $logger->info("starting\n");
 
 @ARGV || $logger->error_die("Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -r reactome_release -from from_species_name(e.g. hsa) -sp to_species_name(e.g.dme) -filt second_taxon_filter -thr threshold_for_complex");
 
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp, $opt_filt, $opt_thr, $opt_debug);
+our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp, $opt_release_date, $opt_filt, $opt_thr, $opt_debug);
 
 &GetOptions(
     "user:s",
@@ -47,6 +47,7 @@ our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp,
 	"r=i",
 	"from=s",
 	"sp=s",
+    "release_date:s",
 	"filt=i",
 	"thr=i",
 	"debug",
@@ -55,6 +56,7 @@ our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp,
 $opt_db || $logger->error_die("Need database name (-db).\n");
 $opt_r || $logger->error_die("Need Reactome release number, e.g. -r 32\n");
 $opt_sp || $logger->error_die("Need species (-sp), e.g. mmus.\n");
+$opt_release_date || $logger->error_die("Need release date e.g. -release_date 2017-12-13");
 $opt_from ||= 'hsap';
 
 $logger->info("opt_db=$opt_db\n");
@@ -245,7 +247,7 @@ foreach my $rxn (@{$reaction_ar}) {
         next;
     }
     $logger->info("infer event for reaction=" . $rxn->extended_displayName . "\n");
-    infer_event($rxn);
+    infer_event($rxn, $opt_release_date);
 }
 
 #creating hierarchy structure as in human event
@@ -587,7 +589,10 @@ sub orthologous_entity {
     if ($i->is_valid_attribute('species')) {
         unless ($orthologous_entity{$i}) {
 	    my $inf_ent;
-	    if ($i->is_a('GenomeEncodedEntity')) {
+	    if (!has_species($i)) {
+            $inf_ent = $i;
+            $logger->info("Referring to instance " . $i->displayName . ' (' . $i->db_id . ') rather than creating an inference');
+        } elsif ($i->is_a('GenomeEncodedEntity')) {
             $inf_ent = create_homol_gee($i, $override);
 	    } elsif ($i->is_a('Complex') || $i->is_a('Polymer')) {
             $inf_ent = infer_complex_polymer($i, $override);
@@ -599,7 +604,8 @@ sub orthologous_entity {
             # be inferred unchanged to other species.  I don't know if
             # the assumption makes sense or if it produces correct results,
             # but it stops the script from dying. David Croft.
-            # TODO: somebody needs to look into this.
+            # TODO: somebody needs to look into this.            
+            $logger->warn($i->displayName . ' (' . $i->db_id . ') is a simple entity with a species');
             $inf_ent = $i;
 	    } else {
             $logger->error_die("Unknown PhysicalEntity class: " . $i->class . ", instance name: " . $i->extended_displayName . "\n");
@@ -630,6 +636,31 @@ sub orthologous_entity {
     }
 }
 
+sub has_species {
+    my $instance = shift;
+    
+    if ($instance->is_a('OtherEntity')) {
+        return 0;
+    } elsif ($instance->is_a('Complex') || $instance->is_a('Polymer') || $instance->is_a('EntitySet')) {
+        return any { has_species($_) } get_contained_instances($instance);
+    } else {
+        return $instance->species->[0] ? 1 : 0;
+    }
+}
+
+sub get_contained_instances {
+    my $instance = shift;
+    if ($instance->is_a('Complex')) {
+        return @{$instance->hasComponent};
+    } elsif ($instance->is_a('EntitySet')) {
+        return (@{$instance->hasMember}, @{$instance->hasCandidate});
+    } elsif ($instance->is_a('Polymer')) {
+        return @{$instance->repeatedUnit};
+    } else {
+        return;
+    }    
+}
+
 #Argument: any instance
 #returns a new instance of the same class as the incoming instance - exception is the ReferenceIsoform class, where a ReferenceGeneProduct instance needs to be returned (no isoform information available for inferred species)
 #the inference target species is assigned where appropriate, and the compartment is copied over or, in the case of bacteria, replaced by 'intracellular' as appropriate
@@ -658,7 +689,7 @@ sub new_inferred_instance {
 #a number of tests confirms whether a reaction can be inferred (checking input, output, catalyst and requirement)
 #returns an event instance if inference successful, undef if unsuccessful. However, if the incoming reaction does not contain any EntityWithAccessionedSequence, it returns 1. In this case the event is not counted as an eligible event.
 sub infer_event {
-    my ($event) = @_;
+    my ($event, $release_date) = @_;
     
     return if skip_event($event);
     
@@ -721,7 +752,8 @@ sub infer_event {
         $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
         return;
     }
-
+    
+    $inf_e->releaseDate($release_date);
     $inf_e->TotalProt($total);
     $inf_e->InferredProt($inferred);
 #    $inf_e->MaxHomologues($max);
