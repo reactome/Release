@@ -73,7 +73,7 @@ DIAGRAM:foreach my $pathway_diagram_instance (@pathway_diagram_instances) {
             $root_element->getElementsByTagName('Nodes')->[0]->removeChild($node);
             $updated = 1;
             
-            print STDERR "Removing RenderablePathway node for instance $node_db_id [$node_schema_class]\n";
+            print STDERR "Removing RenderablePathway node for instance $node_db_id [$node_schema_class] in pathway diagram $pathway_diagram_db_id\n";
         }
         
         my $proper_render_type = get_proper_render_type($node_instance);
