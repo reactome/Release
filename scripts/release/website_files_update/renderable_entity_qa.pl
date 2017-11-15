@@ -5,9 +5,11 @@ use lib "/usr/local/gkb/modules";
 use GKB::Config;
 use GKB::DBAdaptor;
 use GKB::Utils;
+use GKB::Utils_esther;
 
 use autodie;
 use Data::Dumper;
+use feature qw/state/;
 use Getopt::Long;
 use List::MoreUtils qw/any/;
 use XML::LibXML;
@@ -88,6 +90,8 @@ DIAGRAM:foreach my $pathway_diagram_instance (@pathway_diagram_instances) {
     }
     
     if ($updated && $fix) {    
+        $pathway_diagram_instance->modified(@{$pathway_diagram_instance->modified});
+        $pathway_diagram_instance->add_attribute_value('modified', get_instance_edit($dba));
         $pathway_diagram_instance->storedATXML(undef);
         $pathway_diagram_instance->storedATXML($dom->toString);
         $dba->update_attribute($pathway_diagram_instance, 'storedATXML');
@@ -162,6 +166,20 @@ sub is_protein_without_reference_entity {
 
 sub get_id_list_for_proteins_without_reference_entities {
     return (1599370, 6788097);
+}
+
+sub get_instance_edit {
+    my $dba = shift;
+    state $db_to_instance_edit;
+    
+    my $db_name = $dba->db_name;
+    unless ($db_to_instance_edit && $db_to_instance_edit->{$db_name}) {
+        chomp(my $date = `date \+\%F`);
+        my $instance_edit = GKB::Utils_esther::create_instance_edit($dba, "Weiser", 'JD', $date);
+        $db_to_instance_edit->{$db_name} = $instance_edit;
+    }
+    
+    return $db_to_instance_edit->{$db_name};
 }
 
 sub usage_instructions {
