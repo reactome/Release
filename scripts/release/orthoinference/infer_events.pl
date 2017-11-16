@@ -529,11 +529,13 @@ sub infer_gse {
         #handle CandidateSets
         if ($gse->is_a('CandidateSet')) {
             $logger->info("Inferring candidate set " . $gse->displayName . ' (' . $gse->db_id . ')');
+            my @candidates = grep { !instance_in_list($_, \@members) } @{infer_members($gse->HasCandidate)};
             if ($ar_cand->[0]) {
                 $inf_gse->HasCandidate(@candidates);
             } else {
                 $logger->info("No inferred candidates");
                 if ($members[0]) {
+                    if (!$members[1]) {
                         $logger->info("Single member -- returning member rather than set");
                         $inf_gse = $members[0]; # return single member rather than a set
                     } else { # change to defined set if multiple members but no candidates
