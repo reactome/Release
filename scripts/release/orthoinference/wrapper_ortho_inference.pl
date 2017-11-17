@@ -20,11 +20,11 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-our($opt_r, $opt_from, $opt_sp, $opt_source_db, $opt_debug, $opt_host, $opt_port, $opt_user, $opt_pass);
+our($opt_r, $opt_from, $opt_sp, $opt_source_db, $opt_debug, $opt_host, $opt_port, $opt_user, $opt_pass, $opt_release_date);
 
 @ARGV || die "Usage: $0 -r reactome_version(e.g.14)  -from source species (default = hsap) -sp sp_abbreviation (only for species-specific Reactome) -source_db name of source database (default = test_slice_reactomeversion_myisam)   (optional list of top event ids for limited inference) -debug\n";
 
-&GetOptions("r:i", "from:s", "sp:s", "source_db:s", "debug", "host:s", "port:s", "user:s", "pass:s");
+&GetOptions("r:i", "from:s", "sp:s", "source_db:s", "debug", "host:s", "port:s", "user:s", "pass:s", "release_date:s");
 
 
 my %db_options = ("-host" => ($opt_host ||= "localhost"),
@@ -74,7 +74,7 @@ foreach my $sp (@species) {
        next if $sp eq 'mtub';
     }
     $logger->info("wrapper_ortho_inference: running infer_events script\n");
-    run("perl infer_events.pl -db $db -r $opt_r -from $opt_from -sp $sp -thr 75 @ARGV $db_option_string"); #run script with 75% complex threshold
+    run("perl infer_events.pl -db $db -r $opt_r -from $opt_from -sp $sp -release_date $opt_release_date -thr 75 @ARGV $db_option_string"); #run script with 75% complex threshold
 }
 `chgrp gkb $opt_r/* 2> /dev/null`; # Allows all group members to read/write compara release files
 
