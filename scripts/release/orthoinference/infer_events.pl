@@ -510,13 +510,16 @@ sub read_ensg_mapping {
 #When the override flag is set to true and the inference is unsuccessful, a GenomeEncodedEntity instance (ghost) is returned. 
 sub infer_gse {
     my ($gse, $override) = @_;
-    $inferred_gse{$gse} && return $inferred_gse{$gse};
-#infer members only to start with, no candidates
+    $inferred_gse{$gse} && return $inferred_gse{$gse}; #return cached inferred set instance if it exists
+    
+    my $logger = get_logger(__PACKAGE__);
+
     my $ar = infer_members($gse->HasMember);
     my $inf_gse = new_inferred_instance($gse);
     $inf_gse->Name(@{$gse->Name});
     $inf_gse->HasMember(@{$ar});
     if ($gse->is_a('OpenSet')) {
+        $logger->info("Inferring open set " . $gse->displayName . ' (' . $gse->db_id . ')');
         $inf_gse->ReferenceEntity(@{$gse->ReferenceEntity});
     } else {
         my ($total, $inferred, $count) = count_distinct_proteins($gse); #disregarding candidates for counting (unless a CandidateSet has only candidates and no members - in this case all candidates have to have a homologue in order for the inferred variable to be set to 1)
@@ -524,19 +527,41 @@ sub infer_gse {
         $inf_gse->TotalProt($total);
         $inf_gse->InferredProt($inferred);
         $inf_gse->MaxHomologues($count);
-        #handle CandidateSets - infer candidates where no confirmed member exists (and all candidates have a homologue - otherwise the "correct" protein may be missing)
+
+        #handle CandidateSets
         if ($gse->is_a('CandidateSet')) {
-            my $ar_cand;
-            if (!$gse->HasMember->[0]) { #no member exists
-                $ar_cand = infer_members($gse->HasCandidate, 1); #the flag set to 1 ensures an "all or none" inference
-            }
-            $inf_gse->HasCandidate(@{$ar_cand});
-                unless ($ar_cand->[0] || $ar->[0]) { #Candidate set must have at least one member or candidate
+            $logger->info("Inferring candidate set " . $gse->displayName . ' (' . $gse->db_id . ')');
+            my $ar_cand = infer_members($gse->HasCandidate);
+            if ($ar_cand->[0]) {
+                $inf_gse->HasCandidate(@{$ar_cand});
+            } else {
+                $logger->info("No inferred candidates");
+                if ($ar->[0]) {
+                    if (!$ar->[1]) {
+                        $logger->info("Single member -- returning member rather than set");
+                        $inf_gse = $ar->[0]; # return single member rather than a set
+                    } else { # change to defined set if multiple members but no candidates
+                        $logger->info("Multiple members -- changing candidate set to defined set");
+                        my $inf_defined_set = new_inferred_instance_with_class($gse, 'DefinedSet');
+                        $inf_defined_set->Name(@{$inf_gse->Name});
+                        $inf_defined_set->HasMember(@{$ar});
+                        $inf_defined_set->TotalProt($total);
+                        $inf_defined_set->InferredProt($inferred);
+                        $inf_defined_set->MaxHomologues($count);
+                    
+                        $inf_gse = $inf_defined_set;
+                    }
+                } else {
+                    $logger->info("No member -- returning undef instead of instance");
                     return unless $override;
-                	$inf_gse = create_ghost($gse);
+                    
+                    $logger->info("Creating ghost set due to forced override");
+                    $inf_gse = create_ghost($gse);
+                }
             }
         #handle DefinedSets
         } elsif ($gse->is_a('DefinedSet')) {
+            $logger->info("Inferring defined set " . $gse->displayName . ' (' . $gse->db_id . ')');
             if (!$ar->[0]) { #no member
             	$override ? return create_ghost($gse) : return;
             } elsif (!$ar->[1]) { #only one member, return member itself rather than DefinedSet
@@ -558,6 +583,7 @@ sub infer_gse {
     $inferred_gse{$gse} = $inf_gse; #make this assignment only for bona fide inferred instances, not those created based on override
     return $inf_gse;
 }
+
 
 #Argument: members of an EntitySet to be inferred (arrayref of PhysicalEntity instances)
 #members are given as array ref, inferred members are returned as array ref
@@ -665,13 +691,21 @@ sub get_contained_instances {
 #returns a new instance of the same class as the incoming instance - exception is the ReferenceIsoform class, where a ReferenceGeneProduct instance needs to be returned (no isoform information available for inferred species)
 #the inference target species is assigned where appropriate, and the compartment is copied over or, in the case of bacteria, replaced by 'intracellular' as appropriate
 sub new_inferred_instance {
-    my ($i) = @_;
+    my $i = shift;
     my $class;
     if (($protein_class eq 'ReferenceGeneProduct') && ($i->class eq 'ReferenceIsoform')) {
         $class = 'ReferenceGeneProduct';
     } else {
         $class = $i->class;
     }
+    
+    return new_inferred_instance_with_class($i, $class);
+}
+
+sub new_inferred_instance_with_class {
+    my $i = shift;
+    my $class = shift;
+    
     my $inf_i = GKB::Instance->new(-ONTOLOGY=>$i->ontology, -CLASS=>$class);
     $inf_i->inflated(1);
     $inf_i->Created($instance_edit);
