@@ -765,7 +765,7 @@ sub infer_event {
     my ($output_inference_successful) = infer_attributes($event, $inf_e, 'output');
     if (!$output_inference_successful) {
         $logger->info(get_info($event));
-        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
+        $logger->info("Aborting $opt_sp event inference -- output inference unsuccessful");
         return;
     }
 
@@ -774,16 +774,16 @@ sub infer_event {
     my ($catalyst_inference_successful) = infer_catalyst($event, $inf_e);
     if (!$catalyst_inference_successful) {
         $logger->info(get_info($event));
-        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
+        $logger->info("Aborting $opt_sp event inference -- catalyst inference unsuccessful");
         return;
     }
 #    print "infer regulation.........................\n";
     
-    my ($regulation_inference_successful, $regulation_collection) = infer_regulation($event, $inf_e, $release_date); #returns undef only when Regulation class is Requirement
+    my ($regulation_inference_successful, $regulation_collection) = infer_regulation($event, $release_date); #returns undef only when Regulation class is Requirement
     $logger->info("Inferring reaction regulation instances");
     if (!$regulation_inference_successful) {
         $logger->info(get_info($event));
-        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
+        $logger->info("Aborting $opt_sp event inference -- regulation inference unsuccessful");
         return;
     }
     
