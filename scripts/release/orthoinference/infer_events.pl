@@ -779,7 +779,7 @@ sub infer_event {
     }
 #    print "infer regulation.........................\n";
     
-    my ($regulation_inference_successful, $regulation_collection) = infer_regulation($event, $inf_e); #returns undef only when Regulation class is Requirement
+    my ($regulation_inference_successful, $regulation_collection) = infer_regulation($event, $inf_e, $release_date); #returns undef only when Regulation class is Requirement
     $logger->info("Inferring reaction regulation instances");
     if (!$regulation_inference_successful) {
         $logger->info(get_info($event));
@@ -961,15 +961,15 @@ sub create_inf_cat {
 }
 
 #manages inference of Regulation instances attached to Events or CatalystActivities
-#Arguments: Event or CatalystActivity instance to be inferred
+#Arguments: Event or CatalystActivity instance to be inferred and release date
 #returns undef if inference unsuccessful and the Regulation instance is of class 'Requirement', returns 1 and an array ref with the inferred Regulation instances in all other cases (the array may be empty if there is no Regulation instance attached to the incoming instance in the first place, or if the Regulation instance cannot be inferred, but is not of class 'Requirement')
 sub infer_regulation {
-    my ($i) = @_;
+    my ($i, $release_date) = @_;
     my @reg;
     my $reg_ar = $i->reverse_attribute_value('regulatedEntity');
     if ($reg_ar->[0]) {
         foreach my $reg (@{$reg_ar}) {
-            my $regulator = infer_regulator($reg->Regulator->[0]);
+            my $regulator = infer_regulator($reg->Regulator->[0], $release_date);
             unless ($regulator) {
                 if ($reg->is_a('Requirement')) {
                     return; #the event should not be inferred in this case
@@ -990,10 +990,10 @@ sub infer_regulation {
     return (1, \@reg);
 }
 
-#Argument: an instance allowed as regulator
+#Argument: an instance allowed as regulator and release date
 #returns an instance if inference is successful, or undef if unsuccessful
 sub infer_regulator {
-    my ($reg) = @_;
+    my ($reg, $release_date) = @_;
     return unless $reg;
     
     my $inf_reg;
@@ -1007,7 +1007,7 @@ sub infer_regulator {
             return;
         }
 	
-        $inf_reg = infer_event($reg);
+        $inf_reg = infer_event($reg, $release_date);
         return if defined $inf_reg && $inf_reg == 1; #the event has no accessioned sequences and is therefore not eligible for inference
     }
     return $inf_reg;
@@ -1287,7 +1287,7 @@ sub store_instance {
 #creates and stores the event hierarchy above a given inferred reaction, based on the hierarchy of the corresponding human events
 #This method now deals with both Pathways and BlackBoxEvents (both of which can group subevents)
 sub create_orthologous_generic_event {
-    my ($hum_event) = @_;
+    my ($hum_event, $release_date) = @_;
     
     my $logger = get_logger(__PACKAGE__);
     
@@ -1299,6 +1299,7 @@ sub create_orthologous_generic_event {
                 my $gen_inf_event = new_inferred_instance($gen_hum_event);
                 $gen_inf_event->Name(@{$gen_hum_event->Name});
                 $gen_inf_event->Summation($summation);
+                $gen_inf_event->releaseDate($release_date);
                 $gen_inf_event->InferredFrom($gen_hum_event);
                 $gen_inf_event->EvidenceType($evidence_type);
                 $gen_inf_event->GoBiologicalProcess(@{$gen_hum_event->GoBiologicalProcess});
@@ -1311,7 +1312,7 @@ sub create_orthologous_generic_event {
                 }
         
                 $inferred_event{$gen_hum_event} = $gen_inf_event;
-                $dba->store($gen_inf_event);	
+                $dba->store($gen_inf_event);
                 
                 $gen_hum_event->OrthologousEvent;
                 $gen_hum_event->add_attribute_value('orthologousEvent',$gen_inf_event);
@@ -1321,8 +1322,8 @@ sub create_orthologous_generic_event {
                 }
                 push @inferrable_human_events, $gen_hum_event;
             }
-            create_orthologous_generic_event($gen_hum_event);
-	    
+            create_orthologous_generic_event($gen_hum_event, $release_date);
+
             $logger->info("orthologous generic event subroutine:\n");
     	    $logger->info($gen_hum_event->displayName . " => " . $inferred_event{$gen_hum_event}->displayName . "\n");
     	}
