@@ -254,7 +254,7 @@ foreach my $rxn (@{$reaction_ar}) {
 my %seen;
 foreach (@inferrable_human_events){
     next if $seen{$_}++;
-    create_orthologous_generic_event($_);
+    create_orthologous_generic_event($_, $opt_release_date);
 }
 
 #fill pathways and blackboxevents with their components in the same order as in human
