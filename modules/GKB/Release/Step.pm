@@ -393,9 +393,11 @@ sub archive_files {
 	my $step_version_archive = "$step_archive/$version";
 	
 	`mkdir -p $step_version_archive`;
-	`gzip -q *.dump 2>/dev/null`;
-	`mv --backup=numbered $_ $step_version_archive 2>/dev/null` foreach qw/*.dump.gz *.err *.log *.out/;
-	symlink $step_archive, 'archive' unless (-e 'archive');
+	if (-d $step_version_archive) {
+		`mv --backup=numbered $_ $step_version_archive 2>/dev/null` foreach qw/*.dump *.err *.log *.out/;
+		`gzip -qf *.dump* 2> /dev/null`;
+		symlink $step_archive, 'archive' unless (-e 'archive');
+	}
 	
 	return $step_version_archive;
 }
