@@ -126,7 +126,7 @@ our $tmp = "$gkbdev/tmp";
 our $cvs = "/usr/local/cvs_repository";
 our $logdir = "$release/logs";
 our $logfile = "$logdir/release{version}.log";
-our $archive = "/nfs/reactome/reactome/archive/release";
+our $archive = "/nfs/reactome/archive/release";
 
 our %passwords = (
     'sudo' => \$sudo, 
