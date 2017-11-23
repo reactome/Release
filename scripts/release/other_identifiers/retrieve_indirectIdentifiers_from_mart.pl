@@ -72,7 +72,7 @@ IDENTIFIER:foreach my $identifier (get_identifiers($sp_mart_name)) {
 
     my $query_runner = get_query_runner();
     $query_runner->execute($query);
-    open(my $fh, '>', "output2/$sp_mart_name\_$identifier");
+    open(my $fh, '>', "output/$sp_mart_name\_$identifier");
     $query_runner->printResults($fh);
     close $fh;
 }
