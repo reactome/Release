@@ -51,7 +51,6 @@ if ($sp->displayName =~ /^(\w)\w+ (\w+)$/) {
 my $registry = get_registry();
 IDENTIFIER:foreach my $identifier (get_identifiers($sp_mart_name)) {
     next if $identifier =~ /chembl|clone_based|dbass|description|ottg|ottt|ottp|shares_cds|merops|mirbase|reactome/;
-    next unless $identifier =~ /go/i;
     my $query = get_query($registry);
 
     $query->setDataset($sp_mart_name . "_gene_ensembl");
@@ -72,7 +71,7 @@ IDENTIFIER:foreach my $identifier (get_identifiers($sp_mart_name)) {
 
     my $query_runner = get_query_runner();
     $query_runner->execute($query);
-    open(my $fh, '>', "output2/$sp_mart_name\_$identifier");
+    open(my $fh, '>', "output/$sp_mart_name\_$identifier");
     $query_runner->printResults($fh);
     close $fh;
 }
