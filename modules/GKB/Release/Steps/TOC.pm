@@ -27,33 +27,32 @@ override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
     my $ssh = $self->get_server();
-    my $website_dir = replace_gkb_alias_in_dir($website, $gkbdir);
     my $livedb = 'gk_current';
   
     if ($gkbdir eq "gkbdev") {
-    	$self->cmd("Removing cached frontpage files",
-    	    [
-                ["echo $sudo | sudo -S rm -rf $website_dir/html/img-fp/$db"],
-                ["echo $sudo | sudo -S rm $website_dir/html/img-fp/$livedb"]
-    	   ]
-    	);
+        $self->cmd("Removing cached frontpage files",
+            [
+                ["echo $sudo | sudo -S rm -rf $website_static/cgi-tmp/img-fp/$db"],
+                ["echo $sudo | sudo -S rm $website_static/cgi-tmp/img-fp/$livedb"]
+            ]
+        );
     
-    	$self->cmd("Creating table of contents",
-    	    [
-                ["mkdir -p $website_dir/html/img-fp"],
-                ["$website_dir/cgi-bin/toc DB=$db"],
-            	["$website_dir/cgi-bin/doi_toc DB=$db"],
-                ["ln -s $website_dir/html/img-fp/$db $website_dir/html/img-fp/$livedb"],
-            	["echo $sudo | sudo -S chown -R \${USER}:www-data $website_dir/html/img-fp/$db/toc"],
-            	["echo $sudo | sudo -S chown -R \${USER}:www-data $website_dir/html/img-fp/$db/doi_toc"]
-    	    ]
-    	);
+        $self->cmd("Creating table of contents",
+            [
+                ["mkdir -p $website_static/cgi-tmp/img-fp"],
+                ["$website_static/cgi-bin/toc DB=$db"],
+                ["$website_static/cgi-bin/doi_toc DB=$db"],
+                ["ln -s $website_static/cgi-tmp/img-fp/$db $website_static/cgi-tmp/img-fp/$livedb"],
+                ["echo $sudo | sudo -S chown -R \${USER}:www-data $website_static/cgi-tmp/img-fp/$db/toc"],
+                ["echo $sudo | sudo -S chown -R \${USER}:www-data $website_static/cgi-tmp/img-fp/$db/doi_toc"]
+            ]
+        );
     } elsif ($gkbdir eq "gkb") {
         $self->cmd("Creating table of contents",
             [
                 ["echo $sudo | sudo -S rm -rf $website_dir/html/img-fp/$livedb"],
-            	["$website_dir/cgi-bin/toc DB=$livedb"],
-                ["$website_dir/cgi-bin/doi_toc DB=$livedb"],
+                ["$website_static/cgi-bin/toc DB=$livedb"],
+                ["$website_static/cgi-bin/doi_toc DB=$livedb"],
                 ["echo $sudo | sudo -S chown -R \${USER}:www-data $website_dir/html/img-fp/$livedb/*toc"]
             ],
             {"ssh" => $ssh}
