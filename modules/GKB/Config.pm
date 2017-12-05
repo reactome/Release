@@ -24,6 +24,7 @@ use vars qw(
 	$GK_DB_PASS
 	$GK_DB_PORT
 	$GK_ENTITY_DB_NAME
+	$REACTOME_ROOT_DIR
     $GK_ROOT_DIR
 	$GK_JAVA_CODEBASE
 	$GK_FETCH_SCRIPT
@@ -108,11 +109,12 @@ $WWW_USER = 'nobody';
 
 # Various paths
 ##################################################################################
+$REACTOME_ROOT_DIR = '/usr/local/reactomes/Reactome/production';
 $GK_ROOT_DIR = '/usr/local/gkb';
 $GK_JAVA_CODEBASE = "/jars";
-$GK_TMP_IMG_DIR = "$GK_ROOT_DIR/website/html/img-tmp";
+$GK_TMP_IMG_DIR = "$REACTOME_ROOT_DIR/Website/static/cgi-tmp/img-tmp";
 # Place for frontpage images 
-$FRONTPAGE_IMG_DIR = "$GK_ROOT_DIR/website/html/img-fp";
+$FRONTPAGE_IMG_DIR = "$REACTOME_ROOT_DIR/Website/static/cgi-tmp/img-fp";
 $NEWS_FILE = "$GK_ROOT_DIR/website/html/news.html";
 $DB_BACKUP_DIR = "$GK_ROOT_DIR/database_backups";
 $GK_FETCH_SCRIPT = "/cgi-bin/instance2text.pl";
@@ -137,7 +139,7 @@ $SKY_REPLACEMENT_IMAGE = undef;
 $DEFAULT_IMAGE_FORMAT = 'png';
 
 # format YYYYMMDD
-$LAST_RELEASE_DATE = 20170622;
+$LAST_RELEASE_DATE = 20170927;
 
 #$DEFAULT_VIEW_FORMAT = 'sidebarwithdynamichierarchy';
 $DEFAULT_VIEW_FORMAT = 'elv';

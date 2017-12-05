@@ -1248,7 +1248,7 @@ sub check_for_identical_instances {
     
     $i->identical_instances_in_db(undef); #clear first
     $dba->fetch_identical_instances($i);
-    $logger->info("Checking for identical instances for " . ($i->db_id || ('unstored instance ' . $i->name->[0])));
+    $logger->info("Checking for identical instances for " . ($i->db_id || ('unstored instance ' . ($i->name->[0] ? $i->name->[0] : ''))));
     if ($i->identical_instances_in_db && $i->identical_instances_in_db->[0]) {
         my $count_ii = @{$i->identical_instances_in_db}; #number of elements
         if ($count_ii == 1) {
