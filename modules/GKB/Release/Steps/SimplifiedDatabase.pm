@@ -87,7 +87,7 @@ sub _execute_query {
     my $database_name = shift;
     my $query = shift;
     
-    return `mysql -u $GKB::Config::GK_DB_USER -p$GKB::Config::GK_DB_PASS -sN -e 'use $database_name; $query'`;
+    return `mysql -u $GKB::Config::GK_DB_USER -h$GKB::Config::GK_DB_HOST -p$GKB::Config::GK_DB_PASS -sN -e 'use $database_name; $query'`;
 }
 
 1;
