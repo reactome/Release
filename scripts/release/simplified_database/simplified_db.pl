@@ -501,7 +501,7 @@ sub load_simplified_database_schema {
     my $schema_file = "simplified.sql";
     croak "$schema_file doesn't exist" unless (-e $schema_file);
     
-    system("mysql -u $GKB::Config::GK_DB_USER -p$GKB::Config::GK_DB_PASS $simplified_database < $schema_file");
+    system("mysql -u $GKB::Config::GK_DB_USER -h$GKB::Config::GK_DB_HOST -p$GKB::Config::GK_DB_PASS $simplified_database < $schema_file");
     my $dbh = get_simplified_database_handle();
     $dbh->do("use $simplified_database");
 }
