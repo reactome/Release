@@ -531,7 +531,7 @@ sub infer_gse {
         if ($gse->is_a('CandidateSet')) {
             $logger->info("Inferring candidate set " . $gse->displayName . ' (' . $gse->db_id . ')');
             my @candidates = grep { !instance_in_list($_, \@members) } @{infer_members($gse->HasCandidate)};
-            if ($ar_cand->[0]) {
+            if (scalar @candidates > 0) {
                 $inf_gse->HasCandidate(@candidates);
             } else {
                 $logger->info("No inferred candidates");
