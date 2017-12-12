@@ -617,7 +617,7 @@ sub orthologous_entity {
 	    my $inf_ent;
 	    if (!has_species($i)) {
             $inf_ent = $i;
-            $logger->info("Referring to instance " . $i->displayName . ' (' . $i->db_id . ') rather than creating an inference');
+            $logger->info("Referring to instance " . $i->displayName . ' (' . $i->db_id . ') of class ' . $i->class . ' rather than creating an inference');
         } elsif ($i->is_a('GenomeEncodedEntity')) {
             $inf_ent = create_homol_gee($i, $override);
 	    } elsif ($i->is_a('Complex') || $i->is_a('Polymer')) {
