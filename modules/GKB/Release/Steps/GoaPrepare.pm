@@ -21,7 +21,7 @@ has '+mail' => ( default => sub {
 );
 
 override 'run_commands' => sub {
-	my ($self, $gkbdir) = @_;
+my ($self, $gkbdir) = @_;
     
     my $host = $self->host;
        
@@ -31,11 +31,11 @@ override 'run_commands' => sub {
    
     $self->cmd("Updating GO ontology folder from GO SVN",[["svn --ignore-externals update $go"]]);
     $self->cmd("Preparing GO submission",
-    	[
-    		["perl goa_submission.pl @args"],
-    		["perl goa_submission_stats.pl gene_association.reactome gene_association.reactome.stats"],
-		["perl $utildir/filter-gene-association.pl -e -v 2 -p nocheck -i gene_association.reactome > gofilter.report 2>&1"]
-    	]
+        [
+            ["perl goa_submission.pl @args > goa_submission.out 2> goa_submission.err"],
+            ["perl goa_submission_stats.pl gene_association.reactome gene_association.reactome.stats"],
+            ["perl $utildir/filter-gene-association.pl -e -v 2 -p nocheck -i gene_association.reactome > gofilter.report 2>&1"]
+        ]
     );    
 };
 
