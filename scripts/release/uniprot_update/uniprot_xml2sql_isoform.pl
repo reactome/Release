@@ -63,8 +63,8 @@ my @temp = split(/\n/, `ls -1tr $update_dir/uniprot-reviewed*`);	# look for file
 die "Can't find $update_dir/uniprot-reviewed_no.list.gz\n" unless ($trembl_file);
 
 if ($trembl_file =~ /\.gz$/) {
-	system("gunzip -f $update_dir/$trembl_file");
-	$trembl_file =~ s/\.gz$//;
+    system("gunzip -f $update_dir/$trembl_file");
+    $trembl_file =~ s/\.gz$//;
 }
 
 # Download sprot file
@@ -73,8 +73,8 @@ if ($trembl_file =~ /\.gz$/) {
 die "Can't find $update_dir/uniprot_sprot.xml.gz\n" unless ($sprot_file);
 
 if ($sprot_file =~ /\.gz$/) {
-	system("gunzip -f $update_dir/$sprot_file");
-	$sprot_file =~ s/\.gz$//;
+    system("gunzip -f $update_dir/$sprot_file");
+    $sprot_file =~ s/\.gz$//;
 }
 
 # Prepare to update InstanceEdit
@@ -220,7 +220,7 @@ while (<$uniprot_records_fh>) {
 
     $total_xml++;
 
-	#Parsing the instance attributes: accession, gene names, keywords, comments, isoforms....
+    #Parsing the instance attributes: accession, gene names, keywords, comments, isoforms....
 
     my ($id) = $_ =~ /\<name\>([A-Za-z0-9\_]*)\<\/name\>/ms;
     unshift @ac, $id;
@@ -271,7 +271,7 @@ while (<$uniprot_records_fh>) {
         push @gene_name, @names;
     }
 
-	my $name = $gene_name[0] ? $gene_name[0] : $rec_name;
+    my $name = $gene_name[0] ? $gene_name[0] : $rec_name;
     
     my @reference_dna_sequences;
     if ($taxon =~ /Homo sapiens/i) {
@@ -330,7 +330,7 @@ while (<$uniprot_records_fh>) {
                 print $ref_DNA_seq_report "Reference DNA sequence with db_id $reference_dna_sequence_db_id created for $gene_id\n";
                 $reactome_rds{$gene_id} = $reference_dna_sequence_db_id;
             }
-            push @reference_dna_sequences, $reference_dna_sequence;               
+            push @reference_dna_sequences, $reference_dna_sequence;
         }
     }    
     
@@ -361,29 +361,29 @@ while (<$uniprot_records_fh>) {
     my @chains;
     while (/\<feature.*?type=\"initiator methionine\"(.*?)\<\/feature\>/gms) {
         my $feature = $1;
-	
+
         my $position;
         if ($feature =~ /\<location\>\n\s+<position position=\"(\d+)\"/ms) {
             $position = $1;
         }
-	
+
         push @chains, "initiator methionine:$position";
     } 
     
     while (/\<feature.*?type=\"(chain|peptide|propeptide|signal peptide|transit peptide)\"(.*?)\<\/feature\>/gms) {
         my $type = $1;
         my $feature = $2;
-	
+
         my $begin = '';
         if ($feature =~ /<begin position=\"(\d+)\"/ms) {
             $begin = $1; 	
         }
-	
+
         my $end = '';
         if ($feature =~ /<end position=\"(\d+)\"/ms) {
             $end = $1;
         }
-		
+
         push @chains, "$type:$begin-$end";
     }
     
@@ -391,8 +391,8 @@ while (<$uniprot_records_fh>) {
         'secondaryIdentifier' => \@ac,
         'description' => $desc,
         'sequenceLength' => $lngth,
-    	'species' => $species_instance,
-    	'checksum' => $checksum,
+        'species' => $species_instance,
+        'checksum' => $checksum,
         'name' => $name,
         'geneName' => \@gene_name,
         'comment' => $cc,
@@ -413,7 +413,7 @@ while (<$uniprot_records_fh>) {
         my $ddd = $dba->store($sdim);
         $sdim->created($instance_edit);
         $sdim->modified(undef);
-	
+
         $ddd = $sdim->db_id;
 
         print "New UniProt\:$ac\t$ddd\n";
@@ -434,10 +434,10 @@ while (<$uniprot_records_fh>) {
                 $sdi->created($instance_edit);
                 $sdi->modified(undef);
                 $sdi->VariantIdentifier($isoid);
-		
-	            $ddd = $sdi->db_id;
 
-				updateinstance($sdi, \%values);
+                $ddd = $sdi->db_id;
+
+                updateinstance($sdi, \%values);
             }
             else {
                 $mis_parents{$isoid} = $ac;
@@ -460,11 +460,11 @@ while (<$uniprot_records_fh>) {
             print "Updating master sequence...$sdd\t$ac\n";
                         
             $sdi->Created( @{ $sdi->Created } );
-    	    $sdi->Modified( @{ $sdi->Modified } );
-        	$sdi->add_attribute_value( 'modified', $instance_edit );
+            $sdi->Modified( @{ $sdi->Modified } );
+            $sdi->add_attribute_value( 'modified', $instance_edit );
 
             updateinstance($sdi, \%values);
-         	
+            
             $dupl_flag = 1;
             
             ## master sequence update finished
@@ -481,7 +481,7 @@ while (<$uniprot_records_fh>) {
                             
                             $isod->inflate();
 
-						    $isod->isoformParent($sdi);
+                            $isod->isoformParent($sdi);
             
                             $isod->Created( @{ $isod->Created } );
                             $isod->Modified( @{ $isod->Modified } );
@@ -508,7 +508,7 @@ while (<$uniprot_records_fh>) {
                         $sdi_new->modified(undef);
                         $sdi_new->variantIdentifier($is_ac);
 
-						print "New isoform: $is_ac\t$ddd\tMaster: $sdd\n";
+                        print "New isoform: $is_ac\t$ddd\tMaster: $sdd\n";
                         updateinstance($sdi_new, \%values);
                         $new_iso++;
                     }
@@ -627,9 +627,9 @@ foreach my $sp_ac ( sort keys %reactome_iso ) {
     my $db_id  = $sdi->db_id;    
     my $par    = $sdi->isoformParent->[0];
     unless ($par) {
-		print $sdi->db_id,"\n";
-		push @skip, $sdi->db_id;
-		next;
+        print $sdi->db_id,"\n";
+        push @skip, $sdi->db_id;
+        next;
     }
     next unless $par->identifier;
     
@@ -691,11 +691,11 @@ foreach my $t_ac ( sort keys %reactome_gp ) {
 
                 my $ar2 = $dba->fetch_referer_by_instance($sdi);	#CY addition
                 foreach my $ref ( @{$ar2} ) {
-					my $class = $ref->_class->[0];
-					if ( $class =~ /EntityWithAccessionedSequence/ ) {
-						push @referrer, $ref->db_id;
-					}
-				}               
+                    my $class = $ref->_class->[0];
+                    if ( $class =~ /EntityWithAccessionedSequence/ ) {
+                        push @referrer, $ref->db_id;
+                    }
+                }
             }
             if (@referrer) {
                 my $report_line = "\|\[http\://www.uniprot.org/uniprot/$all_ac $all_ac\]\n\|";
@@ -704,14 +704,14 @@ foreach my $t_ac ( sort keys %reactome_gp ) {
                 $report_line .= '|'  . join('|', @referrer) . "\n\|";
                 $report_line .= $species;
                 $report_line .= "\n\|\-\n";
-		
+
                 if (any { $t_ac eq $_ } @skip_list) {
-                	push @skip_replaceable, $report_line;
+                    push @skip_replaceable, $report_line;
                 } else {
-                	print $wiki_fh $report_line;
+                    print $wiki_fh $report_line;
                 }
             } else {
-            	$no_referrer{$pid} = ();            	
+                $no_referrer{$pid} = ();
             }
                         
             print "$t_ac\t$all_ac\t$pid\n";
@@ -745,18 +745,18 @@ foreach my $rac ( sort keys %reactome_gp ) {
         $pid = $sdi->db_id;
         $species = $sdi->Species->[0] ? $sdi->Species->[0]->Name->[0] : "" ;
 
-		my $ar2 = $dba->fetch_referer_by_instance($sdi);	#CY addition
+        my $ar2 = $dba->fetch_referer_by_instance($sdi);    #CY addition
         foreach my $ref ( @{$ar2} ) {
-			my $class = $ref->_class->[0];
-			if ( $class =~ /EntityWithAccessionedSequence/ ) {
-				my $refid = $ref->stableIdentifier->[0];				
-				if ($refid) {				
-					push @referrer, $ref->stableIdentifier->[0]->identifier->[0];
-				} else {
-					push @referrer, $ref->db_id;
-				}
-			}
-		}         
+            my $class = $ref->_class->[0];
+            if ( $class =~ /EntityWithAccessionedSequence/ ) {
+                my $refid = $ref->stableIdentifier->[0];
+                if ($refid) {
+                    push @referrer, $ref->stableIdentifier->[0]->identifier->[0];
+                } else {
+                    push @referrer, $ref->db_id;
+                }
+            }
+        }         
     }
 
     print "$rac\n";
@@ -764,17 +764,17 @@ foreach my $rac ( sort keys %reactome_gp ) {
         my $report_line = "\|\n\|";
         $report_line .= "\|$rac\n\|";
         $report_line .= "\[http\://reactomecurator.oicr.on.ca/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$pid\& $pid\]\n\|";    
-    	$report_line .= '|' . join('|', @referrer) . "\n\|";
+        $report_line .= '|' . join('|', @referrer) . "\n\|";
         $report_line .= $species;
-    	$report_line .= "\n\|\-\n";
-	
+        $report_line .= "\n\|\-\n";
+
         if ( any { $rac eq $_ } @skip_list) {
-        	push @skip_no_replacement, $report_line;
-        } else {		
-        	print $wiki_fh $report_line;
+            push @skip_no_replacement, $report_line;
+        } else {
+            print $wiki_fh $report_line;
         }
     } else {
-    	$no_referrer{$pid} = ();    	
+        $no_referrer{$pid} = ();
     }
 }
 
@@ -784,41 +784,41 @@ foreach my $iac ( sort keys %reactome_iso ) {
 
     my $species;    
     foreach my $sdi ( @{$isod} ) {
-    	my @referrer = ();
-    	my $id = $sdi->db_id;
-    	#$species = $sdi->Species->[0]->Name->[0];
-	$species = $sdi->Species->[0] ? $sdi->Species->[0]->Name->[0] : "" ;
-    	my $ar2 = $dba->fetch_referer_by_instance($sdi);	#CY addition
+        my @referrer = ();
+        my $id = $sdi->db_id;
+        #$species = $sdi->Species->[0]->Name->[0];
+        $species = $sdi->Species->[0] ? $sdi->Species->[0]->Name->[0] : "" ;
+        my $ar2 = $dba->fetch_referer_by_instance($sdi);	#CY addition
         foreach my $ref ( @{$ar2} ) {
             my $class = $ref->_class->[0];
             if ( $class =~ /EntityWithAccessionedSequence/ ) {
-            	my $refid = $ref->stableIdentifier->[0];
-            	if ($refid) {				
-            		push @referrer, $ref->stableIdentifier->[0]->identifier->[0];
-            	} else {
-            		push @referrer, $ref->db_id;
-            	}
+                my $refid = $ref->stableIdentifier->[0];
+                if ($refid) {
+                    push @referrer, $ref->stableIdentifier->[0]->identifier->[0];
+                } else {
+                    push @referrer, $ref->db_id;
+                }
             }
-        }  
-	
+        }
+
         if (@referrer) {
-        	print "$iac\t$id\n";
-		
+            print "$iac\t$id\n";
+
             my $report_line = "\|\n\|";
             $report_line .= "\|$iac\n\|";
             $report_line .= "\[http\://reactomecurator.oicr.on.ca/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$id\& $id\]\n\|";	    	
-        	$report_line .= '|' . join('|', @referrer) . "\n\|";
-        	$report_line .= $species;
-        	$report_line .= "\n\|\-\n";
-		
-        	if (any { $iac eq $_ } @skip_list) {
-        		push @skip_no_replacement, $report_line;
-        	} else {
-        		print $wiki_fh $report_line;
-        	}
+            $report_line .= '|' . join('|', @referrer) . "\n\|";
+            $report_line .= $species;
+            $report_line .= "\n\|\-\n";
+
+            if (any { $iac eq $_ } @skip_list) {
+                push @skip_no_replacement, $report_line;
+            } else {
+                print $wiki_fh $report_line;
+            }
         } else {
-        	$no_referrer{$id} = ();    		    		
-        }	
+            $no_referrer{$id} = ();
+        }
     }   
 }
 print $wiki_fh "\|\}\n-----\n";
@@ -855,12 +855,12 @@ print "\nDeleting DBID with obsolete UniProt and no referrers (2nd round during 
 
 NEXT:foreach my $id (sort keys %no_referrer)
 {
-	foreach (@skip) {
-		next NEXT if $id == $_;
-	}
-	next unless $id;
-	$dba->delete_by_db_id($id);
-	print "Deleting DBID: $id\n";  
+    foreach (@skip) {
+        next NEXT if $id == $_;
+    }
+    next unless $id;
+    $dba->delete_by_db_id($id);
+    print "Deleting DBID: $id\n";  
 }
 
 print "Checking for duplicate isoform instances...\n";
@@ -917,89 +917,87 @@ sub species_instance {
 }
 
 sub updateinstance {
-	my $i = shift;
-	my $values = shift;
-	
-	my %values = %$values;
-	
-	if (!$i->checksum->[0] || $i->checksum->[0] eq $values{'checksum'} ) {
-		$i->isSequenceChanged("false");
-	} else {
-		$i->isSequenceChanged("true");
-		print $sequence_report_fh $i->db_id . " sequence has changed\n";
-	}
-	
+    my $i = shift;
+    my $values = shift;
+    
+    my %values = %$values;
+
+    if (!$i->checksum->[0] || $i->checksum->[0] eq $values{'checksum'} ) {
+        $i->isSequenceChanged("false");
+    } else {
+        $i->isSequenceChanged("true");
+        print $sequence_report_fh $i->db_id . " sequence has changed\n";
+    }
+
     my $changed = 0;
-	foreach my $attribute (keys %values) {
-		my $new_value = $values{$attribute};
+    foreach my $attribute (keys %values) {
+        my $new_value = $values{$attribute};
         next unless $new_value;
-		
-		update_chain_log($i, $new_value) if $attribute eq 'Chain';
-		
-		my @added_values = @{$i->add_attribute_value_if_necessary($attribute, (ref $new_value eq 'ARRAY') ? @$new_value : $new_value)};
+
+        update_chain_log($i, $new_value) if $attribute eq 'Chain';
+
+        my @curent_values = @{$i->$attribute};
+        
+        my @added_values = @{$i->add_attribute_value_if_necessary($attribute, (ref $new_value eq 'ARRAY') ? @$new_value : $new_value)};
         if (@added_values) {
             $changed = 1;
-        }        
-	}
-	$dba->update($i) if $changed;
-	
-	return $i;
+        }
+    }
+    $dba->update($i) if $changed;
+
+    return $i;
 }
 
 sub update_chain_log {
-	my $i = shift;
-	my $new_chains = shift;
-	my @old_chains = @{$i->Chain};
-	
-	my $t = localtime;
-	my $date = $t->day . ' ' . $t->fullmonth . ' ' . $t->mday . ' ' . $t->year;
-	
-	my $reference_gene_product = $i->db_id;
-	$reference_gene_product .= " - ". $i->name->[0] if $i->name;
-	$reference_gene_product .= " (" . $i->species->[0]->name->[0] . ")" if $i->species->[0];
-	
-	foreach my $old_chain (@old_chains) {
-		unless ( any { $old_chain  eq $_ } @{$new_chains}) {
-			my $log_entry = "$old_chain for " . $i->db_id . " removed on $date";
-			print $sequence_report_fh $log_entry . " for $reference_gene_product\n";
-			
-			my $log = $i->_chainChangeLog->[0] ?
-				  $i->_chainChangeLog->[0] . ';' . $log_entry :
-				  $log_entry;
-			$i->add_attribute_value('_chainChangeLog', $log);
-			print "old chain removed for " . $i->db_id . "\n";
-		}
-	}
-	
-	foreach my $new_chain (@{$new_chains}) {		
-		unless ( any { $new_chain eq $_ } @old_chains) {
-			my $log_entry = "$new_chain for " . $i->db_id . " added on $date";
-			print $sequence_report_fh $log_entry . " for $reference_gene_product\n";
-			
-			my $log = $i->_chainChangeLog->[0] ?
-				  $i->_chainChangeLog->[0] . ';' . $log_entry :
-				  $log_entry;
-			$i->add_attribute_value('_chainChangeLog', $log);
-			print "new chain added for " . $i->db_id . "\n";
-		}
-	}
+    my $i = shift;
+    my $new_chains = shift;
+    my @old_chains = @{$i->Chain};
+
+    my $t = localtime;
+    my $date = $t->day . ' ' . $t->fullmonth . ' ' . $t->mday . ' ' . $t->year;
+
+    my $reference_gene_product = $i->db_id;
+    $reference_gene_product .= " - ". $i->name->[0] if $i->name;
+    $reference_gene_product .= " (" . $i->species->[0]->name->[0] . ")" if $i->species->[0];
+
+    foreach my $old_chain (@old_chains) {
+        unless ( any { $old_chain  eq $_ } @{$new_chains}) {
+            my $log_entry = "$old_chain for " . $i->db_id . " removed on $date";
+            print $sequence_report_fh $log_entry . " for $reference_gene_product\n";
+
+            my $log = $i->_chainChangeLog->[0] ? $i->_chainChangeLog->[0] . ';' . $log_entry : $log_entry;
+            $i->add_attribute_value('_chainChangeLog', $log);
+            print "old chain removed for " . $i->db_id . "\n";
+        }
+    }
+
+    foreach my $new_chain (@{$new_chains}) {
+        unless ( any { $new_chain eq $_ } @old_chains) {
+            my $log_entry = "$new_chain for " . $i->db_id . " added on $date";
+            print $sequence_report_fh $log_entry . " for $reference_gene_product\n";
+
+            my $log = $i->_chainChangeLog->[0] ? $i->_chainChangeLog->[0] . ';' . $log_entry : $log_entry;
+            $i->add_attribute_value('_chainChangeLog', $log);
+            print "new chain added for " . $i->db_id . "\n";
+        }
+    }
 }
 
 sub get_skip_list {
-	my %skip_list_id = ();
-	
-	opendir(my $dir, $update_dir);
-	while(my $file = readdir $dir) {
-		next unless $file =~ /^skiplist/;
-		open(my $skiplist, "<", "$update_dir/$file");
-		while(my $uniprot_id = <$skiplist>) {
-			chomp $uniprot_id;
-			next unless (length $uniprot_id == 6 || length $uniprot_id == 10);
-			$skip_list_id{$uniprot_id}++;
-		}
-		close $skiplist;
-	}
-	closedir $dir;
-	
-	return keys %skip_list_id;
+    my %skip_list_id = ();
+
+    opendir(my $dir, $update_dir);
+    while(my $file = readdir $dir) {
+        next unless $file =~ /^skiplist/;
+        open(my $skiplist, "<", "$update_dir/$file");
+        while(my $uniprot_id = <$skiplist>) {
+            chomp $uniprot_id;
+            next unless (length $uniprot_id == 6 || length $uniprot_id == 10);
+            $skip_list_id{$uniprot_id}++;
+        }
+        close $skiplist;
+    }
+    closedir $dir;
+
+    return keys %skip_list_id;
 }
