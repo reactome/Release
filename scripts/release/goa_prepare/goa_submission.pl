@@ -315,10 +315,10 @@ sub get_proteins_from_physical_entity {
     return unless $physical_entity;
         
     my @proteins = ();
-    if ($physical_entity->is_a('Complex') || $physical_entity->is_a('EntitySet')) {
-        foreach my $sub_element (@{$physical_entity->hasMember}, @{$physical_entity->hasComponent}) {
-            my @proteins_from_complex_or_set = get_proteins_from_physical_entity($sub_element);
-            push @proteins, @proteins_from_complex_or_set if @proteins_from_complex_or_set;
+    if ($physical_entity->is_a('Complex') || $physical_entity->is_a('EntitySet') || $physical_entity->is_a('Polymer')) {
+        foreach my $sub_element (@{$physical_entity->hasMember}, @{$physical_entity->hasComponent}, @{$physical_entity->repeatedUnit}) {
+            my @proteins_from_complex_or_set_or_polymer = get_proteins_from_physical_entity($sub_element);
+            push @proteins, @proteins_from_complex_or_set_or_polymer if @proteins_from_complex_or_set_or_polymer;
         }        
     } elsif ($physical_entity->is_a('EntityWithAccessionedSequence')) { # If the entity is a protein
             push @proteins, $physical_entity;
