@@ -235,7 +235,7 @@ sub get_rows_from_protein {
     return unless $taxon;
     return if any {$_ == $taxon} get_microbial_species_to_exclude();
     
-    my @references = get_prot_reference($catalyst_activity);
+    my @references = get_prot_reference($catalyst_activity) if $ontology_letter eq 'F';
     my @rows;
     foreach my $go (@{$go_accessions}) {
         my $accession = $go->{'accession'};
@@ -383,7 +383,7 @@ sub get_annotation_dispatch_table {
             'evidence_code' => sub {
                 my $references = shift;
                 
-                return (grep { defined } @{$references}) ? 'EXP' : 'TAS';
+                return get_evidence_code($references);
             }
         },
         'P' => {
@@ -400,6 +400,12 @@ sub get_annotation_dispatch_table {
             }
         }
     };
+}
+
+sub get_evidence_code {
+    my $references = shift;
+    
+    return (grep { defined } @{$references}) ? 'EXP' : 'TAS';
 }
 
 sub get_biological_process_accessions {
