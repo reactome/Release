@@ -9,6 +9,7 @@ use GKB::DBAdaptor;
 
 use autodie;
 use Carp;
+use Data::Dumper;
 use Getopt::Long;
 
 
@@ -44,10 +45,10 @@ foreach my $display_name (keys %display_name_to_events) {
     my @events = @{$display_name_to_events{$display_name}};
     next unless scalar @events > 1;
     
-    my @event_records = map { join("\t", ($_->db_id, get_event_modifier($_))) } @events;
+    my @event_records = map { join("\t", ($_->db_id, get_event_modifier($_), get_species_names($_))) } @events;
     my $display_name_record = join("\t", ($display_name, @event_records)) . "\n";
     
-    if (scalar @events > 2 || !different_species($events[0], $events[1])) {
+    if (same_species(@events)) {
         push @for_manual_check, $display_name_record;
     } else {
         push @different_species, $display_name_record;
@@ -62,11 +63,20 @@ print $output "$_" foreach @different_species;
 
 close $output;
 
-sub different_species {
-    my $event1 = shift;
-    my $event2 = shift;
+sub same_species {
+    my @events = @_;
     
-    return different_values($event1->species, $event2->species, {'instance_type_attribute' => 1});
+    my %seen_event_combos;
+    for (my $index1 = 0; $index1 < scalar @events; $index1++) {
+        for (my $index2 = 0; $index2 < scalar @events; $index2++) {
+            next if $index1 == $index2;
+            next if $seen_event_combos{$index1}{$index2};
+            $seen_event_combos{$index1}{$index2} = 1;
+            $seen_event_combos{$index2}{$index1} = 1;
+            
+            return 1 if !different_values($events[$index1]->species, $events[$index2]->species, {'instance_type_attribute' => 1});
+        }
+    }
 }
 
 sub get_species_names {
