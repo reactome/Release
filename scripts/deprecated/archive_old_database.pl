@@ -55,7 +55,7 @@ while (<*>) {
 sub archive {
     my $db = shift;
     warn "I have been asked to archive $db\nI am backing it up first\n";
-    system "mysqldump -uroot -pr3\@ct0mb $db |gzip -c >$dump/$db.sql.gz";
+    system "mysqldump -uroot -pXXXXX $db |gzip -c >$dump/$db.sql.gz";
 
     my $archive_path = $archive ."/$db";
     if (-d $archive_path) {
@@ -79,14 +79,14 @@ sub archive {
 	warn "OK, archiving\n";
 	system "mv $db $archive";
     }
-    
+
 
     unless (-d $db || -l $db) {
 	warn "This is where I would be symlinking...";
-	system "ln -s $archive_path"; 
+	system "ln -s $archive_path";
     }
 
-    
+
 }
 
 sub usage {
@@ -101,4 +101,3 @@ sub usage {
    h|help    this message
 '
 }
-
