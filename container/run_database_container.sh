@@ -11,3 +11,5 @@ docker run --name release_database --net reactome_release -p 3306:3306 \
     -v $PATH_TO_DATABASE_ROOT/stable_identifiers_20171024.sql:/docker-entrypoint-initdb.d/stable_identifiers.sql \
     -v $(pwd)/mysql_databases:/var/lib/mysql \
     -e MYSQL_ROOT_PASSWORD=root  release_dbs
+# TODO: It looks like the Release step GenerateOrthoInferenceStableIds neesds the previous test_reactome database as well.
+# -v $PATH_TO_DATABASE_ROOT/test_reactome_${PREV_RELEASE_NUMBER}.sql:/docker-entrypoint-initdb.d/test_reactome_${PREV_RELEASE_NUMBER}.sql \
