@@ -55,7 +55,7 @@ while (<*>) {
 sub archive {
     my $db = shift;
     warn "I have been asked to archive $db\nI am backing it up first\n";
-    system "mysqldump -uroot -pr3\@ct0mb $db |gzip -c >$dump/$db.sql.gz";
+    system "mysqldump -uroot -pXXXXXXXX $db |gzip -c >$dump/$db.sql.gz";
 
     my $archive_path = $archive ."/$db";
     if (-d $archive_path) {
