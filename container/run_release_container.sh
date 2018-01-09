@@ -9,6 +9,7 @@ mkdir -p logs/chebi_update
 mkdir -p logs/update_stable_ids
 mkdir -p logs/myisam
 mkdir -p logs/orthoinference
+mkdir -p logs/simplified_database
 
 touch logs/uniprot_update/uniprot.wiki
 touch logs/uniprot_update/uniprot.err
@@ -54,9 +55,11 @@ touch logs/orthoinference/wrapper_ortho_inference.log
 touch logs/orthoinference/wrapper_ortho_inference.err
 touch logs/orthoinference/test_reactome_${RELEASE_NUMBER}_after_ortho.dump.gz
 touch logs/orthoinference/normal_event_skip_list.txt
+touch logs/orthoinference/simplified_database.out
+touch logs/orthoinference/simplified_database.log
+touch logs/orthoinference/simplified_database.err
 
 docker run -it --name release_system --net reactome_release \
-	-p 20:20 -p 21:21 -p 22:22 -p 990:990 -p 3100-3200:3100-3200 \
 	-v $(pwd)/stable_id_mapping.stored_data:/release/scripts/release/generate_stable_ids_orthoinference/stable_id_mapping.stored_data \
 	-v $(pwd)/Secrets.pm:/release/modules/GKB/Secrets.pm \
 	-v $(pwd)/release-config.pm:/release/modules/GKB/Release/Config.pm \
@@ -97,6 +100,9 @@ docker run -it --name release_system --net reactome_release \
 	-v $(pwd)/logs/orthoinference/wrapper_ortho_inference.log:/usr/local/gkb/scripts/release/orthoinference/wrapper_ortho_inference.log \
 	-v $(pwd)/logs/orthoinference/wrapper_ortho_inference.err:/usr/local/gkb/scripts/release/orthoinference/wrapper_ortho_inference.err \
 	-v $(pwd)/logs/orthoinference/normal_event_skip_list.txt:/usr/local/gkb/scripts/release/orthoinference/normal_event_skip_list.txt \
+	-v $(pwd)/logs/orthoinference/simplified_database.out:/usr/local/gkb/scripts/release/simplified_database/simplified_database.out \
+	-v $(pwd)/logs/orthoinference/simplified_database.log:/usr/local/gkb/scripts/release/simplified_database/simplified_database.log \
+	-v $(pwd)/logs/orthoinference/simplified_database.err:/usr/local/gkb/scripts/release/simplified_database/simplified_database.err \
 	-v $(pwd)/nfs_backup:/nfs \
 	reactome-release /bin/bash
 
