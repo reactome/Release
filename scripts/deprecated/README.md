@@ -54,3 +54,6 @@ Reactome Mart no longer exists.
 
 ### updateDatabase.pl
 Purpose unclear. Has not be run or touched in years.
+
+### csv-heatmap/*
+The widget is no longer available on the main Reactome site, so these scripts are no longer needed.
