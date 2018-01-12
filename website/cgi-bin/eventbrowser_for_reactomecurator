@@ -1,0 +1,81 @@
+#!/usr/local/bin/perl
+use strict;
+use warnings;
+
+use lib "/usr/local/gkb/modules";
+
+use feature qw/state/;
+use CGI qw(:standard);
+use CGI::Carp 'fatalsToBrowser';
+
+use GKB::Config;
+use GKB::StableIdentifierDatabase;
+use GKB::FrontPage3;
+use GKB::WebUtils;
+use GKB::DBAdaptor;
+
+
+my $cgi = CGI->new();
+my $url = get_url($cgi) || handle_error("$0: unable to obtain URL for redirection");
+print $cgi->redirect($url);
+
+sub get_url {
+    my $cgi = shift;;
+
+    my $st_id = $cgi->param('STID') || $cgi->param('ST_ID');
+    my $id = $st_id ?
+        GKB::StableIdentifierDatabase->new()->db_id_from_stable_id($st_id) :
+        $cgi->param('ID') || $cgi->param('DB_ID');
+    my $query = $cgi->param('QUERY') || $cgi->param('EXACT');
+
+    handle_error("$0: unable to extract an id or query from parameters") unless ($id || $query);
+
+    my $db = $cgi->param('DB') || $GK_DB_NAME;
+    if ($id) {
+        my $instance = get_dba($cgi)->fetch_instance_by_db_id($id)->[0] || die "Could not get instance for $id";
+
+        if ($cgi->param('PWB_REDIRECT')) {
+            return GKB::WebUtils->new_from_cgi(-CGI => $cgi)->build_pathway_browser_url($instance);
+        }
+
+        if ($instance->is_a('Event') || $instance->is_a('PhysicalEntity') || $instance->is_a('Regulation')){
+            return "/content/detail/$id";
+        } else {
+            return "/cgi-bin/instancebrowser?ID=$id;DB=$db";
+        }
+    } elsif ($query) {
+        return "/content/query?q=/'$query'";
+    }
+
+    return;
+}
+
+sub get_dba {
+    my $cgi = shift;
+
+    state $dba = GKB::DBAdaptor->new(
+        -dbname => $cgi->param('DB') || $GK_DB_NAME,
+        -user   => $GK_DB_USER,
+        -host   => $GK_DB_HOST,
+        -pass   => $GK_DB_PASS,
+        -port   => $GK_DB_PORT,
+        -debug  => defined $cgi->param('DEBUG') ? $cgi->param('DEBUG') : undef
+    );
+
+    return $dba;
+}
+
+sub handle_error {
+    my ($error_message) = @_;
+
+    my $front_page = GKB::FrontPage3->new("eventbrowser", "/stylesheet.css");
+    my $header = $front_page->get_header();
+    my $footer = $front_page->get_footer();
+
+    print header, $header;
+    print qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Internal error</FONT></h1>\n);
+    print qq(<h1><PRE>\n\n\n$error_message\n\n</PRE></h1>\n);
+    print $footer;
+
+    exit;
+}

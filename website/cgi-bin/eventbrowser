@@ -1,0 +1,30 @@
+#!/usr/local/bin/perl
+use strict;
+use warnings;
+
+use lib "../cgi-modules";
+
+use feature qw/state/;
+use CGI qw(:standard);
+use CGI::Carp 'fatalsToBrowser';
+
+use GKB::Config;
+use GKB::WebUtils;
+
+
+my $cgi = CGI->new();
+my $url = get_url($cgi);
+print $cgi->redirect($url);
+
+sub get_url {
+    #my $cgi = shift;;
+
+    my $st_id = $cgi->param('STID') || $cgi->param('ST_ID');
+    my $id = $st_id ? $st_id : $cgi->param('ID') || $cgi->param('DB_ID');
+
+    if ($cgi->param('PWB_REDIRECT')) {
+        return GKB::WebUtils->new_from_cgi(-CGI => $cgi)->build_pathway_browser_url($id);
+    }
+
+    return "/content/schema/instance/browser/$id";
+}
