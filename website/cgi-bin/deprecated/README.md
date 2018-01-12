@@ -16,3 +16,7 @@ https://reactome.org/ContentService/exporter/sbml/1474244.xml
 ## who_is_using_reactome
 
 This script relied on the CSV heatmap, which is also now [deprecated](../../../scripts/deprecated#csv-heatmap).
+
+## launchcytoscape
+
+No longer used.
