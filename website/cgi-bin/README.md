@@ -45,6 +45,20 @@ Data::Dumper;
 JSON;
 </pre>
 
+### classbrowser
+Still in use on reactomecurator: https://reactomecurator.oicr.on.ca/cgi-bin/classbrowser?DB=gk_central&ID=9025969
+
+Perl dependencies:
+<pre>
+CGI qw(:standard);
+GKB::DBAdaptor;
+GKB::Config;
+Data::Dumper;
+GKB::WebUtils;
+strict;
+GKB::FrontPage3;
+</pre>
+
 ### control_panel_st_id
 Renders “External identifier history” page for pathway browser, for example:
 https://reactome.org/cgi-bin/control_panel_st_id?ST_ID=R-HSA-392841 -
@@ -104,6 +118,53 @@ CGI qw(:standard);
 CGI::Carp 'fatalsToBrowser';
 GKB::Config;
 GKB::WebUtils;
+</pre>
+
+### extendedsearch
+Still in use on reactomecurator: https://reactomecurator.oicr.on.ca/cgi-bin/extendedsearch
+
+Perl dependencies (Also has an odd BEGIN block to find modules):
+<pre>
+GKB::DBAdaptor;
+GKB::PrettyInstance;
+GKB::WebUtils;
+GKB::Config;
+Data::Dumper;
+GKB::FrontPage3;
+</pre>
+
+### footer
+Still in use on reactomecurator
+
+### link
+Still available on reactomecurator: https://reactomecurator.oicr.on.ca/cgi-bin/link?ID=1234&SOURCE=gk_current
+
+Perl dependencies:
+<pre>
+lib '/usr/local/gkb/modules';
+CGI qw(:standard);
+GKB::DBAdaptor;
+GKB::PrettyInstance;
+GKB::WebUtils;
+GKB::Config;
+Data::Dumper;
+GKB::FrontPage3;
+GKB::StableIdentifierDatabase;
+</pre>
+
+### instancebrowser
+Still in use on reactome curator: https://reactomecurator.oicr.on.ca/cgi-bin/instancebrowser?ID=96168;DB=gk_current
+
+Perl dependencies:
+<pre>
+lib "/usr/local/gkb/modules"; #adjust this path if necessary
+CGI qw(:standard);
+GKB::DBAdaptor;
+GKB::PrettyInstance;
+GKB::WebUtils;
+GKB::Config;
+Data::Dumper;
+GKB::FrontPage3;
 </pre>
 
 ### pdfexporter
@@ -187,6 +248,12 @@ Data::Dumper;
 GKB::DocumentGeneration::ReactomeDatabaseReader;
 GKB::DocumentGeneration::GenerateTextRTF;
 </pre>
+
+### search2
+
+Still in use in reactomecurator:
+
+https://reactomecurator.oicr.on.ca/cgi-bin/search2?QUERY=ntn1&species=Homo+sapiens&OPERATOR=ANY&cluster=true
 
 ### taboutputter
 Generates tab output. Was linked to from old CGI-based instance browser. Can still be accessed at https://reactome.org/cgi-bin/taboutputter?DB=gk_current&INSTRUCTIONID=4&ID=168898
