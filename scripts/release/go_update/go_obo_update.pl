@@ -275,6 +275,7 @@ foreach my $check_acc ( sort keys %total_acc ) {
 }
 print FR "\|\}\n";
 
+print FR "\n-----\n";
 print FR "\{\| class \=\"wikitable\"
 \|\+ Incorrect GO Category (i.e. biological process, cellular component, molecular function)
 \|\-
