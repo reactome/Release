@@ -88,7 +88,8 @@ use warnings;
 use base 'Exporter';
 use Carp;
 use DateTime;
-use List::MoreUtils qw/any all/;
+use feature qw/state/;
+use List::MoreUtils qw/any all none/;
 
 use lib '/usr/local/gkb/modules';
 use GKB::Config;
@@ -141,12 +142,15 @@ sub is_electronically_inferred {
     if ($instance->is_a('Event')) {
         return $instance->evidenceType->[0] && $instance->evidenceType->[0]->displayName =~ /electronic/i;
     } elsif ($instance->is_a('PhysicalEntity')) {
-        # If manually inferred physical entities ever start using the inferredFrom slot, this logic
-        # can be augmented to check the event(s) to which the physical entity is/are attached
-        # to see if the event(s) are electronically inferred
-        return $instance->inferredFrom->[0] &&
-               $instance->inferredFrom->[0]->species->[0] &&
-               $instance->inferredFrom->[0]->species->[0]->displayName =~ /^Homo sapiens$/i;
+        return 0 if is_human($instance);
+        
+        state $gk_central_dba = get_dba('gk_central', 'reactomecurator.oicr.on.ca');
+        my $gk_central_instance = $gk_central_dba->fetch_instance_by_db_id($instance->db_id)->[0];     
+        
+        return (!$gk_central_instance
+                
+                || ($gk_central_instance->displayName ne $instance->displayName)) &&
+               $instance->inferredFrom->[0] && is_human($instance->inferredFrom->[0]);
     } elsif ($instance->is_a('CatalystActivity')) {
         return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('catalystActivity')};
     } elsif ($instance->is_a('Regulation')) {
@@ -271,7 +275,8 @@ sub get_event_modifier {
 	
 	my $author_instance;
     foreach my $modified_instance (reverse @{$event->modified}) {
-        next if $modified_instance->author->[0] && any {$modified_instance->author->[0]->db_id == $_} (140537, 1551959); # Ignore Guanming and Joel's person instance as possible author 
+        next if $modified_instance->author->[0] && any {$modified_instance->author->[0]->db_id == $_} (140537, 1551959, 8939149);
+        # Ignore Guanming, Joel and Solomon's person instance as possible author 
         
         $author_instance = $modified_instance->author->[0];
         last if $author_instance;
@@ -280,7 +285,6 @@ sub get_event_modifier {
 	
 	return $author_instance ? $author_instance->displayName : 'Unknown';
 }
-
 
 sub is_human {
     my $instance = shift;
@@ -291,6 +295,39 @@ sub is_human {
         !($instance->species->[1]) &&
         !(is_chimeric($instance))
     );
+}
+
+sub different_values {
+    my $current_values = shift;
+    my $new_values = shift;
+    my $instance_type_attribute_info = shift;
+    
+    my ($current, $new);
+    if ($instance_type_attribute_info->{'instance_type_attribute'}) {
+        $current = [map {$_->db_id} @$current_values];
+        $new = [map { $_->db_id } @$new_values];
+    } else {
+        $current = $current_values;
+        $new = $new_values;
+    }
+    return 0 if same_array_contents($current, $new);
+    
+    return 1;
+}
+
+sub same_array_contents {
+    my $array1 = shift;
+    my $array2 = shift;
+    
+    # Not the same if different number of elements
+    return 0 if scalar @{$array1} != scalar @{$array2};
+    
+    # Not the same if element in one array but not the other 
+    foreach my $array1_element (@{$array1}) {
+        return 0 if none {$_ eq $array1_element} @{$array2};
+    }
+    
+    return 1;
 }
 
 sub report {
@@ -340,6 +377,7 @@ get_unique_species
 get_instance_modifier
 get_event_modifier
 is_human
+different_values
 report
 date_correctly_formatted
 dates_do_not_match
