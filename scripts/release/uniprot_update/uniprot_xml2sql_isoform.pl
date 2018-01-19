@@ -5,27 +5,6 @@ use 5.010;
 #This script updates the Uniprot ReferencePeptideSequences in Reactome. Uniprot entries (swissprot section) are imported/updated in Reactome if they are assigned to one of the species specified in @species.
 #The script checks for existing entries and updates them.
 
-###############################################
-####IMPORTANT STEPS BEFORE RUNNING THE SCRIPT##
-#The list of Trembl entries that's needed to check remaining entries in the second round, needs to be downloaded from the UniProt website:
-#Go to:  http://www.uniprot.org/  
-#Click on Search without entering any search term. 
-#Click on "unreviewed" in "Show only reviewed  (UniProtKB/Swiss-Prot) or unreviewed  (UniProtKB/TrEMBL) entries".
-#Click on "download" (right top corner). 
-#Click on "compressed" in "Download data compressed or uncompressed". 
-#Choose "Download" under "LIST".
-#This gives you a single column list of all Trembl accessions. 
-#Save this list in the /usr/local/gkbdev/scripts/uniprot_update directory on brie8.
-#Note that depending on the web browser, the file will be named by default as "uniprot-reviewed_no.list.gz" or "uniprot-reviewed:no.list.gz"
-#This script will take care of the filename discrepancy so you don't have to rename the file after downloading
-#
-#The file to parse for the update of Swissprot entries is at ftp://ftp.ebi.ac.uk/pub/databases/uniprot/knowledgebase/uniprot_sprot.xml.gz
-#This file is automatically downloaded and unzipped by this script and saved to /usr/local/gkbdev/scripts/uniprot_update
-#
-#Save a dump of gk_central in /usr/local/gkbdev/scripts/uniprot_update/ as a backup.
-#
-#Run the script from /usr/local/gkbdev/scripts: ./uniprot_db_update.pl -db gk_central -user xxxx -pass xxxx
-
 use lib "/usr/local/gkbdev/modules";
 
 use GKB::Instance;
@@ -36,7 +15,7 @@ use GKB::Utils_esther;
 use autodie;
 use Data::Dumper;
 use Getopt::Long;
-use List::MoreUtils qw/any notall/;
+use List::MoreUtils qw/any notall none/;
 use Time::Piece;
 
 our ( $opt_user, $opt_host, $opt_pass, $opt_port, $opt_db, $opt_, $opt_species );
@@ -339,7 +318,7 @@ while (<$uniprot_records_fh>) {
         push @kw, $1;
     }
     my $cc;
-    while (/\<comment type\=\"([A-Za-z\ ]*)\".*\s+\<text\>(.*)\<\/text\>/gm) {
+    while (/\<comment type\=\"([A-Za-z\ ]*)\".*\s+\<text.*?\>(.*)\<\/text\>/gm) {
         my $tt = uc($1);
         $cc .= $tt . " " . $2;
     }
@@ -387,19 +366,22 @@ while (<$uniprot_records_fh>) {
         push @chains, "$type:$begin-$end";
     }
     
+    # Values always use array reference
     my %values = (
-        'secondaryIdentifier' => \@ac,
-        'description' => $desc,
-        'sequenceLength' => $lngth,
-        'species' => $species_instance,
-        'checksum' => $checksum,
-        'name' => $name,
-        'geneName' => \@gene_name,
-        'comment' => $cc,
-        'keyword' => \@kw,
-        'chain' => \@chains,
-        'referenceGene' => \@reference_dna_sequences
+        'secondaryIdentifier' => [@ac],
+        'description' => [$desc],
+        'sequenceLength' => [$lngth],
+        'species' => [$species_instance],
+        'checksum' => [$checksum],
+        'name' => [$name],
+        'geneName' => [@gene_name],
+        'comment' => [$cc],
+        'keyword' => [@kw],
+        'chain' => [@chains]
     );
+    if ($taxon =~ /Homo sapiens/i) {
+        $values{'referenceGene'} = [@reference_dna_sequences];
+    }
 
     if ( not defined $reactome_gp{$ac} ) {   #new UniProt instance if not exists
         $new_sp++;
@@ -418,7 +400,7 @@ while (<$uniprot_records_fh>) {
 
         print "New UniProt\:$ac\t$ddd\n";
 
-        updateinstance($sdim, \%values);
+        updateinstance($sdim, \%values, $_);
 
         foreach my $isoid ( sort keys %isoids ) {
             if ( $isoid =~ /$ac/ ) {
@@ -437,7 +419,7 @@ while (<$uniprot_records_fh>) {
 
                 $ddd = $sdi->db_id;
 
-                updateinstance($sdi, \%values);
+                updateinstance($sdi, \%values, $_);
             }
             else {
                 $mis_parents{$isoid} = $ac;
@@ -463,7 +445,7 @@ while (<$uniprot_records_fh>) {
             $sdi->Modified( @{ $sdi->Modified } );
             $sdi->add_attribute_value( 'modified', $instance_edit );
 
-            updateinstance($sdi, \%values);
+            updateinstance($sdi, \%values, $_);
             
             $dupl_flag = 1;
             
@@ -487,7 +469,7 @@ while (<$uniprot_records_fh>) {
                             $isod->Modified( @{ $isod->Modified } );
                             $isod->add_attribute_value( 'modified', $instance_edit );
 
-                            updateinstance($isod, \%values);
+                            updateinstance($isod, \%values, $_);
                             
                             delete $isoids{$is_ac};
                             delete $reactome_iso{$is_ac};
@@ -509,7 +491,7 @@ while (<$uniprot_records_fh>) {
                         $sdi_new->variantIdentifier($is_ac);
 
                         print "New isoform: $is_ac\t$ddd\tMaster: $sdd\n";
-                        updateinstance($sdi_new, \%values);
+                        updateinstance($sdi_new, \%values, $_);
                         $new_iso++;
                     }
                 }
@@ -525,7 +507,7 @@ close $ref_DNA_seq_report;
 close $sequence_report_fh;
 close $uniprot_records_fh;
 
-$dba->execute("COMMIT");
+#$dba->execute("COMMIT");
 print "$record_counter records processed and committed\n";
 print "All records in $sprot_file processed\n";
 #XmL file parsing finished
@@ -919,10 +901,9 @@ sub species_instance {
 sub updateinstance {
     my $i = shift;
     my $values = shift;
-    
-    my %values = %$values;
+    my $uniprot_entry = shift;
 
-    if (!$i->checksum->[0] || $i->checksum->[0] eq $values{'checksum'} ) {
+    if (!$i->checksum->[0] || $i->checksum->[0] eq $values->{'checksum'} ) {
         $i->isSequenceChanged("false");
     } else {
         $i->isSequenceChanged("true");
@@ -930,22 +911,65 @@ sub updateinstance {
     }
 
     my $changed = 0;
-    foreach my $attribute (keys %values) {
-        my $new_value = $values{$attribute};
-        next unless $new_value;
+    foreach my $attribute (keys %{$values}) {
+        my $new_values = [grep {defined} @{$values->{$attribute}}];
+        if (scalar @{$new_values} == 0) {
+            print "WARNING: No new values for $attribute on instance $i->{db_id} - skipping attribute update\n";
+            next;
+        }
 
-        update_chain_log($i, $new_value) if $attribute eq 'Chain';
-
-        my @curent_values = @{$i->$attribute};
-        
-        my @added_values = @{$i->add_attribute_value_if_necessary($attribute, (ref $new_value eq 'ARRAY') ? @$new_value : $new_value)};
-        if (@added_values) {
+        if (values_changed($i, $attribute, $new_values)) {
+            $i->$attribute(@{$new_values});
             $changed = 1;
+            #print "$uniprot_entry\n";
+        }
+        
+        if ($attribute eq 'Chain') {
+            update_chain_log($i, $new_values);
         }
     }
     $dba->update($i) if $changed;
 
     return $i;
+}
+    
+sub values_changed {
+    my $instance = shift;
+    my $attribute = shift;
+    my $new_values = shift;
+    
+    my ($current, $new);
+    
+    my $current_values = $instance->$attribute;
+    if ($instance->is_instance_type_attribute($attribute)) {
+        $current = [map {$_->db_id} @$current_values];
+        $new = [map { $_->db_id } @$new_values];
+    } else {
+        $current = $current_values;
+        $new = $new_values;
+    }
+    return 0 if same_array_contents($current, $new);
+    
+    print "$attribute changed for instance $instance->{db_id}:\n";
+    print "old attribute values - " . join(',', sort @{$current}) . "\n";
+    print "new attribute values - " . join(',', sort @{$new}) . "\n";
+    
+    return 1;
+}
+
+sub same_array_contents {
+    my $array1 = shift;
+    my $array2 = shift;
+    
+    # Not the same if different number of elements
+    return 0 if scalar @{$array1} != scalar @{$array2};
+    
+    # Not the same if element in one array but not the other 
+    foreach my $array1_element (@{$array1}) {
+        return 0 if none {$_ eq $array1_element} @{$array2};
+    }
+    
+    return 1;
 }
 
 sub update_chain_log {
