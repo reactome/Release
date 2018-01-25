@@ -24,6 +24,7 @@ use GKB::Config;
 use GKB::Config_Species;
 
 use autodie;
+use feature qw/state/;
 use Data::Dumper;
 use Getopt::Long;
 use DBI;
@@ -617,7 +618,7 @@ sub orthologous_entity {
 	    my $inf_ent;
 	    if (!has_species($i)) {
             $inf_ent = $i;
-            $logger->info("Referring to instance " . $i->displayName . ' (' . $i->db_id . ') of class ' . $i->class . ' rather than creating an inference');
+            $logger->info("Referring to instance " . $i->displayName . ' (' . $i->db_id . ') rather than creating an inference');
         } elsif ($i->is_a('GenomeEncodedEntity')) {
             $inf_ent = create_homol_gee($i, $override);
 	    } elsif ($i->is_a('Complex') || $i->is_a('Polymer')) {
@@ -1133,75 +1134,138 @@ sub create_ghost {
 #creates inferred EWAS instances, and the required ReferenceEntities
 #returns array ref with homologue instances and the number of homologues (if there are more than $opt_filt homologues, the list contains $opt_filt homologues, and $count = $opt_filt + 1)
 #the array is empty if there are no homologues
+my %inferred_EWASs;
 sub infer_ewas {
-    my ($i) = @_;
+    my $i = shift;
     my @tmp;
     my $id = $i->referenceEntity->[0]->identifier->[0];
     my $count = 0;
-    foreach my $homol (@{$homologue{$id}}) {
-        unless ($homol) {die "empty homologue{$id}!\n";} #otherwise empty ewas are created, check why...
+    foreach my $homologue_id (@{$homologue{$id}}) {
+        if (!$homologue_id) {die "empty homologue{$id}!\n";} #otherwise empty ewas are created, check why...
         $count++;
-	last if ($opt_filt && ($count > $opt_filt));
-	my ($source, $inf_id) = split/:/, $homol; #$source indicates whether the identifier comes from UniProt (SWISS or TREMBL), or from ensembl (ENSP)
-#create ReferenceEntity
-        my $inf_rps = $seen_rps{$inf_id};
-        unless ($inf_rps) {
-	    $inf_rps = new_inferred_instance($i->ReferenceEntity->[0]);
-	    my $ref_db;
-	    if ($source eq 'ENSP') {
-		$ref_db = $ens_db;
-	    } else {
-		$ref_db = $uni_db;
-	    }
-	    $inf_rps->ReferenceDatabase($ref_db);
-            $inf_rps->Identifier($inf_id);
-	    my $ref_gene = create_ReferenceDNASequence($inf_id);
-	    $inf_rps->ReferenceGene(@{$ref_gene});
-            $inf_rps->Species($taxon);
-            $inf_rps = check_for_identical_instances($inf_rps);
-            $seen_rps{$inf_id} = $inf_rps;
-	}
-#create EWAS
+        last if ($opt_filt && ($count > $opt_filt));
+        
+        #create EWAS
         my $inf_ewas = new_inferred_instance($i);
+        push @{$inferred_EWASs{$i->db_id}}, $inf_ewas;
+        my $inf_rps = infer_reference_gene_product($homologue_id);
         $inf_ewas->ReferenceEntity($inf_rps);
-        $inf_ewas->Name($inf_id);
+        $inf_ewas->Name($inf_rps->identifier->[0]);
         $inf_ewas->StartCoordinate(@{$i->StartCoordinate});
         $inf_ewas->EndCoordinate(@{$i->EndCoordinate});
         if ((defined $inf_ewas->StartCoordinate->[0]  && $inf_ewas->StartCoordinate->[0] > 1) || (defined $inf_ewas->EndCoordinate->[0] && $inf_ewas->EndCoordinate->[0] > 1)) {
-            $inf_ewas->Name($i->Name->[0], $inf_id);
+            $inf_ewas->Name($i->Name->[0], $inf_rps->identifier->[0]);
         }
-#infer modifications
-        my @mod_res;
-        my $flag;
-        foreach my $res (@{$i->HasModifiedResidue}) {
-            my $inf_res = new_inferred_instance($res);
-            $inf_res->Coordinate(@{$res->Coordinate});
-            $inf_res->ReferenceSequence($inf_rps);
-	    $inf_res->is_valid_attribute('modification') && $inf_res->Modification(@{$res->Modification}); #currently only GroupModifiedResidue has modification
-#check whether the modification is a phosphorylation, if so add 'phospho' to name
-	    if (!$flag && ($res->PsiMod->[0] && $res->PsiMod->[0]->Name->[0] =~ /phospho/)) {
-                $inf_ewas->Name('phospho-'.$inf_ewas->Name->[0]);
-                $flag++; #to make sure 'phospho-' is added only once
-            }
-            if ($res->Coordinate->[0]) {
-                $inf_res->_displayName($res->displayName." (in $from_name\)");
-            }
-	    $inf_res->is_valid_attribute('residue') && $inf_res->Residue(@{$res->Residue}); #this attribute has been removed from data model, only here for backward compatibility
-	    $inf_res->PsiMod(@{$res->PsiMod});
-            $inf_res = check_for_identical_instances($inf_res);
-            push @mod_res, $inf_res;
+        my @modified_residues = grep { $_->is_a('TranslationalModification') } @{$i->HasModifiedResidue};
+        if (phospho_modification(\@modified_residues)) {
+            $inf_ewas->Name('phospho-' . $inf_ewas->name->[0]);
         }
-        $inf_ewas->HasModifiedResidue(@mod_res);
+        
+        #infer modifications
+        my @inferred_modified_residues;
+        foreach my $residue (@modified_residues) {
+            my $inferred_residues = infer_modified_residue($inf_ewas, $residue, \%inferred_EWASs);
+            if ($inferred_residues->[0]) {
+                push @inferred_modified_residues, @{$inferred_residues};
+            }
+        }
+        $inf_ewas->HasModifiedResidue(@inferred_modified_residues);
+        
         $inf_ewas = check_for_identical_instances($inf_ewas); #in case it exists already, replace with existing one
         $inf_ewas->InferredFrom;
         $inf_ewas->add_attribute_value_if_necessary('inferredFrom', $i);
         $dba->update_attribute($inf_ewas, 'inferredFrom');
-	$i->InferredTo;
+        $i->InferredTo;
         $i->add_attribute_value_if_necessary('inferredTo', $inf_ewas);
         $dba->update_attribute($i, 'inferredTo');
         push @tmp, $inf_ewas;
     }
     return \@tmp, $count;
+}
+
+sub infer_reference_gene_product {
+    my $reference_identifier = shift;
+    
+    my ($source, $identifier) = split /:/, $reference_identifier;
+        
+    state $seen_reference_gene_product;
+    
+    #create ReferenceEntity
+    my $inf_rps = $seen_reference_gene_product->{$identifier};
+    if (!$inf_rps) {
+        $inf_rps = new_inferred_instance($i->ReferenceEntity->[0]);
+        my $ref_db;
+        if ($source eq 'ENSP') {
+            $ref_db = $ens_db;
+        } else {
+            $ref_db = $uni_db;
+        }
+        
+        $inf_rps->ReferenceDatabase($ref_db);
+        $inf_rps->Identifier($identifier);
+        my $ref_gene = create_ReferenceDNASequence($identifier);
+        $inf_rps->ReferenceGene(@{$ref_gene});
+        $inf_rps->Species($taxon);
+        $inf_rps = check_for_identical_instances($inf_rps);
+        $seen_reference_gene_product->{$identifier} = $inf_rps;
+    }
+    
+    return $inf_rps;
+}
+
+sub phospho_modification {
+    my $modified_residues = shift;
+    
+    return any {$_->PsiMod->[0] && $_->PsiMod->[0]->name->[0] =~ /phospho/ } @{$modified_residues};
+}
+
+sub infer_modified_residue {
+    my $inf_ewas = shift;
+    my $residue = shift;
+    my $inferred_EWASs = shift;
+    
+    my $inferred_residue = new_inferred_instance($residue);
+    $inferred_residue->_displayName($residue->displayName." (in $from_name\) at unknown position");
+
+    $inferred_residue->PsiMod(@{$residue->PSiMod});
+            
+    $inferred_residue->is_valid_attribute('modification') && $inf_res->Modification(@{$residue->Modification}); #currently only GroupModifiedResidue has modification
+    $inferred_residue->is_valid_attribute('residue') && $inf_res->Residue(@{$residue->Residue}); #this attribute has been removed from data model, only here for backward compatibility
+    if ($residue->is_a('InterChainCrosslinkedResidue') {
+        my $other_EWAS = get_other_EWAS($residue); # The second EWAS the InterChainCrosslinkedResidue attaches
+        my @inferred_other_EWASs = @{$inferred_EWASs->{$other_EWAS->db_id}};
+        return unless @inferred_other_EWASs;
+        
+        my @inferred_residues;
+        foreach my $inferred_other_EWAS (@inferred_other_EWASs) {
+            my $inferred_ICCR = $inferred_residue->clone; $ # ICCR - InterChainCrosslinkedResidue
+            my $inferred_equivalent_ICCR = $inferred_residue->clone;
+            
+            $inferred_ICCR->referenceSequence($inf_ewas->referenceEntity->[0]);
+            $inferred_ICCR->secondReferenceSequence($inferred_other_EWAS->referenceEntity->[0]);
+            $inferred_equivalent_ICCR->referenceSequence($inferred_other_EWAS->referenceEntity->[0]);
+            $inferred_equivalent_ICCR->secondReferenceSequence($inf_ewas->referenceEntity->[0]);
+            $inferred_ICCR->equivalentTo($inferred_equivalent_ICCR);
+            $inferred_equivalent_ICCR->equivalentTo($inferred_ICCR);
+            
+            $inferred_other_EWAS->add_attribute_value('hasModifiedResidue', $inferred_equivalent_ICCR);
+            
+            push @inferred_residues, $inferred_ICCR;
+        }
+        return \@inferred_residues;
+    } else {
+        $inferred_residue->ReferenceSequence($inf_ewas->referenceEntity->[0]);
+        $inferred_residue = check_for_identical_instances($inf_res);
+        return [$inferred_residue];
+    }
+}
+
+sub get_other_EWAS {
+    my $residue = shift;
+    my $equivalent_ICCR = $residue->equivalentTo->[0];
+    my $other_ewas = $equivalent_ICCR->reverse_attribute_value('hasModifiedResidue')->[0];
+    
+    return $other_ewas;
 }
 
 #creates ReferenceDNASequence instances for the ENSG identifier mapping to the protein, and for some model organisms (for which Ensembl uses their original ids) also a direct "link" to the model organism database - to be filled into the referenceGene slot of the ReferenceGeneProduct
