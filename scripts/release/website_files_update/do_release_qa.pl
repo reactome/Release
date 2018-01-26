@@ -34,21 +34,19 @@ open(my $output, ">", "$outfile");
 
 my $reaction_like_events = get_dba($db, $host)->fetch_instance(-CLASS => 'ReactionlikeEvent');
 
+print $output join("\t", "RLE DB ID", "RLE Display Name", "RLE created author", "RLE last modified author") . "\n";
 foreach my $reaction_like_event (@{$reaction_like_events}) {
 	my $do_release = $reaction_like_event->_doRelease->[0];
     my $inferred_events = $reaction_like_event->reverse_attribute_value('inferredFrom');
     
     if ((!$do_release || $do_release =~ /FALSE/i) && any { $_->_doRelease->[0] && $_->_doRelease->[0] =~ /TRUE/i } @{$inferred_events}) {
-        report_issue($reaction_like_event, $output, '');
+        print $output join("\t", (
+            $reaction_like_event->db_id,
+            $reaction_like_event->_displayName->[0],
+            get_instance_creator($reaction_like_event),
+            get_instance_modifier($reaction_like_event)
+        )) . "\n";
     }
-}
-
-sub report_issue {
-	my $event = shift;
-	my $output = shift;
-	my $message = shift;
-	
-	print $output $message . $event->db_id . '-' . $event->_displayName->[0] . '-' . join(",", map($_->_displayName->[0], (@{$event->species}))) . "\n";
 }
 
 sub usage_instructions {
