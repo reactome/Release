@@ -262,6 +262,14 @@ sub XOR {
     return ($expression1 || $expression2) && (!($expression1 && $expression2));
 }
 
+sub get_instance_creator {
+    my $instance = shift;
+    
+	my $author_instance = $instance->created->[0]->author->[0] if $instance->created->[0];
+	
+	return $author_instance ? $author_instance->displayName : 'Unknown';    
+}
+
 sub get_instance_modifier {
     my $instance = shift;
     
@@ -374,6 +382,7 @@ get_source_for_electronically_inferred_instance
 has_multiple_species
 is_chimeric
 get_unique_species
+get_instance_creator
 get_instance_modifier
 get_event_modifier
 is_human
