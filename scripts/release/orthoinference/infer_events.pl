@@ -1137,6 +1137,9 @@ sub create_ghost {
 my %inferred_EWASs;
 sub infer_ewas {
     my $i = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
     my @tmp;
     my $id = $i->referenceEntity->[0]->identifier->[0];
     my $count = 0;
@@ -1147,8 +1150,8 @@ sub infer_ewas {
         
         #create EWAS
         my $inf_ewas = new_inferred_instance($i);
-        push @{$inferred_EWASs{$i->db_id}}, $inf_ewas;
-        my $inf_rps = infer_reference_gene_product($homologue_id);
+        #push @{$inferred_EWASs{$i->db_id}}, $inf_ewas;
+        my $inf_rps = infer_reference_gene_product($i, $homologue_id);
         $inf_ewas->ReferenceEntity($inf_rps);
         $inf_ewas->Name($inf_rps->identifier->[0]);
         $inf_ewas->StartCoordinate(@{$i->StartCoordinate});
@@ -1172,6 +1175,7 @@ sub infer_ewas {
         $inf_ewas->HasModifiedResidue(@inferred_modified_residues);
         
         $inf_ewas = check_for_identical_instances($inf_ewas); #in case it exists already, replace with existing one
+        push @{$inferred_EWASs{$i->db_id}}, $inf_ewas;
         $inf_ewas->InferredFrom;
         $inf_ewas->add_attribute_value_if_necessary('inferredFrom', $i);
         $dba->update_attribute($inf_ewas, 'inferredFrom');
@@ -1184,6 +1188,7 @@ sub infer_ewas {
 }
 
 sub infer_reference_gene_product {
+    my $ewas_instance = shift;
     my $reference_identifier = shift;
     
     my ($source, $identifier) = split /:/, $reference_identifier;
@@ -1193,7 +1198,7 @@ sub infer_reference_gene_product {
     #create ReferenceEntity
     my $inf_rps = $seen_reference_gene_product->{$identifier};
     if (!$inf_rps) {
-        $inf_rps = new_inferred_instance($i->ReferenceEntity->[0]);
+        $inf_rps = new_inferred_instance($ewas_instance->ReferenceEntity->[0]);
         my $ref_db;
         if ($source eq 'ENSP') {
             $ref_db = $ens_db;
@@ -1224,21 +1229,24 @@ sub infer_modified_residue {
     my $residue = shift;
     my $inferred_EWASs = shift;
     
+    my $logger = get_logger(__PACKAGE__);
+    
     my $inferred_residue = new_inferred_instance($residue);
     $inferred_residue->_displayName($residue->displayName." (in $from_name\) at unknown position");
 
     $inferred_residue->PsiMod(@{$residue->PSiMod});
             
-    $inferred_residue->is_valid_attribute('modification') && $inf_res->Modification(@{$residue->Modification}); #currently only GroupModifiedResidue has modification
-    $inferred_residue->is_valid_attribute('residue') && $inf_res->Residue(@{$residue->Residue}); #this attribute has been removed from data model, only here for backward compatibility
-    if ($residue->is_a('InterChainCrosslinkedResidue') {
+    $inferred_residue->is_valid_attribute('modification') && $inferred_residue->Modification(@{$residue->Modification}); #currently only GroupModifiedResidue has modification
+    $inferred_residue->is_valid_attribute('residue') && $inferred_residue->Residue(@{$residue->Residue}); #this attribute has been removed from data model, only here for backward compatibility
+    if ($residue->is_a('InterChainCrosslinkedResidue')) {
+        $logger->info("Inferring InterChainCrosslinkedResidue $residue->{db_id} for $opt_sp");
         my $other_EWAS = get_other_EWAS($residue); # The second EWAS the InterChainCrosslinkedResidue attaches
-        my @inferred_other_EWASs = @{$inferred_EWASs->{$other_EWAS->db_id}};
+        my @inferred_other_EWASs = @{$inferred_EWASs->{$other_EWAS->db_id}} if $other_EWAS && $inferred_EWASs->{$other_EWAS->db_id};
         return unless @inferred_other_EWASs;
         
         my @inferred_residues;
         foreach my $inferred_other_EWAS (@inferred_other_EWASs) {
-            my $inferred_ICCR = $inferred_residue->clone; $ # ICCR - InterChainCrosslinkedResidue
+            my $inferred_ICCR = $inferred_residue->clone; # ICCR - InterChainCrosslinkedResidue
             my $inferred_equivalent_ICCR = $inferred_residue->clone;
             
             $inferred_ICCR->referenceSequence($inf_ewas->referenceEntity->[0]);
@@ -1248,14 +1256,19 @@ sub infer_modified_residue {
             $inferred_ICCR->equivalentTo($inferred_equivalent_ICCR);
             $inferred_equivalent_ICCR->equivalentTo($inferred_ICCR);
             
+            $inferred_ICCR = check_for_identical_instances($inferred_ICCR);
+            $inferred_equivalent_ICCR = check_for_identical_instances($inferred_equivalent_ICCR);
+            
             $inferred_other_EWAS->add_attribute_value('hasModifiedResidue', $inferred_equivalent_ICCR);
+            $dba->update_attribute($inferred_other_EWAS, 'hasModifiedResidue');
             
             push @inferred_residues, $inferred_ICCR;
+            $logger->info("InterChainCrosslinkedResidue $residue->{db_id} has been inferred for $opt_sp");
         }
         return \@inferred_residues;
     } else {
         $inferred_residue->ReferenceSequence($inf_ewas->referenceEntity->[0]);
-        $inferred_residue = check_for_identical_instances($inf_res);
+        $inferred_residue = check_for_identical_instances($inferred_residue);
         return [$inferred_residue];
     }
 }
