@@ -4,13 +4,20 @@ use warnings;
 
 use autodie qw/:all/;
 use Cwd;
+use English;
 use File::Basename;
 use Readonly;
 
+Readonly my $SUDO_USER => 0;
 Readonly my $STAGING => "/usr/local/reactomes/Reactome/production/staging";
 Readonly my $RESTFUL_API => "$STAGING/webapps/ReactomeRESTfulAPI";
 Readonly my $APPLICATION_CONTEXT => "$RESTFUL_API/WEB-INF/applicationContext_Production.xml";
 Readonly my $CONFIG_SECRETS => "/opt/GKB/modules/GKB/Secrets.pm";
+
+if ($EFFECTIVE_USER_ID != $SUDO_USER) {
+    print STDERR "Please run this script as sudo or root\n";
+    exit 1;
+}
 
 my ($db_name, $use_cache) = @ARGV;
 if (!$db_name) {
@@ -56,7 +63,7 @@ print "Packing $RESTFUL_API directory into war file\n";
 system("perl pack.pl " . basename("$RESTFUL_API.war"));
 
 print "Deploying $RESTFUL_API.war file\n";
-#system("perl deploy.pl " . basename($RESTFUL_API.war"));
+system("perl deploy.pl " . basename("$RESTFUL_API.war"));
 
 system(qq(perl -i -pe "s/GK_DB_NAME\\s*=\\s*\\K'\\S+';/'$db_name';/" $CONFIG_SECRETS));
 if (!(`grep $db_name $CONFIG_SECRETS`)) {
