@@ -50,6 +50,7 @@ disclaimers of warranty.
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use strict;
 
+use lib '/usr/local/gkb/modules';
 use GKB::Config;
 use GKB::DBAdaptor;
 use GKB::HTMLUtils;
@@ -59,6 +60,8 @@ use GKB::Utils;
 use GKB::DocumentGeneration::TextUnit;
 use GKB::DocumentGeneration::Reader;
 use GKB::Graphics::ReactomeReaction;
+
+use Carp;
 use Storable qw(nstore retrieve);
 use Data::Dumper;
 use Log::Log4perl qw/get_logger/;
@@ -481,7 +484,7 @@ sub get_next_text_unit {
 		if ($pathway) {
 		    my @initial_pathways = ($pathway);
 		    	
-		    my @text_units = $self->get_chapters_from_events_text_units($depth, $depth_limit, $chapter_num, "", \@initial_pathways, $include_images_flag);
+		    my @text_units = $self->get_chapters_from_events_text_units($depth, $depth_limit, $chapter_num, [], \@initial_pathways, $include_images_flag);
 	
 		    if (@text_units && scalar(@text_units)>0) {
 		    	$self->store_array(\@text_units);
@@ -644,7 +647,7 @@ sub get_chapter_num {
 #
 # Returns nothing
 sub get_chapters_from_events_text_units {
-    my ($self, $depth, $depth_limit, $section, $parent_event, $events, $include_images_flag, $step_thru_increments) = @_;
+    my ($self, $depth, $depth_limit, $section, $parent_events, $events, $include_images_flag, $step_thru_increments) = @_;
 
     my $logger = get_logger(__PACKAGE__);
     
@@ -740,7 +743,7 @@ sub get_chapters_from_events_text_units {
 		# Only include reactions if the user wants them
 		if (!$event->is_a("ReactionlikeEvent") || $reaction_representation) {
 		    # Emit event
-		    @text_units = (@text_units, $self->get_instance_text_units($event, $depth, $new_section, $instance_hash, $include_images_flag));
+		    @text_units = (@text_units, $self->get_instance_text_units($event, $depth, $new_section, $instance_hash, $include_images_flag, $parent_events));
 		}
 	
 		# Find all sub- pathways and reactions
@@ -749,7 +752,8 @@ sub get_chapters_from_events_text_units {
 		# Go down one level in the recursion, glub, glub, glub
 		my @new_text_units = ();
 		if (@sub_events && scalar(@sub_events)>0) {
-		    @new_text_units = $self->get_chapters_from_events_text_units($new_depth, $depth_limit, $new_section, $event, \@sub_events, $include_images_flag, $step_thru_increments);
+            my $ancestral_events = $parent_events->[0] ? [@{$parent_events}, $event] : [$event];
+		    @new_text_units = $self->get_chapters_from_events_text_units($new_depth, $depth_limit, $new_section, $ancestral_events, \@sub_events, $include_images_flag, $step_thru_increments);
 		}
 	
 		if (@new_text_units && scalar(@new_text_units)>0) {
@@ -1102,7 +1106,7 @@ sub get_instance_name {
 
 # Returns s list of text units for the supplied instance
 sub get_instance_text_units {
-    my ($self, $instance, $depth, $new_section, $instance_hash, $include_images_flag) = @_;
+    my ($self, $instance, $depth, $new_section, $instance_hash, $include_images_flag, $ancestral_events) = @_;
 
     my $logger = get_logger(__PACKAGE__);
     
@@ -1165,10 +1169,12 @@ sub get_instance_text_units {
 	    
 	    my $url = $self->hyperlink_base_url;
 	    if ($instance->is_a("Pathway") && GKB::WebUtils->has_diagram($db_name,$instance)) {
+
 		$url .= "/PathwayBrowser/#FOCUS_PATHWAY_ID=$instance_db_id";
 	    }
 	    else {
-		$url .= "/content/detail/$instance_db_id";
+            $url .= get_pathway_browser_link($instance, $ancestral_events);
+		#$url .= "/content/detail/$instance_db_id";
 	    }
 
             $text_unit->set_url($url);
@@ -1260,6 +1266,57 @@ sub get_instance_text_units {
     return @text_units;
 }
 
+sub get_pathway_browser_link {
+    my $selected_event = shift;
+    my $ancestral_events = shift;
+    
+    my @pathways_without_diagrams;
+    my @pathways_with_diagrams;
+    
+    foreach my $ancestral_pathway (@$ancestral_events) {
+        if ($ancestral_pathway->reverse_attribute_value('representedPathway')->[0]) {
+            push @pathways_with_diagrams, $ancestral_pathway;
+        } else {
+            push @pathways_without_diagrams, $ancestral_pathway;
+        }
+    }
+    
+    my $viewed_pathway = pop @pathways_with_diagrams;
+    my $viewed_pathway_stable_id = get_stable_identifier($viewed_pathway);
+
+    my $path = get_path($viewed_pathway);
+    if ($path) {
+        $path = "&PATH=" . $path;
+    }
+    my $selected = '&SEL=' . get_stable_identifier($selected_event);
+    
+    return "/PathwayBrowser/#/" . $viewed_pathway_stable_id . $selected . $path;
+    #confess join ",", map { $_->db_id} @$ancestral_events if $selected =~ /R-HSA-5693609$/;
+}
+
+sub get_path {
+    my $pathway = shift;
+    
+    my $path = '';
+    my @parent_pathways = get_parent_pathways($pathway);
+    if (scalar @parent_pathways == 1) {
+        $path = join ',', get_stable_identifier($parent_pathways[0]) . get_path($parent_pathways[0]);
+    }
+    
+    return $path;
+}
+
+sub get_parent_pathways {
+    my $pathway = shift;
+    return @{$pathway->reverse_attribute_value('hasEvent')};
+}
+
+sub get_stable_identifier {
+    my $instance = shift;
+    
+    my $stable_identifier = $instance->stableIdentifier->[0]->identifier->[0];
+    return $stable_identifier;
+}
 
 sub hyperlink {
     my $self = shift;
