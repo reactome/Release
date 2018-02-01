@@ -19,7 +19,12 @@ BEGIN {
 use lib "/tmp/libs/bioperl-1.0";
 use lib "/tmp/libs/my_perl_stuff";
 
+use autodie;
+use Carp;
+use CGI::Carp qw/fatalsToBrowser/;
 use CGI qw(:standard);
+use Cwd qw/getcwd/;
+use File::Basename;
 use GKB::DBAdaptor;
 use GKB::PrettyInstance;
 use GKB::WebUtils;
@@ -104,6 +109,11 @@ if ( !(-e $cache_path) || !$CACHE_GENERATED_DOCUMENTS ) {
     $text_generator->generate_chapters();
     $text_generator->close();
 }
+
+my $cwd = getcwd;
+chdir dirname($cache_path);
+system("perl -pi -e 's/R..HSA../R-HSA-/g' $cache_filename");
+chdir $cwd;
 
 # Pass the RTF back to the browser
 print $CGI->redirect($url);
