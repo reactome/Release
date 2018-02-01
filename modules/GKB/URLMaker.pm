@@ -24,21 +24,34 @@ sub urlify {
     my $self = shift;
     my $force_pwb_link = $self->force_pwb_link();
     my $url;
+    
+    if (ref $_[0] && $_[0]->is_a('Pathway') && $_[0]->stableIdentifier->[0]) {
+        my $stable_id = $_[0]->stableIdentifier->[0]->identifier->[0];
+        return "http://" . get_host_name() . "/PathwayBrowser/#/$stable_id";
+    }
+    
     unless ($url = $self->_get_cached_url) {
-	$url = $self->script_name . '?';
-	while (my ($name,$ar) = each %{$self->{'param'}}) {
-	    $url .= join('&', map {"$name=$_"} @{$ar}) . '&';
-	}
-	if ($force_pwb_link) {
-	    $url .= 'PWB_REDIRECT=1&';
-	}
-	$self->_set_cached_url($url);
+        $url = $self->script_name . '?';
+        while (my ($name,$ar) = each %{$self->{'param'}}) {
+            $url .= join('&', map {"$name=$_"} @{$ar}) . '&';
+        }
+        if ($force_pwb_link) {
+            $url .= 'PWB_REDIRECT=1&';
+        }
+        $self->_set_cached_url($url);
     }
     foreach (@_) {
-	ref $_ || confess("Need GKB::Instance, got '$_'.");
-	$url .= 'ID=' . $_->db_id . '&';
+        ref $_ || confess("Need GKB::Instance, got '$_'.");
+        $url .= 'ID=' . $_->db_id . '&';
     }
     return $url;
+}
+
+sub get_host_name {
+    chomp(my $host_name = `hostname -f`);
+    
+    return 'reactome.org' if $host_name eq 'reactomeprd1.oicr.on.ca';
+    return $host_name;
 }
 
 sub force_pwb_link {

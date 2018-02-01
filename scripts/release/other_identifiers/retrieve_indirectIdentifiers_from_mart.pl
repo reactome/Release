@@ -38,6 +38,7 @@ my $dba = GKB::DBAdaptor->new
 
 # Fetch the species
 $opt_sp ||= 'Homo sapiens';
+
 my $sp = $dba->fetch_instance_by_attribute('Species',[['name',[$opt_sp]]])->[0]
     || $logger->error_die("No species '$opt_sp' found.\n");
 my $sp_mart_name;
@@ -50,7 +51,6 @@ if ($sp->displayName =~ /^(\w)\w+ (\w+)$/) {
 my $registry = get_registry();
 IDENTIFIER:foreach my $identifier (get_identifiers($sp_mart_name)) {
     next if $identifier =~ /chembl|clone_based|dbass|description|ottg|ottt|ottp|shares_cds|merops|mirbase|reactome/;
-    
     my $query = get_query($registry);
 
     $query->setDataset($sp_mart_name . "_gene_ensembl");
@@ -58,12 +58,15 @@ IDENTIFIER:foreach my $identifier (get_identifiers($sp_mart_name)) {
     $query->addAttribute("ensembl_gene_id");
     $query->addAttribute("ensembl_transcript_id");
     $query->addAttribute("ensembl_peptide_id");
+    my $error_occurred;
     try {
         $query->addAttribute($identifier);
     } catch {
         $logger->warn("could not add attribute $identifier for $sp_mart_name");
-        next IDENTIFIER;
+        $error_occurred = 1;
     };
+    next IDENTIFIER if $error_occurred;
+    
     $query->formatter("TSV");
 
     my $query_runner = get_query_runner();

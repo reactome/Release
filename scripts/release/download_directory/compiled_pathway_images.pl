@@ -20,7 +20,7 @@ my $logger = get_logger(__PACKAGE__);
 
 my $cvs_host = 'reactomecurator.oicr.on.ca';
 my $cvs_images_dir = '/usr/local/cvs_repository/GKB/website/images/Pathway_Illustrations';
-my $images_dir = '/usr/local/reactomes/Reactome/production/GKB/website/images';
+my $images_dir = '/usr/local/reactomes/Reactome/production/Website/static/figures';
 
 my $ssh = Net::OpenSSH->new($cvs_host);
 #$ssh = Net::OpenSSH->new("$opt_cvs_user:$opt_cvs_pass\@$cvs_host") if $ssh->error;

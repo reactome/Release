@@ -7,6 +7,12 @@ use GKB::Secrets;
 use vars qw(
 	@ISA
 	@EXPORT
+	$GK_DOCKBLASTER_USER
+	$GK_DOCKBLASTER_PASS
+	$GK_BRENDA_USER
+	$GK_BRENDA_PASS
+	$GK_COSMIC_USER
+	$GK_COSMIC_PASS
     $GK_ORPHAN_USER
     $GK_ORPHAN_PASS
     $GK_SOLR_USER
@@ -18,6 +24,7 @@ use vars qw(
 	$GK_DB_PASS
 	$GK_DB_PORT
 	$GK_ENTITY_DB_NAME
+	$REACTOME_ROOT_DIR
     $GK_ROOT_DIR
 	$GK_JAVA_CODEBASE
 	$GK_FETCH_SCRIPT
@@ -85,6 +92,12 @@ $GK_IDB_NAME = $GKB::Secrets::GK_IDB_NAME;
 $GK_DB_PORT  = $GKB::Secrets::GK_DB_PORT;
 $GK_ORPHAN_USER = $GKB::Secrets::GK_ORPHAN_USER;
 $GK_ORPHAN_PASS = $GKB::Secrets::GK_ORPHAN_PASS;
+$GK_DOCKBLASTER_USER = $GKB::Secrets::GK_DOCKBLASTER_USER;
+$GK_DOCKBLASTER_PASS = $GKB::Secrets::GK_DOCKBLASTER_PASS;
+$GK_BRENDA_USER = $GKB::Secrets::GK_BRENDA_USER;
+$GK_BRENDA_PASS = $GKB::Secrets::GK_BRENDA_PASS;
+$GK_COSMIC_USER = $GKB::Secrets::GK_COSMIC_USER;
+$GK_COSMIC_PASS = $GKB::Secrets::GK_COSMIC_PASS;
 $GK_SOLR_USER   = $GKB::Secrets::GK_SOLR_USER;
 $GK_SOLR_PASS   = $GKB::Secrets::GK_SOLR_PASS;
 
@@ -96,11 +109,12 @@ $WWW_USER = 'nobody';
 
 # Various paths
 ##################################################################################
+$REACTOME_ROOT_DIR = '/usr/local/reactomes/Reactome/production';
 $GK_ROOT_DIR = '/usr/local/gkb';
 $GK_JAVA_CODEBASE = "/jars";
-$GK_TMP_IMG_DIR = "$GK_ROOT_DIR/website/html/img-tmp";
+$GK_TMP_IMG_DIR = "$REACTOME_ROOT_DIR/Website/static/cgi-tmp/img-tmp";
 # Place for frontpage images 
-$FRONTPAGE_IMG_DIR = "$GK_ROOT_DIR/website/html/img-fp";
+$FRONTPAGE_IMG_DIR = "$REACTOME_ROOT_DIR/Website/static/cgi-tmp/img-fp";
 $NEWS_FILE = "$GK_ROOT_DIR/website/html/news.html";
 $DB_BACKUP_DIR = "$GK_ROOT_DIR/database_backups";
 $GK_FETCH_SCRIPT = "/cgi-bin/instance2text.pl";
@@ -125,7 +139,8 @@ $SKY_REPLACEMENT_IMAGE = undef;
 $DEFAULT_IMAGE_FORMAT = 'png';
 
 # format YYYYMMDD
-$LAST_RELEASE_DATE = 20161221;
+$LAST_RELEASE_DATE = 20170927;
+
 #$DEFAULT_VIEW_FORMAT = 'sidebarwithdynamichierarchy';
 $DEFAULT_VIEW_FORMAT = 'elv';
 
@@ -310,6 +325,14 @@ sub get_name {
 	     $GK_DB_USER
 	     $GK_DB_PASS
 	     $GK_DB_PORT
+		 	$GK_DOCKBLASTER_USER
+	$GK_DOCKBLASTER_PASS
+	$GK_BRENDA_USER
+	$GK_BRENDA_PASS
+	$GK_COSMIC_USER
+	$GK_COSMIC_PASS
+	$GK_ORPHAN_USER
+	$GK_ORPHAN_PASS
 	     $GK_ENTITY_DB_NAME
              $GK_ROOT_DIR
 	     $GK_JAVA_CODEBASE

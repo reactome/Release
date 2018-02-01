@@ -11,7 +11,7 @@ my $pass = shift;
 
 
 # use a list of databases to catch the non-current pathway_ids
-my @dbs = reverse map {"test_reactome_$_"} 42..56;
+my @dbs = reverse map {"test_reactome_$_"} 42..61;
 for my $db (@dbs) {
     my $dba = GKB::DBAdaptor->new(
 	-dbname => $db,

@@ -146,7 +146,7 @@ sub new_from_cgi {
     $self->dba($dba);
     $self->debug($debug);
     my $urlmaker = GKB::URLMaker->new(-SCRIPTNAME => $cgi->script_name,
-				      'DB' => $cgi->param('DB'));
+				      'DB' => scalar $cgi->param('DB'));
     $self->urlmaker($urlmaker);
     return $self;
 }
@@ -1986,13 +1986,11 @@ sub print_TOC {
     # order alphabetically
     @fpis = sort {uc($a->displayName) cmp uc($b->displayName)} @fpis;
 
-    if ($self->force_pwb_link()) {
-	$self->urlmaker->force_pwb_link(1);
-    }
-
     foreach my $fp (@fpis) {
-		$self->urlmaker || $self->throw("Need URLMaker object.");
-		print $fp->prettyfy(-URLMAKER => $self->urlmaker,
+		#$self->urlmaker || $self->throw("Need URLMaker object.");
+		print $fp->prettyfy(
+                -WEBUTILS => $self,
+                -URLMAKER => $self->urlmaker,
 			    -SUBCLASSIFY => 1,
 			    -CGI => $self->cgi)->top_browsing_view();
     }
@@ -2014,8 +2012,10 @@ sub print_DOI_TOC {
     
     # Create table rows, one per pathway
     foreach my $pathway (@pathways) {
-		$self->urlmaker || $self->throw("Need URLMaker object.");
-		print $pathway->prettyfy(-URLMAKER => $self->urlmaker,
+		#$self->urlmaker || $self->throw("Need URLMaker object.");
+		print $pathway->prettyfy(
+                #-URLMAKER => $self->urlmaker,
+                -WEBUTILS => $self,
 			    -SUBCLASSIFY => 1,
 			    -CGI => $self->cgi)->top_browsing_view(1);
     }

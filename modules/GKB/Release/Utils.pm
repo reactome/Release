@@ -103,12 +103,13 @@ our @EXPORT = qw/get_dba set_environment prompt releaselog replace_gkb_alias_in_
 
 sub get_dba {
 	my $db = shift;
+	my $host = shift // $GKB::Config::GK_DB_HOST;
 	
 	return GKB::DBAdaptor->new(
 		-dbname => $db,
 		-user => $GKB::Config::GK_DB_USER,
 		-pass => $GKB::Config::GK_DB_PASS,
-		-host => $GKB::Config::GK_DB_HOST,
+		-host => $host,
 		-port => 3306
 	);
 }

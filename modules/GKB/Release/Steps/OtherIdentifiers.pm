@@ -45,9 +45,11 @@ sub _check_other_identifier_count_for_all_species {
         my $current_RGP_count = scalar @current_RGPs;
         my @previous_RGPs = _get_RGPs_with_other_identifiers("test_reactome_$prevver", $species_name);
         my $previous_RGP_count = scalar @previous_RGPs;
-        
+ 
         if ($current_RGP_count < $previous_RGP_count) {
-            push @errors, "$species_name has fewer reference gene products with other identifiers compared to the previous release: $version - $current_RGP_count; $prevver - $previous_RGP_count";
+            my $error = "$species_name has fewer reference gene products with other identifiers compared to the previous release: $version - $current_RGP_count; $prevver - $previous_RGP_count";
+            push @errors, $error;
+            releaselog($error);
             next;
         }
                
@@ -55,7 +57,9 @@ sub _check_other_identifier_count_for_all_species {
         my $previous_other_identifier_count = _get_total_other_identifier_count(@previous_RGPs);
         
         if ($current_other_identifier_count < $previous_other_identifier_count) {
-            push @errors, "$species_name has fewer total other identifiers compared to the previous release: $version - $current_other_identifier_count; $prevver - $previous_other_identifier_count";
+            my $error = "$species_name has fewer total other identifiers compared to the previous release: $version - $current_other_identifier_count; $prevver - $previous_other_identifier_count";
+            push @errors, $error;
+            releaselog($error);
             next;
         }
         

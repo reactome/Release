@@ -79,11 +79,11 @@ unless (defined $ARGV[0] && $ARGV[0] =~ /\d(\.\.)\d|\d,?/) {
 
 unless ($TEST_MODE) {
     $user = prompt("Enter user name - leave blank for default of $user:") || $user;
-    $version = prompt("Enter current version number:");
+    $version = prompt("Enter release version number:");
     die "Current version number must be an integer" unless $version && $version =~ /^\d+$/;
     $prevver = $version - 1;
 } else {
-    print "REMINDER: You are in TEST MODE.  To enable normal operation, edit \$TEST_MODE in the GKB::Config::Release module and restart this script\n";
+    print "REMINDER: You are in TEST MODE.  To enable normal operation, edit \$TEST_MODE in the GKB::Release::Config module and restart this script\n";
 }
 set_version_for_config_variables($version);
 
