@@ -58,6 +58,7 @@ BEGIN
 		('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0xC2,0x9D)),
 		('”',concat('Ã¢â‚¬Â',0x9D)),
 		('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0x9D)),
+		('-','â€‘'), -- <-- This mapping was discovered by Lisa.
 		('•','â€¢'),	('–','â€“'),	('—','â€”'),	('ª','Âª'),
 		('˜','Ëœ'),		('™','â„¢'),	('š','Å¡'),		('›','â€º'),
 		('œ','Å“'),		('ž','Å¾'),		('Ÿ','Å¸'),		('¡','Â¡'),
@@ -99,7 +100,10 @@ BEGIN
 		('δ', 'ÃŽÂ´'), ('ε', 'ÃŽÂµ'),
 		('δ', 'ÃƒÅ½Ã‚Â´'),
 		('γ', 'ÃƒÅ½Ã‚Â³'),
-		('γδ', 'ÃƒÅ½Ã‚Â³ÃƒÅ½Ã‚Â´')
+		('γδ', 'ÃƒÅ½Ã‚Â³ÃƒÅ½Ã‚Â´'),
+		('-', '‒'), -- This is actually a valid dash (FIGURE DASH), but some tools render it as "ΓÇæ".
+		('-', 'ΓÇæ'),
+		('-', concat( 0xE2, 0x80, 0x92 )) -- same thing as above, but with the hex code.
 		;
 
 	-- select 'The mappings are: ' as message;
@@ -123,11 +127,28 @@ BEGIN
 					order by count(distinct ',tbl_name,'.DB_ID) asc, special_char asc');
 
 	-- Before running the fix, let's see what there is that has "bad" characters.
-
-	set @detailed_report_query= CONCAT('	select distinct special_char, hex(special_char), replacement_char, ',tbl_name,'.DB_ID, ',tbl_name,'.',col_name,'
-					from ',tbl_name,', special_chars
+	set @detailed_report_query= CONCAT('
+					select * from
+					( select distinct special_char, hex(special_char), replacement_char, ',tbl_name,'.DB_ID, ',tbl_name,'.',col_name,'
+					from special_chars, ',tbl_name,'
 					where BINARY ',tbl_name,'.',col_name,'
-					like CONCAT(''%'',special_chars.special_char,''%'')');
+					like CONCAT(''%'',special_chars.special_char,''%'') ) as records_with_special_chars
+					left join
+					( select ',tbl_name,'.db_id,
+					ieCreator.dateTime as created_time, ieCreator.note as creation_note,
+					concat(Creator.firstname, \' \', Creator.initial, \' \' , Creator.surname ) as creator,
+					ieModifier.note as modified_note, ieModifier.dateTime as modified_time,
+					concat(Modifier.firstname, \' \', Modifier.initial, \' \' , Modifier.surname ) as modifier
+                    from ',tbl_name,'
+                    left join DatabaseObject as DBO on DBO.db_id = ',tbl_name,'.db_id
+					left join InstanceEdit as ieCreator on ieCreator.DB_ID = DBO.created
+					left join InstanceEdit_2_author as ie2a_creator on ie2a_creator.DB_ID = ieCreator.DB_ID
+					left join Person as Creator on ie2a_creator.author = Creator.DB_ID
+					left join DatabaseObject_2_modified on DatabaseObject_2_modified.DB_ID = DBO.DB_ID
+					left join InstanceEdit as ieModifier on DatabaseObject_2_modified.modified = ieModifier.DB_ID
+					left join InstanceEdit_2_author as ie2a_modifier on ie2a_modifier.DB_ID = ieModifier.DB_ID
+					left join Person as Modifier on ie2a_modifier.author = Modifier.DB_ID ) as object_info
+                    on object_info.db_id = records_with_special_chars.db_id;  ');
 
 	-- select @summary_report_query,@detailed_report_query;
 
@@ -206,6 +227,17 @@ BEGIN
 
 	if update_source then
 		begin
+			declare exit handler for sqlexception
+			begin
+				rollback;
+				select 'Rolling back due to sqlexception!' as message;
+			end;
+			declare exit handler for sqlwarning
+			begin
+				rollback;
+				select 'Rolling back due to sqlwarning!' as message;
+			end;
+
 			start transaction;
 			set @update_str=concat('update ',tbl_name,', fixed_vals
 									set ',tbl_name,'.',col_name,' = fixed_vals.fixed_val

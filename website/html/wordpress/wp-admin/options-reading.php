@@ -10,52 +10,19 @@
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
 if ( ! current_user_can( 'manage_options' ) )
-	wp_die( __( 'You do not have sufficient permissions to manage options for this site.' ) );
+	wp_die( __( 'Sorry, you are not allowed to manage options for this site.' ) );
 
 $title = __( 'Reading Settings' );
 $parent_file = 'options-general.php';
 
-/**
- * Display JavaScript on the page.
- *
- * @since 3.5.0
- */
-function options_reading_add_js() {
-?>
-<script type="text/javascript">
-//<![CDATA[
-	jQuery(document).ready(function($){
-		var section = $('#front-static-pages'),
-			staticPage = section.find('input:radio[value="page"]'),
-			selects = section.find('select'),
-			check_disabled = function(){
-				selects.prop( 'disabled', ! staticPage.prop('checked') );
-			};
-		check_disabled();
- 		section.find('input:radio').change(check_disabled);
-	});
-//]]>
-</script>
-<?php
-}
 add_action('admin_head', 'options_reading_add_js');
-
-/**
- * Render the blog charset setting.
- *
- * @since 3.5.0
- */
-function options_reading_blog_charset() {
-	echo '<input name="blog_charset" type="text" id="blog_charset" value="' . esc_attr( get_option( 'blog_charset' ) ) . '" class="regular-text" />';
-	echo '<p class="description">' . __( 'The <a href="http://codex.wordpress.org/Glossary#Character_set">character encoding</a> of your site (UTF-8 is recommended)' ) . '</p>';
-}
 
 get_current_screen()->add_help_tab( array(
 	'id'      => 'overview',
 	'title'   => __('Overview'),
 	'content' => '<p>' . __('This screen contains the settings that affect the display of your content.') . '</p>' .
 		'<p>' . sprintf(__('You can choose what&#8217;s displayed on the front page of your site. It can be posts in reverse chronological order (classic blog), or a fixed/static page. To set a static home page, you first need to create two <a href="%s">Pages</a>. One will become the front page, and the other will be where your posts are displayed.'), 'post-new.php?post_type=page') . '</p>' .
-		'<p>' . __('You can also control the display of your content in RSS feeds, including the maximum numbers of posts to display and whether to show full text or a summary.') . '</p>' .
+		'<p>' . __('You can also control the display of your content in RSS feeds, including the maximum number of posts to display and whether to show full text or a summary.') . '</p>' .
 		'<p>' . __('You must click the Save Changes button at the bottom of the screen for new settings to take effect.') . '</p>',
 ) );
 
@@ -68,15 +35,15 @@ get_current_screen()->add_help_tab( array(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __('For more information:') . '</strong></p>' .
-	'<p>' . __('<a href="http://codex.wordpress.org/Settings_Reading_Screen" target="_blank">Documentation on Reading Settings</a>') . '</p>' .
-	'<p>' . __('<a href="https://wordpress.org/support/" target="_blank">Support Forums</a>') . '</p>'
+	'<p>' . __('<a href="https://codex.wordpress.org/Settings_Reading_Screen">Documentation on Reading Settings</a>') . '</p>' .
+	'<p>' . __('<a href="https://wordpress.org/support/">Support Forums</a>') . '</p>'
 );
 
 include( ABSPATH . 'wp-admin/admin-header.php' );
 ?>
 
 <div class="wrap">
-<h2><?php echo esc_html( $title ); ?></h2>
+<h1><?php echo esc_html( $title ); ?></h1>
 
 <form method="post" action="options.php">
 <?php

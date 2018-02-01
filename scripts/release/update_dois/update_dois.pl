@@ -11,6 +11,7 @@ use Try::Tiny;
 
 use GKB::Config;
 use GKB::DBAdaptor;
+use GKB::Utils_esther;
 
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);

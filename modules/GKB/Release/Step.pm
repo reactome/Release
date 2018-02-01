@@ -186,7 +186,7 @@ use Capture::Tiny ':all';
 use File::Basename;
 use File::Spec;
 use File::stat;
-use List::MoreUtils qw/uniq/;
+use List::MoreUtils qw/uniq all/;
 use Net::OpenSSH;
 
 use GKB::Release::Utils;
@@ -215,6 +215,7 @@ has 'gkb' => (
 has 'directory' => (
 	is => 'rw',
 	isa => 'Str',
+	lazy => 1,
 	default => $release
 );
 
@@ -328,9 +329,7 @@ sub cmd {
 	# Display message
 	say releaselog("NOW $message...\n"); 
 	
-	
 	my @cmd_results;
-
 	foreach my $cmdarg (@{$cmdref}) { 
 		my ($cmd, @args) = @{$cmdarg};
 		
@@ -379,6 +378,13 @@ sub cmd {
 	return @cmd_results;
 }
 
+sub cmd_successful {
+	my $self = shift;
+	my $results = shift;
+	
+	return all { $_->{'exit_code'} == 0} @$results;
+}
+
 sub archive_files {
 	my $self = shift;
 	my $version = shift;
@@ -387,9 +393,11 @@ sub archive_files {
 	my $step_version_archive = "$step_archive/$version";
 	
 	`mkdir -p $step_version_archive`;
-	`gzip -q *.dump 2>/dev/null`;
-	`mv --backup=numbered $_ $step_version_archive 2>/dev/null` foreach qw/*.dump.gz *.err *.log *.out/;
-	symlink $step_archive, 'archive' unless (-e 'archive');
+	if (-d $step_version_archive) {
+		`mv --backup=numbered $_ $step_version_archive 2>/dev/null` foreach qw/*.dump *.err *.log *.out/;
+		`gzip -qf *.dump* 2> /dev/null`;
+		symlink $step_archive, 'archive' unless (-e 'archive');
+	}
 	
 	return $step_version_archive;
 }

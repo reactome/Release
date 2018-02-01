@@ -14,6 +14,9 @@
  * @package WordPress
  */
 
+/** Require SSL for admin login */
+define('FORCE_SSL_ADMIN', true);
+
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
 
