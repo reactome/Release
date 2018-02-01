@@ -23,10 +23,12 @@ $slicedb (Reactome slice database -- i.e. test_slice_XX)
 $stable_id_db (Reactome stable identifier database)
 $gkcentral (Reactome curator database)
 $gkcentral_host (host server for Reactome database)
+$base_dir (directory with all Reactome components)
 $gkbdev (directory for Release Git repository)
 $scripts (scripts directory)
 $release (release directory)
 $website (website directory)
+$website_static (website static content)
 $html (html directory)
 $gkbmodules (GKB modules directory)
 $dumpdir (database dump directory)
@@ -115,18 +117,19 @@ if ($TEST_MODE) {
 }
 
 # Set directory paths
-our $gkbdev = "/usr/local/gkbdev";
+our $base_dir = "/usr/local/reactomes/Reactome/production";
+our $gkbdev = "/usr/local/gkb";
 our $scripts = "$gkbdev/scripts";
 our $release = "$scripts/release";
-our $website = "$gkbdev/website";
-our $html = "$website/html";
+our $website = "$base_dir/Website";
+our $website_static = "$website/static";
 our $gkbmodules = "$gkbdev/modules";
 our $dumpdir = "$gkbdev/tmp";
 our $tmp = "$gkbdev/tmp";
 our $cvs = "/usr/local/cvs_repository";
 our $logdir = "$release/logs";
 our $logfile = "$logdir/release{version}.log";
-our $archive = "/nfs/reactome/reactome/archive/release";
+our $archive = "/nfs/reactome/archive/release";
 
 our %passwords = (
     'sudo' => \$sudo, 
@@ -169,7 +172,7 @@ our @EXPORT = qw/
     $TEST_MODE
     $user $pass $sudo $date $version $prevver
     $db $slicedb $stable_id_db $gkcentral $gkcentral_host
-    $gkbdev $scripts $release $website $html $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
+    $base_dir $gkbdev $scripts $release $website $website_static $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server %hosts %maillist
     $log_conf
 /;

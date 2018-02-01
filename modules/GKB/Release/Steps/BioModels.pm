@@ -25,7 +25,7 @@ override 'run_commands' => sub {
 
     # Backup database and run biomodels script
     $self->cmd("Backup database", [["mysqldump --opt -u$user -p$pass $db > $db\_before_biomodels.dump"]]);
-    my @results = $self->cmd("Running BioModels script", [["perl biomodels.pl -db $db > biomodels_$version.out"]]);
+    my @results = $self->cmd("Running BioModels script", [["perl biomodels.pl -db $db > biomodels_$version.out 2> biomodels_$version.err"]]);
     
     my $exit_code = ($results[0])->{'exit_code'};
     # Backup the database

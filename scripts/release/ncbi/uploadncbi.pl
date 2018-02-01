@@ -4,7 +4,7 @@ use warnings;
 use v5.10;
 use Net::FTP;
 
-my $ftp = Net::FTP->new("ftp-private.ncbi.nih.gov", Debug => 0, Passive => 1);
+my $ftp = Net::FTP->new("ftp-private.ncbi.nih.gov", Debug => 0, Passive => 0);
 my ($ftppass, $version) = @ARGV;
 my $previous_version = $version - 1;
 

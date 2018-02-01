@@ -22,14 +22,15 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-my ($user, $host, $pass, $port, $db, $species);
+my ($user, $host, $pass, $port, $db, $species, $sbgn_output_dir);
 GetOptions(
     "user=s" => \$user,
     "host=s" => \$host,
     "pass=s" => \$pass,
     "port=i" => \$port,
     "db=s" => \$db,
-    "sp=s" => \$species
+    "sp=s" => \$species,
+    "output_dir=s" => \$sbgn_output_dir
 );
 
 $user ||= $GKB::Config::GK_DB_USER;
@@ -37,7 +38,7 @@ $host ||= $GKB::Config::GK_DB_HOST;
 $pass ||= $GKB::Config::GK_DB_PASS;
 $port ||= $GKB::Config::GK_DB_PORT;
 $db ||= $GKB::Config::GK_DB_NAME;
-
+$sbgn_output_dir ||= 'sbgn';
 
 if (-e $LIBSBML_LD_LIBRARY_PATH) {
     my $ld_library_path = $ENV{'LD_LIBRARY_PATH'};
@@ -85,12 +86,14 @@ my $dba = GKB::DBAdaptor->new(
 );
 
 my $species_instance = $species ? $dba->fetch_instance_by_db_id($species)->[0] : undef;
+system("mkdir -p $sbgn_output_dir");
+
 my @pathways = @{$dba->fetch_instance(-CLASS => 'Pathway')};
 
 foreach my $pathway (@pathways) {
     next if $species_instance && $species_instance->db_id != $pathway->species->[0]->db_id;
     my $pathway_id = $pathway->db_id;
-    my $outfile = trim($pathway->name->[0]) . '.sbgn';
+    my $outfile = "$sbgn_output_dir/" . trim($pathway->name->[0]) . '.sbgn';
     
     my $command = qq(java -classpath $classpath org.gk.sbgn.SBGNBuilderCommandLine -user $user -pass $pass -host $host -db $db -port $port -sp $species -pid $pathway_id -o "$outfile");
     system($command) == 0 or $logger->warn("$command failed");

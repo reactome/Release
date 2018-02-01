@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl -w
 use strict;
-
+use Carp;
 #This script infers reactions from one species to another based on a file of homologue pairs. The implementation at present is based on the Ensembl compara orthologue mapping, but the script can easily be adapted by adding a method returning the homologue hash. The orthopair file for the Ensembl compara system can be prepared by running the script  prepare_orthopair_files.pl under GKB/scripts/compara.
 #After the reactions have been inferred, the higher-level event hierarchy is also created based on the from-species.
 
@@ -24,10 +24,11 @@ use GKB::Config;
 use GKB::Config_Species;
 
 use autodie;
+use feature qw/state/;
 use Data::Dumper;
 use Getopt::Long;
 use DBI;
-
+use List::MoreUtils qw/any/;
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
@@ -36,39 +37,41 @@ $logger->info("starting\n");
 
 @ARGV || $logger->error_die("Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -r reactome_release -from from_species_name(e.g. hsa) -sp to_species_name(e.g.dme) -filt second_taxon_filter -thr threshold_for_complex");
 
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp, $opt_filt, $opt_thr, $opt_debug);
+our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp, $opt_release_date, $opt_filt, $opt_thr, $opt_debug);
 
-&GetOptions("user:s",
-	    "host:s",
-	    "pass:s",
-	    "port:i",
-	    "db=s",
-	    "r=i",
-	    "from=s",
-	    "sp=s",
-	    "filt=i",
-	    "thr=i",
-	    "debug",
-	    );
+&GetOptions(
+    "user:s",
+	"host:s",
+	"pass:s",
+	"port:i",
+	"db=s",
+	"r=i",
+	"from=s",
+	"sp=s",
+    "release_date:s",
+	"filt=i",
+	"thr=i",
+	"debug",
+);
 
 $opt_db || $logger->error_die("Need database name (-db).\n");
 $opt_r || $logger->error_die("Need Reactome release number, e.g. -r 32\n");
 $opt_sp || $logger->error_die("Need species (-sp), e.g. mmus.\n");
+$opt_release_date || $logger->error_die("Need release date e.g. -release_date 2017-12-13");
 $opt_from ||= 'hsap';
 
 $logger->info("opt_db=$opt_db\n");
 
 #connection to Reactome
-my $dba = GKB::DBAdaptor->new
-   (
-     -dbname => $opt_db,
-     -user   => $opt_user,         
-     -host   => $opt_host,
-     -pass   => $opt_pass,
-     -port   => $opt_port || 3306,
-     -driver => 'mysql',
-     -DEBUG => $opt_debug
-     );
+my $dba = GKB::DBAdaptor->new(
+    -dbname => $opt_db,
+    -user   => $opt_user,         
+    -host   => $opt_host,
+    -pass   => $opt_pass,
+    -port   => $opt_port || 3306,
+    -driver => 'mysql',
+    -DEBUG => $opt_debug
+);
 
 my $protein_class = &GKB::Utils::get_reference_protein_class($dba); #determines whether the database is in the pre-March09 schema with ReferencePeptideSequence, or in the new one with ReferenceGeneProduct and ReferenceIsoform
 
@@ -111,6 +114,7 @@ $ens_db->Name('Ensembl', "ENSEMBL_$species_info{$opt_sp}->{'name'}->[0]\_PROTEIN
 $ens_db->Url($species_info{$opt_sp}->{'refdb'}->{'url'});
 $ens_db->AccessUrl($species_info{$opt_sp}->{'refdb'}->{'access'});
 $ens_db = check_for_identical_instances($ens_db);
+
 $logger->info("ENSEMBL ReferenceDatabase.extended_displayName=" . $ens_db->extended_displayName . "\n");
 
 my $ensg_db = create_instance('ReferenceDatabase');
@@ -171,32 +175,35 @@ open(my $report, ">>", "$opt_r\/report_ortho_inference_$opt_db\.txt");
 open(my $regulator, ">>", "$opt_r\/cyclical_reactions_$opt_db\.txt");
 open(my $inf, ">", "$opt_r\/inferred_$opt_sp\_$opt_thr\.txt");
 open(my $eli, ">", "$opt_r\/eligible_$opt_sp\_$opt_thr\.txt");
+open(my $manual, ">", "$opt_r\/skip_manual_inferred_human_events_$opt_sp");
 
 my (%uni, %orthologous_entity, %inferred_cp, %inferred_gse, %homol_gee, %seen_rps, %inferred_event, %being_inferred, %homol_cat, %instances);
 my $a =("#"x20)."\n";
-my @all_human_events;
+my @inferrable_human_events;
+my @manual_human_events;
+my %manual_event_to_non_human_source;
 my $count_leaves = 0;
 my $count_inferred_leaves = 0;
 
 #define reactions to be considered for inference (by default all ReactionlikeEvents)
-    my $reaction_ar;
-    if (@ARGV) { #list of event ids, for which downstream reactions should be inferred - NOTE : make sure these events are from the source species
+my $reaction_ar;
+if (@ARGV) { #list of event ids, for which downstream reactions should be inferred - NOTE : make sure these events are from the source species
 	$reaction_ar = get_reaction_instances($dba, @ARGV);
-    } else { #get all ReactionlikeEvents for the target species by default
+} else { #get all ReactionlikeEvents for the target species by default
 	$reaction_ar = $dba->fetch_instance(-CLASS => 'ReactionlikeEvent',
 					    -QUERY => [{-ATTRIBUTE => 'species',
 							-VALUE => [$source_species->db_id]}
 						       ]
 					    );
-    }
+}
     
-    my $complex_ar = $dba->fetch_instance(-CLASS => 'Complex',
+my $complex_ar = $dba->fetch_instance(-CLASS => 'Complex',
 					  -QUERY => [{-ATTRIBUTE => 'species',
 						      -VALUE => [$source_species->db_id]}
 						    ]
 					);
 
-    my $ewas_ar = $dba->fetch_instance(-CLASS => 'EntityWithAccessionedSequence',
+my $ewas_ar = $dba->fetch_instance(-CLASS => 'EntityWithAccessionedSequence',
 				       -QUERY => [{-ATTRIBUTE => 'species',
 						   -VALUE => [$source_species->db_id]}
 						  ]
@@ -232,8 +239,8 @@ foreach my $rxn (@{$reaction_ar}) {
     $logger->info("scalar(tmp)=" . scalar(@tmp) . "\n");
     if ($tmp[0]) { #the event exists in the other species, need not be inferred but should be kept for the step when the event hierarchy is created, so that it can be fit in at the appropriate position in the event hierarchy
         unless ($tmp[0]->disease->[0]) {        
-            $inferred_event{$rxn} = $tmp[0]; #disregards multiple events here..., the first event is taken into the hash to allow building the event structure further down 
-            push @all_human_events, $rxn;
+            $manual_event_to_non_human_source{$rxn} = $tmp[0]; #disregards multiple events here..., the first event is taken into the hash to allow building the event structure further down 
+            push @manual_human_events, $rxn;
         } else {
             $logger->info("Skipping building of hierarchy around pre-existing disease reaction " .
                           $tmp[0]->displayName . " (" . $tmp[0]->db_id . ")");
@@ -241,28 +248,28 @@ foreach my $rxn (@{$reaction_ar}) {
         next;
     }
     $logger->info("infer event for reaction=" . $rxn->extended_displayName . "\n");
-    infer_event($rxn);
+    infer_event($rxn, $opt_release_date);
 }
 
 #creating hierarchy structure as in human event
 my %seen;
-foreach (@all_human_events){
+foreach (@inferrable_human_events){
     next if $seen{$_}++;
     create_orthologous_generic_event($_);
 }
 
 #fill pathways and blackboxevents with their components in the same order as in human
 my %seen3;
-foreach my $hum_pathway (@all_human_events){
+foreach my $hum_pathway (@inferrable_human_events){
     next if $seen3{$hum_pathway}++;
     next unless $hum_pathway->is_valid_attribute('hasEvent'); #This should happen for both Pathways and BlackBoxEvents
     $logger->info("filling pathway name=" . $hum_pathway->extended_displayName . "\n");
     my @pathway_comps;
     foreach my $path_comp (@{$hum_pathway->HasEvent}) {
-	#print STDERR $path_comp->extended_displayName, "\n";
-	if ($inferred_event{$path_comp}) {
-	    push @pathway_comps, $inferred_event{$path_comp};
-	}
+        #print STDERR $path_comp->extended_displayName, "\n";
+        if ($inferred_event{$path_comp}) {
+            push @pathway_comps, $inferred_event{$path_comp};
+        }
     }
     if ($inferred_event{$hum_pathway}->is_valid_attribute('hasEvent')) {
     	$inferred_event{$hum_pathway}->HasEvent;
@@ -273,10 +280,10 @@ foreach my $hum_pathway (@all_human_events){
     }
 }
 $logger->info("inferring preceding events.....\n");
-infer_preceding_events(@all_human_events);
+infer_preceding_events(@inferrable_human_events);
 #finally mark all human events with orthologous events as modified
 my %seen4;
-foreach my $hum_event (@all_human_events){
+foreach my $hum_event (@inferrable_human_events){
     next if $seen4{$hum_event}++;
     GKB::Utils_esther::update_modified_if_necessary($hum_event, $instance_edit, $dba);
 }
@@ -299,10 +306,20 @@ if ($count_leaves == 0) {
 }
 print $report $opt_from, " to ",$opt_sp, "\t", $count_inferred_leaves, " out of ", $count_leaves, " eligible reactions (", $perc, "%)$warning\n";
 
+foreach my $manual_event (@manual_human_events) {
+    print $manual $manual_event->displayName . ' (' . $manual_event->db_id . ') was skipped for ' . $opt_sp . "\n";
+
+    my $non_human_event = $manual_event_to_non_human_source{$manual_event};
+    
+    print $manual $manual_event->displayName . ' (' . $manual_event->db_id . ') inferred from ' .
+                  $non_human_event->displayName . ' (' . $non_human_event->db_id . ")\n";
+}
+
 close($report);
 close($regulator);
 close($inf);
 close($eli);
+close($manual);
 
 $logger->info("end\n");
 
@@ -344,12 +361,12 @@ sub get_reaction_ids {
     my $ar = $dba->fetch_instance_by_db_id($pwy_id);
     
     if ($ar->[0]) {
-	my $ar2 = $ar->[0]->follow_class_attributes(-INSTRUCTIONS => 
+        my $ar2 = $ar->[0]->follow_class_attributes(-INSTRUCTIONS => 
 						    {'Pathway' => {'attributes' => [qw(hasEvent)]}},
 						    -OUT_CLASSES => [qw(ReactionlikeEvent)]);
-	foreach my $rxn (@{$ar2}) {
-	    push @tmp, $rxn->db_id;
-	}
+        foreach my $rxn (@{$ar2}) {
+            push @tmp, $rxn->db_id;
+        }
     }
     return @tmp;
 }
@@ -360,13 +377,12 @@ sub get_reaction_instances {
     my ($dba, @id) = @_;
     my @tmp;
     foreach my $id (@id) {
-	my $event_ar = $dba->fetch_instance_by_db_id($id);
-	my $ar = $event_ar->[0]->follow_class_attributes(-INSTRUCTIONS => 
+        my $event_ar = $dba->fetch_instance_by_db_id($id);
+        my $ar = $event_ar->[0]->follow_class_attributes(-INSTRUCTIONS => 
 							 {'Pathway' => {'attributes' => [qw(hasEvent)]},
 							  'BlackBoxEvent' => {'attributes' => [qw(hasEvent)]}},
-		
 							  -OUT_CLASSES => [qw(ReactionlikeEvent)]);
-	push @tmp, @{$ar};
+        push @tmp, @{$ar};
     }
     return \@tmp;
 }
@@ -451,13 +467,13 @@ sub read_orthology {
     $logger->info("Now reading orthology mapping file: $file\n");
     if (open(my $read_orthopair, '<', $file)) {
 	    while (<$read_orthopair>) {
-		my %seen_to;
-		my ($from, $tos) = split/\t/, $_;
-		my @tos = split/\s/, $tos;
-		foreach my $to (@tos) {
-		    $seen_to{$to}++;
-		}
-		push @{$homologue{$from}}, keys %seen_to;
+            my %seen_to;
+            my ($from, $tos) = split/\t/, $_;
+            my @tos = split/\s/, $tos;
+            foreach my $to (@tos) {
+                $seen_to{$to}++;
+            }
+            push @{$homologue{$from}}, keys %seen_to;
 	    }
 	    close($read_orthopair);
     } else {
@@ -479,8 +495,8 @@ sub read_ensg_mapping {
 	        my ($ensg, $protein_ids) = split/\t/, $_;
 	        my @protein_ids = split/\s/, $protein_ids;
 	        foreach my $id (@protein_ids) {
-		    $id =~ s/\w+://;  #remove database prefix
-		    push @{$ensg{$id}}, $ensg;
+                $id =~ s/\w+://;  #remove database prefix
+                push @{$ensg{$id}}, $ensg;
 	        }
 	    }
 	    close($read);
@@ -495,39 +511,64 @@ sub read_ensg_mapping {
 #When the override flag is set to true and the inference is unsuccessful, a GenomeEncodedEntity instance (ghost) is returned. 
 sub infer_gse {
     my ($gse, $override) = @_;
-    $inferred_gse{$gse} && return $inferred_gse{$gse};
-#infer members only to start with, no candidates
+    $inferred_gse{$gse} && return $inferred_gse{$gse}; #return cached inferred set instance if it exists
+    
+    my $logger = get_logger(__PACKAGE__);
+
     my $ar = infer_members($gse->HasMember);
     my $inf_gse = new_inferred_instance($gse);
     $inf_gse->Name(@{$gse->Name});
     $inf_gse->HasMember(@{$ar});
     if ($gse->is_a('OpenSet')) {
-	$inf_gse->ReferenceEntity(@{$gse->ReferenceEntity});
+        $logger->info("Inferring open set " . $gse->displayName . ' (' . $gse->db_id . ')');
+        $inf_gse->ReferenceEntity(@{$gse->ReferenceEntity});
     } else {
-	my ($total, $inferred, $count) = count_distinct_proteins($gse); #disregarding candidates for counting (unless a CandidateSet has only candidates and no members - in this case all candidates have to have a homologue in order for the inferred variable to be set to 1)
-	return if (!$override && $total && !$inferred); #contains protein, but none can be inferred
-	$inf_gse->TotalProt($total);
-	$inf_gse->InferredProt($inferred);
-	$inf_gse->MaxHomologues($count);
-#handle CandidateSets - infer candidates where no confirmed member exists (and all candidates have a homologue - otherwise the "correct" protein may be missing)
-	if ($gse->is_a('CandidateSet')) {
-	    my $ar_cand;
-	    if (!$gse->HasMember->[0]) { #no member exists
-		$ar_cand = infer_members($gse->HasCandidate, 1); #the flag set to 1 ensures an "all or none" inference
-	    }
-	    $inf_gse->HasCandidate(@{$ar_cand});
-	    unless ($ar_cand->[0] || $ar->[0]) { #Candidate set must have at least one member or candidate
-		return unless $override;
-		$inf_gse = create_ghost($gse);
-	    }
-#handle DefinedSets
-	} elsif ($gse->is_a('DefinedSet')) {
-	    if (!$ar->[0]) { #no member
-		$override?return create_ghost($gse):return;
-	    } elsif (!$ar->[1]) { #only one member, return member itself rather than DefinedSet
-		$inf_gse = $ar->[0];
-	    }	   
-	}
+        my ($total, $inferred, $count) = count_distinct_proteins($gse); #disregarding candidates for counting (unless a CandidateSet has only candidates and no members - in this case all candidates have to have a homologue in order for the inferred variable to be set to 1)
+        return if (!$override && $total && !$inferred); #contains protein, but none can be inferred
+        $inf_gse->TotalProt($total);
+        $inf_gse->InferredProt($inferred);
+        $inf_gse->MaxHomologues($count);
+
+        #handle CandidateSets
+        if ($gse->is_a('CandidateSet')) {
+            $logger->info("Inferring candidate set " . $gse->displayName . ' (' . $gse->db_id . ')');
+            my $ar_cand = infer_members($gse->HasCandidate);
+            if ($ar_cand->[0]) {
+                $inf_gse->HasCandidate(@{$ar_cand});
+            } else {
+                $logger->info("No inferred candidates");
+                if ($ar->[0]) {
+                    if (!$ar->[1]) {
+                        $logger->info("Single member -- returning member rather than set");
+                        $inf_gse = $ar->[0]; # return single member rather than a set
+                    } else { # change to defined set if multiple members but no candidates
+                        $logger->info("Multiple members -- changing candidate set to defined set");
+                        my $inf_defined_set = new_inferred_instance_with_class($gse, 'DefinedSet');
+                        $inf_defined_set->Name(@{$inf_gse->Name});
+                        $inf_defined_set->HasMember(@{$ar});
+                        $inf_defined_set->TotalProt($total);
+                        $inf_defined_set->InferredProt($inferred);
+                        $inf_defined_set->MaxHomologues($count);
+                    
+                        $inf_gse = $inf_defined_set;
+                    }
+                } else {
+                    $logger->info("No member -- returning undef instead of instance");
+                    return unless $override;
+                    
+                    $logger->info("Creating ghost set due to forced override");
+                    $inf_gse = create_ghost($gse);
+                }
+            }
+        #handle DefinedSets
+        } elsif ($gse->is_a('DefinedSet')) {
+            $logger->info("Inferring defined set " . $gse->displayName . ' (' . $gse->db_id . ')');
+            if (!$ar->[0]) { #no member
+            	$override ? return create_ghost($gse) : return;
+            } elsif (!$ar->[1]) { #only one member, return member itself rather than DefinedSet
+            	$inf_gse = $ar->[0];
+            }	   
+        }
     }
     $inf_gse = check_for_identical_instances($inf_gse);
 #set inferredFrom attribute for entities with species
@@ -544,6 +585,7 @@ sub infer_gse {
     return $inf_gse;
 }
 
+
 #Argument: members of an EntitySet to be inferred (arrayref of PhysicalEntity instances)
 #members are given as array ref, inferred members are returned as array ref
 #the flag imposes a 'none or all' inference to avoid partial inference for CandidateSets - unless all candidates can be inferred, undef is returned
@@ -552,11 +594,11 @@ sub infer_members {
     my @tmp;
     my %seen;
     foreach my $i (@{$ar}) {
-	my $inf_i = orthologous_entity($i);
-	return if ($flag && !$inf_i); #inference for none or all
-	next unless $inf_i;
-	next if $seen{$inf_i->db_id}++;
-	push @tmp, $inf_i;
+        my $inf_i = orthologous_entity($i);
+        return if ($flag && !$inf_i); #inference for none or all
+        next unless $inf_i;
+        next if $seen{$inf_i->db_id}++;
+        push @tmp, $inf_i;
     }
     return \@tmp;
 }
@@ -574,7 +616,10 @@ sub orthologous_entity {
     if ($i->is_valid_attribute('species')) {
         unless ($orthologous_entity{$i}) {
 	    my $inf_ent;
-	    if ($i->is_a('GenomeEncodedEntity')) {
+	    if (!has_species($i)) {
+            $inf_ent = $i;
+            $logger->info("Referring to instance " . $i->displayName . ' (' . $i->db_id . ') rather than creating an inference');
+        } elsif ($i->is_a('GenomeEncodedEntity')) {
             $inf_ent = create_homol_gee($i, $override);
 	    } elsif ($i->is_a('Complex') || $i->is_a('Polymer')) {
             $inf_ent = infer_complex_polymer($i, $override);
@@ -586,7 +631,8 @@ sub orthologous_entity {
             # be inferred unchanged to other species.  I don't know if
             # the assumption makes sense or if it produces correct results,
             # but it stops the script from dying. David Croft.
-            # TODO: somebody needs to look into this.
+            # TODO: somebody needs to look into this.            
+            $logger->warn($i->displayName . ' (' . $i->db_id . ') is a simple entity with a species');
             $inf_ent = $i;
 	    } else {
             $logger->error_die("Unknown PhysicalEntity class: " . $i->class . ", instance name: " . $i->extended_displayName . "\n");
@@ -617,27 +663,59 @@ sub orthologous_entity {
     }
 }
 
+sub has_species {
+    my $instance = shift;
+    
+    if ($instance->is_a('OtherEntity')) {
+        return 0;
+    } elsif ($instance->is_a('Complex') || $instance->is_a('Polymer') || $instance->is_a('EntitySet')) {
+        return any { has_species($_) } get_contained_instances($instance);
+    } else {
+        return $instance->species->[0] ? 1 : 0;
+    }
+}
+
+sub get_contained_instances {
+    my $instance = shift;
+    if ($instance->is_a('Complex')) {
+        return @{$instance->hasComponent};
+    } elsif ($instance->is_a('EntitySet')) {
+        return (@{$instance->hasMember}, @{$instance->hasCandidate});
+    } elsif ($instance->is_a('Polymer')) {
+        return @{$instance->repeatedUnit};
+    } else {
+        return;
+    }    
+}
+
 #Argument: any instance
 #returns a new instance of the same class as the incoming instance - exception is the ReferenceIsoform class, where a ReferenceGeneProduct instance needs to be returned (no isoform information available for inferred species)
 #the inference target species is assigned where appropriate, and the compartment is copied over or, in the case of bacteria, replaced by 'intracellular' as appropriate
 sub new_inferred_instance {
-    my ($i) = @_;
+    my $i = shift;
     my $class;
     if (($protein_class eq 'ReferenceGeneProduct') && ($i->class eq 'ReferenceIsoform')) {
-	$class = 'ReferenceGeneProduct';
+        $class = 'ReferenceGeneProduct';
     } else {
-	$class = $i->class;
+        $class = $i->class;
     }
-    my $inf_i = GKB::Instance->new(-ONTOLOGY=>$i->ontology,
-				   -CLASS=>$class);
+    
+    return new_inferred_instance_with_class($i, $class);
+}
+
+sub new_inferred_instance_with_class {
+    my $i = shift;
+    my $class = shift;
+    
+    my $inf_i = GKB::Instance->new(-ONTOLOGY=>$i->ontology, -CLASS=>$class);
     $inf_i->inflated(1);
     $inf_i->Created($instance_edit);
     if ($i->is_valid_attribute('compartment') && $i->Compartment->[0]) {
-	my ($comp) = check_intracellular($i->Compartment);
-	$inf_i->Compartment(@{$comp});
+        my ($comp) = check_intracellular($i->Compartment);
+        $inf_i->Compartment(@{$comp});
     }
     if ($i->is_valid_attribute('species') && $i->Species->[0]) {
-	$inf_i->Species($taxon);
+        $inf_i->Species($taxon);
     }
     return $inf_i;
 }
@@ -646,7 +724,7 @@ sub new_inferred_instance {
 #a number of tests confirms whether a reaction can be inferred (checking input, output, catalyst and requirement)
 #returns an event instance if inference successful, undef if unsuccessful. However, if the incoming reaction does not contain any EntityWithAccessionedSequence, it returns 1. In this case the event is not counted as an eligible event.
 sub infer_event {
-    my ($event) = @_;
+    my ($event, $release_date) = @_;
     
     return if skip_event($event);
     
@@ -675,18 +753,42 @@ sub infer_event {
     $being_inferred{$event} = 1;
 #fill in physical entities - this is done in the respective methods called, the test variables decide as to whether the event inference can continue successfully or whether inference should be stopped as unsuccessful
 #    print "infer input..........................\n";
-    my $test1 = infer_attributes($event, $inf_e, 'input');
-    return unless $test1;
+    $logger->info("Inferring reaction inputs");
+    my ($input_inference_successful) = infer_attributes($event, $inf_e, 'input');
+    if (!$input_inference_successful) {
+        $logger->info(get_info($event));
+        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
+        return;
+    }
+        
 #    print "infer output..........................\n";
-    my $test2 = infer_attributes($event, $inf_e, 'output');
-    return unless $test2;
-#    print "infer catalystActivity...................................\n";
-    my $test3 = infer_catalyst($event, $inf_e);
-    return unless $test3;
-#    print "infer regulation.........................\n";
-    my ($test4, $reg) = infer_regulation($event, $inf_e);
-    return unless $test4; #returns undef only when Regulation class is Requirement
+    $logger->info("Inferring reaction outputs");
+    my ($output_inference_successful) = infer_attributes($event, $inf_e, 'output');
+    if (!$output_inference_successful) {
+        $logger->info(get_info($event));
+        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
+        return;
+    }
 
+#    print "infer catalystActivity...................................\n";
+    $logger->info("Inferring reaction catalyst activities");
+    my ($catalyst_inference_successful) = infer_catalyst($event, $inf_e);
+    if (!$catalyst_inference_successful) {
+        $logger->info(get_info($event));
+        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
+        return;
+    }
+#    print "infer regulation.........................\n";
+    
+    my ($regulation_inference_successful, $regulation_collection) = infer_regulation($event, $inf_e); #returns undef only when Regulation class is Requirement
+    $logger->info("Inferring reaction regulation instances");
+    if (!$regulation_inference_successful) {
+        $logger->info(get_info($event));
+        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
+        return;
+    }
+    
+    $inf_e->releaseDate($release_date);
     $inf_e->TotalProt($total);
     $inf_e->InferredProt($inferred);
 #    $inf_e->MaxHomologues($max);
@@ -704,25 +806,25 @@ sub infer_event {
     $dba->update_attribute($event, 'orthologousEvent');
 
     unless ($opt_from eq 'hsap') {
-	update_human_event($inf_e); #to make sure reactions are visible in the sky (coordinates for human events are taken as "template" for other species events)
+        update_human_event($inf_e); #to make sure reactions are visible in the sky (coordinates for human events are taken as "template" for other species events)
     }
     $inferred_event{$event} = $inf_e; #keep track of human - target species event pairs
     $being_inferred{$event} = 0;
-
-    if ($reg->[0]) {
-	foreach my $r (@{$reg}) {
-	    my $source_regulation = $r->{source};
-        my $inferred_regulation = $r->{inferred};
+    
+    if ($regulation_collection->[0]) {
+        foreach my $regulation_pair (@{$regulation_collection}) {
+            my $source_regulation = $regulation_pair->{source};
+            my $inferred_regulation = $regulation_pair->{inferred};
         
-        $inferred_regulation->RegulatedEntity($inf_e);
-	    $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_e has been stored
-        $source_regulation->inferredTo(@{$source_regulation->inferredTo});
-        $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
-        $dba->update_attribute($source_regulation, 'inferredTo');
-	}
+            $inferred_regulation->RegulatedEntity($inf_e);
+            $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_e has been stored
+            $source_regulation->inferredTo(@{$source_regulation->inferredTo});
+            $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
+            $dba->update_attribute($source_regulation, 'inferredTo');
+        }
     }
     $count_inferred_leaves++; #counts successfully inferred events
-    push @all_human_events, $event;
+    push @inferrable_human_events, $event;
     print $inf $inf_e->db_id, "\t", $inf_e->displayName, "\n";
 
     return $inf_e;
@@ -782,6 +884,12 @@ sub skip_event {
 	}
 }
 
+sub get_info {
+    my $instance = shift;
+    
+    return $instance->displayName . ' (' . $instance->db_id . ")\n";
+}
+
 #Argument: Event instance to be inferred, inferred event instance, attribute name
 #infers attribute values and attaches them to the inferred event
 #returns 1 if inference successful, otherwise undef
@@ -789,9 +897,9 @@ sub infer_attributes {
     my ($event, $inf_e, $attribute) = @_;
     my @attribute_values;
     foreach my $i (@{$event->$attribute}) {
-	my $test = orthologous_entity($i);
-	return unless orthologous_entity($i);
-	push @attribute_values, orthologous_entity($i);
+        my $orthologous_entity = orthologous_entity($i);
+        return unless $orthologous_entity;
+        push @attribute_values, $orthologous_entity;
     }
     $inf_e->attribute_value($attribute, @attribute_values);
     return 1;
@@ -802,11 +910,13 @@ sub infer_attributes {
 #returns 1 if inference successful, otherwise undef
 sub infer_catalyst {
     my ($event, $inf_e) = @_;
+
     foreach my $cat (@{$event->catalystActivity}) {
-	my $inf_cat = create_inf_cat($cat);
-	return unless $inf_cat;
-	$inf_e->CatalystActivity;
-	$inf_e->add_attribute_value('catalystActivity', $inf_cat);
+        my $inf_cat = create_inf_cat($cat);
+        return unless $inf_cat;
+        
+        $inf_e->CatalystActivity;
+        $inf_e->add_attribute_value('catalystActivity', $inf_cat);
     }
     return 1;
 }
@@ -817,18 +927,19 @@ sub infer_catalyst {
 sub create_inf_cat {
     my ($cat) = @_;
     $homol_cat{$cat} && return $homol_cat{$cat};
+    
     my $inf_cat = new_inferred_instance($cat);
     $inf_cat->Activity(@{$cat->Activity});
     my $i = $cat->physicalEntity->[0];
     if ($i) {
-	return unless orthologous_entity($i);
-	$inf_cat->attribute_value('physicalEntity', orthologous_entity($i));
+        return unless orthologous_entity($i);
+        $inf_cat->attribute_value('physicalEntity', orthologous_entity($i));
     }
     my @tmp;
     foreach my $au (@{$cat->ActiveUnit}) {
-	next if $au->is_a('Domain');
-	my $inf_au = orthologous_entity($au);
-	$inf_au && push @tmp, $inf_au;
+        next if $au->is_a('Domain');
+        my $inf_au = orthologous_entity($au);
+        $inf_au && push @tmp, $inf_au;
     }
     $tmp[0] && $inf_cat->ActiveUnit(@tmp);
     my ($test, $reg) = infer_regulation($cat);
@@ -836,16 +947,16 @@ sub create_inf_cat {
     $inf_cat = check_for_identical_instances($inf_cat);
     $homol_cat{$cat} = $inf_cat;
     if ($reg->[0]) {
-	foreach my $r (@{$reg}) {
-	    my $source_regulation = $r->{source};
-        my $inferred_regulation = $r->{inferred};
+        foreach my $r (@{$reg}) {
+            my $source_regulation = $r->{source};
+            my $inferred_regulation = $r->{inferred};
         
-        $inferred_regulation->RegulatedEntity($inf_cat);
-	    $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_cat has been stored
+            $inferred_regulation->RegulatedEntity($inf_cat);
+            $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_cat has been stored
         $source_regulation->inferredTo(@{$source_regulation->inferredTo});
         $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
         $dba->update_attribute($source_regulation, 'inferredTo');
-	}
+        }
     }
     return $inf_cat;
 }
@@ -877,7 +988,7 @@ sub infer_regulation {
             };
         }
     }
-    return 1, \@reg;
+    return (1, \@reg);
 }
 
 #Argument: an instance allowed as regulator
@@ -888,17 +999,17 @@ sub infer_regulator {
     
     my $inf_reg;
     if ($reg->is_a('PhysicalEntity')) {
-	$inf_reg = orthologous_entity($reg);
+        $inf_reg = orthologous_entity($reg);
     } elsif ($reg->is_a('CatalystActivity')) {
-	$inf_reg = create_inf_cat($reg);
+        $inf_reg = create_inf_cat($reg);
     } elsif ($reg->is_a('Event')) {
-	if ($being_inferred{$reg}) {
-	    print $regulator $reg->db_id . "\n";
-	    return;
-	}
+        if ($being_inferred{$reg}) {
+            print $regulator $reg->db_id . "\n";
+            return;
+        }
 	
-	$inf_reg = infer_event($reg);
-	return if defined $inf_reg && $inf_reg == 1; #the event has no accessioned sequences and is therefore not eligible for inference
+        $inf_reg = infer_event($reg);
+        return if defined $inf_reg && $inf_reg == 1; #the event has no accessioned sequences and is therefore not eligible for inference
     }
     return $inf_reg;
 }
@@ -931,12 +1042,12 @@ sub infer_complex_polymer {
     $inf_cp->Summation($summation_complex);
     my @new_components;
     if ($cp->is_a('Complex')) {
-	foreach my $comp (@{$cp->HasComponent}) {
-	    push @new_components, orthologous_entity($comp, 1);
-	}
-	$inf_cp->HasComponent(@new_components);
+        foreach my $comp (@{$cp->HasComponent}) {
+            push @new_components, orthologous_entity($comp, 1);
+        }
+        $inf_cp->HasComponent(@new_components);
     } else {
-	foreach my $comp (@{$cp->RepeatedUnit}) {
+        foreach my $comp (@{$cp->RepeatedUnit}) {
             push @new_components, orthologous_entity($comp, 1);
         }
         $inf_cp->RepeatedUnit(@new_components);
@@ -949,9 +1060,9 @@ sub infer_complex_polymer {
         $inf_cp->InferredFrom;
         $inf_cp->add_attribute_value_if_necessary('inferredFrom', $cp);
         $dba->update_attribute($inf_cp, 'inferredFrom');
-	$cp->InferredTo;
-	$cp->add_attribute_value_if_necessary('inferredTo', $inf_cp);
-	$dba->update_attribute($cp, 'inferredTo');
+        $cp->InferredTo;
+        $cp->add_attribute_value_if_necessary('inferredTo', $inf_cp);
+        $dba->update_attribute($cp, 'inferredTo');
     }
     $override && return $inf_cp; #skip assignment to %inferred_cp, otherwise events may wrongly be inferred
     $inferred_cp{$cp} = $inf_cp;
@@ -965,8 +1076,8 @@ sub create_homol_gee {
     my ($i, $override) = @_;
     $homol_gee{$i} && return $homol_gee{$i};
     if ($i->class eq 'GenomeEncodedEntity') { #GEEs without accession don't have orthologues by default and should not be inferred, unless $override
-	return unless $override;
-	return create_ghost($i);
+        return unless $override;
+        return create_ghost($i);
     }
     my ($ar, $count) = infer_ewas($i); #returns list and number of homologues (if there are more than $opt_filt homologues, the list contains $opt_filt homologues, and $count = $opt_filt + 1)
     if ($count>1) { # more than one homologue -> create DS
@@ -974,7 +1085,7 @@ sub create_homol_gee {
                                      -CLASS=>'DefinedSet');
         $gse->inflated(1);
         $gse->Created($instance_edit);
-	my ($comp) = check_intracellular($i->Compartment);
+        my ($comp) = check_intracellular($i->Compartment);
         $gse->Compartment(@{$comp});
         $gse->Name('Homologues of '.$i->Name->[0]);
         if (defined $opt_filt && ($count > $opt_filt)) {
@@ -983,17 +1094,17 @@ sub create_homol_gee {
         $gse->Species($taxon);
         $gse->HasMember(@{$ar});
         $gse = check_for_identical_instances($gse);
-	$gse->InferredFrom;
+        $gse->InferredFrom;
         $gse->add_attribute_value_if_necessary('inferredFrom', $i);
         $dba->update_attribute($gse, 'inferredFrom');
-	$i->InferredTo;
+        $i->InferredTo;
         $i->add_attribute_value_if_necessary('inferredTo', $gse);
-	$dba->update_attribute($i, 'inferredTo');
+        $dba->update_attribute($i, 'inferredTo');
         $homol_gee{$i} = $gse;
     } elsif ($count==1) {
         $homol_gee{$i} = $ar->[0];
     } else { #no homologue
-	return unless $override;
+        return unless $override;
         return create_ghost($i);
     }
     return $homol_gee{$i};
@@ -1023,75 +1134,138 @@ sub create_ghost {
 #creates inferred EWAS instances, and the required ReferenceEntities
 #returns array ref with homologue instances and the number of homologues (if there are more than $opt_filt homologues, the list contains $opt_filt homologues, and $count = $opt_filt + 1)
 #the array is empty if there are no homologues
+my %inferred_EWASs;
 sub infer_ewas {
-    my ($i) = @_;
+    my $i = shift;
     my @tmp;
     my $id = $i->referenceEntity->[0]->identifier->[0];
     my $count = 0;
-    foreach my $homol (@{$homologue{$id}}) {
-        unless ($homol) {die "empty homologue{$id}!\n";} #otherwise empty ewas are created, check why...
+    foreach my $homologue_id (@{$homologue{$id}}) {
+        if (!$homologue_id) {die "empty homologue{$id}!\n";} #otherwise empty ewas are created, check why...
         $count++;
-	last if ($opt_filt && ($count > $opt_filt));
-	my ($source, $inf_id) = split/:/, $homol; #$source indicates whether the identifier comes from UniProt (SWISS or TREMBL), or from ensembl (ENSP)
-#create ReferenceEntity
-        my $inf_rps = $seen_rps{$inf_id};
-        unless ($inf_rps) {
-	    $inf_rps = new_inferred_instance($i->ReferenceEntity->[0]);
-	    my $ref_db;
-	    if ($source eq 'ENSP') {
-		$ref_db = $ens_db;
-	    } else {
-		$ref_db = $uni_db;
-	    }
-	    $inf_rps->ReferenceDatabase($ref_db);
-            $inf_rps->Identifier($inf_id);
-	    my $ref_gene = create_ReferenceDNASequence($inf_id);
-	    $inf_rps->ReferenceGene(@{$ref_gene});
-            $inf_rps->Species($taxon);
-            $inf_rps = check_for_identical_instances($inf_rps);
-            $seen_rps{$inf_id} = $inf_rps;
-	}
-#create EWAS
+        last if ($opt_filt && ($count > $opt_filt));
+        
+        #create EWAS
         my $inf_ewas = new_inferred_instance($i);
+        push @{$inferred_EWASs{$i->db_id}}, $inf_ewas;
+        my $inf_rps = infer_reference_gene_product($homologue_id);
         $inf_ewas->ReferenceEntity($inf_rps);
-        $inf_ewas->Name($inf_id);
+        $inf_ewas->Name($inf_rps->identifier->[0]);
         $inf_ewas->StartCoordinate(@{$i->StartCoordinate});
         $inf_ewas->EndCoordinate(@{$i->EndCoordinate});
         if ((defined $inf_ewas->StartCoordinate->[0]  && $inf_ewas->StartCoordinate->[0] > 1) || (defined $inf_ewas->EndCoordinate->[0] && $inf_ewas->EndCoordinate->[0] > 1)) {
-            $inf_ewas->Name($i->Name->[0], $inf_id);
+            $inf_ewas->Name($i->Name->[0], $inf_rps->identifier->[0]);
         }
-#infer modifications
-        my @mod_res;
-        my $flag;
-        foreach my $res (@{$i->HasModifiedResidue}) {
-            my $inf_res = new_inferred_instance($res);
-            $inf_res->Coordinate(@{$res->Coordinate});
-            $inf_res->ReferenceSequence($inf_rps);
-	    $inf_res->is_valid_attribute('modification') && $inf_res->Modification(@{$res->Modification}); #currently only GroupModifiedResidue has modification
-#check whether the modification is a phosphorylation, if so add 'phospho' to name
-	    if (!$flag && ($res->PsiMod->[0] && $res->PsiMod->[0]->Name->[0] =~ /phospho/)) {
-                $inf_ewas->Name('phospho-'.$inf_ewas->Name->[0]);
-                $flag++; #to make sure 'phospho-' is added only once
-            }
-            if ($res->Coordinate->[0]) {
-                $inf_res->_displayName($res->displayName." (in $from_name\)");
-            }
-	    $inf_res->is_valid_attribute('residue') && $inf_res->Residue(@{$res->Residue}); #this attribute has been removed from data model, only here for backward compatibility
-	    $inf_res->PsiMod(@{$res->PsiMod});
-            $inf_res = check_for_identical_instances($inf_res);
-            push @mod_res, $inf_res;
+        my @modified_residues = grep { $_->is_a('TranslationalModification') } @{$i->HasModifiedResidue};
+        if (phospho_modification(\@modified_residues)) {
+            $inf_ewas->Name('phospho-' . $inf_ewas->name->[0]);
         }
-        $inf_ewas->HasModifiedResidue(@mod_res);
+        
+        #infer modifications
+        my @inferred_modified_residues;
+        foreach my $residue (@modified_residues) {
+            my $inferred_residues = infer_modified_residue($inf_ewas, $residue, \%inferred_EWASs);
+            if ($inferred_residues->[0]) {
+                push @inferred_modified_residues, @{$inferred_residues};
+            }
+        }
+        $inf_ewas->HasModifiedResidue(@inferred_modified_residues);
+        
         $inf_ewas = check_for_identical_instances($inf_ewas); #in case it exists already, replace with existing one
         $inf_ewas->InferredFrom;
         $inf_ewas->add_attribute_value_if_necessary('inferredFrom', $i);
         $dba->update_attribute($inf_ewas, 'inferredFrom');
-	$i->InferredTo;
+        $i->InferredTo;
         $i->add_attribute_value_if_necessary('inferredTo', $inf_ewas);
         $dba->update_attribute($i, 'inferredTo');
         push @tmp, $inf_ewas;
     }
     return \@tmp, $count;
+}
+
+sub infer_reference_gene_product {
+    my $reference_identifier = shift;
+    
+    my ($source, $identifier) = split /:/, $reference_identifier;
+        
+    state $seen_reference_gene_product;
+    
+    #create ReferenceEntity
+    my $inf_rps = $seen_reference_gene_product->{$identifier};
+    if (!$inf_rps) {
+        $inf_rps = new_inferred_instance($i->ReferenceEntity->[0]);
+        my $ref_db;
+        if ($source eq 'ENSP') {
+            $ref_db = $ens_db;
+        } else {
+            $ref_db = $uni_db;
+        }
+        
+        $inf_rps->ReferenceDatabase($ref_db);
+        $inf_rps->Identifier($identifier);
+        my $ref_gene = create_ReferenceDNASequence($identifier);
+        $inf_rps->ReferenceGene(@{$ref_gene});
+        $inf_rps->Species($taxon);
+        $inf_rps = check_for_identical_instances($inf_rps);
+        $seen_reference_gene_product->{$identifier} = $inf_rps;
+    }
+    
+    return $inf_rps;
+}
+
+sub phospho_modification {
+    my $modified_residues = shift;
+    
+    return any {$_->PsiMod->[0] && $_->PsiMod->[0]->name->[0] =~ /phospho/ } @{$modified_residues};
+}
+
+sub infer_modified_residue {
+    my $inf_ewas = shift;
+    my $residue = shift;
+    my $inferred_EWASs = shift;
+    
+    my $inferred_residue = new_inferred_instance($residue);
+    $inferred_residue->_displayName($residue->displayName." (in $from_name\) at unknown position");
+
+    $inferred_residue->PsiMod(@{$residue->PSiMod});
+            
+    $inferred_residue->is_valid_attribute('modification') && $inf_res->Modification(@{$residue->Modification}); #currently only GroupModifiedResidue has modification
+    $inferred_residue->is_valid_attribute('residue') && $inf_res->Residue(@{$residue->Residue}); #this attribute has been removed from data model, only here for backward compatibility
+    if ($residue->is_a('InterChainCrosslinkedResidue') {
+        my $other_EWAS = get_other_EWAS($residue); # The second EWAS the InterChainCrosslinkedResidue attaches
+        my @inferred_other_EWASs = @{$inferred_EWASs->{$other_EWAS->db_id}};
+        return unless @inferred_other_EWASs;
+        
+        my @inferred_residues;
+        foreach my $inferred_other_EWAS (@inferred_other_EWASs) {
+            my $inferred_ICCR = $inferred_residue->clone; $ # ICCR - InterChainCrosslinkedResidue
+            my $inferred_equivalent_ICCR = $inferred_residue->clone;
+            
+            $inferred_ICCR->referenceSequence($inf_ewas->referenceEntity->[0]);
+            $inferred_ICCR->secondReferenceSequence($inferred_other_EWAS->referenceEntity->[0]);
+            $inferred_equivalent_ICCR->referenceSequence($inferred_other_EWAS->referenceEntity->[0]);
+            $inferred_equivalent_ICCR->secondReferenceSequence($inf_ewas->referenceEntity->[0]);
+            $inferred_ICCR->equivalentTo($inferred_equivalent_ICCR);
+            $inferred_equivalent_ICCR->equivalentTo($inferred_ICCR);
+            
+            $inferred_other_EWAS->add_attribute_value('hasModifiedResidue', $inferred_equivalent_ICCR);
+            
+            push @inferred_residues, $inferred_ICCR;
+        }
+        return \@inferred_residues;
+    } else {
+        $inferred_residue->ReferenceSequence($inf_ewas->referenceEntity->[0]);
+        $inferred_residue = check_for_identical_instances($inf_res);
+        return [$inferred_residue];
+    }
+}
+
+sub get_other_EWAS {
+    my $residue = shift;
+    my $equivalent_ICCR = $residue->equivalentTo->[0];
+    my $other_ewas = $equivalent_ICCR->reverse_attribute_value('hasModifiedResidue')->[0];
+    
+    return $other_ewas;
 }
 
 #creates ReferenceDNASequence instances for the ENSG identifier mapping to the protein, and for some model organisms (for which Ensembl uses their original ids) also a direct "link" to the model organism database - to be filled into the referenceGene slot of the ReferenceGeneProduct
@@ -1138,31 +1312,40 @@ sub check_for_identical_instances {
     
     $i->identical_instances_in_db(undef); #clear first
     $dba->fetch_identical_instances($i);
+    $logger->info("Checking for identical instances for " . ($i->db_id || ('unstored instance ' . ($i->name->[0] ? $i->name->[0] : ''))));
     if ($i->identical_instances_in_db && $i->identical_instances_in_db->[0]) {
-	my $count_ii = @{$i->identical_instances_in_db}; #number of elements
-	if ($count_ii == 1) {
-	    $logger->info("Replaced with existing identical instance: " . $i->identical_instances_in_db->[0]->db_id . "\n");
-	    return $i->identical_instances_in_db->[0];
-	} else { #interactive replacement
-	    $logger->info("This entity has more than one identical instances.......\n");
-#The following condition check is only needed for databases in the old data model when isoforms were included in the ReferencePeptideSequence class  - the details are slightly complicated, but that was one reason why we have changed the data model - so it's sorted now and this check is only kept for backward compatibility
-	    if (($protein_class eq 'ReferencePeptideSequence') &&
-		$i->is_a('ReferencePeptideSequence') && $i->identical_instances_in_db->[0]->VariantIdentifier->[0]) {
-		$logger->info($i->identical_instances_in_db->[0]->VariantIdentifier->[0], " ***different isoforms used?***\n");
-	    } else {
-#temporary hack to avoid failing of script due to duplicates
-		$logger->warn("***duplicates***:\n");
-		foreach (@{$i->identical_instances_in_db}) {
-		    $logger->warn("\t" . $_->extended_displayName . "\n");
-		}
-	    }
-	    return $i->identical_instances_in_db->[0]; #return first element for now
-	}
+        my $count_ii = @{$i->identical_instances_in_db}; #number of elements
+        if ($count_ii == 1) {
+            $logger->info("Replaced with existing identical instance: " . $i->identical_instances_in_db->[0]->db_id . "\n");
+            return $i->identical_instances_in_db->[0];
+        } else { #interactive replacement
+            $logger->info("This entity has more than one identical instances.......\n");
+            #The following condition check is only needed for databases in the old data model when isoforms were included in the ReferencePeptideSequence class  - the details are slightly complicated, but that was one reason why we have changed the data model - so it's sorted now and this check is only kept for backward compatibility
+    	    if (($protein_class eq 'ReferencePeptideSequence') && $i->is_a('ReferencePeptideSequence') && $i->identical_instances_in_db->[0]->VariantIdentifier->[0]) {
+                $logger->info($i->identical_instances_in_db->[0]->VariantIdentifier->[0], " ***different isoforms used?***\n");
+            } else {
+                #temporary hack to avoid failing of script due to duplicates
+        		$logger->warn("***duplicates***:\n");
+        		foreach (@{$i->identical_instances_in_db}) {
+        		    $logger->warn("\t" . $_->extended_displayName . "\n");
+        		}
+    	    }
+            return $i->identical_instances_in_db->[0]; #return first element for now
+        }
     } else {
-	my $ID = $dba->store($i);
-	$logger->info("Stored instance: $ID\n");
-	return $i;
+        store_instance($i);
+        return $i;
     }
+}
+
+sub store_instance {
+    my $instance = shift;
+    
+    my $logger = get_logger(__PACKAGE__);
+    
+    my $ID = $dba->store($instance);
+    $logger->info("Stored Instance: $ID");
+    #push @newly_stored_instances, $instance;
 }
 
 #creates and stores the event hierarchy above a given inferred reaction, based on the hierarchy of the corresponding human events
@@ -1200,7 +1383,7 @@ sub create_orthologous_generic_event {
                 unless ($opt_from eq 'hsap') {
                     update_human_event($gen_inf_event);
                 }
-                push @all_human_events, $gen_hum_event;
+                push @inferrable_human_events, $gen_hum_event;
             }
             create_orthologous_generic_event($gen_hum_event);
 	    

@@ -2,7 +2,7 @@
 /**
  * Class for working with MO files
  *
- * @version $Id: mo.php 718 2012-10-31 00:32:02Z nbachiyski $
+ * @version $Id: mo.php 1157 2015-11-20 04:30:11Z dd32 $
  * @package pomo
  * @subpackage mo
  */
@@ -10,10 +10,26 @@
 require_once dirname(__FILE__) . '/translations.php';
 require_once dirname(__FILE__) . '/streams.php';
 
-if ( !class_exists( 'MO' ) ):
+if ( ! class_exists( 'MO', false ) ):
 class MO extends Gettext_Translations {
 
 	var $_nplurals = 2;
+
+	/**
+	 * Loaded MO file.
+	 *
+	 * @var string
+	 */
+	private $filename = '';
+
+	/**
+	 * Returns the loaded MO file.
+	 *
+	 * @return string The loaded MO file.
+	 */
+	public function get_filename() {
+		return $this->filename;
+	}
 
 	/**
 	 * Fills up with the entries from MO file $filename
@@ -21,10 +37,15 @@ class MO extends Gettext_Translations {
 	 * @param string $filename MO file to load
 	 */
 	function import_from_file($filename) {
-		$reader = new POMO_FileReader($filename);
-		if (!$reader->is_resource())
+		$reader = new POMO_FileReader( $filename );
+
+		if ( ! $reader->is_resource() ) {
 			return false;
-		return $this->import_from_reader($reader);
+		}
+
+		$this->filename = (string) $filename;
+
+		return $this->import_from_reader( $reader );
 	}
 
 	/**
@@ -124,7 +145,7 @@ class MO extends Gettext_Translations {
 		//TODO: warnings for control characters
 		$exported = $entry->singular;
 		if ($entry->is_plural) $exported .= chr(0).$entry->plural;
-		if (!is_null($entry->context)) $exported = $entry->context . chr(4) . $exported;
+		if ($entry->context) $exported = $entry->context . chr(4) . $exported;
 		return $exported;
 	}
 
@@ -134,7 +155,7 @@ class MO extends Gettext_Translations {
 	 */
 	function export_translations($entry) {
 		//TODO: warnings for control characters
-		return implode(chr(0), $entry->translations);
+		return $entry->is_plural ? implode(chr(0), $entry->translations) : $entry->translations[0];
 	}
 
 	/**

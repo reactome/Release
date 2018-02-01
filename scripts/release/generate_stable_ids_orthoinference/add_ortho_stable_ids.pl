@@ -12,6 +12,7 @@ use Scalar::Util 'blessed';
 
 use lib '/usr/local/gkb/modules';
 use GKB::DBAdaptor;
+use GKB::CommonUtils;
 use GKB::Config;
 use GKB::Utils_esther;
 
@@ -42,7 +43,7 @@ get_api_connections()->{$release_db}->execute("START TRANSACTION") unless $dry_r
 foreach my $db_id (get_db_ids($release_db)) {    
     my $stable_id = fetch_stable_id($db_id, $release_db);
     next unless $stable_id;
-    next unless $stable_id->identifier->[0] =~ /R-HSA/;
+    #next unless $stable_id->identifier->[0] =~ /R-HSA/;
 
     foreach my $orthologous_instance (get_orthologous_instances(get_instance($db_id, $release_db))) {
         eval {
@@ -60,7 +61,7 @@ foreach my $db_id (get_db_ids($release_db)) {
         }        
         
         my $identifier = $stable_id->identifier->[0];
-        $identifier =~ s/HSA/$species/;
+        $identifier =~ s/R-[A-Z]{3}/R-$species/;
         #$logger->info("$db_id ST_ID $identifier");
 
         $seen_id{$identifier}++;
@@ -77,20 +78,8 @@ foreach my $db_id (get_db_ids($release_db)) {
             create_stable_id($orthologous_instance->db_id, $release_db, $identifier) unless $dry_run;
             $logger->info("Stable ID $identifier created for inferred instance " .
                           $orthologous_instance->db_id . ' inferred from ' . $db_id);
-        } elsif ($st_id->identifier->[0] ne $identifier) {
-            unless ($dry_run) {
-                $st_id->inflate();
-                $st_id->identifier($identifier);
-                $st_id->identifierVersion(1);
-                $st_id->displayName("$identifier.1");
-                $st_id->Modified(@{$st_id->Modified});
-                $st_id->add_attribute_value('modified', get_instance_edit($release_db));
-                
-                foreach my $attribute (qw/identifier identifierVersion _displayName modified/) {
-                    get_api_connections()->{$release_db}->update_attribute($st_id, $attribute);
-                }
-            }
-            $logger->info("Stable ID updated to $identifier for " . $orthologous_instance->db_id . " (" . $orthologous_instance->displayName . ")");
+        } else {
+            $logger->info("Stable id already exists in $release_db as " . $st_id->identifier->[0] . " for $species inferred from " . $db_id);
         }
     }
 }
@@ -105,6 +94,7 @@ sub get_orthologous_instances {
     my @orthologous_instances;
 
     if ($instance->is_a('Event')) {
+        return unless is_human($instance);
         push @orthologous_instances, @{$instance->attribute_value('orthologousEvent')};
     } elsif ($instance->is_a('PhysicalEntity') || $instance->is_a('Regulation')) {
         push @orthologous_instances, @{$instance->attribute_value('inferredTo')};
