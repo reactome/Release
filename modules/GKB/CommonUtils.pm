@@ -106,6 +106,69 @@ sub get_dba {
     );
 }
 
+sub restore_database {
+    my $db = shift;
+    my $host = shift;
+    my $source = shift;
+    my $overwrite = shift;
+    my $backup = shift;
+    
+    if (database_exists($db, $host) && $backup) {
+        backup_database($db, $host);
+    }
+    
+    create_database($db, $host, $overwrite);
+    populate_database($db, $host, $source);
+}
+
+sub backup_database {
+    my $db = shift;
+    my $host = shift;
+    
+    my $user = $GKB::Config::GK_DB_USER;
+    my $pass = $GKB::Config::GK_DB_PASS;
+    my $timestamp = localtime(time);
+    
+    return (system("mysqldump -u $user -p$pass -h $host $db > $db.$timestamp.dump") == 0);
+}
+
+sub create_database {
+    my $db = shift;
+    my $host = shift;
+    my $overwrite = shift;
+    
+    if (database_exists($db, $host) && !$overwrite) {
+        confess "Database $db on $host already exists\n";
+    }
+    
+    my $user = $GKB::Config::GK_DB_USER;
+    my $pass = $GKB::Config::GK_DB_PASS;
+    
+    return (system("mysql -u $user -p$pass -h $host -e 'drop database if exists $db; create database $db'") == 0);
+}
+
+sub populate_database {
+    my $db = shift;
+    my $host = shift;
+    my $source = shift;
+    
+    my $user = $GKB::Config::GK_DB_USER;
+    my $pass = $GKB::Config::GK_DB_PASS;
+    
+    my $stream = ($source =~ /\.gz$/) ? 'zcat' : 'cat';
+    return (system("$stream $source | mysql -u $user -p$pass -h $host $db") == 0);
+}
+
+sub database_exists {
+    my $db = shift;
+    my $host = shift;
+    
+    my $user = $GKB::Config::GK_DB_USER;
+    my $pass = $GKB::Config::GK_DB_PASS;
+    
+    return (system("mysql -u $user -p$pass -h $host -e 'use $db' 2> /dev/null") == 0);
+}
+
 sub get_name_and_id {
     my $instance = shift;
     
@@ -265,19 +328,19 @@ sub get_instance_modifier {
 }
 
 sub get_event_modifier {
-	my $event = shift;
-	
-	return 'Unknown' unless $event;
-	
-	my $author_instance;
+    my $event = shift;
+
+    return 'Unknown' unless $event;
+
+    my $author_instance;
     foreach my $modified_instance (reverse @{$event->modified}) {
         $author_instance ||= $modified_instance->author->[0] unless $modified_instance->author->[0] && $modified_instance->author->[0]->db_id == 140537;
     }
-	$author_instance ||= $event->created->[0]->author->[0];
-	
-	my $author_name = $author_instance->displayName if $author_instance;
-	
-	return $author_name || 'Unknown';
+    $author_instance ||= $event->created->[0]->author->[0];
+
+    my $author_name = $author_instance->displayName if $author_instance;
+
+    return $author_name || 'Unknown';
 }
 
 sub is_human {
@@ -328,6 +391,9 @@ sub get_date_time_object {
 
 our @EXPORT = qw/
 get_dba
+backup_database
+restore_database
+database_exists
 get_name_and_id
 get_all_species_in_entity
 is_electronically_inferred
