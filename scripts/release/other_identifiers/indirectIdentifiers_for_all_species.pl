@@ -1,21 +1,8 @@
 #!/usr/local/bin/perl -w
 use strict;
 
-BEGIN {
-    my ($path) = $0 =~ /^(\S+)$/;
-    my @a = split('/',$path);
-    pop @a;
-    if (@a && !$a[0]) {
-        $#a = $#a - 2;
-    } else {
-        push @a, ('..','..','..');
-    }
-    push @a, 'modules';
-    my $libpath = join('/', @a);
-    unshift (@INC, $libpath);
-}
-
-use File::Path;
+use Data::Dumper;
+use File::Path qw/make_path/;
 use Getopt::Long;
 
 use GKB::Utils;
@@ -46,9 +33,9 @@ my $dba = GKB::DBAdaptor->new
      );
 
 my @species = $dba->species_for_ref_dbs('ENSEMBL','UniProt');
-print STDERR "My species:\n",Dumper \@species;
+print STDERR "My species:\n", Dumper(\@species);
 
-make_path('output', { mode => 0775});
+make_path('output', { mode => 0775 });
 my @cmds = (
 	    qq(./retrieve_indirectIdentifiers_from_mart.pl @params),
 	    qq(./indirectIdentifiers_from_mart.pl @params),
@@ -64,7 +51,3 @@ foreach my $sp (@species) {
 }
 
 print STDERR "$0: no fatal errors.\n";
-
-
-
-

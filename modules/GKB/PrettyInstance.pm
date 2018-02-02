@@ -1911,7 +1911,10 @@ sub reactionmap_key {
 sub top_browsing_view {
     my ($self, $doi_flag) = @_;
 
-    $self->urlmaker->turn_off_pwb_link();
+    #$self->urlmaker->turn_off_pwb_link();
+    my $current_url_maker = $self->urlmaker();
+    $self->urlmaker($self->create_url_maker('author_contributions'));
+    
     my $authors = GKB::Utils::get_authors_recursively($self);
     my $authors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$authors}) || '&nbsp';
         
@@ -1931,7 +1934,7 @@ sub top_browsing_view {
         }
         $out .= qq(<TD>$doi</TD>);
     } else {
-        my $urlmaker_instance = $self->urlmaker->clone();
+        my $urlmaker_instance = $current_url_maker->clone();
         $urlmaker_instance->_delete_cached_url();
         my $treemaker = GKB::HtmlTreeMaker::NoReactions->new(-ROOT_INSTANCES => [$self],
 					    -URLMAKER => $urlmaker_instance,
@@ -1978,6 +1981,15 @@ sub top_browsing_view {
 	. qq(<TD CLASS="editor">$editors_str</TD>)
 	. qq(</TR>\n);
     return $out;
+}
+
+sub create_url_maker {
+    my ($self, $script_name) = @_;
+    
+    return GKB::URLMaker->new(
+        -SCRIPTNAME => $script_name,
+        'DB' => scalar $self->cgi->param('DB')
+    );
 }
 
 # reference from ensembl pages for mouseover representation

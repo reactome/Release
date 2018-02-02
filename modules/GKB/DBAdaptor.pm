@@ -401,8 +401,8 @@ sub new {
 	$self->db_name($db);
     }
     
-
     my $dbh = eval { DBI->connect($dsn,$user,$password, {RaiseError => 1, mysql_enable_utf8 => 1}); };
+
     if ($@ || !$dbh) {
     	my $throw_string = "Could not connect to database ";
     	if (defined $db) {
@@ -2565,7 +2565,7 @@ sub fetch_multiple_attributes_values {
     foreach my $i (0 .. $#{$order}) {
 	ref($order->[$i]) || $self->throw("Not an array ref: '$order->[$i]'.");
 	$order{$order->[$i]->[0]}->{'order'} = $i;
-	$order{$order->[$i]->[0]}->{'desc'} = 1 if (uc($order->[$i]->[1]) eq 'DESC');
+	$order{$order->[$i]->[0]}->{'desc'} = 1 if (defined $order->[$i]->[1] && uc($order->[$i]->[1]) eq 'DESC');
     }
     my (@select,%from,@where,@order);
     my $db_id_name = $GKB::Ontology::DB_ID_NAME;

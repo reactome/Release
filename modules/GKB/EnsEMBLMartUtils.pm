@@ -161,7 +161,7 @@ sub get_identifiers {
         push @identifiers, (split /\n/, $results);
     }
     
-    return @identifiers, "interpro", "smart", "pfam", "prints";
+    return @identifiers, "interpro", "smart", "pfam", "prints", "go_id", "goslim_goa_accession";
 }
 
 sub get_registry_xml_contents {

@@ -55,7 +55,8 @@ eval {
         if (defined $header) {
 	    print $CGI->header(-charset => 'UTF-8');
 	    print $header;
-	    print $enclosing_div_start;
+        print deprecated_warning($CGI->param('QUERY'));
+        print $enclosing_div_start;
 	    $wu->handle_simple_query_form(1);
 	    print $enclosing_div_end;
 	    print $footer;
@@ -80,3 +81,17 @@ sub handle_error {
     }
 }
 
+sub deprecated_warning {
+    my $query = shift // '{query}';
+    
+    my $replacement_url = "http://reactome.org/content/query?q=$query";
+    
+    return <<END;
+    <div style="background:gainsboro;border:1px solid gray;text-align:center">
+        <span style="font-size:larger;color:red">
+            ATTENTION: This page will be retired on July 31, 2017. Please use its replacement
+            <a href="$replacement_url">$replacement_url</a>
+        </span>
+    </div>
+END
+}

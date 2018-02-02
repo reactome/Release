@@ -328,19 +328,19 @@ sub get_instance_modifier {
 }
 
 sub get_event_modifier {
-    my $event = shift;
-
-    return 'Unknown' unless $event;
-
-    my $author_instance;
+	my $event = shift;
+	
+	return 'Unknown' unless $event;
+	
+	my $author_instance;
     foreach my $modified_instance (reverse @{$event->modified}) {
         $author_instance ||= $modified_instance->author->[0] unless $modified_instance->author->[0] && $modified_instance->author->[0]->db_id == 140537;
     }
-    $author_instance ||= $event->created->[0]->author->[0];
-
-    my $author_name = $author_instance->displayName if $author_instance;
-
-    return $author_name || 'Unknown';
+	$author_instance ||= $event->created->[0]->author->[0];
+	
+	my $author_name = $author_instance->displayName if $author_instance;
+	
+	return $author_name || 'Unknown';
 }
 
 sub is_human {
