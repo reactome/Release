@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Reaction Logic Table Exporter</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="logic_table.js"></script>
+    </head>
+<body>
+    <h1>Reaction Logic Table Exporter</h1>    
+    <form id="export_form" action="/cgi-bin/reaction_logic_table_export2.cgi" method="post">
+        <div id="db_ids_container">
+            <label for="db_ids">Enter db_id(s) of pathways to export (one per line):</label>
+            <textarea id="db_ids" name="db_ids"></textarea>
+        </div>
+        <div id="join_pathways_container">
+            <label for="join_pathways">Export multiple pathways as one reaction logic table</label>
+            <input type="checkbox" id="join_pathways" name="join_pathways" value="checked">
+        </div>
+        <input type="submit" value="Export">
+    </form>
+</body>
+</html>
