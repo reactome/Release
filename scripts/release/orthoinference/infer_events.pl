@@ -172,10 +172,15 @@ $source_species || $logger->error_die("can't find source species instance for $s
 ##################
 
 open(my $report, ">>", "$opt_r\/report_ortho_inference_$opt_db\.txt");
+binmode($report, ":utf8");
 open(my $regulator, ">>", "$opt_r\/cyclical_reactions_$opt_db\.txt");
+binmode($regulator, ":utf8");
 open(my $inf, ">", "$opt_r\/inferred_$opt_sp\_$opt_thr\.txt");
+binmode($inf, ":utf8");
 open(my $eli, ">", "$opt_r\/eligible_$opt_sp\_$opt_thr\.txt");
+binmode($eli, ":utf8");
 open(my $manual, ">", "$opt_r\/skip_manual_inferred_human_events_$opt_sp");
+binmode($manual, ":utf8");
 
 my (%uni, %orthologous_entity, %inferred_cp, %inferred_gse, %homol_gee, %seen_rps, %inferred_event, %being_inferred, %homol_cat, %instances);
 my $a =("#"x20)."\n";
