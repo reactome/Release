@@ -127,7 +127,7 @@ CONFIGURE
 
 Make sure tomcat runs with JAVA_OPTS="-Xmx2g -Xms256m -Dfile.encoding=UTF-8" 
 (modify the launch script or environment to add these options), and also 
-copy the lib/spring-instrument-tomcat-3.2.8.RELEASE.jar, which enables 
+copy the lib/spring-instrument-tomcat-4.2.4.RELEASE.jar, which enables 
 Tomcat-specific AspectJ load-time weaving, to $CATALINA_HOME/lib.
 
 Note:
@@ -135,13 +135,13 @@ This should work for a GlassFish not in EE environment too.
 For WebLogic, WebSphere, OC4J, Resin, GlassFish (EE), and JBoss, 
 you do not have to copy any spring instrument library jar there.
 For Jetty and any other application server, by the way,
-adding "-javaagent:/path/to/spring-instrument-3.2.8.RELEASE.jar" 
+adding "-javaagent:/path/to/spring-instrument-4.2.4.RELEASE.jar" 
 Java option to the application server launch script works too, but 
 then either build the new biopax-validator.war from the sources with 
 'mvn clean install -P-tomcat' (disable tomcat profile) command, or manually 
 remove the Validator's META-INF/context.xml after it's deployed (and failed 
 to start there for the first time) and restart the app. server.
-(See also: http://static.springsource.org/spring/docs/3.2.8.RELEASE/spring-framework-reference/html/aop.html#aop-aj-ltw-environments).
+(See also: http://static.springsource.org/spring/docs/4.2.4.RELEASE/spring-framework-reference/html/aop.html#aop-aj-ltw-environments).
 
 
 DEPLOY
@@ -174,8 +174,8 @@ it is usually uninstalled automatically by Tomcat.
 
 I. Framework
 
- 1. Uses Paxtools Java library (the BioPAX API), version 4.3.0-SNAPSHOT.
- 2. Spring Framework 3.2.8.RELEASE - to report errors (AOP), wire different modules,
+ 1. Uses Paxtools Java library (the BioPAX API), version [5.1.0-SNAPSHOT,6).
+ 2. Spring Framework 4.2.4.RELEASE - to report errors (AOP), wire different modules,
     internationalize, and build web services (MVC).
  3. Java 6: VarArgs, generics, annotations, AOP load-time weaving (LTW),
  	@Resource and @PostConstruct annotations.

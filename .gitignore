@@ -7,4 +7,5 @@ tmp/
 *.old
 news.html
 inference_stats.png
+website/html/img-tmp
 **/biomart-perl/*

@@ -36,6 +36,7 @@ use strict;
 use Tie::File;
 use RTF::Writer;
 use Data::Dumper;
+use CGI::Carp qw/fatalsToBrowser/;
 
 use GKB::Config;
 use GKB::DocumentGeneration::GenerateText;
@@ -570,32 +571,32 @@ sub generate_hyperlink {
     my $font_size = $self->regular_text_font_size * 2;
     
     $rtf->paragraph(
-    		$self->colortableblue(),
-		    \'\cf2',        # 'Font color: blue
-		    \'\ul',         # 'Underline
-		    \'\f1',         # 'Font 1 (Courier)
-		    \"\\fs$font_size",
-		    \'\li200',      # 'Left indent
-		    \'\fi-200',     # 'Negative indent for 1st line
-		    \'{',			#'
-		    \'\field',		#'
-		    \'{',			#'
-		    \'\*',			#'
-		    \'\fldinst',	#'
-		    \'{',			#'
-		    "HYPERLINK $url",
-			\'}',			#'
-			\'}',			#'
-			\'{',			#'
-		    \'\fldrslt',	#'
-		    \'{',			#'
-		    "$text",
-			\'}',			#'
-			\'}',			#'
-			\'}',			#'
-		    \'\ul0',        # 'Underline off
-		    \'\cf1',        # 'Font color: black
-		    "\n");
+            $self->colortableblue(),
+            \'\cf2',        # 'Font color: blue
+            \'\ul',         # 'Underline
+            \'\f1',         # 'Font 1 (Courier)
+            \"\\fs$font_size",
+            \'\li200',      # 'Left indent
+            \'\fi-200',     # 'Negative indent for 1st line
+            \'{',           #'
+            \'\field',      #'
+            \'{',           #'
+            \'\*',          #'
+            \'\fldinst',    #'
+            \'{',           #'
+            "HYPERLINK $url",
+            \'}',           #'
+            \'}',           #'
+            \'{',           #'
+            \'\fldrslt',    #'
+            \'{',           #'
+            "$text",
+            \'}',           #'
+            \'}',           #'
+            \'}',           #'
+            \'\ul0',        # 'Underline off
+            \'\cf1',        # 'Font color: black
+            "\n");
 }
 
 
