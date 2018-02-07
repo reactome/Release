@@ -1237,7 +1237,6 @@ sub infer_modified_residue {
     my $logger = get_logger(__PACKAGE__);
     
     my $inferred_residue = new_inferred_instance($residue);
-    $inferred_residue->_displayName($residue->displayName." (in $from_name\) at unknown position");
 
     $inferred_residue->PsiMod(@{$residue->PSiMod});
             
@@ -1254,10 +1253,16 @@ sub infer_modified_residue {
             my $inferred_ICCR = $inferred_residue->clone; # ICCR - InterChainCrosslinkedResidue
             my $inferred_equivalent_ICCR = $inferred_residue->clone;
             
+            my ($name, $coordinate_1, $coordinate_2) = $residue->displayName =~ /(.* at) (.*) and (.*)/;
+            
+            $inferred_ICCR->displayName(get_inferred_ICCR_name($name, [$coordinate_1, $coordinate_2], $from_name));
             $inferred_ICCR->referenceSequence($inf_ewas->referenceEntity->[0]);
             $inferred_ICCR->secondReferenceSequence($inferred_other_EWAS->referenceEntity->[0]);
+            
+            $inferred_equivalent_ICCR->displayName(get_inferred_ICCR_name($name, [$coordinate_2, $coordinate_1], $from_name));
             $inferred_equivalent_ICCR->referenceSequence($inferred_other_EWAS->referenceEntity->[0]);
             $inferred_equivalent_ICCR->secondReferenceSequence($inf_ewas->referenceEntity->[0]);
+            
             $inferred_ICCR->equivalentTo($inferred_equivalent_ICCR);
             $inferred_equivalent_ICCR->equivalentTo($inferred_ICCR);
             
@@ -1272,6 +1277,7 @@ sub infer_modified_residue {
         }
         return \@inferred_residues;
     } else {
+        $inferred_residue->_displayName($residue->displayName." at unknown position (in $from_name\)");
         $inferred_residue->ReferenceSequence($inf_ewas->referenceEntity->[0]);
         $inferred_residue = check_for_identical_instances($inferred_residue);
         return [$inferred_residue];
@@ -1284,6 +1290,14 @@ sub get_other_EWAS {
     my $other_ewas = $equivalent_ICCR->reverse_attribute_value('hasModifiedResidue')->[0];
     
     return $other_ewas;
+}
+
+sub get_inferred_ICCR_name {
+    my $name = shift;
+    my $coordinates = shift;
+    my $source_species = shift;
+    
+    return "$name unknown position ( " . $coordinates->[0] . " and " . $coordinates->[1] . " in $source_species)";
 }
 
 #creates ReferenceDNASequence instances for the ENSG identifier mapping to the protein, and for some model organisms (for which Ensembl uses their original ids) also a direct "link" to the model organism database - to be filled into the referenceGene slot of the ReferenceGeneProduct
