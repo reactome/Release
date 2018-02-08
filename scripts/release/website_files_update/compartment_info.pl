@@ -28,14 +28,20 @@ my $previous_version = prompt('Enter previous test slice version: (e.g. 38):');
 my $recent_db = "test_slice_$recent_version";
 print 'recent db is '.$recent_db."\n";
 my $dba_recent = get_dba($recent_db, $GKB::Config::GK_DB_HOST);
-my @recent_compartments = get_compartments($dba_recent);
 
 my $previous_db = "test_slice_$previous_version";
 print 'previous db is '.$previous_db."\n";
 my $dba_old = get_dba($previous_db, $GKB::Config::GK_DB_HOST);
-my @old_compartments = get_compartments($dba_old);
 
+my @recent_compartments = get_compartments($dba_recent);
+my @old_compartments = get_compartments($dba_old);
 my @new_compartments = get_new_instances(\@old_compartments, \@recent_compartments);
+
+print "Compartments in $recent_db\n\n";
+print_compartments(@recent_compartments)
+
+print "New compartments in $recent_db compared to $previous_db\n\n";
+print_compartments(@new_compartments);
 
 # Ask user for information
 sub prompt {
@@ -76,6 +82,17 @@ sub get_new_instanaces {
     }
     
     return @new_instances;
+}
+
+sub print_compartments {
+    my @compartments = @_;
+    
+    foreach my $compartment (sort {$a->displayName cmp $b->displayName} @compartments) {
+        print join("\t",
+            $compartment->db_id,
+            $compartment->displayName,
+            $compartment->accession->[0]) . "\n";
+    }
 }
 
 sub usage_instructions {
