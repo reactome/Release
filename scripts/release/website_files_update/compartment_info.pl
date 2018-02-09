@@ -38,7 +38,7 @@ my @old_compartments = get_compartments($dba_old);
 my @new_compartments = get_new_instances(\@old_compartments, \@recent_compartments);
 
 print "Compartments in $recent_db\n\n";
-print_compartments(@recent_compartments)
+print_compartments(@recent_compartments);
 
 print "New compartments in $recent_db compared to $previous_db\n\n";
 print_compartments(@new_compartments);
@@ -69,7 +69,7 @@ sub get_compartments {
     return get_unique_instances(@compartments, @included_location);
 }
 
-sub get_new_instanaces {
+sub get_new_instances {
     my $old_instances = shift;
     my $recent_instances = shift;
     
@@ -78,7 +78,7 @@ sub get_new_instanaces {
     
     my @new_instances;
     foreach my $recent_instance (@$recent_instances) {
-        push @new_instance, $recent_instance unless (exists $db_id_to_instance{$recent_instance->db_id});
+        push @new_instances, $recent_instance unless (exists $db_id_to_instance{$recent_instance->db_id});
     }
     
     return @new_instances;
