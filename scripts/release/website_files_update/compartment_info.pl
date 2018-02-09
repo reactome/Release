@@ -107,7 +107,9 @@ sub usage_instructions {
     (in the recent slice but not in the older slice) are printed to an output file
     with the same name as the script but with a .txt extension.
     
-    Usage: perl $0
+    Usage: perl $0 [options]
+    
+    -help   Print these instructions
 
 END
 }
