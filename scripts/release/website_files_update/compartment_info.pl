@@ -101,7 +101,13 @@ sub print_compartments {
 sub usage_instructions {
     return <<END;
 
-Usage: perl $0
+    This script prompts for two test slice database names.  The compartments
+    for each slice are obtained.  The list of compartments (db id, display name,
+    and accession) for the more recent slice database and the newer compartments
+    (in the recent slice but not in the older slice) are printed to an output file
+    with the same name as the script but with a .txt extension.
+    
+    Usage: perl $0
 
 END
 }
