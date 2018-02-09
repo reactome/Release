@@ -5,12 +5,9 @@ use lib "/usr/local/gkbdev/modules";
 
 use GKB::CommonUtils;
 use GKB::Config;
-use GKB::DBAdaptor;
-use GKB::Utils;
 
 use autodie;
 use Getopt::Long;
-use Term::ReadKey;
 
 my ($help);
 GetOptions(
@@ -37,11 +34,14 @@ my @recent_compartments = get_compartments($dba_recent);
 my @old_compartments = get_compartments($dba_old);
 my @new_compartments = get_new_instances(\@old_compartments, \@recent_compartments);
 
-print "Compartments in $recent_db\n\n";
-print_compartments(@recent_compartments);
+(my $outfile = $0) =~ s/\.pl/\.txt/;
+open(my $out, '>', $outfile);
+print $out "Compartments in $recent_db\n\n";
+print_compartments($out, @recent_compartments);
 
-print "New compartments in $recent_db compared to $previous_db\n\n";
-print_compartments(@new_compartments);
+print $out "New compartments in $recent_db compared to $previous_db\n\n";
+print_compartments($out, @new_compartments);
+close $out;
 
 # Ask user for information
 sub prompt {
@@ -85,14 +85,16 @@ sub get_new_instances {
 }
 
 sub print_compartments {
+    my $file_handle = shift;
     my @compartments = @_;
     
     foreach my $compartment (sort {$a->displayName cmp $b->displayName} @compartments) {
-        print join("\t",
+        print $file_handle join("\t",
             $compartment->db_id,
             $compartment->displayName,
             $compartment->accession->[0]) . "\n";
     }
+    print $file_handle "\n";
 }
 
 sub usage_instructions {
