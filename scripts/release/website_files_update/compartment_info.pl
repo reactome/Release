@@ -8,6 +8,7 @@ use GKB::Config;
 
 use autodie;
 use Getopt::Long;
+use Term::ReadKey;
 
 my ($help);
 GetOptions(
