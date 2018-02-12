@@ -321,6 +321,16 @@ sub XOR {
     return ($expression1 || $expression2) && (!($expression1 && $expression2));
 }
 
+sub get_instance_creator {
+    my $instance = shift;
+    
+    if ($event->created->[0] && $event->created->[0]->author->[0]) {
+        return $event->created->[0]->author->[0]->displayName || 'Unknown';
+    }
+    
+    return 'Unknown';
+}
+
 sub get_instance_modifier {
     my $instance = shift;
     
