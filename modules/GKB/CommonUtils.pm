@@ -422,6 +422,7 @@ get_source_for_electronically_inferred_instance
 has_multiple_species
 is_chimeric
 get_unique_species
+get_instance_creator
 get_instance_modifier
 get_event_modifier
 is_human
