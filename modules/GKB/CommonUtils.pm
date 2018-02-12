@@ -354,6 +354,17 @@ sub is_human {
     );
 }
 
+sub get_unique_instances {
+    my @instances = @_;
+    
+    my %db_id_to_instance;
+    foreach my $instance (@instances) {
+        $db_id_to_instance{$instance->db_id} = $instance;
+    }
+    
+    return values %db_id_to_instance;
+}
+
 sub report {
 	my $message = shift;
 	my $fh = shift;
@@ -404,6 +415,7 @@ get_unique_species
 get_instance_modifier
 get_event_modifier
 is_human
+get_unique_instances
 report
 date_correctly_formatted
 dates_do_not_match
