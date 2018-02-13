@@ -321,6 +321,24 @@ sub XOR {
     return ($expression1 || $expression2) && (!($expression1 && $expression2));
 }
 
+sub get_components {
+    my $composite_entity = shift;
+    
+    my @components;
+    foreach my $component (@{$composite_entity->hasComponent},
+                           @{$composite_entity->hasMember},
+                           @{$composite_entity->hasCandidate},
+                           @{$composite_entity->repeatedUnit}) {
+        push @components, $component;
+        my @sub_components = grep {defined} get_components($component);
+        if (@sub_components) {
+            push @components, @sub_components;
+        }
+    }
+    
+    return @components;
+}
+
 sub get_instance_creator {
     my $instance = shift;
     
@@ -422,6 +440,7 @@ get_source_for_electronically_inferred_instance
 has_multiple_species
 is_chimeric
 get_unique_species
+get_components
 get_instance_creator
 get_instance_modifier
 get_event_modifier
