@@ -342,8 +342,8 @@ sub get_components {
 sub get_instance_creator {
     my $instance = shift;
     
-    if ($event->created->[0] && $event->created->[0]->author->[0]) {
-        return $event->created->[0]->author->[0]->displayName || 'Unknown';
+    if ($instance->created->[0] && $instance->created->[0]->author->[0]) {
+        return $instance->created->[0]->author->[0]->displayName || 'Unknown';
     }
     
     return 'Unknown';
