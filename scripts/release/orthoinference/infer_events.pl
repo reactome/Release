@@ -1297,7 +1297,7 @@ sub get_inferred_ICCR_name {
     my $coordinates = shift;
     my $source_species = shift;
     
-    return "$name unknown position ( " . $coordinates->[0] . " and " . $coordinates->[1] . " in $source_species)";
+    return "$name unknown position (" . $coordinates->[0] . " and " . $coordinates->[1] . " in $source_species)";
 }
 
 #creates ReferenceDNASequence instances for the ENSG identifier mapping to the protein, and for some model organisms (for which Ensembl uses their original ids) also a direct "link" to the model organism database - to be filled into the referenceGene slot of the ReferenceGeneProduct
