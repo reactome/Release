@@ -321,6 +321,34 @@ sub XOR {
     return ($expression1 || $expression2) && (!($expression1 && $expression2));
 }
 
+sub get_components {
+    my $composite_entity = shift;
+    
+    my @components;
+    foreach my $component (@{$composite_entity->hasComponent},
+                           @{$composite_entity->hasMember},
+                           @{$composite_entity->hasCandidate},
+                           @{$composite_entity->repeatedUnit}) {
+        push @components, $component;
+        my @sub_components = grep {defined} get_components($component);
+        if (@sub_components) {
+            push @components, @sub_components;
+        }
+    }
+    
+    return @components;
+}
+
+sub get_instance_creator {
+    my $instance = shift;
+    
+    if ($instance->created->[0] && $instance->created->[0]->author->[0]) {
+        return $instance->created->[0]->author->[0]->displayName || 'Unknown';
+    }
+    
+    return 'Unknown';
+}
+
 sub get_instance_modifier {
     my $instance = shift;
     
@@ -352,6 +380,17 @@ sub is_human {
         !($instance->species->[1]) &&
         !(is_chimeric($instance))
     );
+}
+
+sub get_unique_instances {
+    my @instances = @_;
+    
+    my %db_id_to_instance;
+    foreach my $instance (@instances) {
+        $db_id_to_instance{$instance->db_id} = $instance;
+    }
+    
+    return values %db_id_to_instance;
 }
 
 sub report {
@@ -401,9 +440,12 @@ get_source_for_electronically_inferred_instance
 has_multiple_species
 is_chimeric
 get_unique_species
+get_components
+get_instance_creator
 get_instance_modifier
 get_event_modifier
 is_human
+get_unique_instances
 report
 date_correctly_formatted
 dates_do_not_match
