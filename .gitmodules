@@ -1,3 +1,6 @@
 [submodule "pathway_log_analysis"]
 	path = pathway_log_analysis
 	url = https://github.com/reactome/pathway_log_analysis.git
+[submodule "slicingTool"]
+	path = slicingTool
+	url = https://github.com/reactome/slicingTool.git
