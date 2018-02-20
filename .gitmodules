@@ -4,3 +4,6 @@
 [submodule "slicingTool"]
 	path = slicingTool
 	url = https://github.com/reactome/slicingTool.git
+[submodule "curator_website"]
+	path = curator_website
+	url = https://github.com/reactome/curator_website.git
