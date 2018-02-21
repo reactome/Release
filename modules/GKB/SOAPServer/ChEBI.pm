@@ -33,6 +33,7 @@ use strict;
 
 use GKB::Config;
 use Data::Dumper;
+use Time::HiRes qw/usleep/;
 #use SOAP::Data;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use GKB::SOAPServer::ProxyPlusURI;
@@ -188,8 +189,22 @@ sub get_up_to_date_identifier_name_formulae {
     my @params = ( SOAP::Data->name(chebiId => "CHEBI:$identifier"));
 
     # Call method
-    my $som = $self->soap->call($method => @params);
-
+    my $som;
+    my $attempt = 0;
+    usleep(500);
+    until ($som || $attempt == 10) {
+        $attempt++;
+        if ($attempt > 1) {
+            sleep 30;
+        }
+        eval {
+            $som = $self->soap->call($method => @params);
+        };
+        if ($@) {
+            print "Attempt $attempt for $identifier: $@\n";
+        }
+    }
+    
     #$logger->info("som=" . Dumper($som) . "\n");
 
     # Retrieve ChEBI ID(s)
