@@ -34,7 +34,6 @@ use strict;
 use GKB::Config;
 use Carp;
 use Data::Dumper;
-use Time::HiRes qw/usleep/;
 #use SOAP::Data;
 use vars qw(@ISA $AUTOLOAD %ok_field);
 use GKB::SOAPServer::ProxyPlusURI;
@@ -192,7 +191,6 @@ sub get_up_to_date_identifier_name_formulae {
     # Call method
     my $som;
     my $attempt = 0;
-    usleep(500);
     my $MAX_ATTEMPTS = 10;
     until ($som || $attempt == $MAX_ATTEMPTS) {
         $attempt++;
