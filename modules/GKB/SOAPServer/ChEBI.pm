@@ -32,6 +32,7 @@ package GKB::SOAPServer::ChEBI;
 use strict;
 
 use GKB::Config;
+use Carp;
 use Data::Dumper;
 use Time::HiRes qw/usleep/;
 #use SOAP::Data;
@@ -192,7 +193,8 @@ sub get_up_to_date_identifier_name_formulae {
     my $som;
     my $attempt = 0;
     usleep(500);
-    until ($som || $attempt == 10) {
+    my $MAX_ATTEMPTS = 10;
+    until ($som || $attempt == $MAX_ATTEMPTS) {
         $attempt++;
         if ($attempt > 1) {
             sleep 30;
@@ -202,6 +204,9 @@ sub get_up_to_date_identifier_name_formulae {
         };
         if ($@) {
             print "Attempt $attempt for $identifier: $@\n";
+            if ($attempt == $MAX_ATTEMPTS) {
+                confess "Unable to connect for $identifier\n";
+            }            
         }
     }
     
