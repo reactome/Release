@@ -65,7 +65,9 @@ foreach my $instance (get_instances_with_stable_identifiers($dba)) {
         next unless $source_instances[0];
         
         if (!$instance->species->[0]) {
-            $logger->warn("No species for electronically inferred instance " . $instance->db_id);
+            if (!$instance->is_a('Regulation')) {            
+                $logger->warn("Skipping electronically inferred instance " . $instance->db_id . " (" . $instance->class . ") without species");
+            }
             next;
         }
 
