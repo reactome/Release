@@ -214,7 +214,7 @@ sub print_selection_form {
 	$self->print_identical_instance_section($ii);
     }
     print qq(</TABLE>\n);
-    print $self->cgi->endform, "\n";
+    print $self->cgi->end_form, "\n";
 }
 
 sub print_identical_instance_section {
