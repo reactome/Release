@@ -11,8 +11,7 @@
 THRESHOLD=90
 
 echo "----------"
-date +%Y-%M-%d:%H:%m:%S
-
+date +"%Y-%m-%d %H:%M:%S"
 df -h
 for line in $(df -h  | grep -v "Use%" | grep -v nfs | tr -s ' ' | cut -d ' ' -f 4,5,6 | tr ' ' ',') ; do
 	PERCENT_USED=$(echo $line | cut -f 2 -d ',')
