@@ -2659,7 +2659,7 @@ sub print_canned_query_selecter_page {
 #    print "</td>";
 #    print "</tr>";
 #    print "</table>";
-#    print $cgi->endform;
+#    print $cgi->end_form;
     
     # Create a frame with BioMart in it.  Provide a default
     # action if no frames are available.
@@ -2832,7 +2832,7 @@ sub print_canned_query_data_input_page {
 	}    	
 		
     print "<P>" . $cgi->submit(-name=>'CANNED_QUERY_DATA_INPUT__SUBMIT', -value=>'Run query') . "  " . $cgi->defaults();    
-    print $cgi->endform;    
+    print $cgi->end_form;    
     $self->print_end_page();    
 }
 
