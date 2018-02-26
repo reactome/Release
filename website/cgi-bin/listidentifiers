@@ -284,7 +284,7 @@ sub print_search_form_page_w_message {
 	) .
 	qq(</TD><TD>) .
 	$CGI->submit(-name => 'SUBMIT', -value => 'List!') .
-	$CGI->endform .
+	$CGI->end_form .
 	qq(</TD></TR>\n<TR><TD COLSPAN="3" STYLE="background:white;"><P />) . join('<BR />', '<B>List of databases:</B>', map {$database_urls{$_} ? sprintf qq(<A HREF="%s">%s</A>), $database_urls{$_}, $_ : $_} @database_names) . 
 	qq(</TD></TR></TABLE></DIV>);
 
