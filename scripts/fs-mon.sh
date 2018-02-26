@@ -7,6 +7,8 @@
 #
 # This job is meant to be run with cron. Cron will send anything on stderr to the email
 # address in the cronfile's MAILTO field.
+# 
+# This script requires the program 'bc' to be installed to perform calculations.
 
 THRESHOLD=90
 
