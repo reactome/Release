@@ -241,7 +241,7 @@ sub print_query_form {
 				]
 			       )
 			    );
-    print $self->cgi->endform;
+    print $self->cgi->end_form;
     print qq(\n</DIV>\n);
 }
 
@@ -265,7 +265,7 @@ sub print_simple_query_form {
     
     print qq(<DIV CLASS="section">\n<TABLE WIDTH="$HTML_PAGE_WIDTH" CLASS="search" CELLSPACING="0" BORDER="0">);
 #    print qq(<DIV>\n<TABLE WIDTH="$HTML_PAGE_WIDTH" CELLSPACING="0" BORDER="0">);
-    print $self->cgi->startform(-action => '/cgi-bin/search2', -method => 'GET');
+    print $self->cgi->start_form(-action => '/cgi-bin/search2', -method => 'GET');
     print $self->cgi->hidden(-name => 'DB',-value => $DB);
 #    print qq(<TR><TD>Find</TD><TD>);
     print qq(<TR><TD CLASS="search">Find</TD><TD CLASS="search">);
@@ -347,7 +347,7 @@ sub print_simple_query_form {
 #    print qq(</TD><TD>);
     print $self->cgi->submit(-name => 'SUBMIT', -value => 'Go!');
     print qq(</TD></TR>);
-    print $self->cgi->endform;
+    print $self->cgi->end_form;
     print qq(</TABLE>\n</DIV>\n);
 }
 
@@ -926,7 +926,7 @@ sub print_big_query_form {
     
     print qq(</TABLE>\n</DIV>\n);
 #    print qq(<HR>\n);
-    print $self->cgi->endform;
+    print $self->cgi->end_form;
 }
 
 sub print_remote_attribute_query_form {
@@ -1020,7 +1020,7 @@ sub print_remote_attribute_query_form {
     
     print qq(</TABLE>\n</DIV>);
 #    print qq(<HR>\n);
-    print $self->cgi->endform;
+    print $self->cgi->end_form;
 }
 
 sub handle_big_query_form {
@@ -2289,7 +2289,7 @@ sub print_protege2mysql_form {
 					     ])
 			     )
 			    );
-    print $self->cgi->endform, "\n";
+    print $self->cgi->end_form, "\n";
 }
 
 sub handle_protege2mysql_form {
@@ -2516,10 +2516,10 @@ sub sanitize_uploaded_file {
 
 sub print_keyword_search_form {
     my $self = shift;
-    print $self->cgi->startform();
+    print $self->cgi->start_form();
     print $self->cgi->hidden(-name => 'DB',-value => $self->cgi->param('DB')), "\n";
     $self->_print_query_boxes;
-    print $self->cgi->endform, "\n";
+    print $self->cgi->end_form, "\n";
     print $self->cgi->p(qq(Please note that the the instances that you eventually download are not only the ones that you have selected but also the ones which are the attribute values of the selected instances and attribute values of those etc etc. However, instances which refer to a selected instance are not included unless they themselves are attribute values of some instance which is downloaded.)), "\n";
 }
 
@@ -2538,7 +2538,7 @@ sub handle_keyword_search_form {
     $self->cgi->delete('DB_ID');
 
     print qq(<TABLE CELLPADDING="2" WIDTH="$HTML_PAGE_WIDTH" CELLSPACING="2" BORDER="0">\n);
-    print $self->cgi->startform;
+    print $self->cgi->start_form;
     print $self->cgi->hidden(-name => 'DB',-value => $self->cgi->param('DB')), "\n";
     print qq(<TR><TD COLSPAN="2">Check the instances you want to download. Check 'Shallow extraction' (below) if you wish to download in full only the selected instances. The instances referred by the selected instances will be downloaded as "ghosts" with just DB_ID and display name set. Those instances should not be edited in Protege. If you leave 'Shallow extraction' unchecked all the instances, i.e. both the ones checked as well as the ones referred by any other downloaded instance will be extracted in full.<BR /><BR /></TD></TR>\n);
 
@@ -2577,7 +2577,7 @@ sub handle_keyword_search_form {
     $self->_reverse_attribute_to_be_followed_box;
     $self->_print_query_boxes;
     print $self->cgi->p(qq(Instances which have been checked above will be carried forward to the results of this search.));
-    print $self->cgi->endform, "\n";
+    print $self->cgi->end_form, "\n";
 }
 
 sub _relevant_refering_instances {
@@ -2873,7 +2873,7 @@ sub _generic_query_form_popup_menu {
 sub print_pathfinder_form {
     my ($self) = @_;
     print qq(<DIV CLASS="section"><TABLE  CELLPADDING="2" WIDTH="$HTML_PAGE_WIDTH" CELLSPACING="2" BORDER="0" CLASS="search2">);
-    print $self->cgi->startform(-method => 'POST');
+    print $self->cgi->start_form(-method => 'POST');
     print $self->cgi->hidden(-name => 'DB',-value => $self->cgi->param('DB')), "\n";
 
     my $labels_hr = {};
@@ -3084,7 +3084,7 @@ sub print_pathfinder_form {
     print $self->cgi->submit(-NAME => 'SUBMIT', -VALUE => 'Go!');
     print qq(</TD></TR>\n</TABLE></DIV>\n);
 
-#    print $self->cgi->endform();
+#    print $self->cgi->end_form();
     if (@{$from_ar} == 1 and (@{$to_ar} == 1 or $to_flag)) {
 	my $kill_list = [];
 	my (@name_list,@db_id_list);
@@ -3134,7 +3134,7 @@ sub print_pathfinder_form {
 		    "</TD></TR>\n";
 	    }
 	    print qq(</TABLE>\n);
-	    print $self->cgi->endform();
+	    print $self->cgi->end_form();
 	    print qq(</DIV>\n);
 	    $self->_pathfinder_reactionmap($path);
 	    my @events = grep {$_->is_a('Event')} @{$path};
@@ -3143,7 +3143,7 @@ sub print_pathfinder_form {
 #	    my @events = grep {$_->is_a('Event')} @{$path};
 #	    $self->_print_applet_tag(\@events,$kill_list,$taxon);
 	} else {
-	    print $self->cgi->endform();
+	    print $self->cgi->end_form();
 	    print qq(</DIV>\n);
 	    print qq(<DIV CLASS="section">\n<DIV CLASS="nothingfound">No path found</DIV>\n);
 	}

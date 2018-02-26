@@ -32,6 +32,7 @@ package GKB::SOAPServer::ChEBI;
 use strict;
 
 use GKB::Config;
+use Carp;
 use Data::Dumper;
 #use SOAP::Data;
 use vars qw(@ISA $AUTOLOAD %ok_field);
@@ -188,8 +189,25 @@ sub get_up_to_date_identifier_name_formulae {
     my @params = ( SOAP::Data->name(chebiId => "CHEBI:$identifier"));
 
     # Call method
-    my $som = $self->soap->call($method => @params);
-
+    my $som;
+    my $attempt = 0;
+    my $MAX_ATTEMPTS = 10;
+    until ($som || $attempt == $MAX_ATTEMPTS) {
+        $attempt++;
+        if ($attempt > 1) {
+            sleep 30;
+        }
+        eval {
+            $som = $self->soap->call($method => @params);
+        };
+        if ($@) {
+            print "Attempt $attempt for $identifier: $@\n";
+            if ($attempt == $MAX_ATTEMPTS) {
+                confess "Unable to connect for $identifier\n";
+            }            
+        }
+    }
+    
     #$logger->info("som=" . Dumper($som) . "\n");
 
     # Retrieve ChEBI ID(s)
