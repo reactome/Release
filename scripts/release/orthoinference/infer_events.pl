@@ -1287,6 +1287,7 @@ sub infer_modified_residue {
 sub get_other_EWAS {
     my $residue = shift;
     my $equivalent_ICCR = $residue->equivalentTo->[0];
+    return unless $equivalent_ICCR;
     my $other_ewas = $equivalent_ICCR->reverse_attribute_value('hasModifiedResidue')->[0];
     
     return $other_ewas;
