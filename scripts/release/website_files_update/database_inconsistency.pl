@@ -43,7 +43,7 @@ while (my @row = $sth->fetchrow_array) {
     }
 }
 
-sub usage_insturctions {
+sub usage_instructions {
     return <<END;
 This script checks a database for DatabaseObject records with an attribute
 of any given class which are not in the table for that class.  These inconsistencies
