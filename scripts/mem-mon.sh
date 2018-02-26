@@ -33,7 +33,7 @@ PERCENT_AVAIL=$(echo "$MEM_AVAILABLE.00/$MEM_TOTAL.00*100.00" | bc -l)
 printf -v PERCENT_AVAIL_F  '%0.2f\n' $PERCENT_AVAIL
 
 echo "% mem available: $PERCENT_AVAIL_F"
-WARNING_FILE=_low_memory_warning_sent
+WARNING_FILE=/tmp/_low_memory_warning_sent
 # for bc, 1 => "true"
 if [[ 1 == $(bc <<< "$PERCENT_AVAIL < $THRESHOLD" ) ]] ; then
 	if [[ ! -e $WARNING_FILE ]] ; then

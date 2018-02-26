@@ -7,7 +7,7 @@
 #
 # This job is meant to be run with cron. Cron will send anything on stderr to the email
 # address in the cronfile's MAILTO field.
-# 
+#
 # This script requires the program 'bc' to be installed to perform calculations.
 
 THRESHOLD=90
@@ -25,7 +25,7 @@ for line in $(df -h  | grep -v "Use%" | grep -v nfs | tr -s ' ' | cut -d ' ' -f 
 	# If a warning was sent for a filesystem, don't send another one.
 	# If a warning was sent for some filesystem but it's no longer past the threshold, remove the warning file
 	# so that a warning can be sent the next time it exceeds the threshold.
-	WARNING_FILE=${FS/\//_}_low_disc_space_warning_sent
+	WARNING_FILE=/tmp/${FS/\//_}_low_disc_space_warning_sent
 	# for bc, 1 => "true"
 	if [[ 1 == $(bc <<< "$PERCENT_USED_N > $THRESHOLD" ) ]] ; then
 		if [[ ! -e  $WARNING_FILE ]] ; then
