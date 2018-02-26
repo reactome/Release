@@ -11,7 +11,7 @@ use Readonly;
 Readonly my $SUDO_USER => 0;
 Readonly my $STAGING => "/usr/local/reactomes/Reactome/production/staging";
 Readonly my $RESTFUL_API => "$STAGING/webapps/ReactomeRESTfulAPI";
-Readonly my $APPLICATION_CONTEXT => "$RESTFUL_API/WEB-INF/applicationContext_Production.xml";
+Readonly my $APPLICATION_CONTEXT => "$RESTFUL_API/WEB-INF/applicationContext.xml";
 Readonly my $CONFIG_SECRETS => "/opt/GKB/modules/GKB/Secrets.pm";
 
 if ($EFFECTIVE_USER_ID != $SUDO_USER) {
@@ -44,15 +44,12 @@ if (!(`grep $db_name $APPLICATION_CONTEXT`)) {
 }
 
 print "Changing cache use to $use_cache\n";
-system(qq(perl -i -pe "s/<property name=\\"useCache\\" value=\\K\\"true\\"/\\"$use_cache\\"/" $APPLICATION_CONTEXT));
+system(qq(perl -i -p0e "s/<property name=\\"useCache\\".*?<value>\\K\\w+/$use_cache/ms" $APPLICATION_CONTEXT));
 
-if (!(`grep "property name=\\"useCache\\" value=\\"$use_cache\\"" $APPLICATION_CONTEXT`)) {
+if (!(`grep -Pzo "(?s)property name=\\"useCache\\".*?<value>$use_cache" $APPLICATION_CONTEXT`)) {
     print STDERR "Setting cache to $use_cache for $APPLICATION_CONTEXT failed\n";
     exit 1;
 }
-
-print "Moving " . basename($APPLICATION_CONTEXT) . " to applicationContext.xml";
-system("cp -f $APPLICATION_CONTEXT $RESTFUL_API/WEB-INF/applicationContext.xml");
 
 if (-e "$RESTFUL_API.war") {
     print "Backing up $RESTFUL_API.war\n";

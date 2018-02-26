@@ -68,6 +68,8 @@ unless (
 my $instance_edit =
   GKB::Utils_esther::create_instance_edit( $dba, $surname, $initial, $date );
 
+print "Instance edit db id is " . $instance_edit->db_id . "\n";
+
 ## Then we extract all the GO terms from database and put them in two hashes,
 ## total_acc contains accessions, total_name contains names.
 ## There are also hashes to report obsolete, replaced, consider_to_replace entries
