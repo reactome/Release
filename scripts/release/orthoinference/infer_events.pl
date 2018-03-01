@@ -1238,14 +1238,14 @@ sub infer_modified_residue {
     
     my $inferred_residue = new_inferred_instance($residue);
 
-    $inferred_residue->PsiMod(@{$residue->PSiMod});
+    $inferred_residue->PsiMod(@{$residue->PsiMod});
             
     $inferred_residue->is_valid_attribute('modification') && $inferred_residue->Modification(@{$residue->Modification}); #currently only GroupModifiedResidue has modification
     $inferred_residue->is_valid_attribute('residue') && $inferred_residue->Residue(@{$residue->Residue}); #this attribute has been removed from data model, only here for backward compatibility
     if ($residue->is_a('InterChainCrosslinkedResidue')) {
         $logger->info("Inferring InterChainCrosslinkedResidue $residue->{db_id} for $opt_sp");
-        my $other_EWAS = get_other_EWAS($residue); # The second EWAS the InterChainCrosslinkedResidue attaches
-        my @inferred_other_EWASs = @{$inferred_EWASs->{$other_EWAS->db_id}} if $other_EWAS && $inferred_EWASs->{$other_EWAS->db_id};
+        my $other_EWASs = get_other_EWASs($residue); # The second EWAS the InterChainCrosslinkedResidue attaches
+        my @inferred_other_EWASs = map @{$inferred_EWASs->{$_->db_id}} grep {defined && $inferred_EWASs->{$_->db_id}} @$other_EWASs;
         return unless @inferred_other_EWASs;
         
         my @inferred_residues;
@@ -1269,7 +1269,7 @@ sub infer_modified_residue {
             $inferred_ICCR = check_for_identical_instances($inferred_ICCR);
             $inferred_equivalent_ICCR = check_for_identical_instances($inferred_equivalent_ICCR);
             
-            $inferred_other_EWAS->add_attribute_value('hasModifiedResidue', $inferred_equivalent_ICCR);
+            $inferred_other_EWAS->add_attribute_value_if_necessary('hasModifiedResidue', $inferred_equivalent_ICCR);
             $dba->update_attribute($inferred_other_EWAS, 'hasModifiedResidue');
             
             push @inferred_residues, $inferred_ICCR;
@@ -1284,13 +1284,13 @@ sub infer_modified_residue {
     }
 }
 
-sub get_other_EWAS {
+sub get_other_EWASs {
     my $residue = shift;
     my $equivalent_ICCR = $residue->equivalentTo->[0];
     return unless $equivalent_ICCR;
-    my $other_ewas = $equivalent_ICCR->reverse_attribute_value('hasModifiedResidue')->[0];
+    my $other_EWASs = $equivalent_ICCR->reverse_attribute_value('hasModifiedResidue');
     
-    return $other_ewas;
+    return $other_EWASs;
 }
 
 sub get_inferred_ICCR_name {
