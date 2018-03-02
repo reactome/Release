@@ -75,6 +75,7 @@ print "Instance edit db id is " . $instance_edit->db_id . "\n";
 ## There are also hashes to report obsolete, replaced, consider_to_replace entries
 
 my (%total_acc);
+my (%accession_count);
 my (%categories) = (
     "biological_process", "GO_BiologicalProcess",
     "molecular_function", "GO_MolecularFunction",
@@ -105,6 +106,7 @@ foreach my $terms ( sort keys %categories ) {
             $total_name{$acc} = $name;
             $cc++;
         }
+        push @{$accession_count{$acc}}, $db_id;
     }
     print "$categories{$terms}\t$cc\n";
 }
@@ -341,7 +343,22 @@ foreach my $obs_id ( sort keys %obsolete ) {
         }
     }
 }
+print FR "\|\}\n";
 
+print FR "\n-----\n";
+print FR "\{\| class \=\"wikitable\"
+\|\+ Duplicate GO accessions
+\|\-
+\! GO ID
+\! Instance DB IDs
+\|\-\n";
+
+foreach my $duplicate_accession (grep {scalar @{ $accession_count{$_}} > 1} keys %accession_count) {
+    my $db_ids = join ',', @{$accession_count{$duplicate_accession}};
+    print FR "\|$duplicate_accession\n";
+    print FR "\|$db_ids\n";
+    print FR "\|\-\n";
+}
 print FR "\|\}\n";
 
 print FR "\n-----\n";
