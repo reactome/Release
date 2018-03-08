@@ -23,15 +23,11 @@ use Carp;
 use Getopt::Long;
 
 
-my ($user, $pass, $port, $host, $db, $debug, $help);
+my ($host, $db, $help);
 
 &GetOptions(
-    "user:s" => \$user,
     "host:s" => \$host,
-    "pass:s" => \$pass,
-    "port:i" => \$port,
     "db:s" => \$db,
-    "debug" => \$debug,
     "help" => \$help
 );
 
@@ -40,24 +36,17 @@ if ($help) {
     exit;
 }
 
-
 $db ||= $GK_DB_NAME;
 $host ||= $GK_DB_HOST;
-$user ||= $GK_DB_USER;
-$pass ||= $GK_DB_PASS;
-$port ||= $GK_DB_PORT;
 
 my $dba = GKB::DBAdaptor->new
     (
-     -user   => $user,
+     -user   => $GK_DB_USER,
      -host   => $host,
-     -pass   => $pass,
-     -port   => $port,
+     -pass   => $GK_DB_PASS,
+     -port   => $GK_DB_PORT,
      -dbname => $db,
-     -DEBUG => $debug
      );
-
-
 
 my %seen; # Prevents duplication in the file
 open(my $output, ">", "event_qa_$db.txt");
@@ -135,7 +124,7 @@ sub usage_instructions {
     return <<END;
     
     This script checks all events (pathways and reaction like events) in the database
-    and reports the following:
+    and reports the following in a text file with the name event_qa_<db>.txt:
     
     * Events with no species
     * Pathway with no species containing an event with a species
@@ -145,5 +134,12 @@ sub usage_instructions {
     * Human events regulated by non-human events or vice-versa
     * Orphan events (not a preceding/following event, regulatory event, or in the hierarchy)
     
+    Usage: perl $0 [options]
+    
+    Options:
+    
+    -db [db_name]   Source database (default is $GKB::Config::GK_DB_NAME)
+    -host [db_host] Host of source database (default is $GKB::Config::GK_DB_HOST)
+    -help           Display these instructions
 END
 }
