@@ -24,7 +24,7 @@ override 'run_commands' => sub {
 
     my $host = $self->host;
 
-    my $download_dir = replace_gkb_alias_in_dir($html, $gkbdir) . '/download';
+    my $download_dir = $website_static . '/download';
 
     if ($gkbdir eq "gkbdev") {
         $self->cmd("Creating download directory",[["perl create_download_directory.pl -host $host -port 3306 -user $user -pass $pass -r $version -db $db > create_download_directory.$version.out"]]);
@@ -37,19 +37,20 @@ override 'run_commands' => sub {
             ]
         );
     } elsif ($gkbdir eq "gkb") {
-        my $archive_live = replace_gkb_alias_in_dir("$html/download/archive", 'gkb');
+        my $archive_live = "$download_dir/archive";
+
         my @archiving_results = $self->cmd("Archiving version $prevver download directory",
             [
-                ["echo $sudo | sudo -S chmod -R g+rw $html/download/$prevver"],
-                ["echo $sudo | sudo -S chown -R www-data:gkb $html/download/$prevver"],
-                ["tar zcvf - $html/download/$prevver | ssh $live_server 'cat > $archive_live/$prevver.tgz'"]
+                ["echo $sudo | sudo -S chmod -R g+rw $download_dir/$prevver"],
+                ["echo $sudo | sudo -S chown -R www-data:gkb $download_dir/$prevver"],
+                ["tar zcvf - $download_dir/$prevver | ssh $live_server 'cat > $archive_live/$prevver.tgz'"]
             ]
         );
         my @copying_dir_results = $self->cmd("Copying current download directory from $host",
             [
-                ["echo $sudo | sudo -S chmod -R g+rw $html/download/$version"],
-                ["echo $sudo | sudo -S chown -R www-data:gkb $html/download/$version"],
-                ["rsync -arv $html/download/$version $live_server:$download_dir"],
+                ["echo $sudo | sudo -S chmod -R g+rw $download_dir/$version"],
+                ["echo $sudo | sudo -S chown -R www-data:gkb $download_dir/$version"],
+                ["rsync -arv $download_dir/$version $live_server:$download_dir"],
                 ["ssh -t $live_server 'echo $sudo | sudo -S chown -R www-data:gkb $download_dir'"]
             ]
         );
