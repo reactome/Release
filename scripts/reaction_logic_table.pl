@@ -76,7 +76,7 @@ foreach my $reaction (@reactions) {
     add_reaction_to_logic_table($reaction, \@reactions);
 }
 
-
+$output_dir ||= '.';
 my $output_file_full_path = "$output_dir/$output_file.tsv";
 open my $logic_table_fh, ">", "$output_file_full_path";
 report_interactions(\%interactions, $logic_table_fh);

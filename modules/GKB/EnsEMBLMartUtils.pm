@@ -10,10 +10,8 @@ use File::Basename 'dirname';
 use Time::Out qw/timeout/;
 use Try::Tiny;
 
-
-use lib "/usr/local/reactomes/Reactome/development/GKB/modules";
-use lib '/usr/local/reactomes/Reactome/development/GKB/BioMart/biomart-perl/lib';
-
+use lib '/usr/local/gkb/modules/';
+use lib '/usr/local/gkb/BioMart/biomart-perl/lib';
 use BioMart::Initializer;
 use BioMart::Query;
 use BioMart::QueryRunner;
@@ -161,7 +159,7 @@ sub get_identifiers {
         push @identifiers, (split /\n/, $results);
     }
     
-    return @identifiers, "interpro", "smart", "pfam", "prints";
+    return @identifiers, "interpro", "smart", "pfam", "prints", "go_id", "goslim_goa_accession";
 }
 
 sub get_registry_xml_contents {

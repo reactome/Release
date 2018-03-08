@@ -32,6 +32,7 @@ package GKB::SOAPServer::ChEBI;
 use strict;
 
 use GKB::Config;
+use Carp;
 use Data::Dumper;
 #use SOAP::Data;
 use vars qw(@ISA $AUTOLOAD %ok_field);
@@ -42,8 +43,8 @@ Log::Log4perl->init(\$LOG_CONF);
 @ISA = qw(GKB::SOAPServer::ProxyPlusURI);
 
 #my $proxy = 'http://www.ebi.ac.uk/webservices/chebi/webservice?wsdl';
-my $proxy = 'http://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl';
-my $uri = 'http://www.ebi.ac.uk/webservices/chebi';
+my $proxy = 'https://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl';
+my $uri = 'https://www.ebi.ac.uk/webservices/chebi';
 
 sub AUTOLOAD {
     my $self = shift;
@@ -181,21 +182,38 @@ sub get_up_to_date_identifier_name_formulae {
 
     my $logger = get_logger(__PACKAGE__);
 
-#	$logger->info("ChEBI.getUpToDateIdentifiers: identifier=|$identifier|\n");
+    $logger->info("ChEBI.getUpToDateIdentifiers: identifier=|$identifier|\n");
 
     # Setup method and parameters
     my $method = SOAP::Data->name('getCompleteEntity')->attr({xmlns => $uri});
     my @params = ( SOAP::Data->name(chebiId => "CHEBI:$identifier"));
 
     # Call method
-    my $som = $self->soap->call($method => @params);
-
-#	$logger->info("som=" . Dumper($som) . "\n");
+    my $som;
+    my $attempt = 0;
+    my $MAX_ATTEMPTS = 10;
+    until ($som || $attempt == $MAX_ATTEMPTS) {
+        $attempt++;
+        if ($attempt > 1) {
+            sleep 30;
+        }
+        eval {
+            $som = $self->soap->call($method => @params);
+        };
+        if ($@) {
+            print "Attempt $attempt for $identifier: $@\n";
+            if ($attempt == $MAX_ATTEMPTS) {
+                confess "Unable to connect for $identifier\n";
+            }            
+        }
+    }
+    
+    #$logger->info("som=" . Dumper($som) . "\n");
 
     # Retrieve ChEBI ID(s)
     my @stuff = $som->valueof('//chebiId');
 
-#	$logger->info("ChEBI IDs: @stuff\n");
+    $logger->info("ChEBI IDs: @stuff\n");
 
     # Assume that the first identifier in the list is the actual compound,
     # and everything else comes higher up in the ChEBI ontology

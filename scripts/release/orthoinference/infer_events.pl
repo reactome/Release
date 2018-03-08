@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl -w
 use strict;
-
+use Carp;
 #This script infers reactions from one species to another based on a file of homologue pairs. The implementation at present is based on the Ensembl compara orthologue mapping, but the script can easily be adapted by adding a method returning the homologue hash. The orthopair file for the Ensembl compara system can be prepared by running the script  prepare_orthopair_files.pl under GKB/scripts/compara.
 #After the reactions have been inferred, the higher-level event hierarchy is also created based on the from-species.
 
@@ -37,7 +37,7 @@ $logger->info("starting\n");
 
 @ARGV || $logger->error_die("Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -r reactome_release -from from_species_name(e.g. hsa) -sp to_species_name(e.g.dme) -filt second_taxon_filter -thr threshold_for_complex");
 
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp, $opt_filt, $opt_thr, $opt_debug);
+our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp, $opt_release_date, $opt_filt, $opt_thr, $opt_debug);
 
 &GetOptions(
     "user:s",
@@ -48,6 +48,7 @@ our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp,
 	"r=i",
 	"from=s",
 	"sp=s",
+    "release_date:s",
 	"filt=i",
 	"thr=i",
 	"debug",
@@ -56,6 +57,7 @@ our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_r, $opt_from, $opt_sp,
 $opt_db || $logger->error_die("Need database name (-db).\n");
 $opt_r || $logger->error_die("Need Reactome release number, e.g. -r 32\n");
 $opt_sp || $logger->error_die("Need species (-sp), e.g. mmus.\n");
+$opt_release_date || $logger->error_die("Need release date e.g. -release_date 2017-12-13");
 $opt_from ||= 'hsap';
 
 $logger->info("opt_db=$opt_db\n");
@@ -246,14 +248,14 @@ foreach my $rxn (@{$reaction_ar}) {
         next;
     }
     $logger->info("infer event for reaction=" . $rxn->extended_displayName . "\n");
-    infer_event($rxn);
+    infer_event($rxn, $opt_release_date);
 }
 
 #creating hierarchy structure as in human event
 my %seen;
 foreach (@inferrable_human_events){
     next if $seen{$_}++;
-    create_orthologous_generic_event($_);
+    create_orthologous_generic_event($_, $opt_release_date);
 }
 
 #fill pathways and blackboxevents with their components in the same order as in human
@@ -614,7 +616,10 @@ sub orthologous_entity {
     if ($i->is_valid_attribute('species')) {
         unless ($orthologous_entity{$i}) {
 	    my $inf_ent;
-	    if ($i->is_a('GenomeEncodedEntity')) {
+	    if (!has_species($i)) {
+            $inf_ent = $i;
+            $logger->info("Referring to instance " . $i->displayName . ' (' . $i->db_id . ') of class ' . $i->class . ' rather than creating an inference');
+        } elsif ($i->is_a('GenomeEncodedEntity')) {
             $inf_ent = create_homol_gee($i, $override);
 	    } elsif ($i->is_a('Complex') || $i->is_a('Polymer')) {
             $inf_ent = infer_complex_polymer($i, $override);
@@ -626,7 +631,8 @@ sub orthologous_entity {
             # be inferred unchanged to other species.  I don't know if
             # the assumption makes sense or if it produces correct results,
             # but it stops the script from dying. David Croft.
-            # TODO: somebody needs to look into this.
+            # TODO: somebody needs to look into this.            
+            $logger->warn($i->displayName . ' (' . $i->db_id . ') is a simple entity with a species');
             $inf_ent = $i;
 	    } else {
             $logger->error_die("Unknown PhysicalEntity class: " . $i->class . ", instance name: " . $i->extended_displayName . "\n");
@@ -662,6 +668,31 @@ sub instance_in_list {
     my $list = shift;
     
     return any { $instance->reasonably_identical($_) } @$list;
+}
+
+sub has_species {
+    my $instance = shift;
+    
+    if ($instance->is_a('OtherEntity')) {
+        return 0;
+    } elsif ($instance->is_a('Complex') || $instance->is_a('Polymer') || $instance->is_a('EntitySet')) {
+        return any { has_species($_) } get_contained_instances($instance);
+    } else {
+        return $instance->species->[0] ? 1 : 0;
+    }
+}
+
+sub get_contained_instances {
+    my $instance = shift;
+    if ($instance->is_a('Complex')) {
+        return @{$instance->hasComponent};
+    } elsif ($instance->is_a('EntitySet')) {
+        return (@{$instance->hasMember}, @{$instance->hasCandidate});
+    } elsif ($instance->is_a('Polymer')) {
+        return @{$instance->repeatedUnit};
+    } else {
+        return;
+    }    
 }
 
 #Argument: any instance
@@ -700,7 +731,7 @@ sub new_inferred_instance_with_class {
 #a number of tests confirms whether a reaction can be inferred (checking input, output, catalyst and requirement)
 #returns an event instance if inference successful, undef if unsuccessful. However, if the incoming reaction does not contain any EntityWithAccessionedSequence, it returns 1. In this case the event is not counted as an eligible event.
 sub infer_event {
-    my ($event) = @_;
+    my ($event, $release_date) = @_;
     
     return if skip_event($event);
     
@@ -742,7 +773,7 @@ sub infer_event {
     my ($output_inference_successful) = infer_attributes($event, $inf_e, 'output');
     if (!$output_inference_successful) {
         $logger->info(get_info($event));
-        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
+        $logger->info("Aborting $opt_sp event inference -- output inference unsuccessful");
         return;
     }
 
@@ -751,19 +782,20 @@ sub infer_event {
     my ($catalyst_inference_successful) = infer_catalyst($event, $inf_e);
     if (!$catalyst_inference_successful) {
         $logger->info(get_info($event));
-        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
+        $logger->info("Aborting $opt_sp event inference -- catalyst inference unsuccessful");
         return;
     }
 #    print "infer regulation.........................\n";
     
-    my ($regulation_inference_successful, $regulation_collection) = infer_regulation($event, $inf_e); #returns undef only when Regulation class is Requirement
+    my ($regulation_inference_successful, $regulation_collection) = infer_regulation($event, $release_date); #returns undef only when Regulation class is Requirement
     $logger->info("Inferring reaction regulation instances");
     if (!$regulation_inference_successful) {
         $logger->info(get_info($event));
-        $logger->info("Aborting $opt_sp event inference -- input inference unsuccessful");
+        $logger->info("Aborting $opt_sp event inference -- regulation inference unsuccessful");
         return;
     }
-
+    
+    $inf_e->releaseDate($release_date);
     $inf_e->TotalProt($total);
     $inf_e->InferredProt($inferred);
 #    $inf_e->MaxHomologues($max);
@@ -937,15 +969,15 @@ sub create_inf_cat {
 }
 
 #manages inference of Regulation instances attached to Events or CatalystActivities
-#Arguments: Event or CatalystActivity instance to be inferred
+#Arguments: Event or CatalystActivity instance to be inferred and release date
 #returns undef if inference unsuccessful and the Regulation instance is of class 'Requirement', returns 1 and an array ref with the inferred Regulation instances in all other cases (the array may be empty if there is no Regulation instance attached to the incoming instance in the first place, or if the Regulation instance cannot be inferred, but is not of class 'Requirement')
 sub infer_regulation {
-    my ($i) = @_;
+    my ($i, $release_date) = @_;
     my @reg;
     my $reg_ar = $i->reverse_attribute_value('regulatedEntity');
     if ($reg_ar->[0]) {
         foreach my $reg (@{$reg_ar}) {
-            my $regulator = infer_regulator($reg->Regulator->[0]);
+            my $regulator = infer_regulator($reg->Regulator->[0], $release_date);
             unless ($regulator) {
                 if ($reg->is_a('Requirement')) {
                     return; #the event should not be inferred in this case
@@ -966,10 +998,10 @@ sub infer_regulation {
     return (1, \@reg);
 }
 
-#Argument: an instance allowed as regulator
+#Argument: an instance allowed as regulator and release date
 #returns an instance if inference is successful, or undef if unsuccessful
 sub infer_regulator {
-    my ($reg) = @_;
+    my ($reg, $release_date) = @_;
     return unless $reg;
     
     my $inf_reg;
@@ -983,7 +1015,7 @@ sub infer_regulator {
             return;
         }
 	
-        $inf_reg = infer_event($reg);
+        $inf_reg = infer_event($reg, $release_date);
         return if defined $inf_reg && $inf_reg == 1; #the event has no accessioned sequences and is therefore not eligible for inference
     }
     return $inf_reg;
@@ -1224,7 +1256,7 @@ sub check_for_identical_instances {
     
     $i->identical_instances_in_db(undef); #clear first
     $dba->fetch_identical_instances($i);
-    $logger->info("Checking for identical instances for " . ($i->db_id || ('unstored instance ' . $i->name->[0])));
+    $logger->info("Checking for identical instances for " . ($i->db_id || ('unstored instance ' . ($i->name->[0] ? $i->name->[0] : ''))));
     if ($i->identical_instances_in_db && $i->identical_instances_in_db->[0]) {
         my $count_ii = @{$i->identical_instances_in_db}; #number of elements
         if ($count_ii == 1) {
@@ -1263,7 +1295,7 @@ sub store_instance {
 #creates and stores the event hierarchy above a given inferred reaction, based on the hierarchy of the corresponding human events
 #This method now deals with both Pathways and BlackBoxEvents (both of which can group subevents)
 sub create_orthologous_generic_event {
-    my ($hum_event) = @_;
+    my ($hum_event, $release_date) = @_;
     
     my $logger = get_logger(__PACKAGE__);
     
@@ -1275,6 +1307,7 @@ sub create_orthologous_generic_event {
                 my $gen_inf_event = new_inferred_instance($gen_hum_event);
                 $gen_inf_event->Name(@{$gen_hum_event->Name});
                 $gen_inf_event->Summation($summation);
+                $gen_inf_event->releaseDate($release_date);
                 $gen_inf_event->InferredFrom($gen_hum_event);
                 $gen_inf_event->EvidenceType($evidence_type);
                 $gen_inf_event->GoBiologicalProcess(@{$gen_hum_event->GoBiologicalProcess});
@@ -1287,7 +1320,7 @@ sub create_orthologous_generic_event {
                 }
         
                 $inferred_event{$gen_hum_event} = $gen_inf_event;
-                $dba->store($gen_inf_event);	
+                $dba->store($gen_inf_event);
                 
                 $gen_hum_event->OrthologousEvent;
                 $gen_hum_event->add_attribute_value('orthologousEvent',$gen_inf_event);
@@ -1297,8 +1330,8 @@ sub create_orthologous_generic_event {
                 }
                 push @inferrable_human_events, $gen_hum_event;
             }
-            create_orthologous_generic_event($gen_hum_event);
-	    
+            create_orthologous_generic_event($gen_hum_event, $release_date);
+
             $logger->info("orthologous generic event subroutine:\n");
     	    $logger->info($gen_hum_event->displayName . " => " . $inferred_event{$gen_hum_event}->displayName . "\n");
     	}

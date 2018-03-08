@@ -189,6 +189,8 @@ use File::stat;
 use List::MoreUtils qw/uniq all/;
 use Net::OpenSSH;
 
+use lib '/usr/local/gkb/modules';
+
 use GKB::Release::Utils;
 use GKB::Release::Config;
 
@@ -286,7 +288,9 @@ sub run {
 	}
 	$self->mail_now();
 	
+	say releaselog("Archiving output, logs, dump files...");
 	$self->archive_files($version);
+
 }
 
 sub source_code_passes_tests {
@@ -393,9 +397,11 @@ sub archive_files {
 	my $step_version_archive = "$step_archive/$version";
 	
 	`mkdir -p $step_version_archive`;
-	`gzip -q *.dump 2>/dev/null`;
-	`mv --backup=numbered $_ $step_version_archive 2>/dev/null` foreach qw/*.dump.gz *.err *.log *.out/;
-	symlink $step_archive, 'archive' unless (-e 'archive');
+	if (-d $step_version_archive) {
+		`gzip -qf $step_version_archive/*.dump 2> /dev/null`;
+		`mv --backup=numbered $_ $step_version_archive 2> /dev/null` foreach qw/*.dump* *.err *.log *.out/;
+		symlink $step_archive, 'archive' unless (-e 'archive');
+	}
 	
 	return $step_version_archive;
 }
@@ -596,7 +602,13 @@ sub _set_passwords {
 	
 	foreach my $passtype (@{$self->passwords}) {
 		my $passref = $passwords{$passtype};
-		$$passref = prompt("Enter your " . $passtype . " password: ", 1) unless $$passref;
+		if (!$$passref) {
+			$$passref = prompt("Enter your " . $passtype . " password: ", 1);
+			my $confirmed_password = prompt("Confirm your $passtype password: ", 1);
+			if ($confirmed_password ne $$passref) {
+				die ("$passtype passwords do not match -- aborting\n");
+			}
+		}
 	}
 }
 
