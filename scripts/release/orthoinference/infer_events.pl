@@ -1172,7 +1172,7 @@ sub infer_ewas {
         #infer modifications
         my @inferred_modified_residues;
         foreach my $residue (@modified_residues) {
-            my $inferred_residues = infer_modified_residue($inf_ewas, $residue, \%inferred_EWASs);
+            my $inferred_residues = infer_modified_residue($inf_ewas, $residue, $i, \%inferred_EWASs);
             if ($inferred_residues->[0]) {
                 push @inferred_modified_residues, @{$inferred_residues};
             }
@@ -1232,6 +1232,7 @@ sub phospho_modification {
 sub infer_modified_residue {
     my $inf_ewas = shift;
     my $residue = shift;
+    my $instance = shift;
     my $inferred_EWASs = shift;
     
     my $logger = get_logger(__PACKAGE__);
@@ -1244,8 +1245,12 @@ sub infer_modified_residue {
     $inferred_residue->is_valid_attribute('residue') && $inferred_residue->Residue(@{$residue->Residue}); #this attribute has been removed from data model, only here for backward compatibility
     if ($residue->is_a('InterChainCrosslinkedResidue')) {
         $logger->info("Inferring InterChainCrosslinkedResidue $residue->{db_id} for $opt_sp");
-        my $other_EWASs = get_other_EWASs($residue); # The second EWAS the InterChainCrosslinkedResidue attaches
-        my @inferred_other_EWASs = map @{$inferred_EWASs->{$_->db_id}} grep {defined && $inferred_EWASs->{$_->db_id}} @$other_EWASs;
+        my @other_EWASs = @{get_other_EWASs($residue)}; # The second EWAS the InterChainCrosslinkedResidue attaches
+        my @inferred_other_EWASs;
+            push @inferred_other_EWASs, $inf_ewas;
+        }
+        push @inferred_other_EWASs, map @{$inferred_EWASs->{$_->db_id}}
+                                    grep {defined && $inferred_EWASs->{$_->db_id}} @other_EWASs;
         return unless @inferred_other_EWASs;
         
         my @inferred_residues;
