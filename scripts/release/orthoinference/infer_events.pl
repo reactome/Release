@@ -1247,7 +1247,9 @@ sub infer_modified_residue {
         $logger->info("Inferring InterChainCrosslinkedResidue $residue->{db_id} for $opt_sp");
         my @other_EWASs = @{get_other_EWASs($residue)}; # The second EWAS the InterChainCrosslinkedResidue attaches
         my @inferred_other_EWASs;
+        if (any {$instance->db_id == $_->db_id} @other_EWASs) {
             push @inferred_other_EWASs, $inf_ewas;
+            @other_EWASs = grep {$instance->db_id != $_->db_id} @other_EWASs;
         }
         push @inferred_other_EWASs, map @{$inferred_EWASs->{$_->db_id}}
                                     grep {defined && $inferred_EWASs->{$_->db_id}} @other_EWASs;
