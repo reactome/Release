@@ -33,7 +33,7 @@ override 'run_commands' => sub {
     $self->cmd("Running EC number update script",[["perl addEcNumber2Activity_update.pl @args > ec_number.out 2> ec_number.err"]]);
     
     foreach my $class ("GO_MolecularFunction", "GO_BiologicalProcess", "GO_CellularComponent", "PhysicalEntity", "CatalystActivity") {
-        $self->cmd("Updating $class display names",[["perl updateDisplayName.pl @args -class $class"]]);
+        $self->cmd("Updating $class display names",[["perl updateDisplayName.pl @args -class $class > update_$class.out 2> update_$class.err"]]);
     }
 };
 
