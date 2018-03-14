@@ -57,7 +57,7 @@ sub hide_password {
     
     $string =~ /-pass (.*?) /;
     my $password = $1;
-    my $aterisks = '*' x 5;
+    my $asterisks = '*' x 5;
     
     $string =~ s/-pass $password/-pass $asterisks/;
     
