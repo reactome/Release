@@ -278,11 +278,14 @@ sub run {
 	
 	$self->run_commands($self->gkb);
 	
+	say "Running $self->{name} post-step tests...";
 	my @post_step_test_errors = $self->post_step_tests();
 	if (@post_step_test_errors) {
+		say "Errors from $self->{name} post-step tests -- sending e-mail";
 		$self->mail->{'body'} = "Errors Reported\n\n" . join("\n", @post_step_test_errors);
 		$self->mail->{'to'} = 'automation';
 	} else {
+		say "No errors from $self->{name} post-step tests";
 		$self->mail->{'body'} .= "\n\n" if $self->mail->{'body'};
 		$self->mail->{'body'} .= "$self->{name} step has completed successfully";
 	}
