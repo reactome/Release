@@ -451,6 +451,8 @@ print FR "\|\}\n";
 
 $dba->execute('COMMIT');
 
+# Run script to output new GO Molecular Function instances based on the GO update instance edit from this script
+system("perl new_GO_molecular_function.pl $instance_edit->{db_id} > new_GO_molecular_function.txt");
 print "go_obo_update.pl has finished its job";
 
 sub different_go_instances {
