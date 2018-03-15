@@ -354,7 +354,7 @@ print FR "\{\| class \=\"wikitable\"
 \|\-\n";
 
 foreach my $duplicate_accession (grep {scalar @{ $accession_count{$_}} > 1} keys %accession_count) {
-    my $db_ids = join ',', @{$accession_count{$duplicate_accession}};
+    my $db_ids = join '<nowiki>|</nowiki>', @{$accession_count{$duplicate_accession}};
     print FR "\|$duplicate_accession\n";
     print FR "\|$db_ids\n";
     print FR "\|\-\n";
