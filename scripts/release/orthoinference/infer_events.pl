@@ -16,6 +16,8 @@ use Carp;
 use lib "$ENV{HOME}/bioperl-1.0";
 use lib "$ENV{HOME}/GKB/modules";
 
+use lib '/usr/local/gkb/modules';
+
 use GKB::DBAdaptor;
 use GKB::Instance;
 use GKB::Utils_esther;
@@ -1251,8 +1253,7 @@ sub infer_modified_residue {
             push @inferred_other_EWASs, $inf_ewas;
             @other_EWASs = grep {$instance->db_id != $_->db_id} @other_EWASs;
         }
-        push @inferred_other_EWASs, map @{$inferred_EWASs->{$_->db_id}}
-                                    grep {defined && $inferred_EWASs->{$_->db_id}} @other_EWASs;
+        push @inferred_other_EWASs, map @{$inferred_EWASs->{$_->db_id}}, grep {defined && $inferred_EWASs->{$_->db_id}} @other_EWASs;
         return unless @inferred_other_EWASs;
         
         my @inferred_residues;
@@ -1276,8 +1277,12 @@ sub infer_modified_residue {
             $inferred_ICCR = check_for_identical_instances($inferred_ICCR);
             $inferred_equivalent_ICCR = check_for_identical_instances($inferred_equivalent_ICCR);
             
-            $inferred_other_EWAS->add_attribute_value_if_necessary('hasModifiedResidue', $inferred_equivalent_ICCR);
-            $dba->update_attribute($inferred_other_EWAS, 'hasModifiedResidue');
+            if ($inferred_other_EWAS eq $inf_ewas) {
+                push @inferred_residues, $inferred_equivalent_ICCR;
+            } else {
+                $inferred_other_EWAS->add_attribute_value_if_necessary('hasModifiedResidue', $inferred_equivalent_ICCR);
+                $dba->update_attribute($inferred_other_EWAS, 'hasModifiedResidue');
+            }
             
             push @inferred_residues, $inferred_ICCR;
             $logger->info("InterChainCrosslinkedResidue $residue->{db_id} has been inferred for $opt_sp");
