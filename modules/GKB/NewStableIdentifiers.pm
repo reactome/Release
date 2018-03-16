@@ -405,64 +405,8 @@ sub get_species_prefix_from_regulation {
 sub get_prefix_from_species_instance {
     my $species_instance = shift;
     
-    return unless $species_instance && $species_instance->name->[0];
-    
-    if (get_preset_prefix_from_species_name($species_instance->name->[0])) {
-        return get_preset_prefix_from_species_name($species_instance->name->[0]);
-    }
-    
-    return get_prefix_from_species_name($species_instance->name->[0]);
-}
-
-sub get_preset_prefix_from_species_name {
-    my $species_name = shift;
-    
-    my %species_to_prefix = (
-      "Crithidia fasciculata" => 'CFS',
-      "Corynephage beta" => 'CPH',
-      "Hepatitis A virus" => 'HAV',
-      "Hepatitis B virus" => 'HBV',
-      "Hepatitis C Virus" => 'HCV',
-      "Hepatitis D virus" => 'HDV',
-      "Human herpesvirus" => 'HER',
-      "Human papillomavirus" => 'HPV',
-      "Molluscum contagiosum virus" => 'MCV',
-      "Mycobacterium tuberculosis" => 'MTU',
-      "Neisseria meningitidis" => 'NME',
-      "Influenza A virus" => 'FLU',
-      "Human immunodeficiency virus" => 'HIV',
-      "Rotavirus" => 'ROT',
-      "Sendai virus" => 'SEV',
-      "Sindbis virus" => 'SIV',
-      "Bacteria" => 'BAC',
-      "Viruses" => 'VIR'
-    );
-    
-    foreach my $species (keys %species_to_prefix) {
-        return $species_to_prefix{$species} if $species_name =~ /^$species/i;
-    }
-}
-
-sub get_prefix_from_species_name {
-    my $species_name = shift;
-    
-    my $logger = get_logger(__PACKAGE__);
-    
-    my ($first_letter_of_genus, $first_two_letters_of_species);
-    eval {
-        ($first_letter_of_genus, $first_two_letters_of_species) = $species_name =~ /(\w).*? (\w{2}).*?/;
-    };
-    if ($@) {
-        confess $@;
-    }
-    
-    
-    if (!$first_letter_of_genus || !$first_two_letters_of_species) {    
-        $logger->warn("Unable to get prefix for species " . $species_name);
-        return '';
-    }
-    
-    return uc($first_letter_of_genus . $first_two_letters_of_species);
+    return unless $species_instance && $species_instance->abbreviation->[0];
+    return $species_instance->abbreviation->[0];
 }
 
 sub get_all_entities {
