@@ -28,6 +28,7 @@ use Data::Dumper;
 use Getopt::Long;
 use DBI;
 use List::MoreUtils qw/any/;
+
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
@@ -514,10 +515,10 @@ sub infer_gse {
     
     my $logger = get_logger(__PACKAGE__);
 
-    my $ar = infer_members($gse->HasMember);
+    my @members = @{infer_members($gse->HasMember)};
     my $inf_gse = new_inferred_instance($gse);
     $inf_gse->Name(@{$gse->Name});
-    $inf_gse->HasMember(@{$ar});
+    $inf_gse->HasMember(@members);
     if ($gse->is_a('OpenSet')) {
         $logger->info("Inferring open set " . $gse->displayName . ' (' . $gse->db_id . ')');
         $inf_gse->ReferenceEntity(@{$gse->ReferenceEntity});
@@ -531,20 +532,20 @@ sub infer_gse {
         #handle CandidateSets
         if ($gse->is_a('CandidateSet')) {
             $logger->info("Inferring candidate set " . $gse->displayName . ' (' . $gse->db_id . ')');
-            my $ar_cand = infer_members($gse->HasCandidate);
-            if ($ar_cand->[0]) {
-                $inf_gse->HasCandidate(@{$ar_cand});
+            my @candidates = grep { !instance_in_list($_, \@members) } @{infer_members($gse->HasCandidate)};
+            if (scalar @candidates > 0) {
+                $inf_gse->HasCandidate(@candidates);
             } else {
                 $logger->info("No inferred candidates");
-                if ($ar->[0]) {
-                    if (!$ar->[1]) {
+                if ($members[0]) {
+                    if (!$members[1]) {
                         $logger->info("Single member -- returning member rather than set");
-                        $inf_gse = $ar->[0]; # return single member rather than a set
+                        $inf_gse = $members[0]; # return single member rather than a set
                     } else { # change to defined set if multiple members but no candidates
                         $logger->info("Multiple members -- changing candidate set to defined set");
                         my $inf_defined_set = new_inferred_instance_with_class($gse, 'DefinedSet');
                         $inf_defined_set->Name(@{$inf_gse->Name});
-                        $inf_defined_set->HasMember(@{$ar});
+                        $inf_defined_set->HasMember(@members);
                         $inf_defined_set->TotalProt($total);
                         $inf_defined_set->InferredProt($inferred);
                         $inf_defined_set->MaxHomologues($count);
@@ -660,6 +661,13 @@ sub orthologous_entity {
             return $i;
         }
     }
+}
+
+sub instance_in_list {
+    my $instance = shift;
+    my $list = shift;
+    
+    return any { $instance->reasonably_identical($_) } @$list;
 }
 
 sub has_species {
