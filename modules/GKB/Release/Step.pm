@@ -610,6 +610,7 @@ sub _set_passwords {
 			my $MAX_ATTEMPTS = 3;
 			my $retry;
 			do {
+				$attempts += 1;
 				$$passref = prompt("Enter your " . $passtype . " password: ", 1);
 				my $confirmed_password = prompt("Confirm your $passtype password: ", 1);
 				if ($confirmed_password ne $$passref) {
@@ -621,7 +622,6 @@ sub _set_passwords {
 						die("$message -- aborting\n");
 					}
 				}
-				$attempts += 1;
 			} while ($retry && $attempts < $MAX_ATTEMPTS);
 		}
 	}
