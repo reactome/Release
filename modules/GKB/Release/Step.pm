@@ -611,6 +611,7 @@ sub _set_passwords {
 			my $retry;
 			do {
 				$attempts += 1;
+				$retry = 0;
 				$$passref = prompt("Enter your " . $passtype . " password: ", 1);
 				my $confirmed_password = prompt("Confirm your $passtype password: ", 1);
 				if ($confirmed_password ne $$passref) {
