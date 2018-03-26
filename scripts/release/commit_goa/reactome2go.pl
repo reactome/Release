@@ -42,10 +42,11 @@ $opt_db =~ /(\d+)$/;
 my $outfile = "Reactome2GoV" . $1;
 
 open(FILE, ">$outfile") or die "$0: could not open file $outfile";
-
+binmode(FILE, ":utf8");
 my $ar = $dba->fetch_instance(-CLASS => 'Event'); # Obtains a reference to the array of all Reactome events
 
 # Each event in Reactome is processed
+binmode(STDOUT, ":utf8");
 foreach my $ev (@{$ar}) {
     print "$0: ev->db_id=" . $ev->db_id() . "\n";
     Reactome2GO($ev);
