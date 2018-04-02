@@ -563,10 +563,10 @@ sub infer_gse {
         #handle DefinedSets
         } elsif ($gse->is_a('DefinedSet')) {
             $logger->info("Inferring defined set " . $gse->displayName . ' (' . $gse->db_id . ')');
-            if (!$ar->[0]) { #no member
+            if (!$members[0]) { #no member
             	$override ? return create_ghost($gse) : return;
-            } elsif (!$ar->[1]) { #only one member, return member itself rather than DefinedSet
-            	$inf_gse = $ar->[0];
+            } elsif (!$members[1]) { #only one member, return member itself rather than DefinedSet
+            	$inf_gse = $members[0];
             }	   
         }
     }

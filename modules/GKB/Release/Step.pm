@@ -606,11 +606,24 @@ sub _set_passwords {
 	foreach my $passtype (@{$self->passwords}) {
 		my $passref = $passwords{$passtype};
 		if (!$$passref) {
-			$$passref = prompt("Enter your " . $passtype . " password: ", 1);
-			my $confirmed_password = prompt("Confirm your $passtype password: ", 1);
-			if ($confirmed_password ne $$passref) {
-				die ("$passtype passwords do not match -- aborting\n");
-			}
+			my $attempts = 0;
+			my $MAX_ATTEMPTS = 3;
+			my $retry;
+			do {
+				$attempts += 1;
+				$retry = 0;
+				$$passref = prompt("Enter your " . $passtype . " password: ", 1);
+				my $confirmed_password = prompt("Confirm your $passtype password: ", 1);
+				if ($confirmed_password ne $$passref) {
+					$retry = 1; 
+					my $message = "$passtype passwords do not match";
+					if ($attempts < $MAX_ATTEMPTS) {
+                        print("$message -- please try again\n");
+                    } else {
+						die("$message -- aborting\n");
+					}
+				}
+			} while ($retry && $attempts < $MAX_ATTEMPTS);
 		}
 	}
 }

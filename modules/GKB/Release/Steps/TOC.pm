@@ -26,36 +26,35 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
-    my $ssh = $self->get_server();
-    my $livedb = 'gk_current';
-  
+    my $live_db = 'gk_current';
+    my $img_fp_dir = "$website_static/cgi-tmp/img-fp";
+
     if ($gkbdir eq "gkbdev") {
         $self->cmd("Removing cached frontpage files",
             [
-                ["echo $sudo | sudo -S rm -rf $website_static/cgi-tmp/img-fp/$db"],
-                ["echo $sudo | sudo -S rm $website_static/cgi-tmp/img-fp/$livedb"]
+                ["echo $sudo | sudo -S rm -rf $img_fp_dir/$db"],
+                ["mv --backup=numbered $img_fp_dir/$live_db $img_fp_dir/$live_db.old"]
             ]
         );
     
         $self->cmd("Creating table of contents",
             [
-                ["mkdir -p $website_static/cgi-tmp/img-fp"],
+                ["mkdir -p $img_fp_dir"],
                 ["$website_static/cgi-bin/toc DB=$db"],
                 ["$website_static/cgi-bin/doi_toc DB=$db"],
-                ["ln -s $website_static/cgi-tmp/img-fp/$db $website_static/cgi-tmp/img-fp/$livedb"],
-                ["echo $sudo | sudo -S chown -R \${USER}:www-data $website_static/cgi-tmp/img-fp/$db/toc"],
-                ["echo $sudo | sudo -S chown -R \${USER}:www-data $website_static/cgi-tmp/img-fp/$db/doi_toc"]
+                ["mv $img_fp_dir/$db $img_fp_dir/$live_db"],
+                ["echo $sudo | sudo -S chown -R www-data:gkb $img_fp_dir/$live_db/*toc"]
             ]
         );
     } elsif ($gkbdir eq "gkb") {
         $self->cmd("Creating table of contents",
             [
-                ["echo $sudo | sudo -S rm -rf $website_dir/html/img-fp/$livedb"],
-                ["$website_static/cgi-bin/toc DB=$livedb"],
-                ["$website_static/cgi-bin/doi_toc DB=$livedb"],
-                ["echo $sudo | sudo -S chown -R \${USER}:www-data $website_dir/html/img-fp/$livedb/*toc"]
+                ["echo $sudo | sudo -S rm -rf $img_fp_dir/$live_db"],
+                ["$website_static/cgi-bin/toc DB=$live_db"],
+                ["$website_static/cgi-bin/doi_toc DB=$live_db"],
+                ["echo $sudo | sudo -S chown -R www-data:gkb $img_fp_dir/$live_db/*toc"]
             ],
-            {"ssh" => $ssh}
+            {"ssh" => $self->get_server()}
         );
     }
 };
@@ -77,12 +76,13 @@ sub get_server {
 sub _check_file_modification_times {
     my $self = shift;
     
+    my $live_db = 'gk_current';
+    
     my $TIME_ZONE = 'UTC';
     my $MAX_SINCE_MODIFIED = 2; # Minutes
     
     my @errors;
-    my $website_dir = replace_gkb_alias_in_dir($website, $self->gkb);
-    foreach my $file (map {"$website_dir/html/img-fp/$_"} ("$db/doi_toc", "$db/toc", 'gk_current')) {
+    foreach my $file (map {"$website_static/cgi-tmp/img-fp/$_"} ("$live_db/doi_toc", "$live_db/toc")) {
         my $modification_time = $self->_get_modification_time($file, \@errors);
         next unless $modification_time;
         my $seconds_since_modification = time - $modification_time;
