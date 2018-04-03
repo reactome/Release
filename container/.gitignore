@@ -1,4 +1,8 @@
-mysql_databases
-mysql_databases_*
+./mysql_databases
+./mysql_databases_*
 Secrets.pm
-logs
+logs/
+logs_*
+nfs*
+./biopax*
+owls/
