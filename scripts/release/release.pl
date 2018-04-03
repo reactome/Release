@@ -78,8 +78,8 @@ unless (defined $ARGV[0] && $ARGV[0] =~ /\d(\.\.)\d|\d,?/) {
 }
 
 unless ($TEST_MODE) {
-    $user = prompt("Enter user name - leave blank for default of $user:") || $user;
     $version = prompt("Enter release version number:");
+    $user = prompt("Enter user name - leave blank for default of $user:") || $user;
     die "Current version number must be an integer" unless $version && $version =~ /^\d+$/;
     $prevver = $version - 1;
 } else {

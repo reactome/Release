@@ -37,17 +37,29 @@ print STDERR "My species:\n", Dumper(\@species);
 
 make_path('output', { mode => 0775 });
 my @cmds = (
-	    qq(./retrieve_indirectIdentifiers_from_mart.pl @params),
-	    qq(./indirectIdentifiers_from_mart.pl @params),
-	    qq(./gene_names_from_mart.pl @params)
-	    );
+	qq(./retrieve_indirectIdentifiers_from_mart.pl @params),
+	qq(./indirectIdentifiers_from_mart.pl @params),
+	qq(./gene_names_from_mart.pl @params)
+);
 
 foreach my $sp (@species) {
     foreach my $cmd (@cmds) {
 		my $tmp = "$cmd -sp '$sp'";
-		print STDERR "Command to be run: $tmp\n";
-		system($tmp) == 0 or print "$tmp failed.\n";
+		print STDERR "Command to be run: " . hide_password($tmp) . "\n";
+		system($tmp) == 0 or print(hide_password($tmp) . " failed.\n");
     }
 }
 
 print STDERR "$0: no fatal errors.\n";
+
+sub hide_password {
+    my $string = shift;
+    
+    $string =~ /-pass (.*?) /;
+    my $password = $1;
+    my $asterisks = '*' x 5;
+    
+    $string =~ s/-pass $password/-pass $asterisks/;
+    
+    return $string;
+}

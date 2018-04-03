@@ -189,6 +189,8 @@ use File::stat;
 use List::MoreUtils qw/uniq all/;
 use Net::OpenSSH;
 
+use lib '/usr/local/gkb/modules';
+
 use GKB::Release::Utils;
 use GKB::Release::Config;
 
@@ -276,17 +278,22 @@ sub run {
 	
 	$self->run_commands($self->gkb);
 	
+	say "Running $self->{name} post-step tests...";
 	my @post_step_test_errors = $self->post_step_tests();
 	if (@post_step_test_errors) {
+		say "Errors from $self->{name} post-step tests -- sending e-mail";
 		$self->mail->{'body'} = "Errors Reported\n\n" . join("\n", @post_step_test_errors);
 		$self->mail->{'to'} = 'automation';
 	} else {
+		say "No errors from $self->{name} post-step tests";
 		$self->mail->{'body'} .= "\n\n" if $self->mail->{'body'};
 		$self->mail->{'body'} .= "$self->{name} step has completed successfully";
 	}
 	$self->mail_now();
 	
+	say releaselog("Archiving output, logs, dump files...");
 	$self->archive_files($version);
+
 }
 
 sub source_code_passes_tests {
@@ -394,8 +401,8 @@ sub archive_files {
 	
 	`mkdir -p $step_version_archive`;
 	if (-d $step_version_archive) {
-		`mv --backup=numbered $_ $step_version_archive 2>/dev/null` foreach qw/*.dump *.err *.log *.out/;
-		`gzip -qf *.dump* 2> /dev/null`;
+		`gzip -qf $step_version_archive/*.dump 2> /dev/null`;
+		`mv --backup=numbered $_ $step_version_archive 2> /dev/null` foreach qw/*.dump* *.err *.log *.out/;
 		symlink $step_archive, 'archive' unless (-e 'archive');
 	}
 	
@@ -598,7 +605,26 @@ sub _set_passwords {
 	
 	foreach my $passtype (@{$self->passwords}) {
 		my $passref = $passwords{$passtype};
-		$$passref = prompt("Enter your " . $passtype . " password: ", 1) unless $$passref;
+		if (!$$passref) {
+			my $attempts = 0;
+			my $MAX_ATTEMPTS = 3;
+			my $retry;
+			do {
+				$attempts += 1;
+				$retry = 0;
+				$$passref = prompt("Enter your " . $passtype . " password: ", 1);
+				my $confirmed_password = prompt("Confirm your $passtype password: ", 1);
+				if ($confirmed_password ne $$passref) {
+					$retry = 1; 
+					my $message = "$passtype passwords do not match";
+					if ($attempts < $MAX_ATTEMPTS) {
+                        print("$message -- please try again\n");
+                    } else {
+						die("$message -- aborting\n");
+					}
+				}
+			} while ($retry && $attempts < $MAX_ATTEMPTS);
+		}
 	}
 }
 

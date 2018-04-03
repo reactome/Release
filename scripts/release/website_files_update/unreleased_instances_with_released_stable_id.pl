@@ -101,6 +101,7 @@ my $released_instances = $release_dba->fetch_instance(-CLASS => $class);
 my %released;
 foreach my $instance (@{$released_instances}) {
     next unless $instance->stableIdentifier->[0];
+    next unless $instance->stableIdentifier->[0]->released->[0] && $instance->stableIdentifier->[0]->released->[0] =~ /true/i;
     my $stable_id = $instance->stableIdentifier->[0]->identifier->[0];
     $released{$stable_id}++;
 }
@@ -112,10 +113,12 @@ $class = lc $class;
 $outfile =~ s/instances/$class/;
 
 open my $out, '>', $outfile;
+binmode($out, ":utf8");
 foreach my $instance (@{$curated_instances}) {
     next unless $instance->species->[0];
     next unless $instance->species->[0]->name->[0] =~ /Homo sapiens/;
     next unless $instance->stableIdentifier->[0];
+    next unless $instance->stableIdentifier->[0]->released->[0] && $instance->stableIdentifier->[0]->released->[0] =~ /true/i;
     my $stable_id = $instance->stableIdentifier->[0]->identifier->[0];
     next if $released{$stable_id};
     

@@ -230,13 +230,6 @@ my @cmds = (
     ],
 
     [
-    "psicquic_indexers",
-     1,
-     1,
-     "perl psicquic_indexers.pl -release $release_nr"
-    ],
-
-    [
      "gene_association.reactome",
      1,
      0,
