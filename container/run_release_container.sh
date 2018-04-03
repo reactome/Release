@@ -59,7 +59,7 @@ touch logs/orthoinference/simplified_database.out
 touch logs/orthoinference/simplified_database.log
 touch logs/orthoinference/simplified_database.err
 
-docker run -it --name release_system --net reactome_release \
+docker run -it --name release_system \
 	-v $(pwd)/stable_id_mapping.stored_data:/release/scripts/release/generate_stable_ids_orthoinference/stable_id_mapping.stored_data \
 	-v $(pwd)/Secrets.pm:/release/modules/GKB/Secrets.pm \
 	-v $(pwd)/release-config.pm:/release/modules/GKB/Release/Config.pm \
