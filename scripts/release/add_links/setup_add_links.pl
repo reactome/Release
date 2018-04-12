@@ -72,7 +72,7 @@ sub update_addlinks_repo {
 sub clone_addlinks_repo {
     my $addlinks_dir = shift;
     
-    system("git clone https://github.com/reactome/AddLinks.git $addlinks_dir");
+    system("git clone https://github.com/reactome/add-links.git $addlinks_dir");
 }
 
 sub build_jar {
