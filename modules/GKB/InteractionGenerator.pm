@@ -653,6 +653,9 @@ sub find_mitab_interactors_for_ReferenceSequence {
 	      'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}},
              -OUT_CLASSES => ['ReactionlikeEvent', 'CatalystActivity', 'PhysicalEntity']);
 	foreach my $i (@{$upstream_instances}) {
+		# TODO: 'Regulation.regulatedEntity' will be removed soon. ReactionlikeEvent will have a regulatedBy attribute to resolve this.
+		# Switching to a normal (instead of reverse) lookup on 'regulatedBy' on the elements of @{$upstream_instances} might work, but
+		# that will return an array, so the code that follows might need to be re-worked to account for this.
 	    foreach my $regulation (@{$i->reverse_attribute_value('regulatedEntity')}) {
 		my $regulators = $regulation->follow_class_attributes
 		    (-INSTRUCTIONS => 
