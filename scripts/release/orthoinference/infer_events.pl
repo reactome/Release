@@ -418,7 +418,7 @@ sub get_physical_entities_in_reaction_like_event {
     push @physical_entities, @{$reaction_like_event->output};
     push @physical_entities, map($_->physicalEntity->[0], @{$reaction_like_event->catalystActivity});
     
-    
+    # TODO: regulatedEntity will become invalid, must switch to 'regulatedBy'
     my @regulations = @{$reaction_like_event->reverse_attribute_value('regulatedEntity')};
     my @regulators = map {@{$_->regulator}} @regulations;
     push @physical_entities, grep {$_->is_a('PhysicalEntity')} @regulators;
@@ -974,6 +974,7 @@ sub create_inf_cat {
 sub infer_regulation {
     my ($i, $release_date) = @_;
     my @reg;
+    # TODO: input will soon only be a ReactionLikeEvent and the reverse to attribute will be "regulatedBy" and it may return a list of several things as it is 1:n (RLE:Regulation)
     my $reg_ar = $i->reverse_attribute_value('regulatedEntity');
     if ($reg_ar->[0]) {
         foreach my $reg (@{$reg_ar}) {
