@@ -1094,6 +1094,8 @@ sub hyperlinked_identifier {
 sub regulation_as_rows {
     my ($self) = @_;
     my $out = '';
+    # TODO: Soon, regulatedEntity will not be valid (it will be removed!). ReactionlikeEvent will have a 1:N regulatedBy attribute. So, this might have to change
+    # to get a list of things that the Regulation regulates (via a reverse lookup on regulatedBy).
     if ($self->is_valid_reverse_attribute('regulatedEntity')) {
 	my $regulation = $self->reverse_attribute_value('regulatedEntity');
 	@{$regulation} = grep {$_->Regulator->[0]} @{$regulation};

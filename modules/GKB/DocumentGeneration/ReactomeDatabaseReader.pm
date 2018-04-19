@@ -1488,6 +1488,10 @@ sub get_regulation_text_units_from_instance() {
     my @text_units = ();
     my $text_unit;
 
+	# TODO: This will need to change. Regulation.regulatedEntity will be removed. Instead, ReactionlikeEvent will have a new 'regulatedBy' attribute.
+	# This function is expecting something that is an input/output of a ReactionlikeEvent as the function input. Maybe we should be looking up the regulator
+	# rather than doing a reverse lookup of regulatedEntity? Or do a regular lookup on regulatedBy, except that will need the original event, not its
+	# inputs/outputs.
 	my $regulators = $instance->reverse_attribute_value('regulatedEntity');
 	if (!(defined $regulators) || scalar(@{$regulators}) < 1) {
     	return @text_units;
