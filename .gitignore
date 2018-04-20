@@ -13,3 +13,6 @@ modules/GKB/biomart/*
 .atomignore
 container/logs*
 container/mysql_databases*
+.includepath
+.project
+.settings
