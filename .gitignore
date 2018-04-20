@@ -5,6 +5,9 @@ tmp/
 *.dump
 *.log
 *.old
+*.class
 news.html
 inference_stats.png
 website/html/img-tmp
+modules/GKB/biomart/*
+.atomignore
