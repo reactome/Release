@@ -1,8 +1,11 @@
-./mysql_databases
-./mysql_databases_*
+mysql_databases
+mysql_databases*
+logs*
+mysql_databases_*
 Secrets.pm
 logs/
 logs_*
 nfs*
-./biopax*
+biopax*
 owls/
+*.class
