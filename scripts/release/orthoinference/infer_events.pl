@@ -820,15 +820,20 @@ sub infer_event {
     $being_inferred{$event} = 0;
     
     if ($regulation_collection->[0]) {
+    	$logger->info("Number of Regulators that this event (".$inf_e->db_id.") is regulatedBy: ".scalar(@{$regulation_collection}));
+    	#$inf_e->RegulatedBy(@{$regulation_collection});
         foreach my $regulation_pair (@{$regulation_collection}) {
             my $source_regulation = $regulation_pair->{source};
             my $inferred_regulation = $regulation_pair->{inferred};
-        
-            $inferred_regulation->RegulatedEntity($inf_e);
+            #$inferred_regulation->RegulatedEntity($inf_e);
+            
             $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_e has been stored
             $source_regulation->inferredTo(@{$source_regulation->inferredTo});
             $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
             $dba->update_attribute($source_regulation, 'inferredTo');
+            
+            $inf_e->add_attribute_value('regulatedBy', $inferred_regulation);
+    		$dba->update_attribute($inf_e,'regulatedBy');
         }
     }
     $count_inferred_leaves++; #counts successfully inferred events
@@ -973,55 +978,53 @@ sub create_inf_cat {
 #Arguments: Event or CatalystActivity instance to be inferred and release date
 #returns undef if inference unsuccessful and the Regulation instance is of class 'Requirement', returns 1 and an array ref with the inferred Regulation instances in all other cases (the array may be empty if there is no Regulation instance attached to the incoming instance in the first place, or if the Regulation instance cannot be inferred, but is not of class 'Requirement')
 sub infer_regulation {
-    my ($i, $release_date) = @_;
-    my @reg;
-    # TODO: input will soon only be a ReactionLikeEvent and the reverse to attribute will be "regulatedBy" and it may return a list of several things as it is 1:n (RLE:Regulation)
+	my ($i, $release_date) = @_;
+	my @reg;
+	# TODO: input will soon only be a ReactionLikeEvent and the reverse to attribute will be "regulatedBy" and it may return a list of several things as it is 1:n (RLE:Regulation)
 #    my $reg_ar = $i->reverse_attribute_value('regulatedEntity');
 	my $reg_ar = $i->regulatedBy;
-    if ($reg_ar->[0]) {
-        foreach my $reg (@{$reg_ar}) {
-            my $regulator = infer_regulator($reg->Regulator->[0], $release_date);
-            unless ($regulator) {
-                if ($reg->is_a('Requirement')) {
-                    return; #the event should not be inferred in this case
-                } else {
-                    next; #no Regulation object is stored, but this doesn't stop the event being inferred
-                }
-            }
-            my $inf_reg = new_inferred_instance($reg);
-            $inf_reg->Regulator($regulator);
-            $inf_reg->add_attribute_value_if_necessary('inferredFrom', $reg);
-
-            push @reg, {
-                source => $reg,
-                inferred => $inf_reg
-            };
-        }
-    }
-    return (1, \@reg);
+	if ($reg_ar->[0]) {
+		foreach my $reg (@{$reg_ar}) {
+			my $regulator = infer_regulator($reg->Regulator->[0], $release_date);
+			unless ($regulator) {
+				if ($reg->is_a('Requirement')) {
+					return; #the event should not be inferred in this case
+				} else {
+					next; #no Regulation object is stored, but this doesn't stop the event being inferred
+				}
+			}
+			my $inf_reg = new_inferred_instance($reg);
+			$inf_reg->Regulator($regulator);
+			$inf_reg->add_attribute_value_if_necessary('inferredFrom', $reg);
+			push @reg, {
+				source => $reg,
+				inferred => $inf_reg
+			};
+		}
+	}
+	return (1, \@reg);
 }
 
 #Argument: an instance allowed as regulator and release date
 #returns an instance if inference is successful, or undef if unsuccessful
 sub infer_regulator {
-    my ($reg, $release_date) = @_;
-    return unless $reg;
-    
-    my $inf_reg;
-    if ($reg->is_a('PhysicalEntity')) {
-        $inf_reg = orthologous_entity($reg);
-    } elsif ($reg->is_a('CatalystActivity')) {
-        $inf_reg = create_inf_cat($reg);
-    } elsif ($reg->is_a('Event')) {
-        if ($being_inferred{$reg}) {
-            print $regulator $reg->db_id . "\n";
-            return;
-        }
-	
-        $inf_reg = infer_event($reg, $release_date);
-        return if defined $inf_reg && $inf_reg == 1; #the event has no accessioned sequences and is therefore not eligible for inference
-    }
-    return $inf_reg;
+	my ($reg, $release_date) = @_;
+	return unless $reg;
+
+	my $inf_reg;
+	if ($reg->is_a('PhysicalEntity')) {
+		$inf_reg = orthologous_entity($reg);
+	} elsif ($reg->is_a('CatalystActivity')) {
+		$inf_reg = create_inf_cat($reg);
+	} elsif ($reg->is_a('Event')) {
+		if ($being_inferred{$reg}) {
+			print $regulator $reg->db_id . "\n";
+			return;
+		}
+		$inf_reg = infer_event($reg, $release_date);
+		return if defined $inf_reg && $inf_reg == 1; #the event has no accessioned sequences and is therefore not eligible for inference
+	}
+	return $inf_reg;
 }
 
 #Argument: Complex or Polymer to be inferred
