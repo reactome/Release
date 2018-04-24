@@ -96,7 +96,8 @@ sub get_orthologous_instances {
     if ($instance->is_a('Event')) {
         return unless is_human($instance);
         push @orthologous_instances, @{$instance->attribute_value('orthologousEvent')};
-    } elsif ($instance->is_a('PhysicalEntity') || $instance->is_a('Regulation')) {
+#    } elsif ($instance->is_a('PhysicalEntity') || $instance->is_a('Regulation')) {
+	} elsif ($instance->is_a('PhysicalEntity')) {
         push @orthologous_instances, @{$instance->attribute_value('inferredTo')};
     } else {
         $logger->warn($instance->displayName . ' (' . $instance->db_id . ') is a(n) ' .
@@ -129,28 +130,28 @@ sub classes_with_stable_ids {
 sub species {
     my $instance = shift;
     
-    my $species_display_name = $instance->is_a('Regulation') ?
-        get_regulation_instance_species($instance) :
-        eval{$instance->attribute_value('species')->[0]->displayName};
+    my $species_display_name = eval{$instance->attribute_value('species')->[0]->displayName};
     
     return $species_display_name ? abbreviate($species_display_name) : undef;
 }
 
-sub get_regulation_instance_species {
-    my $instance = shift;
-    
-    croak "$instance is not an instance\n" unless blessed($instance) && $instance->isa("GKB::Instance");
-    croak $instance->displayName . ' (' . $instance->db_id . ") is not a regulation instance\n" unless $instance->is_a('Regulation');
-    # TODO: regulatedEntity will no longer be a valid attribute. Need to get 'regulatedBy' from a ReactionlikeEvent. Maybe just skip straight to getting the species from the regulator?
-    # After all, if we look at all the RLEs that reference $instance via regulatedBy, they might not all be the same species. Then what do we do?
-    if ($instance->regulatedEntity->[0]) {
-        return get_species_from_instance($instance->regulatedEntity->[0]);
-    } elsif ($instance->regulator->[0]) {
-        return get_species_from_instance($instance->regulator->[0]);
-    }
-    
-    return undef;
-}
+#sub get_regulation_instance_species {
+#	my $instance = shift;
+#
+#	croak "$instance is not an instance\n" unless blessed($instance) && $instance->isa("GKB::Instance");
+#	croak $instance->displayName . ' (' . $instance->db_id . ") is not a regulation instance\n" unless $instance->is_a('Regulation');
+#	# TODO: regulatedEntity will no longer be a valid attribute. Need to get 'regulatedBy' from a ReactionlikeEvent. Maybe just skip straight to getting the species from the regulator?
+#	# After all, if we look at all the RLEs that reference $instance via regulatedBy, they might not all be the same species. Then what do we do?
+##    if ($instance->regulatedEntity->[0]) {
+##        return get_species_from_instance($instance->regulatedEntity->[0]);
+##    } elsif ($instance->regulator->[0]) {
+#	# At Guanming's suggestion, this code will focus on the regulator.
+#	if ($instance->regulator->[0])
+#	{
+#		return get_species_from_instance($instance->regulator->[0]);
+#	}
+#	return undef;
+#}
 
 sub get_species_from_instance {
     my $instance = shift;
