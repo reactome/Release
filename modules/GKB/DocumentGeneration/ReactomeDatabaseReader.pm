@@ -110,80 +110,80 @@ sub AUTOLOAD {
 sub new {
     my($pkg, @args) = @_;
     my $self = bless {}, $pkg;
-    
+
     $self->document_style($DOCUMENT_STYLE_BOOK);
     $self->hyperlink_base_url("http://www.reactome.org");
     $self->hyperlink_db("gk_current");
-    
+
     my $instance_hash = {};
     $self->instance_hash($instance_hash);
-    
+
     return $self;
 }
 
 sub set_document_style {
     my ($self, $document_style) = @_;
-	
+
     $self->document_style($document_style);
 }
 
 sub set_document_style_book {
     my ($self) = @_;
-	
+
     $self->document_style($DOCUMENT_STYLE_BOOK);
 }
 
 sub set_document_style_report {
     my ($self) = @_;
-	
+
     $self->document_style($DOCUMENT_STYLE_REPORT);
 }
 
 sub set_document_style_reviewers_report {
     my ($self) = @_;
-	
+
     $self->document_style($DOCUMENT_STYLE_REVIEWERS_REPORT);
 }
 
 sub is_document_style_book {
     my ($self) = @_;
-	
+
 	if ($self->document_style() eq $DOCUMENT_STYLE_BOOK) {
 		return 1;
 	}
-	
+
 	return 0;
 }
 
 sub is_document_style_report {
     my ($self) = @_;
-	
+
 	if ($self->document_style() eq $DOCUMENT_STYLE_REPORT) {
 		return 1;
 	}
-	
+
 	return 0;
 }
 
 sub is_document_style_reviewers_report {
     my ($self) = @_;
-	
+
 	if ($self->document_style() eq $DOCUMENT_STYLE_REVIEWERS_REPORT) {
 		return 1;
 	}
-	
+
 	return 0;
 }
 
 sub set_hyperlink_base_url {
     my ($self, $hyperlink_base_url) = @_;
-	
+
     $self->hyperlink_base_url($hyperlink_base_url);
 }
 
 sub set_hyperlink_db {
     my ($self, $hyperlink_db) = @_;
-	
+
     $self->hyperlink_db($hyperlink_db);
 }
 
@@ -192,7 +192,7 @@ sub set_hyperlink_db {
 # filenames hopefully unique.  Stem is stored internally.
 sub store_array {
     my ($self, $array) = @_;
-    
+
 	my $user = $ENV{USER};
 	if (!(defined $user)) {
 		$user = "anonymous"
@@ -204,7 +204,7 @@ sub store_array {
 		$filename = "$storable_root_dir/$stem" . "_" . $i;
 		Storable::nstore($array->[$i], $filename);
 	}
-	
+
 	$self->stored_array_element_num(0);
 	$self->stored_array_stem($stem);
 }
@@ -215,11 +215,11 @@ sub store_array {
 # data!
 sub retrieve_next_array_element {
     my ($self) = @_;
-    
+
     if (!(defined $self->stored_array_stem)) {
     	return undef;
     }
-    
+
     my $filename = "$storable_root_dir/" . $self->stored_array_stem . "_" . $self->stored_array_element_num;
     my $array_element = undef;
     if ( -e $filename ) {
@@ -366,11 +366,11 @@ sub get_copyright_conditions {
 # Emits a page containing the preface text.
 sub get_preface {
     my ($self) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
 
     my $text = "REACTOME is an open-source, open access, manually curated and peer-reviewed pathway database. Pathway annotations are authored by expert biologists, in collaboration with Reactome editorial staff and cross-referenced to many bioinformatics databases. These include NCBI Entrez Gene, Ensembl and UniProt databases, the UCSC and HapMap Genome Browsers, the KEGG Compound and ChEBI small molecule databases, PubMed, and Gene Ontology.\n";
-    
+
     $logger->info("text=|$text|");
 
     return $text;
@@ -381,7 +381,7 @@ sub get_acknowledgements {
     my ($self) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     my $text = "";
 
     # The grant awarding bodies
@@ -422,20 +422,20 @@ sub get_members {
 		# members no longer work for us.
 		if ($line =~ /\<tr\>\<td\>(.+)\<\/td\>/i) {
 		    $member=$1;
-	
+
 		    if ($member =~ /alumni/i) {
 				last;
 		    }
 		    # Remove starting and trailing white space
 		    $member = GKB::HTMLUtils->remove_white_padding($member);
-		    
+
 		    # Replace tabs with spaces
 		    $member =~ s/\t+/ /g;
-	
+
 		    push @members, $member;
 		}
     }
-    
+
     return @members;
 }
 
@@ -444,7 +444,7 @@ sub get_last_word {
 
 	$text =~ / ([^ ]+)$/;
 	my $last_word = $1;
-	
+
 	return $last_word;
 }
 
@@ -455,13 +455,13 @@ sub get_last_word {
 # This is not very nice!!
 sub get_about_html_content {
     my ($self) = @_;
-    
+
     my $about_html = "../../website/html/about.html";
 	if (defined $GK_ROOT_DIR) {
 		$about_html = "$GK_ROOT_DIR/website/html/about.html";
 	}
     my $content = GKB::FileUtils->read_file($about_html);
-    
+
     return $content;
 }
 
@@ -470,11 +470,11 @@ sub get_about_html_content {
 # It would be nice if this didn't have to take any arguments.
 sub get_next_text_unit {
     my ($self, $depth, $depth_limit,$include_images_flag) = @_;
-    
+
     # If there are still text units for the current chapter hanging around,
     # retrieve one of those.
     my $text_unit = $self->retrieve_next_array_element();
-    
+
     # If there are no more text units for the current chapter, assume that
     # the end of the chapter has been reached and try to start a new
     # chapter.
@@ -483,16 +483,16 @@ sub get_next_text_unit {
 		my $pathway = shift @{$pathways};
 		if ($pathway) {
 		    my @initial_pathways = ($pathway);
-		    	
+
 		    my @text_units = $self->get_chapters_from_events_text_units($depth, $depth_limit, $chapter_num, [], \@initial_pathways, $include_images_flag);
-	
+
 		    if (@text_units && scalar(@text_units)>0) {
 		    	$self->store_array(\@text_units);
 
 		    	# Pop the first array element out of its file
 		    	$text_unit = $self->retrieve_next_array_element();
 		    }
-	
+
 		    $chapter_num++;
 		}
     }
@@ -514,10 +514,10 @@ sub get_next_text_unit_old {
     my ($self, $depth, $depth_limit,$include_images_flag) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     my $text_unit;
     my $blobbi_text_unit = $self->retrieve_next_array_element();
-    
+
 	if (defined $blobbi_text_unit) {
 	    $logger->info("blobbi_text_unit=$blobbi_text_unit");
 	} else {
@@ -538,7 +538,7 @@ sub get_next_text_unit_old {
 		if ($pathway) {
 		    my @initial_pathways = ($pathway);
 		    @global_text_units = $self->get_chapters_from_events_text_units($depth, $depth_limit, $chapter_num, "", \@initial_pathways, $include_images_flag);
-	
+
 		    if (@global_text_units && scalar(@global_text_units)>0) {
 		    	$logger->info("storing new array");
 		    	$self->store_array(\@global_text_units);
@@ -551,7 +551,7 @@ sub get_next_text_unit_old {
 				}
 				$text_unit = shift @global_text_units;
 		    }
-	
+
 		    $chapter_num++;
 		}
     }
@@ -582,7 +582,7 @@ sub get_next_text_unit_step_thru {
     if (@global_text_units && scalar(@global_text_units)>0) {
 	$text_unit = shift @global_text_units;
     } else {
-	# If this is the first time we have called this subroutine or 
+	# If this is the first time we have called this subroutine or
 	# @global_text_units is empty, try to extract more text units.
 	if (!$step_thru_pathway) {
 	    $step_thru_pathway = shift @{$pathways};
@@ -650,7 +650,7 @@ sub get_chapters_from_events_text_units {
     my ($self, $depth, $depth_limit, $section, $parent_events, $events, $include_images_flag, $step_thru_increments) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     my @actual_events = @{$events};
     if (scalar(@actual_events) == 2 && $events->[0]->is_a("Pathway") && $events->[1]->is_a("Pathway")) {
         $logger->info("we have 2 pathways");
@@ -681,19 +681,19 @@ sub get_chapters_from_events_text_units {
 		if (!$step_thru_increments->[$depth]) {
 		    $step_thru_increments->[$depth]=0;
 		}
-	
+
 		$step_thru_position = $step_thru_increments->[$depth];
     }
 
     my $event;
     my $new_depth = $depth+1;
 
-# 28.11.07 Bernard would like to suppress printing of sub-event listing    
+# 28.11.07 Bernard would like to suppress printing of sub-event listing
 #    # Only emit the subevent list once.
 #    if ($step_thru_position<1) {
 #	       @text_units = (@text_units, $self->get_subevent_summary($event, $parent_event, \@actual_events, $depth, $new_depth, $depth_limit, $include_images_flag));
 #    }
-    
+
     # Print each event and then recurse down to sub-events, if there
     # are any.
     my $event_num;
@@ -710,7 +710,7 @@ sub get_chapters_from_events_text_units {
 				last;
 		    }
 		}
-	
+
 		$event = $actual_events[$event_num];
 
 		# Add a title and/or a list of authors to the beginning of the document
@@ -723,18 +723,18 @@ sub get_chapters_from_events_text_units {
 				@text_units = (@text_units, $self->get_reviewers_report_introduction($event, $depth));
 			}
 		}
-		
+
 		if ($depth == 0) {
 		    $new_section = $section;
 		} else {
 		    $new_section = $self->get_new_section($section, $event_num+1);
 		}
-	
+
 		# Don't try to emit an event that lacks content (text or image)
 		if ($event->is_a("Pathway") && !( GKB::Utils->is_pathway_with_content($event, $new_depth, $depth_limit) )) {
 			next;
 		}
-		
+
 		# If we are reporting a disease pathway, skip normal pathways
 		if (!(@{$event->disease} > 0) && $self->{diseased} && $event->is_a("Pathway")) {
 		    next;
@@ -745,17 +745,17 @@ sub get_chapters_from_events_text_units {
 		    # Emit event
 		    @text_units = (@text_units, $self->get_instance_text_units($event, $depth, $new_section, $instance_hash, $include_images_flag, $parent_events));
 		}
-	
+
 		# Find all sub- pathways and reactions
 		my @sub_events = GKB::Utils->get_instance_sub_events($event);
-	
+
 		# Go down one level in the recursion, glub, glub, glub
 		my @new_text_units = ();
 		if (@sub_events && scalar(@sub_events)>0) {
             my $ancestral_events = $parent_events->[0] ? [@{$parent_events}, $event] : [$event];
 		    @new_text_units = $self->get_chapters_from_events_text_units($new_depth, $depth_limit, $new_section, $ancestral_events, \@sub_events, $include_images_flag, $step_thru_increments);
 		}
-	
+
 		if (@new_text_units && scalar(@new_text_units)>0) {
 		    @text_units = (@text_units, @new_text_units);
 		} else {
@@ -766,7 +766,7 @@ sub get_chapters_from_events_text_units {
 			$step_thru_increments->[$depth]++;
 		    }
 		}
-		
+
 		# Add a literature list to the end of the document
 		if ($depth==0 && !($self->document_style() eq $DOCUMENT_STYLE_BOOK) && $event->is_a("Pathway") && scalar(GKB::Utils->get_instance_sub_events($event))>0) {
 			@text_units = (@text_units, $self->get_event_literature_summary($event, $depth));
@@ -789,7 +789,7 @@ sub get_report_title {
 	$text_unit->set_contents("Report for $instance_name");
 	$text_unit->set_depth($depth);
 	push @text_units, $text_unit;
-	
+
 	return @text_units;
 }
 
@@ -806,7 +806,7 @@ sub get_reviewers_report_title {
 	$text_unit->set_contents("Report for Pathway Review");
 	$text_unit->set_depth($depth);
 	push @text_units, $text_unit;
-	
+
 	return @text_units;
 }
 
@@ -821,7 +821,7 @@ sub get_reviewers_report_introduction {
 
     # ignore normal pathways if this is a disease pathway
     $self->{diseased}++ if $disease;
- 
+
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("section_header");
     $text_unit->set_contents("Introduction");
@@ -858,7 +858,7 @@ sub get_reviewers_report_introduction {
     $text_unit->set_type("bullet_text");
     $text_unit->set_contents($text);
     push @text_units, $text_unit;
-	
+
     $text = "Review of text document";
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("section_internal_header");
@@ -922,7 +922,7 @@ END
 	$text_unit->set_type("body_text_paragraph");
 	$text_unit->set_contents($text);
 	push @text_units, $text_unit;
-	push @text_units, 
+	push @text_units,
 	$self->hyperlink("Navigating Disease pathways", "http://wiki.reactome.org/index.php/Usersguide#Navigating_Disease_Pathway_Diagrams");
     }
 
@@ -933,7 +933,7 @@ END
     push @text_units, $text_unit;
 
     push @text_units, $self->hyperlink("Reactome User Guide","http://wiki.reactome.org/index.php/Usersguide");
-    
+
     $text = qq(<b>\*Note that the \"Expression\" and \"Structure\" data are not available before public release as it is provided by external resources.</b>);
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("body_text_paragraph");
@@ -957,12 +957,12 @@ sub get_report_authors {
 
 	my $instance_authors = GKB::Utils::get_authors_recursively($event);
 	$self->get_literature_refs(\@text_units, $instance_authors, "", 1);
-			
+
 	$text_unit = GKB::DocumentGeneration::TextUnit->new();
 	$text_unit->set_type("vertical_space");
 	$text_unit->set_contents(2);
 	push @text_units, $text_unit;
-	
+
 	return @text_units;
 }
 
@@ -993,12 +993,12 @@ sub get_subevent_summary {
 				    $event_type = "Events";
 				}
 		    }
-	
+
 		    $text_unit = GKB::DocumentGeneration::TextUnit->new();
 		    $text_unit->set_type("vertical_space");
 		    $text_unit->set_contents(2);
 		    push @text_units, $text_unit;
-	
+
 		    # Create a bulleted list of the sub-events that will subsequently
 		    # be explored in depth.
 		    $text_unit = GKB::DocumentGeneration::TextUnit->new();
@@ -1009,12 +1009,12 @@ sub get_subevent_summary {
 		    }
 		    $text_unit->set_contents("$event_type $list_heading");
 		    push @text_units, $text_unit;
-		
+
 		    $text_unit = GKB::DocumentGeneration::TextUnit->new();
 		    $text_unit->set_type("vertical_space");
 		    $text_unit->set_contents(1);
 		    push @text_units, $text_unit;
-		
+
 		    my $bullet_text;
 		    foreach $event (@{$events}) {
 				if ($event->is_a("Pathway")) {
@@ -1024,13 +1024,13 @@ sub get_subevent_summary {
 #					    if ($reaction_representation == 0) {
 #						next;
 #					    }
-			
+
 						$event_type = "Reaction";
 				    } else {
 						$event_type = "Event";
 				    }
 				}
-		
+
 				$event_name = $event->attribute_value("name")->[0];
 				unless ($event_name) {
 				    $event_name = $event->attribute_value("_displayName")->[0];
@@ -1038,7 +1038,7 @@ sub get_subevent_summary {
 				unless ($event_name) {
 				    $event_name = "UNKNOWN";
 				}
-			    
+
 				$bullet_text = "  $event_type: $event_name";
 				if (!$event->is_a("ReactionlikeEvent") && !( GKB::Utils->is_pathway_with_content($event, $new_depth, $depth_limit, $include_images_flag) )) {
 				    $bullet_text .= " (no information currently available for this sub-pathway).";
@@ -1073,14 +1073,14 @@ sub get_event_literature_summary {
 	    $text_unit->set_contents("Full List of Literature References for Pathway \"$instance_name\"");
 		$text_unit->set_depth($depth);
 		push @text_units, $text_unit;
-		
+
 		foreach my $instance_reference (@instance_references) {
 			$text_unit = GKB::DocumentGeneration::TextUnit->new();
 			$text_unit->set_type("body_text_paragraph");
 			$text_unit->set_contents($instance_reference);
 			push @text_units, $text_unit;
 		}
-				
+
 		$text_unit = GKB::DocumentGeneration::TextUnit->new();
 		$text_unit->set_type("vertical_space");
 		$text_unit->set_contents(2);
@@ -1109,7 +1109,7 @@ sub get_instance_text_units {
     my ($self, $instance, $depth, $new_section, $instance_hash, $include_images_flag, $ancestral_events) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     my @text_units = ();
     my $text_unit;
 
@@ -1125,7 +1125,7 @@ sub get_instance_text_units {
     my $instance_editors;
     my $instance_reviewers;
     my $instance_revisers;
-    
+
     my $event_type = lc($instance->class());
     if ($instance->is_a("Event")) {
 	$event_type = "event";
@@ -1159,14 +1159,14 @@ sub get_instance_text_units {
 	}
     }
 
-    if ($instance->is_a("Pathway") || $instance->is_a("ReactionlikeEvent") || $instance->is_a("BlackBoxEvent")) { 
+    if ($instance->is_a("Pathway") || $instance->is_a("ReactionlikeEvent") || $instance->is_a("BlackBoxEvent")) {
         if (defined $self->hyperlink_base_url && defined $self->hyperlink_db) {
             $text_unit = GKB::DocumentGeneration::TextUnit->new();
             push @text_units, $text_unit;
             $text_unit = GKB::DocumentGeneration::TextUnit->new();
             $text_unit->set_type("hyperlink");
             $text_unit->set_contents("See web page for this $event_type");
-	    
+
 	    my $url = $self->hyperlink_base_url;
 	    if ($instance->is_a("Pathway") && GKB::WebUtils->has_diagram($db_name,$instance)) {
 
@@ -1181,7 +1181,7 @@ sub get_instance_text_units {
             push @text_units, $text_unit;
         }
     }
-    
+
     # If the instance has already been encountered
     # somewhere else, simply emit a reference to the appropriate
     # section, rather than printing out the content.
@@ -1207,7 +1207,7 @@ sub get_instance_text_units {
 #		$instance_reviewers = GKB::Utils::get_reviewers_recursively($instance);
 		$instance_reviewers = $instance->reviewed;
         $instance_revisers = $instance->revised;
-	
+
 		$self->get_literature_refs(\@text_units, $instance_authors, "Authors");
 		$self->get_literature_refs(\@text_units, $instance_editors, "Editors");
 		$self->get_literature_refs(\@text_units, $instance_reviewers, "Reviewers");
@@ -1216,15 +1216,15 @@ sub get_instance_text_units {
 		my $text_unit = GKB::DocumentGeneration::TextUnit->new();
 		$text_unit->set_type("vertical_space");
 		$text_unit->set_contents(1);
-	
+
 		my @descriptive_text_units = $self->get_descriptive_text_units_from_instance($instance);
 		push @text_units, $text_unit, @descriptive_text_units;
-	
+
 		# Diagram
 		if ($include_images_flag) {
 			@text_units = (@text_units, $self->get_instance_diagram_text_units($instance));
 		}
-	
+
 		# Literature references
 		my @instance_references = GKB::Utils->get_event_literature_references($instance);
 		if (scalar(@instance_references)>0) {
@@ -1232,7 +1232,7 @@ sub get_instance_text_units {
 		    $text_unit->set_type("section_internal_header");
 		    $text_unit->set_contents("References");
 		    push @text_units, $text_unit;
-	
+
 		    foreach my $instance_reference (@instance_references) {
 				$text_unit = GKB::DocumentGeneration::TextUnit->new();
 				$text_unit->set_type("body_text_paragraph");
@@ -1240,27 +1240,27 @@ sub get_instance_text_units {
 				push @text_units, $text_unit;
 		    }
 		}
-		
+
                  # If this is a disease reaction, then there may well be a corresponding
                  ##"normal" reaction.  Get this, if available.
 		 if ($instance->is_valid_attribute("normalReaction") && (defined $instance->normalReaction) && scalar(@{$instance->normalReaction})>0) {
 		     @text_units = (@text_units, $self->get_associated_normal_reaction($instance, $event_type));
 		 }
-		
+
 
 		# The event in another species that this one was inferred
 		# from, if such a thing exists
 		if ($instance->is_valid_attribute("inferredFrom") && (defined $instance->inferredFrom) && scalar(@{$instance->inferredFrom})>0) {
 			@text_units = (@text_units, $self->get_instances_from_which_inferred($instance, $event_type));
 		}
-		
+
 		# Regulation
 		if ($instance->is_a("ReactionlikeEvent")) {
 			@text_units = (@text_units, $self->get_regulation_text_units_from_reaction($instance));
 			@text_units = (@text_units, $self->get_regulated_input_text_units_from_reaction($instance));
 			@text_units = (@text_units, $self->get_regulated_output_text_units_from_reaction($instance));
 			@text_units = (@text_units, $self->get_regulated_catalyst_text_units_from_reaction($instance));
-		}	
+		}
     }
 
     return @text_units;
@@ -1269,10 +1269,10 @@ sub get_instance_text_units {
 sub get_pathway_browser_link {
     my $selected_event = shift;
     my $ancestral_events = shift;
-    
+
     my @pathways_without_diagrams;
     my @pathways_with_diagrams;
-    
+
     foreach my $ancestral_pathway (@$ancestral_events) {
         if ($ancestral_pathway->reverse_attribute_value('representedPathway')->[0]) {
             push @pathways_with_diagrams, $ancestral_pathway;
@@ -1280,7 +1280,7 @@ sub get_pathway_browser_link {
             push @pathways_without_diagrams, $ancestral_pathway;
         }
     }
-    
+
     my $viewed_pathway = pop @pathways_with_diagrams;
     my $viewed_pathway_stable_id = get_stable_identifier($viewed_pathway);
 
@@ -1289,20 +1289,20 @@ sub get_pathway_browser_link {
         $path = "&PATH=" . $path;
     }
     my $selected = '&SEL=' . get_stable_identifier($selected_event);
-    
+
     return "/PathwayBrowser/#/" . $viewed_pathway_stable_id . $selected . $path;
     #confess join ",", map { $_->db_id} @$ancestral_events if $selected =~ /R-HSA-5693609$/;
 }
 
 sub get_path {
     my $pathway = shift;
-    
+
     my $path = '';
     my @parent_pathways = get_parent_pathways($pathway);
     if (scalar @parent_pathways == 1) {
         $path = join ',', get_stable_identifier($parent_pathways[0]) . get_path($parent_pathways[0]);
     }
-    
+
     return $path;
 }
 
@@ -1313,7 +1313,7 @@ sub get_parent_pathways {
 
 sub get_stable_identifier {
     my $instance = shift;
-    
+
     my $stable_identifier = $instance->stableIdentifier->[0]->identifier->[0];
     return $stable_identifier;
 }
@@ -1345,7 +1345,7 @@ sub get_instances_from_which_inferred() {
 	$text_unit->set_type("section_internal_header");
 	$text_unit->set_contents("Source $event_type");
 	push @text_units, $text_unit;
-	
+
 	my $inferred_from;
 	my $species;
 	foreach $inferred_from (@{$instance->inferredFrom}) {
@@ -1360,13 +1360,13 @@ sub get_instances_from_which_inferred() {
 				$inferred_from_species .= $species->_displayName->[0];
 			}
 		}
-				
+
 		my $text = "This $event_type was inferred from the corresponding $event_type \"$inferred_from_name\" in species $inferred_from_species.";
 		$text_unit = GKB::DocumentGeneration::TextUnit->new();
 		$text_unit->set_type("body_text_paragraph");
 		$text_unit->set_contents($text);
 		push @text_units, $text_unit;
-				
+
 		my @inferred_from_descriptive_text_units = $self->get_descriptive_text_units_from_instance($inferred_from);
 		push(@text_units, @inferred_from_descriptive_text_units);
 
@@ -1376,7 +1376,7 @@ sub get_instances_from_which_inferred() {
 			$text_unit->set_type("body_text_paragraph");
 			$text_unit->set_contents("The following literature references support the source $event_type:");
 			push @text_units, $text_unit;
-		
+
 		    foreach my $instance_reference (@inferred_from_literature_references) {
 				$text_unit = GKB::DocumentGeneration::TextUnit->new();
 				$text_unit->set_type("body_text_paragraph");
@@ -1384,13 +1384,13 @@ sub get_instances_from_which_inferred() {
 				push @text_units, $text_unit;
 		    }
 		}
-				
+
 		$text_unit = GKB::DocumentGeneration::TextUnit->new();
 	    $text_unit->set_type("vertical_space");
 	    $text_unit->set_contents(1);
 	    push @text_units, $text_unit;
 	}
-	
+
 	return @text_units;
 }
 
@@ -1409,12 +1409,12 @@ sub get_associated_normal_reaction() {
     $text_unit->set_type("section_internal_header");
     $text_unit->set_contents("Normal $event_type");
     push @text_units, $text_unit;
-	
+
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("body_text_paragraph");
     $text_unit->set_contents("This $event_type has the corresponding normal (healthy) $event_type:");
     push @text_units, $text_unit;
-		
+
     my $space_text_unit = GKB::DocumentGeneration::TextUnit->new();
     $space_text_unit->set_type("vertical_space");
     $space_text_unit->set_contents(1);
@@ -1426,12 +1426,12 @@ sub get_associated_normal_reaction() {
         $text_unit->set_type("body_text_paragraph");
         $text_unit->set_contents("<b>$normal_event_name</b>");
         push @text_units, $text_unit;
-    
+
         $space_text_unit = GKB::DocumentGeneration::TextUnit->new();
         $space_text_unit->set_type("vertical_space");
         $space_text_unit->set_contents(1);
         push @text_units, $space_text_unit;
-    
+
         my @inferred_from_descriptive_text_units = $self->get_descriptive_text_units_from_instance($normal_event, 1);
         if (scalar(@inferred_from_descriptive_text_units)>0 && (defined $inferred_from_descriptive_text_units[0])) {
             push(@text_units, @inferred_from_descriptive_text_units);
@@ -1443,30 +1443,30 @@ sub get_associated_normal_reaction() {
 }
 
 sub get_regulation_text_units_from_reaction() {
-    my ($self, $instance) = @_;
+	my ($self, $instance) = @_;
 
-    my @text_units = ();
-    my $text_unit;
-    
-    my @regulation_text_units = $self->get_regulation_text_units_from_instance($instance);
-    if (scalar(@regulation_text_units) > 0) {
-	$text_unit = GKB::DocumentGeneration::TextUnit->new();
-	$text_unit->set_type("section_internal_header");
-	$text_unit->set_contents("Regulators of this Reaction");
-	push @text_units, $text_unit;
-	
-	@text_units = (@text_units, @regulation_text_units);
-    }
-    
-    return @text_units;
+	my @text_units = ();
+	my $text_unit;
+
+	my @regulation_text_units = $self->get_regulation_text_units_from_instance($instance);
+	if (scalar(@regulation_text_units) > 0) {
+		$text_unit = GKB::DocumentGeneration::TextUnit->new();
+		$text_unit->set_type("section_internal_header");
+		$text_unit->set_contents("Regulators of this Reaction");
+		push @text_units, $text_unit;
+
+		@text_units = (@text_units, @regulation_text_units);
+	}
+
+	return @text_units;
 }
 
 sub get_regulated_input_text_units_from_reaction() {
     my ($self, $reaction) = @_;
-    
+
     my @text_units = ();
     my $text_unit;
-    
+
     my $instances = $reaction->input;
     my @instances_text_units = $self->get_regulation_text_units_from_instances($instances);
     if (scalar(@instances_text_units) > 0) {
@@ -1474,7 +1474,7 @@ sub get_regulated_input_text_units_from_reaction() {
 		$text_unit->set_type("section_internal_header");
 		$text_unit->set_contents("Regulators of Reactants in this Reaction");
 		push @text_units, $text_unit;
-		
+
 		@text_units = (@text_units, @instances_text_units);
     }
 
@@ -1483,10 +1483,10 @@ sub get_regulated_input_text_units_from_reaction() {
 
 sub get_regulated_output_text_units_from_reaction() {
     my ($self, $reaction) = @_;
-    
+
     my @text_units = ();
     my $text_unit;
-    
+
     my $instances = $reaction->output;
     my @instances_text_units = $self->get_regulation_text_units_from_instances($instances);
     if (scalar(@instances_text_units) > 0) {
@@ -1494,7 +1494,7 @@ sub get_regulated_output_text_units_from_reaction() {
 		$text_unit->set_type("section_internal_header");
 		$text_unit->set_contents("Regulators of Products in this Reaction");
 		push @text_units, $text_unit;
-		
+
 		@text_units = (@text_units, @instances_text_units);
     }
 
@@ -1503,10 +1503,10 @@ sub get_regulated_output_text_units_from_reaction() {
 
 sub get_regulated_catalyst_text_units_from_reaction() {
     my ($self, $reaction) = @_;
-    
+
     my @text_units = ();
     my $text_unit;
-    
+
     my $catalyst_activities = $reaction->catalystActivity;
     my @instances_text_units = ();
 	foreach my $catalyst_activity (@{$catalyst_activities}) {
@@ -1520,7 +1520,7 @@ sub get_regulated_catalyst_text_units_from_reaction() {
 		$text_unit->set_type("section_internal_header");
 		$text_unit->set_contents("Regulators of Enzymes in this Reaction");
 		push @text_units, $text_unit;
-		
+
 		@text_units = (@text_units, @instances_text_units);
     }
 
@@ -1529,9 +1529,9 @@ sub get_regulated_catalyst_text_units_from_reaction() {
 
 sub get_regulation_text_units_from_instances() {
     my ($self, $instances) = @_;
-    
+
     my @text_units = ();
-    
+
 	foreach my $instance (@{$instances}) {
 		@text_units = (@text_units, $self->get_regulation_text_units_from_instance($instance));
 	}
@@ -1539,17 +1539,22 @@ sub get_regulation_text_units_from_instances() {
 	return @text_units;
 }
 
-sub get_regulation_text_units_from_instance() {
-    my ($self, $instance) = @_;
+sub get_regulation_text_units_from_instance()
+{
+	my ($self, $instance) = @_;
+	my @text_units = ();
+	my $text_unit;
 
-    my @text_units = ();
-    my $text_unit;
-
-	my $regulators = $instance->reverse_attribute_value('regulatedEntity');
+	# TODO: This will need to change. Regulation.regulatedEntity will be removed. Instead, ReactionlikeEvent will have a new 'regulatedBy' attribute.
+	# This function is expecting something that is an input/output of a ReactionlikeEvent as the function input. Maybe we should be looking up the regulator
+	# rather than doing a reverse lookup of regulatedEntity? Or do a regular lookup on regulatedBy, except that will need the original event, not its
+	# inputs/outputs.
+#	my $regulators = $instance->reverse_attribute_value('regulatedEntity');
+	my $regulators = $instance->regulatedBy;
 	if (!(defined $regulators) || scalar(@{$regulators}) < 1) {
-    	return @text_units;
+		return @text_units;
 	}
-	
+
 	my $text;
 	foreach my $regulator (@{$regulators}) {
 		$text = $regulator->_displayName->[0];
@@ -1569,21 +1574,19 @@ sub get_regulation_text_units_from_instance() {
 			}
 			$text .= ")";
 		}
-					
 		$text_unit = GKB::DocumentGeneration::TextUnit->new();
 		$text_unit->set_type("body_text_paragraph");
 		$text_unit->set_contents($text);
 		push @text_units, $text_unit;
 	}
-
-    return @text_units;
+	return @text_units;
 }
 
 sub get_descriptive_text_units_from_instance() {
     my ($self, $instance, $use_italics) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     my @text_units = ();
     my $text_unit;
 
@@ -1606,16 +1609,16 @@ sub get_descriptive_text_units_from_instance() {
 	$text =~ s/&#8221;/"/g;#" Taken from "demoroniser" source
 	$text =~ s/&#8222;/"/g;#" Taken from "demoroniser" source
 	$text =~ s/&#8223;/"/g;#" Taken from "demoroniser" source
-	
+
 	$text =~ s/\xE2\x80\x9C/"/g;; #" found using hexedit
 	$text =~ s/\xE2\x80\x9D/"/g;; #" found using hexedit
-	
+
 	# Try to do something sensible with HTML tags
 	$text =~ s/<br>/__LINEBREAK__/ig;
 	$text =~ s/<br[^0-9a-zA-Z]/__LINEBREAK__/ig; # to cope with somebody forgetting the closing >
 	$text =~ s/<\/*p>/__LINEBREAK__/ig;
 	#$text =~ s/<[a-zA-Z]+>/ /g;
-	
+
 #		$text_unit = GKB::DocumentGeneration::TextUnit->new();
 #		$text_unit->set_type("section_internal_header");
 #		$text_unit->set_contents("Description");
@@ -1624,7 +1627,7 @@ sub get_descriptive_text_units_from_instance() {
 #    	$space_text_unit->set_type("vertical_space");
 #    	$space_text_unit->set_contents(1);
 #    	push @text_units, $space_text_unit;
-	
+
 	my @text_blocks = split(/__LINEBREAK__/, $text);
 	#unshift @text_blocks, '<b>Summary:</b>';
 	foreach my $text_block (@text_blocks) {
@@ -1639,7 +1642,7 @@ sub get_descriptive_text_units_from_instance() {
 	    push @text_units, $text_unit;
 	}
     }
-    
+
     return @text_units;
 }
 
@@ -1662,7 +1665,7 @@ sub get_flanking_events {
 		$text_unit->set_type("section_internal_header");
 		$text_unit->set_contents("$flanking_name Events");
 		push @text_units, $text_unit;
-	
+
 		my $flanking_event_text;
 		my $flanking_event_type;
 		my $flanking_event_name;
@@ -1694,7 +1697,7 @@ sub get_flanking_events {
 		    $text_unit->set_type("body_text_paragraph");
 		    $text_unit->set_contents($flanking_event_text);
 		    push @text_units, $text_unit;
-		    
+
 		    my $bullet_text;
 		    foreach $flanking_event (@{$flanking_events_ref}) {
 			$flanking_event_type = "event";
@@ -1703,12 +1706,12 @@ sub get_flanking_events {
 			} elsif ($flanking_event->is_a("Pathway")) {
 			    $flanking_event_type = "pathway";
 			}
-	
+
 			$flanking_event_name = "";
 			if ($flanking_event->attribute_value("name")) {
 			    $flanking_event_name = $flanking_event->attribute_value("name")->[0];
 			}
-	
+
 			$bullet_text = "the $flanking_event_type $flanking_event_name";
 			my $flanking_section = $instance_hash->{$flanking_event->db_id()};
 			if ($flanking_section) {
@@ -1738,7 +1741,7 @@ sub get_literature_refs {
 			$text_unit->set_contents($title);
 			push @{$text_units}, $text_unit;
     	}
-		
+
 		my $ref_string = "";
 		foreach my $ref (@{$refs}) {
 		    if ($ref_string) {
@@ -1749,7 +1752,7 @@ sub get_literature_refs {
 		if ($ref_string) {
 		    $ref_string .= ".";
 		}
-		
+
 		$text_unit = GKB::DocumentGeneration::TextUnit->new();
 		if ($centred_flag) {
 			$text_unit->set_type("centered_paragraph");
@@ -1769,7 +1772,7 @@ sub get_reaction_description_text_units {
     my ($self, $reaction) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     unless ($reaction) {
 	$logger->info("yurks, reaction is null!!");
 	return;
@@ -1828,9 +1831,9 @@ sub get_reaction_description_text_units {
 # reaction - a reaction instance
 sub get_reaction_diagram_text_units {
     my ($self, $reaction) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     my @text_units = ();
 
     unless ($reaction) {
@@ -1864,7 +1867,7 @@ sub get_reaction_diagram_text_units {
     $space_text_unit->set_type("vertical_space");
     $space_text_unit->set_contents(2);
     push @text_units, $space_text_unit;
-		    
+
     my $image_text_unit = GKB::DocumentGeneration::TextUnit->new();
     $image_text_unit->set_type("image_file_name");
     # note secord argument deleted image file
@@ -1882,9 +1885,9 @@ sub get_reaction_diagram_text_units {
 # instance with an associated curator-drawn diagram.
 sub get_instance_diagram_text_units {
     my ($self, $instance) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     my @text_units = ();
 
     unless ($instance) {
