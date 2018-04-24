@@ -938,40 +938,43 @@ sub infer_catalyst {
 #tests confirm whether a CatalystActivity can be inferred (checking physicalEntity and requirement)
 #returns a CatalystActivity instance if inference successful, undef if unsuccessful.
 sub create_inf_cat {
-    my ($cat) = @_;
-    $homol_cat{$cat} && return $homol_cat{$cat};
-    
-    my $inf_cat = new_inferred_instance($cat);
-    $inf_cat->Activity(@{$cat->Activity});
-    my $i = $cat->physicalEntity->[0];
-    if ($i) {
-        return unless orthologous_entity($i);
-        $inf_cat->attribute_value('physicalEntity', orthologous_entity($i));
-    }
-    my @tmp;
-    foreach my $au (@{$cat->ActiveUnit}) {
-        next if $au->is_a('Domain');
-        my $inf_au = orthologous_entity($au);
-        $inf_au && push @tmp, $inf_au;
-    }
-    $tmp[0] && $inf_cat->ActiveUnit(@tmp);
-    my ($test, $reg) = infer_regulation($cat);
-    return unless $test;
-    $inf_cat = check_for_identical_instances($inf_cat);
-    $homol_cat{$cat} = $inf_cat;
-    if ($reg->[0]) {
-        foreach my $r (@{$reg}) {
-            my $source_regulation = $r->{source};
-            my $inferred_regulation = $r->{inferred};
-        
-            $inferred_regulation->RegulatedEntity($inf_cat);
-            $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_cat has been stored
-        $source_regulation->inferredTo(@{$source_regulation->inferredTo});
-        $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
-        $dba->update_attribute($source_regulation, 'inferredTo');
-        }
-    }
-    return $inf_cat;
+	my ($cat) = @_;
+	$homol_cat{$cat} && return $homol_cat{$cat};
+
+	my $inf_cat = new_inferred_instance($cat);
+	$inf_cat->Activity(@{$cat->Activity});
+	my $i = $cat->physicalEntity->[0];
+	if ($i) {
+		return unless orthologous_entity($i);
+		$inf_cat->attribute_value('physicalEntity', orthologous_entity($i));
+	}
+	my @tmp;
+	foreach my $au (@{$cat->ActiveUnit}) {
+		next if $au->is_a('Domain');
+		my $inf_au = orthologous_entity($au);
+		$inf_au && push @tmp, $inf_au;
+	}
+	$tmp[0] && $inf_cat->ActiveUnit(@tmp);
+	my ($test, $reg) = infer_regulation($cat);
+	return unless $test;
+	$inf_cat = check_for_identical_instances($inf_cat);
+	$homol_cat{$cat} = $inf_cat;
+	if ($reg->[0]) {
+		foreach my $r (@{$reg}) {
+			my $source_regulation = $r->{source};
+			my $inferred_regulation = $r->{inferred};
+
+			# There is no longer a relationship between Regulation and CatalystActivity,
+			# so there is nothing that can replace the statement below:
+#            $inferred_regulation->RegulatedEntity($inf_cat);
+
+			$inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_cat has been stored
+			$source_regulation->inferredTo(@{$source_regulation->inferredTo});
+			$source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
+			$dba->update_attribute($source_regulation, 'inferredTo');
+		}
+	}
+	return $inf_cat;
 }
 
 #manages inference of Regulation instances attached to Events or CatalystActivities
