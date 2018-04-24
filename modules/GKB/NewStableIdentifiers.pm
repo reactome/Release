@@ -348,9 +348,10 @@ sub get_instance_species_prefix {
         return get_species_prefix_from_physical_entity($instance);
     } elsif ($instance->is_a('Event')) {
         return get_species_prefix_from_event($instance);
-    } elsif ($instance->is_a('Regulation')) {
-        return get_species_prefix_from_regulation($instance);
     }
+#    elsif ($instance->is_a('Regulation')) {
+#        return get_species_prefix_from_regulation($instance);
+#    }
 }
 
 sub get_species_prefix_from_physical_entity {
@@ -385,22 +386,22 @@ sub get_species_prefix_from_event {
     }    
 }
 
-sub get_species_prefix_from_regulation {
-    my $instance = shift;
-    
-    my $regulated_entity = $instance->regulatedEntity->[0];
-    if ($regulated_entity && $regulated_entity->is_a('Event')) {
-        return get_species_prefix_from_event($regulated_entity);
-    } elsif ($regulated_entity && $regulated_entity->is_a('CatalystActivity')) {
-        if ($regulated_entity->physicalEntity->[0]) {
-            return get_species_prefix_from_physical_entity($regulated_entity->physicalEntity->[0]);
-        } else {
-            return 'NUL';
-        }
-    } else {
-        return 'NUL';
-    }    
-}
+#sub get_species_prefix_from_regulation {
+#    my $instance = shift;
+#    
+#    my $regulated_entity = $instance->regulatedEntity->[0];
+#    if ($regulated_entity && $regulated_entity->is_a('Event')) {
+#        return get_species_prefix_from_event($regulated_entity);
+#    } elsif ($regulated_entity && $regulated_entity->is_a('CatalystActivity')) {
+#        if ($regulated_entity->physicalEntity->[0]) {
+#            return get_species_prefix_from_physical_entity($regulated_entity->physicalEntity->[0]);
+#        } else {
+#            return 'NUL';
+#        }
+#    } else {
+#        return 'NUL';
+#    }    
+#}
 
 sub get_prefix_from_species_instance {
     my $species_instance = shift;
@@ -437,7 +438,8 @@ sub is_instance_requiring_stable_identifier {
 }
 
 sub get_classes_requiring_stable_identifiers {
-    return ('PhysicalEntity', 'Event', 'Regulation');
+#    return ('PhysicalEntity', 'Event', 'Regulation');
+    return ('PhysicalEntity', 'Event');
 }
 
 1;
