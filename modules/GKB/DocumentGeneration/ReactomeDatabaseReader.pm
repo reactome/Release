@@ -1386,22 +1386,22 @@ sub get_associated_normal_reaction() {
 }
 
 sub get_regulation_text_units_from_reaction() {
-    my ($self, $instance) = @_;
+	my ($self, $instance) = @_;
 
-    my @text_units = ();
-    my $text_unit;
-    
-    my @regulation_text_units = $self->get_regulation_text_units_from_instance($instance);
-    if (scalar(@regulation_text_units) > 0) {
-	$text_unit = GKB::DocumentGeneration::TextUnit->new();
-	$text_unit->set_type("section_internal_header");
-	$text_unit->set_contents("Regulators of this Reaction");
-	push @text_units, $text_unit;
+	my @text_units = ();
+	my $text_unit;
+
+	my @regulation_text_units = $self->get_regulation_text_units_from_instance($instance);
+	if (scalar(@regulation_text_units) > 0) {
+		$text_unit = GKB::DocumentGeneration::TextUnit->new();
+		$text_unit->set_type("section_internal_header");
+		$text_unit->set_contents("Regulators of this Reaction");
+		push @text_units, $text_unit;
 	
-	@text_units = (@text_units, @regulation_text_units);
-    }
-    
-    return @text_units;
+		@text_units = (@text_units, @regulation_text_units);
+	}
+
+	return @text_units;
 }
 
 sub get_regulated_input_text_units_from_reaction() {
@@ -1482,19 +1482,20 @@ sub get_regulation_text_units_from_instances() {
 	return @text_units;
 }
 
-sub get_regulation_text_units_from_instance() {
-    my ($self, $instance) = @_;
-
-    my @text_units = ();
-    my $text_unit;
+sub get_regulation_text_units_from_instance()
+{
+	my ($self, $instance) = @_;
+	my @text_units = ();
+	my $text_unit;
 
 	# TODO: This will need to change. Regulation.regulatedEntity will be removed. Instead, ReactionlikeEvent will have a new 'regulatedBy' attribute.
 	# This function is expecting something that is an input/output of a ReactionlikeEvent as the function input. Maybe we should be looking up the regulator
 	# rather than doing a reverse lookup of regulatedEntity? Or do a regular lookup on regulatedBy, except that will need the original event, not its
 	# inputs/outputs.
-	my $regulators = $instance->reverse_attribute_value('regulatedEntity');
+#	my $regulators = $instance->reverse_attribute_value('regulatedEntity');
+	my $regulators = $instance->regulatedBy;
 	if (!(defined $regulators) || scalar(@{$regulators}) < 1) {
-    	return @text_units;
+		return @text_units;
 	}
 	
 	my $text;
@@ -1516,14 +1517,12 @@ sub get_regulation_text_units_from_instance() {
 			}
 			$text .= ")";
 		}
-					
 		$text_unit = GKB::DocumentGeneration::TextUnit->new();
 		$text_unit->set_type("body_text_paragraph");
 		$text_unit->set_contents($text);
 		push @text_units, $text_unit;
 	}
-
-    return @text_units;
+	return @text_units;
 }
 
 sub get_descriptive_text_units_from_instance() {
