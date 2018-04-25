@@ -19,7 +19,7 @@ use GKB::Utils_esther;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-our($pass,$user,$release_db,$slice_db,%seen_id,%species,$release_num,$dry_run);
+our($pass,$user,$release_db,$slice_db,$db_host,%seen_id,%species,$release_num,$dry_run);
 
 my $usage = "Usage: $0 -user user -pass pass -db test_reactome_XX -sdb test_slice_XX -release_num XX\n";
 
@@ -28,6 +28,7 @@ GetOptions(
     "pass:s"  => \$pass,
     "db:s"    => \$release_db,
     "sdb:s"    => \$slice_db,
+    "host:s"   => \$db_host,
     "release_num:s" => \$release_num,
     "dry_run" => \$dry_run
 );
@@ -35,7 +36,7 @@ GetOptions(
 ($release_db && $release_num && $slice_db) || die $usage;
 
 back_up_databases(
-    [$user, $pass, $release_db, 'localhost']
+    [$user, $pass, $release_db, $db_host]
 ) unless $dry_run;
 
 get_api_connections()->{$release_db}->execute("START TRANSACTION") unless $dry_run;
@@ -214,13 +215,15 @@ sub get_api_connections {
     my $release_dba = GKB::DBAdaptor->new(
         -dbname  => $release_db,
         -user    => $user || $GKB::Config::GK_DB_USER,
-        -pass    => $pass || $GKB::Config::GK_DB_PASS
+        -pass    => $pass || $GKB::Config::GK_DB_PASS,
+        -host	 => $GKB::Config::GK_DB_HOST
     );
 
     my $slice_dba = GKB::DBAdaptor->new(
         -dbname  => $slice_db,
         -user    => $user || $GKB::Config::GK_DB_USER,
-        -pass    => $pass || $GKB::Config::GK_DB_PASS
+        -pass    => $pass || $GKB::Config::GK_DB_PASS,
+        -host    => $GKB::Config::GK_DB_HOST
     );
 
     $api_connections = {
