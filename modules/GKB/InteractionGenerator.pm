@@ -656,7 +656,8 @@ sub find_mitab_interactors_for_ReferenceSequence {
 		# TODO: 'Regulation.regulatedEntity' will be removed soon. ReactionlikeEvent will have a regulatedBy attribute to resolve this.
 		# Switching to a normal (instead of reverse) lookup on 'regulatedBy' on the elements of @{$upstream_instances} might work, but
 		# that will return an array, so the code that follows might need to be re-worked to account for this.
-	    foreach my $regulation (@{$i->reverse_attribute_value('regulatedEntity')}) {
+#	    foreach my $regulation (@{$i->reverse_attribute_value('regulatedEntity')}) {
+		foreach my $regulation (@{$i->regulatedBy}) {
 		my $regulators = $regulation->follow_class_attributes
 		    (-INSTRUCTIONS => 
 		     {'Regulation' => {'attributes' => [qw(regulator)]},
@@ -686,9 +687,12 @@ sub find_mitab_interactors_for_ReferenceSequence {
 	    foreach my $regulation (@{$i->reverse_attribute_value('regulator')}) { #need to do this separately so that one doesn't go down on the branch one has come up on
                 my $regulatedEntities = $regulation->follow_class_attributes
                     (-INSTRUCTIONS =>
-                     {'Regulation' => {'attributes' => [qw(regulatedEntity)]},
-		      'ReactionlikeEvent' => {'attributes' => ['input','output','catalystActivity']},
-                      'CatalystActivity' => {'attributes' => ['physicalEntity']}},
+                     {
+#						'Regulation' => {'attributes' => [qw(regulatedEntity)]},
+						'Regulation' => {'reverse_attributes' => [qw(regulatedBy)]},
+						'ReactionlikeEvent' => {'attributes' => ['input','output','catalystActivity']},
+						'CatalystActivity' => {'attributes' => ['physicalEntity']}
+                     },
                      -OUT_CLASSES => ['PhysicalEntity']
                      );
                 foreach my $pe2 (@{$regulatedEntities}) {
@@ -868,8 +872,12 @@ sub print_psi_mitab_interaction {
 			#get direct Reactions and Reactions via CatalystActivities that are involved in Regulations (don't follow regulators that are PhysicalEntities upwards, as such reactions would come from a different context than the regulation in question)
 			my $reactions = $regulation->follow_class_attributes
 			    (-INSTRUCTIONS =>
-			     {'Regulation' => {'attributes' => [qw(regulator regulatedEntity)]},
-			      'CatalystActivity' => {'reverse_attributes' => [qw(catalystActivity)]}},
+			     {
+#			     	'Regulation' => {'attributes' => [qw(regulator regulatedEntity)]},
+					'Regulation' => {'reverse_attributes' => [qw(regulatedBy)],
+									'attributes' => [qw(regulator)]},
+			      'CatalystActivity' => {'reverse_attributes' => [qw(catalystActivity)]}
+			     },
 			     -OUT_CLASSES => ['ReactionlikeEvent']);
 			foreach my $reaction (@{$reactions}) {
 			    push @tmp_reaction, 'reactome:'.$self->stableIdentifier_or_id($reaction);
