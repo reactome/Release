@@ -126,7 +126,7 @@ sub get_api_connections {
 		-pass   => $pass
 	);
 
-	my $s_dbh = DBI->connect( "dbi:mysql:$stable_id_db\@$db_host", $user, $pass );
+	my $s_dbh = DBI->connect( "dbi:mysql:$stable_id_db;host=$db_host", $user, $pass );
 
 	return (
 		$db           => $r_dba,
