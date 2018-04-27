@@ -26,7 +26,11 @@ my %stable_identifier_to_version;
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
-    my $host = $self->host;
+    #my $host = $self->host;
+    # The $self->host will evaluate to the hostname of the machine where the code is run. 
+    # This won't be useful inside a docker container, where the database is not hosted in the same
+    # container as where the code runs. So we'll use the GK_DB_HOST from the config.
+    my $host = $GKB::Config::GK_DB_HOST;
 
     $self->cmd("Backing up databases",
         [
@@ -45,7 +49,7 @@ override 'run_commands' => sub {
     $stable_identifier_to_version{$_->identifier->[0]}{'before_update'} = $_->identifierVersion->[0] foreach get_all_stable_identifier_instances(get_dba($slicedb));
     $self->cmd("Updating stable IDs",
         [
-            ["perl update_stable_ids.pl -ghost $gkcentral_host -user $user -pass $pass -sdb $slicedb ".
+            ["perl update_stable_ids.pl -ghost $gkcentral_host -host $host -user $user -pass $pass -sdb $slicedb ".
              "-pdb " . get_test_slice($prevver, $host) . " -release $version -gdb $gkcentral > generate_stable_ids_$version.out ".
              "2> generate_stable_ids_$version.err"]
         ]
