@@ -39,32 +39,33 @@
 <div class="container_24">
 <!--header-->
 <div class="header">
- 
+
  <div class="grid_24"><!--Reactome logo-->
  <a href="<?php echo get_option('home'); ?>/"><img src="<?php bloginfo('template_directory'); ?>/images/ReactomeLogo.png" alt="Reactome: A Curated Pathway Database"></a>
  </div><!--end grid 24 Reactome logo-->
- 
+
  <div class="clear"></div><!--clear the row with logo-->
- 
-  <div class="navwrapper"> 
+
+  <div class="navwrapper">
  <div class="grid_24">
  <!--nav-->
  <div class="nav">
-	<?php wp_nav_menu( array('menu' => 'Main' )); ?> 
+	<?php wp_nav_menu( array('menu' => 'Main' )); ?>
  </div><!--close nav-->
 
   <div class="search_bar">
-   <!--SearchForm--><!--DO NOT DELETED THIS LINE-->
-    <form id="search_form" action="/content/query" method="get">
-        <input id="local-searchbox" type="search" class="search" name="q" placeholder="e.g. O95631, NTN1, signaling by EGFR, glucose" />
-        <input type="hidden" name="species" value="Homo sapiens"/>
-        <input type="hidden" name="species" value="Entries without species"/>
-       <input type="hidden" name="cluster" value="true"/>
-        <input type="submit" class="submit" value="Search">
-     </form>
-   <!--DO NOT DELETED THIS LINE--><!--/SearchForm-->
+  <!--SearchForm--><!--DO NOT DELETED THIS LINE-->
+    <form id="search_form" action="/cgi-bin/search2" method="get">
+      <input id="local-searchbox" type="search" class="search" name="QUERY" placeholder="e.g. O95631, NTN1, signaling by EGFR, glucose" />
+      <input type="hidden" name="species" value="Homo sapiens"/>
+      <input type="hidden" name="OPERATOR" value="ANY"/>
+      <!-- <input type="hidden" name="species" value="Entries without species"/> -->
+      <input type="hidden" name="cluster" value="true"/>
+      <input type="submit" class="submit" value="Search">
+    </form>
+  <!--DO NOT DELETED THIS LINE--><!--/SearchForm-->
   </div><!--close search-->
-     
+
  </div><!--close grid 24-->
  <div class="clear"></div><!--clear nav row-->
  </div><!--close navwrapper-->
@@ -83,7 +84,7 @@ The data centre that hosts reactome.org will be undergoing maintenance starting 
    </div>
 -->
 */ ?>
-<!-- Conditional header for dev site --> 
+<!-- Conditional header for dev site -->
 <?php
    $host_name = php_uname('n');
    $dev = '';
