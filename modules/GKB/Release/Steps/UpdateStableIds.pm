@@ -2,7 +2,7 @@ package GKB::Release::Steps::UpdateStableIds;
 
 use GKB::CommonUtils;
 use GKB::NewStableIdentifiers;
-
+use Data::Dumper;
 use GKB::Release::Config;
 use GKB::Release::Utils;
 
@@ -64,7 +64,7 @@ override 'run_commands' => sub {
     );
 };
 
-# Collect and return problems with pre-requisites of stable identifiers
+## Collect and return problems with pre-requisites of stable identifiers
 override 'pre_step_tests' => sub {
     my $self = shift;   
 
@@ -116,15 +116,26 @@ sub get_test_slice {
 }
 
 sub _check_stable_id_count {
-    my $current_db = shift;
-    my $previous_db = shift;
+	my $current_db = shift;
+	my $previous_db = shift;
 
-    my $current_stable_id_count = get_dba($current_db)->class_instance_count('StableIdentifier');
-    my $previous_stable_id_count = get_dba($previous_db)->class_instance_count('StableIdentifier');
+	my $current_stable_id_count = get_dba($current_db)->class_instance_count('StableIdentifier');
+	my $previous_stable_id_count = get_dba($previous_db)->class_instance_count('StableIdentifier');
+	
+	my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
 
-    my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
-    return "Stable id count has gone down from $current_stable_id_count for version $version " .
-        " from $previous_stable_id_count for version $prevver" if $stable_id_count_change < 0;
+	if ($stable_id_count_change < 0)
+	{
+		return "Stable id count has gone down from $current_stable_id_count for version $version from $previous_stable_id_count for version $prevver"
+	}
+	else
+	{
+		# *EXPLICITLY* return undef because post-step test relies on defined vs. undefined.
+		# If you don't return undef, then it seems the empty string '' will be returned and that breaks
+		# the logic of the post step test because '' is defined and the test checked for variables that are
+		# UNdefined.
+		return undef;
+	}
 }
 
 1;

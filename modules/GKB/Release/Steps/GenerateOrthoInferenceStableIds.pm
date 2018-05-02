@@ -2,7 +2,7 @@ package GKB::Release::Steps::GenerateOrthoInferenceStableIds;
 
 use GKB::Release::Config;
 use GKB::Release::Utils;
-
+use Data::Dumper;
 use GKB::NewStableIdentifiers;
 
 use Moose;
@@ -59,6 +59,9 @@ override 'run_commands' => sub {
     );
 };
 
+# Joel's notes mention that this pre-step test should be commented out since it reports missing stable identifiers as an error, but for *this* step that's
+# actually OK. It's actually expected because this step will *generate* them.
+#
 # Collect and return problems with pre-requisites of stable identifiers
 #override 'pre_step_tests' => sub {
 #    my $self = shift;
@@ -67,24 +70,35 @@ override 'run_commands' => sub {
 #};
 
 override 'post_step_tests' => sub {
-    my ($self) = shift;
-    
-    return grep { defined } (
-        super(),
-        $self->pre_step_tests(),
-        get_stable_id_QA_problems_as_list_of_strings(get_dba($db)),
-        _check_stable_id_count($db, "test_reactome_$prevver")
-    );
+	my ($self) = shift;
+	my @qa_problems = get_stable_id_QA_problems_as_list_of_strings(get_dba($db));
+	my $check_stable_id_count = _check_stable_id_count($db, "test_reactome_$prevver");
+
+	return grep { defined } (
+		super(),
+		$self->pre_step_tests(),
+		@qa_problems,
+		$check_stable_id_count
+	);
 };
 
 sub _check_stable_id_count {
-    my $current_db = shift;
-    my $previous_db = shift;
+	my $current_db = shift;
+	my $previous_db = shift;
 
-    my $current_stable_id_count = get_dba($current_db)->class_instance_count("StableIdentifier");
-    my $previous_stable_id_count = get_dba($previous_db)->class_instance_count("StableIdentifier");
-    
-    my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
-    return "Stable id count has gone down from $current_stable_id_count for version $version " .
-        " from $previous_stable_id_count for version $prevver" if $stable_id_count_change < 0;
+	my $current_stable_id_count = get_dba($current_db)->class_instance_count("StableIdentifier");
+	my $previous_stable_id_count = get_dba($previous_db)->class_instance_count("StableIdentifier");
+
+	my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
+
+	if ($stable_id_count_change < 0)
+	{
+		return "Stable id count has gone down from $current_stable_id_count for version $version from $previous_stable_id_count for version $prevver"
+	}
+	else
+	{
+		# EXPLICITLY return undef because if you don't, it seems like it's possible for an empty string '' to be returned which
+		# breaks the login of the post-step test. 
+		return undef;
+	}
 }
