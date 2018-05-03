@@ -39,7 +39,7 @@ open(my $fh, '>', $output_file);
 my @reaction_like_events = @{get_dba($db, $host)->fetch_instance(-CLASS => 'ReactionlikeEvent')};
 my @catalyst_activities = @{get_dba($db, $host)->fetch_instance(-CLASS => 'CatalystActivity')};
 foreach my $instance (@reaction_like_events, @catalyst_activities) {
-    my $regulations = $instance->reverse_attribute_value('regulatedEntity');
+    my $regulations = $instance->regulatedBy;
     
     foreach my $regulation (@$regulations) {
 		my $regulator = $regulation->regulator->[0];
