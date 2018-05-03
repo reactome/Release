@@ -321,22 +321,26 @@ sub XOR {
     return ($expression1 || $expression2) && (!($expression1 && $expression2));
 }
 
-sub get_components {
-    my $composite_entity = shift;
-    
-    my @components;
-    foreach my $component (@{$composite_entity->hasComponent},
-                           @{$composite_entity->hasMember},
-                           @{$composite_entity->hasCandidate},
-                           @{$composite_entity->repeatedUnit}) {
-        push @components, $component;
-        my @sub_components = grep {defined} get_components($component);
-        if (@sub_components) {
-            push @components, @sub_components;
-        }
-    }
-    
-    return @components;
+sub get_components
+{
+	my $composite_entity = shift;
+
+	my @components;
+	if ($composite_entity)
+	{
+		foreach my $component (@{$composite_entity->hasComponent}, @{$composite_entity->hasMember},
+								@{$composite_entity->hasCandidate}, @{$composite_entity->repeatedUnit})
+		{
+			push @components, $component;
+			my @sub_components = grep {defined} get_components($component);
+			if (@sub_components)
+			{
+				push @components, @sub_components;
+			}
+		}
+	}
+
+	return @components;
 }
 
 sub get_instance_creator {
