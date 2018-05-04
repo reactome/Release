@@ -1,8 +1,14 @@
 mysql_databases
+mysql_databases*
+logs*
 mysql_databases_*
 Secrets.pm
-logs
-backed_nfs/*
-nfs_backup/*
+logs/
 release-config.pm
 stable_id_mapping.stored_data
+logs/
+logs_*
+*nfs*
+biopax*
+owls/
+*.class

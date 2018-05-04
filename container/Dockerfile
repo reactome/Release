@@ -29,11 +29,27 @@ RUN cpanm --notest Bio::Perl Data::CTable File::HomeDir Spreadsheet::WriteExcel:
     CGI::Session::Driver::db_file CPANPLUS::Backend Ace Test::Base Bio::Root::TestObject \
     RTF::Tokenizer Parallel::Loops Mail::Sendmail
 
+# Some perl scripts expect GKB to be in /root/GKB/modules so we need to symlink there.
+RUN mkdir -p /root/GKB && ln -s /usr/local/gkb/modules /root/GKB/modules
 RUN mkdir -p /usr/local/gkb
 RUN mkdir /release
 RUN mkdir /tmp/gitroot
+# And other perl scripts expect them to be in ../modules.
+RUN ln -s /usr/local/gkb/modules ../modules
+RUN ln -s /release/scripts /usr/local/gkb/scripts
+# Ugh... so many differnt lib paths. whatever, will just link GKB directly into /etc/perl
+RUN ln -s /usr/local/gkb/modules/GKB /etc/perl/GKB
+RUN mkdir -p /usr/local/gkbdev/ && ln -s /usr/local/gkb/modules /usr/local/gkbdev/modules
+RUN ln -s /release/scripts /usr/local/gkbdev/scripts
+
+
+# Install Biomart
+WORKDIR /release/modules
+RUN git clone https://github.com/biomart/biomart-perl.git && cd biomart-perl && git checkout cvs/release-0_7
+RUN ln -s /release/modules/biomart-perl/lib/BioMart /etc/perl/BioMart
+
 WORKDIR /tmp/gitroot
-ENV AARSDR ASDRFASDF
+ENV xx xxx 
 ARG RELEASE_TAG=release-container
 RUN git clone https://github.com/reactome/Release.git && cd Release && git checkout $RELEASE_TAG
 RUN mv /tmp/gitroot/Release/java /release/java && \
@@ -45,19 +61,6 @@ RUN rm -rf /tmp/gitroot
 # YOU must provide your own Secrets.pm file!
 COPY ./Secrets.pm /usr/local/gkb/modules/GKB/Secrets.pm
 WORKDIR /release/scripts
-# Some perl scripts expect GKB to be in /root/GKB/modules so we need to symlink there.
-RUN mkdir -p /root/GKB && ln -s /usr/local/gkb/modules /root/GKB/modules
-# And other perl scripts expect them to be in ../modules.
-RUN ln -s /usr/local/gkb/modules ../modules
-RUN ln -s /release/scripts /usr/local/gkb/scripts
-# Ugh... so many differnt lib paths. whatever, will just link GKB directly into /etc/perl
-RUN ln -s /usr/local/gkb/modules/GKB /etc/perl/GKB
-RUN mkdir -p /usr/local/gkbdev/ && ln -s /usr/local/gkb/modules /usr/local/gkbdev/modules
-RUN ln -s /release/scripts /usr/local/gkbdev/scripts
-# Install Biomart
-WORKDIR /release/modules
-RUN git clone https://github.com/biomart/biomart-perl.git && cd biomart-perl && git checkout cvs/release-0_7
-RUN ln -s /release/modules/biomart-perl/lib/BioMart /etc/perl/BioMart
 
 ARG ENSEMBL_API_VERSION=90
 WORKDIR /usr/local/gkb/modules

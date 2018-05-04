@@ -1,1 +1,5 @@
 ./mysql_databases*
+./logs*
+./biopax*
+./owls*
+./nfs*
