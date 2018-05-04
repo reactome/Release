@@ -70,8 +70,8 @@ sub get_stable_id_QA_problems_as_hash {
     
     my %duplicate_stable_identifier_instances = get_identifier_to_multiple_stable_identifier_instances_map($dba);
     my %duplicate_old_stable_identifier_instances = get_old_identifier_to_multiple_stable_identifier_instances_map($dba);
-
     foreach my $stable_identifier_instance (@{get_all_stable_identifier_instances_reference($dba)}) {
+
         my @attached_instances = get_instances_attached_to_stable_identifier($stable_identifier_instance);
         if (scalar @attached_instances == 0) {
             push @{$qa_problems{'stable id with no referrers'}}, {'st_id_instance' => [$stable_identifier_instance],  'instance' => [undef]};
@@ -86,7 +86,7 @@ sub get_stable_id_QA_problems_as_hash {
                 };
             }            
         }
-        
+
         my $identifier = $stable_identifier_instance->identifier->[0]; 
         if (exists($duplicate_stable_identifier_instances{$identifier})) {
             push @{$qa_problems{'duplicate stable identifier instances'}},
@@ -103,19 +103,22 @@ sub get_stable_id_QA_problems_as_hash {
             push @{$qa_problems{'duplicate old stable identifier instances'}},
                 {'st_id_instance' => $duplicate_old_stable_identifier_instances{$old_identifier}, 'instance' => \@attached_instances, 'old_stable_identifier' => $old_identifier};
         }
+        
     }
-    
 	foreach my $instance (get_instances_requiring_stable_identifiers($dba)) {
 		if (!$instance->is_a('Regulation'))
 		{
 			if (is_missing_stable_identifier($instance)) {
 				push @{$qa_problems{'missing stable identifier'}}, {'st_id_instance' => [undef], 'instance' => [$instance]};
+				if (scalar @{$qa_problems{'missing stable identifier'}} > 10)
+		        {
+		        	last;
+		        }
 			} elsif (has_multiple_stable_identifiers($instance)) {
 				push @{$qa_problems{'multiple stable identifiers'}}, {'st_id_instance' => \@{$instance->stableIdentifier}, 'instance' => [$instance]};
 			}
 		}
 	}
-
 	return %qa_problems;
 }
 
@@ -364,10 +367,6 @@ sub get_instance_species_prefix {
 	} elsif ($instance->is_a('Event')) {
 		return get_species_prefix_from_event($instance);
 	}
-#    elsif ($instance->is_a('Regulation')) {
-#        return get_species_prefix_from_regulation($instance);
-#    }
-	return ""
 }
 
 sub get_species_prefix_from_physical_entity {
@@ -401,23 +400,6 @@ sub get_species_prefix_from_event {
         return 'NUL';
     }    
 }
-
-#sub get_species_prefix_from_regulation {
-#    my $instance = shift;
-#    
-#    my $regulated_entity = $instance->regulatedEntity->[0];
-#    if ($regulated_entity && $regulated_entity->is_a('Event')) {
-#        return get_species_prefix_from_event($regulated_entity);
-#    } elsif ($regulated_entity && $regulated_entity->is_a('CatalystActivity')) {
-#        if ($regulated_entity->physicalEntity->[0]) {
-#            return get_species_prefix_from_physical_entity($regulated_entity->physicalEntity->[0]);
-#        } else {
-#            return 'NUL';
-#        }
-#    } else {
-#        return 'NUL';
-#    }    
-#}
 
 sub get_prefix_from_species_instance {
     my $species_instance = shift;
@@ -454,7 +436,6 @@ sub is_instance_requiring_stable_identifier {
 }
 
 sub get_classes_requiring_stable_identifiers {
-#    return ('PhysicalEntity', 'Event', 'Regulation');
     return ('PhysicalEntity', 'Event');
 }
 
