@@ -59,7 +59,7 @@ touch logs/orthoinference/simplified_database.out
 touch logs/orthoinference/simplified_database.log
 touch logs/orthoinference/simplified_database.err
 
-docker run -it --name release_system \
+docker run -it --name release_system --net reactome_release \
 	-v $(pwd)/stable_id_mapping.stored_data:/release/scripts/release/generate_stable_ids_orthoinference/stable_id_mapping.stored_data \
 	-v $(pwd)/Secrets.pm:/release/modules/GKB/Secrets.pm \
 	-v $(pwd)/release-config.pm:/release/modules/GKB/Release/Config.pm \
@@ -104,6 +104,6 @@ docker run -it --name release_system \
 	-v $(pwd)/logs/orthoinference/simplified_database.log:/usr/local/gkb/scripts/release/simplified_database/simplified_database.log \
 	-v $(pwd)/logs/orthoinference/simplified_database.err:/usr/local/gkb/scripts/release/simplified_database/simplified_database.err \
 	-v $(pwd)/nfs_backup:/nfs \
-	reactome-release /bin/bash
+	reactome_release /bin/bash
 
 # TODO: Figure out a nice way to get the dump/backup files out of the container
