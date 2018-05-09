@@ -3797,7 +3797,7 @@ sub focus_species_changes {
 		'Event' => {'reverse_attributes' => [qw(hasEvent)]},
 		'PhysicalEntity' => {'reverse_attributes' => [qw(hasComponent hasMember hasCandidate repeatedUnit input output physicalEntity regulator)]},
 		'CatalystActivity' => {'reverse_attributes' => [qw(catalystActivity)]},
-		'Regulation' => {'attributes' => [qw(regulatedEntity)]} #TODO: regulatedEntity will be removed, and replaced with ReactionlikeEvent.regulatedBy
+		'Regulation' => {'reverse_attributes' => [qw(regulatedBy)]}
 	    },
 	    -OUT_CLASSES => [qw(Event)]
 	    );
