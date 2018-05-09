@@ -3683,11 +3683,7 @@ sub find_1_directed_path_between_instances {
 	 ['CatalystActivity',  \&GKB::Instance::reverse_attribute_value, 'regulator', 'PositiveRegulation'],
 	 ['PhysicalEntity',  \&GKB::Instance::reverse_attribute_value, 'regulator', 'PositiveRegulation'],
 	 ['Reaction',  \&GKB::Instance::reverse_attribute_value, 'regulator', 'PositiveRegulation'],
-	 # TODO: Regulation.regulatedEntity will soon become invalid. ReactionlikeEvent has a regulatedBy attribute but it is NOT 1:1 with Regulation
-	 # so maybe we can't keep this here at all? OR... maybe we need something like:
 	 ['ReactionlikeEvent', \&GKB::Instance::reverse_attribute_value, 'regulatedBy','PositiveRegulation'],
-#	 ['PositiveRegulation',  \&GKB::Instance::attribute_value, 'regulatedEntity', 'Reaction'],
-#	 ['PositiveRegulation',  \&GKB::Instance::attribute_value, 'regulatedEntity', 'CatalystActivity'],
 	 ];
     my %seen;
     my %kill_h;
