@@ -61,7 +61,7 @@ sub clone_biomodels_repository_from_github {
     my $present_dir = getcwd();
     chdir $directory;
     system "rm -fr Models2Pathways" if -d "Models2Pathways";
-    my $return_value = system("git clone https://github.com/reactome/Models2Pathways");
+    my $return_value = system("git clone https://github.com/reactome/biomodels-mapper.git");
     chdir $present_dir;
     
     return ($return_value == 0);
