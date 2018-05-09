@@ -418,8 +418,6 @@ sub get_physical_entities_in_reaction_like_event {
     push @physical_entities, @{$reaction_like_event->output};
     push @physical_entities, map($_->physicalEntity->[0], @{$reaction_like_event->catalystActivity});
     
-    # TODO: regulatedEntity will become invalid, must switch to 'regulatedBy'
-    # my @regulations = @{$reaction_like_event->reverse_attribute_value('regulatedEntity')};
     my @regulations = @{$reaction_like_event->regulatedBy};
     my @regulators = map {@{$_->regulator}} @regulations;
     push @physical_entities, grep {$_->is_a('PhysicalEntity')} @regulators;
@@ -825,7 +823,6 @@ sub infer_event {
         foreach my $regulation_pair (@{$regulation_collection}) {
             my $source_regulation = $regulation_pair->{source};
             my $inferred_regulation = $regulation_pair->{inferred};
-            #$inferred_regulation->RegulatedEntity($inf_e);
             
             $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_e has been stored
             $source_regulation->inferredTo(@{$source_regulation->inferredTo});
@@ -967,7 +964,7 @@ sub create_inf_cat {
 			# There is no longer a relationship between Regulation and CatalystActivity,
 			# so there is nothing that can replace the statement below:
 #            $inferred_regulation->RegulatedEntity($inf_cat);
-
+			#
 			$inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_cat has been stored
 			$source_regulation->inferredTo(@{$source_regulation->inferredTo});
 			$source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
@@ -983,8 +980,7 @@ sub create_inf_cat {
 sub infer_regulation {
 	my ($i, $release_date) = @_;
 	my @reg;
-	# TODO: input will soon only be a ReactionLikeEvent and the reverse to attribute will be "regulatedBy" and it may return a list of several things as it is 1:n (RLE:Regulation)
-#    my $reg_ar = $i->reverse_attribute_value('regulatedEntity');
+
 	my $reg_ar = $i->regulatedBy;
 	if ($reg_ar->[0]) {
 		foreach my $reg (@{$reg_ar}) {
