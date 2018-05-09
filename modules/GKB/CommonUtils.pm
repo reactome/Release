@@ -213,7 +213,6 @@ sub is_electronically_inferred {
 	} elsif ($instance->is_a('CatalystActivity')) {
 		return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('catalystActivity')};
 	} elsif ($instance->is_a('Regulation')) {
-#        return any { is_electronically_inferred($_)} @{$instance->regulatedEntity};
 		return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('regulatedBy')};
 	}
 }
@@ -238,7 +237,6 @@ sub get_source_for_electronically_inferred_instance {
 	} elsif ($instance->is_a('Regulation')) {
 		return @{$instance->inferredFrom} if @{$instance->inferredFrom}; # Only present for version 59 and onward
 
-#        my @source_regulated_entities = get_source_for_electronically_inferred($instance->regulatedEntity->[0]);
 		my @source_regulated_entities = get_source_for_electronically_inferred($instance->reverse_attribute_value('regulatedBy'));
 		my @source_regulators = get_source_for_electronically_inferred($instance->regulator->[0]);
 

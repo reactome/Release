@@ -77,7 +77,6 @@ foreach my $event (@{$ar}) {
 	} else {
         if ($event->reverse_attribute_value('regulator')) {
 			foreach my $regulation (@{$event->reverse_attribute_value('regulator')}) {
-#				my $regulated_entity = $regulation->regulatedEntity->[0];
 				my $regulated_entity = $regulation->reverse_attribute_value('regulatedBy');
 
 				if (!$regulated_entity->species->[0]) {
