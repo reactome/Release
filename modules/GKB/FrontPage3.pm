@@ -85,7 +85,7 @@ sub get_ok_field {
 sub get_header {
     my ($self) = @_;
     
-    my $chunk = GKB::HTMLUtils->extract_chunk_from_html($self->content, '', '<!--content-->');
+    my $chunk = GKB::HTMLUtils->extract_chunk_from_html($self->content, '', '<!--template-placeholder-->');
     my $title = $self->title;
     if ($title) {
         $chunk =~ s/<title>.*?<\/title>/<title>$title<\/title>/si;
@@ -93,7 +93,7 @@ sub get_header {
     my $stylesheet_url = "/stylesheet.css";
     if (defined $stylesheet_url && !($stylesheet_url eq '')) {
         my $stylesheet_html = "";
-        $stylesheet_html .= "<link rel=\"stylesheet\" type=\"text\/css\" href=\"$stylesheet_url\" />\n";
+        #$stylesheet_html .= "<link rel=\"stylesheet\" type=\"text\/css\" href=\"$stylesheet_url\" />\n";
         $stylesheet_html .= "<style type=\"text/css\">\n";
         $stylesheet_html .= "TR.contents TD.sidebar {font-size: 100% !important; line-height: 120%;} UL.classhierarchy {line-height: 100%;} UL.classhierarchy LI A {font-size: 100% !important; padding: 0; line-height: 0;} TD.sidebar UL LI {margin-left: 3px;} A.sidebar:link {padding: 0px; margin: 0px; list-style-type: none; font-size: 100%;} A.DOI {font-size: 100% !important;}\n";
         $stylesheet_html .= "</style>\n";
@@ -107,7 +107,7 @@ sub get_header {
 sub get_footer {
     my ($self) = @_;
     
-    my $chunk = GKB::HTMLUtils->extract_chunk_from_html($self->content, '<!--footer-->', '');
+    my $chunk = GKB::HTMLUtils->extract_chunk_from_html($self->content, '<!--template-placeholder-->', '');
 
     return $chunk;
 }
@@ -115,7 +115,8 @@ sub get_footer {
 sub get_enclosing_div_start {
     my ($self) = @_;
     
-    return "\n\n<!--content-->\n<div id=\"content\" style=\"width=700; min-height=400;\">\n";
+    #return "\n\n<!--content-->\n<div id=\"content\" style=\"width=700; min-height=400;\">\n";
+    return "\n\n<!--content-->\n<div id=\"r-responsive-table\" class=\"padding0 top30\">\n";
 }
 
 sub get_enclosing_div_end {
@@ -132,7 +133,10 @@ sub get_index_html_content {
     $host = 'reactome.org' if $host =~ /reactomeprd1/;
 
     chomp $host;
-    my $content = `wget --no-check-certificate -qO- $host`;
+    my $content = `wget --no-check-certificate -qO- $host/template-cgi`;
+
+    $content =~ s|http:\/\/|https:\/\/|g;
+    $content =~ s/favth\-content\-block\s?//g;
     
     return $content;
 }
