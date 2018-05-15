@@ -16,3 +16,11 @@ container/mysql_databases*
 .includepath
 .project
 .settings
+classes
+*class
+Reactome2GoV*
+deleted_unused_pe_test_reactome*
+post_requisite_file_listing*~*
+*.err
+*.bak
+
