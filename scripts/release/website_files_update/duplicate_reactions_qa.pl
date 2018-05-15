@@ -75,16 +75,16 @@ sub has_value_for_any_attribute {
 sub get_defining_attributes_for_reaction_class {
     my $dba = shift;
     
-    return $dba->ontology->list_class_attributes_with_defining_type('Reaction', 'all')
+    return $dba->ontology->list_class_attributes_with_defining_type('Reaction', 'all');
 }
 
 sub usage_instructions {
     return <<END;
 
     This script reports released reactions whose defining attributes (input,
-    output, catalyst activity, and entity functional status) and compartment
-    attribute contain the same instances.
-    
+    output, catalyst activity, and entity functional status), compartment
+    attribute and species attribute contain the same instances.
+ 
     The output file for this script is the name of the script with a .txt
     extension.
     
