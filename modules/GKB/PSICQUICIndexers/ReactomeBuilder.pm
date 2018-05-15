@@ -73,7 +73,7 @@ sub get_ok_field {
 sub get_mitab_path {
 	my ($self) = @_;
 	
-	return $self->get_current_download_dir() . "/homo_sapiens.mitab.interactions.txt";
+	return $self->get_current_download_dir() . "/interactors/reactome.homo_sapiens.interactions.psi-mitab.txt";
 }
 
 1;
