@@ -2,7 +2,6 @@ package GKB::Release::Steps::UpdateStableIds;
 
 use GKB::CommonUtils;
 use GKB::NewStableIdentifiers;
-use Data::Dumper;
 use GKB::Release::Config;
 use GKB::Release::Utils;
 
