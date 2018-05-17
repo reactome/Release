@@ -2,7 +2,6 @@ package GKB::Release::Steps::GenerateOrthoInferenceStableIds;
 
 use GKB::Release::Config;
 use GKB::Release::Utils;
-use Data::Dumper;
 use GKB::NewStableIdentifiers;
 
 use Moose;
