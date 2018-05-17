@@ -46,9 +46,6 @@ $ghost ||= 'localhost';
 # Make sure our requested DBs are slice DBs
 check_db_names();
 
-print "host is $host\n";
-print "g_host is $ghost\n";
-
 #back_up_databases(
 #    [$user, $pass, $gk_central, $ghost],
 #    [$user, $pass, $release_db, $host]
@@ -56,7 +53,7 @@ print "g_host is $ghost\n";
 
 get_api_connections()->{$release_db}->execute("START TRANSACTION");
 get_api_connections()->{$gk_central}->execute("START TRANSACTION");
-print "transactions started\n";
+
 # Evaluate each instance
 for my $db_id (get_db_ids($release_db)) {
     my $instance   = get_instance($db_id, $release_db);
