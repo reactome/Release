@@ -185,7 +185,7 @@ sub classes_with_stable_ids {
     # select distinct _class from DatabaseObject where StableIdentifier is not null 
     qw/
     Pathway SimpleEntity OtherEntity DefinedSet Complex EntityWithAccessionedSequence GenomeEncodedEntity
-    Reaction BlackBoxEvent PositiveRegulation CandidateSet NegativeRegulation OpenSet Requirement Polymer
+    Reaction BlackBoxEvent CandidateSet OpenSet Polymer
     Depolymerisation EntitySet Polymerisation FailedReaction
     /;
 }
