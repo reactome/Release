@@ -39,7 +39,7 @@ foreach my $regulation (@{$regulations}) {
     my $regulation_author = get_authors($regulation->created->[0]);
     my $regulation_db_id = $regulation->db_id;
     
-    foreach my $regulated_entity (@{$regulation->regulatedEntity}) {
+    foreach my $regulated_entity (@{$regulation->reverse_attribute_value('regulatedBy')}) {
         next unless is_human($regulated_entity) && !$seen{$regulated_entity}++;
     
         my $regulated_entity_display_name = $regulated_entity->displayName;

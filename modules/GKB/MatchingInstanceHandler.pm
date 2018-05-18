@@ -50,57 +50,62 @@ sub debug {
     return $self->{'debug'};
 }
 
-sub handle_matching_instances {
-    my ($self,$instance,$dba) = @_;
-    my $ar = $instance->identical_instances_in_db;
-    return unless (@{$ar});
-    if (@{$ar} == 1) {
-	$self->_handle_single_matching_instance($instance,$dba);
-    } else {
-	$self->_handle_multiple_matching_instances($instance,$dba);
-    }
+sub handle_matching_instances 
+{
+	my ($self,$instance,$dba) = @_;
+	my $ar = $instance->identical_instances_in_db;
+	return unless (@{$ar});
+	if (@{$ar} == 1)
+	{
+		$self->_handle_single_matching_instance($instance,$dba);
+	}
+	else
+	{
+		$self->_handle_multiple_matching_instances($instance,$dba);
+	}
 }
 
 sub _handle_single_matching_instance {
-    my ($self,$instance,$dba) = @_;
-    my $ar = $instance->identical_instances_in_db;
-    $self->throw($self->_message($instance,$ar)) unless (-t STDIN && -t STDOUT);
-    print $self->_message($instance,$ar);
-    $| = 1;
-    while (1) {
-#	print "Enter nothing (i.e. just click Return) to store the current instance as this instance, 'n' to store instance as new, '>' to merge current instance to this instance, '<' to merge this instance to the current instance: ";
-	print "Enter nothing (i.e. just click Return) to store the current instance as this instance, 'n' to store instance as new: ";
-	my $str = <STDIN>;
-	chomp $str;
-	if ($str eq "n") {
-	    $dba->store($instance,undef,1);
-	    print "Instance stored as: ", $instance->extended_displayName, "\n";
-	    $self->_print_log_message('NEW (but has matching instances)', $instance);
-	    last;
-	} elsif ($str eq '') {
-	    $instance->db_id($ar->[0]->db_id);
-	    print "Instance stored as: ", $ar->[0]->extended_displayName, "\n";
-	    $self->_print_log_message('EXISTS', $instance);
-	    last;
-#	} elsif ($str =~ /^>/) {
-#	    $ar->[0]->inflate;
-#	    $ar->[0]->merge($instance);
-#	    $dba->update($ar->[0]);
-#	    # Have to set db_id to indicate that this instance has been dealt with.
-#	    $instance->db_id($ar->[0]->db_id);
-#	    print "Instance merged to: ", $ar->[0]->extended_displayName, "\n";
-##	    $self->_print_log_message('MERGE TO', $instance);		
-#	    last;
-#	} elsif ($str =~ /^</) {
-#	    $instance->db_id($ar->[0]->db_id);
-#	    $instance->merge($ar->[0]);
-#	    $dba->update($instance);
-#	    print "Instance merged with: ", $instance->extended_displayName, "\n";
-##	    $self->_print_log_message('MERGE FROM', $instance);
-#	    last;
+	my ($self,$instance,$dba) = @_;
+	my $ar = $instance->identical_instances_in_db;
+	$self->throw($self->_message($instance,$ar)) unless (-t STDIN && -t STDOUT);
+	print $self->_message($instance,$ar);
+	$| = 1;
+	while (1) {
+	#	print "Enter nothing (i.e. just click Return) to store the current instance as this instance, 'n' to store instance as new, '>' to merge current instance to this instance, '<' to merge this instance to the current instance: ";
+		print "Enter nothing (i.e. just click Return) to store the current instance as this instance, 'n' to store instance as new: ";
+		my $str = <STDIN>;
+		chomp $str;
+		if ($str eq "n")
+		{
+			$dba->store($instance,undef,1);
+			print "Instance stored as: ", $instance->extended_displayName, "\n";
+			$self->_print_log_message('NEW (but has matching instances)', $instance);
+			last;
+		} elsif ($str eq '') {
+			$instance->db_id($ar->[0]->db_id);
+			print "Instance stored as: ", $ar->[0]->extended_displayName, "\n";
+			$self->_print_log_message('EXISTS', $instance);
+			last;
+	#	} elsif ($str =~ /^>/) {
+	#	    $ar->[0]->inflate;
+	#	    $ar->[0]->merge($instance);
+	#	    $dba->update($ar->[0]);
+	#	    # Have to set db_id to indicate that this instance has been dealt with.
+	#	    $instance->db_id($ar->[0]->db_id);
+	#	    print "Instance merged to: ", $ar->[0]->extended_displayName, "\n";
+	##	    $self->_print_log_message('MERGE TO', $instance);		
+	#	    last;
+	#	} elsif ($str =~ /^</) {
+	#	    $instance->db_id($ar->[0]->db_id);
+	#	    $instance->merge($ar->[0]);
+	#	    $dba->update($instance);
+	#	    print "Instance merged with: ", $instance->extended_displayName, "\n";
+	##	    $self->_print_log_message('MERGE FROM', $instance);
+	#	    last;
+		}
 	}
-    }
-    print "\n";
+	print "\n";
 }
 
 sub _handle_multiple_matching_instances {
