@@ -42,7 +42,6 @@ my %instructions1 = (-INSTRUCTIONS =>
 			$protein_class => {'reverse_attributes' => [qw(referenceEntity)]},
 			'CatalystActivity' => {'reverse_attributes' =>[qw(catalystActivity)]},
 #			'PhysicalEntity' => {'reverse_attributes' => [qw(hasComponent input output physicalEntity hasMember hasCandidate regulator)]},
-#			'Regulation' => {'attributes' =>[qw(regulatedEntity)]}
 			'PhysicalEntity' => {'reverse_attributes' => [qw(hasComponent input output physicalEntity hasMember hasCandidate)]}
 		    },
 		    -OUT_CLASSES => ['Event']

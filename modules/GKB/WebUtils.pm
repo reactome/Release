@@ -2606,6 +2606,7 @@ sub _checkbox_and_displayName {
 }
 
 sub _reverse_attribute_to_be_followed_box {
+	# TODO: Regulation.regulatedEvent will soon be removed! It will be replaced with ReactionlikeEvent.regulatedBy (1:N).
     my $self = shift;
     print
 	qq(<TABLE WIDTH="$HTML_PAGE_WIDTH" CELLPADDING="2" CELLSPACING="0"><TR><TD>),
@@ -3796,7 +3797,7 @@ sub focus_species_changes {
 		'Event' => {'reverse_attributes' => [qw(hasEvent)]},
 		'PhysicalEntity' => {'reverse_attributes' => [qw(hasComponent hasMember hasCandidate repeatedUnit input output physicalEntity regulator)]},
 		'CatalystActivity' => {'reverse_attributes' => [qw(catalystActivity)]},
-		'Regulation' => {'attributes' => [qw(regulatedEntity)]}
+		'Regulation' => {'reverse_attributes' => [qw(regulatedBy)]}
 	    },
 	    -OUT_CLASSES => [qw(Event)]
 	    );
