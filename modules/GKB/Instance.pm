@@ -350,27 +350,30 @@ sub referer_value {
 # NOTE: Throws is reverse attributes have not been attached to this instance.
 ###
 sub reverse_attribute_value {
-    my $self = shift;
-    my $attribute = shift;
-    $attribute || $self->throw("Need attribute to store/retrieve value");
-    if (@_) {
-	if (defined $_[0] && ref($_[0]) && (ref($_[0]) eq 'ARRAY')) { 
-	    $self->{'reverse_attribute'}->{$attribute} = shift;
-	} else {
-	    $self->throw("Need array ref, got '@_'.");
+	my $self = shift;
+	my $attribute = shift;
+	$attribute || $self->throw("Need attribute to store/retrieve value");
+	if (@_)
+	{
+		if (defined $_[0] && ref($_[0]) && (ref($_[0]) eq 'ARRAY')) { 
+			$self->{'reverse_attribute'}->{$attribute} = shift;
+		} else {
+			$self->throw("Need array ref, got '@_'.");
+		}
 	}
-    } else {
-	if ($self->reverse_attributes_attached) {
-	    return $self->{'reverse_attribute'}->{$attribute} || [];
-	} elsif ($self->{'reverse_attribute'} && $self->{'reverse_attribute'}->{$attribute}) {
-	    return $self->{'reverse_attribute'}->{$attribute} || [];
-	} elsif ($self->dba) {
-	    $self->dba->load_reverse_attribute_values($self,$attribute);
-	    return $self->{'reverse_attribute'}->{$attribute} || [];
-	} else {
-	    $self->throw("Reverse attributes have not been attached to " . $self->class . " " . $self->db_id . " yet.");
+	else
+	{
+		if ($self->reverse_attributes_attached) {
+			return $self->{'reverse_attribute'}->{$attribute} || [];
+		} elsif ($self->{'reverse_attribute'} && $self->{'reverse_attribute'}->{$attribute}) {
+			return $self->{'reverse_attribute'}->{$attribute} || [];
+		} elsif ($self->dba) {
+			$self->dba->load_reverse_attribute_values($self,$attribute);
+			return $self->{'reverse_attribute'}->{$attribute} || [];
+		} else {
+			$self->throw("Reverse attributes have not been attached to " . $self->class . " " . $self->db_id . " yet.");
+		}
 	}
-    }
 }
 
 sub add_reverse_attribute_value {
@@ -487,11 +490,12 @@ sub db_id {
 # Return true if reverse attributes have been attached to this instance
 ###
 sub reverse_attributes_attached {
-    my $self = shift;
-    if (@_) {
-	$self->{'reverse_attributes_attached'} = shift;
-    }
-    return $self->{'reverse_attributes_attached'};
+	my $self = shift;
+	if (@_)
+	{
+		$self->{'reverse_attributes_attached'} = shift;
+	}
+	return $self->{'reverse_attributes_attached'};
 }
 
 ### Function: inflated

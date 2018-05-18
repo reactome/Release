@@ -2,7 +2,6 @@ package GKB::Release::Steps::UpdateStableIds;
 
 use GKB::CommonUtils;
 use GKB::NewStableIdentifiers;
-
 use GKB::Release::Config;
 use GKB::Release::Utils;
 
@@ -26,7 +25,11 @@ my %stable_identifier_to_version;
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
-    my $host = $self->host;
+    #my $host = $self->host;
+    # The $self->host will evaluate to the hostname of the machine where the code is run. 
+    # This won't be useful inside a docker container, where the database is not hosted in the same
+    # container as where the code runs. So we'll use the GK_DB_HOST from the config.
+    my $host = $GKB::Config::GK_DB_HOST;
 
     $self->cmd("Backing up databases",
         [
@@ -45,7 +48,7 @@ override 'run_commands' => sub {
     $stable_identifier_to_version{$_->identifier->[0]}{'before_update'} = $_->identifierVersion->[0] foreach get_all_stable_identifier_instances(get_dba($slicedb));
     $self->cmd("Updating stable IDs",
         [
-            ["perl update_stable_ids.pl -ghost $gkcentral_host -user $user -pass $pass -sdb $slicedb ".
+            ["perl update_stable_ids.pl -ghost $gkcentral_host -host $host -user $user -pass $pass -sdb $slicedb ".
              "-pdb " . get_test_slice($prevver, $host) . " -release $version -gdb $gkcentral > generate_stable_ids_$version.out ".
              "2> generate_stable_ids_$version.err"]
         ]
@@ -60,7 +63,7 @@ override 'run_commands' => sub {
     );
 };
 
-# Collect and return problems with pre-requisites of stable identifiers
+## Collect and return problems with pre-requisites of stable identifiers
 override 'pre_step_tests' => sub {
     my $self = shift;   
 
@@ -112,15 +115,26 @@ sub get_test_slice {
 }
 
 sub _check_stable_id_count {
-    my $current_db = shift;
-    my $previous_db = shift;
+	my $current_db = shift;
+	my $previous_db = shift;
 
-    my $current_stable_id_count = get_dba($current_db)->class_instance_count('StableIdentifier');
-    my $previous_stable_id_count = get_dba($previous_db)->class_instance_count('StableIdentifier');
+	my $current_stable_id_count = get_dba($current_db)->class_instance_count('StableIdentifier');
+	my $previous_stable_id_count = get_dba($previous_db)->class_instance_count('StableIdentifier');
+	
+	my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
 
-    my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
-    return "Stable id count has gone down from $current_stable_id_count for version $version " .
-        " from $previous_stable_id_count for version $prevver" if $stable_id_count_change < 0;
+	if ($stable_id_count_change < 0)
+	{
+		return "Stable id count has gone down from $current_stable_id_count for version $version from $previous_stable_id_count for version $prevver"
+	}
+	else
+	{
+		# *EXPLICITLY* return undef because post-step test relies on defined vs. undefined.
+		# If you don't return undef, then it seems the empty string '' will be returned and that breaks
+		# the logic of the post step test because '' is defined and the test checked for variables that are
+		# UNdefined.
+		return undef;
+	}
 }
 
 1;

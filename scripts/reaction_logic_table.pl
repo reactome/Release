@@ -102,8 +102,9 @@ sub add_reaction_to_logic_table {
         
         process_output($output, $all_reactions);
     }
-    
-    my @regulations = @{$reaction->reverse_attribute_value('regulatedEntity')};
+    # Regulation.regulatedEntity will be removed, and replaced with ReactionlikeEvent.regulatedBy as a 1:N (RLE:Regulation) relationship.
+#    my @regulations = @{$reaction->reverse_attribute_value('regulatedEntity')};
+	my @regulations = @{$reaction->reverse_attribute_value('regulatedBy')};
     process_regulations($reaction, $all_reactions, \@regulations);
 }
 
