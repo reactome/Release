@@ -235,7 +235,10 @@ sub get_source_for_electronically_inferred_instance {
 		my @potential_source_catalyst_activities = grep {$instance->db_id != $_->db_id} map {@{$_->reverse_attribute_value('physicalEntity')}} @source_physical_entities;
 		return grep {$_->activity->[0]->db_id == $instance->activity->[0]->db_id} @potential_source_catalyst_activities;
 	} elsif ($instance->is_a('Regulation')) {
-		return @{$instance->inferredFrom} if @{$instance->inferredFrom}; # Only present for version 59 and onward
+		if ($instance->is_valid_attribute('inferredFrom'))
+		{
+			return @{$instance->inferredFrom} if @{$instance->inferredFrom}; # Only present for version 59 and onward
+		}
 
 		my @source_regulated_entities = get_source_for_electronically_inferred($instance->reverse_attribute_value('regulatedBy'));
 		my @source_regulators = get_source_for_electronically_inferred($instance->regulator->[0]);
