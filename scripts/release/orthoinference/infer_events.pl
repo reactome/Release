@@ -793,8 +793,10 @@ sub infer_event {
         $logger->info("Aborting $opt_sp event inference -- regulation inference unsuccessful");
         return;
     }
-    
-    $inf_e->releaseDate($release_date);
+    if ($inf_e->is_valid_attribute('releaseDate'))
+    {
+    	$inf_e->releaseDate($release_date);
+    }
     $inf_e->TotalProt($total);
     $inf_e->InferredProt($inferred);
 #    $inf_e->MaxHomologues($max);
@@ -802,9 +804,12 @@ sub infer_event {
 #fill in attributes connecting source and target species events
     $inf_e->InferredFrom;
     $inf_e->OrthologousEvent;
-    $inf_e->add_attribute_value_if_necessary('inferredFrom', $event);
+    if ($inf_e->is_valid_attribute('inferredFrom'))
+    {
+    	$inf_e->add_attribute_value_if_necessary('inferredFrom', $event);
+    	$dba->update_attribute($inf_e, 'inferredFrom');	
+    }
     $inf_e->add_attribute_value_if_necessary('orthologousEvent', $event);
-    $dba->update_attribute($inf_e, 'inferredFrom');
     $dba->update_attribute($inf_e, 'orthologousEvent');
 
     $event->OrthologousEvent; 
@@ -825,9 +830,9 @@ sub infer_event {
             my $inferred_regulation = $regulation_pair->{inferred};
             
             $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_e has been stored
-            $source_regulation->inferredTo(@{$source_regulation->inferredTo});
-            $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
-            $dba->update_attribute($source_regulation, 'inferredTo');
+#            $source_regulation->inferredTo(@{$source_regulation->inferredTo});
+#            $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
+#            $dba->update_attribute($source_regulation, 'inferredTo');
             
             $inf_e->add_attribute_value('regulatedBy', $inferred_regulation);
     		$dba->update_attribute($inf_e,'regulatedBy');
@@ -966,9 +971,9 @@ sub create_inf_cat {
 #            $inferred_regulation->RegulatedEntity($inf_cat);
 			#
 			$inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_cat has been stored
-			$source_regulation->inferredTo(@{$source_regulation->inferredTo});
-			$source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
-			$dba->update_attribute($source_regulation, 'inferredTo');
+			#$source_regulation->inferredTo(@{$source_regulation->inferredTo});
+			#$source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
+			#$dba->update_attribute($source_regulation, 'inferredTo');
 		}
 	}
 	return $inf_cat;
@@ -994,7 +999,7 @@ sub infer_regulation {
 			}
 			my $inf_reg = new_inferred_instance($reg);
 			$inf_reg->Regulator($regulator);
-			$inf_reg->add_attribute_value_if_necessary('inferredFrom', $reg);
+			# $inf_reg->add_attribute_value_if_necessary('inferredFrom', $reg);
 			push @reg, {
 				source => $reg,
 				inferred => $inf_reg
@@ -1312,7 +1317,10 @@ sub create_orthologous_generic_event {
                 my $gen_inf_event = new_inferred_instance($gen_hum_event);
                 $gen_inf_event->Name(@{$gen_hum_event->Name});
                 $gen_inf_event->Summation($summation);
-                $gen_inf_event->releaseDate($release_date);
+                if ($gen_inf_event->is_valid_attribute('releaseDate'))
+                {
+                	$gen_inf_event->releaseDate($release_date);
+                }
                 $gen_inf_event->InferredFrom($gen_hum_event);
                 $gen_inf_event->EvidenceType($evidence_type);
                 $gen_inf_event->GoBiologicalProcess(@{$gen_hum_event->GoBiologicalProcess});
