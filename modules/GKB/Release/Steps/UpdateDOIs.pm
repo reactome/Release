@@ -11,8 +11,7 @@ has '+passwords' => ( default => sub { ['mysql'] } );
 # has '+user_input' => ( default => sub { {'live_run' => {'query' => 'Is this DOI update a live run -- i.e. databases to be changed? (y/n):'}}});
 has '+user_input' => (default => sub {
                     {
-                        'props' => {'query' => 'Is the proper config.properties file and UpdateDOIs.report(optional) in the update_dois directory?:'},
-                        'clone' => {'query' => 'Does data-release-pipeline need to be updated/cloned?:'}
+                        'props' => {'query' => 'Have you updated update_dois/config.properties? '},
                     }
 });
 has '+directory' => ( default => "$release/update_dois" );
@@ -38,10 +37,12 @@ override 'run_commands' => sub {
         ]
     );
 
+    if ($self->user_input->{'props'}->{'response'} !~ /^y/i) {
+      die "Please update the databaseTR, and authorID fields in update_dois/config.properties before running.\n";
+    }
     # my $live_run = $self->user_input->{'live_run'}->{'response'} =~ /^y/i ? '-live_run' : '';
     # my @args = ("-user", $user, "-pass", $pass, "-release_db", $db, "-release_db_host", $host, "-curator_db", $gkcentral, "-curator_db_host", $gkcentral_host, $live_run);
-		my $update = $self->user_input->{'clone'}->{'response'} =~ /^y|yes/i ? '-clone' : '';
-		$self->cmd("Running script to update DOIs for $db and $gkcentral",[["perl setup_update_dois.pl $update > setup_update_dois.out 2>> setup_update_dois.err"]]);
+		$self->cmd("Running script to update DOIs for $db and $gkcentral",[["perl setup_update_dois.pl > setup_update_dois.out 2>> setup_update_dois.err"]]);
 };
 
 1;
