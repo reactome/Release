@@ -22,7 +22,7 @@ use constant DEBUG => 0;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-our($pass,$user,$release_db,$prev_release_db,$gk_central,$ghost,$release_num);
+our($pass,$user,$release_db,$prev_release_db,$gk_central,$ghost,$host,$release_num);
 
 my $usage = "Usage:\n\t" . join("\n\t", 
 				"$0 -sdb slice_db_name -gdb gk_central_db_name -pdb prev_release_db_name \\",
@@ -33,6 +33,7 @@ GetOptions(
     "pass:s"  => \$pass,
     "gdb:s"   => \$gk_central,
     "ghost:s" => \$ghost,
+    "host:s"  => \$host,
     "sdb:s"   => \$release_db,
     "pdb:s"   => \$prev_release_db,
     "release:i" => \$release_num
@@ -45,13 +46,14 @@ $ghost ||= 'localhost';
 # Make sure our requested DBs are slice DBs
 check_db_names();
 
-back_up_databases(
-    [$user, $pass, $gk_central, $ghost],
-    [$user, $pass, $release_db, 'localhost']
-);
+#back_up_databases(
+#    [$user, $pass, $gk_central, $ghost],
+#    [$user, $pass, $release_db, $host]
+#);
 
 get_api_connections()->{$release_db}->execute("START TRANSACTION");
 get_api_connections()->{$gk_central}->execute("START TRANSACTION");
+
 # Evaluate each instance
 for my $db_id (get_db_ids($release_db)) {
     my $instance   = get_instance($db_id, $release_db);
@@ -185,24 +187,25 @@ sub classes_with_stable_ids {
     # select distinct _class from DatabaseObject where StableIdentifier is not null 
     qw/
     Pathway SimpleEntity OtherEntity DefinedSet Complex EntityWithAccessionedSequence GenomeEncodedEntity
-    Reaction BlackBoxEvent PositiveRegulation CandidateSet NegativeRegulation OpenSet Requirement Polymer
+    Reaction BlackBoxEvent CandidateSet OpenSet Polymer
     Depolymerisation EntitySet Polymerisation FailedReaction
     /;
 }
 
-sub back_up_databases {
-    my @dbs = @_;
-    
-    foreach my $db (@dbs) {
-        my ($user, $pass, $name, $host) = @$db;
-        next unless $name && $host;
-        $user ||= $GKB::Config::GK_DB_USER;
-        $pass ||= $GKB::Config::GK_DB_PASS;
-        
-        my $back_up_successful = (system("mysqldump -h $host -u $user -p$pass $name > $name.dump") == 0);
-        die "Unable to back-up $db at $host for $user" unless $back_up_successful;
-    }   
-}
+#sub back_up_databases {
+#    my @dbs = @_;
+#    
+#    foreach my $db (@dbs) {
+#        my ($user, $pass, $name, $host) = @$db;
+#        next unless $name && $host;
+#        $user ||= $GKB::Config::GK_DB_USER;
+#        $pass ||= $GKB::Config::GK_DB_PASS;
+#   		print "backing up $name on $host\n";
+#        my $back_up_successful = (system("mysqldump -h$host -u$user -p$pass $name > $name.dump") == 0);
+#        die "Unable to back-up $db at $host for $user" unless $back_up_successful;
+#    }
+#    print "database backup complete!\n"
+#}
 
 # If stable ID exists, return instance.
 sub stable_id {
@@ -246,13 +249,15 @@ sub get_api_connections {
     my $r_dba = GKB::DBAdaptor->new(
         -dbname  => $release_db,
         -user    => $user,
-        -pass    => $pass
+        -pass    => $pass,
+        -host    => $host
     );
 
     my $p_dba = GKB::DBAdaptor->new(
         -dbname  => $prev_release_db,
         -user    => $user,
-        -pass    => $pass
+        -pass    => $pass,
+        -host    => $host
     );
 
     my $g_dba = GKB::DBAdaptor->new(
@@ -280,6 +285,7 @@ sub get_db_ids {
             push @db_ids, $db_id;
         } 
     }
+    print "Number of DB_IDs: ".scalar(@db_ids)."\n";
     return @db_ids;
 }
 

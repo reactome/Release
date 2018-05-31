@@ -163,7 +163,7 @@ sub get_participants {
     my @inputs = @{$RLE->input};
     my @outputs = @{$RLE->output};
     my @catalysts = map {$_->physicalEntity->[0]} @{$RLE->catalystActivity};
-    my @regulators = map {$_->regulator->[0]} @{$RLE->reverse_attribute_value('regulatedEntity')};
+    my @regulators = map {$_->regulator->[0]} @{$RLE->regulatedBy};
     
     return (@inputs, @outputs, @catalysts, @regulators);
 }

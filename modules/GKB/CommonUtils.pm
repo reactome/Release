@@ -195,61 +195,62 @@ sub get_all_species_in_entity {
 }
 
 sub is_electronically_inferred {
-    my $instance = shift;
-                    
-    my $dba = $instance->dba();
-    my $db_name = $dba->db_name();
-    return 0 unless $db_name =~ /^test_reactome_\d+$/ || $db_name eq 'gk_current';
-    
-    if ($instance->is_a('Event')) {
-        return $instance->evidenceType->[0] && $instance->evidenceType->[0]->displayName =~ /electronic/i;
-    } elsif ($instance->is_a('PhysicalEntity')) {
-        # If manually inferred physical entities ever start using the inferredFrom slot, this logic
-        # can be augmented to check the event(s) to which the physical entity is/are attached
-        # to see if the event(s) are electronically inferred
-        return $instance->inferredFrom->[0] &&
-               $instance->inferredFrom->[0]->species->[0] &&
-               $instance->inferredFrom->[0]->species->[0]->displayName =~ /^Homo sapiens$/i;
-    } elsif ($instance->is_a('CatalystActivity')) {
-        return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('catalystActivity')};
-    } elsif ($instance->is_a('Regulation')) {
-        return any { is_electronically_inferred($_)} @{$instance->regulatedEntity};
-    }
+	my $instance = shift;
+
+	my $dba = $instance->dba();
+	my $db_name = $dba->db_name();
+	return 0 unless $db_name =~ /^test_reactome_\d+$/ || $db_name eq 'gk_current';
+
+	if ($instance->is_a('Event')) {
+		return $instance->evidenceType->[0] && $instance->evidenceType->[0]->displayName =~ /electronic/i;
+	} elsif ($instance->is_a('PhysicalEntity')) {
+		# If manually inferred physical entities ever start using the inferredFrom slot, this logic
+		# can be augmented to check the event(s) to which the physical entity is/are attached
+		# to see if the event(s) are electronically inferred
+		return $instance->inferredFrom->[0] &&
+			$instance->inferredFrom->[0]->species->[0] &&
+			$instance->inferredFrom->[0]->species->[0]->displayName =~ /^Homo sapiens$/i;
+	} elsif ($instance->is_a('CatalystActivity')) {
+		return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('catalystActivity')};
+	} elsif ($instance->is_a('Regulation')) {
+		return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('regulatedBy')};
+	}
 }
 
 sub get_source_for_electronically_inferred_instance {
-    my $instance = shift;
-    
-    return unless is_electronically_inferred($instance);
-    
-    if ($instance->is_a('Event') || $instance->is_a('PhysicalEntity')) {
-        return @{$instance->inferredFrom};
-    } elsif ($instance->is_a('CatalystActivity')) {
-        my @source_physical_entities = get_source_for_electronically_inferred_instance($instance->physicalEntity->[0]);
-        
-        # The physical entity of the inferred catalyst activity may not be an electronically inferred instance
-        # but the same instance used by the source catalyst activity (e.g. simple entities without species).
-        # This is assumed when a source physical entity can't be found from the inferred catalyst activity's
-        # physical entity
-        @source_physical_entities = ($instance->physicalEntity->[0]) if scalar @source_physical_entities == 0;        
-        
-        my @potential_source_catalyst_activities =
-            grep {$instance->db_id != $_->db_id} map {@{$_->reverse_attribute_value('physicalEntity')}} @source_physical_entities;
-        return grep {$_->activity->[0]->db_id == $instance->activity->[0]->db_id} @potential_source_catalyst_activities;
-    } elsif ($instance->is_a('Regulation')) {
-        return @{$instance->inferredFrom} if @{$instance->inferredFrom}; # Only present for version 59 and onward
-        
-        my @source_regulated_entities = get_source_for_electronically_inferred($instance->regulatedEntity->[0]);
-        my @source_regulators = get_source_for_electronically_inferred($instance->regulator->[0]);
-        
-        # Source regulation instance(s) will have both a source regulated entity and
-        # a source regulator used to infer the inferred regulation instance passed
-        # to the subroutine
-        return intersection_of_database_instance_lists(
-            [map {@{$_->reverse_attribute_value('regulatedEntity')}} @source_regulated_entities],
-            [map {@{$_->reverse_attribute_value('regulator')}} @source_regulators]
-        );
-    }    
+	my $instance = shift;
+	return unless is_electronically_inferred($instance);
+
+	if ($instance->is_a('Event') || $instance->is_a('PhysicalEntity')) {
+		return @{$instance->inferredFrom};
+	} elsif ($instance->is_a('CatalystActivity')) {
+		my @source_physical_entities = get_source_for_electronically_inferred_instance($instance->physicalEntity->[0]);
+
+		# The physical entity of the inferred catalyst activity may not be an electronically inferred instance
+		# but the same instance used by the source catalyst activity (e.g. simple entities without species).
+		# This is assumed when a source physical entity can't be found from the inferred catalyst activity's
+		# physical entity
+		@source_physical_entities = ($instance->physicalEntity->[0]) if scalar @source_physical_entities == 0;        
+
+		my @potential_source_catalyst_activities = grep {$instance->db_id != $_->db_id} map {@{$_->reverse_attribute_value('physicalEntity')}} @source_physical_entities;
+		return grep {$_->activity->[0]->db_id == $instance->activity->[0]->db_id} @potential_source_catalyst_activities;
+	} elsif ($instance->is_a('Regulation')) {
+		if ($instance->is_valid_attribute('inferredFrom'))
+		{
+			return @{$instance->inferredFrom} if @{$instance->inferredFrom}; # Only present for version 59 and onward
+		}
+
+		my @source_regulated_entities = get_source_for_electronically_inferred($instance->reverse_attribute_value('regulatedBy'));
+		my @source_regulators = get_source_for_electronically_inferred($instance->regulator->[0]);
+
+		# Source regulation instance(s) will have both a source regulated entity and
+		# a source regulator used to infer the inferred regulation instance passed
+		# to the subroutine
+		return intersection_of_database_instance_lists(
+			[map {@{$_->regulatedBy}} @source_regulated_entities],
+			[map {@{$_->reverse_attribute_value('regulator')}} @source_regulators]
+		);
+	}
 }
 
 sub intersection_of_database_instance_lists {
@@ -321,22 +322,26 @@ sub XOR {
     return ($expression1 || $expression2) && (!($expression1 && $expression2));
 }
 
-sub get_components {
-    my $composite_entity = shift;
-    
-    my @components;
-    foreach my $component (@{$composite_entity->hasComponent},
-                           @{$composite_entity->hasMember},
-                           @{$composite_entity->hasCandidate},
-                           @{$composite_entity->repeatedUnit}) {
-        push @components, $component;
-        my @sub_components = grep {defined} get_components($component);
-        if (@sub_components) {
-            push @components, @sub_components;
-        }
-    }
-    
-    return @components;
+sub get_components
+{
+	my $composite_entity = shift;
+
+	my @components;
+	if ($composite_entity)
+	{
+		foreach my $component (@{$composite_entity->hasComponent}, @{$composite_entity->hasMember},
+								@{$composite_entity->hasCandidate}, @{$composite_entity->repeatedUnit})
+		{
+			push @components, $component;
+			my @sub_components = grep {defined} get_components($component);
+			if (@sub_components)
+			{
+				push @components, @sub_components;
+			}
+		}
+	}
+
+	return @components;
 }
 
 sub get_instance_creator {
@@ -361,11 +366,18 @@ sub get_event_modifier {
 	return 'Unknown' unless $event;
 	
 	my $author_instance;
-    foreach my $modified_instance (reverse @{$event->modified}) {
-        $author_instance ||= $modified_instance->author->[0] unless $modified_instance->author->[0] && $modified_instance->author->[0]->db_id == 140537;
-    }
-	$author_instance ||= $event->created->[0]->author->[0];
-	
+	try
+	{
+		foreach my $modified_instance (reverse @{$event->modified})
+		{
+			$author_instance ||= $modified_instance->author->[0] unless $modified_instance->author->[0] && $modified_instance->author->[0]->db_id == 140537;
+		}
+		$author_instance ||= $event->created->[0]->author->[0];
+	}
+	catch
+	{
+		confess "Error caught: $_ \nFor event: ".$event->extended_displayName;
+	}
 	my $author_name = $author_instance->displayName if $author_instance;
 	
 	return $author_name || 'Unknown';

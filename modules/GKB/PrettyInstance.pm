@@ -1094,8 +1094,8 @@ sub hyperlinked_identifier {
 sub regulation_as_rows {
     my ($self) = @_;
     my $out = '';
-    if ($self->is_valid_reverse_attribute('regulatedEntity')) {
-	my $regulation = $self->reverse_attribute_value('regulatedEntity');
+    if ($self->is_valid_reverse_attribute('regulatedBy')) {
+	my $regulation = $self->reverse_attribute_value('regulatedBy');
 	@{$regulation} = grep {$_->Regulator->[0]} @{$regulation};
 	my @a = grep {$_->class eq 'Requirement'} @{$regulation};
 	if (@a) {
