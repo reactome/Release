@@ -70,6 +70,7 @@ sub get_dba {
     return GKB::DBAdaptor->new (
         -user => $GKB::Config::GK_DB_USER,
         -pass => $GKB::Config::GK_DB_PASS,
+        -host => $GKB::Config::GK_DB_HOST,
         -dbname => $db
     );
 }

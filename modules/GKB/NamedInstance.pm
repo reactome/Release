@@ -308,11 +308,8 @@ use strict;
 sub set_displayName {
     my ($self) = @_;
     $self->debug && print join("\t", (caller(0))[3], $self,  $self->class, ($self->db_id || '')), "\n";
-    $self->attribute_value('_displayName',
-			   "'" . ($self->Regulator->[0] ? $self->Regulator->[0]->displayName : 'UNKNOWN ENTITY') .
-			   "' regulates '" .
-			   ($self->RegulatedEntity->[0] ? $self->RegulatedEntity->[0]->displayName : 'UNKNOWN ENTITY') . "'"
-			   );
+
+	$self->attribute_value('_displayName', 'Regulation by '. ($self->Regulator->[0] ? $self->Regulator->[0]->displayName : 'unknown'));
     return $self->attribute_value('_displayName')->[0];
 }
 
@@ -324,11 +321,8 @@ use strict;
 sub set_displayName {
     my ($self) = @_;
     $self->debug && print join("\t", (caller(0))[3], $self,  $self->class, ($self->db_id || '')), "\n";
-    $self->attribute_value('_displayName',
-			   "'" . ($self->Regulator->[0] ? $self->Regulator->[0]->displayName : 'UNKNOWN ENTITY') .
-			   "' positively regulates '" .
-			   ($self->RegulatedEntity->[0] ? $self->RegulatedEntity->[0]->displayName : 'UNKNOWN ENTITY') . "'"
-			   );
+
+	$self->attribute_value('_displayName', 'Positive regulation by '. ($self->Regulator->[0] ? $self->Regulator->[0]->displayName : 'unknown'));
     return $self->attribute_value('_displayName')->[0];
 }
 
@@ -339,12 +333,9 @@ use strict;
 
 sub set_displayName {
     my ($self) = @_;
-    $self->debug && print join("\t", (caller(0))[3], $self,  $self->class, ($self->db_id || '')), "\n";
-    $self->attribute_value('_displayName',
-			   "'" . ($self->Regulator->[0] ? $self->Regulator->[0]->displayName : 'UNKNOWN ENTITY') .
-			   "' is required for '" .
-			   ($self->RegulatedEntity->[0] ? $self->RegulatedEntity->[0]->displayName : 'UNKNOWN ENTITY') . "'"
-			   );
+
+	$self->attribute_value('_displayName', 'Requirement by '. ($self->Regulator->[0] ? $self->Regulator->[0]->displayName : 'unknown'));
+
     return $self->attribute_value('_displayName')->[0];
 }
 
@@ -355,12 +346,9 @@ use strict;
 
 sub set_displayName {
     my ($self) = @_;
-    $self->debug && print join("\t", (caller(0))[3], $self,  $self->class, ($self->db_id || '')), "\n";
-    $self->attribute_value('_displayName',
-			   "'" . ($self->Regulator->[0] ? $self->Regulator->[0]->displayName : 'UNKNOWN ENTITY') .
-			   "' negatively regulates '" .
-			   ($self->RegulatedEntity->[0] ? $self->RegulatedEntity->[0]->displayName : 'UNKNOWN ENTITY') . "'"
-			   );
+
+	$self->attribute_value('_displayName', 'Negative regulation by '. ($self->Regulator->[0] ? $self->Regulator->[0]->displayName : 'unknown'));
+
     return $self->attribute_value('_displayName')->[0];
 }
 

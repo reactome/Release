@@ -29,7 +29,7 @@ use constant DEBUG => 0;
 Log::Log4perl->init( \$LOG_CONF );
 my $logger = get_logger(__PACKAGE__);
 
-our ( $pass, $user, $db, $stable_id_db, $release, %parent, %logged, %ortho );
+our ( $pass, $user, $db, $stable_id_db, $db_host, $release, %parent, %logged, %ortho );
 
 my $usage = "Usage:\n\t$0 -db test_reactome_xx -sdb stable_id_db_name -user db_user user -pass db_pass -release XX";
 
@@ -37,6 +37,7 @@ GetOptions(
 	"user:s"    => \$user,
 	"pass:s"    => \$pass,
 	"db:s"      => \$db,
+	"host:s"    => \$db_host,
 	"sdb:s"     => \$stable_id_db,
 	"release:i" => \$release
 );
@@ -121,10 +122,11 @@ sub get_api_connections {
 	my $r_dba = GKB::DBAdaptor->new(
 		-dbname => $db,
 		-user   => $user,
+		-host 	=> $db_host,
 		-pass   => $pass
 	);
 
-	my $s_dbh = DBI->connect( "dbi:mysql:$stable_id_db", $user, $pass );
+	my $s_dbh = DBI->connect( "dbi:mysql:$stable_id_db;host=$db_host", $user, $pass );
 
 	return (
 		$db           => $r_dba,

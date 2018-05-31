@@ -418,8 +418,7 @@ sub get_physical_entities_in_reaction_like_event {
     push @physical_entities, @{$reaction_like_event->output};
     push @physical_entities, map($_->physicalEntity->[0], @{$reaction_like_event->catalystActivity});
     
-    
-    my @regulations = @{$reaction_like_event->reverse_attribute_value('regulatedEntity')};
+    my @regulations = @{$reaction_like_event->regulatedBy};
     my @regulators = map {@{$_->regulator}} @regulations;
     push @physical_entities, grep {$_->is_a('PhysicalEntity')} @regulators;
     push @physical_entities, map {$_->physicalEntity->[0]} grep {$_->is_a('catalystActivity')} @regulators;
@@ -755,6 +754,7 @@ sub infer_event {
     $logger->info("total=$total, inferred=$inferred, max=$max\n");
     return 1 unless $total; #reactions with no EWAS at all should not be inferred
     $count_leaves++; #these are the eligible events
+    binmode($eli, ":utf8");
     print $eli $event->db_id, "\t", $event->displayName, "\n";
 
     $being_inferred{$event} = 1;
@@ -794,8 +794,10 @@ sub infer_event {
         $logger->info("Aborting $opt_sp event inference -- regulation inference unsuccessful");
         return;
     }
-    
-    $inf_e->releaseDate($release_date);
+    if ($inf_e->is_valid_attribute('releaseDate'))
+    {
+    	$inf_e->releaseDate($release_date);
+    }
     $inf_e->TotalProt($total);
     $inf_e->InferredProt($inferred);
 #    $inf_e->MaxHomologues($max);
@@ -803,9 +805,12 @@ sub infer_event {
 #fill in attributes connecting source and target species events
     $inf_e->InferredFrom;
     $inf_e->OrthologousEvent;
-    $inf_e->add_attribute_value_if_necessary('inferredFrom', $event);
+    if ($inf_e->is_valid_attribute('inferredFrom'))
+    {
+    	$inf_e->add_attribute_value_if_necessary('inferredFrom', $event);
+    	$dba->update_attribute($inf_e, 'inferredFrom');	
+    }
     $inf_e->add_attribute_value_if_necessary('orthologousEvent', $event);
-    $dba->update_attribute($inf_e, 'inferredFrom');
     $dba->update_attribute($inf_e, 'orthologousEvent');
 
     $event->OrthologousEvent; 
@@ -819,19 +824,24 @@ sub infer_event {
     $being_inferred{$event} = 0;
     
     if ($regulation_collection->[0]) {
+    	$logger->info("Number of Regulators that this event (".$inf_e->db_id.") is regulatedBy: ".scalar(@{$regulation_collection}));
+    	#$inf_e->RegulatedBy(@{$regulation_collection});
         foreach my $regulation_pair (@{$regulation_collection}) {
             my $source_regulation = $regulation_pair->{source};
             my $inferred_regulation = $regulation_pair->{inferred};
-        
-            $inferred_regulation->RegulatedEntity($inf_e);
+            
             $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_e has been stored
-            $source_regulation->inferredTo(@{$source_regulation->inferredTo});
-            $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
-            $dba->update_attribute($source_regulation, 'inferredTo');
+#            $source_regulation->inferredTo(@{$source_regulation->inferredTo});
+#            $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
+#            $dba->update_attribute($source_regulation, 'inferredTo');
+            
+            $inf_e->add_attribute_value('regulatedBy', $inferred_regulation);
+    		$dba->update_attribute($inf_e,'regulatedBy');
         }
     }
     $count_inferred_leaves++; #counts successfully inferred events
     push @inferrable_human_events, $event;
+    binmode($inf, ":utf8");
     print $inf $inf_e->db_id, "\t", $inf_e->displayName, "\n";
 
     return $inf_e;
@@ -932,93 +942,95 @@ sub infer_catalyst {
 #tests confirm whether a CatalystActivity can be inferred (checking physicalEntity and requirement)
 #returns a CatalystActivity instance if inference successful, undef if unsuccessful.
 sub create_inf_cat {
-    my ($cat) = @_;
-    $homol_cat{$cat} && return $homol_cat{$cat};
-    
-    my $inf_cat = new_inferred_instance($cat);
-    $inf_cat->Activity(@{$cat->Activity});
-    my $i = $cat->physicalEntity->[0];
-    if ($i) {
-        return unless orthologous_entity($i);
-        $inf_cat->attribute_value('physicalEntity', orthologous_entity($i));
-    }
-    my @tmp;
-    foreach my $au (@{$cat->ActiveUnit}) {
-        next if $au->is_a('Domain');
-        my $inf_au = orthologous_entity($au);
-        $inf_au && push @tmp, $inf_au;
-    }
-    $tmp[0] && $inf_cat->ActiveUnit(@tmp);
-    my ($test, $reg) = infer_regulation($cat);
-    return unless $test;
-    $inf_cat = check_for_identical_instances($inf_cat);
-    $homol_cat{$cat} = $inf_cat;
-    if ($reg->[0]) {
-        foreach my $r (@{$reg}) {
-            my $source_regulation = $r->{source};
-            my $inferred_regulation = $r->{inferred};
-        
-            $inferred_regulation->RegulatedEntity($inf_cat);
-            $inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_cat has been stored
-        $source_regulation->inferredTo(@{$source_regulation->inferredTo});
-        $source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
-        $dba->update_attribute($source_regulation, 'inferredTo');
-        }
-    }
-    return $inf_cat;
+	my ($cat) = @_;
+	$homol_cat{$cat} && return $homol_cat{$cat};
+
+	my $inf_cat = new_inferred_instance($cat);
+	$inf_cat->Activity(@{$cat->Activity});
+	my $i = $cat->physicalEntity->[0];
+	if ($i) {
+		return unless orthologous_entity($i);
+		$inf_cat->attribute_value('physicalEntity', orthologous_entity($i));
+	}
+	my @tmp;
+	foreach my $au (@{$cat->ActiveUnit}) {
+		next if $au->is_a('Domain');
+		my $inf_au = orthologous_entity($au);
+		$inf_au && push @tmp, $inf_au;
+	}
+	$tmp[0] && $inf_cat->ActiveUnit(@tmp);
+	my ($test, $reg) = infer_regulation($cat);
+	return unless $test;
+	$inf_cat = check_for_identical_instances($inf_cat);
+	$homol_cat{$cat} = $inf_cat;
+	if ($reg->[0]) {
+		foreach my $r (@{$reg}) {
+			my $source_regulation = $r->{source};
+			my $inferred_regulation = $r->{inferred};
+
+			# There is no longer a relationship between Regulation and CatalystActivity,
+			# so there is nothing that can replace the statement below:
+#            $inferred_regulation->RegulatedEntity($inf_cat);
+			#
+			$inferred_regulation = check_for_identical_instances($inferred_regulation); #this can only be done after inf_cat has been stored
+			#$source_regulation->inferredTo(@{$source_regulation->inferredTo});
+			#$source_regulation->add_attribute_value('inferredTo', $inferred_regulation);
+			#$dba->update_attribute($source_regulation, 'inferredTo');
+		}
+	}
+	return $inf_cat;
 }
 
 #manages inference of Regulation instances attached to Events or CatalystActivities
 #Arguments: Event or CatalystActivity instance to be inferred and release date
 #returns undef if inference unsuccessful and the Regulation instance is of class 'Requirement', returns 1 and an array ref with the inferred Regulation instances in all other cases (the array may be empty if there is no Regulation instance attached to the incoming instance in the first place, or if the Regulation instance cannot be inferred, but is not of class 'Requirement')
 sub infer_regulation {
-    my ($i, $release_date) = @_;
-    my @reg;
-    my $reg_ar = $i->reverse_attribute_value('regulatedEntity');
-    if ($reg_ar->[0]) {
-        foreach my $reg (@{$reg_ar}) {
-            my $regulator = infer_regulator($reg->Regulator->[0], $release_date);
-            unless ($regulator) {
-                if ($reg->is_a('Requirement')) {
-                    return; #the event should not be inferred in this case
-                } else {
-                    next; #no Regulation object is stored, but this doesn't stop the event being inferred
-                }
-            }
-            my $inf_reg = new_inferred_instance($reg);
-            $inf_reg->Regulator($regulator);
-            $inf_reg->add_attribute_value_if_necessary('inferredFrom', $reg);
+	my ($i, $release_date) = @_;
+	my @reg;
 
-            push @reg, {
-                source => $reg,
-                inferred => $inf_reg
-            };
-        }
-    }
-    return (1, \@reg);
+	my $reg_ar = $i->regulatedBy;
+	if ($reg_ar->[0]) {
+		foreach my $reg (@{$reg_ar}) {
+			my $regulator = infer_regulator($reg->Regulator->[0], $release_date);
+			unless ($regulator) {
+				if ($reg->is_a('Requirement')) {
+					return; #the event should not be inferred in this case
+				} else {
+					next; #no Regulation object is stored, but this doesn't stop the event being inferred
+				}
+			}
+			my $inf_reg = new_inferred_instance($reg);
+			$inf_reg->Regulator($regulator);
+			# $inf_reg->add_attribute_value_if_necessary('inferredFrom', $reg);
+			push @reg, {
+				source => $reg,
+				inferred => $inf_reg
+			};
+		}
+	}
+	return (1, \@reg);
 }
 
 #Argument: an instance allowed as regulator and release date
 #returns an instance if inference is successful, or undef if unsuccessful
 sub infer_regulator {
-    my ($reg, $release_date) = @_;
-    return unless $reg;
-    
-    my $inf_reg;
-    if ($reg->is_a('PhysicalEntity')) {
-        $inf_reg = orthologous_entity($reg);
-    } elsif ($reg->is_a('CatalystActivity')) {
-        $inf_reg = create_inf_cat($reg);
-    } elsif ($reg->is_a('Event')) {
-        if ($being_inferred{$reg}) {
-            print $regulator $reg->db_id . "\n";
-            return;
-        }
-	
-        $inf_reg = infer_event($reg, $release_date);
-        return if defined $inf_reg && $inf_reg == 1; #the event has no accessioned sequences and is therefore not eligible for inference
-    }
-    return $inf_reg;
+	my ($reg, $release_date) = @_;
+	return unless $reg;
+
+	my $inf_reg;
+	if ($reg->is_a('PhysicalEntity')) {
+		$inf_reg = orthologous_entity($reg);
+	} elsif ($reg->is_a('CatalystActivity')) {
+		$inf_reg = create_inf_cat($reg);
+	} elsif ($reg->is_a('Event')) {
+		if ($being_inferred{$reg}) {
+			print $regulator $reg->db_id . "\n";
+			return;
+		}
+		$inf_reg = infer_event($reg, $release_date);
+		return if defined $inf_reg && $inf_reg == 1; #the event has no accessioned sequences and is therefore not eligible for inference
+	}
+	return $inf_reg;
 }
 
 #Argument: Complex or Polymer to be inferred
@@ -1307,7 +1319,10 @@ sub create_orthologous_generic_event {
                 my $gen_inf_event = new_inferred_instance($gen_hum_event);
                 $gen_inf_event->Name(@{$gen_hum_event->Name});
                 $gen_inf_event->Summation($summation);
-                $gen_inf_event->releaseDate($release_date);
+                if ($gen_inf_event->is_valid_attribute('releaseDate'))
+                {
+                	$gen_inf_event->releaseDate($release_date);
+                }
                 $gen_inf_event->InferredFrom($gen_hum_event);
                 $gen_inf_event->EvidenceType($evidence_type);
                 $gen_inf_event->GoBiologicalProcess(@{$gen_hum_event->GoBiologicalProcess});

@@ -935,7 +935,7 @@ sub print_remote_attribute_query_form {
     print $self->cgi->start_form(-action => $self->cgi->script_name . "/$s", -method => 'GET');
     print $self->cgi->hidden(-name => 'DB',-value => $self->cgi->param('DB'));
 
-    print qq(<DIV CLASS="section">\n<TABLE cellspacing="0" style="background-color:#B0C4DE;margin-top:-10px"  WIDTH="$HTML_PAGE_WIDTH">);
+    print qq(<DIV CLASS="section padding0 top30">\n<TABLE cellspacing="0" style="background-color:rgb(88, 195, 229);padding: 10px;border-collapse: inherit;"  WIDTH="$HTML_PAGE_WIDTH">);
     my %classes;
     @classes{$self->dba->ontology->list_classes} = $self->dba->ontology->list_classes;
     my $class = $self->cgi->param('QUERY_CLASS');
@@ -1972,8 +1972,8 @@ sub reactome_logo {
 
 sub print_TOC {
     my ($self) = @_;
-    print qq(<TABLE WIDTH="$HTML_PAGE_WIDTH" CLASS="contents" BORDER="0" CELLPADDING="0" CELLSPACING="0">\n);
-    print qq(<TR CLASS="contents"><TH>Topic</TH><TH WIDTH="20%">Authors</TH><TH>&nbsp;&nbsp;&nbsp;Released&nbsp;&nbsp;&nbsp;</TH><TH>&nbsp;&nbsp;&nbsp;Revised&nbsp;&nbsp;&nbsp;</TH><TH WIDTH="20%">Reviewers</TH><TH WIDTH="20%">Editors</TH></TR>\n);
+    print qq(<TABLE WIDTH="$HTML_PAGE_WIDTH" CLASS="reactome" BORDER="0" CELLPADDING="0" CELLSPACING="0">\n);
+    print qq(<THEAD><TR><TH scope="col">Topic</TH><TH scope="col" WIDTH="20%">Authors</TH><TH scope="col">&nbsp;&nbsp;&nbsp;Released&nbsp;&nbsp;&nbsp;</TH><TH scope="col">&nbsp;&nbsp;&nbsp;Revised&nbsp;&nbsp;&nbsp;</TH><TH scope="col" WIDTH="20%">Reviewers</TH><TH scope="col" WIDTH="20%">Editors</TH></TR></THEAD>\n);
     my @fpis;
     foreach my $fp (@{$self->dba->fetch_all_class_instances_as_shells('FrontPage')}) {
 		push @fpis, @{$fp->FrontPageItem};
@@ -2001,8 +2001,8 @@ sub print_TOC {
 sub print_DOI_TOC {
     my ($self) = @_;
     
-    print qq(<TABLE WIDTH="$HTML_PAGE_WIDTH" CLASS="contents" BORDER="0" CELLPADDING="0" CELLSPACING="0">\n);
-    print qq(<TR CLASS="contents"><TH>Topic</TH><TH>DOI</TH><TH WIDTH="20%">Authors</TH><TH>&nbsp;&nbsp;&nbsp;Released&nbsp;&nbsp;&nbsp;</TH><TH>&nbsp;&nbsp;&nbsp;Revised&nbsp;&nbsp;&nbsp;</TH><TH WIDTH="20%">Reviewers</TH><TH WIDTH="20%">Editors</TH></TR>\n);
+    print qq(<TABLE WIDTH="$HTML_PAGE_WIDTH" CLASS="reactome" BORDER="0" CELLPADDING="0" CELLSPACING="0">\n);
+    print qq(<THEAD><TR><TH scope="col">Topic</TH><TH scope="col">DOI</TH><TH scope="col" WIDTH="20%">Authors</TH><TH scope="col">&nbsp;&nbsp;&nbsp;Released&nbsp;&nbsp;&nbsp;</TH><TH scope="col">&nbsp;&nbsp;&nbsp;Revised&nbsp;&nbsp;&nbsp;</TH><TH scope="col" WIDTH="20%">Reviewers</TH><TH scope="col" WIDTH="20%">Editors</TH></TR></THEAD>\n);
 
 	# Get all pathways with a DOI
     my @pathways = @{$self->dba->fetch_instance_by_remote_attribute('Pathway', [['doi', 'IS NOT NULL', []]])};
@@ -2606,6 +2606,7 @@ sub _checkbox_and_displayName {
 }
 
 sub _reverse_attribute_to_be_followed_box {
+	# TODO: Regulation.regulatedEvent will soon be removed! It will be replaced with ReactionlikeEvent.regulatedBy (1:N).
     my $self = shift;
     print
 	qq(<TABLE WIDTH="$HTML_PAGE_WIDTH" CELLPADDING="2" CELLSPACING="0"><TR><TD>),
@@ -3796,7 +3797,7 @@ sub focus_species_changes {
 		'Event' => {'reverse_attributes' => [qw(hasEvent)]},
 		'PhysicalEntity' => {'reverse_attributes' => [qw(hasComponent hasMember hasCandidate repeatedUnit input output physicalEntity regulator)]},
 		'CatalystActivity' => {'reverse_attributes' => [qw(catalystActivity)]},
-		'Regulation' => {'attributes' => [qw(regulatedEntity)]}
+		'Regulation' => {'reverse_attributes' => [qw(regulatedBy)]}
 	    },
 	    -OUT_CLASSES => [qw(Event)]
 	    );

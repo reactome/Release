@@ -43,7 +43,7 @@ foreach my $record (@records) {
     my $manual_check = $fields[8];
     
     my $regulated_entity_instance = $dba->fetch_instance_by_db_id($regulated_entity_id)->[0];
-    my $regulation_instances = $regulated_entity_instance->reverse_attribute_value('regulatedEntity');
+    my $regulation_instances = $regulated_entity_instance->regulatedBy;
     
     if (!$manual_check) {
         my $pathway_with_diagram = $fields[7];
