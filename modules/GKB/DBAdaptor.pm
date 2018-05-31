@@ -3683,8 +3683,7 @@ sub find_1_directed_path_between_instances {
 	 ['CatalystActivity',  \&GKB::Instance::reverse_attribute_value, 'regulator', 'PositiveRegulation'],
 	 ['PhysicalEntity',  \&GKB::Instance::reverse_attribute_value, 'regulator', 'PositiveRegulation'],
 	 ['Reaction',  \&GKB::Instance::reverse_attribute_value, 'regulator', 'PositiveRegulation'],
-	 ['PositiveRegulation',  \&GKB::Instance::attribute_value, 'regulatedEntity', 'Reaction'],
-	 ['PositiveRegulation',  \&GKB::Instance::attribute_value, 'regulatedEntity', 'CatalystActivity'],
+	 ['ReactionlikeEvent', \&GKB::Instance::reverse_attribute_value, 'regulatedBy','PositiveRegulation'],
 	 ];
     my %seen;
     my %kill_h;
