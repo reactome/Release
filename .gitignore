@@ -5,7 +5,6 @@ tmp/
 *.dump
 *.log
 *.old
-*.class
 news.html
 inference_stats.png
 website/html/img-tmp
@@ -23,4 +22,7 @@ deleted_unused_pe_test_reactome*
 post_requisite_file_listing*~*
 *.err
 *.bak
-
+release-config.pm
+logs
+mysql_databases
+container/stable_id_mapping.stored_data
