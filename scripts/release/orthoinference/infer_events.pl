@@ -754,6 +754,7 @@ sub infer_event {
     $logger->info("total=$total, inferred=$inferred, max=$max\n");
     return 1 unless $total; #reactions with no EWAS at all should not be inferred
     $count_leaves++; #these are the eligible events
+    binmode($eli, ":utf8");
     print $eli $event->db_id, "\t", $event->displayName, "\n";
 
     $being_inferred{$event} = 1;
@@ -840,6 +841,7 @@ sub infer_event {
     }
     $count_inferred_leaves++; #counts successfully inferred events
     push @inferrable_human_events, $event;
+    binmode($inf, ":utf8");
     print $inf $inf_e->db_id, "\t", $inf_e->displayName, "\n";
 
     return $inf_e;
