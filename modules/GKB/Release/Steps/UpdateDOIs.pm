@@ -36,7 +36,8 @@ override 'run_commands' => sub {
             ["mysqldump -u$user -p$pass -h$gkcentral_host --lock-tables=FALSE $gkcentral > $gkcentral.dump"]
         ]
     );
-
+    # databaseTR indicates Test Reactome db, and since the format is test_reactome_XX, this needs to be updated wirth release number for each release
+    # authorId values refer to various user ID's attributed to you in Reactome's databases.
     if ($self->user_input->{'props'}->{'response'} !~ /^y/i) {
       die "Please update the databaseTR, and authorID fields in update_dois/config.properties before running.\n";
     }
