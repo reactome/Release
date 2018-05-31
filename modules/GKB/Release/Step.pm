@@ -285,6 +285,7 @@ sub run {
 		# Let's write the errors to a file. That way, someone OTHER than the mail recipient can see them.
 		my $post_step_test_log = File::Spec->catfile($self->directory, 'post_step_test_errors.log');
 		open(my $post_step_test_fh, '>', $post_step_test_log);
+		binmode $post_step_test_fh, ":utf8";
 		print $post_step_test_fh join("\n", @post_step_test_errors);
 		close $post_step_test_fh;
 		say releaselog("ERRORS from $self->{name} post-step tests reported -- see $post_step_test_log");
