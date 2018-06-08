@@ -743,7 +743,7 @@ sub dissect_Reaction{
    }#foreach
   
 #Regulators
-foreach $regulator (@{$event->reverse_attribute_value('regulatedEntity')}){
+foreach $regulator (@{$event->regulatedBy}){
     $entity = $regulator->Regulator->[0];
     if(($entity->is_a('PhysicalEntity'))){
       if($regulator->is_a('NegativeRegulation')){

@@ -24,8 +24,8 @@ has '+mail' => ( default => sub {
 
 override 'run_commands' => sub {
 	my ($self, $gkbdir) = @_;
-
-    $self->cmd("Converting database to myisam",[["perl innodb2myisam.pl -user $user -pass $pass -host $slice_host -dbfrom $slicedb -dbto $slicedb\_myisam > myisam.out 2> myisam.err"]]);
+	my $host = $GKB::Config::GK_DB_HOST;
+    $self->cmd("Converting database to myisam",[["perl innodb2myisam.pl -user $user -pass $pass -host $host -dbfrom $slicedb -dbto $slicedb\_myisam > myisam.out 2> myisam.err"]]);
 };
 
 override 'post_step_tests' => sub {
@@ -39,8 +39,9 @@ override 'post_step_tests' => sub {
 };
 
 sub _check_myisam_db_exists {
+	my $host = $GKB::Config::GK_DB_HOST;
     return capture_stderr {
-        system("mysql -u$user -p$pass -e 'use $slicedb\_myisam'");
+        system("mysql -u$user -p$pass -h$host -e 'use $slicedb\_myisam'");
     };
 }
 

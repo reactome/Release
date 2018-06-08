@@ -305,7 +305,7 @@ sub build_indexes {
 	
 	# Get the pom.xml file
 	my $cd_command = "cd $index_path";
-	my $checkout_command = "svn checkout https://psicquic.googlecode.com/svn/trunk/psicquic-webservice";
+	my $checkout_command = "git clone https://github.com/PSICQUIC/psicquic-webservice.git";
 	my $command = "$cd_command; $checkout_command";
 	$logger->info("checkout, $command=$command");
 	$status = system($command);
