@@ -187,7 +187,7 @@ my @cmds = (
      "ensembl to pathway map",
      1,
      0,
-     "perl ensembl2pathway.pl $opt_user, $opt_pass ${opt_db}_dn $opt_r",
+     "perl ensembl2pathway.pl $opt_user $opt_pass ${opt_db}_dn $opt_r",
     ],
 
     [
