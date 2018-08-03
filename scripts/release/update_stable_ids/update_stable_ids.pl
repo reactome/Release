@@ -192,6 +192,7 @@ sub classes_with_stable_ids {
     /;
 }
 
+# The wrapping module UpdateStableIds.pm already does backups - not sure why this script also did backups.
 #sub back_up_databases {
 #    my @dbs = @_;
 #    
