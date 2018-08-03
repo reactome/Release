@@ -27,7 +27,7 @@ use strict;
 my($user, $host, $pass, $port, $db, $debug, $help);
 
 GetOptions(
-  "help" => \$help  
+  "help" => \$help
 );
 
 if ($help) {
@@ -168,9 +168,9 @@ foreach my $x (@si) {
 	if ($name =~ /^(\w)\w+\s(\w+)/){
 		$name = $1."."." ".$2;
 	}
-	
+
 	$id = $x->db_id;
-	
+
 	#count instances species-wise
 	my $protein_class = &GKB::Utils::get_reference_protein_class($dba);
 	$protein = $dba->fetch_instance(-CLASS => $protein_class,
@@ -178,8 +178,8 @@ foreach my $x (@si) {
 	                                             -VALUE => [$id]
 					              }]
 						      );
-	
-	# Determine the "unique protein identifier count" for all species, for human also determine a count including isoforms. For the latter, all ReferenceGeneProducts (both parents and isoforms) that have been used directly in annotation are counted. (This means that RGPs that only act as a parent for an isoform used in annotation are not counted.)    
+
+	# Determine the "unique protein identifier count" for all species, for human also determine a count including isoforms. For the latter, all ReferenceGeneProducts (both parents and isoforms) that have been used directly in annotation are counted. (This means that RGPs that only act as a parent for an isoform used in annotation are not counted.)
 	my %seen;
 	foreach my $p (@{$protein}) {
 		#check for EWAS referers
@@ -188,11 +188,11 @@ foreach my $x (@si) {
 	                                           -OUT_CLASSES => ['EntityWithAccessionedSequence']);
 	    next unless $ewas->[0];
 	    $seen{$p->Identifier->[0]}++; #for counting unique protein identifiers
-	    
-		#for human also count total with annotation                                                                                        
-	    if ($name eq 'H. sapiens') {    
-			$all_human++;                 
-	    }                      
+
+		#for human also count total with annotation
+	    if ($name eq 'H. sapiens') {
+			$all_human++;
+	    }
 	}
 	my $unique = scalar (keys %seen);
 	$p += $unique;
@@ -200,8 +200,8 @@ foreach my $x (@si) {
 	#    $unique .= "*";
 	    $name = "*".$name;
 	}
-	
-	
+
+
 =head
 	#The following block is not used right now - only kept in case this "more exact" method for counting is needed in the future
 	#Note: Counting all instances of the ReferenceGeneProduct class leads to an inflated score as the parent of a ReferenceIsoform is counted along with the ReferenceIsoform instance(s). Therefore, for each UniProt accession that has any annotation on the ReferenceIsoform level, the count should be reduced by one.
@@ -213,49 +213,49 @@ foreach my $x (@si) {
 		next unless $p->class eq 'ReferenceIsoform';
 		$seen{$p->Identifier->[0]}++; #counting UniProt accessions, not variantIdentifiers (correction only once per UniProt accession)
 	    }
-	    $correction += keys %seen; 
-	}	
-	$protein_count = @{$protein} - $correction;	      
-	$p += $protein_count;		
+	    $correction += keys %seen;
+	}
+	$protein_count = @{$protein} - $correction;
+	$p += $protein_count;
 =cut
-	
-	
+
+
 	my $complex = $dba->fetch_instance(-CLASS => 'Complex',
 	                                  -QUERY => [{-ATTRIBUTE => 'species',
 	                                             -VALUE => [$id]
 					              }]
 						      );
 	$c += @{$complex};
-	
-	
+
+
 	my $reaction = $dba->fetch_instance(-CLASS => 'ReactionlikeEvent',
 	                                  -QUERY => [{-ATTRIBUTE => 'species',
 	                                             -VALUE => [$id]
-	
+
 					              }]
 						      );
 	$r += @{$reaction};
-						      
+
 	my $pathway = $dba->fetch_instance(-CLASS => 'Pathway',
 	                               -QUERY => [{-ATTRIBUTE => 'species',
 	                                            -VALUE => [$id]
-	                                          
-	                                   
+
+
 					              }]
 						      );
 	$path += @{$pathway};
-	
+
 	# Don't bother with species that have no proteins, pathways, etc.
 	if ($unique == 0 && @{$complex} == 0 && @{$reaction} == 0 && @{$pathway} == 0) {
 		print "All counts are 0 for $name, skipping\n";
 		next;
 	}
-	
+
 	push ( @rows,$name."\t".$unique."\t".@{$complex}."\t".@{$reaction}."\t".@{$pathway}."\n");
 }
 
 print $all_human, "\n";
- 
+
 print "Species\tProteins\tComplexes\tReactions\tPathways\n";
 print (@rows);
 print "\nTotal\t$p\t$c\t$r\t$path\n";
@@ -268,48 +268,89 @@ if (!open (OUTPUT, ">$output")) {
 }
 
 print OUTPUT "SPECIES\tPROTEINS\tCOMPLEXES\tREACTIONS\tPATHWAYS\n";
-print OUTPUT (@rows); 
+print OUTPUT (@rows);
 
 close OUTPUT;
 
-#write the stats page html. 
+#write the stats page html.
 my $out1 = 'stats.html';
 if (!open (OUTPUT1,">$out1")) {
 	print STDERR "$0: cannot open file $out1 for writing\n";
 	exit(1);
 }
+# This is what the Joomla code looks like:
+# <div id="r-responsive-table">
+# <table class="reactome margin margin0">
+# <thead>
+# <tr><th style="text-align: left;">SPECIES</th><th>PROTEINS</th><th>COMPLEXES</th><th>REACTIONS</th><th>PATHWAYS</th></tr>
+# </thead>
+# <tbody>
+# <tr>
+# <td data-label="SPECIES">D. discoideum</td>
+# <td data-label="">2174</td>
+# <td data-label="">1932</td>
+# <td data-label="">1766</td>
+# <td data-label="">848</td>
+# </tr>
+# <tr>
+# <td data-label="SPECIES">P. falciparum</td>
+# <td data-label="">772</td>
+# <td data-label="">731</td>
+# <td data-label="">613</td>
+# <td data-label="">470</td>
+# </tr>
+# <tr>
+# <td data-label="SPECIES">S. pombe</td>
+# <td data-label="">1465</td>
+# <td data-label="">1473</td>
+# <td data-label="">1230</td>
+# <td data-label="">673</td>
+# </tr>
 
+# Old HTML code:
+# print OUTPUT1 <<HTML;
+# <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+# <html>
+#     <head>
+# 	<title>Stats</title>
+# 	<link rel="stylesheet" type="text/css" href="/stylesheet.css" />
+#     </head>
+#
+#     <body>
+# 	<!--#include virtual="/cgi-bin/navigation_bar" -->
+# 	<h1 class="frontpage">Reactome Statistics (Version $version)</h1>
+#
+# 	<!-- Start of the stats table  -->
+# 	<table border="0" width="90%" cellpadding="0" cellspacing="0" class="classbrowser">
+# 	    <td valign="top" align="center">
+# 		<table class="class attributes">
+# 		    <tr height="40">
+# 			<th><b>Species</b></th>
+# 			<th><b>PROTEINS</b></th>
+# 			<th><b>COMPLEXES</b></th>
+# 			<th><b>REACTIONS</b></th>
+# 			<th><b>PATHWAYS</b></th>
+# 		    </tr>
+#
+# HTML
 print OUTPUT1 <<HTML;
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-    <head>
-	<title>Stats</title>
-	<link rel="stylesheet" type="text/css" href="/stylesheet.css" />
-    </head>
-
-    <body>
-	<!--#include virtual="/cgi-bin/navigation_bar" -->
-	<h1 class="frontpage">Reactome Statistics (Version $version)</h1>
-	    
-	<!-- Start of the stats table  -->
-	<table border="0" width="90%" cellpadding="0" cellspacing="0" class="classbrowser">
-	    <td valign="top" align="center">
-		<table class="class attributes">
-		    <tr height="40">
-			<th><b>Species</b></th>
-			<th><b>PROTEINS</b></th>
-			<th><b>COMPLEXES</b></th>
-			<th><b>REACTIONS</b></th>
-			<th><b>PATHWAYS</b></th>
-		    </tr>
-		    
+<div id="r-responsive-table">
+    <table class="reactome margin margin0">
+        <thead>
+            <tr>
+                <th style="text-align: left;">SPECIES</th>
+                <th>PROTEINS</th>
+                <th>COMPLEXES</th>
+                <th>REACTIONS</th>
+                <th>PATHWAYS</th></tr>
+        </thead>
+        <tbody>
 HTML
- 
 my $own = "\"own\"";
 my $center = "\"center\"";
-	
+
 print $output."\n";
-	
+
 foreach my $row (@rows) {
     my ($zero, $one, $two, $three, $four) = split ("\t", $row);
 
@@ -318,37 +359,50 @@ foreach my $row (@rows) {
     chomp $two;
     chomp $three;
     chomp $four;
-  
-    print OUTPUT1 <<HTML;	
-		    <tr height="18" class=$own>
-			<td height="25" class=$own>$zero</td>
-			<td class=$own align=$center>$one</td>
-			<td class=$own align=$center>$two</td>
-			<td class=$own align=$center>$three</td>
-			<td class=$own align=$center>$four</td>
-		    </tr>
-		    
-HTML
 
+# Old HTML:
+#     print OUTPUT1 <<HTML;
+# 		    <tr height="18" class=$own>
+# 			<td height="25" class=$own>$zero</td>
+# 			<td class=$own align=$center>$one</td>
+# 			<td class=$own align=$center>$two</td>
+# 			<td class=$own align=$center>$three</td>
+# 			<td class=$own align=$center>$four</td>
+# 		    </tr>
+#
+# HTML
+    print OUTPUT1 <<HTML;
+    <tr>
+        <td data-label="SPECIES">$zero</td>
+        <td data-label="">$one</td>
+        <td data-label="">$two</td>
+        <td data-label="">$three</td>
+        <td data-label="">$four</td>
+    </tr>
+HTML
 }
 
+# print OUTPUT1 <<HTML;
+# 		</table><!-- Close the stat table -->
+# 	    </td>
+# 	    <td valign="top" align="justify">
+# 		<img height="400" title="" src="stats.png"><br /><br /><br />
+# 	    </td>
+# 	</table> <!-- Close the page table --><br />
+#
+# 	<div style="font-size:9pt;text-align:left;color:black;padding-top:10px;width=40%">
+# 	    *Reactome annotates to protein isoforms when this information is available.<br />
+# 	    The total number of curated human proteins including isoforms is $all_human
+# 	</div>
+#
+# 	<!--#include virtual="/cgi-bin/footer" -->
+#     </body>
+# </html>
+
 print OUTPUT1 <<HTML;
-		</table><!-- Close the stat table -->
-	    </td>    
-	    <td valign="top" align="justify">
-		<img height="400" title="" src="stats.png"><br /><br /><br />
-	    </td>
-	</table> <!-- Close the page table --><br />
-
-	<div style="font-size:9pt;text-align:left;color:black;padding-top:10px;width=40%">
-	    *Reactome annotates to protein isoforms when this information is available.<br />
-	    The total number of curated human proteins including isoforms is $all_human
-	</div>
-
-	<!--#include virtual="/cgi-bin/footer" -->
-    </body>
-</html>
-
+        </tbody>
+    </table>
+</div>
 HTML
 
 close(OUTPUT1);
@@ -359,7 +413,7 @@ sub sublist_list {
     my ($local_species_order, $config_species_order, $list_of_sublists, $previous_config_species_name) = @_;
     my @config_species_order_array = @{$config_species_order};
     print "sublist_list: scalar config_species_order_array=" . scalar(@config_species_order_array) . "\n";
-    
+
 	my $config_species_name = shift(@config_species_order_array);
 	if (defined $config_species_name) {
 		if (!is_in_list($config_species_name, $local_species_order)) {
@@ -387,7 +441,7 @@ sub sublist_list {
 
 sub is_in_list {
     my ($value, $list) = @_;
-    
+
     my $element;
     foreach $element (@{$list}) {
     	if ($element eq $value) {
@@ -403,18 +457,18 @@ sub usage_instructions {
     This script creates the stats page detailing the
     number of proteins, complexes, reactions, and
     pathways per species.
-    
+
     Usage: perl $0 [options]
-    
+
     Options:
-    
+
     user [db_user]	Database user name (defaults to $GKB::Config::GK_DB_USER)
     pass [db_pass]	Database user password (defaults to $GKB::Config::GK_DB_USER password)
     host [db_host]	Database host (defaults to $GKB::Config::GK_DB_HOST)
     port [db_port]	Database port (defaults to $GKB::Config::GK_DB_PORT)
     db	 [db_name]	Database name (defaults to $GKB::Config::GK_DB_NAME)
-    debug		Show database adaptor debug information 
+    debug		Show database adaptor debug information
     help		Show these instructions
- 
+
 END
 }
