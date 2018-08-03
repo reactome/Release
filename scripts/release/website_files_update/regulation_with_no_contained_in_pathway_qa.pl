@@ -97,7 +97,14 @@ sub get_authors {
 sub regulated_entity_is_human {
     my $regulation = shift;
     
+    # TODO: A Regulation could regulate multiple things, now that regulatedBy is a 1:N relation between RLEs and Regulation. So how do we determine if 
+    # *a* single regulated entity is Human?
     my $regulated_entity = $regulation->regulatedEntity->[0];
+#    my $regulator = $regulation->regulator;
+#    if ($regulator)
+#    {
+#    	my $species = $regulator->species->;
+#    }
     croak "Regulation instance $regulation->{db_id} has no regulated entity\n" unless $regulated_entity;
     if ($regulated_entity->is_a('Event')) {
         return is_human($regulated_entity);
@@ -105,7 +112,7 @@ sub regulated_entity_is_human {
         return is_human($regulated_entity->physicalEntity->[0]);
     } else {
         croak "Regulated entity instance $regulated_entity->{db_id} is of the wrong class: " . $regulated_entity->class . "\n";
-    }    
+    }
 }
 
 sub is_human {

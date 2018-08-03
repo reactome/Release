@@ -67,10 +67,11 @@ sub get_stable_id_QA_problems_as_list_of_strings {
 sub get_stable_id_QA_problems_as_hash {
     my $dba = shift;
     my %qa_problems;
+    
     my %duplicate_stable_identifier_instances = get_identifier_to_multiple_stable_identifier_instances_map($dba);
     my %duplicate_old_stable_identifier_instances = get_old_identifier_to_multiple_stable_identifier_instances_map($dba);
     foreach my $stable_identifier_instance (@{get_all_stable_identifier_instances_reference($dba)}) {
-            my @attached_instances = get_instances_attached_to_stable_identifier($stable_identifier_instance);
+        my @attached_instances = get_instances_attached_to_stable_identifier($stable_identifier_instance);
         if (scalar @attached_instances == 0) {
             push @{$qa_problems{'stable id with no referrers'}}, {'st_id_instance' => [$stable_identifier_instance],  'instance' => [undef]};
         } elsif (scalar @attached_instances > 1) {
@@ -101,10 +102,9 @@ sub get_stable_id_QA_problems_as_hash {
             push @{$qa_problems{'duplicate old stable identifier instances'}},
                 {'st_id_instance' => $duplicate_old_stable_identifier_instances{$old_identifier}, 'instance' => \@attached_instances, 'old_stable_identifier' => $old_identifier};
         }
-       
+        
     }
 	foreach my $instance (get_instances_requiring_stable_identifiers($dba)) {
-
 		if (!$instance->is_a('Regulation'))
 		{
 			if (is_missing_stable_identifier($instance)) {
@@ -217,8 +217,7 @@ sub has_incorrect_stable_identifier {
 		# Changed "confess" to "logger->error" - I think this is happening because we've gone from allowing Stable IDs on Regulations to NOT allowing them.
 		# I'm not sure that breaking execution with "confess" is the best approach, but the error should still be logged, since the code 
 		# won't generate Stable IDs for Regulations in the future.
-		#$logger->error( "Instance '".$instance->extended_displayName."' is not an instance requiring a stable identifier" );
-                confess "Instance '".$instance->extended_displayName."' is not an instance requiring a stable identifier" ;
+		$logger->error( "Instance '".$instance->extended_displayName."' is not an instance requiring a stable identifier" );
 		# return "false" - instance shouldn't even have a stable identifier. If we return false, then something might try to correct the stable identifier.
 		# So we'll return "false" to indicate that all is OK with this instance.
 		return 0;
@@ -361,7 +360,8 @@ sub get_stable_identifier_numeric_component {
 sub get_instance_species_prefix {
 	my $instance = shift;
 	if (!is_instance_requiring_stable_identifier($instance)) {
-		$logger->error( "Instance '".$instance."' is not a database object requiring stable identifiers" );
+		$logger->error( "Instance '".$instance->displayName."' is not a database object requiring stable identifiers" );
+		return undef;
 	}
 	else
 	{	
