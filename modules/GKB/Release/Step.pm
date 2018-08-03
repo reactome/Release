@@ -561,8 +561,8 @@ sub _file_size_ok {
 sub _file_size_percent_change {
 	my $new_file_size = shift;
 	my $old_file_size = shift;
-	
-	return sprintf("%.2f", (($new_file_size - $old_file_size) / $old_file_size) * 100);
+	my $percent_diff = $old_file_size > 0 ? (($new_file_size - $old_file_size) / $old_file_size) * 100 : $new_file_size;
+	return sprintf("%.2f", $percent_diff  );
 }
 
 sub _get_sender_address {
