@@ -8,7 +8,7 @@
 48898	Bos taurus
 68322	Saccharomyces cerevisiae
 68324	Schizosaccharomyces pombe
-879693  Taeniopygia guttata
+9038668	Taeniopygia guttata
 170941	Dictyostelium discoideum
 170928	Plasmodium falciparum
 49633	Sus scrofa
