@@ -1,4 +1,5 @@
 # build as: `docker build -t reactome-release .`
+# TODO: Upgrade to Ubuntu 18.04
 FROM ubuntu:16.04
 RUN apt-get update && apt-get install -y apt-utils software-properties-common python-software-properties
 RUN add-apt-repository ppa:webupd8team/java && apt-get update
@@ -49,7 +50,7 @@ RUN git clone https://github.com/biomart/biomart-perl.git && cd biomart-perl && 
 RUN ln -s /release/modules/biomart-perl/lib/BioMart /etc/perl/BioMart
 
 WORKDIR /tmp/gitroot
-ENV xx xxx 
+ENV xx xxx
 ARG RELEASE_TAG=release-container
 RUN git clone https://github.com/reactome/Release.git && cd Release && git checkout $RELEASE_TAG
 RUN mv /tmp/gitroot/Release/java /release/java && \
@@ -89,6 +90,9 @@ RUN ./compile.sh
 
 # Clean up.
 RUN apt autoremove && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/oracle-jdk9-installer
+
+# Index files to make it easier to find stuff
+RUN apt-get install -y mlocate && updatedb
 
 WORKDIR /release/scripts/release
 # NOTE: can probably uninstall git after all code is pulled. Nope. commit_stats pushes to github.
