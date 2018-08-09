@@ -112,7 +112,7 @@ $WWW_USER = 'nobody';
 $REACTOME_ROOT_DIR = '/usr/local/reactomes/Reactome/production';
 $GK_ROOT_DIR = '/usr/local/gkb';
 $GK_JAVA_CODEBASE = "/jars";
-$GK_TMP_IMG_DIR = "$REACTOME_ROOT_DIR/Website/static/cgi-tmp";
+$GK_TMP_IMG_DIR = "$REACTOME_ROOT_DIR/Website/static/figures";
 #$GK_TMP_IMG_DIR = "/opt/GKB/website/images";
 # Place for frontpage images 
 $FRONTPAGE_IMG_DIR = "$REACTOME_ROOT_DIR/Website/static/cgi-tmp/img-fp";

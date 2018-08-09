@@ -201,6 +201,14 @@ sub is_electronically_inferred {
 	my $db_name = $dba->db_name();
 	return 0 unless $db_name =~ /^test_reactome_\d+$/ || $db_name eq 'gk_current';
 
+	# first, let's check to see if the "magic" note is in the Created InstanceEdit for this object.
+	my $created = $instance->created->[0];
+	if ($created && $created->note && $created->note eq "inferred events based on ensembl compara")
+	{
+		return 1;
+	}
+	# If there's no note to indicate that the object was created during orthoinference,
+	# try the old logic.
 	if ($instance->is_a('Event')) {
 		return $instance->evidenceType->[0] && $instance->evidenceType->[0]->displayName =~ /electronic/i;
 	} elsif ($instance->is_a('PhysicalEntity')) {
