@@ -23,9 +23,8 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
 	my ($self) = @_;
 	$self->cmd("Backing up database",[["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral > $gkcentral\_before_chebi_update.dump"]]);
-    $self->cmd("Running Chebi script",
+    $self->cmd("Running ChEBI Update script",
     	[
-		    #["cvs up improve_chebi_ids.pl"],
  			["perl run_ChEBI_Update.pl -db $gkcentral -host $gkcentral_host -user $user -pass $pass > improve_chebi_ids.out 2> improve_chebi_ids.err"]
     	]
  	);
