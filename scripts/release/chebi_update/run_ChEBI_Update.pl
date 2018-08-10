@@ -23,7 +23,7 @@ my $data_release_pipeline_repository = "https://github.com/reactome/data-release
 my $resource_dir = "data-release-pipeline/".$data_release_pipeline_application."/src/main/resources/";
 my $start_directory = cwd(); # abs_path($0);
 
-print "start_directory: ".$start_directory;
+print "start_directory: ".$start_directory."\n";
 
 if (-e "data-release-pipeline") {
   $logger->info("data-release-pipeline exists, pulling");
@@ -64,7 +64,7 @@ sub clone_repo {
 
 sub build_jar_and_execute {
   # Need to build/install release-common-lib first.
-  print "currently in: ".cwd(); 
+  print "currently in: ".cwd()."\n";
   chdir "release-common-lib";
   system("mvn clean compile install");
   chdir "../".$data_release_pipeline_application;
