@@ -1,1 +1,67 @@
-eventbrowser_deprecated
+#!/usr/local/bin/perl -w
+use lib "/usr/local/gkb/modules";
+use common::sense;
+use CGI qw(:standard);
+use CGI::Carp 'fatalsToBrowser';
+use Data::Dumper;
+use GKB::StableIdentifierDatabase;
+use GKB::FrontPage3;
+use GKB::WebUtils;
+
+my $CGI = CGI->new();
+my $stable = GKB::StableIdentifierDatabase->new();
+
+my $query_url  = '/content/query?q=';
+my $detail_url = '/cgi-bin/instancebrowser?ID=';
+#my $detail_url = '/content/detail/';
+
+my $id = $CGI->param('ID') || $CGI->param('DB_ID');
+my $st_id = $CGI->param('STID') || $CGI->param('ST_ID');
+my $query = $CGI->param('QUERY') || $CGI->param('EXACT');
+
+unless ($id || $st_id || $query) {
+    handle_error("eventbrowser: I do not have any search terms");
+}
+
+if ($st_id) {
+   $id = $stable->db_id_from_stable_id($st_id)
+       || handle_error("Unable to find a Reactome Instance for Stable ID $st_id");
+}
+
+my $url;
+
+if ($id) {
+    $url = "$detail_url$id";
+}
+elsif ($query) {
+    $url = "$query_url/'$query'";
+}
+
+if ($id && $CGI->param('PWB_REDIRECT')) {
+    my $wu = GKB::WebUtils->new_from_cgi(-CGI => $CGI);
+    my $instance = $wu->dba->fetch_instance_by_db_id($id)->[0];
+    $url = $wu->build_pathway_browser_url($instance);
+}
+
+print $CGI->redirect($url);
+#print header, $CGI->start_html;
+#print $CGI->h1($url);
+#print $CGI->end_html;
+
+
+
+sub handle_error {
+    my ($error_message) = @_;
+
+    my $front_page = GKB::FrontPage3->new("eventbrowser", "/stylesheet.css");
+    my $header = $front_page->get_header();
+    my $footer = $front_page->get_footer();
+
+    print header, $header;
+    print qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Internal error</FONT></h1>\n);
+    print qq(<h1><PRE>\n\n\n$error_message\n\n</PRE></h1>\n);
+    print $footer;
+
+    exit;
+}
+
