@@ -8,27 +8,27 @@
 	  <div class="grid_5 alpha">
 	    <a class="button icon browse" href="/PathwayBrowser/"><span>Browse Pathways</span></a>
  	 </div>
-  	<div class="grid_5">
-   	 <a class="button icon data" href="/PathwayBrowser/#TOOL=AT"><span>Analyze Data</span></a>
-  	</div>
-
-    <div class="grid_5 omega">
-
-    <a class="button icon cytoscape" href="//wiki.reactome.org/index.php/ReactomeFIViz"><span>Reactome FIViz app</span></a>
-    </div>
-  
- 	 <div class="clear"></div> <!--clear the first row of buttons -->
-
-    <div class="grid_5 alpha">
-    <a class="button icon overview" href="//wiki.reactome.org/index.php/Usersguide"><span>User Guide</span></a>
-    </div>
-	  <div class="grid_5">
-	    <a class="button icon download" href="/pages/download-data/"><span>Data Download</span></a>
-	  </div>
-          <div class="grid_5 omega">
+<div class="grid_5 omega">
         <a class="button icon contact" href="/pages/contact-us/"><span>Contact Us</span></a>
       </div>
-      
+ <!-- 	<div class="grid_5">
+   	 <a class="button icon data" href="/PathwayBrowser/#TOOL=AT"><span>Analyze Data</span></a>
+  	</div>
+-->
+ <!--    <div class="grid_5 omega">
+    <a class="button icon cytoscape" href="//wiki.reactome.org/index.php/ReactomeFIViz"><span>Reactome FIViz app</span></a>
+    </div>
+-->
+ 	 <div class="clear"></div> <!--clear the first row of buttons -->
+ <!--   <div class="grid_5 alpha">
+    <a class="button icon overview" href="//wiki.reactome.org/index.php/Usersguide"><span>User Guide</span></a>
+    </div>
+-->
+ <!--	  <div class="grid_5">
+	    <a class="button icon download" href="/pages/download-data/"><span>Data Download</span></a>
+	  </div>
+-->
+
       <div class="clear"></div> <!--clear second row of buttons -->
     
     </div><!--close buttonswrap-->
@@ -36,8 +36,9 @@
     <div class="contentwrap">
     <div class="contenthead">About Reactome</div><!--close contenthead-->
     <div class="contentbody">
-    	Reactome is a free, open-source, curated and peer reviewed pathway database. Our goal is to provide intuitive bioinformatics tools for the visualization, interpretation and analysis of pathway knowledge to support basic research, genome analysis, modeling, systems biology and education. The current version (v62) of Reactome was released on September 27, 2017.</p> 
+    	Reactome is a free, open-source, curated and peer reviewed pathway database. Our goal is to provide intuitive bioinformatics tools for the visualization, interpretation and analysis of pathway knowledge to support basic research, genome analysis, modeling, systems biology and education. To access the most current version of Reactome, please go to <a href="https://reactome.org/"><span>reactome.org</a>.
 
+<p> </p> 
 If you use Reactome in Asia, we suggest using our Chinese mirror site at <a href="http://reactome.ncpsb.org/"><span>reactome.ncpsb.org</a>.
 
     </div><!--close contentbody-->
@@ -61,12 +62,12 @@ If you use Reactome in Asia, we suggest using our Chinese mirror site at <a href
             
             <div class="announcement">
 
-            <a href="/version-62-released/"> Current Version: Reactome V62             <!--This is a placeholder for static announcements. For example, downtime due to server maintenance, or some other important announcement-->
+             <!--<a href="/version-62-released/"> Current Version: Reactome V62-->             <!--This is a placeholder for static announcements. For example, downtime due to server maintenance, or some other important announcement-->
 
             </div><!--close annoucement-->
 
             <!--twitter feed --><div class="twitter">
-            <a class="twitter-timeline" width="300" height="400" href="//twitter.com/reactome" data-widget-id="344458797739294721" data-chrome="noheader noborders transparent">Tweets by @reactome</a></div>
+            <a class="twitter-timeline" width="350" height="300" href="//twitter.com/reactome" data-widget-id="344458797739294721" data-chrome="noheader noborders transparent">Tweets by @reactome</a></div>
              </div><!--close content body-->
              </div><!--close contentwrap-->
 

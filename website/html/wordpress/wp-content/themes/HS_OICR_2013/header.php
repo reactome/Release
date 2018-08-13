@@ -55,13 +55,16 @@
 
   <div class="search_bar">
    <!--SearchForm--><!--DO NOT DELETED THIS LINE-->
-    <form id="search_form" action="/content/query" method="get">
-        <input id="local-searchbox" type="search" class="search" name="q" placeholder="e.g. O95631, NTN1, signaling by EGFR, glucose" />
+
+    <form id="search_form" action="/cgi-bin/search2" method="get">
+        <input id="local-searchbox" type="search" class="search" name="QUERY" placeholder="e.g. O95631, NTN1, signaling by EGFR, glucose" />
         <input type="hidden" name="species" value="Homo sapiens"/>
-        <input type="hidden" name="species" value="Entries without species"/>
-       <input type="hidden" name="cluster" value="true"/>
+        <input type="hidden" name="OPERATOR" value="ANY"/>
+        <!-- <input type="hidden" name="species" value="Entries without species"/> -->
+        <input type="hidden" name="cluster" value="true"/>
         <input type="submit" class="submit" value="Search">
      </form>
+
    <!--DO NOT DELETED THIS LINE--><!--/SearchForm-->
   </div><!--close search-->
      
