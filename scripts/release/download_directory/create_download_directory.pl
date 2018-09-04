@@ -208,15 +208,6 @@ my @cmds = (
      "gzip $release_nr/$species_file_stem.sbml",
     ],
 
-    #[
-    # "SBGN_dumper",
-    # 1,
-    # 0,
-    # "mkdir -p $release_nr/$sbgn_output_dir",
-    # "perl SBGN_dumper.pl $reactome_db_options -sp '$sbml2_species' -output_dir $sbgn_output_dir",
-    # "tar -cvf - $sbgn_output_dir/*.sbgn | gzip -c > $release_nr/$species_file_stem.sbgn.tar.gz",
-    #],
-
     [
      "gene_association.reactome",
      1,
