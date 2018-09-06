@@ -33,7 +33,7 @@ my @options = (
     ["UpdateDOIs", GKB_DEV_ALIAS, "-adds DOIs to requesting pathways in release database and gk_central"],
     ['UpdateGkCurrent', GKB_DEV_ALIAS, "-populate gk_current database with new release content"],
     ['TOC', GKB_DEV_ALIAS, "-create cached toc and doi_toc files"],
-    ['DownloadDirectory', GKB_DEV_ALIAS, "-update the download directory"],
+    ['DownloadDirectory', GKB_DEV_ALIAS, "-Create the download directory"],
     ['CommitStatsFiles', GKB_DEV_ALIAS, "-commit inference statistics files to GitHub"],
     ['UpdateConfig', GKB_LIVE_ALIAS, "-update configuration file to current version"],
     ['TOC', GKB_LIVE_ALIAS, "-create cached toc and doi_toc files"],
