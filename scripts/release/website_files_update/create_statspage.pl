@@ -403,6 +403,8 @@ print OUTPUT1 <<HTML;
         </tbody>
     </table>
 </div>
+<p></p>
+<p>*Reactome annotates to protein isoforms when this information is available. The total number of curated human proteins including isoforms is $all_human</p>
 HTML
 
 close(OUTPUT1);
