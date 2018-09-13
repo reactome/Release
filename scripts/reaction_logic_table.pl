@@ -39,7 +39,7 @@ unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
 
 
 my @reactions;
-my $dba = get_dba({'host' => 'reactomecurator.oicr.on.ca', 'db' => 'gk_central'});
+my $dba = get_dba({'host' => 'reactome.org', 'db' => 'gk_current'});
 
 my $output_file;
 if ($selected_pathways eq 'all') {    
@@ -103,7 +103,7 @@ sub add_reaction_to_logic_table {
         process_output($output, $all_reactions);
     }
     
-    my @regulations = @{$reaction->reverse_attribute_value('regulatedEntity')};
+    my @regulations = @{$reaction->reverse_attribute_value('regulatedBy')};
     process_regulations($reaction, $all_reactions, \@regulations);
 }
 
@@ -229,9 +229,9 @@ sub get_label {
     
     $label .= "_RLE" if $instance->is_a('ReactionlikeEvent');
     $label =~ s/[ \,+]/_/g;
-    
+    $label = $instance->db_id;  
     $label_cache{$instance->db_id} = $label;
-    
+   
     return $label;
 }
 

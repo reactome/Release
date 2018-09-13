@@ -2,21 +2,34 @@
 <html>
     <head>
         <title>Reaction Logic Table Exporter</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="logic_table.js"></script>
     </head>
-<body>
-    <h1>Reaction Logic Table Exporter</h1>    
-    <form id="export_form" action="/cgi-bin/reaction_logic_table_export.cgi" method="post">
-        <div id="db_ids_container">
-            <label for="db_ids">Enter db_id(s) of pathways to export (one per line):</label>
-            <textarea id="db_ids" name="db_ids"></textarea>
+    <body>
+        <div class="logic_table">
+            <h1>Reaction Logic Table Exporter</h1>    
+            <form id="export_form" onsubmit="validateDBIds(event)" action="/cgi-bin/reaction_logic_table_export.cgi" method="post">
+                <div id="db_ids_container">
+                    <label for="db_ids">Enter db_id(s) of pathways to export (one per line):</label>
+                    <textarea id="db_ids" name="db_ids"></textarea>
+                </div>
+                <div id="join_pathways_container">
+                    <label for="join_pathways">Export multiple pathways as one reaction logic table</label>
+                    <input type="checkbox" id="join_pathways" name="join_pathways" value="checked">
+                </div>
+                <input type="submit" value="Export Reaction Logic Table(s)">
+            </form>
         </div>
-        <div id="join_pathways_container">
-            <label for="join_pathways">Export multiple pathways as one reaction logic table</label>
-            <input type="checkbox" id="join_pathways" name="join_pathways" value="checked">
+        <div class="mapping_file">
+            <h1>DB ID Mapping File Exporter</h1>
+            <form id="export_mapping_file_form" onSubmit="validateEmailAddress(event)" action="/cgi-bin/db_id_mapping_file_export.cgi" method="post">
+                <p>This file will be sent to the e-mail address provided as it takes longer to generate</p>
+                <div>
+                    <label for="emailaddress">E-mail address:</label>
+                    <input id="emailaddress" type="email" name="emailaddress" />
+                    <span id="email_error"></span>
+                </div>
+                <input type="submit" value="Send DB ID Mapping File -- coming soon!" disabled="disabled">
+            </form>
         </div>
-        <input type="submit" value="Export">
-    </form>
-</body>
+    </body>
 </html>
