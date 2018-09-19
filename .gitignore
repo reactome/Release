@@ -12,6 +12,7 @@ modules/GKB/biomart/*
 .atomignore
 container/logs*
 container/mysql_databases*
+container/*nfs*
 .includepath
 .project
 .settings
@@ -26,3 +27,7 @@ release-config.pm
 logs
 mysql_databases
 container/stable_id_mapping.stored_data
+scripts/release/update_dois/*properties
+scripts/release/update_dois/*report
+*ddis*
+Secrets.pm
