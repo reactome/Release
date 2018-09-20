@@ -436,14 +436,6 @@ sub set_displayName {
     return $self->attribute_value('_displayName')->[0];
 }
 
-sub get_compartment_names {
-    my @compartments = @_;
-    
-    my @compartment_names = grep { defined } map{$_->displayName} @compartments;
-    
-    return @compartment_names ? join(', ', @compartment_names) : '';
-}
-
 package GKB::NamedInstance::ChemicalDrug;
 use vars qw(@ISA);
 use strict;
