@@ -2999,11 +2999,13 @@ use strict;
 use GKB::Config;
 @ISA = qw(GKB::PrettyInstance::PhysicalEntity);
 
+
 package GKB::PrettyInstance::ChemicalDrug;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
 @ISA = qw(GKB::PrettyInstance::Drug);
+
 
 package GKB::PrettyInstance::ProteinDrug;
 use vars qw(@ISA);
@@ -3011,11 +3013,13 @@ use strict;
 use GKB::Config;
 @ISA = qw(GKB::PrettyInstance::Drug);
 
+
 package GKB::PrettyInstance::RNADrug;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
 @ISA = qw(GKB::PrettyInstance::Drug);
+
 
 package GKB::PrettyInstance::EntitySet;
 use vars qw(@ISA);
