@@ -49,5 +49,5 @@ function hideEmailInputError() {
 }
 
 function getEmailErrorSpanElement() {
-    return document.getElementById("email_error");
+    return document.getElementsByClassName("email_error")[0];
 }

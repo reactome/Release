@@ -8,27 +8,42 @@
         <div class="logic_table">
             <h1>Reaction Logic Table Exporter</h1>    
             <form id="export_form" onsubmit="validateDBIds(event)" action="/cgi-bin/reaction_logic_table_export.cgi" method="post">
-                <div id="db_ids_container">
+                <div class="db_ids_container">
                     <label for="db_ids">Enter db_id(s) of pathways to export (one per line):</label>
                     <textarea id="db_ids" name="db_ids"></textarea>
                 </div>
-                <div id="join_pathways_container">
+                
+                <div class="join_pathways_container">
                     <label for="join_pathways">Export multiple pathways as one reaction logic table</label>
-                    <input type="checkbox" id="join_pathways" name="join_pathways" value="checked">
+                    <input type="checkbox" id="join_pathways" name="join_pathways" value="checked" />
                 </div>
-                <input type="submit" value="Export Reaction Logic Table(s)">
+                
+                <div class="data_source_container">
+                    <label>Data Source:</label>
+                    <input type="radio" name="data_host" value="reactome.org" checked="checked" />Reactome Production
+                    <input type="radio" name="data_host" value="reactomecurator.oicr.on.ca" />Reactome Curator
+                </div>
+                
+                <input type="submit" value="Export Reaction Logic Table(s)" />
             </form>
         </div>
-        <div class="mapping_file">
+        <div class="mapping_file" style="margin-top:3em">
             <h1>DB ID Mapping File Exporter</h1>
             <form id="export_mapping_file_form" onSubmit="validateEmailAddress(event)" action="/cgi-bin/db_id_mapping_file_export.cgi" method="post">
-                <p>This file will be sent to the e-mail address provided as it takes longer to generate</p>
-                <div>
+                <div class="email_container">
+                    <p>This file will be sent to the e-mail address provided as it can take longer to generate</p>
                     <label for="emailaddress">E-mail address:</label>
                     <input id="emailaddress" type="email" name="emailaddress" />
-                    <span id="email_error"></span>
+                    <span class="email_error"></span>
                 </div>
-                <input type="submit" value="Send DB ID Mapping File -- coming soon!" disabled="disabled">
+                
+                <div class="data_source_container">
+                    <label>Data Source:</label>
+                    <input type="radio" name="data_host" value="reactome.org" checked="checked" />Reactome Production
+                    <input type="radio" name="data_host" value="reactomecurator.oicr.on.ca" />Reactome Curator
+                </div>
+                
+                <input type="submit" value="Send DB ID Mapping File -- coming soon!" />
             </form>
         </div>
     </body>
