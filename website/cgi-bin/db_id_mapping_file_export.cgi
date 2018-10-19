@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 use autodie qw/:all/;
+no autodie qw/flock/;
 use Carp;
 use CGI;
 use CGI::Carp qw/fatalsToBrowser/;
@@ -23,71 +24,169 @@ use Try::Tiny;
 run(@ARGV) unless caller();
 
 sub run {
-    Readonly my $sender_address => 'joel.weiser@oicr.on.ca';
-    #Readonly my $minutes_to_cache_mapping_file => 5;
+    my $cgi = CGI->new;
+    my $database = get_database(get_data_host($cgi));
+    
+    my $lock_file = catfile(get_output_dir_path($database), "$database.lock");
+    open(our $source_fh, '>', $lock_file);
+    my $another_process_running = !(flock($source_fh, LOCK_EX|LOCK_NB));
     
     STDOUT->autoflush;
-    $ENV{PATH} = '/bin/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin';
+    $ENV{PATH} = '/bin:/bin/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin';
     
-    my $cgi = CGI->new;
     if ($cgi->request_method eq 'GET') {
         die "This CGI script cannot be accessed directly\n";
     }
     
-    my $recipient_address = $cgi->param('emailaddress');
-    if (!(Email::Valid->address($recipient_address))) {
-        confess "$recipient_address is not a valid e-mail address: $Email::Valid::Details check failed";
-    }
-    
-    if (-s get_path_to_mapping_file()) { #&& mapping_file_is_recent($minutes_to_cache_mapping_file)) {
-        open(my $mapping_file_fh, '<', get_path_to_mapping_file());
-        flock($mapping_file_fh, LOCK_SH);
-        try {
-            send_email_with_mapping_file({
-                'sender' => $sender_address,
-                'recipient' => $recipient_address
-            });
-        } catch {
-            display_error_page($cgi, $_);
-            exit;
-        };
-        display_submitted_page($cgi, { 'file_must_be_generated' => 0 });
-        close($mapping_file_fh);
-        exit 0;
-    }
-    
-    my $pid = fork() // die "Could not fork process\n";
-    if ($pid) {
-        display_submitted_page($cgi, { 'file_must_be_generated' => 1 });
+    if ($database eq 'gk_central') {
+        send_file_for_gk_central($cgi, $another_process_running, $source_fh);
     } else {
-        try {
-            close STDOUT;
-            close STDERR;
-            
-            my $output_dir_path = get_output_dir_path();
-            my $output_file_name = get_name_of_mapping_file();
-            my $mapping_file_script = catfile(get_scripts_dir_path(), 'db_id_to_name_mapping.pl');
+        send_file_for_gk_current($cgi, $another_process_running, $source_fh);
+    }
+    close($source_fh);
+}
 
-            unlink($output_file_name) if (-e $output_file_name);
-            make_path($output_dir_path);
-            system("perl $mapping_file_script -output_dir $output_dir_path -output_file $output_file_name 2> $output_file_name.err");
-            send_email_with_mapping_file({
-                'sender' => $sender_address,
-                'recipient' => $recipient_address
-            });
-        } catch {
-            error_clean_up($_);
-        };
-        
-        exit 0;
+sub send_file_for_gk_central {
+    my $cgi = shift || confess "No CGI object provided\n";
+    my $another_process_running = shift // confess "Unknown if another process is running\n";
+    my $source_fh = shift || confess "No source file handle provided\n";
+    
+    my $database = get_database(get_data_host($cgi));
+    if ($another_process_running || (-e get_path_to_mapping_file($database) && mapping_file_is_recent($database))) {
+        retrieve_mapping_file_and_email($cgi, $source_fh);
+    } else {
+        my $pid = fork() // die "Could not fork process\n";
+        if ($pid) {
+            display_submitted_page($cgi, { 'file_must_be_generated' => 1 });
+        } else {
+            create_mapping_file_and_email($cgi);
+        }
+    }
+}
+    
+sub send_file_for_gk_current {
+    my $cgi = shift || confess "No CGI object provided\n";
+    my $another_process_running = shift // confess "Unknown if another process is running\n";
+    my $source_fh = shift || confess "No source file handle provided\n";
+    
+    my $database = get_database(get_data_host($cgi));
+    if (!(-e get_path_to_mapping_file($database)) && !$another_process_running) {
+        my $pid = fork() // die "Could not fork process\n";
+        if ($pid) {
+            display_submitted_page($cgi, { 'file_must_be_generated' => 1 });
+        } else {
+            create_mapping_file_and_email($cgi);
+        }
+    } else {
+        print "Retrieving mapping file for gk_current\n";
+        retrieve_mapping_file_and_email($cgi, $source_fh);
     }
 }
 
+sub create_mapping_file_and_email {
+    my $cgi = shift || confess "No CGI object provided\n";
+    my $remove_mapping_file = shift // 0;
+
+    try {
+        generate_mapping_file(get_data_host($cgi));
+    } catch {
+        remove_mapping_file(get_database(get_data_host($cgi)));
+        confess "Error generating mapping file: $_";
+    };
+
+    my $database = get_database(get_data_host($cgi));
+    try {
+        send_email_with_mapping_file({
+            'sender' => get_sender_address(),
+            'recipient' => get_recipient_address($cgi),
+            'file_path' => get_path_to_mapping_file($database),
+            'attachment_name' => get_name_of_mapping_file($database)
+        });            
+    } catch {
+        confess "Unable to send e-mail to " . get_recipient_address($cgi) . "\n";
+    } finally {
+        if ($remove_mapping_file) {
+            remove_mapping_file(get_database(get_data_host($cgi)));
+        }
+    };
+}
+
+sub retrieve_mapping_file_and_email {
+    my $cgi = shift || confess "No CGI object provided\n";
+    my $source_fh = shift || confess "No source file handle provided\n";
+    
+    my $database = get_database(get_data_host($cgi));
+    if (!(-e get_path_to_mapping_file($database))) {
+        print "Mapping file does not exist\n";
+        flock($source_fh, LOCK_SH) || die "Unable to get shared lock on $0: $!\n";
+    }    
+    #try {
+        # If this fails (presumably because the other cgi process failed to generate the file), re-generate file and try re-opening
+        open(my $mapping_file_fh, '<', get_path_to_mapping_file($database)); 
+    #} catch {
+    #    generate_mapping_file(get_data_host($cgi));
+    #    open(my $mapping_file_fh, '<', get_path_to_mapping_file($database));
+    #};
+    my $mapping_file_being_generated = !(flock($mapping_file_fh, LOCK_EX|LOCK_NB));
+    print "Mapping file is being generated: $mapping_file_being_generated\n";
+    if (!$mapping_file_being_generated) {
+        flock($mapping_file_fh, LOCK_UN) || die "Unable to unlock mapping file\n"; # Remove the exclusive lock used to check if mapping file was already locked
+    }
+
+    display_submitted_page($cgi, { 'file_must_be_generated' => $mapping_file_being_generated });
+    close STDOUT;
+    close STDERR;
+    flock($mapping_file_fh, LOCK_SH) || die "Unable to get shared lock for mapping file: $!\n";
+
+    try {
+        send_email_with_mapping_file({
+            'sender' => get_sender_address(),
+            'recipient' => get_recipient_address($cgi),
+            'file_path' => get_path_to_mapping_file($database),
+            'attachment_name' => get_name_of_mapping_file($database)
+        });
+    } catch {
+        display_error_page($cgi, $_);
+    } finally {
+        close($mapping_file_fh);
+    };    
+}
+
+sub remove_mapping_file {
+    my $database = shift || confess "No database name provided\n";
+    
+    unlink(get_path_to_mapping_file($database)) if -e (get_path_to_mapping_file($database));
+}
+
 sub mapping_file_is_recent {
-    my $minutes_to_cache_mapping_file = shift;
-    my $minutes_since_modification = (time - stat(get_path_to_mapping_file())->mtime) / 60;
+    my $database = shift || "No database provided for determining if mapping file is recent\n";
+    my $minutes_to_cache_mapping_file = shift // 10;
+    my $minutes_since_modification = (time - stat(get_path_to_mapping_file($database))->mtime) / 60;
     
     return ($minutes_since_modification <= $minutes_to_cache_mapping_file);
+}
+
+sub generate_mapping_file {
+    my $data_host = shift || confess "No data host provided for generating mapping file\n";
+    my $database = get_database($data_host);
+    
+    try {
+        #close STDOUT;
+        #close STDERR;
+        
+        my $output_dir_path = get_output_dir_path($database);
+        my $output_file_name = get_name_of_mapping_file($database);
+        my $mapping_file_script = catfile(get_scripts_dir_path(), 'db_id_to_name_mapping.pl');
+
+        remove_mapping_file($database);
+        make_path($output_dir_path, { chmod => 0775 });
+    
+        system("perl $mapping_file_script -host $data_host -db $database -output_dir $output_dir_path -output_file $output_file_name 2>> " . get_path_to_mapping_file($database) . ".err");
+        # Exclusive file lock to mapping file removed when script terminates (even on interruption/failure) and creates
+        # a race condition before the mapping file can be removed by the error_clean_up subroutine        
+    } catch {
+        error_clean_up($_, $database);
+    };
 }
     
 sub send_email_with_mapping_file {
@@ -95,6 +194,8 @@ sub send_email_with_mapping_file {
     
     my $sender_address = $parameters->{'sender'} || confess "No e-mail address provided for sender\n";
     my $recipient_address = $parameters->{'recipient'} || confess "No e-mail address provided for recipient\n";
+    my $file_path = $parameters->{'file_path'} || confess "No file path provided for mapping file\n";
+    my $attachment_name = $parameters->{'attachment_name'} || confess "No attachment name provided for mapping file\n";
     
     my $msg = MIME::Lite->new(
         From => $sender_address,
@@ -104,7 +205,7 @@ sub send_email_with_mapping_file {
     ) or confess "Could not create e-mail message: $!";
     
     $msg = add_email_body($msg);
-    $msg = add_email_file_attachment($msg);
+    $msg = add_email_file_attachment($msg, $file_path, $attachment_name);
 
     $msg->send();
 }
@@ -131,12 +232,14 @@ END_BODY
 
 sub add_email_file_attachment {
     my $msg = shift || confess "No MIME::Lite e-mail object provided\n";
+    my $file_path = shift || confess "No file path provided for attachment\n";
+    my $attachment_name = shift || confess "No attachment name provided for attachment\n";
 
     $msg->attach(
        	Type => 'text/plain',
-        Path => get_path_to_mapping_file(),
-        Filename => get_name_of_mapping_file()
-    );
+        Path => $file_path,
+        Filename => $attachment_name
+    ) or confess "Unable to attach mapping file: $_";
     
     return $msg;
 }
@@ -151,7 +254,7 @@ sub display_submitted_page {
           $cgi->h1('Request for mapping file submitted');
           
     print $mapping_file_being_generated ?  
-            $cgi->p('Generation of the db id to name mapping file takes about 5 minutes.  You should receive an e-mail after this completes.') :
+            $cgi->p('Generation of the db id to name mapping file can take about 10 minutes.  You should receive an e-mail after this completes.') :
             $cgi->p('File has been sent!');
     
     print get_home_page_link($cgi),
@@ -171,7 +274,7 @@ sub display_error_page {
 }
 
 sub get_home_page_link {
-    my $cgi = shift;
+    my $cgi = shift || confess "No CGI object provided\n";;
     return $cgi->a({href=>'/logic_table.html'}, 'Return to logic table form'),
 }
 
@@ -184,15 +287,21 @@ sub get_scripts_dir_path {
 }
 
 sub get_output_dir_path {
-    return catfile(get_gkb_dir_path(), 'website', 'html', 'img-tmp', "db_id_mapping_file_export", get_reactome_version());
+    my $database = shift || confess "No database provided to determine output directory path\n";
+    
+    my $version = $database eq 'gk_central' ? 'gk_central' : get_reactome_version();
+    
+    return catfile(get_gkb_dir_path(), 'website', 'html', 'img-tmp', "db_id_mapping_file_export", $version);
 }
 
 sub get_path_to_mapping_file {
-    return catfile(get_output_dir_path(), 'db_id_to_name_mapping.txt');
+    my $database = shift || confess "No database provided to determine output directory path\n";
+    return catfile(get_output_dir_path($database), 'db_id_to_name_mapping.txt');
 }
 
 sub get_name_of_mapping_file {
-    return (fileparse(get_path_to_mapping_file()))[0];
+    my $database = shift || confess "No database provided to determine output directory path\n";
+    return (fileparse(get_path_to_mapping_file($database)))[0];
 }
 
 sub get_reactome_version {
@@ -200,10 +309,43 @@ sub get_reactome_version {
     return $version if $version =~ /^\d+$/;
 }
 
-sub error_clean_up {
-    my $error = shift;
+sub get_sender_address {
+    return 'joel.weiser@oicr.on.ca';
+}
+
+sub get_recipient_address {
+    my $cgi = shift || confess "No CGI object provided\n";
     
-    unlink(get_name_of_mapping_file()) if -e (get_name_of_mapping_file());
-    die "$0: Process interrupted - " . ($error || $!) . "\n";
+    my $recipient_address = $cgi->param('emailaddress');
+    if (!(Email::Valid->address($recipient_address))) {
+        confess "$recipient_address is not a valid e-mail address: $Email::Valid::Details check failed";
+    }
+    
+    return $recipient_address;
+}
+
+sub get_data_host {
+    my $cgi = shift || confess "No CGI object provided\n";
+
+    my ($data_host) = $cgi->param('data_host') =~ /(reactome.*?(\.org|\.oicr\.on\.ca))$/;
+    if (!$data_host) {
+        confess $cgi->param('data_host') . " is not an authorized data host\n";
+    }
+    
+    return $data_host;
+}
+
+sub get_database {
+    my $data_host = shift || confess "No data host provided\n";
+    
+    return $data_host eq 'reactomecurator.oicr.on.ca' ? 'gk_central' : 'gk_current';
+}
+
+sub error_clean_up {
+    my $error = shift || $!;
+    my $database = shift || confess "No database provided\n";
+    
+    remove_mapping_file($database);
+    die "$0: Process interrupted - $error\n";
 }
 
