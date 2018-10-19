@@ -25,8 +25,10 @@ Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
 
-my ($selected_pathways, $output_dir, $all_reactions);
+my ($host, $db, $selected_pathways, $output_dir, $all_reactions);
 GetOptions(
+    'host=s' => \$host,
+    'db=s' => \$db,
     'pathways=s' => \$selected_pathways,
     'output_dir=s' => \$output_dir,
     'all_reactions' => \$all_reactions
@@ -39,7 +41,9 @@ unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
 
 
 my @reactions;
-my $dba = get_dba({'host' => 'reactome.org', 'db' => 'gk_current'});
+$host ||= 'reactome.org';
+$db ||= 'gk_current';
+my $dba = get_dba({'host' => $host, 'db' => $db});
 
 my $output_file;
 if ($selected_pathways eq 'all') {    
@@ -51,9 +55,8 @@ if ($selected_pathways eq 'all') {
     
     foreach my $db_id (@db_ids) {
         my $pathway = $dba->fetch_instance_by_db_id($db_id)->[0];
-    	unless($pathway->is_a('Pathway')) {
-            print("$db_id is not a pathway");
-            exit;
+        unless($pathway && $pathway->is_a('Pathway')) {
+            die("$db_id is not a pathway");
         }
         push @pathways, $pathway;
     }
@@ -188,7 +191,7 @@ sub process_regulations {
     foreach my $regulation (@$regulations) {
         foreach my $active_regulator_component (get_active_regulator_component($regulation)) {
             process_if_set_complex_or_polymer($active_regulator_component) unless is_a_reaction_output($active_regulator_component, $all_reactions);
-	
+
             my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
             record(get_label($active_regulator_component), get_label($reaction), $value, AND);
         }
@@ -239,18 +242,20 @@ sub get_dba {
     my $parameters = shift // {};
     
     return GKB::DBAdaptor->new (
-	-user => $GKB::Config::GK_DB_USER,
-	-pass => $GKB::Config::GK_DB_PASS,
+    -user => $GKB::Config::GK_DB_USER,
+    -pass => $GKB::Config::GK_DB_PASS,
     -host => $parameters->{'host'} || $GKB::Config::GK_DB_HOST,
-	-dbname => $parameters->{'db'} || $GKB::Config::GK_DB_NAME
+    -dbname => $parameters->{'db'} || $GKB::Config::GK_DB_NAME
     );
 }
 
 
 sub get_reaction_like_events {
     my $event = shift;
-    return $event->follow_class_attributes(-INSTRUCTIONS => {'Event' => {'attributes' =>[qw(hasEvent)]}},
-						      -OUT_CLASSES => ['ReactionlikeEvent']);
+    return $event->follow_class_attributes(
+        -INSTRUCTIONS => {'Event' => {'attributes' =>[qw(hasEvent)]}},
+        -OUT_CLASSES => ['ReactionlikeEvent']
+    );
 }
 
 sub is_preceding_event {
@@ -323,45 +328,45 @@ sub get_reactions_using_output_as_input {
 }
 
 sub report_interactions {
-	my $interactions = shift;
-	my $fh = shift;
-	
-	foreach my $child (keys %$interactions) {
-		my @logic_keys = keys %{$interactions{$child}};
-			
-		if (@logic_keys > 1) {
-			introduce_dummy_nodes($interactions, $child);
-		}
-	}
-	
+    my $interactions = shift;
+    my $fh = shift;
+    
+    foreach my $child (keys %$interactions) {
+        my @logic_keys = keys %{$interactions{$child}};
+
+        if (@logic_keys > 1) {
+            introduce_dummy_nodes($interactions, $child);
+        }
+    }
+
     my %seen;
-	foreach my $child (keys %{$interactions}) {
-		foreach my $logic (keys %{$interactions{$child}}) {
-			foreach my $parent (keys %{$interactions{$child}{$logic}}) {
-				foreach my $value (keys %{$interactions{$child}{$logic}{$parent}}) {
-					next if $seen{$child}{$logic}{$parent}{$value}++;
+    foreach my $child (keys %{$interactions}) {
+        foreach my $logic (keys %{$interactions{$child}}) {
+            foreach my $parent (keys %{$interactions{$child}{$logic}}) {
+                foreach my $value (keys %{$interactions{$child}{$logic}{$parent}}) {
+                    next if $seen{$child}{$logic}{$parent}{$value}++;
                     next if on_skip_list($parent, $child);
                     print $fh join("\t", $parent, $child, $value, $logic) . "\n";
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 }
 
 sub introduce_dummy_nodes {
-	my $interactions = shift;
-	my $child = shift;
-		
-	my $AND_parents = $interactions{$child}{AND()};
-	my $OR_parents = $interactions{$child}{OR()};
-	
-	delete $interactions{$child};
-	
-	$interactions{$child}{AND()}{"$child\_AND"}{1}++;
-	$interactions{$child}{AND()}{"$child\_OR"}{1}++;
-	
-	$interactions{"$child\_AND"}{AND()} = $AND_parents;
-	$interactions{"$child\_OR"}{OR()} = $OR_parents;
+    my $interactions = shift;
+    my $child = shift;
+
+    my $AND_parents = $interactions{$child}{AND()};
+    my $OR_parents = $interactions{$child}{OR()};
+
+    delete $interactions{$child};
+
+    $interactions{$child}{AND()}{"$child\_AND"}{1}++;
+    $interactions{$child}{AND()}{"$child\_OR"}{1}++;
+
+    $interactions{"$child\_AND"}{AND()} = $AND_parents;
+    $interactions{"$child\_OR"}{OR()} = $OR_parents;
 }
 
 sub on_skip_list {
@@ -425,6 +430,8 @@ Usage: perl $0 [options]
 
 Options
 
+-host [database host] Host server for the database being used to generate the logic table (default is reactome.org)
+-db  [database name] Name of database being used to generate the logic table (default is gk_current)
 -pathways [db_id list or 'all'] comma delimited list of pathway db_ids or 'all' (required)
 -output	[file name] name of output file (defaults to name of script with .tsv extension)
 -all_reactions  flag used to include unreleased reactions (default is to use only released reactions)  

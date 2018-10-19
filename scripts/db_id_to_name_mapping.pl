@@ -13,8 +13,10 @@ use File::Basename;
 use Getopt::Long;
 use Term::ReadKey;
 
-my ($output_dir, $output_file, $help);
+my ($host, $db, $output_dir, $output_file, $help);
 GetOptions(
+  'host:s' => \$host,
+  'db:s' => \$db,
   'output_dir:s' => \$output_dir,
   'output_file:s' => \$output_file,
   'help'=> \$help 
@@ -25,6 +27,8 @@ if ($help) {
     exit;
 }
 
+$host ||= 'reactome.org';
+$db ||= 'gk_current';
 $output_dir ||= '.';
 if (!$output_file) {
     unless (($output_file = basename($0)) =~ s/.pl$/.txt/) {
@@ -39,7 +43,7 @@ truncate($output, 0);
 binmode($output, ":utf8");
 report(join("\t", 'Database_Identifier', 'Node_Name', 'Node_Type', 'Display_Name', 'Reference_Entity_Name', 'Reference_Entity_Identifier', 'Instance_Class') . "\n", $output);
 
-my $dba = get_dba({'host' => 'reactome.org', 'db' => 'gk_current'});
+my $dba = get_dba({'host' => $host, 'db' => $db});
 my $events = $dba->fetch_instance(-CLASS => 'Event');
 my $physical_entities = $dba->fetch_instance(-CLASS => 'PhysicalEntity');
 
