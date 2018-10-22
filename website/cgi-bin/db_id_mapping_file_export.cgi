@@ -21,10 +21,10 @@ use MIME::Lite;
 use Readonly;
 use Try::Tiny;
 
-run(@ARGV) unless caller();
+run() unless caller();
 
 sub run {
-    my $cgi = CGI->new;
+    my $cgi = shift // CGI->new;
     my $database = get_database(get_data_host($cgi));
     
     my $lock_file = catfile(get_output_dir_path($database), "$database.lock");
@@ -121,8 +121,9 @@ sub retrieve_mapping_file_and_email {
         # If this fails (presumably because the other cgi process failed to generate the file), re-generate file and try re-opening
         open(my $mapping_file_fh, '<', get_path_to_mapping_file($database)); 
     #} catch {
-    #    generate_mapping_file(get_data_host($cgi));
-    #    open(my $mapping_file_fh, '<', get_path_to_mapping_file($database));
+        #close($source_fh);
+        #run($cgi);
+        #exit;
     #};
     my $mapping_file_being_generated = !(flock($mapping_file_fh, LOCK_EX|LOCK_NB));
     #print "Mapping file is being generated: $mapping_file_being_generated\n";
