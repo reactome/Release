@@ -268,7 +268,7 @@ sub display_submitted_page {
           $cgi->h1('Request for mapping file submitted');
 
     print $mapping_file_being_generated ? 
-            $cgi->p('Generation of the db id to name mapping file can take about 10 minutes.  You should receive an e-mail after this completes.') :
+            $cgi->p('Generation of the db id to name mapping file can take up to 15 minutes.  You should receive an e-mail after this completes.') :
             $cgi->p('File has been sent!');
     print $cgi->p('If you do not receive the mapping file within 30 minutes of your request, please contact ' . get_sender_address());
 
