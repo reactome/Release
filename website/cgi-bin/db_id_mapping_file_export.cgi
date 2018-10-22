@@ -70,24 +70,25 @@ sub send_file_for_gk_current {
     my $source_fh = shift || confess "No source file handle provided\n";
     
     my $database = get_database(get_data_host($cgi));
-    if (!(-e get_path_to_mapping_file($database)) && !$another_process_running) {
+    if ($another_process_running || (-e get_path_to_mapping_file($database))) {
+        #print "Retrieving mapping file for gk_current\n";
+        retrieve_mapping_file_and_email($cgi, $source_fh);
+    } else {
         my $pid = fork() // die "Could not fork process\n";
         if ($pid) {
             display_submitted_page($cgi, { 'file_must_be_generated' => 1 });
         } else {
             create_mapping_file_and_email($cgi);
         }
-    } else {
-        print "Retrieving mapping file for gk_current\n";
-        retrieve_mapping_file_and_email($cgi, $source_fh);
-    }
+    }    
 }
 
 sub create_mapping_file_and_email {
     my $cgi = shift || confess "No CGI object provided\n";
-    my $remove_mapping_file = shift // 0;
 
     try {
+        close STDOUT;
+        close STDERR;
         generate_mapping_file(get_data_host($cgi));
     } catch {
         remove_mapping_file(get_database(get_data_host($cgi)));
@@ -104,10 +105,6 @@ sub create_mapping_file_and_email {
         });            
     } catch {
         confess "Unable to send e-mail to " . get_recipient_address($cgi) . "\n";
-    } finally {
-        if ($remove_mapping_file) {
-            remove_mapping_file(get_database(get_data_host($cgi)));
-        }
     };
 }
 
@@ -117,7 +114,7 @@ sub retrieve_mapping_file_and_email {
     
     my $database = get_database(get_data_host($cgi));
     if (!(-e get_path_to_mapping_file($database))) {
-        print "Mapping file does not exist\n";
+        #print "Mapping file does not exist\n";
         flock($source_fh, LOCK_SH) || die "Unable to get shared lock on $0: $!\n";
     }    
     #try {
@@ -128,28 +125,32 @@ sub retrieve_mapping_file_and_email {
     #    open(my $mapping_file_fh, '<', get_path_to_mapping_file($database));
     #};
     my $mapping_file_being_generated = !(flock($mapping_file_fh, LOCK_EX|LOCK_NB));
-    print "Mapping file is being generated: $mapping_file_being_generated\n";
+    #print "Mapping file is being generated: $mapping_file_being_generated\n";
     if (!$mapping_file_being_generated) {
         flock($mapping_file_fh, LOCK_UN) || die "Unable to unlock mapping file\n"; # Remove the exclusive lock used to check if mapping file was already locked
     }
+    
+    my $pid = fork() // die "Could not fork process\n";
+    if ($pid) {
+        display_submitted_page($cgi, { 'file_must_be_generated' => $mapping_file_being_generated });
+    } else {
+        close STDOUT;
+        close STDERR;
+        flock($mapping_file_fh, LOCK_SH) || die "Unable to get shared lock for mapping file: $!\n";
 
-    display_submitted_page($cgi, { 'file_must_be_generated' => $mapping_file_being_generated });
-    close STDOUT;
-    close STDERR;
-    flock($mapping_file_fh, LOCK_SH) || die "Unable to get shared lock for mapping file: $!\n";
-
-    try {
-        send_email_with_mapping_file({
-            'sender' => get_sender_address(),
-            'recipient' => get_recipient_address($cgi),
-            'file_path' => get_path_to_mapping_file($database),
-            'attachment_name' => get_name_of_mapping_file($database)
-        });
-    } catch {
-        display_error_page($cgi, $_);
-    } finally {
-        close($mapping_file_fh);
-    };    
+        try {
+            send_email_with_mapping_file({
+                'sender' => get_sender_address(),
+                'recipient' => get_recipient_address($cgi),
+                'file_path' => get_path_to_mapping_file($database),
+                'attachment_name' => get_name_of_mapping_file($database)
+            });
+        } catch {
+            display_error_page($cgi, $_);
+        } finally {
+            close($mapping_file_fh);
+        };
+    }
 }
 
 sub remove_mapping_file {
@@ -256,6 +257,7 @@ sub display_submitted_page {
     print $mapping_file_being_generated ?  
             $cgi->p('Generation of the db id to name mapping file can take about 10 minutes.  You should receive an e-mail after this completes.') :
             $cgi->p('File has been sent!');
+    print $cgi->p('If you do not receive the mapping file within 30 minutes of your request, please contact ' . get_sender_address() . "\n");
     
     print get_home_page_link($cgi),
           $cgi->end_html;
@@ -269,6 +271,7 @@ sub display_error_page {
           $cgi->start_html('Unable to send mapping file'),
           $cgi->h1('Error: Unable to send mapping file'),
           $cgi->p($error),
+          $cgi->p('If this error persists, please contact ' . get_sender_address() . "\n");
           get_home_page_link($cgi),
           $cgi->end_html;
 }
