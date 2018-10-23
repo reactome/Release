@@ -12,6 +12,7 @@ use feature qw/state/;
 use autodie qw/:all/;
 use Carp;
 use Data::Dumper;
+use Fcntl qw/:flock/;
 use List::MoreUtils qw/any none uniq/;
 use Getopt::Long;
 use Readonly;
@@ -25,13 +26,14 @@ Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
 
-my ($host, $db, $selected_pathways, $output_dir, $all_reactions);
+my ($host, $db, $selected_pathways, $output_file, $output_dir, $include_unreleased);
 GetOptions(
     'host=s' => \$host,
     'db=s' => \$db,
     'pathways=s' => \$selected_pathways,
+    'output_file=s' => \$output_file,
     'output_dir=s' => \$output_dir,
-    'all_reactions' => \$all_reactions
+    'include_unreleased' => \$include_unreleased
 );
 
 unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
@@ -45,10 +47,9 @@ $host ||= 'reactome.org';
 $db ||= 'gk_current';
 my $dba = get_dba({'host' => $host, 'db' => $db});
 
-my $output_file;
 if ($selected_pathways eq 'all') {    
     @reactions = @{$dba->fetch_instance(-CLASS => 'ReactionlikeEvent', [['species',['48887']]])};
-    $output_file = 'all';
+    $output_file ||= 'all';
 } else {
     my @db_ids = split(",", $selected_pathways);
     my @pathways;
@@ -60,7 +61,7 @@ if ($selected_pathways eq 'all') {
         }
         push @pathways, $pathway;
     }
-    $output_file = scalar @pathways == 1 ?
+    $output_file ||= scalar @pathways == 1 ?
         $pathways[0]->displayName :
         join("_", @db_ids);
     $output_file =~ s/['\\\/:\(\)&; ]+/_/g;
@@ -70,7 +71,7 @@ if ($selected_pathways eq 'all') {
     }
 }
 @reactions = grep {!$_->disease->[0]} @reactions;
-@reactions = grep {$_->_doRelease->[0] && $_->_doRelease->[0] =~ /TRUE/i} @reactions unless $all_reactions;
+@reactions = grep {$_->_doRelease->[0] && $_->_doRelease->[0] =~ /TRUE/i} @reactions unless $include_unreleased;
 exit unless @reactions;
 
 my %interactions;
@@ -80,8 +81,12 @@ foreach my $reaction (@reactions) {
 }
 
 $output_dir ||= '.';
-my $output_file_full_path = "$output_dir/$output_file.tsv";
+my $output_file_full_path = "$output_dir/$output_file";
 open my $logic_table_fh, ">", "$output_file_full_path";
+flock($logic_table_fh, LOCK_EX);
+seek($logic_table_fh, 0, 0);
+truncate($logic_table_fh, 0);
+binmode($logic_table_fh, ":utf8");
 report_interactions(\%interactions, $logic_table_fh);
 close $logic_table_fh;
 
@@ -430,11 +435,13 @@ Usage: perl $0 [options]
 
 Options
 
+-pathways [db_id list or 'all'] Comma delimited list of pathway db_ids or 'all' (required)
 -host [database host] Host server for the database being used to generate the logic table (default is reactome.org)
 -db  [database name] Name of database being used to generate the logic table (default is gk_current)
--pathways [db_id list or 'all'] comma delimited list of pathway db_ids or 'all' (required)
--output	[file name] name of output file (defaults to name of script with .tsv extension)
--all_reactions  flag used to include unreleased reactions (default is to use only released reactions)  
+-output_dir [file directory] Path to directory for output file  (defaults to current directory)
+-output_file [file name] Name of output file (defaults to 'all' if all pathways selected, name of single pathway
+                         selected, or concatenated ids of multiple pathways selected)
+-include_unreleased  Flag used to include unreleased reactions (default is to use only released reactions when excluded)  
 
 END
 }
