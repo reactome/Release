@@ -36,16 +36,16 @@ if (!$output_file) {
     }
 }
 
+my $dba = get_dba({'host' => $host, 'db' => $db});
+my $events = $dba->fetch_instance(-CLASS => 'Event');
+my $physical_entities = $dba->fetch_instance(-CLASS => 'PhysicalEntity');
+
 open (my $output, ">", "$output_dir/$output_file");
 flock($output, LOCK_EX);
 seek($output, 0, 0);
 truncate($output, 0);
 binmode($output, ":utf8");
 report(join("\t", 'Database_Identifier', 'Node_Name', 'Node_Type', 'Display_Name', 'Reference_Entity_Name', 'Reference_Entity_Identifier', 'Instance_Class') . "\n", $output);
-
-my $dba = get_dba({'host' => $host, 'db' => $db});
-my $events = $dba->fetch_instance(-CLASS => 'Event');
-my $physical_entities = $dba->fetch_instance(-CLASS => 'PhysicalEntity');
 
 my %seen;
 foreach my $instance (@{$events},@{$physical_entities}) {
