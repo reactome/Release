@@ -1,15 +1,32 @@
+var hideSubmissionTimeout;
+function validateAndSubmitLogicTableForm(e) {
+    e.preventDefault();
+    if (!DBIdsAreValid()) {
+        showDBIDInputError();
+        return;
+    }
+    
+    hideDBIDInputError();
+    document.getElementById("export_form").submit();
+    clearTimeout(hideSubmissionTimeout);
+    showSubmissionReceived("Submission received -- your download will begin shortly!");
+    hideSubmissionTimeout = setTimeout(hideSubmissionReceived, 4000);
+    
+}
+
 function validateDBIds(e) {
     e.preventDefault();
-        
-    var db_ids = document.getElementById("db_ids").value;
-        
-    var is_list_of_numbers = /^([0-9]+(\r?\n)?)+$/;
-    if (is_list_of_numbers.test(db_ids)) {
-        document.getElementById("export_form").submit();
-    } else {
-        alert("Db_ids must be numeric");
-    }
-};
+    !getDBIds() || DBIdsAreValid() ? hideDBIDInputError() : showDBIDInputError();
+}
+
+function getDBIds() {
+    return document.getElementById("db_ids").value;
+}
+
+function DBIdsAreValid() {
+    var isListOfNumbers = /^([0-9]+(\r?\n)?)+$/;
+    return isListOfNumbers.test(getDBIds());
+}
 
 // Taken from https://gist.github.com/dreamstarter/9231254
 function emailValid(email) {
@@ -50,4 +67,41 @@ function hideEmailInputError() {
 
 function getEmailErrorSpanElement() {
     return document.getElementsByClassName("email_error")[0];
+}
+
+function showDBIDInputError(message) {
+    var dbIDErrorSpan = getDBIDErrorSpanElement();
+    dbIDErrorSpan.style = "color:red";
+    dbIDErrorSpan.innerHTML = message || "Db_ids must be numeric";
+}
+
+function hideDBIDInputError() {
+    var dbIDErrorSpan = getDBIDErrorSpanElement();
+    dbIDErrorSpan.style = "";
+    dbIDErrorSpan.innerHTML = "";    
+}
+
+function getDBIDErrorSpanElement() {
+    return document.getElementsByClassName("db_id_error")[0];
+}
+
+function showSubmissionReceived(message) {
+    var submissionReceivedSpan = getSubmissionReceivedSpanElement();
+    submissionReceivedSpan.style = "color:green";
+    submissionReceivedSpan.innerHTML = message;   
+}
+
+function hideSubmissionReceived() {
+    var submissionReceivedSpan = getSubmissionReceivedSpanElement();
+    submissionReceivedSpan.style = "";
+    submissionReceivedSpan.innerHTML = "";    
+}
+
+function getSubmissionReceivedSpanElement() {
+    return document.getElementsByClassName("submission_received")[0];
+}
+
+function hide_logic_table_messages() {
+    hideDBIDInputError();
+    hideSubmissionReceived();
 }

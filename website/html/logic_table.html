@@ -7,10 +7,11 @@
     <body>
         <div class="logic_table">
             <h1>Reaction Logic Table Exporter</h1>    
-            <form id="export_form" onsubmit="validateDBIds(event)" action="/cgi-bin/reaction_logic_table_export.cgi" method="post">
+            <form id="export_form" onsubmit="validateAndSubmitLogicTableForm(event)" action="/cgi-bin/reaction_logic_table_export.dev.cgi" method="post">
                 <div class="db_ids_container">
-                    <label for="db_ids">Enter db_id(s) of pathways to export (one per line):</label>
-                    <textarea id="db_ids" name="db_ids"></textarea>
+                    <label style="display: block;" for="db_ids">Enter db_id(s) of pathways to export (one per line):</label>
+                    <textarea onInput="validateDBIds(event)" style="display: block;" id="db_ids" name="db_ids" rows="5" cols="25"></textarea>
+                    <span class="db_id_error"></span>
                 </div>
                 
                 <div class="join_pathways_container">
@@ -25,6 +26,7 @@
                 </div>
                 
                 <input type="submit" value="Export Reaction Logic Table(s)" />
+                <span class="submission_received"></span>
             </form>
         </div>
         <div class="mapping_file" style="margin-top:3em">
