@@ -173,7 +173,7 @@ sub remove_mapping_file {
 }
 
 sub mapping_file_is_recent {
-    my $database = shift || "No database provided for determining if mapping file is recent\n";
+    my $database = shift || confess "No database provided for determining if mapping file is recent\n";
     my $minutes_to_cache_mapping_file = shift // 10;
     my $minutes_since_modification = (time - stat(get_path_to_mapping_file($database))->mtime) / 60;
 
