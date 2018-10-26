@@ -59,7 +59,7 @@ foreach my $id (@ids) {
     flock($generate_fh, LOCK_EX);
     if ((!-e $file_full_path) || ($database eq 'gk_central' && (!file_is_recent($file_full_path)))) {
         my $error = capture_stderr {
-            system("perl $scripts/reaction_logic_table.dev.pl -host $data_host -db $database -pathways $id -output_dir $output_dir -output_file $file_name");
+            system("perl $scripts/reaction_logic_table.pl -host $data_host -db $database -pathways $id -output_dir $output_dir -output_file $file_name");
         };
         
         open(my $error_fh, '>', "$output_dir/$file_name.err");
