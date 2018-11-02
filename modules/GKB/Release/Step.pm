@@ -410,8 +410,12 @@ sub archive_files {
 	
 	`mkdir -p $step_version_archive`;
 	if (-d $step_version_archive) {
-		`gzip -qf $step_version_archive/*.dump 2> /dev/null`;
-		`mv --backup=numbered $_ $step_version_archive 2> /dev/null` foreach qw/*.dump* *.err *.log *.out/;
+		if (glob("*.dump"))
+		{
+			`gzip -qf $step_version_archive/*.dump 2> /dev/null`;
+			`mv --backup=numbered $_ $step_version_archive ` foreach qw/*.dump*/;
+		}
+		`mv --backup=numbered $_ $step_version_archive ` foreach qw/*.err *.log *.out/;
 		symlink $step_archive, 'archive' unless (-e 'archive');
 	}
 	
@@ -485,6 +489,9 @@ sub _get_file_size_errors {
 		chomp $file_listing;
 		my ($file_name_pattern, $old_file_size, $verify_file_size) = split "\t", $file_listing;
 		my $file_name_pattern_with_version = $file_name_pattern;
+                #print "version is $version\n";
+                #print "file_name_pattern is $file_name_pattern\n";
+                #print "File listing is $file_listing\n";
 		$file_name_pattern_with_version =~ s/{version}/$version/g;
 		$verify_file_size //= 0;
 		
