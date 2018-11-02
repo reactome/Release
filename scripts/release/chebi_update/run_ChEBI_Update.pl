@@ -28,10 +28,10 @@ print "start_directory: ".$start_directory."\n";
 if (-e "data-release-pipeline") {
   $logger->info("data-release-pipeline exists, pulling");
   chdir "data-release-pipeline";
-  system("git pull");
+  if (!$data_release_pipeline_tag) {
+    system("git pull");
   # if there is a tag defined, we should check that out.
-  if ($data_release_pipeline_tag ne '')
-  {
+  } else {
     #chdir "data-release-pipeline";
     system("git checkout ".$data_release_pipeline_tag);
     #chdir "..";
