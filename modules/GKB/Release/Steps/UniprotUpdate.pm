@@ -30,7 +30,7 @@ override 'run_commands' => sub {
             ["wget -q -N ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz"],
             ["wget -q -O uniprot-reviewed:no.list.gz 'http://www.uniprot.org/uniprot/?query=reviewed%3Ano&compress=yes&format=list'"]
         ]
-    ); 
+    );
  
     my @args = ("-db", $gkcentral, "-host", $gkcentral_host, "-user", $user, "-pass", $pass);
     $self->cmd("Running uniprot perl script",[["perl uniprot_xml2sql_isoform.pl @args > uniprot.out 2> uniprot.err"]]);
