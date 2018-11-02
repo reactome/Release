@@ -13,7 +13,6 @@ use Data::Dumper;
 use feature qw/state/;
 use Getopt::Long;
 use List::MoreUtils qw/any/;
-use POSIX qw/ceil/;
 
 my($user, $host, $pass, $port, $db, $num_output_files, $output_dir);
 (@ARGV) || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -num_output_files number_of_output_files -output_dir dir_for_output_files\n";
@@ -272,7 +271,7 @@ sub get_split_hash_size {
    my $number_of_desired_hashes = shift;
    
    my $hash_size = $original_hash_size / $number_of_desired_hashes;
-   return ($hash_size == int($hash_size)) ? $hash_size : ceil($hash_size);
+   return ($hash_size == int($hash_size)) ? $hash_size : int($hash_size + 1);
 }
 
 sub fix_name {
