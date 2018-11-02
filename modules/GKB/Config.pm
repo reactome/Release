@@ -109,15 +109,12 @@ $WWW_USER = 'nobody';
 
 # Various paths
 ##################################################################################
-#$REACTOME_ROOT_DIR = '/usr/local/reactomes/Reactome/production';
-$REACTOME_ROOT_DIR = '/usr/local/gkb';
+$REACTOME_ROOT_DIR = '/usr/local/reactomes/Reactome/production';
 $GK_ROOT_DIR = '/usr/local/gkb';
 $GK_JAVA_CODEBASE = "/jars";
-#$GK_TMP_IMG_DIR = "$REACTOME_ROOT_DIR/GKB/website/html/img-tmp";
-$GK_TMP_IMG_DIR = "$REACTOME_ROOT_DIR/website/html/img-tmp";
+$GK_TMP_IMG_DIR = "$REACTOME_ROOT_DIR/GKB/website/html/img-tmp";
 # Place for frontpage images 
-#$FRONTPAGE_IMG_DIR = "$REACTOME_ROOT_DIR/GKB/website/html/img-fp";
-$FRONTPAGE_IMG_DIR = "$REACTOME_ROOT_DIR/website/html/img-fp";
+$FRONTPAGE_IMG_DIR = "$REACTOME_ROOT_DIR/GKB/website/html/img-fp";
 $NEWS_FILE = "$GK_ROOT_DIR/website/html/news.html";
 $DB_BACKUP_DIR = "$GK_ROOT_DIR/database_backups";
 $GK_FETCH_SCRIPT = "/cgi-bin/instance2text.pl";
@@ -296,6 +293,7 @@ log4perl.appender.FullLog.create_at_logtime=1
 log4perl.appender.FullLog.mode=append
 log4perl.appender.FullLog.layout=PatternLayout
 log4perl.appender.FullLog.layout.ConversionPattern=%p %l %d - %m%n
+log4perl.appender.FullLog.utf8=1
 
 log4perl.appender.ErrorLog=Log::Log4perl::Appender::File
 log4perl.appender.ErrorLog.filename='.get_name().'.err
@@ -304,6 +302,7 @@ log4perl.appender.ErrorLog.mode=append
 log4perl.appender.ErrorLog.layout=PatternLayout
 log4perl.appender.ErrorLog.layout.ConversionPattern=%p %l %d - %m%n
 log4perl.appender.ErrorLog.Threshold = WARN
+log4perl.appender.ErrorLog.utf8=1
 ';
 
 $LOG_CONF = '
