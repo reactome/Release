@@ -14,7 +14,9 @@ use GKB::Utils_esther;
 
 use autodie;
 use Data::Dumper;
+use DateTime;
 use Getopt::Long;
+use IO::Uncompress::Gunzip qw/gunzip $GunzipError/;
 use List::MoreUtils qw/any notall none/;
 use Time::Piece;
 
@@ -42,8 +44,9 @@ my @temp = split(/\n/, `ls -1tr $update_dir/uniprot-reviewed*`);	# look for file
 die "Can't find $update_dir/uniprot-reviewed_no.list.gz\n" unless ($trembl_file);
 
 if ($trembl_file =~ /\.gz$/) {
-    system("gunzip -f $update_dir/$trembl_file");
-    $trembl_file =~ s/\.gz$//;
+    (my $unzipped_trembl_file = $trembl_file) =~ s/\.gz$//;
+    gunzip "$update_dir/$trembl_file" => "$update_dir/$unzipped_trembl_file" or die "Can't gunzip $trembl_file: $GunzipError\n";
+    $trembl_file = $unzipped_trembl_file;
 }
 
 # Download sprot file
@@ -52,16 +55,16 @@ if ($trembl_file =~ /\.gz$/) {
 die "Can't find $update_dir/uniprot_sprot.xml.gz\n" unless ($sprot_file);
 
 if ($sprot_file =~ /\.gz$/) {
-    system("gunzip -f $update_dir/$sprot_file");
-    $sprot_file =~ s/\.gz$//;
+    (my $unzipped_sprot_file = $sprot_file) =~ s/\.gz$//;
+    gunzip "$update_dir/$sprot_file" => "$update_dir/$unzipped_sprot_file" or die "Can't gunzip $sprot_file: $GunzipError\n";
+    $sprot_file = $unzipped_sprot_file;
 }
 
 # Prepare to update InstanceEdit
 # To be replaced by name and initials of a user who runs the update
 my $surname = 'Weiser';
 my $initial = 'JD';
-my $date    = `date \+\%F`;
-chomp $date;
+my $date = DateTime->now(time_zone => "local")->ymd();
 
 my $db_inst;
 unless (
@@ -573,7 +576,7 @@ open(my $duplicate_db_id_fh, '>', "$update_dir/duplicated_db_id.txt" );
 print "Deleting obsolete instances with no referers....\n";
 
 foreach my $sp_ac ( sort keys %reactome_gp ) {
-    if ( `grep -m 1 '$sp_ac' $update_dir/$trembl_file` ) {
+    if ( `grep -m 1 '^$sp_ac\$' $update_dir/$trembl_file` ) {
         print $trembl_fh "$sp_ac\n";
         delete( $reactome_gp{$sp_ac} );
     } else {
@@ -637,7 +640,7 @@ print "Preparing reports...\n";
 my %no_referrer = ();
 
 foreach ( sort keys %dup_db_id ) {
-    next if `grep -m 1 '$dup_db_id{$_}' $update_dir/$trembl_file`;
+    next if `grep -m 1 '^$dup_db_id{$_}\$' $update_dir/$trembl_file`;
     print $duplicate_db_id_fh "$dup_db_id{$_}\t$_\n";
 }
 close $duplicate_db_id_fh;
