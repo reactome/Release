@@ -7,3 +7,4 @@ archive
 *.bak
 log
 *.gz
+old_jars
