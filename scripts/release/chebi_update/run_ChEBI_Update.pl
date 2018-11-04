@@ -16,9 +16,9 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-my $data_release_pipeline_application_version = "1.0.0";
+my $data_release_pipeline_application_version = "1.1.0";
 my $data_release_pipeline_application = "chebi-update";
-my $data_release_pipeline_tag = "1.0.0";
+my $data_release_pipeline_tag = "chebi-update-1.1.0";
 my $data_release_pipeline_repository = "https://github.com/reactome/data-release-pipeline";
 my $resource_dir = "data-release-pipeline/".$data_release_pipeline_application."/src/main/resources/";
 my $start_directory = cwd(); # abs_path($0);
