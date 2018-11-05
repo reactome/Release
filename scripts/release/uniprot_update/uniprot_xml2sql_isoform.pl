@@ -910,13 +910,6 @@ sub updateinstance {
     my $values = shift;
     my $uniprot_entry = shift;
 
-    if (!$i->checksum->[0] || $i->checksum->[0] eq $values->{'checksum'}->[0] ) {
-        $i->isSequenceChanged("false");
-    } else {
-        $i->isSequenceChanged("true");
-        print $sequence_report_fh $i->db_id . " sequence has changed\n";
-    }
-
     my $changed = 0;
     foreach my $attribute (keys %{$values}) {
         my $new_values = [grep {defined} @{$values->{$attribute}}];
@@ -924,15 +917,19 @@ sub updateinstance {
             print "WARNING: No new values for $attribute on instance $i->{db_id} - skipping attribute update\n";
             next;
         }
+        
+        if (lc $attribute eq 'checksum' && update_attribute_is_sequence_changed($i, $new_values)) {
+            $changed = 1;
+        }
+        
+        if (lc $attribute eq 'chain') {
+            update_chain_log($i, $new_values);
+        }
 
         if (values_changed($i, $attribute, $new_values)) {
             $i->$attribute(@{$new_values});
             $changed = 1;
             #print "$uniprot_entry\n";
-        }
-        
-        if ($attribute eq 'Chain') {
-            update_chain_log($i, $new_values);
         }
     }
     $dba->update($i) if $changed;
@@ -1012,6 +1009,30 @@ sub update_chain_log {
             print "new chain added for " . $i->db_id . "\n";
         }
     }
+}
+
+sub update_attribute_is_sequence_changed {
+    my $instance = shift;
+    my $new_values = shift;
+    
+    my $old_checksum = $instance->checksum->[0];
+    my $new_checksum = $new_values->[0];
+    my $sequence_changed = is_sequence_changed($old_checksum, $new_checksum);
+    
+    if ($sequence_changed) {
+        print $sequence_report_fh $instance->db_id . " sequence has changed\n";
+    }
+    my $old_is_sequence_changed_value = $instance->isSequenceChanged->[0];
+    $instance->isSequenceChanged($sequence_changed ? "true" : "false");
+    
+    return $old_is_sequence_changed_value ne ($sequence_changed ? "true" : "false");
+}
+
+sub is_sequence_changed {
+    my $old_checksum = shift;
+    my $new_checksum = shift;
+    
+    return $old_checksum && $new_checksum && $old_checksum ne $new_checksum;
 }
 
 sub get_skip_list {
