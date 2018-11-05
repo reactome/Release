@@ -454,7 +454,11 @@ while (<$uniprot_records_fh>) {
             
             ## master sequence update finished
             
-            $values{'species'} ||= $sdi->species->[0]; #Inherit species instance (if not already specified) from isoform parent
+            
+            #Inherit species instance (if not already specified) from isoform parent
+            if (!(grep { defined } @{$values{'species'}})) {
+                $values{'species'}->[0] = $sdi->species->[0];
+            }
             foreach my $is_ac ( sort keys %isoids ) {    #isoforms update                
                 if ( $is_ac =~ /$ac/ ) {
                     my $isst = $dba->fetch_instance_by_attribute( 'ReferenceIsoform', [ [ 'variantIdentifier', [$is_ac] ] ] );
