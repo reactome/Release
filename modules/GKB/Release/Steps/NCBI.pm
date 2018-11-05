@@ -37,7 +37,7 @@ override 'run_commands' => sub {
 
     my $ncbipass = $self->user_input->{'ncbi_ftp_pass'}->{'response'};
     # Connect to ncbi and upload files
-    $self->cmd("Uploading NCBI files", [["perl uploadncbi.pl $ncbipass $version"]]);
+    $self->cmd("Uploading NCBI files", [["perl uploadncbi.pl -ftppass $ncbipass -version $version"]]);
     
     # Run hapmap and UCSC scripts
     $self->cmd("Running hapmap script", [["./1haprefseq.pl -user $user -pass $pass -db $db"]]);

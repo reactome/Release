@@ -1,1 +1,4 @@
 archive
+data-release-pipeline
+config.properties
+ebi-nexus-cert.crt
