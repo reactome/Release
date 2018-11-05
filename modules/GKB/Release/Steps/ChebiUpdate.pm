@@ -15,7 +15,7 @@ has '+mail' => ( default => sub {
 						'to' => 'curation',
 						'subject' => $self->name,
 						'body' => "",
-						'attachment' => $self->directory . "/chebi.wiki"
+						'attachment' => $self->directory . "./archive/$version/chebi_update_logs_R$version.tgz"
 					};
 				}
 );
@@ -25,7 +25,7 @@ override 'run_commands' => sub {
 	$self->cmd("Backing up database",[["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral > $gkcentral\_before_chebi_update.dump"]]);
     $self->cmd("Running ChEBI Update script",
     	[
- 			["perl run_ChEBI_Update.pl > improve_chebi_ids.out 2> improve_chebi_ids.err"]
+ 			["perl run_ChEBI_Update.pl $version  > improve_chebi_ids.out 2> improve_chebi_ids.err"]
     	]
  	);
 	$self->cmd("Backing up database",[["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral > $gkcentral\_after_chebi_update.dump"]]);
