@@ -906,7 +906,7 @@ sub updateinstance {
     my $values = shift;
     my $uniprot_entry = shift;
 
-    if (!$i->checksum->[0] || $i->checksum->[0] eq $values->{'checksum'} ) {
+    if (!$i->checksum->[0] || $i->checksum->[0] eq $values->{'checksum'}->[0] ) {
         $i->isSequenceChanged("false");
     } else {
         $i->isSequenceChanged("true");
