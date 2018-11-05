@@ -2,3 +2,5 @@ archive
 *.sh
 *.err 
 *.log
+*.txt
+*.csv

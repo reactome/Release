@@ -189,6 +189,8 @@ use File::stat;
 use List::MoreUtils qw/uniq all/;
 use Net::OpenSSH;
 
+use lib '/usr/local/gkb/modules';
+
 use GKB::Release::Utils;
 use GKB::Release::Config;
 
@@ -276,17 +278,31 @@ sub run {
 	
 	$self->run_commands($self->gkb);
 	
+	say "Running $self->{name} post-step tests...";
 	my @post_step_test_errors = $self->post_step_tests();
 	if (@post_step_test_errors) {
+		
+		# Let's write the errors to a file. That way, someone OTHER than the mail recipient can see them.
+		my $post_step_test_log = File::Spec->catfile($self->directory, 'post_step_test_errors.log');
+		open(my $post_step_test_fh, '>', $post_step_test_log);
+		binmode $post_step_test_fh, ":utf8";
+		print $post_step_test_fh join("\n", @post_step_test_errors);
+		close $post_step_test_fh;
+		say releaselog("ERRORS from $self->{name} post-step tests reported -- see $post_step_test_log");
+		
+		say "Errors from $self->{name} post-step tests -- sending e-mail";
 		$self->mail->{'body'} = "Errors Reported\n\n" . join("\n", @post_step_test_errors);
 		$self->mail->{'to'} = 'automation';
 	} else {
+		say "No errors from $self->{name} post-step tests";
 		$self->mail->{'body'} .= "\n\n" if $self->mail->{'body'};
 		$self->mail->{'body'} .= "$self->{name} step has completed successfully";
 	}
 	$self->mail_now();
 	
+	say releaselog("Archiving output, logs, dump files...");
 	$self->archive_files($version);
+
 }
 
 sub source_code_passes_tests {
@@ -394,8 +410,12 @@ sub archive_files {
 	
 	`mkdir -p $step_version_archive`;
 	if (-d $step_version_archive) {
-		`mv --backup=numbered $_ $step_version_archive 2>/dev/null` foreach qw/*.dump *.err *.log *.out/;
-		`gzip -qf *.dump* 2> /dev/null`;
+		if (glob("*.dump"))
+		{
+			`gzip -qf $step_version_archive/*.dump 2> /dev/null`;
+			`mv --backup=numbered $_ $step_version_archive ` foreach qw/*.dump*/;
+		}
+		`mv --backup=numbered $_ $step_version_archive ` foreach qw/*.err *.log *.out/;
 		symlink $step_archive, 'archive' unless (-e 'archive');
 	}
 	
@@ -545,8 +565,8 @@ sub _file_size_ok {
 sub _file_size_percent_change {
 	my $new_file_size = shift;
 	my $old_file_size = shift;
-	
-	return sprintf("%.2f", (($new_file_size - $old_file_size) / $old_file_size) * 100);
+	my $percent_diff = $old_file_size > 0 ? (($new_file_size - $old_file_size) / $old_file_size) * 100 : $new_file_size;
+	return sprintf("%.2f", $percent_diff  );
 }
 
 sub _get_sender_address {
@@ -598,7 +618,26 @@ sub _set_passwords {
 	
 	foreach my $passtype (@{$self->passwords}) {
 		my $passref = $passwords{$passtype};
-		$$passref = prompt("Enter your " . $passtype . " password: ", 1) unless $$passref;
+		if (!$$passref) {
+			my $attempts = 0;
+			my $MAX_ATTEMPTS = 3;
+			my $retry;
+			do {
+				$attempts += 1;
+				$retry = 0;
+				$$passref = prompt("Enter your " . $passtype . " password: ", 1);
+				my $confirmed_password = prompt("Confirm your $passtype password: ", 1);
+				if ($confirmed_password ne $$passref) {
+					$retry = 1; 
+					my $message = "$passtype passwords do not match";
+					if ($attempts < $MAX_ATTEMPTS) {
+                        print("$message -- please try again\n");
+                    } else {
+						die("$message -- aborting\n");
+					}
+				}
+			} while ($retry && $attempts < $MAX_ATTEMPTS);
+		}
 	}
 }
 

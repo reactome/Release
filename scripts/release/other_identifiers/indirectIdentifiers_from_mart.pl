@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use lib "/usr/local/reactomes/Reactome/development/GKB/modules";
+use lib "/usr/local/gkb/modules";
 
 use GKB::DBAdaptor;
 use GKB::Utils;

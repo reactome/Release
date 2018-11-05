@@ -1094,8 +1094,8 @@ sub hyperlinked_identifier {
 sub regulation_as_rows {
     my ($self) = @_;
     my $out = '';
-    if ($self->is_valid_reverse_attribute('regulatedEntity')) {
-	my $regulation = $self->reverse_attribute_value('regulatedEntity');
+    if ($self->is_valid_reverse_attribute('regulatedBy')) {
+	my $regulation = $self->reverse_attribute_value('regulatedBy');
 	@{$regulation} = grep {$_->Regulator->[0]} @{$regulation};
 	my @a = grep {$_->class eq 'Requirement'} @{$regulation};
 	if (@a) {
@@ -2991,6 +2991,34 @@ sub displayName {
     }
     return $self->Surname->[0] . ', ' . $self->Initial->[0];
 }
+
+
+package GKB::PrettyInstance::Drug;
+use vars qw(@ISA);
+use strict;
+use GKB::Config;
+@ISA = qw(GKB::PrettyInstance::PhysicalEntity);
+
+
+package GKB::PrettyInstance::ChemicalDrug;
+use vars qw(@ISA);
+use strict;
+use GKB::Config;
+@ISA = qw(GKB::PrettyInstance::Drug);
+
+
+package GKB::PrettyInstance::ProteinDrug;
+use vars qw(@ISA);
+use strict;
+use GKB::Config;
+@ISA = qw(GKB::PrettyInstance::Drug);
+
+
+package GKB::PrettyInstance::RNADrug;
+use vars qw(@ISA);
+use strict;
+use GKB::Config;
+@ISA = qw(GKB::PrettyInstance::Drug);
 
 
 package GKB::PrettyInstance::EntitySet;

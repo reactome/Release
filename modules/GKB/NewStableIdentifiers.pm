@@ -70,7 +70,6 @@ sub get_stable_id_QA_problems_as_hash {
     
     my %duplicate_stable_identifier_instances = get_identifier_to_multiple_stable_identifier_instances_map($dba);
     my %duplicate_old_stable_identifier_instances = get_old_identifier_to_multiple_stable_identifier_instances_map($dba);
-
     foreach my $stable_identifier_instance (@{get_all_stable_identifier_instances_reference($dba)}) {
         my @attached_instances = get_instances_attached_to_stable_identifier($stable_identifier_instance);
         if (scalar @attached_instances == 0) {
@@ -78,7 +77,7 @@ sub get_stable_id_QA_problems_as_hash {
         } elsif (scalar @attached_instances > 1) {
             push @{$qa_problems{'stable id has multiple referrers'}}, {'st_id_instance' => [$stable_identifier_instance], 'instance' => \@attached_instances};
         } else {
-            if (has_incorrect_stable_identifier($attached_instances[0])) {
+            if (is_instance_requiring_stable_identifier($attached_instances[0]) &&  !$attached_instances[0]->is_a('Regulation') && has_incorrect_stable_identifier($attached_instances[0])) {
                 push @{$qa_problems{'incorrect stable identifier'}}, {
                     'st_id_instance' => [$stable_identifier_instance],
                     'instance' => [$attached_instances[0]],
@@ -86,7 +85,7 @@ sub get_stable_id_QA_problems_as_hash {
                 };
             }            
         }
-        
+
         my $identifier = $stable_identifier_instance->identifier->[0]; 
         if (exists($duplicate_stable_identifier_instances{$identifier})) {
             push @{$qa_problems{'duplicate stable identifier instances'}},
@@ -103,22 +102,30 @@ sub get_stable_id_QA_problems_as_hash {
             push @{$qa_problems{'duplicate old stable identifier instances'}},
                 {'st_id_instance' => $duplicate_old_stable_identifier_instances{$old_identifier}, 'instance' => \@attached_instances, 'old_stable_identifier' => $old_identifier};
         }
+        
     }
-    
-    foreach my $instance (get_instances_requiring_stable_identifiers($dba)) {
-        if (is_missing_stable_identifier($instance)) {
-            push @{$qa_problems{'missing stable identifier'}}, {'st_id_instance' => [undef], 'instance' => [$instance]};
-        } elsif (has_multiple_stable_identifiers($instance)) {
-            push @{$qa_problems{'multiple stable identifiers'}}, {'st_id_instance' => \@{$instance->stableIdentifier}, 'instance' => [$instance]};
-        }
-    }
-
-    return %qa_problems;
+	foreach my $instance (get_instances_requiring_stable_identifiers($dba)) {
+		if (!$instance->is_a('Regulation'))
+		{
+			if (is_missing_stable_identifier($instance)) {
+				push @{$qa_problems{'missing stable identifier'}}, {'st_id_instance' => [undef], 'instance' => [$instance]};
+				if (scalar @{$qa_problems{'missing stable identifier'}} > 10)
+		        {
+		        	last;
+		        }
+			} elsif (has_multiple_stable_identifiers($instance)) {
+				push @{$qa_problems{'multiple stable identifiers'}}, {'st_id_instance' => \@{$instance->stableIdentifier}, 'instance' => [$instance]};
+			}
+		}
+	}
+	return %qa_problems;
 }
 
 sub get_correct_stable_identifier {
-    my $instance = shift;
-    return map {'R-' . get_instance_species_prefix($instance) . '-' . $_} get_correct_stable_identifier_numeric_component($instance);
+	my $instance = shift;
+	my $prefix = get_instance_species_prefix($instance);
+	$prefix = $prefix ? $prefix : '';
+	return map {'R-' . $prefix . '-' . $_} get_correct_stable_identifier_numeric_component($instance);
 }
 
 sub get_correct_stable_identifier_numeric_component {
@@ -142,12 +149,20 @@ sub stable_identifier_numeric_component_is_correct {
 }
 
 sub stable_identifier_species_prefix_is_correct {
-    my $instance = shift;
-    
-    my $stable_identifier_instance = $instance->stableIdentifier->[0];
-    return 0 unless $stable_identifier_instance;
-    
-    return get_instance_species_prefix($instance) eq get_stable_identifier_species_prefix($stable_identifier_instance);
+	my $instance = shift;
+
+	my $stable_identifier_instance = $instance->stableIdentifier->[0];
+	return 0 unless $stable_identifier_instance;
+	my $inst_species_prefix = get_instance_species_prefix($instance);
+	my $st_id_species_prefix = get_stable_identifier_species_prefix($stable_identifier_instance);
+	if ($inst_species_prefix && $st_id_species_prefix)
+	{
+		return $inst_species_prefix eq $st_id_species_prefix;
+	}
+	else
+	{
+		return undef;
+	}
 }
 
 sub get_instances_requiring_stable_identifiers {
@@ -197,13 +212,18 @@ sub get_instances_with_incorrect_stable_identifiers {
 }
 
 sub has_incorrect_stable_identifier {
-    my $instance = shift;
-    
-    if (!is_instance_requiring_stable_identifier($instance)) {
-        confess "'$instance' is not an instance requiring a stable identifier";
-    }
-    
-    return (!stable_identifier_numeric_component_is_correct($instance) || !stable_identifier_species_prefix_is_correct($instance));
+	my $instance = shift;
+	if (!is_instance_requiring_stable_identifier($instance)) {
+		# Changed "confess" to "logger->error" - I think this is happening because we've gone from allowing Stable IDs on Regulations to NOT allowing them.
+		# I'm not sure that breaking execution with "confess" is the best approach, but the error should still be logged, since the code 
+		# won't generate Stable IDs for Regulations in the future.
+		$logger->error( "Instance '".$instance->extended_displayName."' is not an instance requiring a stable identifier" );
+		# return "false" - instance shouldn't even have a stable identifier. If we return false, then something might try to correct the stable identifier.
+		# So we'll return "false" to indicate that all is OK with this instance.
+		return 0;
+	}
+
+	return (!stable_identifier_numeric_component_is_correct($instance) || !stable_identifier_species_prefix_is_correct($instance));
 }
 
 sub is_incorrect_old_stable_identifier {
@@ -338,19 +358,23 @@ sub get_stable_identifier_numeric_component {
 }
 
 sub get_instance_species_prefix {
-    my $instance = shift;
-    
-    if (!is_instance_requiring_stable_identifier($instance)) {
-        confess "$instance is not a database object requiring stable identifiers";
-    }
-    
-    if ($instance->is_a('PhysicalEntity')) {
-        return get_species_prefix_from_physical_entity($instance);
-    } elsif ($instance->is_a('Event')) {
-        return get_species_prefix_from_event($instance);
-    } elsif ($instance->is_a('Regulation')) {
-        return get_species_prefix_from_regulation($instance);
-    }
+	my $instance = shift;
+	if (!is_instance_requiring_stable_identifier($instance)) {
+		$logger->error( "Instance '".$instance->displayName."' is not a database object requiring stable identifiers" );
+		return undef;
+	}
+	else
+	{	
+		if ($instance->is_a('PhysicalEntity')) {
+			return get_species_prefix_from_physical_entity($instance);
+		} elsif ($instance->is_a('Event')) {
+			return get_species_prefix_from_event($instance);
+		}
+		else
+		{
+			$logger->error("Instance '".$instance."' is a ".$instance->class.", not a PhysicalEntity or Event.");
+		}
+	}
 }
 
 sub get_species_prefix_from_physical_entity {
@@ -385,84 +409,11 @@ sub get_species_prefix_from_event {
     }    
 }
 
-sub get_species_prefix_from_regulation {
-    my $instance = shift;
-    
-    my $regulated_entity = $instance->regulatedEntity->[0];
-    if ($regulated_entity && $regulated_entity->is_a('Event')) {
-        return get_species_prefix_from_event($regulated_entity);
-    } elsif ($regulated_entity && $regulated_entity->is_a('CatalystActivity')) {
-        if ($regulated_entity->physicalEntity->[0]) {
-            return get_species_prefix_from_physical_entity($regulated_entity->physicalEntity->[0]);
-        } else {
-            return 'NUL';
-        }
-    } else {
-        return 'NUL';
-    }    
-}
-
 sub get_prefix_from_species_instance {
     my $species_instance = shift;
     
-    return unless $species_instance && $species_instance->name->[0];
-    
-    if (get_preset_prefix_from_species_name($species_instance->name->[0])) {
-        return get_preset_prefix_from_species_name($species_instance->name->[0]);
-    }
-    
-    return get_prefix_from_species_name($species_instance->name->[0]);
-}
-
-sub get_preset_prefix_from_species_name {
-    my $species_name = shift;
-    
-    my %species_to_prefix = (
-      "Crithidia fasciculata" => 'CFS',
-      "Corynephage beta" => 'CPH',
-      "Hepatitis A virus" => 'HAV',
-      "Hepatitis B virus" => 'HBV',
-      "Hepatitis C Virus" => 'HCV',
-      "Hepatitis D virus" => 'HDV',
-      "Human herpesvirus" => 'HER',
-      "Human papillomavirus" => 'HPV',
-      "Molluscum contagiosum virus" => 'MCV',
-      "Mycobacterium tuberculosis" => 'MTU',
-      "Neisseria meningitidis" => 'NME',
-      "Influenza A virus" => 'FLU',
-      "Human immunodeficiency virus" => 'HIV',
-      "Rotavirus" => 'ROT',
-      "Sendai virus" => 'SEV',
-      "Sindbis virus" => 'SIV',
-      "Bacteria" => 'BAC',
-      "Viruses" => 'VIR'
-    );
-    
-    foreach my $species (keys %species_to_prefix) {
-        return $species_to_prefix{$species} if $species_name =~ /^$species/i;
-    }
-}
-
-sub get_prefix_from_species_name {
-    my $species_name = shift;
-    
-    my $logger = get_logger(__PACKAGE__);
-    
-    my ($first_letter_of_genus, $first_two_letters_of_species);
-    eval {
-        ($first_letter_of_genus, $first_two_letters_of_species) = $species_name =~ /(\w).*? (\w{2}).*?/;
-    };
-    if ($@) {
-        confess $@;
-    }
-    
-    
-    if (!$first_letter_of_genus || !$first_two_letters_of_species) {    
-        $logger->warn("Unable to get prefix for species " . $species_name);
-        return '';
-    }
-    
-    return uc($first_letter_of_genus . $first_two_letters_of_species);
+    return unless $species_instance && $species_instance->abbreviation->[0];
+    return $species_instance->abbreviation->[0];
 }
 
 sub get_all_entities {
@@ -493,7 +444,7 @@ sub is_instance_requiring_stable_identifier {
 }
 
 sub get_classes_requiring_stable_identifiers {
-    return ('PhysicalEntity', 'Event', 'Regulation');
+    return ('PhysicalEntity', 'Event');
 }
 
 1;

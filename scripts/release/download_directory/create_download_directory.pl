@@ -184,32 +184,12 @@ $logger->info("opt_sp=$opt_sp\n");
 # log files foo_script.err, foo_script.out
 my @cmds = (
     [
-     "ensembl to pathway map",
-     1,
-     0,
-     "perl ensembl2pathway.pl $opt_user, $opt_pass ${opt_db}_dn $opt_r",
-    ],
-
-    [
      "database_dumps",
      1,
      0,
      "mkdir $release_nr/databases",
      "mysqldump --opt $mysqldump_db_options | gzip -c > $release_nr/databases/gk_current.sql.gz",
      "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
-     "mysqldump --opt $mysqldump_wordpress_db_options  > $release_nr/databases/gk_wordpress.sql",
-     "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
-     # Next we need to sanitize the WordPress dump. So we will restore it to a temporary database, sanitzie it to remove user's names and passwords,
-     # and then dump *that* as the final database.
-     "mysql  -u $opt_user -h $opt_host  -p$opt_pass -P $opt_port -e 'CREATE DATABASE tmp_wordpress IF NOT EXISTS' ",
-     "mysql --opt $mysqldump_tmp_wordpress_db_options < $release_nr/databases/gk_wordpress.sql",
-     # execute the sanitize script
-     "mysql --opt $mysqldump_tmp_wordpress_db_options < ./sanitize_wordpress.sql",
-     # remove the original dump file
-     "rm $release_nr/databases/gk_wordpress.sql",
-     # dump the sanitized database to a file
-     "mysqldump --opt $mysqldump_tmp_wordpress_db_options | gzip -c >  $release_nr/databases/gk_wordpress.sql.gz",
-     "mysql  -u $opt_user -h $opt_host  -p$opt_pass -P $opt_port -e 'DROP DATABASE tmp_wordpress IF EXISTS' "
     ],
 
     [
@@ -218,22 +198,6 @@ my @cmds = (
      0,
      "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' > $release_nr/$species_file_stem.sbml",
      "gzip $release_nr/$species_file_stem.sbml",
-    ],
-
-    [
-     "SBGN_dumper",
-     1,
-     0,
-     "mkdir -p $release_nr/$sbgn_output_dir",
-     "perl SBGN_dumper.pl $reactome_db_options -sp '$sbml2_species' -output_dir $sbgn_output_dir",
-     "tar -cvf - $sbgn_output_dir/*.sbgn | gzip -c > $release_nr/$species_file_stem.sbgn.tar.gz",
-    ],
-
-    [
-    "psicquic_indexers",
-     1,
-     1,
-     "perl psicquic_indexers.pl -release $release_nr"
     ],
 
     [

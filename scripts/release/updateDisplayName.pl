@@ -46,13 +46,15 @@ my $instance_edit = GKB::Utils_esther::create_instance_edit( $dba, $surname, $in
 
 my $ar = $dba->fetch_instance(-CLASS => $opt_class);
 
+print "New Display Name\tOld Display Name\n";
 foreach my $i (@{$ar}) {
     $i->inflate();
-    my $display_name = $i->attribute_value("_displayName")->[0];
+
+    my $old_display_name = $i->attribute_value("_displayName")->[0];
     $i->namedInstance; # display name updated here
-    next if $display_name eq $i->displayName;
+    next if $old_display_name eq $i->displayName;
     
-    print $i->extended_displayName, "\n";
+    print $i->extended_displayName, "\t", $old_display_name, "\n";
     
     $i->Modified( @{ $i->Modified } );
     $i->add_attribute_value( 'modified', $instance_edit );

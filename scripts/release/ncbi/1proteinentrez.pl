@@ -48,13 +48,15 @@ my $protein_count;
 foreach my $entrez_gene_instance (@{$entrez_gene_instances}){
     #get only RefPepSeq with Entrez Gene as refGene
     my $protein_class = &GKB::Utils::get_reference_protein_class($dba);
-    my $rgps = $dba->fetch_instance($protein_class,[['referenceGene',[$entrez_gene_instance->db_id]]]);
+    my @rgps =
+        grep { $_->referenceDatabase->[0]->displayName =~ /UniProt/ }
+        @{$dba->fetch_instance($protein_class,[['referenceGene',[$entrez_gene_instance->db_id]]])};
 
-    foreach my $rgp (@{$rgps}){	
-	print $protein_reactome_out "query:\t".$rgp->Identifier->[0]."\t[pacc]\n";
-	print $prot_gene_out $rgp->Identifier->[0]."\t".
-			     $entrez_gene_instance->Identifier->[0]."\n";
-	$protein_count++;
+    foreach my $rgp (@rgps){
+        print $protein_reactome_out "query:\t".$rgp->Identifier->[0]."\t[pacc]\n";
+        print $prot_gene_out $rgp->Identifier->[0]."\t".
+              $entrez_gene_instance->Identifier->[0]."\n";
+        $protein_count++;
     }
 }
 
