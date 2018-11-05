@@ -410,8 +410,12 @@ sub archive_files {
 	
 	`mkdir -p $step_version_archive`;
 	if (-d $step_version_archive) {
-		`gzip -qf $step_version_archive/*.dump 2> /dev/null`;
-		`mv --backup=numbered $_ $step_version_archive 2> /dev/null` foreach qw/*.dump* *.err *.log *.out/;
+		if (glob("*.dump"))
+		{
+			`gzip -qf $step_version_archive/*.dump 2> /dev/null`;
+			`mv --backup=numbered $_ $step_version_archive ` foreach qw/*.dump*/;
+		}
+		`mv --backup=numbered $_ $step_version_archive ` foreach qw/*.err *.log *.out/;
 		symlink $step_archive, 'archive' unless (-e 'archive');
 	}
 	
