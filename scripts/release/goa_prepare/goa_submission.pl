@@ -20,7 +20,11 @@ use Carp;
 use Data::Dumper;
 use File::Slurp;
 use Getopt::Long;
-use List::MoreUtils qw/any/;
+use List::MoreUtils qw/all any/;
+
+use Log::Log4perl qw/get_logger/;
+Log::Log4perl->init(\$LOG_CONF);
+my $logger = get_logger(__PACKAGE__);
 
 # Database connection
 our($user, $host, $pass, $port, $db, $date, $debug, $help);
@@ -282,7 +286,7 @@ sub get_proteins_from_catalyst_activity {
     if (@errors) {
         print(join("\n", @errors) . "\n");
         return;
-    }          
+    }
     
     if ($catalyst_activity->activeUnit->[0] && $ontology_letter eq 'F') {
         return get_proteins_from_physical_entity($catalyst_activity->activeUnit->[0]);
@@ -293,38 +297,50 @@ sub get_proteins_from_catalyst_activity {
 sub check_catalyst_activity {
     my $catalyst_activity = shift;
     
-    my @errors;
-    
     my $catalyst_id = $catalyst_activity->displayName . ' (' . $catalyst_activity->db_id . ')';
     my $physical_entity = $catalyst_activity->physicalEntity->[0];
     my @active_units = @{$catalyst_activity->activeUnit};
-    
-    push @errors, "No physical entity: $catalyst_id" if (!$physical_entity);
-    push @errors, "No compartment for physical entity: $catalyst_id" unless $physical_entity && $physical_entity->compartment->[0];
-    push @errors, "No active unit and physical entity is a complex with multiple, distinct proteins: $catalyst_id"
-        if (scalar @active_units == 0) && (scalar @{find_rps($catalyst_activity)} > 1) && $physical_entity->is_a('Complex');
-    push @errors, "Active unit is a complex: $catalyst_id" if (scalar @active_units == 1) && $active_units[0]->is_a('Complex');
-    push @errors, "Multiple active units: $catalyst_id" if scalar @active_units > 1;
+
+    my @errors;    
+    push @errors, "No physical entity: $catalyst_id"
+        if (!$physical_entity);
+    push @errors, "No compartment for physical entity: $catalyst_id"
+        unless $physical_entity && $physical_entity->compartment->[0];
+    push @errors, "No active unit and physical entity is a complex, set or, polymer: $catalyst_id"
+        if (scalar @active_units == 0) && ($physical_entity->is_a('Complex') || $physical_entity->is_a('EntitySet') || $physical_entity->is_a('Polymer'));
+    push @errors, "Active unit is a complex or polymer: $catalyst_id"
+        if (scalar @active_units == 1) && ($active_units[0]->is_a('Complex') || $active_units[0]->is_a('Polymer'));
+    push @errors, "Active unit is a set with non-EWAS members: $catalyst_id"
+        if (scalar @active_units == 1) && $active_units[0]->is("EntitySet") && set_has_only_EWAS_members($active_units[0]);
+    push @errors, "Multiple active units: $catalyst_id"
+        if scalar @active_units > 1;
     
     return @errors;
 }
 
 sub get_proteins_from_physical_entity {
     my $physical_entity = shift;
-
     return unless $physical_entity;
-        
-    my @proteins = ();
-    if ($physical_entity->is_a('Complex') || $physical_entity->is_a('EntitySet') || $physical_entity->is_a('Polymer')) {
-        foreach my $sub_element (@{$physical_entity->hasMember}, @{$physical_entity->hasComponent}, @{$physical_entity->repeatedUnit}) {
-            my @proteins_from_complex_or_set_or_polymer = get_proteins_from_physical_entity($sub_element);
-            push @proteins, @proteins_from_complex_or_set_or_polymer if @proteins_from_complex_or_set_or_polymer;
-        }        
-    } elsif ($physical_entity->is_a('EntityWithAccessionedSequence')) { # If the entity is a protein
-            push @proteins, $physical_entity;
+    
+    my $logger = get_logger(__PACKAGE__);
+    if ($physical_entity->is_a('Complex') || $physical_entity->is_a('Polymer')) {
+        $logger->warn($physical_entity->displayName . ' (' . $physical_entity->db_id . ') is a complex or polymer and should not be used to obtain protein annotations');
+        return;
     }
-
+    
+    my @proteins = ();
+    if ($physical_entity->is_a('EntitySet') && set_has_only_EWAS_members($physical_entity)) {
+        push @proteins, @{$physical_entity->hasMember};
+    } elsif ($physical_entity->is_a('EntityWithAccessionedSequence')) { # If the entity is a protein
+        push @proteins, $physical_entity;
+    }
     return @proteins;
+}
+
+sub set_has_only_EWAS_members {
+    my $entity_set = shift;
+    
+    return all { $_->is_a('EntityWithAccessionedSequence') } @{$entity_set->hasMember};
 }
 
 sub get_taxon {
