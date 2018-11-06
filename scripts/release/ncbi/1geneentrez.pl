@@ -167,10 +167,11 @@ sub generate_XML_gene_file {
             next;
          }
 
+         my @pathways_with_uniprot_id = grep { is_top_level_pathway ($_) } @events_with_uniprot_id;
          foreach my $ncbi_gene_id (@ncbi_gene_ids) {
             print $gene_xml_fh get_link_XML($ncbi_gene_id, "&entity.base.url;", $uniprot_id, "Reactome Entity:$uniprot_id");
    
-            foreach my $pathway (grep { is_top_level_pathway($_) } @events_with_uniprot_id) {
+            foreach my $pathway (@pathways_with_uniprot_id) {
                print $gene_xml_fh get_link_XML($ncbi_gene_id, "&event.base.url;", $pathway->stableIdentifier->[0]->identifier->[0], "Reactome Event:".fix_name($pathway->Name->[0]));
             }
          }
