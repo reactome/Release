@@ -162,7 +162,7 @@ our %hosts = (
 our %maillist = (
     'internal' => 'internal@reactome.org',
     'curation' => 'lmatthews.nyumc@gmail.com',
-    'automation' => 'joel.weiser@oicr.on.ca',
+    'automation' => 'solomon.shorser@oicr.on.ca, justin.cook@oicr.on.ca, joel.weiser@oicr.on.ca',
     'outreach' => 'robin.haw@oicr.on.ca'
 );
 

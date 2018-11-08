@@ -71,14 +71,13 @@ sub get_stable_id_QA_problems_as_hash {
     my %duplicate_stable_identifier_instances = get_identifier_to_multiple_stable_identifier_instances_map($dba);
     my %duplicate_old_stable_identifier_instances = get_old_identifier_to_multiple_stable_identifier_instances_map($dba);
     foreach my $stable_identifier_instance (@{get_all_stable_identifier_instances_reference($dba)}) {
-
         my @attached_instances = get_instances_attached_to_stable_identifier($stable_identifier_instance);
         if (scalar @attached_instances == 0) {
             push @{$qa_problems{'stable id with no referrers'}}, {'st_id_instance' => [$stable_identifier_instance],  'instance' => [undef]};
         } elsif (scalar @attached_instances > 1) {
             push @{$qa_problems{'stable id has multiple referrers'}}, {'st_id_instance' => [$stable_identifier_instance], 'instance' => \@attached_instances};
         } else {
-            if (!$attached_instances[0]->is_a('Regulation') && has_incorrect_stable_identifier($attached_instances[0])) {
+            if (is_instance_requiring_stable_identifier($attached_instances[0]) &&  !$attached_instances[0]->is_a('Regulation') && has_incorrect_stable_identifier($attached_instances[0])) {
                 push @{$qa_problems{'incorrect stable identifier'}}, {
                     'st_id_instance' => [$stable_identifier_instance],
                     'instance' => [$attached_instances[0]],
@@ -219,6 +218,9 @@ sub has_incorrect_stable_identifier {
 		# I'm not sure that breaking execution with "confess" is the best approach, but the error should still be logged, since the code 
 		# won't generate Stable IDs for Regulations in the future.
 		$logger->error( "Instance '".$instance->extended_displayName."' is not an instance requiring a stable identifier" );
+		# return "false" - instance shouldn't even have a stable identifier. If we return false, then something might try to correct the stable identifier.
+		# So we'll return "false" to indicate that all is OK with this instance.
+		return 0;
 	}
 
 	return (!stable_identifier_numeric_component_is_correct($instance) || !stable_identifier_species_prefix_is_correct($instance));
@@ -357,15 +359,21 @@ sub get_stable_identifier_numeric_component {
 
 sub get_instance_species_prefix {
 	my $instance = shift;
-
 	if (!is_instance_requiring_stable_identifier($instance)) {
-		$logger->error( "Instance '".$instance->extended_displayName."' is not a database object requiring stable identifiers" );
+		$logger->error( "Instance '".$instance->displayName."' is not a database object requiring stable identifiers" );
+		return undef;
 	}
-
-	if ($instance->is_a('PhysicalEntity')) {
-		return get_species_prefix_from_physical_entity($instance);
-	} elsif ($instance->is_a('Event')) {
-		return get_species_prefix_from_event($instance);
+	else
+	{	
+		if ($instance->is_a('PhysicalEntity')) {
+			return get_species_prefix_from_physical_entity($instance);
+		} elsif ($instance->is_a('Event')) {
+			return get_species_prefix_from_event($instance);
+		}
+		else
+		{
+			$logger->error("Instance '".$instance."' is a ".$instance->class.", not a PhysicalEntity or Event.");
+		}
 	}
 }
 

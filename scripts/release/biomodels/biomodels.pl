@@ -27,21 +27,21 @@ sub run {
     &GetOptions("user:s", "pass:s", "host:s", "port:i", "db:s");
 
     $opt_db || die $usage;
-    
+
     $opt_user ||= $GK_DB_USER;
     $opt_pass ||= $GK_DB_PASS;
     $opt_host ||= $GK_DB_HOST;
     $opt_port ||= $GK_DB_PORT;
 
     my $present_dir = getcwd();
-    
+
     my $tmp_dir = "/tmp";
     clone_biomodels_repository_from_github($tmp_dir);
-	
-	my $link_name = 'biomodels';
+
+    my $link_name = 'biomodels';
     create_symbolic_link_to_biomodels_repository($tmp_dir, $link_name);
 	
-	my $biomodels_jar_file = 'biomodels.jar';
+    my $biomodels_jar_file = 'biomodels.jar';
     create_biomodels_jar_file($biomodels_jar_file, $link_name);
 
     my $xml_tarball = download_biomodels_package();
@@ -57,41 +57,37 @@ sub run {
 
 sub clone_biomodels_repository_from_github {
     my $directory = shift;
-    
+
     my $present_dir = getcwd();
     chdir $directory;
-    system "rm -fr Models2Pathways" if -d "Models2Pathways";
+    system "rm -fr biomodels-mapper" if -d "biomodels-mapper";
     my $return_value = system("git clone https://github.com/reactome/biomodels-mapper.git");
     chdir $present_dir;
-    
+
     return ($return_value == 0);
 }
 
 sub create_symbolic_link_to_biomodels_repository {
-    my $directory = shift;
+	my $directory = shift;
 	my $link_name = shift;
-	
-	return (system("rm -rf $link_name; ln -s $directory/Models2Pathways $link_name") == 0);
+	return (system("rm -rf $link_name; ln -s $directory/biomodels-mapper $link_name") == 0);
 }
 
 sub create_biomodels_jar_file {
 	my $jar_file = shift;
 	my $symbolic_link_to_repository = shift;
-	
-    my $logger = get_logger(__PACKAGE__);
-    
+	my $logger = get_logger(__PACKAGE__);
 	my $present_dir = getcwd();
 	chdir "$symbolic_link_to_repository";
-    system("mvn clean package");
-    my $return_value = copy("target/Models2Pathways-1.0-jar-with-dependencies.jar", "$present_dir/$jar_file");
-    chdir $present_dir;
-	
+	system("mvn clean package");
+	my $return_value = copy("target/biomodels-mapper-1.0.jar", "$present_dir/$jar_file");
+	chdir $present_dir;
 	return ($return_value == 0);
 }
 
 sub download_biomodels_package {    
     my $logger = get_logger(__PACKAGE__);
-    
+
     my $url = 'ftp.ebi.ac.uk';
     my $ftp = Net::FTP->new($url, Passive => 0) or $logger->error_die("Could not create FTP object for $url");
     $ftp->login() or $logger->error_die("Could not login to $url: " . $ftp->message);
@@ -111,15 +107,15 @@ sub download_biomodels_package {
 sub execute_biomodels_jar_file {
     my $biomodels_jar_file = shift;
     my $xml_tarball = shift;
-    
+
     my $present_dir = getcwd();
-    
+
     system("java -jar -Xms5120M -Xmx10240M $biomodels_jar_file -o $present_dir/ -r /usr/local/reactomes/Reactome/production/AnalysisService/input/analysis.bin -b $xml_tarball/curated");
 }
 
 sub remove_biomodels_repository {
     my $directory = shift;
-    
+
     chdir $directory;
-    return (system("rm -rf Models2Pathways") == 0);
+    return (system("rm -rf biomodels-mapper") == 0);
 }

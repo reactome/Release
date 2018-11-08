@@ -20,8 +20,8 @@ up of values of 2 (or more) attributes. So this is a class (well, a set of class
 handles the naming procedure.
 
 The base class tries to handle most of the cases:
-- if the instance has attribute 'name' the 1st value of this is used
-- if the isntance has attribute 'assertionText' the 1st value of this is used
+- if the instance has attribute 'name', the 1st value of this is used
+- if the instance has attribute 'assertionText', the 1st value of this is used
 - 1st values of defining attributes are concatenated with space.
 
 However, if none of them is good you just have to write a method 'set_displayName' for
@@ -431,18 +431,25 @@ sub set_displayName {
     }    
     $self->attribute_value('_displayName',
 		$self->Name->[0] .
-		($self->Compartment->[0] ? ' [' . get_compartment_names(@{$self->Compartment}) . ']' : '')
+		($self->Compartment->[0] ? ' [' . $self->Compartment->[0]->displayName . ']' : '')
 	);
     return $self->attribute_value('_displayName')->[0];
 }
 
-sub get_compartment_names {
-    my @compartments = @_;
-    
-    my @compartment_names = grep { defined } map{$_->displayName} @compartments;
-    
-    return @compartment_names ? join(', ', @compartment_names) : '';
-}
+package GKB::NamedInstance::ChemicalDrug;
+use vars qw(@ISA);
+use strict;
+@ISA = qw(GKB::NamedInstance::PhysicalEntity);
+
+package GKB::NamedInstance::ProteinDrug;
+use vars qw(@ISA);
+use strict;
+@ISA = qw(GKB::NamedInstance::PhysicalEntity);
+
+package GKB::NamedInstance::RNADrug;
+use vars qw(@ISA);
+use strict;
+@ISA = qw(GKB::NamedInstance::PhysicalEntity);
 
 package GKB::NamedInstance::SimpleEntity;
 use vars qw(@ISA);
