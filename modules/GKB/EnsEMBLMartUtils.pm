@@ -52,6 +52,7 @@ sub get_species_results {
             };
             
             if ($species_results =~ /ERROR/) {
+                $logger->warn("Problem obtaining results - got $species_results");
                 $species_results = capture_stdout {
                     system(get_wget_query($species_mart_url, $species_dataset, $species_virtual_schema, 'uniprot_swissprot_accession'));
                 };
@@ -87,12 +88,12 @@ sub get_xml_query {
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Query>
 <Query  virtualSchemaName = "$virtual_schema" formatter = "TSV" header = "0" uniqueRows = "0" count = "" completionStamp = "1">	
-	<Dataset name = "$dataset" interface = "default" >
-		<Attribute name = "ensembl_gene_id" />
-		<Attribute name = "$swissprot_attribute_name" />
-		<Attribute name = "uniprotsptrembl" />
+    <Dataset name = "$dataset" interface = "default" >
+        <Attribute name = "ensembl_gene_id" />
+        <Attribute name = "$swissprot_attribute_name" />
+        <Attribute name = "uniprotsptrembl" />
         <Attribute name = "ensembl_peptide_id" />
-	</Dataset>
+    </Dataset>
 </Query>
 XML
 }
