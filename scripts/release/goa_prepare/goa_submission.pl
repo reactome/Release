@@ -311,7 +311,7 @@ sub check_catalyst_activity {
     push @errors, "Active unit is a complex or polymer: $catalyst_id"
         if (scalar @active_units == 1) && ($active_units[0]->is_a('Complex') || $active_units[0]->is_a('Polymer'));
     push @errors, "Active unit is a set with non-EWAS members: $catalyst_id"
-        if (scalar @active_units == 1) && $active_units[0]->is("EntitySet") && set_has_only_EWAS_members($active_units[0]);
+        if (scalar @active_units == 1) && $active_units[0]->is_a("EntitySet") && !set_has_only_EWAS_members($active_units[0]);
     push @errors, "Multiple active units: $catalyst_id"
         if scalar @active_units > 1;
     
@@ -340,6 +340,18 @@ sub get_proteins_from_physical_entity {
 sub set_has_only_EWAS_members {
     my $entity_set = shift;
     
+    my $logger = get_logger(__PACKAGE__);
+
+    if (!$entity_set->is_a("EntitySet")) {
+        $logger->error($entity_set->displayName . ' (' . $entity_set->db_id . ') is not an entity set');
+        return 0;
+    }
+
+    if ($entity_set->is_a("DefinedSet") && (scalar @{$entity_set->hasMember} == 0)) {
+        $logger->warn($entity_set->displayName . ' (' . $entity_set->db_id . ') has no members');
+        return 0;
+    }
+
     return all { $_->is_a('EntityWithAccessionedSequence') } @{$entity_set->hasMember};
 }
 
