@@ -184,20 +184,12 @@ $logger->info("opt_sp=$opt_sp\n");
 # log files foo_script.err, foo_script.out
 my @cmds = (
     [
-     "ensembl to pathway map",
-     1,
-     0,
-     "perl ensembl2pathway.pl $opt_user $opt_pass ${opt_db}_dn $opt_r",
-    ],
-
-    [
      "database_dumps",
      1,
      0,
      "mkdir $release_nr/databases",
      "mysqldump --opt $mysqldump_db_options | gzip -c > $release_nr/databases/gk_current.sql.gz",
      "mysqldump --opt $mysqldump_identifier_db_options | gzip -c > $release_nr/databases/gk_stable_ids.sql.gz",
-     "mysqldump --opt $mysqldump_dn_db_options | gzip -c > $release_nr/databases/gk_current_dn.sql.gz",
     ],
 
     [
@@ -206,15 +198,6 @@ my @cmds = (
      0,
      "perl SBML_dumper.pl $reactome_db_options -sp '$opt_sp' > $release_nr/$species_file_stem.sbml",
      "gzip $release_nr/$species_file_stem.sbml",
-    ],
-
-    [
-     "SBGN_dumper",
-     1,
-     0,
-     "mkdir -p $release_nr/$sbgn_output_dir",
-     "perl SBGN_dumper.pl $reactome_db_options -sp '$sbml2_species' -output_dir $sbgn_output_dir",
-     "tar -cvf - $sbgn_output_dir/*.sbgn | gzip -c > $release_nr/$species_file_stem.sbgn.tar.gz",
     ],
 
     [

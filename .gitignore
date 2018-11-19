@@ -8,8 +8,8 @@ tmp/
 news.html
 inference_stats.png
 website/html/img-tmp
-**/biomart-perl/*
 modules/GKB/biomart/*
+**/biomart-perl/*
 .atomignore
 container/logs*
 container/mysql_databases*
@@ -27,3 +27,4 @@ release-config.pm
 logs
 mysql_databases
 container/stable_id_mapping.stored_data
+slicingToolinnodb

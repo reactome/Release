@@ -1,1 +1,3 @@
 httpd.conf
+*.bkup
+*.bak
