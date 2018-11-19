@@ -1,7 +1,7 @@
 # build as: `docker build -t reactome-release .`
 # TODO: Upgrade to Ubuntu 18.04
-FROM ubuntu:16.04
-RUN apt-get update && apt-get install -y apt-utils software-properties-common python-software-properties
+FROM ubuntu:18.04
+RUN apt-get update && apt-get install -y apt-utils software-properties-common   # python-software-properties
 RUN add-apt-repository ppa:webupd8team/java && apt-get update
 RUN echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
 RUN apt-get install -y \
