@@ -57,8 +57,6 @@ try {
     if ($protein_class eq 'ReferencePeptideSequence') {
         $dba->ontology->class_attribute_check('ReferencePeptideSequence', 'variantIdentifier'); #the variantIdentifier attribute should not be a defining attribute in the orthology procedure as otherwise newly created other species instances (which don't have variantIdentifiers) are not recognised as duplicates of existing other species entries (which may or may not have variantIdentifiers) - this issue was only relevant in the old data model where isoforms were represented in the same class as "non-isoforms", this has been addressed by the new data model that distinguishes ReferenceGeneProducts and ReferenceIsoforms
     }
-    $dba->ontology->class_attribute_check('OpenSet', 'name', 'any'); #until ReferenceEntities are all sorted out (ideally the referencEntity attribute would define an OpenSet, but we currently don't have ReferenceEntities for all OpenSets, so the name attribute needs to be defining attribute)
-    $dba->ontology->class_attribute_check('OpenSet', 'species', 'all'); 
     $dba->ontology->class_attribute_check('BlackBoxEvent', 'species', 'all');
     $dba->ontology->class_attribute_check('DefinedSet', 'species', 'all'); #hack for now as there are DefinedSets with species, but with members that don't have species
     
