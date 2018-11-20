@@ -347,7 +347,7 @@ sub set_has_only_EWAS_members {
         return 0;
     }
 
-    if ($entity_set->is_a("DefinedSet") && (scalar @{$entity_set->hasMember} == 0)) {
+    if (scalar @{$entity_set->hasMember} == 0) {
         $logger->warn($entity_set->displayName . ' (' . $entity_set->db_id . ') has no members');
         return 0;
     }
