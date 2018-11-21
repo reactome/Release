@@ -253,30 +253,12 @@ use strict;
 sub set_displayName {
     my ($self) = @_;
     $self->debug && print join("\t", (caller(0))[3], $self,  $self->class, ($self->db_id || '')), "\n";
-    my $activityName = 'unknown';
-    my $str = ' activity';
-    if (my $a = $self->Activity->[0]) {
-	$activityName = $a->displayName;
-    }
-    if ($activityName =~ /activity/) {
-	$str = "";
-    }
-#    $self->attribute_value('_displayName',
-#			   ($self->attribute_value('activity')->[0]
-#			    ? $self->Activity->[0]->displayName
-#			    : 'unknown activity' ).
-#			   " of " .
-#			   (($self->PhysicalEntity->[0])
-#			    ? $self->PhysicalEntity->[0]->displayName
-#			    : "unknown entity")
-#			   );
-    $self->attribute_value('_displayName',
-			   $activityName . $str .
-			   " of " .
-			   (($self->PhysicalEntity->[0])
-			    ? $self->PhysicalEntity->[0]->displayName
-			    : "unknown entity")
-			   );
+    my $activity_name = $self->Activity->[0] ? $self->Activity->[0]->displayName : 'unknown';
+    $activity_name .= ' activity ' if $activityName !~ /activity/;
+    my $physical_entity_display_name =
+        $self->PhysicalEntity->[0] ? $self->PhysicalEntity->[0]->displayName : "unknown entity";
+
+    $self->attribute_value('_displayName', "$activity_name of $physical_entity_display_name");
     return $self->attribute_value('_displayName')->[0];
 }
 
