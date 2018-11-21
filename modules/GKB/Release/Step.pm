@@ -188,6 +188,7 @@ use File::Spec;
 use File::stat;
 use List::MoreUtils qw/uniq all/;
 use Net::OpenSSH;
+use Sys::Hostname::FQDN qw/fqdn/;
 
 use lib '/usr/local/gkb/modules';
 
@@ -237,9 +238,7 @@ has 'host' => (
 	isa => 'Str',
 	lazy => 1,
 	default => sub {
-		my $host = `hostname -f`;
-		chomp $host;
-		return $host;
+		return fqdn();
 	}
 );
 
@@ -436,12 +435,6 @@ sub mail_now {
     	To => $to,
     	Subject => $subject
     };
-	
-	unless ($params->{'attachment'}) {
-		use Mail::Sendmail;
-		$mail->{'Message'} = $body;
-		return sendmail(%{$mail});
-	}
 	
     return _add_body_and_attachment(
 		$mail,

@@ -44,7 +44,6 @@ my @options = (
     ['UncuratedProteins', GKB_DEV_ALIAS, "-creates a list of UniProt identifiers without EWAS referrers"]
 );
 
-
 my @choices;
 my @allchoices;
 
@@ -71,6 +70,7 @@ unless ($TEST_MODE) {
     $prevver = $version - 1;
 } else {
     print "REMINDER: You are in TEST MODE.  To enable normal operation, edit \$TEST_MODE in the GKB::Release::Config module and restart this script\n";
+    $user = 'jweiser';
 }
 set_version_for_config_variables($version);
 
@@ -105,4 +105,4 @@ for (my $i = 1; $i <= scalar @allchoices; $i++) {
 
 foreach my $instance (@instances) {
     $instance->run();
-}	
+}

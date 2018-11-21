@@ -83,20 +83,23 @@ use warnings;
 
 use base 'Exporter';
 
+use DateTime;
+use English qw( -no_match_vars );
 use File::Basename;
+use Win32;
 
 # Created by: Joel Weiser (joel.weiser@oicr.on.ca for questions/comments)
 # Purpose: A module to set and export reactome release variables
 
-our $TEST_MODE = 0;
+our $TEST_MODE = 1;
 
 # Set user variables
-chomp(our $user = `whoami`);
+our $user = $OSNAME eq "MSWin32" ? Win32::LoginName : getpwuid($<);
 
 our $pass; # mysql password
 our $sudo; # Sudo password
 
-chomp(our $date = `date "+%Y%m%d"`); # Today's date
+our $date = DateTime->now(time_zone => "local")->ymd(''); # Today's date
 
 our $version;
 our $prevver;
@@ -111,14 +114,14 @@ our $gkcentral_host = "reactomecurator.oicr.on.ca";
 if ($TEST_MODE) {
     $stable_id_db = "test_stable_identifiers",
     $gkcentral = "test_gk_central";
-    $gkcentral_host = "reactomerelease.oicr.on.ca";
+    $gkcentral_host = "reactomecurator.oicr.on.ca";
     $version = 999;
     $prevver = 57;
 }
 
 # Set directory paths
-our $base_dir = "/usr/local/reactomes/Reactome/production";
-our $gkbdev = "/usr/local/gkb";
+our $base_dir = "C:/Users/jweiser/Documents/GitHub/Release";
+our $gkbdev = "$base_dir";
 our $scripts = "$gkbdev/scripts";
 our $release = "$scripts/release";
 our $website = "$base_dir/Website";
