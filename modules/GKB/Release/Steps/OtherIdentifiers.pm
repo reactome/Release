@@ -26,7 +26,7 @@ override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
     
     $self->cmd("Backing up database",[["mysqldump -u$user -p$pass $db > $db.before_other_identifiers.dump"]]);
-    $self->cmd("Adding other identifiers",[["perl add_identifiers_from_mart.pl -user $user -pass $pass -db $db > other_identifiers.$version.out"]]);
+    $self->cmd("Adding other identifiers",[["perl add_identifiers_from_mart.pl -user $user -pass $pass -db $db > other_identifiers.$version.out 2> other_identifiers.$version.err"]]);
     $self->cmd("Backing up database",[["mysqldump -u$user -p$pass $db > $db.after_other_identifiers.dump"]]);
 };
 
