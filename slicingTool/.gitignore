@@ -1,6 +1,6 @@
 *.txt
 *.prop
-*.sql
+*.sql*
 *.log
 archive
 *.protected
