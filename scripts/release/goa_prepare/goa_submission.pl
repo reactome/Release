@@ -4,7 +4,9 @@ use warnings;
 use feature qw/state/;
 
 #This script should be run over a release database as it requires stable identifiers to be present
-#This script produces a tab delimited file for submission to goa - including Reactome annotations for cellular components, molecular function and biological process.
+#This script produces a tab delimited file for submission to goa - including Reactome annotations for cellular 
+#components, molecular function and biological process.
+#Currently (December 2018), we are using GAF version 2.1 - http://www.geneontology.org/page/go-annotation-file-gaf-format-21
 
 #NOTE: after running this script, run goa_submission_stats.pl to produce stats
 
@@ -20,11 +22,12 @@ use Carp;
 use Data::Dumper;
 use File::Slurp;
 use Getopt::Long;
-use List::MoreUtils qw/all any/;
+# Functions which check a list to see if all/any values return true for a specified condition
+use List::MoreUtils qw/all any/; 
 use Readonly;
 
 use Log::Log4perl qw/get_logger/;
-Log::Log4perl->init(\$LOG_CONF);
+Log::Log4perl->init(\$LOG_CONF); # Configuration file from GKB::Config for logging
 
 # Database connection
 our($user, $host, $pass, $port, $db, $date, $debug, $help);
