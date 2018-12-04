@@ -21,6 +21,7 @@ use Data::Dumper;
 use File::Slurp;
 use Getopt::Long;
 use List::MoreUtils qw/all any/;
+use Readonly;
 
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
@@ -43,6 +44,10 @@ my @rows; # Holds assertions to be printed
 my %date; # Holds dates of assertions so they are not lost when the assertion is manipulated
 my (@manual, @electronic); # Holds events that are manually/electronically inferred
 my (%source, %elec_source); # Holds the events that infer the manual/experimental events
+
+Readonly my $MOLECULAR_FUNCTION => 'F';
+Readonly my $CELLULAR_COMPONENT => 'C';
+Readonly my $BIOLOGICAL_PROCESS => 'P';
 
 # Each event in Reactome is processed
 foreach my $reaction_like_event (@{get_dba($parameters)->fetch_instance(-CLASS => 'ReactionlikeEvent')}) {
@@ -127,7 +132,7 @@ sub get_row {
 
 sub process_cellular_compartments {
     my $event = shift;
-    my $ontology_letter = 'C';
+    my $ontology_letter = $CELLULAR_COMPONENT;
     
     my %seen;
     my @compartment_rows;
@@ -140,7 +145,7 @@ sub process_cellular_compartments {
 
 sub process_molecular_functions {
     my $event = shift;
-    my $ontology_letter = 'F';
+    my $ontology_letter = $MOLECULAR_FUNCTION;
     
     my %seen;
     my @molecular_function_rows;
@@ -157,7 +162,7 @@ sub process_molecular_functions {
 
 sub process_biological_processes {
     my $event = shift;
-    my $ontology_letter = 'P';
+    my $ontology_letter = $BIOLOGICAL_PROCESS;
     
     my %seen;
     my @biological_process_rows;
@@ -238,7 +243,7 @@ sub get_rows_from_protein {
     return unless $taxon;
     return if any {$_ == $taxon} get_microbial_species_to_exclude();
     
-    my @references = get_prot_reference($catalyst_activity) if $ontology_letter eq 'F';
+    my @references = $ontology_letter eq $MOLECULAR_FUNCTION ? get_prot_reference($catalyst_activity) : ();
     my @rows;
     foreach my $go (@{$go_accessions}) {
         my $accession = $go->{'accession'};
@@ -262,9 +267,9 @@ sub get_instance_with_accession {
     
     my $ontology_letter = $parameters->{'ontology_letter'};
     
-    return $ontology_letter eq 'F' ? $parameters->{'catalyst_activity'} :
-           $ontology_letter eq 'P' ? $parameters->{'event'} :
-           $ontology_letter eq 'C' ? $protein :
+    return $ontology_letter eq $MOLECULAR_FUNCTION ? $parameters->{'catalyst_activity'} :
+           $ontology_letter eq $BIOLOGICAL_PROCESS ? $parameters->{'event'} :
+           $ontology_letter eq $CELLULAR_COMPONENT ? $protein :
            undef;
 }
 
@@ -289,13 +294,13 @@ sub get_proteins_from_catalyst_activity {
         return;
     }
     
-    if ($ontology_letter eq 'F') {
+    if ($ontology_letter eq $MOLECULAR_FUNCTION) {
         return get_proteins_for_molecular_function(
             $catalyst_activity->activeUnit->[0] ?
             $catalyst_activity->activeUnit->[0] :
             $catalyst_activity->physicalEntity->[0]
         );
-    } elsif ($ontology_letter eq 'P') {
+    } elsif ($ontology_letter eq $BIOLOGICAL_PROCESS) {
         return get_proteins_for_biological_process($catalyst_activity->physicalEntity->[0]);
     }
 }
@@ -309,12 +314,13 @@ sub check_catalyst_activity {
     my @active_units = @{$catalyst_activity->activeUnit};
 
     my @reasons_to_exclude;
-    push @reasons_to_exclude, "No physical entity: $catalyst_id"
-        if (!$physical_entity);
-    push @reasons_to_exclude, "No compartment for physical entity: $catalyst_id"
-        unless $physical_entity && $physical_entity->compartment->[0];
+    if (!$physical_entity) {
+        push @reasons_to_exclude, "No physical entity: $catalyst_id";
+    } elsif (!$physical_entity->compartment->[0]) {
+        push @reasons_to_exclude, "No compartment for physical entity: $catalyst_id";
+    }
 
-    if ($ontology_letter eq 'F') {
+    if ($ontology_letter eq $MOLECULAR_FUNCTION) {
         push @reasons_to_exclude, "No active unit and physical entity is a complex, set or, polymer: $catalyst_id"
             if (scalar @active_units == 0) && ($physical_entity->is_a('Complex') || $physical_entity->is_a('EntitySet') || $physical_entity->is_a('Polymer'));
         push @reasons_to_exclude, "Active unit is a complex or polymer: $catalyst_id"
@@ -401,7 +407,7 @@ sub get_taxon {
 
 sub get_annotation_dispatch_table {
     return {
-        'C' => {
+        $CELLULAR_COMPONENT => {
             'GO_accession' => sub {
                 my $protein = shift;
 
@@ -429,7 +435,7 @@ sub get_annotation_dispatch_table {
                 return 'TAS';
             }
         },
-        'F' => {
+        $MOLECULAR_FUNCTION => {
             'GO_accession' => sub {
                 my $cat = shift;
 
@@ -448,7 +454,7 @@ sub get_annotation_dispatch_table {
                 return get_evidence_code($references);
             }
         },
-        'P' => {
+        $BIOLOGICAL_PROCESS => {
             'GO_accession' => sub {
                 my $event = shift;
                 return unless $event;
