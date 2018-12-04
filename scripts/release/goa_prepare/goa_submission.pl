@@ -324,14 +324,18 @@ sub check_catalyst_activity {
     }
 
     if ($ontology_letter eq $MOLECULAR_FUNCTION) {
-        push @reasons_to_exclude, "No active unit and physical entity is a complex, set or, polymer: $catalyst_id"
-            if (scalar @active_units == 0) && ($physical_entity->is_a('Complex') || $physical_entity->is_a('EntitySet') || $physical_entity->is_a('Polymer'));
-        push @reasons_to_exclude, "Active unit is a complex or polymer: $catalyst_id"
-            if (scalar @active_units == 1) && ($active_units[0]->is_a('Complex') || $active_units[0]->is_a('Polymer'));
-        push @reasons_to_exclude, "Active unit is a set with non-EWAS members: $catalyst_id"
-            if (scalar @active_units == 1) && $active_units[0]->is_a("EntitySet") && !set_has_only_EWAS_members($active_units[0]);
-        push @reasons_to_exclude, "Multiple active units: $catalyst_id"
-            if scalar @active_units > 1;
+        if ((scalar @active_units == 0) && (any {$physical_entity->is_a($_)} qw/Complex EntitySet Polymer/)) {
+            push @reasons_to_exclude, "No active unit and physical entity is a complex, set or, polymer: $catalyst_id";
+        } elsif (scalar @active_units == 1) {
+            if ($active_units[0]->is_a('Complex') || $active_units[0]->is_a('Polymer')) {
+                push @reasons_to_exclude, "Active unit is a complex or polymer: $catalyst_id";
+            } 
+            if ($active_units[0]->is_a("EntitySet") && !set_has_only_EWAS_members($active_units[0])) {
+                push @reasons_to_exclude, "Active unit is a set with non-EWAS members: $catalyst_id";
+            }
+        } elsif (scalar @active_units > 1) {
+            push @reasons_to_exclude, "Multiple active units: $catalyst_id";
+        }
     }
     
     return @reasons_to_exclude;
@@ -371,7 +375,9 @@ sub get_proteins_from_physical_entity {
     if ($physical_entity->is_a('Complex') || $physical_entity->is_a('EntitySet') || $physical_entity->is_a('Polymer')) {
         foreach my $sub_element (@{$physical_entity->hasMember}, @{$physical_entity->hasComponent}, @{$physical_entity->repeatedUnit}) {
             my @proteins_from_complex_or_set_or_polymer = get_proteins_from_physical_entity($sub_element);
-            push @proteins, @proteins_from_complex_or_set_or_polymer if @proteins_from_complex_or_set_or_polymer;
+            if (@proteins_from_complex_or_set_or_polymer) {
+                push @proteins, @proteins_from_complex_or_set_or_polymer;
+            }
         }
     } elsif ($physical_entity->is_a('EntityWithAccessionedSequence')) { # If the entity is a protein
         push @proteins, $physical_entity;
