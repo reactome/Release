@@ -2,11 +2,15 @@
 use strict;
 use warnings;
 
+# This script will produce a report of catalyst activities whose physical entity or active unit(s)
+# is a non EWAS set (i.e. a set whose members are not exclusively EWAS instances)
+
 use lib "/usr/local/gkb/modules";
 use GKB::CommonUtils;
 
 use autodie;
 use Getopt::Long;
+# Functions which check a list to see if any/notall values return true for a specified condition
 use List::MoreUtils qw/any notall/;
 
 # Database connection
