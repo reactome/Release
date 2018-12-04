@@ -24,7 +24,6 @@ use List::MoreUtils qw/all any/;
 
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
-my $logger = get_logger(__PACKAGE__);
 
 # Database connection
 our($user, $host, $pass, $port, $db, $date, $debug, $help);
