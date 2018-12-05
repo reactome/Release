@@ -130,7 +130,7 @@ sub process_input {
     my $reaction = shift;
     my $input = shift;
     
-    record(get_label($input), get_label($reaction), 1, AND);
+    record($input, $reaction, 1, AND);
 }
 
 sub process_output {
@@ -152,7 +152,7 @@ sub process_output {
     
     my $reaction_to_output_logic = scalar @reactions_to_output > 1 ? OR : AND;
     foreach my $reaction (@reactions_to_output) {
-        record(get_label($reaction), get_label($output), 1, $reaction_to_output_logic);
+        record($reaction, $output, 1, $reaction_to_output_logic);
     }
 }
 
@@ -161,8 +161,8 @@ sub process_if_set_complex_or_polymer {
     my $action = shift //
         sub {
                 record(
-                    get_label($_[0]),
-                    get_label($_[1]),
+                    $_[0],
+                    $_[1],
                     $_[2],
                     $_[3]
                 );
@@ -198,7 +198,7 @@ sub process_regulations {
             process_if_set_complex_or_polymer($active_regulator_component) unless is_a_reaction_output($active_regulator_component, $all_reactions);
 
             my $value = $regulation->is_a('NegativeRegulation') ? -1 : 1;
-            record(get_label($active_regulator_component), get_label($reaction), $value, AND);
+            record($active_regulator_component, $reaction, $value, AND);
         }
     }
 }
@@ -216,11 +216,16 @@ sub record {
     my $child = shift;
     my $value = shift;
     my $logic = shift;
+
+    my $parent_id = $parent->db_id;
+    my $child_id = $child->db_id;
+
+    $parent_id =~ s/\s+/_/g;
+    $child_id =~ s/\s+/_/g;
     
-    $parent =~ s/\s+/_/g;
-    $child =~ s/\s+/_/g;
-    
-    $interactions{$child}{$logic}{$parent}{$value}++;
+    if (!on_skip_list($parent, $child)) {
+        $interactions{$child_id}{$logic}{$parent_id}{$value}++;
+    }
 }
 
 sub get_label {
@@ -230,14 +235,13 @@ sub get_label {
     confess unless $instance;
     
     return $label_cache{$instance->db_id} if $label_cache{$instance->db_id};
-        
+
     my $label = $instance->referenceEntity->[0] ?
     $instance->displayName . '_' . $instance->referenceEntity->[0]->db_id :
     $instance->db_id;
     
     $label .= "_RLE" if $instance->is_a('ReactionlikeEvent');
     $label =~ s/[ \,+]/_/g;
-    $label = $instance->db_id;  
     $label_cache{$instance->db_id} = $label;
    
     return $label;
@@ -247,10 +251,10 @@ sub get_dba {
     my $parameters = shift // {};
     
     return GKB::DBAdaptor->new (
-    -user => $GKB::Config::GK_DB_USER,
-    -pass => $GKB::Config::GK_DB_PASS,
-    -host => $parameters->{'host'} || $GKB::Config::GK_DB_HOST,
-    -dbname => $parameters->{'db'} || $GKB::Config::GK_DB_NAME
+        -user => $GKB::Config::GK_DB_USER,
+        -pass => $GKB::Config::GK_DB_PASS,
+        -host => $parameters->{'host'} || $GKB::Config::GK_DB_HOST,
+        -dbname => $parameters->{'db'} || $GKB::Config::GK_DB_NAME
     );
 }
 
@@ -350,7 +354,6 @@ sub report_interactions {
             foreach my $parent (keys %{$interactions{$child}{$logic}}) {
                 foreach my $value (keys %{$interactions{$child}{$logic}{$parent}}) {
                     next if $seen{$child}{$logic}{$parent}{$value}++;
-                    next if on_skip_list($parent, $child);
                     print $fh join("\t", $parent, $child, $value, $logic) . "\n";
                 }
             }
@@ -378,17 +381,29 @@ sub on_skip_list {
     my $parent = shift;
     my $child = shift;
     
-    my $parent_id = get_id_from_label($parent);
-    my $child_id = get_id_from_label($child);
+    my $parent_id = get_id_from_label(get_label($parent));
+    my $child_id = get_id_from_label(get_label($child));
     
     Readonly my $ANYTHING => -1;
     my %skip_list = (
-        5693589 => [1638790],
-        5686410 => [1638790],
-        5649637 => [3785704],
-        1369085 => [$ANYTHING]
+        5693589 => [1638790], # "D-loop dissociation and strand annealing" to "Sister Chromosomal Arm"
+        5686410 => [1638790], # "BLM mediates dissolution of double Holliday junction" to "Sister Chromosomal Arm"
+        5649637 => [3785704], # "dsDNA" to "DSB inducing agents induce double strand DNA breaks"
+        1369085 => [$ANYTHING] # "PRLR ligands:p-S349- PRLR:JAK2 dimer:SCF beta-TrCP complex" to any other entity
     );
-    my @small_molecules = qw/114729 114735 114736 114754 114749 114728 114925 5316201 114733 114732 114964/;
+    my @small_molecules = (
+        114729, # ATP (ChEBI:15422)
+        114735, # ADP (ChEBI:16761)
+        114736, # phosphate(3-) (ChEBI:18367)
+        114754, # GTP (ChEBI:15996)
+        114749, # GDP (ChEBI:17552)
+        114728, # water (ChEBI:15377)
+        114925, # disphosphoric acid (ChEBI:29888)
+        5316201, # phosphate (unknown:unknown)
+        114733, # NADP(+) (ChEBI:18009)
+        114732, # NADPH (ChEBI:16474)
+        114964, # 2'-deoxyribonucleoside triphosphate (ChEBI:16516)
+    );
     $skip_list{$ANYTHING} = [@small_molecules];
     $skip_list{$_} = [$ANYTHING] foreach @small_molecules;
     
