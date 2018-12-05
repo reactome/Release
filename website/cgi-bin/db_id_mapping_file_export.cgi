@@ -192,7 +192,7 @@ sub generate_mapping_file {
         remove_mapping_file($database);
         make_path($output_dir_path, { chmod => 0775 });
 
-        system("perl $mapping_file_script -host $data_host -db $database -output_dir $output_dir_path -output_file $output_file_name 2>> " . get_path_to_mapping_file($database) . ".err");
+        system("perl $mapping_file_script -host localhost -db $database -output_dir $output_dir_path -output_file $output_file_name 2>> " . get_path_to_mapping_file($database) . ".err");
         
         # TODO: At this point after the system call, exclusive file lock to mapping file removed when db_id_to_name_mapping.pl
         # script terminates (even on interruption/failure) and creates a race condition in that other processes of this script
@@ -343,7 +343,7 @@ sub get_recipient_address {
 sub get_data_host {
     my $cgi = shift || confess "No CGI object provided\n";
 
-    my ($data_host) = $cgi->param('data_host') =~ /(reactome.*?(\.org|\.oicr\.on\.ca))$/;
+    my ($data_host) = $cgi->param('data_host') =~ /(production|curator)/;
     if (!$data_host) {
         confess $cgi->param('data_host') . " is not an authorized data host\n";
     }
@@ -354,7 +354,7 @@ sub get_data_host {
 sub get_database {
     my $data_host = shift || confess "No data host provided\n";
 
-    return $data_host eq 'reactomecurator.oicr.on.ca' ? 'gk_central' : 'gk_current';
+    return $data_host eq 'curator' ? 'gk_central' : 'gk_current';
 }
 
 sub error_clean_up {

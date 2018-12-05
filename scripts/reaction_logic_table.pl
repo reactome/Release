@@ -43,7 +43,7 @@ unless ($selected_pathways && $selected_pathways =~ /^all$|^\d+(,\d+)*$/) {
 
 
 my @reactions;
-$host ||= 'reactome.org';
+$host ||= 'localhost';
 $db ||= 'gk_current';
 my $dba = get_dba({'host' => $host, 'db' => $db});
 

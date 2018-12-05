@@ -27,7 +27,7 @@ if ($help) {
     exit;
 }
 
-$host ||= 'reactome.org';
+$host ||= 'localhost';
 $db ||= 'gk_current';
 $output_dir ||= '.';
 if (!$output_file) {

@@ -22,10 +22,10 @@ my $cgi = CGI->new;
 
 my @db_ids = get_db_ids($cgi);
 my $join_pathways = $cgi->param('join_pathways') && $cgi->param('join_pathways') eq 'checked' ? 1 : 0;
-my $data_host = get_data_host($cgi);
-my $database = $data_host eq 'reactomecurator.oicr.on.ca' ? 'gk_central' : 'gk_current';
+my $database_server = 'reactomecurator.oicr.on.ca';
+my $database = get_data_host($cgi) eq 'curator' ? 'gk_central' : 'gk_current';
 
-my $dba = get_dba($database, $data_host);
+my $dba = get_dba($database, $database_server);
 my @problem_ids = grep {
     my $instance = $dba->fetch_instance_by_db_id($_)->[0];
     !$instance || !$instance->is_a('Pathway');
@@ -59,7 +59,7 @@ foreach my $id (@ids) {
     flock($generate_fh, LOCK_EX);
     if ((!-e $file_full_path) || ($database eq 'gk_central' && (!file_is_recent($file_full_path)))) {
         my $error = capture_stderr {
-            system("perl $scripts/reaction_logic_table.pl -host $data_host -db $database -pathways $id -output_dir $output_dir -output_file $file_name");
+            system("perl $scripts/reaction_logic_table.pl -host $database_server -db $database -pathways $id -output_dir $output_dir -output_file $file_name");
         };
         
         open(my $error_fh, '>', "$output_dir/$file_name.err");
@@ -98,7 +98,7 @@ sub get_db_ids {
 sub get_data_host {
     my $cgi = shift || confess "No CGI object provided\n";
 
-    my ($data_host) = $cgi->param('data_host') =~ /(reactome.*?(\.org|\.oicr\.on\.ca))$/;
+    my ($data_host) = $cgi->param('data_host') =~ /(production|curator)/;
     if (!$data_host) {
         confess $cgi->param('data_host') . " is not an authorized data host\n";
     }
