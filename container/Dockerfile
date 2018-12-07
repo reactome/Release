@@ -1,7 +1,6 @@
 # build as: `docker build -t reactome-release .`
-# TODO: Upgrade to Ubuntu 18.04
 FROM ubuntu:18.04
-RUN apt-get update && apt-get install -y apt-utils software-properties-common   # python-software-properties
+RUN apt-get update && apt-get install -y apt-utils software-properties-common
 RUN add-apt-repository ppa:webupd8team/java && apt-get update
 RUN echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | debconf-set-selections
 RUN apt-get install -y \
@@ -24,11 +23,12 @@ RUN apt-get install -y \
     libgraph-perl libconfig-tiny-perl libconfig-inifiles-perl libhash-merge-perl \
     t-coffee clustalw libunicode-casefold-perl librtf-document-perl librtf-writer-perl \
     libmail-sendmail-perl libswitch-perl libnet-sftp-foreign-perl curl maven ftp \
-    vim mysql-client iputils-ping sendmail oracle-java8-installer oracle-java8-set-default mlocate
+    vim mysql-client iputils-ping sendmail oracle-java8-installer oracle-java8-set-default mlocate \
+    libdata-table-perl  libfile-homedir-perl libspreadsheet-writeexcel-perl libcgi-session-perl \
+    libbio-perl-perl libmail-sendmail-perl
 
-RUN cpanm --notest Bio::Perl Data::CTable File::HomeDir Spreadsheet::WriteExcel::Big \
-    CGI::Session::Driver::db_file CPANPLUS::Backend Ace Test::Base Bio::Root::TestObject \
-    RTF::Tokenizer Parallel::Loops Mail::Sendmail
+RUN cpanm --notest Data::CTable CPANPLUS::Backend Ace Test::Base Bio::Root::TestObject \
+    RTF::Tokenizer Parallel::Loops
 
 # Some perl scripts expect GKB to be in /root/GKB/modules so we need to symlink there.
 RUN mkdir -p /root/GKB && ln -s /usr/local/gkb/modules /root/GKB/modules
@@ -63,7 +63,7 @@ RUN rm -rf /tmp/gitroot
 COPY ./Secrets.pm /usr/local/gkb/modules/GKB/Secrets.pm
 WORKDIR /release/scripts
 
-ARG ENSEMBL_API_VERSION=90
+ARG ENSEMBL_API_VERSION=94
 WORKDIR /usr/local/gkb/modules
 RUN perl install_ensembl_api.pl $ENSEMBL_API_VERSION
 
