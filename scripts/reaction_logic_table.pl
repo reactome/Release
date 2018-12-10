@@ -100,7 +100,7 @@ sub add_reaction_to_logic_table {
     
     my @inputs = @{$reaction->input};
     my @outputs = @{$reaction->output};
-    my @catalysts =  grep { defined } map($_->physicalEntity->[0], @{$reaction->catalystActivity});
+    my @catalysts = grep { defined } map($_->physicalEntity->[0], @{$reaction->catalystActivity});
     
     process_inputs($reaction, $all_reactions, \@inputs);
     process_inputs($reaction, $all_reactions, \@catalysts);
@@ -111,8 +111,7 @@ sub add_reaction_to_logic_table {
         process_output($output, $all_reactions);
     }
     
-    my @regulations = @{$reaction->reverse_attribute_value('regulatedBy')};
-    process_regulations($reaction, $all_reactions, \@regulations);
+    process_regulations($reaction, $all_reactions, $reaction->regulatedBy);
 }
 
 sub process_inputs {
