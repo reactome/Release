@@ -29,20 +29,15 @@ override 'run_commands' => sub {
     $self->cmd("Populating gk_current with $db.dump",
         [["perl restore_database.pl @args >> gk_current.out 2>> gk_current.err"]]
     );
-    
-    $self->cmd("Backing up gk_current hosted on $dev_server",
-        [["mysqldump -u$user -p$pass -h $dev_server gk_current > gk_current.dev.dump"]]
-    );
-    $self->cmd("Populating gk_current on $dev_server with $db.dump",
-        [["perl restore_database.pl @args -host $dev_server >> gk_current.out 2>> gk_current.err"]]
-    );
 
-    $self->cmd("Backing up gk_current hosted on $curator_server",
-        [["mysqldump -u$user -p$pass -h $curator_server gk_current > gk_current.curator.dump"]]
-    );
-    $self->cmd("Populating gk_current on $curator_server with $db.dump",
-        [["perl restore_database.pl @args -host $curator_server >> gk_current.out 2>> gk_current.err"]]
-    );
+    foreach my $remote_server ($dev_server, $curator_server) {
+        $self->cmd("Backing up gk_current hosted on $remote_server",
+            [["mysqldump -u$user -p$pass -h $remote_server gk_current > gk_current.$remote_server.dump"]]
+        );
+        $self->cmd("Populating gk_current on $remote_server with $db.dump",
+            [["perl restore_database.pl @args -host $remote_server >> gk_current.out 2>> gk_current.err"]]
+        );
+    }
 };
 
 override 'post_step_tests' => sub {
