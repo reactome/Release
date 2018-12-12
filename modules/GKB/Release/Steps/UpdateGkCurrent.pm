@@ -41,7 +41,7 @@ override 'run_commands' => sub {
         [["mysqldump -u$user -p$pass -h $curator_server gk_current > gk_current.curator.dump"]]
     );
     $self->cmd("Populating gk_current on $curator_server with $db.dump",
-        [["perl restore_database.pl @args -host $dev_server >> gk_current.out 2>> gk_current.err"]]
+        [["perl restore_database.pl @args -host $curator_server >> gk_current.out 2>> gk_current.err"]]
     );
 };
 
