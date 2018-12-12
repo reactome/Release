@@ -263,7 +263,7 @@ sub run {
 	return unless source_code_passes_tests();
 	
 	say "Running $self->{name} pre-step tests...";
-	my @pre_step_test_errors = $self->pre_step_tests();
+	my @pre_step_test_errors = grep { defined } $self->pre_step_tests();
 	if (@pre_step_test_errors) {
 		my $pre_step_test_log = File::Spec->catfile($self->directory, 'pre_step_test_errors.log');
 		open(my $pre_step_test_fh, '>', $pre_step_test_log);
@@ -279,9 +279,8 @@ sub run {
 	$self->run_commands($self->gkb);
 	
 	say "Running $self->{name} post-step tests...";
-	my @post_step_test_errors = $self->post_step_tests();
+	my @post_step_test_errors = grep { defined } $self->post_step_tests();
 	if (@post_step_test_errors) {
-		
 		# Let's write the errors to a file. That way, someone OTHER than the mail recipient can see them.
 		my $post_step_test_log = File::Spec->catfile($self->directory, 'post_step_test_errors.log');
 		open(my $post_step_test_fh, '>', $post_step_test_log);
