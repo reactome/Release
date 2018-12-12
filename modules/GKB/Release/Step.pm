@@ -318,7 +318,7 @@ sub pre_step_tests {
 	my $self = shift;
 	
 	say releaselog("No pre-step tests to be run for " . $self->name);
-	return;
+	return ();
 }
 
 sub post_step_tests {
