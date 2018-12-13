@@ -1,5 +1,7 @@
 package GKB::Release::Steps::UpdateGkCurrent;
 
+use feature qw/say/;
+
 use GKB::Release::Utils;
 use GKB::Release::Config;
 
@@ -39,6 +41,8 @@ override 'run_commands' => sub {
             $self->cmd("Populating gk_current on $remote_server with $db.dump",
                 [["perl restore_database.pl @args -host $remote_server >> gk_current.out 2>> gk_current.err"]]
             );
+        } else {
+            say releaselog("Not attempting to update gk_current on $remote_server -- back up failed");
         }
     }
 };
