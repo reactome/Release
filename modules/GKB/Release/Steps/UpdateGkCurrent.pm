@@ -42,7 +42,7 @@ override 'run_commands' => sub {
                 [["perl restore_database.pl @args -host $remote_server >> gk_current.out 2>> gk_current.err"]]
             );
         } else {
-            say releaselog("Not attempting to update gk_current on $remote_server -- back up failed");
+            say releaselog("Not attempting to update gk_current on $remote_server -- back up failed\n");
         }
     }
 };
