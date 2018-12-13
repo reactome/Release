@@ -21,12 +21,12 @@ say "Instance edit id is " . $instance_edit->db_id;
 my $extracellular_space_go_instance = $dba->fetch_instance_by_db_id('982')->[0];
 my $extracellular_region_go_instance = $dba->fetch_instance_by_db_id('984')->[0];
 
-my @physical_entities = grep {
-    $_->compartment->[0] && any {$_->db_id == 982} @{$_->compartment} 
-} @{$dba->fetch_instance(-CLASS => 'PhysicalEntity')};
+my @instances = grep {
+    any {$_->db_id == $extracellular_space_go_instance->db_id} @{$_->compartment} 
+} map { @{$dba->fetch_instance(-CLASS => $_)} } ('PhysicalEntity', 'Event');
 
-foreach my $physical_entity (@physical_entities) {
-    my @compartments = @{$physical_entity->compartment};
+foreach my $instance (@instances) {
+    my @compartments = @{$instance->compartment};
     my $has_extracellular_region = any { $_->db_id == $extracellular_region_go_instance->db_id } @compartments;
     my @repaired_compartments = map { 
         if ($_->db_id == $extracellular_space_go_instance->db_id) {
@@ -36,15 +36,15 @@ foreach my $physical_entity (@physical_entities) {
         }
     } @compartments;
 
-    say get_name_and_id($physical_entity) . ': ' . join("\t", map{ $_->displayName} @compartments);
+    say get_name_and_id($instance) . ': ' . join("\t", map{ $_->displayName} @compartments);
 
-    $physical_entity->compartment(@repaired_compartments);
-    $physical_entity->namedInstance;
-    $physical_entity->modified(@{$physical_entity->modified});
-    $physical_entity->add_attribute_value('modified', $instance_edit);
-    $dba->update_attribute($physical_entity, 'compartment');
-    $dba->update_attribute($physical_entity, '_displayName');
-    $dba->update_attribute($physical_entity, 'modified');
+    $instance->compartment(@repaired_compartments);
+    $instance->namedInstance;
+    $instance->modified(@{$instance->modified});
+    $instance->add_attribute_value('modified', $instance_edit);
+    $dba->update_attribute($instance, 'compartment');
+    $dba->update_attribute($instance, '_displayName');
+    $dba->update_attribute($instance, 'modified');
 
-    say get_name_and_id($physical_entity) . ': ' . join("\t", map{ $_->displayName} @{$physical_entity->compartment});
+    say get_name_and_id($instance) . ': ' . join("\t", map{ $_->displayName} @{$instance->compartment});
 }
