@@ -31,12 +31,15 @@ override 'run_commands' => sub {
     );
 
     foreach my $remote_server ($dev_server, $curator_server) {
-        $self->cmd("Backing up gk_current hosted on $remote_server",
+        my @backup_results = $self->cmd("Backing up gk_current hosted on $remote_server",
             [["mysqldump -u$user -p$pass -h $remote_server gk_current > gk_current.$remote_server.dump"]]
         );
-        $self->cmd("Populating gk_current on $remote_server with $db.dump",
-            [["perl restore_database.pl @args -host $remote_server >> gk_current.out 2>> gk_current.err"]]
-        );
+
+        if ($backup_results[0]->{'exit_code'} == 0) {
+            $self->cmd("Populating gk_current on $remote_server with $db.dump",
+                [["perl restore_database.pl @args -host $remote_server >> gk_current.out 2>> gk_current.err"]]
+            );
+        }
     }
 };
 
