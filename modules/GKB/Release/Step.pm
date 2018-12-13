@@ -388,7 +388,7 @@ sub cmd {
 		};
 	}
 	
-	say releaselog("FINISHED $message\n\n");
+	say releaselog("FINISHED $message\n");
 	
 	return @cmd_results;
 }
