@@ -22,13 +22,13 @@ my $extracellular_space_go_instance = $dba->fetch_instance_by_db_id('982')->[0];
 my $extracellular_region_go_instance = $dba->fetch_instance_by_db_id('984')->[0];
 
 my @instances = grep {
-    any {$_->db_id == $extracellular_space_go_instance->db_id} @{$_->compartment} 
+    any {$_->db_id == $extracellular_space_go_instance->db_id} @{$_->compartment}
 } map { @{$dba->fetch_instance(-CLASS => $_)} } ('PhysicalEntity', 'Event');
 
 foreach my $instance (@instances) {
     my @compartments = @{$instance->compartment};
     my $has_extracellular_region = any { $_->db_id == $extracellular_region_go_instance->db_id } @compartments;
-    my @repaired_compartments = map { 
+    my @repaired_compartments = grep { defined } map { 
         if ($_->db_id == $extracellular_space_go_instance->db_id) {
             !$has_extracellular_region ? $extracellular_region_go_instance : undef;
         } else {
