@@ -32,16 +32,26 @@ override 'run_commands' => sub {
 
     # Run entrez scripts
     # OMIM no longer processed by NCBI (October 8, 2015 -- Joel Weiser)
-    $self->cmd("Running gene script", [["./1geneentrez.pl -user $user -pass $pass -db $db -num_output_files 4"]]);
-    $self->cmd("Running protein script", [["./1proteinentrez.pl -user $user -pass $pass -db $db"]]);
+    $self->cmd("Running gene script", [
+        ["./1geneentrez.pl -user $user -pass $pass -db $db -num_output_files 4 > 1geneentrez.out 2> 1geneentrez.err"]
+    ]);
+    $self->cmd("Running protein script", [
+        ["./1proteinentrez.pl -user $user -pass $pass -db $db > 1proteinentrez.out 2> 1proteinentrez.err"]
+    ]);
 
     my $ncbipass = $self->user_input->{'ncbi_ftp_pass'}->{'response'};
     # Connect to ncbi and upload files
-    $self->cmd("Uploading NCBI files", [["perl uploadncbi.pl -ftppass $ncbipass -version $version"]]);
+    $self->cmd("Uploading NCBI files", [
+        ["perl uploadncbi.pl -ftppass $ncbipass -version $version > uploadncbi.out 2> uploadncbi.err"]
+    ]);
 
     # Run hapmap and UCSC scripts
-    $self->cmd("Running hapmap script", [["./1haprefseq.pl -user $user -pass $pass -db $db"]]);
-    $self->cmd("Running UCSC script", [["./1ucscentity.pl -user $user -pass $pass -db $db"]]);
+    $self->cmd("Running hapmap script", [
+        ["./1haprefseq.pl -user $user -pass $pass -db $db > 1haprefseq.out 2> 1haprefseq.err"]
+    ]);
+    $self->cmd("Running UCSC script", [
+        ["./1ucscentity.pl -user $user -pass $pass -db $db > 1ucscentity.out 2> 1ucscentity.err"]
+    ]);
 };
 
 1;
