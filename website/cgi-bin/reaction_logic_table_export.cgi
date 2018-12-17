@@ -153,10 +153,14 @@ sub get_file_name {
         confess "$id_string contains no database identifiers\n";
     }
     
-    my $file_name =
-        scalar @ids == 1 ?
-        $dba->fetch_instance_by_db_id($ids[0])->[0]->displayName :
-        join("_", @ids);
+    my $file_name;
+
+    if (scalar @ids == 1) {
+        my $instance = $dba->fetch_instance_by_db_id($ids[0])->[0];
+        $file_name = $instance->displayName . '.' . $instance->db_id;
+    } else {
+        $file_name = join("_", @ids);
+    }
     $file_name =~ s/['\\\/:\(\)&; ]+/_/g;
     return $file_name . '.tsv';
 }
@@ -168,12 +172,11 @@ sub download_single_file {
     
     my $compress_to_single_file = (scalar @{$files} > 1);
     my $file = $compress_to_single_file ? zip_files($dir, $files) : $files->[0];
-    (my $attachment_file_name = $file) =~ s/\.\d+//;
     
     open(my $fh, '<:raw', "$dir/$file") || confess "Unable to open $dir/$file: $!\n";
     print $cgi->header(
         -type => 'application/octet-stream',
-        -attachment => $attachment_file_name
+        -attachment => $file
     );
     binmode $fh;
     print $_ while (<$fh>);
