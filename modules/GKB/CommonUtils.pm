@@ -376,7 +376,8 @@ sub get_unique_species {
             } @unique_species_instances);
     }
     
-    return sort { $a->displayName cmp $b->displayName } @unique_species_instances;    
+    my @sorted_unique_species_instances = sort { $a->displayName cmp $b->displayName } @unique_species_instances;
+    return @sorted_unique_species_instances;
 }
 
 sub XOR {
