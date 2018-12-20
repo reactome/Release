@@ -58,8 +58,8 @@ override 'run_commands' => sub {
     );
 };
 
-# Joel's notes mention that this pre-step test should be commented out since it reports missing stable identifiers as an error, but for *this* step that's
-# actually OK. It's actually expected because this step will *generate* them.
+# Joel's notes mention that this pre-step test should be commented out since it reports missing stable identifiers
+# as an error, but for *this* step that's actually OK. It's actually expected because this step will *generate* them.
 #
 # Collect and return problems with pre-requisites of stable identifiers
 #override 'pre_step_tests' => sub {
@@ -90,14 +90,10 @@ sub _check_stable_id_count {
 
     my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
 
-    if ($stable_id_count_change < 0)
-    {
-        return "Stable id count has gone down from $current_stable_id_count for version $version from $previous_stable_id_count for version $prevver"
-    }
-    else
-    {
-        # EXPLICITLY return undef because if you don't, it seems like it's possible for an empty string '' to be returned which
-        # breaks the login of the post-step test.
-        return undef;
+    if ($stable_id_count_change < 0) {
+        return "Stable id count has gone down from $current_stable_id_count for version $version from " .
+            " $previous_stable_id_count for version $prevver";
     }
 }
+
+1;
