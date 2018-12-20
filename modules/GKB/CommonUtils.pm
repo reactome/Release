@@ -217,7 +217,12 @@ sub is_electronically_inferred {
     } elsif ($instance->is_a('CatalystActivity')) {
         return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('catalystActivity')};
     } elsif ($instance->is_a('Regulation')) {
-        return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('regulatedBy')};
+        # For backwards compatability when regulations contained the reaction like event (RLE) they regulated
+        # As of Reactome version 65, RLEs have contained their regulation instances in the 'regulatedBy' attribute
+        my @regulated_events = $instance->regulatedEntity->[0] ? 
+            @{$instance->regulatedEntity} : @{$instance->reverse_attribute_value('regulatedBy')};
+
+        return any { is_electronically_inferred($_)} @regulated_events;
     }
 }
 
