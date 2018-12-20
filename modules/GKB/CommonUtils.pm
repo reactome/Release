@@ -85,6 +85,8 @@ disclaimers of warranty.
 use strict;
 use warnings;
 
+use feature qw/state/;
+
 use base 'Exporter';
 use Carp;
 use DateTime;
@@ -212,17 +214,71 @@ sub is_electronically_inferred {
 	if ($instance->is_a('Event')) {
 		return $instance->evidenceType->[0] && $instance->evidenceType->[0]->displayName =~ /electronic/i;
 	} elsif ($instance->is_a('PhysicalEntity')) {
-		# If manually inferred physical entities ever start using the inferredFrom slot, this logic
-		# can be augmented to check the event(s) to which the physical entity is/are attached
-		# to see if the event(s) are electronically inferred
-		return $instance->inferredFrom->[0] &&
-			$instance->inferredFrom->[0]->species->[0] &&
-			$instance->inferredFrom->[0]->species->[0]->displayName =~ /^Homo sapiens$/i;
+		return !in_gk_central($instance) && has_human_source_instance($instance);
 	} elsif ($instance->is_a('CatalystActivity')) {
 		return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('catalystActivity')};
 	} elsif ($instance->is_a('Regulation')) {
 		return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('regulatedBy')};
 	}
+}
+
+sub in_gk_central {
+    my $instance = shift;
+
+    state $gk_central_physical_entity_lookup = fetch_gk_central_physical_entity_lookup();
+
+    my $gk_central_instance = $gk_central_physical_entity_lookup->{$instance->db_id};
+
+    return $gk_central_instance &&
+        $instance->class eq $gk_central_instance->class &&
+        $instance->displayName eq $gk_central_instance->displayName &&
+        have_same_species($instance, $gk_central_instance);
+}
+
+sub have_same_species {
+    my $first_instance = shift;
+    my $second_instance = shift;
+
+    my @first_instance_species = map {$_->displayName} @{$first_instance->species};
+    my @second_instance_species = map {$_->displayName} @{$second_instance->species};
+
+    if (scalar @first_instance_species != scalar @second_instance_species) {
+        return 0;
+    }
+
+    foreach my $first_instance_species (@first_instance_species) {
+        # The same species list do not match if the first instance's currently
+        # considered species is not matched to any species in the second
+        # instance
+        return 0 if (!(any {$_ eq $first_instance_species} @second_instance_species);
+    }
+
+    # The species lists must match if they have the same size and all species in
+    # the first list are found in the second list
+    return 1;
+}
+
+sub has_human_source_instance {
+    my $instance = shift;
+
+    # If manually inferred physical entities ever start using the inferredFrom slot, this logic
+    # can be augmented to check the event(s) to which the physical entity is/are attached
+    # to see if the event(s) are electronically inferred
+    return $instance->inferredFrom->[0] &&
+        $instance->inferredFrom->[0]->species->[0] &&
+        $instance->inferredFrom->[0]->species->[0]->displayName =~ /^Homo sapiens$/i;
+}
+
+sub fetch_gk_central_physical_entity_lookup {
+    my $dba = get_dba('gk_central', 'reactomecurator.oicr.on.ca');
+
+    my @physical_entities = $dba->fetch_instance(-CLASS => 'PhysicalEntity');
+
+    my %physical_entity_lookup = map { $_->db_id => $_ } @physical_entities;
+    #foreach my $physical_entity (@physical_entities) {
+    #    $physical_entity_lookup{$physical_entity->db_id} = $physical_entity;
+    #}
+    return \%physical_entity_lookup;
 }
 
 sub get_source_for_electronically_inferred_instance {
