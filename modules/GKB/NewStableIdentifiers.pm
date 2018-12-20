@@ -8,7 +8,6 @@ use Carp;
 use Data::Dumper;
 use List::MoreUtils qw/all any uniq/;
 use Log::Log4perl qw/get_logger/;
-use Parallel::Loops;
 use Scalar::Util qw/blessed/;
 
 use lib '/usr/local/gkb/modules';
