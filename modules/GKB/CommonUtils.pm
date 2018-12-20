@@ -249,7 +249,7 @@ sub have_same_species {
         # The same species list do not match if the first instance's currently
         # considered species is not matched to any species in the second
         # instance
-        return 0 if (!(any {$_ eq $first_instance_species} @second_instance_species);
+        return 0 if (!(any {$_ eq $first_instance_species} @second_instance_species));
     }
 
     # The species lists must match if they have the same size and all species in
