@@ -432,7 +432,7 @@ sub get_event_modifier {
         $author_instance ||= $event->created->[0]->author->[0];
     } catch {
         confess "Error caught: $_ \nFor event: ".$event->extended_displayName;
-	}
+    };
     my $author_name = $author_instance->displayName if $author_instance;
 
     return $author_name || 'Unknown';
