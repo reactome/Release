@@ -8,6 +8,7 @@ use Readonly;
 use Test::More;
 use Test::Exception;
 use Test::Output;
+use Tie::IxHash;
 
 use_ok('GKB::CommonUtils');
 ok(1, "testing works");
@@ -21,7 +22,9 @@ Readonly my $ELECTRONICALLY_INFERRED => 1;
 Readonly my $MANUALLY_CURATED => 0;
 
 # Values - 1:electronically inferred, 0:not electronically inferred (i.e. manually curated)
-my %instances = (
+my %instances;
+tie %instances, 'Tie::IxHash';
+%instances = (
     193508 => $MANUALLY_CURATED, # manually curated reaction
     9063027 => $ELECTRONICALLY_INFERRED, # elec inferred reaction
     5419271 => $MANUALLY_CURATED, # manually curated black box event
@@ -62,7 +65,9 @@ foreach my $instance_id (keys %instances) {
     is(is_electronically_inferred($instance) ? 1 : 0, $instances{$instance_id}, "testing electronic inference status for $instance_id");
 }
 
-my %electronic_inference_to_source = (
+my %electronic_inference_to_source;
+tie %electronic_inference_to_source, 'Tie::IxHash';
+%electronic_inference_to_source = (
     9719690 => [6781939, 6783290], # elec inferred EWAS with multiple sources
     9351974 => [420855, 445788], # elec inferred defined set with multiple sources
     9018150 => [190222, 190230], # elec inferred complex with multiple sources
