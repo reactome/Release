@@ -508,6 +508,8 @@ database_exists
 get_name_and_id
 get_all_species_in_entity
 is_electronically_inferred
+in_gk_central
+have_same_species
 get_source_for_electronically_inferred_instance
 has_multiple_species
 is_chimeric
