@@ -19,27 +19,38 @@ use English qw/-no_match_vars/;
 use Getopt::Long;
 
 # Database connection
-my($opt_user, $opt_host, $opt_pass, $opt_port, $opt_db, $opt_debug);
+my($user, $host, $pass, $port, $db, $output_file, $debug);
 
 (@ARGV) || die "Usage: $PROGRAM_NAME -user db_user -host db_host -pass db_pass -port db_port -db db_name -debug\n";
 
-GetOptions('user:s', 'host:s', 'pass:s', 'port:i', 'db:s', 'debug');
-
-$opt_db || die "Need database name (-db).\n";
-
-my $dba= GKB::DBAdaptor->new(
-    -user   => $opt_user || $GKB::Config::GK_DB_USER,
-    -host   => $opt_host || $GKB::Config::GK_DB_HOST,
-    -pass   => $opt_pass || $GKB::Config::GK_DB_PASS,
-    -port   => $opt_port || $GKB::Config::GK_DB_PORT,
-    -dbname => $opt_db || $GKB::Config::GK_DB_NAME,
-    -DEBUG => $opt_debug
+GetOptions(
+    'user:s',
+    'host:s',
+    'pass:s',
+    'port:i',
+    'db:s',
+    'debug'
 );
 
-my ($version) = $opt_db =~ /(\d+)$/msx;
-my $outfile = "Reactome2GoV$version";
+$db || die "Need database name (-db).\n";
+$user ||= $GKB::Config::GK_DB_USER;
+$host ||= $GKB::Config::GK_DB_HOST;
+$pass ||= $GKB::Config::GK_DB_PASS;
+$port ||= $GKB::Config::GK_DB_PORT;
 
-open my $file, '>', $outfile;
+my $dba= GKB::DBAdaptor->new(
+    -user   => $user,
+    -host   => $host,
+    -pass   => $pass,
+    -port   => $port,
+    -dbname => $db,
+    -DEBUG => $debug
+);
+
+my ($version) = $db =~ /(\d+)$/msx;
+$output_file ||= "Reactome2GoV$version";
+
+open my $file, '>', $output_file;
 binmode $file, ':encoding(UTF-8)';
 binmode STDOUT, ':encoding(UTF-8)';
 
