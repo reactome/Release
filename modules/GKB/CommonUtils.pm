@@ -276,7 +276,7 @@ sub has_human_source_instance {
 sub fetch_gk_central_physical_entity_lookup {
     my $dba = get_dba('gk_central', 'reactomecurator.oicr.on.ca');
 
-    my @physical_entities = $dba->fetch_instance(-CLASS => 'PhysicalEntity');
+    my @physical_entities = @{$dba->fetch_instance(-CLASS => 'PhysicalEntity')};
 
     my %physical_entity_lookup = map { $_->db_id => $_ } @physical_entities;
 
