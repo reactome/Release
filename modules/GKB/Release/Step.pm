@@ -410,14 +410,22 @@ sub archive_files {
     my $step_archive = "$archive/" . $self->name;
     my $step_version_archive = "$step_archive/$version";
 
-    `mkdir -p $step_version_archive`;
+    system "mkdir -p $step_version_archive";
     if (-d $step_version_archive) {
-        if (glob("*.dump")) {
-            `gzip -qf $step_version_archive/*.dump 2> /dev/null`;
-            `mv --backup=numbered $_ $step_version_archive ` foreach qw/*.dump*/;
+        foreach my $sql_dump_file (glob '*.dump') {
+            if (-e "$sql_dump_file.gz") {
+                system "mv --backup=numbered $sql_dump_file.gz $step_version_archive";
+            }
+            system "gzip -qf $step_version_archive/$sql_dump_file 2> /dev/null";
         }
-        `mv --backup=numbered $_ $step_version_archive ` foreach qw/*.err *.log *.out/;
-        symlink $step_archive, 'archive' unless (-e 'archive');
+
+        foreach my $file (map { glob } qw/*.err *.log *.out *.dump.gz/) {
+            system "mv --backup=numbered $file $step_version_archive";
+        }
+
+        if (!(-e 'archive')) {
+            symlink $step_archive, 'archive';
+        }
     }
 
     return $step_version_archive;
