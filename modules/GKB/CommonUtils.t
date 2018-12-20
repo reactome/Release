@@ -58,7 +58,7 @@ my %instances = (
 
 foreach my $instance_id (keys %instances) {
     my $instance = $release_dba->fetch_instance_by_db_id($instance_id)->[0];
-    
+
     is(is_electronically_inferred($instance) ? 1 : 0, $instances{$instance_id}, "testing electronic inference status for $instance_id");
 }
 
@@ -77,15 +77,15 @@ my %electronic_inference_to_source = (
     9492442 => [1629806], # elec inferred EWAS
     8982667 => [5652148], # elec inferred GEE
     8986465 => [1467470], # elec inferred defined set
-    9029501 => [983323], # elec inferred polymer    
+    9029501 => [983323], # elec inferred polymer
 );
 
 foreach my $electronic_inference_db_id (keys %electronic_inference_to_source) {
     my @expected_source_db_ids = sort { $a <=> $b } @{$electronic_inference_to_source{$electronic_inference_db_id}};
-    
+
     my $electronic_instance = $release_dba->fetch_instance_by_db_id($electronic_inference_db_id)->[0];
     my @received_source_db_ids = sort { $a <=> $b } map {$_->db_id} get_source_for_electronically_inferred_instance($electronic_instance);
-    
+
     is_deeply(\@received_source_db_ids, \@expected_source_db_ids, "checking source instances for electronic instance $electronic_inference_db_id");
 }
 done_testing();
