@@ -253,6 +253,8 @@ sub set_user_input_and_passwords {
 
     $self->_set_passwords();
     $self->_set_user_input();
+
+    return;
 }
 
 sub run {
@@ -260,14 +262,16 @@ sub run {
 
     chdir $self->directory;
     set_environment($self->host);
-    return unless source_code_passes_tests();
+    if (!source_code_passes_tests()) {
+        return;
+    }
 
     say "Running $self->{name} pre-step tests...";
     my @pre_step_test_errors = $self->pre_step_tests();
     if (@pre_step_test_errors) {
         my $pre_step_test_log = File::Spec->catfile($self->directory, 'pre_step_test_errors.log');
-        open(my $pre_step_test_fh, '>', $pre_step_test_log);
-        print $pre_step_test_fh join("\n", @pre_step_test_errors);
+        open my $pre_step_test_fh, '>', $pre_step_test_log;
+        print {$pre_step_test_fh} (join "\n", @pre_step_test_errors);
         close $pre_step_test_fh;
         say releaselog("ERRORS from $self->{name} pre-step tests reported -- see $pre_step_test_log");
 
@@ -276,16 +280,16 @@ sub run {
         say releaselog("No errors from $self->{name} pre-step tests");
     }
 
-	$self->run_commands($self->gkb);
-	
+    $self->run_commands($self->gkb);
+
     say "Running $self->{name} post-step tests...";
     my @post_step_test_errors = $self->post_step_tests();
     if (@post_step_test_errors) {
         # Let's write the errors to a file. That way, someone OTHER than the mail recipient can see them.
         my $post_step_test_log = File::Spec->catfile($self->directory, 'post_step_test_errors.log');
-        open(my $post_step_test_fh, '>', $post_step_test_log);
-        binmode $post_step_test_fh, ":utf8";
-        print $post_step_test_fh join("\n", @post_step_test_errors);
+        open my $post_step_test_fh, '>', $post_step_test_log;
+        binmode $post_step_test_fh, ':encoding(UTF-8)';
+        print {$post_step_test_fh} join "\n", @post_step_test_errors;
         close $post_step_test_fh;
         say releaselog("ERRORS from $self->{name} post-step tests reported -- see $post_step_test_log");
 
@@ -294,45 +298,44 @@ sub run {
         $self->mail->{'to'} = 'automation';
     } else {
         say releaselog("No errors from $self->{name} post-step tests");
-        $self->mail->{'body'} .= "\n\n" if $self->mail->{'body'};
+        if ($self->mail->{'body'}) {
+            $self->mail->{'body'} .= "\n\n";
+        }
         $self->mail->{'body'} .= "$self->{name} step has completed successfully";
     }
     $self->mail_now();
 
-    say releaselog("Archiving output, logs, dump files...");
+    say releaselog('Archiving output, logs, dump files...');
     $self->archive_files($version);
 
+    return 1; # Successful run
 }
 
 sub source_code_passes_tests {
-    return 1 unless (-e "t") && `which prove`;
-    return (system("prove") == 0);
+    # If a test directory and the prove binary exist, run tests
+    # Otherwise, sources tests are ignored because they either don't exist or can't be run
+    return ((-d 't') && `which prove`) ? ((system 'prove') == 0) : 1;
 }
 
 sub run_commands {
-    confess "The run_commands method must be overridden!";
+    confess 'The run_commands method must be overridden!';
 }
 
 # May be overriden by implementation of specific steps
 sub pre_step_tests {
     my $self = shift;
 
-    say releaselog("No pre-step tests to be run for " . $self->name);
+    say releaselog('No pre-step tests to be run for ' . $self->name);
     return;
 }
 
 sub post_step_tests {
     my $self = shift;
 
-    my @errors;
-
-    my @file_size_errors = _get_file_size_errors('post_requisite_file_listing');
-    my @output_errors = _get_output_errors();
-
-    push @errors, @file_size_errors if @file_size_errors;
-    push @errors, @output_errors if @output_errors;
-
-    return @errors;
+    return grep { defined } (
+        _get_file_size_errors('post_requisite_file_listing'),
+         _get_output_errors()
+    );
 }
 
 sub cmd {
@@ -359,11 +362,11 @@ sub cmd {
             ($stdout, $stderr, $exit_code) = tee {
                 if ($parameters && $parameters->{'ssh'}) {
                     my $ssh = Net::OpenSSH->new($parameters->{'ssh'});
-                    unless($ssh->error) {
+                    if (!$ssh->error) {
                         $ssh->system("$cmd @args");
                     }
                 } else {
-                    system($cmd, @args);
+                    system $cmd, @args;
                 }
             };
         };
@@ -397,7 +400,7 @@ sub cmd_successful {
     my $self = shift;
     my $results = shift;
 
-    return all { $_->{'exit_code'} == 0} @$results;
+    return all { $_->{'exit_code'} == 0} @{$results};
 }
 
 sub archive_files {
