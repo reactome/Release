@@ -583,7 +583,7 @@ sub _get_sender_address {
     my $from = $params->{'from'};
 
     return $maillist{$from} // $from if $from;
-    return $maillist{'automation'};
+    return $maillist{'default_sender'};
 }
 
 sub _get_recipient_addresses {
