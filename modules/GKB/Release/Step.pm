@@ -183,10 +183,12 @@ use feature qw/say/;
 use autodie;
 use Carp;
 use Capture::Tiny ':all';
+use Email::Address;
+use Email::Valid;
 use File::Basename;
 use File::Spec;
 use File::stat;
-use List::MoreUtils qw/uniq all/;
+use List::MoreUtils qw/uniq all none/;
 use Net::OpenSSH;
 
 use lib '/usr/local/gkb/modules';
@@ -436,7 +438,17 @@ sub mail_now {
     my $params = $self->mail;
 
     my $from = _get_sender_address($params);
+    if (scalar Email::Address->parse($from) != 1 || !Email::Valid->address($from)) {
+        say releaselog("Unable to send mail - sender address $from is not a single or valid e-mail address");
+        return;
+    }
+
     my $to = $TEST_MODE ? $maillist{'automation'} : _get_recipient_addresses($params);
+    if (none { Email::Valid->address($_)} Email::Address->parse($to)) {
+        say releaselog("Unable to send mail - the recipient e-mail address(es) is/are not valid");
+        return;
+    }
+
     my $subject = $params->{'subject'};
     my $body = $params->{'body'};
 
@@ -583,6 +595,8 @@ sub _get_sender_address {
     my $from = $params->{'from'};
 
     return $maillist{$from} // $from if $from;
+
+
     return $maillist{'default_sender'};
 }
 
