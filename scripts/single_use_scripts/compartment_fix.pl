@@ -10,7 +10,7 @@ use lib '/usr/local/gkb/modules';
 use GKB::CommonUtils;
 use GKB::Utils_esther;
 
-my $dba = get_dba('gk_central.sql', '127.0.0.1');
+my $dba = get_dba('gk_central_20190101', 'reactomecurator.oicr.on.ca');
 my $instance_edit = GKB::Utils_esther::create_instance_edit(
     $dba,
     'Weiser',
@@ -45,6 +45,21 @@ foreach my $instance (@instances) {
     $dba->update_attribute($instance, 'compartment');
     $dba->update_attribute($instance, '_displayName');
     $dba->update_attribute($instance, 'modified');
+
+    if ($instance->is_a('PhysicalEntity') {
+	my @catalyst_activities = @{$instance->reverse_attribtue_value('physicalEntity')};
+	foreach my $catalyst_activity (@catalyst_activities) {
+	    say get_name_and_id($catalyst_activity);
+
+	    $catalyst_activity->namedInstance;
+	    $catalyst_activity->modified(@{$instance->modified});
+	    $catalyst_activity->add_attribute_value('modified', $instance_edit);
+	    $dba->update_attribute($catalyst_activity, '_displayName');
+	    $dba->update_attribute($catalyst_activity, 'modified');
+
+	    say get_name_and_id($catalyst_activity);
+	}
+    }
 
     say get_name_and_id($instance) . ': ' . join("\t", map{ $_->displayName} @{$instance->compartment});
 }
