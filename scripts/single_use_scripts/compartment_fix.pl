@@ -46,16 +46,20 @@ foreach my $instance (@instances) {
     $dba->update_attribute($instance, '_displayName');
     $dba->update_attribute($instance, 'modified');
 
-    if ($instance->is_a('PhysicalEntity') {
-	my @catalyst_activities = @{$instance->reverse_attribtue_value('physicalEntity')};
+    if ($instance->is_a('PhysicalEntity')) {
+	my @catalyst_activities = @{$instance->reverse_attribute_value('physicalEntity')};
 	foreach my $catalyst_activity (@catalyst_activities) {
 	    say get_name_and_id($catalyst_activity);
 
+	    my $catalyst_activity_display_name = $catalyst_activity->displayName;
 	    $catalyst_activity->namedInstance;
-	    $catalyst_activity->modified(@{$instance->modified});
-	    $catalyst_activity->add_attribute_value('modified', $instance_edit);
-	    $dba->update_attribute($catalyst_activity, '_displayName');
-	    $dba->update_attribute($catalyst_activity, 'modified');
+
+	    if ($catalyst_activity_display_name ne $catalyst_activity->displayName) {
+	        $catalyst_activity->modified(@{$instance->modified});
+	        $catalyst_activity->add_attribute_value('modified', $instance_edit);
+	        $dba->update_attribute($catalyst_activity, '_displayName');
+	        $dba->update_attribute($catalyst_activity, 'modified');
+	    }
 
 	    say get_name_and_id($catalyst_activity);
 	}
