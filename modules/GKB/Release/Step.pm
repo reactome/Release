@@ -463,21 +463,32 @@ sub mail_now {
     };
 
     my $mail_sent;
+    my $mail_error = '';
     try {
         if (!$params->{'attachment'}) {
             $mail->{'Message'} =  $params->{'body'};
+            # Handled by Mail::Sendmail
             $mail_sent = sendmail(%{$mail});
         } else {
+            # Handled by MIME::Lite
             $mail_sent =_add_body_and_attachment(
                 $mail,
                 $params->{'body'},
                 $params->{'attachment'}
             )->send();
         }
+    } catch {
+        $mail_error = $_;
+    } finally {
+        # This needs to be handled in the finally block since Mail::Sendmail may
+        # fail, but not throw an exception
+        if ($Mail::Sendmail::error) {
+            $mail_error .= "\nMail::Sendmail error: " . $Mail::Sendmail::error;
+        }
     };
 
     if (!$mail_sent) {
-        say releaselog('Problem sending mail using Mail::Sendmail: ' . $Mail::Sendmail::error);
+        say releaselog("Problem sending mail: $mail_error");
         return $MAIL_FAILED;
     }
 
