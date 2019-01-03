@@ -474,8 +474,6 @@ sub mail_now {
                 $params->{'attachment'}
             )->send();
         }
-    } catch {
-        $mail_sent = 0;
     };
 
     if (!$mail_sent) {
