@@ -213,30 +213,30 @@ sub is_electronically_inferred {
     if ($instance->is_a('Event')) {
         return $instance->evidenceType->[0] && $instance->evidenceType->[0]->displayName =~ /electronic/i;
     } elsif ($instance->is_a('PhysicalEntity')) {
-        return !in_gk_central($instance) && has_human_source_instance($instance);
+        return !in_curator_database($instance) && has_human_source_instance($instance);
     } elsif ($instance->is_a('CatalystActivity')) {
         return any { is_electronically_inferred($_)} @{$instance->reverse_attribute_value('catalystActivity')};
     } elsif ($instance->is_a('Regulation')) {
         # For backwards compatability when regulations contained the reaction like event (RLE) they regulated
         # As of Reactome version 65, RLEs have contained their regulation instances in the 'regulatedBy' attribute
-        my @regulated_events = $instance->regulatedEntity->[0] ? 
+        my @regulated_events = $instance->regulatedEntity->[0] ?
             @{$instance->regulatedEntity} : @{$instance->reverse_attribute_value('regulatedBy')};
 
         return any { is_electronically_inferred($_)} @regulated_events;
     }
 }
 
-sub in_gk_central {
+sub in_curator_database {
     my $instance = shift;
 
-    state $gk_central_physical_entity_lookup = fetch_gk_central_physical_entity_lookup();
+    state $curator_database_physical_entity_lookup = fetch_curator_database_physical_entity_lookup();
 
-    my $gk_central_instance = $gk_central_physical_entity_lookup->{$instance->db_id};
+    my $curator_database_instance = $curator_database_physical_entity_lookup->{$instance->db_id};
 
-    return $gk_central_instance &&
-        $instance->class eq $gk_central_instance->class &&
-        $instance->displayName eq $gk_central_instance->displayName &&
-        have_same_species($instance, $gk_central_instance);
+    return $curator_database_instance &&
+        $instance->class eq $curator_database_instance->class &&
+        $instance->displayName eq $curator_database_instance->displayName &&
+        have_same_species($instance, $curator_database_instance);
 }
 
 sub have_same_species {
@@ -273,8 +273,11 @@ sub has_human_source_instance {
         $instance->inferredFrom->[0]->species->[0]->displayName =~ /^Homo sapiens$/i;
 }
 
-sub fetch_gk_central_physical_entity_lookup {
-    my $dba = get_dba('gk_central', 'reactomecurator.oicr.on.ca');
+sub fetch_curator_database_physical_entity_lookup {
+    my $database = shift // $GKB::Config::$GK_CURATOR_DB_NAME;
+    my $host = shift // $GKB::Config::GK_CURATOR_DB_HOST;
+
+    my $dba = get_dba($database, $host);
 
     my @physical_entities = @{$dba->fetch_instance(-CLASS => 'PhysicalEntity')};
 
@@ -357,7 +360,7 @@ sub is_chimeric {
 
     return $instance->is_valid_attribute('isChimeric') &&
            $instance->isChimeric->[0] &&
-           $instance->isChimeric->[0] =~ /^true$/i; 
+           $instance->isChimeric->[0] =~ /^true$/i;
 }
 
 sub get_unique_species {
@@ -508,7 +511,7 @@ database_exists
 get_name_and_id
 get_all_species_in_entity
 is_electronically_inferred
-in_gk_central
+in_curator_database
 have_same_species
 get_source_for_electronically_inferred_instance
 has_multiple_species
