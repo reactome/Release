@@ -189,7 +189,11 @@ use File::Basename;
 use File::Spec;
 use File::stat;
 use List::MoreUtils qw/uniq all none/;
+use Mail::Sendmail;
+use MIME::Lite;
 use Net::OpenSSH;
+use Readonly;
+use Try::Tiny;
 
 use lib '/usr/local/gkb/modules';
 
@@ -437,38 +441,49 @@ sub mail_now {
     my $self = shift;
     my $params = $self->mail;
 
+    Readonly my $MAIL_SUCCEEDED => 1;
+    Readonly my $MAIL_FAILED => 0;
+
     my $from = _get_sender_address($params);
     if (scalar Email::Address->parse($from) != 1 || !Email::Valid->address($from)) {
         say releaselog("Unable to send mail - sender address $from is not a single or valid e-mail address");
-        return;
+        return $MAIL_FAILED;
     }
 
     my $to = $TEST_MODE ? $maillist{'automation'} : _get_recipient_addresses($params);
     if (none { Email::Valid->address($_)} Email::Address->parse($to)) {
-        say releaselog("Unable to send mail - the recipient e-mail address(es) is/are not valid");
-        return;
+        say releaselog('Unable to send mail - the recipient e-mail address(es) is/are not valid');
+        return $MAIL_FAILED;
     }
-
-    my $subject = $params->{'subject'};
-    my $body = $params->{'body'};
 
     my $mail = {
         From => $from,
         To => $to,
-        Subject => $subject
+        Subject => $params->{'subject'}
     };
 
-    unless ($params->{'attachment'}) {
-        use Mail::Sendmail;
-        $mail->{'Message'} = $body;
-        return sendmail(%{$mail});
+    my $mail_sent;
+    try {
+        if (!$params->{'attachment'}) {
+            $mail->{'Message'} =  $params->{'body'};
+            $mail_sent = sendmail(%{$mail});
+        } else {
+            $mail_sent =_add_body_and_attachment(
+                $mail,
+                $params->{'body'},
+                $params->{'attachment'}
+            )->send();
+        }
+    } catch {
+        $mail_sent = 0;
+    };
+
+    if (!$mail_sent) {
+        say releaselog('Problem sending mail using Mail::Sendmail: ' . $Mail::Sendmail::error);
+        return $MAIL_FAILED;
     }
 
-    return _add_body_and_attachment(
-        $mail,
-        $body,
-        $params->{'attachment'}
-    )->send();
+    return $MAIL_SUCCEEDED;
 }
 
 sub _get_output_errors {
@@ -614,7 +629,6 @@ sub _add_body_and_attachment {
     my $body = shift;
     my $attachment_path = shift;
 
-    use MIME::Lite;
     my ($filename) = $attachment_path =~ /\\(.*)$/;
     $mail->{'Type'} = "multipart/mixed";
 
