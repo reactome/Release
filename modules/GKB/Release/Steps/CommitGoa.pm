@@ -12,15 +12,15 @@ has '+gkb' => ( default => 'gkbdev' );
 has '+passwords' => ( default => sub { ['mysql'] } );
 has '+directory' => ( default => "$release/commit_goa" );
 has '+mail' => ( default => sub {
-                    my $self = shift;
-                    return {
-                        'to' => 'automation',
-                        'subject' => $self->name,
-                        'body' => '',
-                        'attachment' => $reactome_mapping_file
-                    };
-                }
-);
+    my $self = shift;
+
+    return {
+        'to' => 'automation',
+        'subject' => $self->name,
+        'body' => '',
+        'attachment' => $reactome_mapping_file
+    };
+});
 
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
@@ -42,8 +42,7 @@ override 'run_commands' => sub {
         '-pass', $pass,
         '-host', $host,
         '-db', $db,
-        'output_file', $reactome_mapping_file,
-        '-debug'
+        '-output_file', $reactome_mapping_file,
     );
 
     $self->cmd('Creating Reactome2GO file',[["perl reactome2go.pl @args > reactome2go.out 2> reactome2go.err"]]);
