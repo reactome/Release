@@ -21,15 +21,19 @@ use Getopt::Long;
 # Database connection
 my($user, $host, $pass, $port, $db, $output_file, $debug);
 
-(@ARGV) || die "Usage: $PROGRAM_NAME -user db_user -host db_host -pass db_pass -port db_port -db db_name -debug\n";
+if (@ARGV == 0) {
+    die "Usage: $PROGRAM_NAME -user db_user -host db_host -pass db_pass " .
+        "-port db_port -db db_name -output_file file_name -debug\n";
+}
 
 GetOptions(
-    'user:s',
-    'host:s',
-    'pass:s',
-    'port:i',
-    'db:s',
-    'debug'
+    'user:s' => \$user,
+    'host:s' => \$host,
+    'pass:s' => \$pass,
+    'port:i' => \$port,
+    'db:s' => \$db,
+    'output_file:s' => \$output_file,
+    'debug' => \$debug
 );
 
 $db || die "Need database name (-db).\n";
