@@ -65,7 +65,7 @@ close $file;
 print "$PROGRAM_NAME has finished its job\n";
 
 
-sub get_reactome_to_go_mapping_lines {
+sub get_reactome_2_go_mapping_lines {
     my $event = shift;
 
     if (!$event->stableIdentifier->[0]) {
