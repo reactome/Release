@@ -51,8 +51,9 @@ my $dba= GKB::DBAdaptor->new(
     -DEBUG => $debug
 );
 
-my ($version) = $db =~ /(\d+)$/msx;
-$output_file ||= "Reactome2GoV$version";
+if (!$output_file) {
+    $output_file = 'Reactome2GoV' . get_version($db);
+}
 
 open my $file, '>', $output_file;
 binmode $file, ':encoding(UTF-8)';
@@ -68,6 +69,14 @@ close $file;
 
 print "$PROGRAM_NAME has finished its job\n";
 
+sub get_version {
+    my $db_name = shift;
+
+    my ($version) = $db_name =~ /(\d+)$/msx;
+    $version ||= $db_name;
+
+    return $version;
+}
 
 sub get_reactome_2_go_mapping_lines {
     my $event = shift;
