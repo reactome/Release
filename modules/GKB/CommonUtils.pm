@@ -396,10 +396,7 @@ sub get_components {
 
     my @components;
     if ($composite_entity) {
-        foreach my $component (
-            @{$composite_entity->hasComponent}, @{$composite_entity->hasMember},
-            @{$composite_entity->hasCandidate}, @{$composite_entity->repeatedUnit}
-        ) {
+        foreach my $component (get_composite_entity_subunits($composite_entity)) {
             push @components, $component;
             my @sub_components = grep {defined} get_components($component);
             if (@sub_components) {
@@ -409,6 +406,21 @@ sub get_components {
     }
 
     return @components;
+}
+
+sub get_composite_entity_subunits {
+    my $composite_entity = shift;
+
+    return () if !$composite_entity;
+
+    my @subunits;
+
+    push @subunits, @{$composite_entity->hasComponent};
+    push @subunits, @{$composite_entity->hasMember};
+    push @subunits, @{$composite_entity->hasCandidate};
+    push @subunits, @{$composite_entity->repeatedUnit};
+
+    return grep { defined } @subunits;
 }
 
 sub get_instance_creator {
