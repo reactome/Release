@@ -5,7 +5,7 @@ use GKB::Config;
 use Data::Dumper;
 use Getopt::Long;
 use Math::Trig;
-#Don't 'use' GraphViz but 'require' it when needed. This way we don't 
+#Don't 'use' GraphViz but 'require' it when needed. This way we don't
 #necessarily need GraphViz and friends installed as long as the GraphViz
 #dependent stuff is not part of the published website.
 #use GraphViz;
@@ -203,7 +203,7 @@ sub plot_One_Entity {
 	    push(@ENTITY_IMAGE_MAP_COORDS,{x1 => $ENTITY_NODE_COORDS{$dbid}->{x1}, y1 => $ENTITY_NODE_COORDS{$dbid}->{y1}, x2 => $ENTITY_NODE_COORDS{$dbid}->{x2},  y2 => $ENTITY_NODE_COORDS{$dbid}->{y2}, name => $ENTITY_DISSECTION{$dbid}{genmapp}{name}, db_id => $dbid, accession=>$ENTITY_DISSECTION{$dbid}{genmapp}{accession}});
 	}#else
 	}#if entity
-	
+
 	$ALLOW_TEXT=1;
     return($OBJECT_GD_IMAGE,&pass_Image_Map);
 }#sub plot_One_Entity {
@@ -250,7 +250,7 @@ sub plot_One_Entity_In_Set_Space {
 
 	$ENTITY_NODE_COORDS{$dbid}->{x2}=$x_size;
 	$ENTITY_NODE_COORDS{$dbid}->{y2}=$y_size;
-   
+
 	$OBJECT_GD_IMAGE->rectangle($ENTITY_NODE_COORDS{$dbid}->{x1},$ENTITY_NODE_COORDS{$dbid}->{y1},$ENTITY_NODE_COORDS{$dbid}->{x2},$ENTITY_NODE_COORDS{$dbid}->{y2},$BLACK);
 
         if($SPECIES{$dbid}{type}==3){
@@ -292,7 +292,7 @@ sub plot_One_Entity_In_Set_Space {
 	}else{
 	    $OBJECT_GD_IMAGE->filledRectangle($ENTITY_NODE_COORDS{$dbid}->{x1},$ENTITY_NODE_COORDS{$dbid}->{y1},$ENTITY_NODE_COORDS{$dbid}->{x2},$ENTITY_NODE_COORDS{$dbid}->{y2},$COLOUR_PALETTE[$SPECIES{$dbid}{type}]);
             if($ALLOW_TEXT){$OBJECT_GD_IMAGE->string(gdSmallFont,$ENTITY_NODE_COORDS{$dbid}->{x1}+2,$ENTITY_NODE_COORDS{$dbid}->{y1}+2,$ENTITY_DISSECTION{$dbid}{genmapp}{name},$BLACK);}
-            push(@ENTITY_IMAGE_MAP_COORDS,{x1 => $ENTITY_NODE_COORDS{$dbid}->{x1}, y1 => $ENTITY_NODE_COORDS{$dbid}->{y1}, x2 => $ENTITY_NODE_COORDS{$dbid}->{x2},  y2 => $ENTITY_NODE_COORDS{$dbid}->{y2}, name => $ENTITY_DISSECTION{$dbid}{genmapp}{name}, db_id => $dbid, accession=>$ENTITY_DISSECTION{$dbid}{genmapp}{accession}});   
+            push(@ENTITY_IMAGE_MAP_COORDS,{x1 => $ENTITY_NODE_COORDS{$dbid}->{x1}, y1 => $ENTITY_NODE_COORDS{$dbid}->{y1}, x2 => $ENTITY_NODE_COORDS{$dbid}->{x2},  y2 => $ENTITY_NODE_COORDS{$dbid}->{y2}, name => $ENTITY_DISSECTION{$dbid}{genmapp}{name}, db_id => $dbid, accession=>$ENTITY_DISSECTION{$dbid}{genmapp}{accession}});
 	}#else
     }#if entity
 
@@ -339,7 +339,7 @@ sub plot {
 		&dissect_Reaction($_)
 		}} @{$ref_reactions};
 	}#elsif
-	    
+
      }#foreach
 
      $OBJECT_GRAPHVIZ = GraphViz->new(rankdir  => 'TB', layout => 'dot', orientation=>'landscape', edge => {len => $EDGE_LENGTH}, nodesep =>'0.3', ranksep => '1.0');
@@ -357,16 +357,16 @@ sub pass_Image_Map{
     my $outstring = '';
     # Printing HTML image map
     foreach my $db_id (keys %REACTION_NODE_COORDS){
-        $outstring.="<area shape=\"circle\" COORDS=\"$REACTION_NODE_COORDS{$db_id}{'x'},$REACTION_NODE_COORDS{$db_id}{'y'},$REACTION_NODE_COORDS{$db_id}{'c'}\" href=\"/cgi-bin/eventbrowser?DB=$DB_NAME&ID=$db_id\" target=\"_blank\" ONMOUSEOVER='ddrivetip(\"$REACTIONS{$db_id}{'name'}\",\"#DCDCDC\",250);' ONMOUSEOUT='hideddrivetip(); return true;'>\n";
+        $outstring.="<area shape=\"circle\" COORDS=\"$REACTION_NODE_COORDS{$db_id}{'x'},$REACTION_NODE_COORDS{$db_id}{'y'},$REACTION_NODE_COORDS{$db_id}{'c'}\" href=\"/content/detail/$db_id\" target=\"_blank\" ONMOUSEOVER='ddrivetip(\"$REACTIONS{$db_id}{'name'}\",\"#DCDCDC\",250);' ONMOUSEOUT='hideddrivetip(); return true;'>\n";
     }#foreach my $db_id (keys %REACTION_NODE_COORDS){
-    
+
     foreach my $hash (@ENTITY_IMAGE_MAP_COORDS){
-        $outstring.="<area shape=\"RECT\" COORDS=\"$hash->{'x1'},$hash->{'y1'},$hash->{'x2'},$hash->{'y2'}\" href=\"/cgi-bin/eventbrowser?DB=$DB_NAME&ID=".$hash->{'db_id'}."\" target=\"_blank\" ONMOUSEOVER='ddrivetip(\"$hash->{accession}\",\"#DCDCDC\",250);' ONMOUSEOUT='hideddrivetip(); return true;'>\n";
+        $outstring.="<area shape=\"RECT\" COORDS=\"$hash->{'x1'},$hash->{'y1'},$hash->{'x2'},$hash->{'y2'}\" href=\"/content/detail/".$hash->{'db_id'}."\" target=\"_blank\" ONMOUSEOVER='ddrivetip(\"$hash->{accession}\",\"#DCDCDC\",250);' ONMOUSEOUT='hideddrivetip(); return true;'>\n";
     }#for (my $i=0; $i < $file_no; $i++){
-    
+
     foreach my $pe_id (keys %SPECIES){
         if($SPECIES{$pe_id} && $SPECIES{$pe_id}{type}>=3){
-            $outstring.="<area shape=\"RECT\" COORDS=\"$SPECIES{$pe_id}{summary_coords}{x1},$SPECIES{$pe_id}{summary_coords}{y1},$SPECIES{$pe_id}{summary_coords}{x2},$SPECIES{$pe_id}{summary_coords}{y2}\" href=\"/cgi-bin/eventbrowser?DB=$DB_NAME&ID=".$pe_id."\" target=\"_blank\" ONMOUSEOVER='ddrivetip(\"$SPECIES{$pe_id}{name}\",\"#DCDCDC\",250);' ONMOUSEOUT='hideddrivetip(); return true;'>\n";
+            $outstring.="<area shape=\"RECT\" COORDS=\"$SPECIES{$pe_id}{summary_coords}{x1},$SPECIES{$pe_id}{summary_coords}{y1},$SPECIES{$pe_id}{summary_coords}{x2},$SPECIES{$pe_id}{summary_coords}{y2}\" href=\"/content/detail/".$pe_id."\" target=\"_blank\" ONMOUSEOVER='ddrivetip(\"$SPECIES{$pe_id}{name}\",\"#DCDCDC\",250);' ONMOUSEOUT='hideddrivetip(); return true;'>\n";
         }#if($SPECIES{$pe_id}{type}>=3){
     }#foreach my $PE (keys %SPECIES){
 
@@ -435,7 +435,7 @@ sub build_Diagram_From_Graphviz {
 	if($_=~/^edge/){
 	    $objkey++;
 	    &edge($_,$objkey);
-	}# if($_=~/^edge/){	
+	}# if($_=~/^edge/){
      } @graphviz_output_rows;
 
 }#sub build_Diagram_From_Graphviz {
@@ -480,7 +480,7 @@ sub edge {
     $y1=$FIXED_IMAGE_Y-$MIN_Y-$TOP_MARGIN-($graphviz_row_parse[5]*$FACTOR_IMAGE_MAGNIFICATION);
     $x2=$LEFT_MARGIN-$MIN_X+($graphviz_row_parse[$size_ar-7]*$FACTOR_IMAGE_MAGNIFICATION);
     $y2=$FIXED_IMAGE_Y-$MIN_Y-$TOP_MARGIN-($graphviz_row_parse[$size_ar-6]*$FACTOR_IMAGE_MAGNIFICATION);
-    
+
     if($row=~/ Mod /){
 	$colour = $GREEN;
     }elsif($row=~/ PReg /){
@@ -490,9 +490,9 @@ sub edge {
     }else{
 	$colour = $BLACK;
     }
-	
+
     $OBJECT_GD_IMAGE->line($x1,$y1,$x2,$y2,$colour);
-	
+
     &arrowhead($x1,$y1,$x2,$y2,$colour);
     if($graphviz_row_parse[18] =~/\_/){$stoich_col=$graphviz_row_parse[18];}else{$stoich_col=$graphviz_row_parse[12];}
     @stoichiometry=split(/\_/,$stoich_col);
@@ -506,7 +506,7 @@ sub edge {
     $y1=int($FACTOR_GENMAPP_MAGNIFICATION*$y1);
     $x2=int($FACTOR_GENMAPP_MAGNIFICATION*$x2);
     $y2=int($FACTOR_GENMAPP_MAGNIFICATION*$y2);
-    
+
 }#sub line
 
 sub edge_weight{
@@ -532,7 +532,7 @@ sub edge_weight{
 }#sub edge_weight{
 
 sub arrowhead {
-	
+
   # Calculates co-ordinates for edge arrowheads
     my $x1=$_[0];
     my $y1=$_[1];
@@ -542,7 +542,7 @@ sub arrowhead {
     my $ar_len = 7;
     my $ar_wid = 3;
     my $ar_hyp = sqrt(($ar_len**2)+($ar_wid**2));
-    
+
 
     my $x3;
     my $y3;
@@ -556,41 +556,41 @@ sub arrowhead {
     my $beta;
     my $poly4 = new GD::Polygon;
     my $poly5 = new GD::Polygon;
-    
+
     if($x1==$x2){$x2-=0.01;}
     if($y1==$y2){$y2-=0.01;}
-    
+
     if($y2>$y1){
-	
+
 	if($x2>$x1){
 	    $cntr_angle+=(pi/2)+atan(abs($y2-$y1)/abs($x2-$x1));
 	}else{
 	    $cntr_angle+= (pi)+atan(abs($x2-$x1)/abs($y2-$y1));
 	}
-	
+
     }else{
-	
+
 	if($x2>$x1){
 	    $cntr_angle+=atan(abs($x2-$x1)/abs($y2-$y1));
 	}else{
 	    $cntr_angle+=((3*pi)/2)+atan(abs($y2-$y1)/abs($x2-$x1));
 	}
-	
+
     }
-    
+
     $x4=$x2-($ar_hyp*(sin($cntr_angle-(pi/4))));
     $x5=$x2+($ar_hyp*(sin($cntr_angle-((3*pi)/4))));
     $y4=$y2-($ar_hyp*(sin($cntr_angle-((3*pi)/4))));
     $y5=$y2-($ar_hyp*(sin($cntr_angle-(pi/4))));
-    
+
     $poly4->addPt($x2,$y2);
     $poly4->addPt($x4,$y4);
     $poly4->addPt($x5,$y5);
-    
+
     $OBJECT_GD_IMAGE->filledPolygon($poly4,$colour);
-    
+
 }#sub arrowhead {
-    
+
 sub node {
 
     my $row = $_[0];
@@ -610,7 +610,7 @@ sub node {
     if($row=~/$COMPLEX_SHAPE/){
 	$internal_extra_node=$EXTRANODE;
 	$counter = 0;
-	
+
 	$ENTITY_NODE_COORDS{$graphviz_row_parse[6]}->{x1}=$LEFT_MARGIN-$MIN_X+(($graphviz_row_parse[2]-($internal_extra_node*$graphviz_row_parse[4]/2))*$FACTOR_IMAGE_MAGNIFICATION);
 	$ENTITY_NODE_COORDS{$graphviz_row_parse[6]}->{y1}=$FIXED_IMAGE_Y-$MIN_Y-$TOP_MARGIN-(($graphviz_row_parse[3]+($internal_extra_node*$graphviz_row_parse[5]/2))*$FACTOR_IMAGE_MAGNIFICATION);
 	$ENTITY_NODE_COORDS{$graphviz_row_parse[6]}->{x2}=$LEFT_MARGIN-$MIN_X+(($graphviz_row_parse[2]+($internal_extra_node*$graphviz_row_parse[4]/2))*$FACTOR_IMAGE_MAGNIFICATION);
@@ -654,11 +654,11 @@ sub node {
 	$OBJECT_GD_IMAGE->filledArc($REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'x'},$REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'y'},$REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'c'},$REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'c'},0,360,$BLUE);
 	if($ALLOW_TEXT){$OBJECT_GD_IMAGE->string(gdMediumBoldFont,$REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'x'}-8,$REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'y'}-8,'R'.$REACTIONS{$graphviz_row_parse[6]}{localcount},$WHITE);}
 	#print IMGENMAPP "OVAL\t$REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'x'}\t$REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'y'}\t$REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'c'}\t$REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'c'}\n";
-	#print IMGENMAPP "TEXT\t".($REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'x'}-8)."\t".($REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'y'}-8)."\tR$REACTIONS{$graphviz_row_parse[6]}{localcount}\tREACTOME:$graphviz_row_parse[6]\n"; 
+	#print IMGENMAPP "TEXT\t".($REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'x'}-8)."\t".($REACTION_NODE_COORDS{$graphviz_row_parse[6]}{'y'}-8)."\tR$REACTIONS{$graphviz_row_parse[6]}{localcount}\tREACTOME:$graphviz_row_parse[6]\n";
     }
-    
+
 }#sub node
-    
+
 sub draw_label {
 
     my $GD = $_[0];
@@ -672,7 +672,7 @@ sub draw_label {
     my $next_chunk = '';
     my $mapp_x = 0;
     my $mapp_y = 0;
-    
+
     if($WRAPLABEL==0){
 	if($ALLOW_TEXT){$$GD->string(gdSmallFont,$x,$y,$text,$BLACK);}
 	$mapp_x = int($FACTOR_GENMAPP_MAGNIFICATION*$x);
@@ -682,9 +682,9 @@ sub draw_label {
 	$text =~ /(^.*)(\[.*\]$)/;
 			my @chunks = split(/\s+|\-/,$1);
 			push(@chunks,$2);
-			
+
 			foreach $next_chunk(@chunks){
-			    
+
 			    $subphrase .= $next_chunk.' ';
 			    if(length($subphrase)>=$min_span){
 				$$GD->string(gdSmallFont,$x,$y,$subphrase,$BLACK);
@@ -695,16 +695,16 @@ sub draw_label {
 				$mapp_y = int($FACTOR_GENMAPP_MAGNIFICATION*$y);
 				#print IMGENMAPP "TEXT\t$mapp_x\t$mapp_y\t$subphrase\n";
 			    }#if(length($subphrase)>=$min_span){
-			    
+
 			}#foreach $next_chunk(@chunks){
 			$$GD->string(gdSmallFont,$x,$y,$subphrase,$BLACK);
 			$mapp_x = int($FACTOR_GENMAPP_MAGNIFICATION*$x);
 			$mapp_y = int($FACTOR_GENMAPP_MAGNIFICATION*$y);
 			#print IMGENMAPP "TEXT\t$mapp_x\t$mapp_y\t$subphrase\n";
 		    }# if($WRAPLABEL==0){
-	
+
 }#sub sub draw_label {
-    
+
 sub dissect_Reaction{
 
   # Extracts Inputs, Output, Catalyst Entities and Regulators for display.
@@ -741,7 +741,7 @@ sub dissect_Reaction{
       }#if
 
    }#foreach
-  
+
 #Regulators
 foreach $regulator (@{$event->regulatedBy}){
     $entity = $regulator->Regulator->[0];
@@ -805,7 +805,7 @@ sub add_Entity {
 	    }else{
 		$REACTIONS{$reaction_id}{relation}{$rltn}{$entity_db_id}=1;
 	    }
-	    
+
 	    if($rltn eq 'Reg'){
 		$REACTIONS{$reaction_id}{relation}{$rltn}{$entity_db_id}=$reg_type;
 	    }
@@ -813,7 +813,7 @@ sub add_Entity {
     }# if(!(exists($KILL_LOOKUP_HASH{$entity_name}))){
 
 }#sub add_Entity {
-    
+
 sub plot_Network{
     my $max_width = $MAX_NODE_WIDTH_RECORDED*$MINIMUM_CELL_WIDTH;
     my $max_height = $MAX_NODE_HEIGHT_RECORDED*$MINIMUM_CELL_HEIGHT;
@@ -830,7 +830,7 @@ sub plot_Network{
     foreach $entity (keys %SPECIES){
 	$node_width=$MINIMUM_CELL_WIDTH*$ENTITY_DISSECTION{$entity}{dimensions}[0]/$divisor;
 	$node_height=$MINIMUM_CELL_HEIGHT*$ENTITY_DISSECTION{$entity}{dimensions}[1]/$divisor;
-	$OBJECT_GRAPHVIZ->add_node(name => $entity, shape => $shape, label => $entity, height => $node_height,width => $node_width, fontsize =>'2');#, rank =>$SPECIES{$entity}{"compartment"});   
+	$OBJECT_GRAPHVIZ->add_node(name => $entity, shape => $shape, label => $entity, height => $node_height,width => $node_width, fontsize =>'2');#, rank =>$SPECIES{$entity}{"compartment"});
     }#foreach $entity (keys %SPECIES){
 
     foreach $reaction (keys %REACTIONS){
@@ -867,7 +867,7 @@ sub typeset {
       $SPECIES{$entity_db_id}{"name"}=$entity->displayName;
       $SPECIES{$entity_db_id}{"name"}=~s/\"|\'/`/g;
       $SPECIES{$entity_db_id}{"name"}=~s/\"|\'/`/g;
-    
+
       #Non-trivial entities (i.e. complexes or sets) are tested for content before their type is assigned, and are sent on for further dissection
       if($entity->is_a('Complex') && (defined($entity->attribute_value('hasComponent'))) && (defined($entity->attribute_value('hasComponent')->[0]))){
 	  $SPECIES{$entity_db_id}{"type"}=3;
@@ -928,7 +928,7 @@ sub typeset {
 
 sub dissect_Entity {
     #Recursive function that dissects non-trivial (i.e. complexes and sets) entities into trivial ones, keeping track of the structural topology and dimensions of smaler non-trivial entties as it goes along.
-    my $ref_higher_structure = $_[0];#This is the parent node in the %ENTITY_DISSECTION tree to append to. 
+    my $ref_higher_structure = $_[0];#This is the parent node in the %ENTITY_DISSECTION tree to append to.
     my $entity = $_[1];
     my $entity_type = $_[2];#This tells the function whether node growth is horizontal or vertical.
     my $local_width = 0;
@@ -941,7 +941,7 @@ sub dissect_Entity {
 
     if($entity_type==3){
 	#COMPLEX
-	#Extract all trivial structures from this complex and any of its component subcomplexes. 
+	#Extract all trivial structures from this complex and any of its component subcomplexes.
 	my  $d_results = $entity->follow_class_attributes3
          (-INSTRUCTIONS =>
           {'Complex' => {'attributes' => [qw(hasComponent)]}},
@@ -969,18 +969,18 @@ sub dissect_Entity {
 	map{
 	    if(defined($component_counter{$_->db_id}{count})){
 		$component_counter{$_->db_id}{count}++;
-		
+
 	    }else{
 		$component_counter{$_->db_id}{count}=1;
 		$component_counter{$_->db_id}{order}=$main_component_counter{$_->db_id}{order};
 #                $component_order++;
 	    }
-	    #Function simple_Type returns 1 for sequence, 2 for small molecule, and 0 if not. 
+	    #Function simple_Type returns 1 for sequence, 2 for small molecule, and 0 if not.
 	    $component_counter{$_->db_id}{type}=simple_Type($_);
 	    $component_counter{$_->db_id}{entity}=$_;
 	}@{$dissection_results};
 
-	#Stored the info required for final labelling - an array containing [0] stoichiometry and [1] type of trivial entity (for colour coding). 
+	#Stored the info required for final labelling - an array containing [0] stoichiometry and [1] type of trivial entity (for colour coding).
 	map{
 	    $local_height++; #With each new component in the stack, unit height is incremented.
 	    @{$ref_higher_structure->{$_}{label}}=(&provide_Label_Name($component_counter{$_}{entity},$component_counter{$_}{type}),$component_counter{$_}{type});
@@ -1010,7 +1010,7 @@ sub dissect_Entity {
 		$component_counter{$_->db_id}{entity}=$_;
             }
         }@{$dissection_results};
-	
+
 	map{
 	    $local_height++;#Making more space for sets
 	    if($component_counter{$_}{count}>1){
@@ -1097,7 +1097,7 @@ sub draw_Entity {
     my $separator_thickness = 1;
     my $width_for_set_count_marker = 10;
     my $adjust_width=0;
-  
+
     if ($dir eq 'v'){
 
 	my @keys_in_order = ();
@@ -1226,7 +1226,7 @@ sub simple_Type {
 }# sub simple_Type {
 
 sub provide_Label_Name {
-    
+
     my $entity = $_[0];
     my $type = $_[1];
     my $name = '';

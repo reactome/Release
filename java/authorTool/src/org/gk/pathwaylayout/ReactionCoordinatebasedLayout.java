@@ -74,9 +74,9 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 	protected Map<Vertex, List> node2neighbours = Collections.synchronizedMap(new HashMap<Vertex, List>());
 	protected Set<GKInstance> hiddenEntities = new HashSet<GKInstance>();
 	protected Map<Vertex, Set> enode2rnodes = new HashMap<Vertex, Set>();
-	
+
 	public GKInstance focusSpecies = null;
-	
+
 /*	public ReactionCoordinatebasedLayout() throws Exception {
 		//this.dba = new MySQLAdaptor("localhost","test_gk_central_20070531","ro","loe",3306);
 		this.dba = new MySQLAdaptor("localhost","test_reactome_23_entity_level_view","ro","loe",3306);
@@ -89,12 +89,12 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 	public ReactionCoordinatebasedLayout() throws Exception {
 
 	}
-	
+
 	public ReactionCoordinatebasedLayout(MySQLAdaptor dba) throws Exception {
 		this.dba = dba;
 		init();
 	}
-	
+
 	public ReactionCoordinatebasedLayout(GKInstance species) throws Exception {
 		this.dba = (MySQLAdaptor) species.getDbAdaptor();
 		this.focusSpecies = species;
@@ -138,7 +138,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			public void actionPerformed(ActionEvent arg0) {
 				save = true;
 			}
-		});		
+		});
 		JButton zoomInButton = new JButton("+");
 		zoomInButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -150,7 +150,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			public void actionPerformed(ActionEvent arg0) {
 				graph.setScale(graph.getScale() / PathwayLayoutConstants.ZOOM_STEP);
 			}
-		});		
+		});
 		controlPanel.add(relaxButton);
 //		controlPanel.add(relaxWithoutRepaintButton);
 		controlPanel.add(saveButton);
@@ -186,7 +186,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		//setNeighbouringVerteces();
 		relaxer = new Thread(this, "Relaxer");
 		//relax = true;
-		relaxer.start();		
+		relaxer.start();
 	}
 
 	public void init2() throws Exception {
@@ -228,7 +228,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		relaxer.join();
 		frame.dispose();
 	}
-	
+
 	public void initNoGUI() throws Exception {
 		graph.setScale(0.125);
 		List nodes = new ArrayList();
@@ -262,7 +262,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		relaxer.start();
 		save = true;
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		ReactionCoordinatebasedLayout a = new ReactionCoordinatebasedLayout();
 		a.printSomeStats();
@@ -299,7 +299,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		//GraphConstants.setBorder(node.getAttributes(), BorderFactory.createRaisedBevelBorder());
 		Color c;
 		if (entity.getSchemClass().getName().equals(ReactomeJavaConstants.EntityWithAccessionedSequence)) {
-			if (entity.getAttributeValue(ReactomeJavaConstants.referenceEntity) != null && 
+			if (entity.getAttributeValue(ReactomeJavaConstants.referenceEntity) != null &&
 					((GKInstance)entity.getAttributeValue(ReactomeJavaConstants.referenceEntity)).getSchemClass().getName().equals(ReactomeJavaConstants.ReferencePeptideSequence)) {
 				c = PathwayLayoutConstants.PROTEIN_COLOR;
 			} else {
@@ -335,7 +335,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		dba.loadInstanceReverseAttributeValues(reactions, new String[]{ReactomeJavaConstants.regulatedEntity});
 		return reactions;
 	}
-	
+
 	public static void moveTest(GraphModel model, DefaultGraphCell vertex) {
 		AttributeMap map = model.getAttributes(vertex);
 		Map nested = new Hashtable();
@@ -448,7 +448,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	/**
 	 * This method inserts output entities which have not been inserted already and which are not on the list
 	 * of hidden entities.
@@ -496,11 +496,11 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 				continue;
 			// Only insert entities which are not used as an input anywhere. However, want to consider only localised Reactions
 			Collection consumingEvents = entity.getReferers(ReactomeJavaConstants.input);
-			if (consumingEvents != null) { 
+			if (consumingEvents != null) {
 				Collection<GKInstance> filteredConsumingEvents = new ArrayList<GKInstance>();
 				for (Iterator cei = consumingEvents.iterator(); cei.hasNext();) {
 					GKInstance consumingEvent = (GKInstance)cei.next();
-					if (reactionInstance2NodeMap.containsKey(consumingEvent)) 
+					if (reactionInstance2NodeMap.containsKey(consumingEvent))
 						filteredConsumingEvents.add(consumingEvent);
 				}
 				if (!filteredConsumingEvents.isEmpty()) {
@@ -527,7 +527,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			setReactionOutputInserted(reaction,entity);
 		}
 		return toBeInserted;
-	}	
+	}
 
 	/**
 	 * This method inserts output entities only if none of the outputs has been inserted thus far.
@@ -554,11 +554,11 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 				hiddenEntities.add(entity);
 			} else {
 				Collection consumingEvents = entity.getReferers(ReactomeJavaConstants.input);
-				if (consumingEvents != null) { 
+				if (consumingEvents != null) {
 					Collection<GKInstance> filteredConsumingEvents = new ArrayList<GKInstance>();
 					for (Iterator cei = consumingEvents.iterator(); cei.hasNext();) {
 						GKInstance consumingEvent = (GKInstance)cei.next();
-						if (reactionInstance2NodeMap.containsKey(consumingEvent)) 
+						if (reactionInstance2NodeMap.containsKey(consumingEvent))
 							filteredConsumingEvents.add(consumingEvent);
 					}
 					if (filteredConsumingEvents.isEmpty())
@@ -590,8 +590,8 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			setReactionOutputInserted(reaction,entity);
 		}
 		return toBeInserted;
-	}	
-	
+	}
+
 	public List insertEntities(GKInstance reaction) throws InvalidAttributeException, Exception {
 		List toBeInserted = new ArrayList(); // new things which will have to be inserted into model
 		Map entityToCountMap = new HashMap();
@@ -770,7 +770,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	public List insertConnectingEntities(GKInstance reaction) throws InvalidAttributeException, Exception {
 		List toBeInserted = new ArrayList(); // new things which will have to be inserted into model
 		Map entityToCountMap = new HashMap();
@@ -815,7 +815,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 				reactionNodes.add(rnode2);
 				setReactionOutputInserted(event,entity);
 			}
-			setEntityNodeBounds(enode, reactionNodes);			
+			setEntityNodeBounds(enode, reactionNodes);
 		}
 		for (Iterator it = reaction.getAttributeValuesList(ReactomeJavaConstants.catalystActivity).iterator(); it.hasNext();) {
 			GKInstance entity = (GKInstance)((GKInstance) it.next()).getAttributeValue(ReactomeJavaConstants.physicalEntity);
@@ -886,7 +886,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		List<DefaultGraphCell> toBeInserted = new ArrayList<DefaultGraphCell>(); // new things which will have to be inserted into model
 		for (Iterator it = reaction.getAttributeValuesList(ReactomeJavaConstants.input).iterator(); it.hasNext();) {
 			GKInstance entity = (GKInstance) it.next();
-			if (isReactionInputInserted(reaction, entity)) 
+			if (isReactionInputInserted(reaction, entity))
 				continue;
 			List<GKInstance> helperList = new ArrayList<GKInstance>();
 			List<GKInstance[]> helperList2 = new ArrayList<GKInstance[]>();
@@ -923,7 +923,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			Vertex enode = createNodeForEntity(entity);
 			toBeInserted.add(enode);
 			Set<Vertex> reactionNodes = new HashSet<Vertex>(); // for calculating the entity node initial position
-			
+
 			for (GKInstance followingEvent : followingEvents) {
 				Vertex rnode2 = (Vertex)reactionInstance2NodeMap.get(followingEvent);
 				if (rnode2 == null)
@@ -945,7 +945,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 				reactionNodes.add(rnode2);
 				setReactionOutputInserted(event,entity);
 			}
-			setEntityNodeBounds(enode, reactionNodes);			
+			setEntityNodeBounds(enode, reactionNodes);
 		}
 		Vertex rnode = (Vertex)reactionInstance2NodeMap.get(reaction);
 		for (Iterator it = reaction.getAttributeValuesList(ReactomeJavaConstants.catalystActivity).iterator(); it.hasNext();) {
@@ -1012,7 +1012,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	public List insertCloseConnectingEntitiesOnce (GKInstance reaction) throws InvalidAttributeException, Exception {
 		List<DefaultGraphCell> toBeInserted = new ArrayList<DefaultGraphCell>(); // new things which will have to be inserted into model
 		List<DefaultGraphCell> l = insertSomeInputEntitiesIfNecessary(reaction);
@@ -1101,7 +1101,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	public List insertCloseEntities (GKInstance reaction) throws InvalidAttributeException, Exception {
 		List<DefaultGraphCell> toBeInserted = new ArrayList<DefaultGraphCell>(); // new things which will have to be inserted into model
 		Set<GKInstance>inputEntities = new HashSet();
@@ -1192,7 +1192,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	private List<DefaultGraphCell> insertSomeInputEntitiesIfNecessary(GKInstance reaction) throws InvalidAttributeException, Exception {
 		if (reaction.getAttributeValue(ReactomeJavaConstants.input) == null)
 			return null;
@@ -1252,7 +1252,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			if (!helperSet.isEmpty())
 				classifiedEntities[CONNECTING_ENTITY_IDX] = helperSet;
 		}
-		
+
 		if (classifiedEntities[CONNECTING_ENTITY_IDX].isEmpty() && classifiedEntities[CONNECTING_VIA_SET_ENTITY_IDX].isEmpty()) {
 			if (!classifiedEntities[INSERTED_ENTITY_IDX].isEmpty()) {
 				return null;
@@ -1268,7 +1268,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return null;
 	}
-	
+
 	private List insertEntityAsInput (GKInstance reaction, Set entities) throws Exception {
 		List toBeInserted = new ArrayList();
 		for (Iterator i = entities.iterator(); i.hasNext();) {
@@ -1277,7 +1277,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	private List insertEntityAsInput (GKInstance reaction, GKInstance entity) throws Exception {
 		List toBeInserted = new ArrayList();
 		setReactionInputInserted(reaction, entity);
@@ -1291,7 +1291,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		toBeInserted.add(edge);
 		return toBeInserted;
 	}
-	
+
 	private List insertConnectingInputEntities (GKInstance reaction, Set entities) throws Exception {
 		List toBeInserted = new ArrayList();
 		for (Iterator i = entities.iterator(); i.hasNext();) {
@@ -1301,7 +1301,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	private List insertConnectingInputEntities (GKInstance reaction, GKInstance entity) throws Exception {
 		List toBeInserted = new ArrayList();
 		setReactionInputInserted(reaction, entity);
@@ -1340,7 +1340,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		Vertex enode = createNodeForEntity(entity);
 		toBeInserted.add(enode);
 		Set<Vertex> reactionNodes = new HashSet<Vertex>(); // for calculating the entity node initial position
-		
+
 		for (GKInstance followingEvent : followingEvents) {
 			Vertex rnode2 = (Vertex)reactionInstance2NodeMap.get(followingEvent);
 			if (rnode2 == null)
@@ -1366,10 +1366,10 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			reactionNodes.add(rnode2);
 			setReactionOutputInserted(event,entity);
 		}
-		setEntityNodeBounds(enode, reactionNodes);	
+		setEntityNodeBounds(enode, reactionNodes);
 		return toBeInserted;
 	}
-	
+
 	public void setReactionInputInserted(GKInstance reaction, GKInstance entity) {
 		Set<GKInstance> r2i = (Set)reaction2input.get(reaction);
 		if (r2i== null) {
@@ -1396,7 +1396,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			return true;
 		return false;
 	}
-	
+
 	public boolean isReactionAnyOutputInserted(GKInstance reaction) {
 		Set r2o = (Set)reaction2output.get(reaction);
 		if (r2o == null)
@@ -1405,7 +1405,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			return true;
 		return false;
 	}
-	
+
 	public boolean isReactionInputInserted(GKInstance reaction, GKInstance entity) {
 		Set r2i = (Set)reaction2input.get(reaction);
 		if (r2i == null)
@@ -1528,14 +1528,14 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		GraphConstants.setBounds(enode.getAttributes(),new Rectangle(
 				(int)x,(int)y,PathwayLayoutConstants.DEFAULT_ENTITY_NODE_WIDTH,PathwayLayoutConstants.DEFAULT_ENTITY_NODE_HEIGHT));
 	}
-	
+
 	/*
 	 * This is somewhat ridiculous: what I want is to know the node size at the time of placing it.
 	 * Initially I tried inserting them into the graph, measuring their size and then re-locating
 	 * straightaway. However, I constantly get a weird NullPointerException for seemingly random
-	 * node at some point of the process. Hence the need to cache the neighbours and re-adjust 
+	 * node at some point of the process. Hence the need to cache the neighbours and re-adjust
 	 * the location after everything has been inserted. Thankfully this approach works thus far.
-	 */ 
+	 */
 	public void resetEntityNodeBounds() throws InvalidAttributeException, Exception {
 		Map nested = new Hashtable();
 		for (Iterator<Vertex> ei = enode2rnodes.keySet().iterator(); ei.hasNext();) {
@@ -1572,7 +1572,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		model.edit(nested, null, null, null);
 	}
-	
+
 	public void resetEntityNodeBounds1() throws InvalidAttributeException, Exception {
 		Map nested = new Hashtable();
 		for (Iterator<Vertex> ei = enode2rnodes.keySet().iterator(); ei.hasNext();) {
@@ -1605,7 +1605,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		model.edit(nested, null, null, null);
 	}
-	
+
 	public void setEntityNodeBounds2(Vertex enode, Set rnodes) {
 		DefaultGraphCell tv = new DefaultGraphCell(enode.toString());
 		GraphConstants.setResize(tv.getAttributes(), true);
@@ -1645,7 +1645,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		GraphConstants.setBounds(enode.getAttributes(),new Rectangle(
 				(int)x,(int)y,PathwayLayoutConstants.DEFAULT_ENTITY_NODE_WIDTH,PathwayLayoutConstants.DEFAULT_ENTITY_NODE_HEIGHT));
 	}
-	
+
 	public void run1() {
 		Thread me = Thread.currentThread();
 		while (me == relaxer) {
@@ -1685,7 +1685,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	synchronized void relax() {
 		double start = new Date().getTime();
 		for (Iterator ei = edges.iterator(); ei.hasNext();) {
@@ -1938,7 +1938,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			System.out.println("relax() run for " + duration + "seconds");
 		inRelax = false;
 	}
-	
+
 	public double reactionDistance (GKInstance reaction1, GKInstance reaction2) {
 		Vertex rnode1 = reactionInstance2NodeMap.get(reaction1);
 		Vertex rnode2 = reactionInstance2NodeMap.get(reaction2);
@@ -1947,7 +1947,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		int dy = rnode1.getY() - rnode2.getY();
 		return Math.sqrt(dx * dx + dy * dy);
 	}
-	
+
 	public void updateView() {
 		//System.out.println("Starting updateView");
 		inUpdateView = true;
@@ -1989,7 +1989,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		System.out.println("Finished saveAsImage()");
 	}
-	
+
 	public void saveAsTiles() throws IOException {
 		relax = false;
 		while(inRelax || inUpdateView) {
@@ -2020,7 +2020,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			}
 		}
 	}
-	
+
 	/*
 	 * This method is simply too slow
 	 */
@@ -2044,7 +2044,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 				graphics.fillRect(0, 0, img.getWidth(), img.getHeight());
 				graphics.setComposite(AlphaComposite.SrcOver);
 				graphics.translate(-x*tileWitdh,-y*tileWitdh);
-				graph.print(graphics);	
+				graph.print(graphics);
 				graphics.dispose();
 				try {
 					ImageIO.write(img, "png", tileFile);
@@ -2054,7 +2054,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			}
 		}
 	}
-	
+
 	public void saveZoomLevelAsTiles(double zoomLevel, File dir) throws IOException {
 		System.out.printf("Starting saveZoomLevelAsTiles(%s, %s)\n", zoomLevel, dir);
 		graph.setScale(zoomLevel);
@@ -2103,7 +2103,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			}
 		}
 	}
-	
+
 	public void saveZoomLevelAsTilesTest(double zoomLevel, File dir) throws IOException {
 		System.out.printf("Starting saveZoomLevelAsTiles(%s, %s)\n", zoomLevel, dir);
 		graph.setScale(zoomLevel);
@@ -2149,7 +2149,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			}
 		}
 	}
-	
+
 	public void printSomeStats() {
 		System.out.println("Reactions: " + reactionInstance2NodeMap.size());
 		System.out.println("Verteces: " + verteces.size());
@@ -2190,7 +2190,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		System.out.println("Finished reportVertecesWithMultipleOutputEdges()");
 	}
-	
+
 	public void printHtml() throws FileNotFoundException {
 		PrintStream ps = new PrintStream("out.html");
 		ps.println("<HTML>\n" +
@@ -2200,32 +2200,32 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 				"<div id=\"dhtmltooltip\" class=\"dhtmltooltip\"></div>" +
 				"<script language=\"javascript\" src=\"/javascript/tooltip.js\"></script>" +
 				"<MAP NAME=\"img_map\">");
-		String format = "<AREA SHAPE=\"rect\" COORDS=\"%.0f,%.0f,%.0f,%.0f\" HREF=\"/cgi-bin/eventbrowser?ID=%d\" ONMOUSEOVER=\"ddrivetip('%s','dcdcdc',250);\" ONMOUSEOUT='hideddrivetip();'>\n";		
+		String format = "<AREA SHAPE=\"rect\" COORDS=\"%.0f,%.0f,%.0f,%.0f\" HREF=\"/content/detail/%d\" ONMOUSEOVER=\"ddrivetip('%s','dcdcdc',250);\" ONMOUSEOUT='hideddrivetip();'>\n";
 		double scale = graph.getScale();
 		for (Vertex v : verteces) {
 			Rectangle bounds = v.getBounds();
 			GKInstance i = (GKInstance)v.getUserObject();
-			ps.printf(format, scale*bounds.x, scale*bounds.y, scale*(bounds.x+bounds.width), scale*(bounds.y+bounds.height), i.getDBID(), 
+			ps.printf(format, scale*bounds.x, scale*bounds.y, scale*(bounds.x+bounds.width), scale*(bounds.y+bounds.height), i.getDBID(),
 					org.apache.commons.lang.StringEscapeUtils.escapeHtml(i.getDisplayName()));
 		}
 		ps.println("</MAP><IMG USEMAP=#img_map BORDER=\"0\" SRC=\"out.png\"></BODY></HTML>");
 		ps.close();
 	}
-	
+
 	public void saveCoordinates(double zoomLevel, File dir) throws FileNotFoundException {
 		File outFile = new File(dir, "coordinates.txt");
 		PrintStream ps = new PrintStream(outFile);
-		String format = "%d\t%.0f,%.0f,%.0f,%.0f\t\"%s\"\n";		
+		String format = "%d\t%.0f,%.0f,%.0f,%.0f\t\"%s\"\n";
 		for (Vertex v : verteces) {
 			Rectangle bounds = v.getBounds();
 			GKInstance i = (GKInstance)v.getUserObject();
-			ps.printf(format, i.getDBID(), 
-					zoomLevel*bounds.x, zoomLevel*bounds.y, zoomLevel*bounds.width, zoomLevel*bounds.height, 
+			ps.printf(format, i.getDBID(),
+					zoomLevel*bounds.x, zoomLevel*bounds.y, zoomLevel*bounds.width, zoomLevel*bounds.height,
 					org.apache.commons.lang.StringEscapeUtils.escapeHtml(i.getDisplayName()));
 		}
 		ps.close();
 	}
-	
+
 	protected boolean isHiddenEntity (GKInstance entity) {
 		return hiddenEntities.contains(entity);
 	}
@@ -2360,7 +2360,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		model.edit(nested, null, null, null);
 		System.out.println("Finished placeEntitiesWithSingleEdge");
 	}
-	
+
 	public void placeEntitiesWithSingleEdge() {
 		System.out.println("Starting placeEntitiesWithSingleEdge");
 		Map nested = new HashMap();
@@ -2458,7 +2458,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		model.edit(nested, null, null, null);
 		System.out.println("Finished placeEntitiesWithSingleEdge");
 	}
-	
+
 	/*
 	 * PolarCoordinates should contain the "bearing" around which the satellites will be placed.
 	 * At the moment the satellites will be spread in the sector -c..c radians of the bearing
@@ -2469,7 +2469,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		int px = (int) pb.getCenterX();
 		int py = (int) pb.getCenterY();
 		//double c = Math.PI * 0.25;
-		double c = Math.min(Math.PI/12 * Math.sqrt(satellites.size()), Math.PI * 0.45); 
+		double c = Math.min(Math.PI/12 * Math.sqrt(satellites.size()), Math.PI * 0.45);
 		double phi;
 		double step;
 		if (satellites.size() == 1) {
@@ -2514,7 +2514,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		//model.edit(nested, null, null, null);
 		return nested;
 	}
-	
+
 	/*
 	 * This is rather useless
 	 */
@@ -2555,7 +2555,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		System.out.println("Finished nudgeOverlappingNodes");
 	}
-	
+
 	/*
 	 * Finds overlaping entity nodes regardless of the extent of the overlap
 	 */
@@ -2578,7 +2578,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return out;
 	}
-	
+
 	/*
 	 * Finds entity nodes with overlap area at least 0.9 of the area of the smaller node
 	 */
@@ -2609,7 +2609,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return out;
 	}
-	
+
 	/*
 	 * Finds sets (technically Lists though) of entity nodes which have identical
 	 * centre point.
@@ -2645,8 +2645,8 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		System.out.printf("%d sets of entity nodes with identical centrepoint\n", out.size());
 		return out;
 	}
-	
-	/* 
+
+	/*
 	 * Finds sets of entity nodes which have identical centre point and distributes them evenly
 	 * on the perimter of a circle around the centrepoint. Circle diameter is the average of node
 	 * diagonals. Starting bearing of the spreading is perpendicular to the average bearing (if
@@ -2672,9 +2672,9 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		model.edit(nested, null, null, null);
 	}
-	
+
 	/*
-	 * Find sets (well, technically Lists) of Nodes with identical connectivity 
+	 * Find sets (well, technically Lists) of Nodes with identical connectivity
 	 * and with at least 2 connected nodes.
 	 */
 	public List<List<Vertex>> findSetsOfEntityNodesWithIdenticalConnectivity () {
@@ -2705,8 +2705,8 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		System.out.printf("%d sets of entity nodes with identical connectivity\n", out.size());
 		return out;
 	}
-	
-	/* 
+
+	/*
 	 * Finds sets of entity nodes which have identical connectivity and distributes them evenly
 	 * on the perimter of a circle around the centrepoint. Circle diameter is the average of node
 	 * diagonals. Starting bearing of the spreading is perpendicular to the average bearing (if
@@ -2732,7 +2732,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		model.edit(nested, null, null, null);
 	}
-	
+
 	/*
 	 * Spreads given set of verteces on the perimeter of a circle starting from the given bearing
 	 * and centred at Point center or, if null, at the average centrepoint of the verteces in the
@@ -2747,7 +2747,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			py = (int)bounds.getCenterY();
 		} else {
 			px = center.x;
-			py = center.y;			
+			py = center.y;
 		}
 		double r = 0;
 		for (Vertex v : nodes) {
@@ -2777,7 +2777,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		return nested;
 	}
-	
+
 	public void unfixOverlappingEntityNodes () {
 		Set<Vertex> overlappingEntitiesSet = findSignificantlyOverlappingEntityNodes();
 		System.out.printf("Found %d significantly overlapping entities\n", overlappingEntitiesSet.size());
@@ -2792,7 +2792,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		model.edit(nested, null, null, null);
 	}
-	
+
 	/*
 	 * ehem... vertex.translate() did not seem to work for a single translation
 	 * only but is OK when issued from relax* functions.
@@ -2807,7 +2807,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		nested.put(v, attMap);
 		model.edit(nested, null, null, null);
 	}
-	
+
 	public void bringReactionNodesToFront () {
 		List<Vertex> l = new ArrayList<Vertex>();
 		for (Vertex v : verteces) {
@@ -2815,7 +2815,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		model.toFront(l.toArray());
 	}
-	
+
 	public void collapseClusteredCatalystVerteces () {
 		System.out.println("Starting collapseClusteredCatalystVerteces");
 		VertexClusterer vc = new VertexClusterer();
@@ -2835,7 +2835,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		}
 		System.out.println("Finished collapseClusteredCatalystVerteces");
 	}
-	
+
 	public void collapseVerteces1 (List<Vertex> vertexList) {
 		System.out.printf("collapseVerteces: %d\t%s\n", vertexList.size(), vertexList.get(0).getUserObject().toString());
 		Iterator<Vertex> i = vertexList.iterator();
@@ -2865,7 +2865,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		m.put(v1, atts);
 		model.edit(m, null, null, null);
 	}
-	
+
 	public void collapseVerteces (List<Vertex> vertexList) {
 		System.out.printf("collapseVerteces: %d\t%s\n", vertexList.size(), vertexList.get(0).getUserObject().toString());
 		Vertex v1;
@@ -2901,7 +2901,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		verteces.removeAll(vertexList);
 		model.remove(vertexList.toArray());
 	}
-	
+
 	public void storeGraphInDb () throws InvalidAttributeException, Exception {
 		System.out.println("Starting storeGraphInDb");
 		if (dba.supportsTransactions())
@@ -2922,7 +2922,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 			dba.commit();
 		System.out.println("Finished storeGraphInDb");
 	}
-	
+
 	private GKInstance createInstance (Vertex v) throws InvalidAttributeException, Exception {
 		Schema schema = dba.getSchema();
 		GKInstance i;
@@ -2941,7 +2941,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		v.storageInstance = i;
 		return i;
 	}
-	
+
 	private GKInstance createInstance (Edge e) throws InvalidAttributeException, Exception {
 		Schema schema = dba.getSchema();
 		GKInstance i = new GKInstance(schema.getClassByName(ReactomeJavaConstants.Edge));
@@ -2951,7 +2951,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		e.storageInstance = i;
 		return i;
 	}
-	
+
 	private GKInstance createInstance () throws InvalidAttributeException, Exception {
 		Schema schema = dba.getSchema();
 		Rectangle bounds = graph.getCellBounds(graph.getRoots()).getBounds();
@@ -2962,7 +2962,7 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		i.setIsInflated(true);
 		return i;
 	}
-	
+
 	public Point findBottomRight() {
 		int max_x = 0;
 		int max_y = 0;
@@ -2975,12 +2975,12 @@ public class ReactionCoordinatebasedLayout implements Runnable {
 		//return new Point(max_x+10,max_y+10);
 		return new Point(max_x,max_y);
 	}
-	
+
 	public void removeVerteces (Collection verteces) {
 		this.verteces.removeAll(verteces);
 		model.remove(verteces.toArray());
 	}
-	
+
 	public void removeEdges (Collection edges) {
 		this.edges.removeAll(edges);
 		model.remove(edges.toArray());

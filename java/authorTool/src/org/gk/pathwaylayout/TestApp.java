@@ -74,7 +74,7 @@ public class TestApp implements Runnable {
 	protected Map<Vertex, List> node2neighbours = Collections.synchronizedMap(new HashMap<Vertex, List>());
 	protected Collection hiddenEntities;
 	protected Map<Vertex, Set> enode2rnodes = new HashMap<Vertex, Set>();
-	
+
 	public TestApp() throws Exception {
 		this.dba = new MySQLAdaptor("localhost","test_gk_central_20070531","ro","loe",3306);
 		main = Thread.currentThread();
@@ -124,7 +124,7 @@ public class TestApp implements Runnable {
 			public void actionPerformed(ActionEvent arg0) {
 				save = true;
 			}
-		});		
+		});
 		JButton zoomInButton = new JButton("+");
 		zoomInButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -136,7 +136,7 @@ public class TestApp implements Runnable {
 			public void actionPerformed(ActionEvent arg0) {
 				graph.setScale(graph.getScale() / PathwayLayoutConstants.ZOOM_STEP);
 			}
-		});		
+		});
 		controlPanel.add(relaxButton);
 //		controlPanel.add(relaxWithoutRepaintButton);
 		controlPanel.add(saveButton);
@@ -170,7 +170,7 @@ public class TestApp implements Runnable {
 		//setNeighbouringVerteces();
 		relaxer = new Thread(this, "Relaxer");
 		//relax = true;
-		relaxer.start();		
+		relaxer.start();
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -209,7 +209,7 @@ public class TestApp implements Runnable {
 		//GraphConstants.setBorder(node.getAttributes(), BorderFactory.createRaisedBevelBorder());
 		Color c;
 		if (entity.getSchemClass().getName().equals(ReactomeJavaConstants.EntityWithAccessionedSequence)) {
-			if (entity.getAttributeValue(ReactomeJavaConstants.referenceEntity) != null && 
+			if (entity.getAttributeValue(ReactomeJavaConstants.referenceEntity) != null &&
 					((GKInstance)entity.getAttributeValue(ReactomeJavaConstants.referenceEntity)).getSchemClass().getName().equals(ReactomeJavaConstants.ReferencePeptideSequence)) {
 				c = PathwayLayoutConstants.PROTEIN_COLOR;
 			} else {
@@ -358,7 +358,7 @@ public class TestApp implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	/**
 	 * This method inserts output entities which have not been inserted already and which are not on the list
 	 * of hidden entities.
@@ -406,11 +406,11 @@ public class TestApp implements Runnable {
 				continue;
 			// Only insert entities which are not used as an input anywhere. However, want to consider only localised Reactions
 			Collection consumingEvents = entity.getReferers(ReactomeJavaConstants.input);
-			if (consumingEvents != null) { 
+			if (consumingEvents != null) {
 				Collection<GKInstance> filteredConsumingEvents = new ArrayList<GKInstance>();
 				for (Iterator cei = consumingEvents.iterator(); cei.hasNext();) {
 					GKInstance consumingEvent = (GKInstance)cei.next();
-					if (reactionInstance2NodeMap.containsKey(consumingEvent)) 
+					if (reactionInstance2NodeMap.containsKey(consumingEvent))
 						filteredConsumingEvents.add(consumingEvent);
 				}
 				if (!filteredConsumingEvents.isEmpty()) {
@@ -437,7 +437,7 @@ public class TestApp implements Runnable {
 			setReactionOutputInserted(reaction,entity);
 		}
 		return toBeInserted;
-	}	
+	}
 
 	/**
 	 * This method inserts output entities only if none of the outputs has been inserted thus far.
@@ -464,11 +464,11 @@ public class TestApp implements Runnable {
 				hiddenEntities.add(entity);
 			} else {
 				Collection consumingEvents = entity.getReferers(ReactomeJavaConstants.input);
-				if (consumingEvents != null) { 
+				if (consumingEvents != null) {
 					Collection<GKInstance> filteredConsumingEvents = new ArrayList<GKInstance>();
 					for (Iterator cei = consumingEvents.iterator(); cei.hasNext();) {
 						GKInstance consumingEvent = (GKInstance)cei.next();
-						if (reactionInstance2NodeMap.containsKey(consumingEvent)) 
+						if (reactionInstance2NodeMap.containsKey(consumingEvent))
 							filteredConsumingEvents.add(consumingEvent);
 					}
 					if (filteredConsumingEvents.isEmpty())
@@ -500,8 +500,8 @@ public class TestApp implements Runnable {
 			setReactionOutputInserted(reaction,entity);
 		}
 		return toBeInserted;
-	}	
-	
+	}
+
 	public List insertEntities(GKInstance reaction) throws InvalidAttributeException, Exception {
 		List toBeInserted = new ArrayList(); // new things which will have to be inserted into model
 		Map entityToCountMap = new HashMap();
@@ -680,7 +680,7 @@ public class TestApp implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	public List insertConnectingEntities(GKInstance reaction) throws InvalidAttributeException, Exception {
 		List toBeInserted = new ArrayList(); // new things which will have to be inserted into model
 		Map entityToCountMap = new HashMap();
@@ -725,7 +725,7 @@ public class TestApp implements Runnable {
 				reactionNodes.add(rnode2);
 				setReactionOutputInserted(event,entity);
 			}
-			setEntityNodeBounds(enode, reactionNodes);			
+			setEntityNodeBounds(enode, reactionNodes);
 		}
 		for (Iterator it = reaction.getAttributeValuesList(ReactomeJavaConstants.catalystActivity).iterator(); it.hasNext();) {
 			GKInstance entity = (GKInstance)((GKInstance) it.next()).getAttributeValue(ReactomeJavaConstants.physicalEntity);
@@ -796,7 +796,7 @@ public class TestApp implements Runnable {
 		List<DefaultGraphCell> toBeInserted = new ArrayList<DefaultGraphCell>(); // new things which will have to be inserted into model
 		for (Iterator it = reaction.getAttributeValuesList(ReactomeJavaConstants.input).iterator(); it.hasNext();) {
 			GKInstance entity = (GKInstance) it.next();
-			if (isReactionInputInserted(reaction, entity)) 
+			if (isReactionInputInserted(reaction, entity))
 				continue;
 			List<GKInstance> helperList = new ArrayList<GKInstance>();
 			List<GKInstance[]> helperList2 = new ArrayList<GKInstance[]>();
@@ -833,7 +833,7 @@ public class TestApp implements Runnable {
 			Vertex enode = createNodeForEntity(entity);
 			toBeInserted.add(enode);
 			Set<Vertex> reactionNodes = new HashSet<Vertex>(); // for calculating the entity node initial position
-			
+
 			for (GKInstance followingEvent : followingEvents) {
 				Vertex rnode2 = (Vertex)reactionInstance2NodeMap.get(followingEvent);
 				if (rnode2 == null)
@@ -855,7 +855,7 @@ public class TestApp implements Runnable {
 				reactionNodes.add(rnode2);
 				setReactionOutputInserted(event,entity);
 			}
-			setEntityNodeBounds(enode, reactionNodes);			
+			setEntityNodeBounds(enode, reactionNodes);
 		}
 		Vertex rnode = (Vertex)reactionInstance2NodeMap.get(reaction);
 		for (Iterator it = reaction.getAttributeValuesList(ReactomeJavaConstants.catalystActivity).iterator(); it.hasNext();) {
@@ -922,7 +922,7 @@ public class TestApp implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	public List insertCloseConnectingEntitiesOnce (GKInstance reaction) throws InvalidAttributeException, Exception {
 		List<DefaultGraphCell> toBeInserted = new ArrayList<DefaultGraphCell>(); // new things which will have to be inserted into model
 		List<DefaultGraphCell> l = insertSomeInputEntitiesIfNecessary(reaction);
@@ -1011,7 +1011,7 @@ public class TestApp implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	public List insertCloseEntities (GKInstance reaction) throws InvalidAttributeException, Exception {
 		List<DefaultGraphCell> toBeInserted = new ArrayList<DefaultGraphCell>(); // new things which will have to be inserted into model
 		Set<GKInstance>inputEntities = new HashSet();
@@ -1102,7 +1102,7 @@ public class TestApp implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	private List<DefaultGraphCell> insertSomeInputEntitiesIfNecessary(GKInstance reaction) throws InvalidAttributeException, Exception {
 		if (reaction.getAttributeValue(ReactomeJavaConstants.input) == null)
 			return null;
@@ -1162,7 +1162,7 @@ public class TestApp implements Runnable {
 			if (!helperSet.isEmpty())
 				classifiedEntities[CONNECTING_ENTITY_IDX] = helperSet;
 		}
-		
+
 		if (classifiedEntities[CONNECTING_ENTITY_IDX].isEmpty() && classifiedEntities[CONNECTING_VIA_SET_ENTITY_IDX].isEmpty()) {
 			if (!classifiedEntities[INSERTED_ENTITY_IDX].isEmpty()) {
 				return null;
@@ -1178,7 +1178,7 @@ public class TestApp implements Runnable {
 		}
 		return null;
 	}
-	
+
 	private List insertEntityAsInput (GKInstance reaction, Set entities) throws Exception {
 		List toBeInserted = new ArrayList();
 		for (Iterator i = entities.iterator(); i.hasNext();) {
@@ -1187,7 +1187,7 @@ public class TestApp implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	private List insertEntityAsInput (GKInstance reaction, GKInstance entity) throws Exception {
 		List toBeInserted = new ArrayList();
 		setReactionInputInserted(reaction, entity);
@@ -1201,7 +1201,7 @@ public class TestApp implements Runnable {
 		toBeInserted.add(edge);
 		return toBeInserted;
 	}
-	
+
 	private List insertConnectingInputEntities (GKInstance reaction, Set entities) throws Exception {
 		List toBeInserted = new ArrayList();
 		for (Iterator i = entities.iterator(); i.hasNext();) {
@@ -1211,7 +1211,7 @@ public class TestApp implements Runnable {
 		}
 		return toBeInserted;
 	}
-	
+
 	private List insertConnectingInputEntities (GKInstance reaction, GKInstance entity) throws Exception {
 		List toBeInserted = new ArrayList();
 		setReactionInputInserted(reaction, entity);
@@ -1250,7 +1250,7 @@ public class TestApp implements Runnable {
 		Vertex enode = createNodeForEntity(entity);
 		toBeInserted.add(enode);
 		Set<Vertex> reactionNodes = new HashSet<Vertex>(); // for calculating the entity node initial position
-		
+
 		for (GKInstance followingEvent : followingEvents) {
 			Vertex rnode2 = (Vertex)reactionInstance2NodeMap.get(followingEvent);
 			if (rnode2 == null)
@@ -1276,10 +1276,10 @@ public class TestApp implements Runnable {
 			reactionNodes.add(rnode2);
 			setReactionOutputInserted(event,entity);
 		}
-		setEntityNodeBounds(enode, reactionNodes);	
+		setEntityNodeBounds(enode, reactionNodes);
 		return toBeInserted;
 	}
-	
+
 	private void setReactionInputInserted(GKInstance reaction, GKInstance entity) {
 		Set<GKInstance> r2i = (Set)reaction2input.get(reaction);
 		if (r2i== null) {
@@ -1306,7 +1306,7 @@ public class TestApp implements Runnable {
 			return true;
 		return false;
 	}
-	
+
 	private boolean isReactionAnyOutputInserted(GKInstance reaction) {
 		Set r2o = (Set)reaction2output.get(reaction);
 		if (r2o == null)
@@ -1315,7 +1315,7 @@ public class TestApp implements Runnable {
 			return true;
 		return false;
 	}
-	
+
 	private boolean isReactionInputInserted(GKInstance reaction, GKInstance entity) {
 		Set r2i = (Set)reaction2input.get(reaction);
 		if (r2i == null)
@@ -1438,14 +1438,14 @@ public class TestApp implements Runnable {
 		GraphConstants.setBounds(enode.getAttributes(),new Rectangle(
 				(int)x,(int)y,PathwayLayoutConstants.DEFAULT_ENTITY_NODE_WIDTH,PathwayLayoutConstants.DEFAULT_ENTITY_NODE_HEIGHT));
 	}
-	
+
 	/*
 	 * This is somewhat ridiculous: what I want is to know the node size at the time of placing it.
 	 * Initially I tried inserting them into the graph, measuring their size and then re-locating
 	 * straightaway. However, I constantly get a weird NullPointerException for seemingly random
-	 * node at some point of the process. Hence the need to cache the neighbours and re-adjust 
+	 * node at some point of the process. Hence the need to cache the neighbours and re-adjust
 	 * the location after everything has been inserted. Thannkfully this appoach works thus far.
-	 */ 
+	 */
 	public void resetEntityNodeBounds() throws InvalidAttributeException, Exception {
 		Map nested = new Hashtable();
 		for (Iterator<Vertex> ei = enode2rnodes.keySet().iterator(); ei.hasNext();) {
@@ -1482,7 +1482,7 @@ public class TestApp implements Runnable {
 		}
 		model.edit(nested, null, null, null);
 	}
-	
+
 	public void resetEntityNodeBounds1() throws InvalidAttributeException, Exception {
 		Map nested = new Hashtable();
 		for (Iterator<Vertex> ei = enode2rnodes.keySet().iterator(); ei.hasNext();) {
@@ -1515,7 +1515,7 @@ public class TestApp implements Runnable {
 		}
 		model.edit(nested, null, null, null);
 	}
-	
+
 	public void setEntityNodeBounds2(Vertex enode, Set rnodes) {
 		DefaultGraphCell tv = new DefaultGraphCell(enode.toString());
 		GraphConstants.setResize(tv.getAttributes(), true);
@@ -1555,7 +1555,7 @@ public class TestApp implements Runnable {
 		GraphConstants.setBounds(enode.getAttributes(),new Rectangle(
 				(int)x,(int)y,PathwayLayoutConstants.DEFAULT_ENTITY_NODE_WIDTH,PathwayLayoutConstants.DEFAULT_ENTITY_NODE_HEIGHT));
 	}
-	
+
 	public void run() {
 		Thread me = Thread.currentThread();
 		while (me == relaxer) {
@@ -1839,7 +1839,7 @@ public class TestApp implements Runnable {
 			System.out.println("relax() run for " + duration + "seconds");
 		inRelax = false;
 	}
-	
+
 	public static Dimension smallestDistance (Rectangle r1, Rectangle r2) {
 		Rectangle union = r1.union(r2);
 		int w = union.width - r1.width - r2.width;
@@ -1879,7 +1879,7 @@ public class TestApp implements Runnable {
 		int dy = rnode1.getY() - rnode2.getY();
 		return Math.sqrt(dx * dx + dy * dy);
 	}
-	
+
 	public void updateView() {
 		//System.out.println("Starting updateView");
 		inUpdateView = true;
@@ -1951,7 +1951,7 @@ public class TestApp implements Runnable {
 			}
 		}
 	}
-	
+
 	/*
 	 * This method is simply too slow
 	 */
@@ -1975,7 +1975,7 @@ public class TestApp implements Runnable {
 				graphics.fillRect(0, 0, img.getWidth(), img.getHeight());
 				graphics.setComposite(AlphaComposite.SrcOver);
 				graphics.translate(-x*tileWitdh,-y*tileWitdh);
-				graph.print(graphics);	
+				graph.print(graphics);
 				graphics.dispose();
 				try {
 					ImageIO.write(img, "png", tileFile);
@@ -1985,7 +1985,7 @@ public class TestApp implements Runnable {
 			}
 		}
 	}
-	
+
 	public void saveZoomLevelAsTiles(double zoomLevel, File dir) throws IOException {
 		System.out.printf("Starting saveZoomLevelAsTiles(%s, %s)\n", zoomLevel, dir);
 		graph.setScale(zoomLevel);
@@ -2031,7 +2031,7 @@ public class TestApp implements Runnable {
 			}
 		}
 	}
-	
+
 	public void printSomeStats() {
 		System.out.println("Reactions: " + reactionInstance2NodeMap.size());
 		System.out.println("Verteces: " + verteces.size());
@@ -2072,7 +2072,7 @@ public class TestApp implements Runnable {
 		}
 		System.out.println("Finished reportVertecesWithMultipleOutputEdges()");
 	}
-	
+
 	public void printHtml() throws FileNotFoundException {
 		PrintStream ps = new PrintStream("out.html");
 		ps.println("<HTML>\n" +
@@ -2082,32 +2082,32 @@ public class TestApp implements Runnable {
 				"<div id=\"dhtmltooltip\" class=\"dhtmltooltip\"></div>" +
 				"<script language=\"javascript\" src=\"/javascript/tooltip.js\"></script>" +
 				"<MAP NAME=\"img_map\">");
-		String format = "<AREA SHAPE=\"rect\" COORDS=\"%.0f,%.0f,%.0f,%.0f\" HREF=\"/cgi-bin/eventbrowser?ID=%d\" ONMOUSEOVER=\"ddrivetip('%s','dcdcdc',250);\" ONMOUSEOUT='hideddrivetip();'>\n";		
+		String format = "<AREA SHAPE=\"rect\" COORDS=\"%.0f,%.0f,%.0f,%.0f\" HREF=\"/content/detail/%d\" ONMOUSEOVER=\"ddrivetip('%s','dcdcdc',250);\" ONMOUSEOUT='hideddrivetip();'>\n";
 		double scale = graph.getScale();
 		for (Vertex v : verteces) {
 			Rectangle bounds = v.getBounds();
 			GKInstance i = (GKInstance)v.getUserObject();
-			ps.printf(format, scale*bounds.x, scale*bounds.y, scale*(bounds.x+bounds.width), scale*(bounds.y+bounds.height), i.getDBID(), 
+			ps.printf(format, scale*bounds.x, scale*bounds.y, scale*(bounds.x+bounds.width), scale*(bounds.y+bounds.height), i.getDBID(),
 					org.apache.commons.lang.StringEscapeUtils.escapeHtml(i.getDisplayName()));
 		}
 		ps.println("</MAP><IMG USEMAP=#img_map BORDER=\"0\" SRC=\"out.png\"></BODY></HTML>");
 		ps.close();
 	}
-	
+
 	public void saveCoordinates(double zoomLevel, File dir) throws FileNotFoundException {
 		File outFile = new File(dir, "coordinates.txt");
 		PrintStream ps = new PrintStream(outFile);
-		String format = "%d\t%.0f,%.0f,%.0f,%.0f\t\"%s\"\n";		
+		String format = "%d\t%.0f,%.0f,%.0f,%.0f\t\"%s\"\n";
 		for (Vertex v : verteces) {
 			Rectangle bounds = v.getBounds();
 			GKInstance i = (GKInstance)v.getUserObject();
-			ps.printf(format, i.getDBID(), 
-					zoomLevel*bounds.x, zoomLevel*bounds.y, zoomLevel*bounds.width, zoomLevel*bounds.height, 
+			ps.printf(format, i.getDBID(),
+					zoomLevel*bounds.x, zoomLevel*bounds.y, zoomLevel*bounds.width, zoomLevel*bounds.height,
 					org.apache.commons.lang.StringEscapeUtils.escapeHtml(i.getDisplayName()));
 		}
 		ps.close();
 	}
-	
+
 	protected boolean isHiddenEntity (GKInstance entity) {
 		return hiddenEntities.contains(entity);
 	}
@@ -2242,7 +2242,7 @@ public class TestApp implements Runnable {
 		model.edit(nested, null, null, null);
 		System.out.println("Finished placeEntitiesWithSingleEdge");
 	}
-	
+
 	public void placeEntitiesWithSingleEdge() {
 		System.out.println("Starting placeEntitiesWithSingleEdge");
 		Map nested = new HashMap();
@@ -2341,7 +2341,7 @@ public class TestApp implements Runnable {
 		model.edit(nested, null, null, null);
 		System.out.println("Finished placeEntitiesWithSingleEdge");
 	}
-	
+
 	/*
 	 * PolarCoordinates should contain the "bearing" around which the satellites will be placed.
 	 * At the moment the satellites will be spread in the sector -c..c radians of the bearing
@@ -2352,7 +2352,7 @@ public class TestApp implements Runnable {
 		int px = (int) pb.getCenterX();
 		int py = (int) pb.getCenterY();
 		//double c = Math.PI * 0.25;
-		double c = Math.min(Math.PI/12 * Math.sqrt(satellites.size()), Math.PI * 0.45); 
+		double c = Math.min(Math.PI/12 * Math.sqrt(satellites.size()), Math.PI * 0.45);
 		double phi;
 		double step;
 		if (satellites.size() == 1) {
@@ -2397,7 +2397,7 @@ public class TestApp implements Runnable {
 		//model.edit(nested, null, null, null);
 		return nested;
 	}
-	
+
 	/*
 	 * This is rather useless
 	 */
@@ -2438,7 +2438,7 @@ public class TestApp implements Runnable {
 		}
 		System.out.println("Finished nudgeOverlappingNodes");
 	}
-	
+
 	/*
 	 * Finds overlaping entity nodes regardless of the extent of the overlap
 	 */
@@ -2461,7 +2461,7 @@ public class TestApp implements Runnable {
 		}
 		return out;
 	}
-	
+
 	/*
 	 * Finds entity nodes with overlap area at least 0.9 of the area of the smaller node
 	 */
@@ -2492,7 +2492,7 @@ public class TestApp implements Runnable {
 		}
 		return out;
 	}
-	
+
 	/*
 	 * Finds sets (technically Lists though) of entity nodes which have identical
 	 * centre point.
@@ -2528,8 +2528,8 @@ public class TestApp implements Runnable {
 		System.out.printf("%d sets of entity nodes with identical centrepoint\n", out.size());
 		return out;
 	}
-	
-	/* 
+
+	/*
 	 * Finds sets of entity nodes which have identical centre point and distributes them evenly
 	 * on the perimter of a circle around the centrepoint. Circle diameter is the average of node
 	 * diagonals. Starting bearing of the spreading is perpendicular to the average bearing (if
@@ -2555,9 +2555,9 @@ public class TestApp implements Runnable {
 		}
 		model.edit(nested, null, null, null);
 	}
-	
+
 	/*
-	 * Find sets (well, technically Lists) of Nodes with identical connectivity 
+	 * Find sets (well, technically Lists) of Nodes with identical connectivity
 	 * and with at least 2 connected nodes.
 	 */
 	public List<List<Vertex>> findSetsOfEntityNodesWithIdenticalConnectivity () {
@@ -2588,8 +2588,8 @@ public class TestApp implements Runnable {
 		System.out.printf("%d sets of entity nodes with identical connectivity\n", out.size());
 		return out;
 	}
-	
-	/* 
+
+	/*
 	 * Finds sets of entity nodes which have identical connectivity and distributes them evenly
 	 * on the perimter of a circle around the centrepoint. Circle diameter is the average of node
 	 * diagonals. Starting bearing of the spreading is perpendicular to the average bearing (if
@@ -2615,7 +2615,7 @@ public class TestApp implements Runnable {
 		}
 		model.edit(nested, null, null, null);
 	}
-	
+
 	/*
 	 * Spreads given set of verteces on the perimeter of a circle starting from the given bearing
 	 * and centred at Point center or, if null, at the average centrepoint of the verteces in the
@@ -2630,7 +2630,7 @@ public class TestApp implements Runnable {
 			py = (int)bounds.getCenterY();
 		} else {
 			px = center.x;
-			py = center.y;			
+			py = center.y;
 		}
 		double r = 0;
 		for (Vertex v : nodes) {
@@ -2660,7 +2660,7 @@ public class TestApp implements Runnable {
 		}
 		return nested;
 	}
-	
+
 	public void unfixOverlappingEntityNodes () {
 		Set<Vertex> overlappingEntitiesSet = findSignificantlyOverlappingEntityNodes();
 		System.out.printf("Found %d significantly overlapping entities\n", overlappingEntitiesSet.size());
@@ -2675,7 +2675,7 @@ public class TestApp implements Runnable {
 		}
 		model.edit(nested, null, null, null);
 	}
-	
+
 	/*
 	 * ehem... vertex.translate() did not seem to work for a single translation
 	 * only but is OK when issued from relax* functions.
@@ -2690,5 +2690,5 @@ public class TestApp implements Runnable {
 		nested.put(v, attMap);
 		model.edit(nested, null, null, null);
 	}
-	
+
 }

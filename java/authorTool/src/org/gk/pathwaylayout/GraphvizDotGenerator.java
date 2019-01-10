@@ -46,7 +46,7 @@ public class GraphvizDotGenerator {
     // flag to control if URL should be added to nodes. A URL is needed
     // to be output as cmap
     private boolean useURL;
-    
+
     private static final String SMALLMOL_COLOR = "FFFFFF";
     private static final String CANDIDATESET_COLOR = "0064C8";
     private static final String OPENSET_COLOR = "00C864";
@@ -56,21 +56,21 @@ public class GraphvizDotGenerator {
     private static final String COMPLEX_COLOR = "FF8247";
     private static final String SEQUENCE_COLOR = "DEB0C4";
     private static final String OTHER_COLOR = "C8C8C8";
-    
+
     // Entities which will be drawn as a separate copy for each occurrance in pathway (e.g. H20, ATP, etc)
     private Set entitiesDisplayedAsMultipleNodes = new HashSet();
     private Map entitiesToNodeIdListMap = new HashMap();
     private static final int SKY_COORDINATE_SCALING_FACTOR = 10;
-     
+
     public GraphvizDotGenerator() {
         // Used to add links
         nameToIdMap = new HashMap();
     }
-    
+
     public void setUseURL(boolean useURL) {
         this.useURL = useURL;
     }
-    
+
     /**
      * This method is used to add xlinks to a svg graph so that
      * the reactome web site can be displayed.
@@ -115,9 +115,9 @@ public class GraphvizDotGenerator {
         }
         return svg;
     }
-    
-    private void addLink(Element groupElm, 
-                         Long id, 
+
+    private void addLink(Element groupElm,
+                         Long id,
                          String reactomeUrl,
                          Namespace xlinkNS) {
         // Create a link node
@@ -128,7 +128,7 @@ public class GraphvizDotGenerator {
         linkNode.addContent(groupElm);
         parent.addContent(linkNode);
     }
-    
+
     /**
      * Convert a Pathway object into a dot file format.
      * @param pathway
@@ -145,14 +145,14 @@ public class GraphvizDotGenerator {
         }
         return convertToDotGraph3(reactions);
     }
-    
+
     private String convertToDotGraph(Set reactions) throws Exception {
         // Convert to dot-recognizable graph
         StringBuffer buffer = new StringBuffer();
         buffer.append("digraph test {");
         buffer.append("\n");
         // The following three properties are for dot
-        buffer.append("\t nodesep=\"" + nodeSep + "\";\n"); 
+        buffer.append("\t nodesep=\"" + nodeSep + "\";\n");
         buffer.append("\t ranksep=\"" + rankSep + "\";\n");
         // Make width and height small enough so that the minimum size can be picked up.
         buffer.append("\t node [shape=rectangle, fontsize=10, width=0.1, height=0.1, fontname=Helvetica, style=\"filled,rounded\"];\n");
@@ -313,7 +313,7 @@ public class GraphvizDotGenerator {
                         String name1 = reaction.getDBID() + "_1";
                         addReactionNode(name1, buffer);
                         addEdge(reactionName, name1, false, buffer);
-                        for (Iterator it1 = outputs.iterator(); it1.hasNext();) 
+                        for (Iterator it1 = outputs.iterator(); it1.hasNext();)
                             addEdge(name1, (GKInstance)it1.next(), entityToNameMap, true, buffer);
                     }
                 }
@@ -338,7 +338,7 @@ public class GraphvizDotGenerator {
                         addEdge(reactionName, name2, false, buffer);
                         for (Iterator it1 = outputs.iterator(); it1.hasNext();)
                             addEdge(name2, (GKInstance)it1.next(), entityToNameMap, true, buffer);
-                    }              
+                    }
                 }
             }
         }
@@ -352,7 +352,7 @@ public class GraphvizDotGenerator {
         buffer.append("digraph test {");
         buffer.append("\n");
         // The following three properties are for dot
-        buffer.append("\t nodesep=\"" + nodeSep + "\";\n"); 
+        buffer.append("\t nodesep=\"" + nodeSep + "\";\n");
         buffer.append("\t ranksep=\"" + rankSep + "\";\n");
         // Make width and height small enough so that the minimum size can be picked up.
         //buffer.append("\t node [shape=rectangle, ?fontsize=10, width=0.1, height=0.1];\n");
@@ -547,7 +547,7 @@ public class GraphvizDotGenerator {
                         String name1 = reaction.getDBID() + "_1";
                         addReactionNode(name1, buffer);
                         addEdge(reactionName, name1, false, buffer);
-                        for (Iterator it1 = outputId2count.keySet().iterator(); it1.hasNext();) 
+                        for (Iterator it1 = outputId2count.keySet().iterator(); it1.hasNext();)
                             addEdge(name1, (String)it1.next(), true, buffer);
                     }
                 }
@@ -572,21 +572,21 @@ public class GraphvizDotGenerator {
                         addEdge(reactionName, name2, false, buffer);
                         for (Iterator it1 = outputId2count.keySet().iterator(); it1.hasNext();)
                             addEdge(name2, (String)it1.next(), true, buffer);
-                    }              
+                    }
                 }
             }
         }
         buffer.append("}\n");
         return buffer.toString();
     }
-    
+
     private String convertToDotGraph3(Set reactions) throws Exception {
         // Convert to dot-recognizable graph
         StringBuffer buffer = new StringBuffer();
         buffer.append("digraph test {");
         buffer.append("\n");
         // The following three properties are for dot
-        buffer.append("\t nodesep=\"" + nodeSep + "\";\n"); 
+        buffer.append("\t nodesep=\"" + nodeSep + "\";\n");
         buffer.append("\t ranksep=\"" + rankSep + "\";\n");
         // Make width and height small enough so that the minimum size can be picked up.
         buffer.append("\t node [shape=rectangle, fontsize=10, width=0.1, height=0.1, fontname=Helvetica, style=\"filled,rounded\"];\n");
@@ -696,7 +696,7 @@ public class GraphvizDotGenerator {
         buffer.append("}\n");
         return buffer.toString();
     }
-    
+
     private void addReactionNode(String nodeName, StringBuffer buffer) {
         buffer.append("\t\"");
         buffer.append(nodeName);
@@ -704,7 +704,7 @@ public class GraphvizDotGenerator {
         buffer.append("\" shape=circle style=filled color=black];\n");
         nameToIdMap.put(nodeName, extractIdFromName(nodeName));
     }
-    
+
     private void addReactionNode(GKInstance r, String nodeName, StringBuffer buffer) throws Exception {
         buffer.append("\t\"");
         buffer.append(nodeName);
@@ -713,7 +713,7 @@ public class GraphvizDotGenerator {
         buffer.append(reactionPositionString(r));
         buffer.append(" shape=circle style=filled color=black];\n");
     }
-    
+
     private String reactionPositionString(GKInstance reaction) throws Exception {
     		Collection reactionCoordinatesC = reaction.getReferers(ReactomeJavaConstants.locatedEvent);
     		if (reactionCoordinatesC == null || reactionCoordinatesC.isEmpty())
@@ -725,7 +725,7 @@ public class GraphvizDotGenerator {
     		int ty = ((Integer)reactionCoordinates.getAttributeValue(ReactomeJavaConstants.targetY)).intValue();
     		return " pos=\"" + (int)((sx + tx) / 2 * SKY_COORDINATE_SCALING_FACTOR) + "," + (int)((sy + ty) / 2 * SKY_COORDINATE_SCALING_FACTOR) + "!\"";
     }
-    
+
     private void addEdge(String name1, String name2, boolean needArrow, StringBuffer buffer) {
         buffer.append("\t\"");
         buffer.append(name1);
@@ -736,7 +736,7 @@ public class GraphvizDotGenerator {
         else
             buffer.append("\" [dir=none];\n");
     }
-    
+
     private void addEdge(String name1, String name2, boolean needArrow, StringBuffer buffer, String label) {
         buffer.append("\t\"");
         buffer.append(name1);
@@ -748,9 +748,9 @@ public class GraphvizDotGenerator {
         else
             buffer.append(" dir=none];\n");
     }
-    
-    private void addEdge(String name1, 
-                         GKInstance entity, 
+
+    private void addEdge(String name1,
+                         GKInstance entity,
                          Map entityToNameMap,
                          boolean needArrow,
                          StringBuffer buffer) {
@@ -765,10 +765,10 @@ public class GraphvizDotGenerator {
             buffer.append("\" [dir=none]\";\n");
         nameToIdMap.put(name1 + "->" + entityToNameMap.get(entity), extractIdFromName(name1));
     }
-    
+
     private void addEdge(GKInstance entity,
-                         String name1, 
-                         Map entityToNameMap, 
+                         String name1,
+                         Map entityToNameMap,
                          boolean needArrow,
                          StringBuffer buffer) {
         buffer.append("\t\"");
@@ -782,7 +782,7 @@ public class GraphvizDotGenerator {
         nameToIdMap.put(entityToNameMap.get(entity) + "->" + name1,
                         extractIdFromName(name1));
     }
-    
+
     private Long extractIdFromName(String name) {
         int index = name.indexOf("_");
         if (index == -1)
@@ -791,7 +791,7 @@ public class GraphvizDotGenerator {
             return new Long(name.substring(0, index));
         }
     }
-    
+
     private void addCatalystEdge(GKInstance entity,
                                  String rxtNodeName,
                                  Map entityToNameMap,
@@ -804,15 +804,15 @@ public class GraphvizDotGenerator {
         nameToIdMap.put(entityToNameMap.get(entity) + "->" + rxtNodeName,
                         extractIdFromName(rxtNodeName));
     }
- 
+
     private void addCatalystEdge(String entityNodeId,String rxtNodeName,StringBuffer buffer) {
     		buffer.append("\t\"");
     		buffer.append(entityNodeId);
     		buffer.append("\" -> \"");
     		buffer.append(rxtNodeName);
     		buffer.append("\" [dir=none style=dashed];\n");
-    }    
-    
+    }
+
     private void addRegulatorEdge(GKInstance regulation,
                                   String rxtNodeName,
                                   Map entityToNameMap,
@@ -854,7 +854,7 @@ public class GraphvizDotGenerator {
 		buffer.append("\" [dir=none style=dotted");
 		buffer.append(" arrowhead=odot];\n");
 }
-    
+
     private void addReqRegulatorEdge(String regulator, String rxtNodeName, StringBuffer buffer) {
 		buffer.append("\t\"");
 		buffer.append(regulator);
@@ -863,10 +863,10 @@ public class GraphvizDotGenerator {
 		buffer.append("\" [dir=none style=dotted");
 		buffer.append(" arrowhead=invdot];\n");
 }
-    
+
     private void addEdge(GKInstance entity1,
-                         GKInstance entity2, 
-                         Long reactionId, 
+                         GKInstance entity2,
+                         Long reactionId,
                          Map entityToNameMap,
                          boolean needArrow, StringBuffer buffer) {
         buffer.append("\t\"");
@@ -882,7 +882,7 @@ public class GraphvizDotGenerator {
         nameToIdMap.put(edgeName,
                         reactionId);
     }
-    
+
     private void addEdge(String node1,String node2, Long reactionId, boolean needArrow, StringBuffer buffer) {
     		buffer.append("\t\"");
     		buffer.append(node1);
@@ -896,7 +896,7 @@ public class GraphvizDotGenerator {
     		String edgeName = node1 + "->" + node2;
     		nameToIdMap.put(edgeName,reactionId);
     }
-    
+
     private void generateNodes(List entities,
                                Map entityToNameMap,
                                Map nameToEntityMap,
@@ -956,17 +956,14 @@ public class GraphvizDotGenerator {
     		}
     		return nodeIdToCountMap;
     }
-    
+
     private String getURLString(GKInstance i) {
     		StringBuffer out = new StringBuffer();
-    		out.append(" URL=\"/cgi-bin/eventbrowser?ID=" + i.getDBID());
-    		if (i.getDbAdaptor() instanceof MySQLAdaptor) {
-				out.append("&DB=" + ((MySQLAdaptor)i.getDbAdaptor()).getDBName());
-			}
+    		out.append(" URL=\"/content/detail/" + i.getDBID());
     		out.append("\"");
     		return out.toString();
     }
-    
+
     public String findShortestName(GKInstance entity) throws Exception {
     		String shortest = entity.getDisplayName();
     		for (Iterator i = entity.getAttributeValuesList(ReactomeJavaConstants.name).iterator(); i.hasNext();) {
@@ -976,7 +973,7 @@ public class GraphvizDotGenerator {
     		}
     		return shortest;
     }
-    
+
     // Returns null if node exists already
     private String generateNodeUniqueId(GKInstance entity) {
     		List idList;
@@ -996,7 +993,7 @@ public class GraphvizDotGenerator {
     			}
     		}
     }
-    
+
     private String getNodeRenderingParamsString(GKInstance entity) throws Exception {
     		String clsName = entity.getSchemClass().getName();
     		if (clsName.equals(ReactomeJavaConstants.Complex)) {
@@ -1011,7 +1008,7 @@ public class GraphvizDotGenerator {
     			return " color=\"#" + GEE_COLOR + "\"";
     		} else if (clsName.equals(ReactomeJavaConstants.EntityWithAccessionedSequence)) {
     			GKInstance re;
-    			if (((re = (GKInstance) entity.getAttributeValue(ReactomeJavaConstants.referenceEntity)) != null) 
+    			if (((re = (GKInstance) entity.getAttributeValue(ReactomeJavaConstants.referenceEntity)) != null)
     					&& re.getSchemClass().getName().equals(ReactomeJavaConstants.ReferencePeptideSequence)) {
     				return " color=\"#" + PROTEIN_COLOR + "\"";
     			}
@@ -1025,7 +1022,7 @@ public class GraphvizDotGenerator {
     		}
     		return "";
     }
-    
+
     private String generateLabel(String name) {
         char[] chars = name.toCharArray();
         StringBuffer builder = new StringBuffer();
@@ -1051,8 +1048,8 @@ public class GraphvizDotGenerator {
         }
         return builder.toString();
     }
-    
-    private String generateUniqueName(GKInstance entity, 
+
+    private String generateUniqueName(GKInstance entity,
                                       Map nameToEntityMap,
                                       Map entityToNameMap) {
         String name = entity.getDBID().toString();
@@ -1086,10 +1083,10 @@ public class GraphvizDotGenerator {
             }
         }
     }
-    
+
     private void listReactions(GKInstance pathway, Set reactions) throws Exception {
         List components = null;
-        if (pathway.getSchemClass().isValidAttribute(ReactomeJavaConstants.hasComponent)) 
+        if (pathway.getSchemClass().isValidAttribute(ReactomeJavaConstants.hasComponent))
             components = pathway.getAttributeValuesList(ReactomeJavaConstants.hasComponent);
         else if (pathway.getSchemClass().isValidAttribute(ReactomeJavaConstants.hasMember))
             components = pathway.getAttributeValuesList(ReactomeJavaConstants.hasMember);
@@ -1105,9 +1102,9 @@ public class GraphvizDotGenerator {
                 listReactions(comp, reactions);
         }
     }
-    
+
     public String generatePathwayDiagramInFormat(
-    		GKInstance pathway, 
+    		GKInstance pathway,
 		String dotPath,
 		String format) throws Exception {
     		if (dotPath == null)
@@ -1137,9 +1134,9 @@ public class GraphvizDotGenerator {
     		process.destroy();
     		return builder.toString();
     }
-    
+
     public void outputPathwayDiagramInFormat(
-    		GKInstance pathway, 
+    		GKInstance pathway,
 		String dotPath,
 		String format) throws Exception {
     		if (dotPath == null)
@@ -1168,10 +1165,10 @@ public class GraphvizDotGenerator {
     		reader.close();
     		process.destroy();
     }
-    
+
     public void createAndStorePathwayDiagram(GKInstance pathway,
-                                             MySQLAdaptor dba, 
-                                             String dotString) throws Exception {    		
+                                             MySQLAdaptor dba,
+                                             String dotString) throws Exception {
 //    		Map nodeId2Node = new HashMap();
 //    		Schema schema = dba.getSchema();
 //    		GKInstance pathwayDiagram = new GKInstance(schema.getClassByName(ReactomeJavaConstants.PathwayDiagram));
@@ -1248,11 +1245,11 @@ public class GraphvizDotGenerator {
     		}
     		//System.out.println(entitiesDisplayedAsMultipleNodes);
     }
-    
+
     public void reset() {
     		entitiesToNodeIdListMap.clear();
     }
-    
+
     public void layoutReaction(GKInstance reaction) throws InvalidAttributeException, Exception {
     		//handle input,output and catalyst
     		//if input entity is output of a precedingevent, add edge between precedingevent and the entity
@@ -1279,7 +1276,7 @@ public class GraphvizDotGenerator {
     			}
     		}
     }
-    
+
     public static void main(String[] args) {
     		if (args.length < 7) {
     			System.out.println("Usage java org.gk.pathwaylayout.GraphvizDotGenerator " +
@@ -1299,7 +1296,7 @@ public class GraphvizDotGenerator {
     				generator.setEntitiesDisplayedAsMultipleNodes(adaptor,null);
     				String dotString = generator.generatePathwayDiagramInFormat(pathway, args[6], "dot");
     				if (dotString == null) {
-    					
+
     				} else {
     					System.out.println(dotString);
     					generator.createAndStorePathwayDiagram(pathway, adaptor, dotString);

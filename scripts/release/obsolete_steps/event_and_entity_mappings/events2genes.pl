@@ -42,35 +42,35 @@ my $dba = GKB::DBAdaptor->new
     );
 
 my %seen; # Prevents duplication in the file
-		
+
 my $class = ucfirst $ARGV[-1];
 
 my $outfile = "../website/html/download/current/$class\_2_genes.txt"; # Output file for website
-		
+
 # If creation of a filehandle is unsuccessful, the following error message
 # prints and the program terminates.
 if (!open(FILE, ">$outfile")) {
 	print STDERR "$0: could not open file $outfile\n";
 	exit(1);
 }
-			
+
 my $ar = $dba->fetch_instance(-CLASS => $class); # Obtains a reference to the array of all Reactome pathways/reactions
 my %processes;
 
 # Every pathway/reaction in reactome is processed
 foreach my $cls (@{$ar}) {
 	my $toppaths = get_top_level_events($cls); # Obtains the top-level pathway for the current pathway
-	
+
 	my $entities = find_ewas($cls);
-	
+
 	# Each top-level pathway for the current pathway is processed
 	my $name = $cls->Name->[0]; # Obtains the top-level pathway name
 	my $db_id = $cls->db_id;
 	my $stableid = $cls->stableIdentifier->[0]->identifier->[0]; # Obtains the top-level pathway stable id
-	my $url = "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=$stableid"; # Obtains the url to the pathway
-	next if (!$cls->reverse_attribute_value('hasEvent')->[0]) && $class eq "Reaction"; 
+	my $url = "http://www.reactome.org/content/detail/$stableid"; # Obtains the url to the pathway
+	next if (!$cls->reverse_attribute_value('hasEvent')->[0]) && $class eq "Reaction";
 	my $pathwayid = $cls->reverse_attribute_value('hasEvent')->[0]->stableIdentifier->[0]->identifier->[0] . "\t" if $class eq "Reaction";
-	
+
 	# Each entity for the current pathway is processed and linked with the current top-level pathway
 	ENTITY:foreach my $entity (@{$entities}) {
 		my $protein_name = $entity->Name->[0];
@@ -80,16 +80,16 @@ foreach my $cls (@{$ar}) {
 		my $protein_species = $entity->species->[0]->name->[0];
 		my $references = $entity->referenceEntity;
 		next unless $entity->referenceEntity->[0];
-		
+
 		my $gene_id = "";
 		my $gene_name = "";
 		my $protein_id = "";
 		foreach my $reference (@{$references}){
 			my $display_name = $reference->_displayName->[0];
-			$reference->description->[0] =~ 
+			$reference->description->[0] =~
 /recommendedName. (.+?) (alternativeName.+)?shortName/;
 			my $long_name = $1;
-			$protein_name = $long_name if $long_name;			
+			$protein_name = $long_name if $long_name;
 			$gene_name = $reference->geneName->[0] if $reference->geneName;
 			$gene_name = $reference->name->[0] if $reference->name && !$gene_name;
 			if ($reference->referenceGene) {
@@ -108,10 +108,10 @@ foreach my $cls (@{$ar}) {
 			$gene_name = $gene_id unless $gene_name;
 			my $row = "$stableid\t$db_id\t$name\t$pathwayid$gene_id\t$gene_name\t$protein_id\t$protein_name\t$protein_db_id\t$protein_st_id\t$protein_species\n"; # Annotation assembled here
 			next if $seen{$row}++; # Duplicates weeded out
-			print FILE $row; # Unique annotation added to file output	
+			print FILE $row; # Unique annotation added to file output
 		}
 	}
-}	
+}
 close FILE;
 
 sub find_ewas {
@@ -143,6 +143,6 @@ sub top_events {
 	push @out, $e; # All top-level events collected here
     }
     # Filter out reactions
-    @out = grep {! $_->is_a('Reaction')} @out; 
+    @out = grep {! $_->is_a('Reaction')} @out;
     return \@out; # Returns top-level pathways
 }

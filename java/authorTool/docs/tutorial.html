@@ -9,7 +9,7 @@ Reactome Author Tool Tutorial
 Reactome Author Tool Tutorial
 </h1>
 <p>
-In this tutorial, we are going to create a small part of the <a href="http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=69278">mitotic cell cycle</a>. There are ten steps in this tutorial:
+In this tutorial, we are going to create a small part of the <a href="http://www.reactome.org/content/detail/69278">mitotic cell cycle</a>. There are ten steps in this tutorial:
 <ol>
 <li><a href="#install">Install the Reactome author tool</a></li>
 <li><a href="#launch">Launch the Reactome author tool</a></li>
@@ -58,7 +58,7 @@ Double click an empty area of the graphic editor panel for "Mitotic Cell Cycle" 
 </p>
 <h2></a><a name="save" id="save" />4. Save the project</h2>
 <p>
-You should save your newly created project frequently to protect your newly created data. Click "Save Project" under the File menu, type Ctrl-S, or click the save button <img src="images/SaveBtn.gif" /> in the menu bar. 
+You should save your newly created project frequently to protect your newly created data. Click "Save Project" under the File menu, type Ctrl-S, or click the save button <img src="images/SaveBtn.gif" /> in the menu bar.
 (Note: most common operations in the author tool can be started either by choosing an item under a drop-down menu, by clicking a button on the menu bar, or by typing a Ctrl-letter sequence. Some can also be started by right-clicking the appropriate object in the application window. However, the operation works the same way, no matter how you start it.)
  You are asked for a new file name. Type "MitoticCellCycle". The project is saved as an XML file with the default extension ".gkb": MitoticCellCycle.gkb.
 </p>
@@ -67,15 +67,15 @@ You should save your newly created project frequently to protect your newly crea
 To create a new sub-pathway under Mitotic Cell Cycle, right-click the Mitotic Cell Cycle graphic editor panel to bring up the popup menu to choose "Insert Pathway", choose "Insert Pathway" under the Draw menu, type Ctrl-P, or click the insert pathway button on the menu bar. Input "G1 Phase" as the display name for this pathway. Note the appearance of a new set of tasks in the right-hand panel of the window. Note also that the taxon property for "G1 Phase" is automatically set to "Homo sapiens", consistent with the taxon chosen for the larger pathway, Mitotic Cell Cycle, of which it is a part.
 </p>
 <p>Repeat these steps to create sub pathways G1/S Transition, S Phase, G2 Phase, G2/M
-Transition, M Phase, and M/G1 Transition. 
+Transition, M Phase, and M/G1 Transition.
 </p>
 <p>
-In the same way, to create a new molecule ("entity"), complex, reaction, or flow arrow (to connect successive reactions in a pathway), use the "Insert Entity" (Ctrl-E), "Insert Complex" (Ctrl-M), "Insert Reaction" (Ctrl-R), or "Insert Flow Arrow" (Ctrl-F) options of the Draw menu, see below.	
+In the same way, to create a new molecule ("entity"), complex, reaction, or flow arrow (to connect successive reactions in a pathway), use the "Insert Entity" (Ctrl-E), "Insert Complex" (Ctrl-M), "Insert Reaction" (Ctrl-R), or "Insert Flow Arrow" (Ctrl-F) options of the Draw menu, see below.
 </p>
 <p>
 Now we want to annotate causal or temporal relationships (dependencies) among these sub pathways. For example, we want to indicate that G1 Phase precedes G1/S Transition. The easiest way to do this is to select G1 Phase by clicking the G1 Phase node in the graphic editor panel, move the mouse cursor a little bit to display the link widgets (the four gray arrows around the node), choose one outbound arrow (the top or right one) and drag it to G1/S Transition node. Release the arrow after the color of G1/Transition node changes to green. G1 Phase and G1/S Transition are now linked together, and the direction of the arrow indicates the order of the events.
 </p>
-<p> 
+<p>
 Use the same method to create dependences between G1/S Transition and S Phase, S Phase and G2 Phase, G2 Phase and G2/M Phase, G2/M Phase and M Phase, M Phase and M/G1 Transition, and M/G1 Transition and G1 Phase.
 </p>
 <p>
@@ -85,7 +85,7 @@ or use shortcut F4 key). Alternatively, you can arrange sub-pathways
 manually. Here, drag the sub-pathway objects (G1 phase, etc.) into a circular arrangement to represent the cell cycle. The flow arrows will automatically follow the objects they link.
 </p>
 <p>
-You can also change the default background and text colors for a node, and the line color and the width for an edge to improve the appearance of the layout. Here we want to use blue as background and yellow as text color for G1 Phase, S Phase, G2 Phase, and M Phase. Click G1 Phase to select it. Right click to bring up the popup menu. Select "Format Display". The Format Node Display dialog appears. Click <img src="images/Browser.gif" /> to choose colors for text and background. Choose a blue color for background, and a yellow color for text. The selected color is displayed in the preview pane immediately. Do same thing for S Phase, G2 Phase and M Phase. You 
+You can also change the default background and text colors for a node, and the line color and the width for an edge to improve the appearance of the layout. Here we want to use blue as background and yellow as text color for G1 Phase, S Phase, G2 Phase, and M Phase. Click G1 Phase to select it. Right click to bring up the popup menu. Select "Format Display". The Format Node Display dialog appears. Click <img src="images/Browser.gif" /> to choose colors for text and background. Choose a blue color for background, and a yellow color for text. The selected color is displayed in the preview pane immediately. Do same thing for S Phase, G2 Phase and M Phase. You
 may also change the line color and width for an edge by selecting that edge and clicking "Format Display" popup menu.
 <br />
 <img src="images/FormatDisplay.gif" />
@@ -103,10 +103,10 @@ Now we want to add second level events to G1/S Transition pathway. Double click 
 <h2><a name="reactionNode" id="reactionNode" />7. Add reaction nodes to the pathway</h2>
 <p>
 The Pathway "Activation of the pre-replicative complex" contains several reactions.
-Reactions can only be rendered as nodes in pathways. 
+Reactions can only be rendered as nodes in pathways.
 </p>
 <p>
-Double click the "Activation of the pre-replicative complex" pathway node to open a pathway editor. Click the "Insert Reaction" button <img src="images/InsertReactionBtn.gif" />. A reaction property dialog appears. Input "Mcm10 associates with the pre-replicative complex, stabilizing Mcm2-7" as display name. Click OK. A node for this reaction is inserted into the pathway editor. Using the same method, insert the following reaction nodes: 
+Double click the "Activation of the pre-replicative complex" pathway node to open a pathway editor. Click the "Insert Reaction" button <img src="images/InsertReactionBtn.gif" />. A reaction property dialog appears. Input "Mcm10 associates with the pre-replicative complex, stabilizing Mcm2-7" as display name. Click OK. A node for this reaction is inserted into the pathway editor. Using the same method, insert the following reaction nodes:
 <ul>
 <li>Cdt1 is displaced from the pre-replicative complex</li>
 <li>CDK and DDK associate with the Mcm10:pre-replicativev complex</li>
@@ -147,7 +147,7 @@ To modify information that you have already provided (e.g., to revise a descript
 <br />
 <h2><a name="end" id="end" />10. End</h2>
 <p>
-In this simple tutoral, we created a small part of the </a> <a href="http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&amp;ID=69278">mitotic cell cycle.</a> We hope that you find this tutorial helpful, and that you enjoy working with the Author Tool. Please send any questions or comments to <a href="mailto:help@reactome.org">help@reactome.org</a>.
+In this simple tutoral, we created a small part of the </a> <a href="http://www.reactome.org/content/detail/69278">mitotic cell cycle.</a> We hope that you find this tutorial helpful, and that you enjoy working with the Author Tool. Please send any questions or comments to <a href="mailto:help@reactome.org">help@reactome.org</a>.
 </p>
 </body>
 </html>

@@ -73,7 +73,7 @@ foreach my $acc (@{$accessions}) {
 	if (my $stid_i = $ar2->[0]->StableIdentifier->[0]) {
 	    #my $stid_str = $stid_i->displayName;
 	    my $stid_str = $stid_i->Identifier->[0];
-	    print 
+	    print
 		"$acc\t$stid_str\t",
 		$ar2->[0]->Name->[0], "\t",
 		linking_url($stid_str),
@@ -83,7 +83,7 @@ foreach my $acc (@{$accessions}) {
 }
 
 sub linking_url {
-    return "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=" . $_[0];
+    return "http://www.reactome.org/content/detail/" . $_[0];
 }
 
 sub top_level_events_with_evidence {
@@ -120,7 +120,7 @@ sub top_events {
 #	@{$e->reverse_attribute_value('hasMember')} && next;
 	push @out, $e;
     }
-    
+
     # Grab all pathways
     @out = grep {$_->is_a('Pathway')} @out;
     return \@out;

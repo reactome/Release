@@ -85,8 +85,8 @@ foreach my $pathway (@{$ar}) {
 		}
 		my $name = $top->Name->[0]; # Obtains the top-level pathway name
 		my $stableid = $top->stableIdentifier->[0]->identifier->[0]; # Obtains the top-level pathway stable id
-		my $url = "http://www.reactome.org/cgi-bin/eventbrowser_st_id?ST_ID=$stableid"; # Obtains the url to the top-level pathway
-		
+		my $url = "http://www.reactome.org/content/detail/$stableid"; # Obtains the url to the top-level pathway
+
 		# Each simple entity for the current pathway is processed and linked with the current top-level pathway
 		foreach my $entity (@{$ewas_ar}) {
 			my @identifiers = @{$entity->referenceEntity->[0]->otherIdentifier};
@@ -94,10 +94,10 @@ foreach my $pathway (@{$ar}) {
 				next unless $identifier =~ /^ENSP/;
 				my $row = "$identifier\t$stableid\t$name\t$url\n"; # Annotation assembled here
 				next if $seen{$row}++; # Duplicates weeded out
-				push @{$processes{$identifier}}, $name.$human; 
+				push @{$processes{$identifier}}, $name.$human;
 				print FILE $row if $human; # Unique annotation added to file output
 			}
-		}	
+		}
 	}
 }
 
@@ -108,7 +108,7 @@ foreach (keys %processes) {
 	my $row = "$identifier\tEnsembl:$identifier\t";
 	if ($num > 1) {
 		$row .= "[$num processes]:";
-	} 
+	}
 	foreach my $name (@{$processes{$_}}) {
 		$name =~ s/(\d)$//;
 		my $human = $1;
@@ -120,7 +120,7 @@ foreach (keys %processes) {
 	}
 	$nonhuman =~ s/;$//;
 	$row =~ s/;$//;
-	
+
 	my $url = "\thttp://www.reactome.org/cgi-bin/link?SOURCE=Ensembl&ID=$identifier\n";
 	$row .= $url; # Annotation assembled here
 	next if $seen{$row}++; # Duplicates weeded out
@@ -158,6 +158,6 @@ sub top_events {
 	push @out, $e; # All top-level events collected here
     }
     # Filter out reactions
-    @out = grep {! $_->is_a('Reaction')} @out; 
+    @out = grep {! $_->is_a('Reaction')} @out;
     return \@out; # Returns top-level pathways
 }

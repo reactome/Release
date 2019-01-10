@@ -1803,7 +1803,7 @@ sub form_for_eventbrowser_st_id {
 
 	# The ST_ID is redundant, because it is not needed for the POST
 	# operation, but it is needed if the user bookmarks this URL.
-	my $action = "/cgi-bin/eventbrowser_st_id?ST_ID=$identifier";
+	my $action = "/content/detail/$identifier";
 	if (defined $version && !($version eq '')) {
 		$action .= ".$version";
 	}
@@ -1883,7 +1883,7 @@ sub release_warning {
 	        if (!($current_release_db_name eq $most_recent_release_db_name)) {
 		    my ($identifier, $version) = $si->get_identifier_and_version_in_most_recent_release();
 		    if ($identifier) {
-		        $return_page = "eventbrowser_st_id?ST_ID=$identifier";
+		        $return_page = "/content/detail/$identifier";
 		    }
 		    my $current_release_num = $si->get_release_num_from_db_name($current_release_db_name);
 		    $release_warning .=
@@ -2068,7 +2068,7 @@ sub print_pathway_size_table {
 
     	# _displayName
     	print qq(<TD CLASS="sidebar" WIDTH="33%">);
-    	print "<A HREF=\"/cgi-bin/eventbrowser?ID=" . $pathway->db_id() . "$db_param_string\">" . $pathway->_displayName->[0] . "</A>";
+    	print "<A HREF=\"/content/detail/" . $pathway->db_id() . \">" . $pathway->_displayName->[0] . "</A>";
     	print qq(</TD>);
 
 

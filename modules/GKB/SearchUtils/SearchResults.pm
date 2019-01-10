@@ -50,7 +50,7 @@ for my $attr
         type_counts
 	) ) { $ok_field{$attr}++; }
 
-%INSTANCE_CLASS_NAME_MAP = 
+%INSTANCE_CLASS_NAME_MAP =
     (
      'ReferencePeptideSequence' => 'Protein',
      'ReferenceGeneProduct' => 'Protein',
@@ -66,7 +66,7 @@ for my $attr
      'PositiveRegulation' => 'Activation',
      'Requirement' => 'Activation',
     );
-     
+
 sub AUTOLOAD {
     my $self = shift;
     my $attr = $AUTOLOAD;
@@ -75,27 +75,27 @@ sub AUTOLOAD {
     $self->throw("invalid attribute method: ->$attr()") unless $ok_field{$attr};
     $self->{$attr} = shift if @_;
     return $self->{$attr};
-}  
+}
 
 sub new {
     my($pkg, $instances, $db_name) = @_;
     my $self = bless {}, $pkg;
-    
+
     my $search_results = [];
     if (defined $instances) {
     	$search_results = $self->convert_instances_to_query_results($instances, $db_name);
     }
     $self->search_results($search_results);
-    
+
     my %type_counts = ();
     $self->type_counts(\%type_counts);
-    
+
     return $self;
 }
 
 sub set_search_results {
     my($self, $search_results) = @_;
-    
+
     $self->search_results($search_results);
 }
 
@@ -114,7 +114,7 @@ sub set_search_results {
 #					offset or after range.
 sub get_search_results {
     my($self, $offset, $range, $padding_flag) = @_;
-    
+
     my $search_results = $self->search_results();
     my @new_search_results = ();
     if (defined $offset && defined $search_results) {
@@ -142,29 +142,29 @@ sub get_search_results {
     	}
     	$search_results = \@new_search_results;
     }
-    
+
     return $search_results;
 }
 
 sub get_result {
 	my($self, $result_num) = @_;
-	
+
     my $search_results = $self->search_results();
 	if (defined $search_results) {
 		return $search_results->[$result_num];
 	}
-	
+
 	return undef;
 }
 
 sub results_count {
 	my($self, $result_num) = @_;
-	
+
     my $search_results = $self->search_results();
 	if (defined $search_results) {
 		return scalar(@{$search_results});
 	}
-	
+
 	return 0;
 }
 
@@ -172,7 +172,7 @@ sub results_count {
 # scratch.
 sub calculate_type_counts {
 	my($self) = @_;
-	
+
 	my $type_counts = $self->type_counts;
 	$type_counts->{"Pathways"} = 0;
 	$type_counts->{"Reactions"} = 0;
@@ -191,13 +191,13 @@ sub calculate_type_counts {
 
 sub get_type_counts {
 	my($self) = @_;
-	
+
 	return $self->type_counts;
 }
 
 sub set_type_counts {
 	my($self, $type_counts) = @_;
-	
+
 	$self->type_counts($type_counts);
 }
 
@@ -207,7 +207,7 @@ sub set_type_counts {
 # are passed over to the new SearchResults object.
 sub filter_by_type {
 	my ($self, $type_selectors) = @_;
-	
+
     my $search_results = $self->search_results();
 	my $search_result;
 	my @filtered_search_result_array = ();
@@ -219,11 +219,11 @@ sub filter_by_type {
 			next;
 		}
 	}
-	
+
 	my $filtered_search_results = GKB::SearchUtils::SearchResults->new();
 	$filtered_search_results->set_search_results(\@filtered_search_result_array);
 	$filtered_search_results->set_type_counts($self->get_type_counts());
-	
+
 	return $filtered_search_results;
 }
 
@@ -235,7 +235,7 @@ sub get_search_result_type {
     if (defined $title && !($title eq '')) {
     	if ($title =~ /^([A-Za-z]+):/) {
     		$type = $1;
-    		
+
     		if ($type eq 'Pathway' || $type eq 'Reaction' || $type eq 'Protein') {
     			return $type . "s";
     		} else {
@@ -243,7 +243,7 @@ sub get_search_result_type {
     		}
     	}
     }
-    
+
     return $type;
 }
 
@@ -253,11 +253,11 @@ sub get_search_result_type {
 # "gk_current" in order to construct result URLs.
 sub convert_instances_to_query_results {
 	my($self, $instances, $gk_db_name) = @_;
-	
+
 	if (!(defined $gk_db_name)) {
 		$gk_db_name = "gk_current";
 	}
-	
+
 	my @query_result_array = ();
 	if (defined $instances) {
 		my $instance;
@@ -265,7 +265,7 @@ sub convert_instances_to_query_results {
 			push(@query_result_array, $self->convert_instance_to_query_result($instance, $gk_db_name));
 		}
 	}
-	
+
 	return \@query_result_array;
 }
 
@@ -274,16 +274,16 @@ sub convert_instances_to_query_results {
 # object, and return this object.
 sub convert_instance_to_query_result {
 	my($self, $instance, $gk_db_name) = @_;
-	
+
 	if (defined $gk_db_name) {
 		$gk_db_name = "DB=$gk_db_name&";
 	} else {
 		$gk_db_name = "";
 	}
-	
-	my $url_base = "/cgi-bin/eventbrowser?$gk_db_name" . "ID=";
+
+	my $url_base = '/content/detail/';
 	my $url = $url_base . $instance->db_id();
-	
+
 	my $instance_class = $INSTANCE_CLASS_NAME_MAP{$instance->class()};
 	if (!(defined $instance_class)) {
 		$instance_class = $instance->class();
@@ -292,9 +292,9 @@ sub convert_instance_to_query_result {
 	if ($instance->is_valid_attribute("species") && defined $instance->species && defined $instance->species->[0]) {
 		$title .= " (" . $instance->species->[0]->_displayName->[0] . ")";
 	}
-	
+
 	my $description = $instance->get_description();
-	
+
 	my $change_date = undef;
 	if (defined $instance->modified && scalar(@{$instance->modified})>0) {
 		$change_date = $instance->modified->[scalar(@{$instance->modified}) - 1]->dateTime->[0];
@@ -303,15 +303,14 @@ sub convert_instance_to_query_result {
 	} elsif (defined $instance->_timestamp && scalar(@{$instance->_timestamp})>0) {
 		$change_date = $instance->_timestamp->[0];
 	}
-	
+
 	my $search_result = WWW::SearchResult->new();
 	$search_result->url($url);
 	$search_result->title($title);
 	$search_result->description($description);
 	$search_result->change_date($change_date);
-	
+
 	return $search_result;
 }
 
 1;
-
