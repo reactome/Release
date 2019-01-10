@@ -453,22 +453,18 @@ sub get_event_modifier {
 
     Readonly my $GUANMING => 140537;
     Readonly my $JOEL => 1551959;
+    Readonly my $ESTHER => 70169;
 
     # These persons are excluded because they are frequently the authors
     # of development related modifications and this function only considers
     # curation related modifications
     my @excluded_person_ids = (
         $GUANMING,
-        $JOEL
+        $JOEL,
+        $ESTHER
     );
 
-    my $author_instance;
-    try {
-        $author_instance = get_most_recent_author_instance($event, \@excluded_person_ids);
-    } catch {
-        confess "Error caught: $_ \nFor event: ".$event->extended_displayName;
-    };
-
+    my $author_instance = get_most_recent_author_instance($event, \@excluded_person_ids);
     my $author_name = $author_instance ? $author_instance->displayName : 'Unknown';
 
     return $author_name;
