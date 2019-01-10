@@ -90,7 +90,8 @@ use feature qw/state/;
 use base 'Exporter';
 use Carp;
 use DateTime;
-use List::MoreUtils qw/any all/;
+use List::MoreUtils qw/any all none/;
+use Readonly;
 
 use lib '/usr/local/gkb/modules';
 use GKB::Config;
@@ -439,23 +440,65 @@ sub get_instance_modifier {
     return get_event_modifier($instance);
 }
 
+# Returns the name of the most recent modifier of an event or "Unknown" otherwise
+#
+# NOTE: This function depends on known person instance database identifiers and will
+# need to be altered if these database identifiers are altered
 sub get_event_modifier {
     my $event = shift;
 
-    return 'Unknown' unless $event;
+    if (!$event) {
+        return 'Unknown';
+    }
+
+    Readonly my $GUANMING => 140537;
+    Readonly my $JOEL => 1551959;
+
+    # These persons are excluded because they are frequently the authors
+    # of development related modifications and this function only considers
+    # curation related modifications
+    my @excluded_person_ids = (
+        $GUANMING,
+        $JOEL
+    );
 
     my $author_instance;
     try {
-        foreach my $modified_instance (reverse @{$event->modified}) {
-            $author_instance ||= $modified_instance->author->[0] unless $modified_instance->author->[0] && $modified_instance->author->[0]->db_id == 140537;
-        }
-        $author_instance ||= $event->created->[0]->author->[0];
+        $author_instance = get_most_recent_author_instance($event, \@excluded_person_ids);
     } catch {
         confess "Error caught: $_ \nFor event: ".$event->extended_displayName;
     };
-    my $author_name = $author_instance->displayName if $author_instance;
 
-    return $author_name || 'Unknown';
+    my $author_name = $author_instance ? $author_instance->displayName : 'Unknown';
+
+    return $author_name;
+}
+
+# Will return the most recent author instance or undefined if none exists
+sub get_most_recent_author_instance {
+    my $event = shift;
+    my $excluded_person_ids = shift;
+
+    my $author_instance;
+
+    # Reverse modified instances to get most recent first
+    # and stop the loop once an author that is not marked
+    # to be excluded is found
+    foreach my $modified_instance (reverse @{$event->modified}) {
+        $author_instance = $modified_instance->author->[0];
+
+        if ($author_instance && none {$_ == $author_instance->db_id} @{$excluded_person_ids}) {
+            last;
+        }
+    }
+
+    # Use the created instance author if no modification
+    # instance was appropriate
+    if (!$author_instance && $event->created->[0]) {
+        $author_instance = $event->created->[0]->author->[0];
+    };
+
+    return $author_instance;
 }
 
 sub is_human {
@@ -533,6 +576,7 @@ get_components
 get_instance_creator
 get_instance_modifier
 get_event_modifier
+get_most_recent_author_instance
 is_human
 get_unique_instances
 report
