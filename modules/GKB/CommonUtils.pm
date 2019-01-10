@@ -205,7 +205,7 @@ sub is_electronically_inferred {
 
     # first, let's check to see if the "magic" note is in the Created InstanceEdit for this object.
     my $created = $instance->created->[0];
-    if ($created && $created->note && $created->note eq "inferred events based on ensembl compara") {
+    if ($created && $created->note && $created->note =~ /inferred events based on (ensembl compara|panther)/) {
         return 1;
     }
     # If there's no note to indicate that the object was created during orthoinference,
