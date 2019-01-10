@@ -41,7 +41,7 @@ for my $attr
         in_html
 	) ) { $ok_field{$attr}++; }
 
-%VALID_COMPARISON_OPERATOR = 
+%VALID_COMPARISON_OPERATOR =
     (
      'REGEXP' => 'REGEXP',
      'LIKE' => 'LIKE',
@@ -55,7 +55,7 @@ for my $attr
 
 # Used to limit the classes and attributes that get searched with the simple
 # query form - speeds things up a bit.
-@SIMPLE_QUERY_FORM_CLASSES = 
+@SIMPLE_QUERY_FORM_CLASSES =
     (
      'CatalystActivity',
      'Event',
@@ -69,14 +69,14 @@ for my $attr
 	 'Regulation',
      'Summation',
      );
-%SIMPLE_QUERY_FORM_FORBIDDEN_ATTRIBUTES = 
+%SIMPLE_QUERY_FORM_FORBIDDEN_ATTRIBUTES =
     (
      '__is_ghost' => '__is_ghost',
      '_timestamp' => '_timestamp',
      '_doNotRelease' => '_doNotRelease',
      );
 $FORMAT_POPULAR_SEARCH_ENGINE_FLAG = 1;
-     
+
 sub AUTOLOAD {
     my $self = shift;
     my $attr = $AUTOLOAD;
@@ -85,7 +85,7 @@ sub AUTOLOAD {
     $self->throw("invalid attribute method: ->$attr()") unless $ok_field{$attr};
     $self->{$attr} = shift if @_;
     return $self->{$attr};
-}  
+}
 
 sub new {
     my($pkg, @args) = @_;
@@ -110,7 +110,7 @@ sub new {
     } else {
 		$self->throw("Need URLMaker or CGI object.");
     }
-    
+
     return $self;
 }
 
@@ -120,9 +120,9 @@ sub new {
 # take care.
 sub new_nocheck {
     my($pkg, @args) = @_;
-    
+
     my $self = bless {}, $pkg;
-    
+
     my ($cgi) = $self->_rearrange
 	([qw(
 	     CGI
@@ -162,7 +162,7 @@ sub debug {
 # Returns 1 if it is OK to use a G**gle-like view, 0 otherwise.
 sub is_popular_search_engine_mode {
     my $self = shift;
-    
+
     my $DB = $self->cgi->param('DB');
 
 	# TODO: we explicitly exclude gk_central and slices because they can't be
@@ -247,7 +247,7 @@ sub print_query_form {
 
 sub get_simple_query_form_classes {
     my ($self) = @_;
-    
+
     return @SIMPLE_QUERY_FORM_CLASSES;
 }
 
@@ -255,14 +255,14 @@ sub get_simple_query_form_classes {
 # class and species as well as a text-entry slot and a Go button.
 sub print_simple_query_form {
     my ($self) = @_;
-    
+
     my $DB = $self->cgi->param('DB');
 
     if ($self->is_popular_search_engine_mode()) {
     	$self->print_simple_query_form_no_popups();
     	return;
     }
-    
+
     print qq(<DIV CLASS="section">\n<TABLE WIDTH="$HTML_PAGE_WIDTH" CLASS="search" CELLSPACING="0" BORDER="0">);
 #    print qq(<DIV>\n<TABLE WIDTH="$HTML_PAGE_WIDTH" CELLSPACING="0" BORDER="0">);
     print $self->cgi->start_form(-action => '/cgi-bin/search2', -method => 'GET');
@@ -378,7 +378,7 @@ sub print_simple_query_form_no_popups {
     $html .= qq(document.write("$compact_query_form")\n);
     $html .= qq(}\n);
     $html .= qq(</script>\n);
-	
+
 	print $html;
 }
 
@@ -409,7 +409,7 @@ sub get_simple_query_form_no_popups {
 	    $sp{''} = 'All species';
 	}
     my $DB = $self->cgi->param('DB');
-    
+
     my $html = '';
     $html .= qq(<DIV CLASS="search_no_popups">\n);
     $html .= qq(<TABLE ALIGN="center" WIDTH="$total_width" CLASS="search" CELLSPACING="0" BORDER="0">\n);
@@ -429,7 +429,7 @@ sub get_simple_query_form_no_popups {
     $html .= qq(</FORM>\n);
     $html .= qq(</TABLE>\n);
     $html .= qq(</DIV>\n); # search_no_popups
-    
+
     return $html;
 }
 
@@ -444,7 +444,7 @@ sub get_simple_query_form_no_popups {
 # width		(optional) limit width in characters
 sub get_select_menu {
     my ($self, $id, $name, $default, $keys, $values, $width) = @_;
-    
+
     my $id_statement = '';
     if (defined $id && !($id eq '')) {
     	$id_statement = qq(id="$id");
@@ -472,17 +472,17 @@ sub get_select_menu {
     	$html .= qq(<option $selected_statement $value_statement $onmouse_statement>$item_string</option>\n);
     }
     $html .= qq(</select>\n);
-    
+
     return $html;
 }
 
 sub handle_simple_query_form{
     my ($self, $no_decoration) = @_;
-    
+
     my $cgi = $self->cgi;
     my $cat =  lc($cgi->param('CATEGORY'));
     my $ar = $self->fetch_simple_query_form_instances;
-    
+
     if (@{$ar} == 1 && !$self->is_popular_search_engine_mode()) {
     	# If only one result is returned, go straight to the web
     	# page for that result - this reduces the number of clicks
@@ -501,10 +501,10 @@ sub handle_simple_query_form{
 			my $stable_identifier = $ar->[0]->stableIdentifier->[0];
 			my $identifier = $stable_identifier->identifier->[0];
 			my $version = $stable_identifier->identifierVersion->[0];
-			print $cgi->redirect("/cgi-bin/eventbrowser_st_id?ST_ID=$identifier.$version");
+			print $cgi->redirect("/content/detail/$identifier.$version");
     	} else {
 			$ar->[0] = replace_StableIdentifier_instance_with_referrer($ar->[0]);
-			print $cgi->redirect('/cgi-bin/eventbrowser?DB=' . $cgi->param('DB') . '&ID=' . $ar->[0]->db_id);
+			print $cgi->redirect('/content/detail/' . $ar->[0]->db_id);
     	}
 		exit;
     }
@@ -533,10 +533,10 @@ sub fetch_simple_query_form_instances {
     	$qstr = $1;
     	$operator = 'PHRASE';
     }
-    
+
     $cgi->param(-name=>'SEARCH_UTILS_OPERATOR', -value=>$operator);
     ($operator,$qstr) = $self->_ui_qstr_and_operator_2_mysql($operator,$qstr);
-    
+
     my $sp_id = $cgi->param('SPECIES');
     if ($self->is_popular_search_engine_mode()) {
     	# For the G**gle-like search, search over all species
@@ -545,7 +545,7 @@ sub fetch_simple_query_form_instances {
     }
     my %h;
     my $ar = [];
-    
+
     # Unset stable ID flag, so that instances that were *not*
     # found by a search for REACT_XXX.YYY will get
     # displayed with eventbrowser, rather than with
@@ -564,12 +564,12 @@ sub fetch_simple_query_form_instances {
 		map {$h{$_->db_id} = $_}
 		@{$self->dba->fetch_class_instance_by_string_type_attribute
 		      ('ReferenceMolecule',$qstr,$operator)};
-	
+
 		map {$h{$_->db_id} = $_}
 		@{$self->dba->fetch_class_instance_by_string_type_attribute_and_species_db_id
 		      ('ReferenceSequence',$qstr,$operator,$sp_id)};
-	
-	
+
+
 		my $ar2 = $self->dba->fetch_class_instance_by_string_type_attribute_and_species_db_id
 		    ('SimpleEntity',$qstr,$operator,$sp_id);
 		my @tmp = map {$_->db_id} @{$ar2};
@@ -580,19 +580,19 @@ sub fetch_simple_query_form_instances {
 		@{$self->dba->fetch_instance_by_attribute
 		      ('ReferenceSequence',[['referenceEntity',\@tmp,'=','EntityWithAccessionedSequence']])};
 		map {$h{$_->db_id} = $_} grep {! $_->ReferenceEntity->[0]} @{$ar2};
-	
+
 		$ar = [values %h];
     } elsif ($cat eq 'complex') {
 		map {$h{$_->db_id} = $_}
 		@{$self->dba->fetch_class_instance_by_string_type_attribute_and_species_db_id
 		      ('Complex',$qstr,$operator,$sp_id)};
-	
+
 		$ar = [values %h];
     } elsif ($cat eq 'reaction') {
 		map {$h{$_->db_id} = $_}
 		@{$self->dba->fetch_class_instance_by_string_type_attribute_and_species_db_id
 		      ('Reaction',$qstr,$operator,$sp_id)};
-	
+
 		my $ar2 = $self->dba->fetch_class_instance_by_string_type_attribute
 		    ('GO_BiologicalProcess',$qstr,$operator);
 		my @tmp = map {$_->db_id} @{$ar2};
@@ -612,7 +612,7 @@ sub fetch_simple_query_form_instances {
 		map {$h{$_->db_id} = $_}
 		@{$self->dba->fetch_class_instance_by_string_type_attribute_and_species_db_id
 		      ('Pathway',$qstr,$operator,$sp_id)};
-	
+
 		my $ar2 = $self->dba->fetch_class_instance_by_string_type_attribute
 		    ('GO_BiologicalProcess',$qstr,$operator);
 		my @tmp = map {$_->db_id} @{$ar2};
@@ -625,10 +625,10 @@ sub fetch_simple_query_form_instances {
 		map {$h{$_->db_id} = $_}
 		@{$self->dba->fetch_class_instance_by_string_type_attribute
 		      ('Summation',$qstr,$operator)};
-	
+
 		$ar = [values %h];
     }
-    
+
     # If a species has been specified, filter the results by species
     # (insofar as it is possible).
     my @a;
@@ -646,7 +646,7 @@ sub fetch_simple_query_form_instances {
 		}
 		$ar = \@a;
     }
-    
+
     return $ar;
 }
 
@@ -654,13 +654,13 @@ sub fetch_simple_query_form_instances {
 # the current release or another one, if not available.
 sub fetch_instance_by_stable_identifier {
 	my ($self, $qstr ,$operator) = @_;
-	
+
 	# Gives access to a whole bunch of methods for dealing with
 	# previous releases and stable identifiers.
 	my $si = GKB::StableIdentifiers->new($self->cgi);
-	
+
 	my ($identifier, $identifier_version) = $si->extract_identifier_and_version_from_string($qstr);
-	
+
 	# Run a search in the current release first.
 	my $ar = undef;
 	if (defined $identifier_version) {
@@ -675,50 +675,50 @@ sub fetch_instance_by_stable_identifier {
 		$si->close_all_dbas();
 		return $ar;
 	}
-	
+
 	# Tsk, things are more complicated, the stable ID
 	# could not be found in the current release, check
 	# to see if it can be found in previous releases.
 	my @empty_array = ();
-		
+
 	# Get StableIdentifier instance
 	my $stable_identifier = $si->get_stable_identifier($identifier);
 
 	if (!$stable_identifier) {
 		$si->close_all_dbas();
 		return \@empty_array;
-	}	
+	}
 
 	# If no explicit version has been specified, fetch
 	# the highest.
 	if (!(defined $identifier_version)) {
 		$identifier_version = $si->get_max_version_num_from_stable_identifier($stable_identifier);
 	}
-	
+
 	# If no version could be found, give up and return an
 	# empty array.
 	if (!(defined $identifier_version) || $identifier_version == (-1)) {
 		$si->close_all_dbas();
 		return \@empty_array;
-	}	
+	}
 
 	my $release_dba = $si->get_release_dba($stable_identifier, $identifier_version);
 
 	if (!$release_dba) {
 		$si->close_all_dbas();
 		return \@empty_array;
-	}	
+	}
 
 	my $instances = $release_dba->fetch_instance_by_remote_attribute(
 		'DatabaseObject',
 		[['stableIdentifier.identifier','=',[$identifier]]]);
-		
+
 	# This should never happen!
 	if (!$instances) {
 		$si->close_all_dbas();
 		return \@empty_array;
 	}
-	
+
 	# TODO: Isn't there a cleaner way to do this?
 	# Since the instance(s) that have been found come from
 	# a different release from the original database, and
@@ -729,14 +729,14 @@ sub fetch_instance_by_stable_identifier {
 	# sideffect of this subroutine.
 	my $db_name = $release_dba->db_name;
 	$self->cgi->param(-name=>'DB',-value=>$db_name);
-	
+
 	# Set a flag to say that the instance(s) were generated
 	# from stable IDs.  It forces the program to use
 	# eventbrowser_st_id to display the instance, rather
 	# than the default eventbrowser.
 	# This is a somewhat ugly hack.
 	$self->is_stable_identifier('true');
-		
+
 	$si->close_all_dbas();
 
 	return $instances;
@@ -769,11 +769,11 @@ sub _ui_qstr_and_operator_2_mysql {
     if ($operator eq 'EXACT') {
 	$operator = '=';
     } elsif ($operator eq 'REGEXP') {
-	
+
     } elsif ($operator eq 'ALL') {
 	$operator = 'MATCH IN BOOLEAN MODE';
 	foreach (@query) {
-	    if (defined $_) { 
+	    if (defined $_) {
 		s/ (\w+)/ \+$1/g;
 		s/^(\w+)/\+$1/g;
 	    }
@@ -785,7 +785,7 @@ sub _ui_qstr_and_operator_2_mysql {
     } elsif ($operator eq 'PHRASE') {
 	$operator = 'MATCH IN BOOLEAN MODE';
 	foreach (@query) {
-	    if (defined $_) { 
+	    if (defined $_) {
 		unless (/^\"/) {
 		    $_ = '"' . $_;
 		}
@@ -848,7 +848,7 @@ sub print_big_query_form {
     @classes{$self->dba->ontology->list_classes} = $self->dba->ontology->list_classes;
     my $class = $self->cgi->param('QUERY_CLASS');
     $class ||= $self->dba->ontology->root_class;
-    
+
     print qq(<TR><TD>);
     print "Restrict search to a class";
     print qq(</TD><TD COLSPAN="2">);
@@ -859,7 +859,7 @@ sub print_big_query_form {
 			   -ONCHANGE => 'submit()'
 			   );
     print qq(</TD></TR>);
-    
+
     print qq(<TR><TH ALIGN="center" CLASS="search2center" COLSPAN="3">);
     print $self->cgi->submit(-name => 'SUBMIT', -value => 'Search');
     print qq(</TH></TR>);
@@ -923,7 +923,7 @@ sub print_big_query_form {
     print qq(<TR><TH ALIGN="center" CLASS="search2center" COLSPAN="3">);
     print $self->cgi->submit(-name => 'SUBMIT', -value => 'Search');
     print qq(</TH></TR>);
-    
+
     print qq(</TABLE>\n</DIV>\n);
 #    print qq(<HR>\n);
     print $self->cgi->end_form;
@@ -940,7 +940,7 @@ sub print_remote_attribute_query_form {
     @classes{$self->dba->ontology->list_classes} = $self->dba->ontology->list_classes;
     my $class = $self->cgi->param('QUERY_CLASS');
     $class ||= $self->dba->ontology->root_class;
-    
+
     print qq(<TR><TD>);
     print "Restrict search to a class";
     print qq(</TD><TD COLSPAN="2">);
@@ -951,7 +951,7 @@ sub print_remote_attribute_query_form {
 #			   -ONCHANGE => 'submit()'
 			   );
     print qq(</TD></TR>);
-    
+
     print qq(<TR><TH ALIGN="center" CLASS="search2center" COLSPAN="3">);
     print $self->cgi->submit(-name => 'SUBMIT', -value => 'Search');
     print qq(</TH></TR>);
@@ -1008,7 +1008,7 @@ sub print_remote_attribute_query_form {
 	$c++;
     }
     print
-	qq(<TR><TD COLSPAN="2">Output</TD><TD>), 
+	qq(<TR><TD COLSPAN="2">Output</TD><TD>),
 	$self->cgi->textarea(-name => 'OUTPUTINSTRUCTIONS',
 			     -rows => 3,
 			     -columns => 50,
@@ -1017,7 +1017,7 @@ sub print_remote_attribute_query_form {
     print qq(<TR><TH ALIGN="center" CLASS="search2center" COLSPAN="3">);
     print $self->cgi->submit(-name => 'SUBMIT', -value => 'Search');
     print qq(</TH></TR>);
-    
+
     print qq(</TABLE>\n</DIV>);
 #    print qq(<HR>\n);
     print $self->cgi->end_form;
@@ -1032,8 +1032,8 @@ sub handle_big_query_form {
 	@vals = (undef) unless (@vals);
 	my $operator = $self->cgi->param("OPERATOR#$c");
 	($operator,@vals) = $self->_ui_qstr_and_operator_2_mysql($operator,@vals);
-	push @query, [$self->cgi->param($a), 
-		      \@vals, 
+	push @query, [$self->cgi->param($a),
+		      \@vals,
 		      $operator];
     }
     @query || return [];
@@ -1054,7 +1054,7 @@ sub handle_remote_attribute_query_form {
 	@vals = (undef) unless (@vals);
 	my $operator = $self->cgi->param("OPERATOR#$c");
 	($operator,@vals) = $self->_ui_qstr_and_operator_2_mysql($operator,@vals);
-	push @query, [$self->cgi->param($a), 
+	push @query, [$self->cgi->param($a),
 		      $operator,
 		      \@vals];
     }
@@ -1122,7 +1122,7 @@ sub handle_query_form {
 		push @{$ar}, $i;
 	    }
 	}
-	
+
 	if (@$ar == 0) {
 	    $self->look_for_deleted($ar);
 	}
@@ -1178,9 +1178,9 @@ sub handle_query_form {
 # Shows the results of a query
 sub print_view {
     my ($self,$ar,$subclassify) = @_;
-    
+
     $self->debug && print "<PRE>", (caller(0))[3], "</PRE>\n";
-    
+
     if ($self->is_popular_search_engine_mode() && defined $self->cgi->param('SEARCH_UTILS_OPERATOR')) {
 		# Format the results to make it look as though they had
 		# been produced by a well-known search engine.
@@ -1191,7 +1191,7 @@ sub print_view {
 		$su->paginate_query_results($self->cgi, $ar, $query, $operator, $species_db_id);
 		return;
     }
-    
+
     if (! @{$ar}) {
     	my @query = $self->cgi->param('QUERY');
 		print "<P />Your query did not match anything.\n";
@@ -1199,7 +1199,7 @@ sub print_view {
 		print "<HR>\n";
 		return;
     }
-    
+
     my $classic = $self->cgi->param('CLASSIC');
     if (!(defined $classic && $classic =~ /1/)) {
 	$classic = $self->cgi->cookie('ClassicView');
@@ -1208,12 +1208,12 @@ sub print_view {
 # For some reason, if this code is present, IE7 always breaks when
 # displaying fly pathways under the fly server.  TODO: find out why!
     # nasty hack to avoid view siwtch link to be printed on pages with multiple instances since
-    # javascrpt reload, which just reloads the url, of those pages would not reload the page contents 
+    # javascrpt reload, which just reloads the url, of those pages would not reload the page contents
     if (@{$ar} > 1) {
 		$self->omit_view_switch_link(1);
     }
-    
-    $DB::single=1; 
+
+    $DB::single=1;
     if ($self->cgi->param('OUTPUTINSTRUCTIONS')) {
 		print "<PRE>\n";
 		$self->print_userdefined_view($ar);
@@ -1222,7 +1222,7 @@ sub print_view {
     	if (lc($format) eq 'elv' && scalar(@{$ar})==1 && !($self->is_in_diagram($ar->[0]))) {
     		$format = 'sidebarwithdynamichierarchy';
     	}
-     	
+
  		if (lc($format) eq 'list') {
 	    	$self->print_instance_name_list($ar,$subclassify);
 		} elsif (lc($format) eq 'eventbrowser') {
@@ -1292,9 +1292,9 @@ sub print_view {
 
 sub build_pathway_browser_url {
     my ($self, $instance) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     chomp(my $hostname = `hostname -f`);
     if (!$hostname || $hostname !~ /reactomecurator/) {
         croak if (!$instance->stableIdentifier->[0] || !$instance->stableIdentifier->[0]->identifier->[0]);
@@ -1306,14 +1306,14 @@ sub build_pathway_browser_url {
 
         return $url;
     }
-    
+
     my $db = $self->cgi->param('DB');
 
     my $db_id = $instance->db_id();
 
     $self->find_db_id_of_deepest_pathway_with_diagram($instance);
 
-    
+
     my $focus_pathway_db_id = $self->cgi->param('FOCUS_PATHWAY_ID')
 	|| $self->find_db_id_of_deepest_pathway_with_diagram($instance);
 
@@ -1326,7 +1326,7 @@ sub build_pathway_browser_url {
     if (defined $focus_pathway_db_id && !($focus_pathway_db_id eq "")) {
 	$focus_pathway_db_id_element = "FOCUS_PATHWAY_ID=$focus_pathway_db_id&";
     }
-    
+
     my $species_db_id = $self->cgi->param('FOCUS_SPECIES_ID');
 # The old way of doing things uses the focus species from the
 # page's URL to decide the new focus species.
@@ -1347,12 +1347,12 @@ sub build_pathway_browser_url {
     if (defined $species_db_id && !($species_db_id eq "")) {
     	$species_db_id_element = "FOCUS_SPECIES_ID=$species_db_id&";
     }
-    
+
     my $db_id_element = "";
     if (defined $db_id) {
 	$db_id_element = "ID=$db_id&";
     }
-    
+
     my $other_args = "";
     my $data_type = $self->cgi->param('DATA_TYPE');
     if (defined $data_type && !($data_type eq "")) {
@@ -1370,7 +1370,7 @@ sub build_pathway_browser_url {
     if (defined $other_species_db_id && !($other_species_db_id eq "")) {
 	$other_args .= "OTHER_SPECIES_DB_ID=$other_species_db_id&";
     }
-   
+
     my $url = "/PathwayBrowser/#$db_element$species_db_id_element$focus_pathway_db_id_element$db_id_element$other_args";
     $url =~ s/\&$//;
 
@@ -1382,30 +1382,30 @@ sub build_pathway_browser_url {
 # Return true if the instance is present in a diagram
 sub is_in_diagram {
     my ($self, $instance) = @_;
-    
+
     my $db = $self->cgi->param('DB');
     if ($self->has_diagram($db, $instance)) {
     	return 1;
     }
-    
+
     if (defined $self->find_db_id_of_deepest_pathway_with_diagram($instance)) {
     	return 1;
     }
-    
+
     return 0;
 }
 
 # Return true if there is a diagram corresponding specifically to this instance
 sub has_diagram {
     my ($self, $db, $instance) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     if (!(defined $instance)) {
     	$logger->warn("instance is undef!!\n");
     	return 0;
     }
-    
+
     if ($self->has_diagram_instance($instance)) {
     	if (defined $REACTOME_VERSION && $REACTOME_VERSION =~ /^[3-9]\..+$/) {
     	    return 1;
@@ -1420,9 +1420,9 @@ sub has_diagram {
 
 sub has_diagram_instance {
     my ($self, $instance) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     if (!(defined $instance)) {
     	$logger->warn("instance is undef!!\n");
     	return 0;
@@ -1438,15 +1438,15 @@ sub has_diagram_instance {
     		return 1;
     	}
     }
-    
+
     return 0;
 }
 
 sub has_diagram_on_disk {
     my ($self, $db, $instance) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     if (!(defined $instance)) {
     	$logger->warn("instance is undef!!\n");
     	return 0;
@@ -1457,15 +1457,15 @@ sub has_diagram_on_disk {
     	$logger->warn("supplied instance has no DB_ID!\n");
 	return 0;
     }
-    
+
     my $focus_species_db_id = $self->get_focus_species_db_id_from_instance($instance);
-    
+
     if (defined $GK_ROOT_DIR && !($GK_ROOT_DIR eq "") && defined $db && !($db eq "") && defined $focus_species_db_id && !($focus_species_db_id eq "") && defined $focus_pathway_db_id && !($focus_pathway_db_id eq "")) {
 	my $pathway_diagram_db = $db;
 	my $static_files_dir = "$GK_ROOT_DIR/website/html/entitylevelview/pathway_diagram_statics/$pathway_diagram_db/$focus_species_db_id/$focus_pathway_db_id";
 	if (-e $static_files_dir) {
 	    return 1;
-	}	
+	}
     }
 
     return 0;
@@ -1473,7 +1473,7 @@ sub has_diagram_on_disk {
 
 sub get_focus_species_db_id_from_instance {
     my ($self, $instance) = @_;
-    
+
     # This could be a rather dodgy heuristic in cases where there is more than one species.
     my $focus_species_db_id = undef;
     foreach my $species (@{$instance->species}) {
@@ -1487,20 +1487,20 @@ sub get_focus_species_db_id_from_instance {
 	    $focus_species_db_id = $instance->species->[0]->db_id();
 	}
     }
-    
+
     return $focus_species_db_id;
 }
 
 sub find_top_level_pathway_db_id {
     my ($self, $instance) = @_;
-    
+
     my $focus_pathway = $self->find_parent_pathway($instance);
     my $focus_pathway_db_id = undef;
-    
+
     if (defined $focus_pathway) {
 	$focus_pathway_db_id = $focus_pathway->db_id();
     }
-    
+
     return $focus_pathway_db_id;
 }
 
@@ -1508,7 +1508,7 @@ sub find_parent_pathway {
     my ($self, $instance) = @_;
 
     my $focus_pathway;
- 
+
     my $ar = $instance->follow_class_attributes
 	(-INSTRUCTIONS => {'PhysicalEntity' => {'reverse_attributes' => [qw(hasComponent hasMember hasCandidate repeatedUnit input output physicalEntity)]},
 			   'Event' => {'reverse_attributes' => [qw(hasComponent hasMember hasSpecialisedForm hasEvent)]},
@@ -1526,7 +1526,7 @@ sub find_parent_pathway {
 
 sub find_db_id_of_deepest_pathway_with_diagram {
     my ($self, $instance) = @_;
-    
+
     my $deepest_pathway = $self->find_deepest_pathway_with_diagram($instance);
     my $db_id = undef;
     if (defined $deepest_pathway) {
@@ -1538,7 +1538,7 @@ sub find_db_id_of_deepest_pathway_with_diagram {
 
 sub find_deepest_pathway_with_diagram {
     my ($self, $instance) = @_;
-    
+
     # Search upwards in the instance hierarchy to get to the first
     # pathway with a diagram.
     my $ar = $instance->follow_class_attributes
@@ -1770,7 +1770,7 @@ sub link_to_eventbrowser_st_id {
 	my $form_name = $self->form_name_for_eventbrowser_st_id($identifier, $version, $release_num);
 	my $out = $self->form_for_eventbrowser_st_id($form_name, $identifier, $version, $release_num);
 	$out .= $self->onclick_for_eventbrowser_st_id($style, $form_name, $link_text, $other_text);
-	
+
 	return $out;
 }
 
@@ -1791,10 +1791,10 @@ sub form_name_for_eventbrowser_st_id {
 		# Use underscore - full-stop confuses javascript
 		$form_name .= "_$release_num";
 	}
-	
+
 	return $form_name;
 }
-	
+
 # Creates a form for an eventbrowser_st_id CGI that you can
 # put onto a web page.  Needs stable ID, version number and
 # release number (can be empty string).
@@ -1808,7 +1808,7 @@ sub form_for_eventbrowser_st_id {
 		$action .= ".$version";
 	}
 	my $out .= $self->cgi->start_form(-name => $form_name, -method => 'POST', -action => $action);
-	
+
 	# Send these parameter, but hidden, so that if the user
 	# bookmarks it, it won't show.  The 'FROM_REACTOME' flag
 	# forces eventbrowser_st_id to show a regular eventbrowser
@@ -1819,9 +1819,9 @@ sub form_for_eventbrowser_st_id {
 	if (defined $release_num && !($release_num eq '')) {
 		$out .= $self->cgi->hidden(-name => 'RELEASE_NUM', -value => $release_num);
 	}
-	
+
 	$out .= $self->cgi->end_form;
-	
+
 	return $out;
 }
 
@@ -1832,14 +1832,14 @@ sub form_for_eventbrowser_st_id {
 # to do this, set this argument to an empty string.
 sub onclick_for_eventbrowser_st_id {
 	my ($self, $style, $form_name, $link_text, $other_text) = @_;
-	
+
 	if (defined $style && !($style eq '')) {
 		$style = qq{STYLE="$style"};
 	}
 
 	# Creates the link
 	my $out .= qq{<A $style ONCLICK="document.$form_name.submit(); return false">$link_text</A>$other_text};
-	
+
 	return $out;
 }
 
@@ -1852,9 +1852,9 @@ sub onclick_for_eventbrowser_st_id {
 # be inappropriate.
 sub release_warning {
     my $self = shift;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     my $release_warning = '';
     if (defined $WARNING && !($WARNING eq '')) {
     	$release_warning = $WARNING;
@@ -1867,16 +1867,16 @@ sub release_warning {
 	    $logger->warn("CGI in not defined!!\n");
     	    return $release_warning;
 	}
-	
+
 	my $url = $cgi->url();
-	
+
 	if (!$url || !($url =~ /control_panel_st_id/ || $url =~ /bookmarker_st_id/)) {
 	    my $current_release_db_name = $cgi->param('DB');
-	
+
 	    # Gives access to a whole bunch of methods for dealing with
 	    # previous releases and stable identifiers.
 	    my $si = GKB::StableIdentifiers->new($cgi);
-	
+
 	    if ($si->is_known_release_name($current_release_db_name)) {
 	        my $most_recent_release_db_name = $si->get_most_recent_release_db_name();
 	        my $return_page = "frontpage?DB=$most_recent_release_db_name";
@@ -1886,7 +1886,7 @@ sub release_warning {
 		        $return_page = "eventbrowser_st_id?ST_ID=$identifier";
 		    }
 		    my $current_release_num = $si->get_release_num_from_db_name($current_release_db_name);
-		    $release_warning .= 
+		    $release_warning .=
 		    qq{<DIV STYLE="font-size:9pt;font-weight:bold;text-align:center;color:red;padding-top:10px;">
 		    The currently displayed page is from release $current_release_num.  To return to the most
 		    recent release, click <A HREF="$return_page">here</A>.</DIV>\n};
@@ -1894,17 +1894,17 @@ sub release_warning {
 	    }
 	    $si->close_all_dbas();
 	}
-    }	
-    
+    }
+
     return $release_warning;
 }
-    
+
 ## Supplies any warning messages that should be presented to
 ## the user.  Note, this should not be called from any method
 ## that is likely to be used statically, e.g. navigation_bar.
 #sub warnings {
 #    my $self = shift;
-#	
+#
 #	return $WARNING . $self->release_warning();
 #}
 
@@ -1912,30 +1912,30 @@ sub release_warning {
 # web pages.
 sub navigation_bar {
     my $self = shift;
-    
+
     my $db_name = undef;
     my $dbstring = "";
     if ($self && $self->cgi && $self->cgi->param('DB')) {
     	$db_name = $self->cgi->param('DB');
 		$dbstring = "?DB=$db_name";
     }
-    
+
 #    my $use_reactome_icon = 1;
 #    if ($self && $self->cgi && $self->cgi->param('NO_ICON')) {
 #		$use_reactome_icon = 0;
 #    }
     my $use_reactome_icon = 0;
-    
+
     my $launch_new_page_flag = 0;
     if ($self && $self->cgi && $self->cgi->param('NEW_PAGE')) {
 		$launch_new_page_flag = 1;
     }
-    
+
 	my $old_release_flag = 0;
 	if (defined $self && defined $self->cgi) {
 		# Only run this chunk of code in non-static mode, otherwise
 		# it will break.
-		
+
 		my $si = GKB::StableIdentifiers->new($self->cgi);
 		$old_release_flag = $si->is_old_release();
 		$si->close_all_dbas();
@@ -1945,12 +1945,12 @@ sub navigation_bar {
 	if ($self) {
 		$release_warning = $self->release_warning();
 	}
-	
+
 	my $display_banner = "true";
     if ($self && $self->cgi && $self->cgi->param('NO_BANNER')) {
 		$display_banner = undef;
     }
-	
+
 	my $view = GKB::NavigationBar::View->new(GKB::NavigationBar::Model->new($db_name, $old_release_flag, $use_reactome_icon, $launch_new_page_flag), $release_warning, $display_banner);
 	my $out = $view->generate();
 	return $out;
@@ -1966,7 +1966,7 @@ sub navigation_bar_with_query_box {
 
 sub reactome_logo {
     my $self = shift;
-	
+
 	return qq(<IMG SRC="$PROJECT_LOGO_URL" HEIGHT="30" WIDTH="30">\n);
 }
 
@@ -2000,7 +2000,7 @@ sub print_TOC {
 # Table of contents specifically for pathways with a DOI
 sub print_DOI_TOC {
     my ($self) = @_;
-    
+
     print qq(<TABLE WIDTH="$HTML_PAGE_WIDTH" CLASS="reactome" BORDER="0" CELLPADDING="0" CELLSPACING="0">\n);
     print qq(<THEAD><TR><TH scope="col">Topic</TH><TH scope="col">DOI</TH><TH scope="col" WIDTH="20%">Authors</TH><TH scope="col">&nbsp;&nbsp;&nbsp;Released&nbsp;&nbsp;&nbsp;</TH><TH scope="col">&nbsp;&nbsp;&nbsp;Revised&nbsp;&nbsp;&nbsp;</TH><TH scope="col" WIDTH="20%">Reviewers</TH><TH scope="col" WIDTH="20%">Editors</TH></TR></THEAD>\n);
 
@@ -2009,7 +2009,7 @@ sub print_DOI_TOC {
 
     # order alphabetically
     @pathways = sort {uc($a->displayName) cmp uc($b->displayName)} @pathways;
-    
+
     # Create table rows, one per pathway
     foreach my $pathway (@pathways) {
 		#$self->urlmaker || $self->throw("Need URLMaker object.");
@@ -2019,7 +2019,7 @@ sub print_DOI_TOC {
 			    -SUBCLASSIFY => 1,
 			    -CGI => $self->cgi)->top_browsing_view(1);
     }
-    
+
     print qq(</TABLE>\n);
 }
 
@@ -2027,7 +2027,7 @@ sub print_DOI_TOC {
 # of Reactions or PhysicalEntities that they contain.
 sub print_suggested_canonical_pathways {
     my ($self, $reaction_limit, $entity_limit) = @_;
-    
+
     my @pathways = ();
     my $frontpages = $self->dba->fetch_all_class_instances_as_shells('FrontPage');
     if (defined $entity_limit && !($entity_limit eq "")) {
@@ -2042,16 +2042,16 @@ sub print_suggested_canonical_pathways {
 	    	$self->find_pathways_with_fewer_reactions($pathway, $reaction_limit, \@pathways);
 	    }
     }
-    
+
     $self->print_pathway_size_table(\@pathways);
 }
 
 sub print_pathway_size_table {
     my ($self, $pathways) = @_;
-    
+
     # order alphabetically
     my @sorted_pathways = sort {uc($a->displayName) cmp uc($b->displayName)} @{$pathways};
-    
+
     print "<br>Found a total of " . scalar(@sorted_pathways) . " potential canonical pathways:<br><br>\n";
 
 	my $db = $self->cgi->param("DB");
@@ -2059,29 +2059,29 @@ sub print_pathway_size_table {
 	if (defined $db || !($db eq "")) {
 		$db_param_string = "&DB=$db"
 	}
-	
+
     # Create table rows, one per pathway
     print qq(<TABLE WIDTH="$HTML_PAGE_WIDTH" CLASS="contents" BORDER="0" CELLPADDING="0" CELLSPACING="0">\n);
     print qq(<TR CLASS="contents"><TH>Topic</TH><TH>Reaction count</TH><TH>Entity count</TH></TR>\n);
     foreach my $pathway (@sorted_pathways) {
     	print qq(<TR CLASS="contents">);
-    	
+
     	# _displayName
     	print qq(<TD CLASS="sidebar" WIDTH="33%">);
     	print "<A HREF=\"/cgi-bin/eventbrowser?ID=" . $pathway->db_id() . "$db_param_string\">" . $pathway->_displayName->[0] . "</A>";
     	print qq(</TD>);
-    	
-	
+
+
     	# Reaction count
     	print qq(<TD CLASS="sidebar" WIDTH="33%">);
     	print $self->count_reactions_in_pathway($pathway);
     	print qq(</TD>);
-			    
+
     	# Entity count
     	print qq(<TD CLASS="sidebar" WIDTH="33%">);
     	print $self->count_entities_in_pathway($pathway);
     	print qq(</TD>);
-		
+
     	print qq(</TR>);
     }
     print qq(</TABLE>\n);
@@ -2092,9 +2092,9 @@ sub print_pathway_size_table {
 # are appended to the pathways list provided as an argument.
 sub find_pathways_with_fewer_reactions {
     my ($self, $pathway, $reaction_limit, $pathways) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     if (!(defined $pathway)) {
     	$logger->warn("pathway is null!\n");
     	return;
@@ -2106,7 +2106,7 @@ sub find_pathways_with_fewer_reactions {
     if (!(defined $pathways)) {
     	$pathways = [];
     }
-    
+
     if ($self->count_reactions_in_pathway($pathway)<=$reaction_limit) {
     	# Terminate recursion
     	push(@{$pathways}, $pathway);
@@ -2126,9 +2126,9 @@ sub find_pathways_with_fewer_reactions {
 # are appended to the pathways list provided as an argument.
 sub find_pathways_with_fewer_entities {
     my ($self, $pathway, $entity_limit, $pathways) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     if (!(defined $pathway)) {
     	$logger->warn("pathway is null!\n");
     	return;
@@ -2140,7 +2140,7 @@ sub find_pathways_with_fewer_entities {
     if (!(defined $pathways)) {
     	$pathways = [];
     }
-    
+
     if ($self->count_entities_in_pathway($pathway)<=$entity_limit) {
     	# Terminate recursion
     	push(@{$pathways}, $pathway);
@@ -2158,37 +2158,37 @@ sub find_pathways_with_fewer_entities {
 # Returns a count of the number of reactions in the given pathway.
 sub count_reactions_in_pathway {
     my ($self, $pathway) = @_;
-    
+
     if (!(defined $pathway)) {
     	return 0;
     }
-    
+
     my %instructions = (-INSTRUCTIONS =>
 				{
 				    'Pathway' => {'attributes' => [qw(hasComponent hasEvent)]}, # hasComponent needed for backward compatibility
 				},
 				 -OUT_CLASSES => ['ReactionlikeEvent']
 				);
-				
+
     my $instances = $pathway->follow_class_attributes(%instructions);
-    
+
     return scalar(@{$instances});
 }
 
 # Returns a count of the number of PhysicalEntities in the given pathway.
 sub count_entities_in_pathway {
     my ($self, $pathway) = @_;
-    
+
     if (!(defined $pathway)) {
     	return 0;
     }
-    
+
     my $instances = GKB::PrettyInstance::Event::get_participating_molecules($pathway);
-    
+
     if (!(defined $instances)) {
     	return 0;
     }
-    
+
     return scalar(@{$instances});
 }
 
@@ -2208,7 +2208,7 @@ sub make_footer {
 	qq(<TABLE WIDTH="$HTML_PAGE_WIDTH">) .
 	$copyright_renderer .
 	qq(<TR CLASS="footer"><TD><I>Date: ) .
-	&format_date . 
+	&format_date .
 	qq(</I></TD><TD ALIGN="right">) .
 	$project_help_renderer .
 	qq(</TD></TR></TABLE>\n) .
@@ -2220,7 +2220,7 @@ sub make_footer {
 # appear in the bookmark, plus the URL.
 sub create_bookmark {
 	my ($self, $style, $text, $url) = @_;
-	
+
 	if (defined $style && !($style eq '')) {
 		$style = qq{STYLE="$style"};
 	}
@@ -2247,7 +2247,7 @@ __END__
 	return $bookmark;
 }
 
-sub format_date { 
+sub format_date {
     my ($sec, $min, $hour, $day, $month, $year) = localtime();
     $year  += 1900;
     $month += 1;
@@ -2265,7 +2265,7 @@ sub print_protege2mysql_form {
 					    "Your project's pins file",
 					    $self->cgi->filefield
 					    (-name => 'FILE',
-					     -size => 30  
+					     -size => 30
 					     ),
 #					    $self->cgi->checkbox
 #					    (-name => 'IGNORE_DB_ID',
@@ -2313,7 +2313,7 @@ sub _handle_tmp_db {
 	 (-CGI => $self->cgi,
 	  -WEBUTILS => $self
 	  )
-	 );    
+	 );
     #$self->dba->debug(1);$self->dba->matching_instance_handler->debug(1);
     eval {
 	my $ar = $self->dba->matching_instance_handler->handle_temporarily_stored_instances($self->dba);
@@ -2483,7 +2483,7 @@ sub _report_internal_duplicates {
     my %h;
     foreach my $i ($cache->instances) {
 	if ($i->attribute_value($DB_ID_NAME)->[0]) {
-	    $h{$i->attribute_value($DB_ID_NAME)->[0]} ? push(@{$h{$i->attribute_value($DB_ID_NAME)->[0]}}, $i) 
+	    $h{$i->attribute_value($DB_ID_NAME)->[0]} ? push(@{$h{$i->attribute_value($DB_ID_NAME)->[0]}}, $i)
 		: ($h{$i->attribute_value($DB_ID_NAME)->[0]} = [$i]);
 	} elsif ($i->identical_instances_in_db) {
 	    map {$h{$_->db_id} ? push(@{$h{$_->db_id}}, $i) : ($h{$_->db_id} = [$i])} @{$i->identical_instances_in_db};
@@ -2563,7 +2563,7 @@ sub handle_keyword_search_form {
     print qq(</TABLE>\n);
     print
 	qq(<TABLE WIDTH="$HTML_PAGE_WIDTH"><TR><TD>),
-	$self->cgi->checkbox(-name => 'SHALLOW', -label => 'Shallow extraction'), 
+	$self->cgi->checkbox(-name => 'SHALLOW', -label => 'Shallow extraction'),
 	qq(</TD>\n<TD>),
 	$self->cgi->submit(-name => "DOWNLOAD", -value => 'Create project'),
 	qq(</TD>\n<TD>),
@@ -2651,8 +2651,8 @@ sub _instance_displayName {
 
 sub _print_query_boxes {
     my $self = shift;
-    print $self->cgi->table({-border => 0, 
-			     -cellpadding => 2, 
+    print $self->cgi->table({-border => 0,
+			     -cellpadding => 2,
 			     -cellspacing => 0,
 			     -width => "$HTML_PAGE_WIDTH",
 			     -class => 'search2'},
@@ -2737,14 +2737,14 @@ sub create_protege_project {
 
 sub create_protege_project_wo_orthologues {
     my ($self,$basename,$ar) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     my $instances = $self->dba->fetch_instance_by_attribute($self->dba->ontology->root_class,
 							    [[$DB_ID_NAME, $ar]]);
-	
+
 	return unless @$instances;
-	
+
     $logger->info($instances->[0]->extended_displayName, "\n");
     my $ca = GKB::ClipsAdaptor->new(
 	-ONTOLOGY => $self->dba->ontology,
@@ -2759,7 +2759,7 @@ sub create_protege_project_wo_orthologues {
 				-TGZ => 1,
 				-INSTANCES => $instances,
 				-DBA => $self->dba,
-				);    
+				);
 }
 
 sub create_pins_dump_only {
@@ -2884,8 +2884,8 @@ sub print_pathfinder_form {
     if (my $val = $self->cgi->param('TAXON')) {
 	if ($taxon = $self->dba->fetch_instance_by_db_id($val)->[0]) {
 	    $filter_function = sub {
-		return (!($_[0]->is_valid_attribute('species') && 
-			  $_[0]->attribute_value('species')->[0] && 
+		return (!($_[0]->is_valid_attribute('species') &&
+			  $_[0]->attribute_value('species')->[0] &&
 			  $_[0]->attribute_value('species')->[0] != $taxon));
 	    };
 	}
@@ -2910,32 +2910,32 @@ sub print_pathfinder_form {
     $values_ar = [];
     my $default;
     my ($from_str,$from_op);
-    my $op = (lc($self->dba->table_type) eq 'innodb') ? 'REGEXP' : 'PHRASE'; 
+    my $op = (lc($self->dba->table_type) eq 'innodb') ? 'REGEXP' : 'PHRASE';
     if (my $val = $self->cgi->param('FROM')) {
 	$from_str = $val;
 	($from_op, $val) = $self->_ui_qstr_and_operator_2_mysql($op,$val);
 
 	my %seen;
 
-	@{$from_ar} = 
+	@{$from_ar} =
 	grep {! $seen{$_->db_id}++}
 	grep {&{$filter_function}($_)}
 	@{$self->dba->fetch_instance_by_remote_attribute('PhysicalEntity',[['name',$from_op,[$val]],
 									   ['input:ReactionlikeEvent','IS NOT NULL',[]]])};
 
-	push @{$from_ar}, 
+	push @{$from_ar},
 	grep {! $seen{$_->db_id}++}
 	grep {&{$filter_function}($_)}
 	@{$self->dba->fetch_instance_by_remote_attribute('PhysicalEntity',[['_displayName',$from_op,[$val]],
 									   ['physicalEntity:CatalystActivity','IS NOT NULL',[]]])};
 
-	push @{$from_ar}, 
+	push @{$from_ar},
 	grep {! $seen{$_->db_id}++}
 	grep {&{$filter_function}($_)}
 	@{$self->dba->fetch_instance_by_remote_attribute('PhysicalEntity',[['_displayName','=',[$from_str]],
 									   ['input:ReactionlikeEvent','IS NOT NULL',[]]])};
-	
-	push @{$from_ar}, 
+
+	push @{$from_ar},
 	grep {! $seen{$_->db_id}++}
 	grep {&{$filter_function}($_)}
 	@{$self->dba->fetch_instance_by_remote_attribute('PhysicalEntity',[['_displayName','=',[$from_str]],
@@ -2994,7 +2994,7 @@ sub print_pathfinder_form {
     $values_ar = [];
     $labels_hr = {};
     $default = undef;
-    my ($to_str,$to_op,$to_flag); 
+    my ($to_str,$to_op,$to_flag);
     if (my $val = $self->cgi->param('TO')) {
 	$to_str = $val;
 	($to_op, $val) = $self->_ui_qstr_and_operator_2_mysql($op,$val);
@@ -3006,7 +3006,7 @@ sub print_pathfinder_form {
 	@{$self->dba->fetch_instance_by_remote_attribute('PhysicalEntity',[['name',$to_op,[$val]],
 									   ['output:ReactionlikeEvent','IS NOT NULL',[]]])};
 
-	push @{$to_ar}, 
+	push @{$to_ar},
 	grep {! $seen{$_->db_id}++}
 	grep {&{$filter_function}($_)}
 	@{$self->dba->fetch_instance_by_remote_attribute('PhysicalEntity',[['_displayName','=',[$to_str]],
@@ -3029,7 +3029,7 @@ sub print_pathfinder_form {
 #    } elsif ($val = $self->cgi->param('TO_MENU')) {
 #	@{$to_ar} = grep {&{$filter_function}($_)} @{$self->dba->fetch_instance_by_db_id($val)};
     } elsif (my @vals = $self->cgi->param('TO_MENU')) {
-	@{$to_ar} = grep {&{$filter_function}($_)} 
+	@{$to_ar} = grep {&{$filter_function}($_)}
 	@{$self->dba->fetch_instance_by_attribute($self->dba->ontology->root_class, [[$DB_ID_NAME,\@vals]])};
 	$to_flag = 1;
     }
@@ -3164,7 +3164,7 @@ sub _pathfinder_reactionmap {
 	    $reaction2connector{$i->db_id} = $ar->[$j + 1];
 	}
     }
-    my %instructions = 
+    my %instructions =
 	(-INSTRUCTIONS =>
 	 {'Reaction' => {'attributes' => [qw(orthologousEvent)], 'reverse_attributes' => [qw(locatedEvent)]}},
 	 -OUT_CLASSES => ['ReactionCoordinates']
@@ -3293,7 +3293,7 @@ sub find_focus_species {
 sub get_focus_species {
     my $self = shift;
     my $focus_species = GKB::Utils::find_focus_species_or_default($self->dba,$self->cgi,@_);
-    
+
     # If $focus_species is not in the list of species known to the frontpage,
     # we need to find a plausible alternative.
     eval {
@@ -3438,7 +3438,7 @@ sub fetch_Events_by_identifiers_from_dn_db {
 	     -port   => $GK_DB_PORT,
 	    );
 	foreach my $i (@{$ar}) {
-	    
+
 	}
     };
     if ($@) {
@@ -3534,7 +3534,7 @@ sub print_instance_attribute_value_table {
     print qq(<TR>), join('', map {qq(<TH>$_</TH>)} ('Display name','Class','DB_ID',@atts,map {"($_)"} @rev_atts)), qq(</TR>\n);
 #    foreach my $i (sort {lc($a->displayName) cmp lc($b->displayName)} @{$ar}) {
     foreach my $i (@{$ar}) {
-	print 
+	print
 	    qq(<TR><TD>),
 	    $i->prettyfy(-URLMAKER => $self->urlmaker,
 			 -SUBCLASSIFY => 1,
@@ -3547,7 +3547,7 @@ sub print_instance_attribute_value_table {
 	foreach my $att (@atts) {
 	    print qq(<TD>);
 	    if ($i->is_valid_attribute($att)) {
-		if (my @v = @{$i->attribute_value($att)}) { 
+		if (my @v = @{$i->attribute_value($att)}) {
 		    if ($i->is_instance_type_attribute($att)) {
 			print join('<P />',
 				   map {$_->prettyfy(-URLMAKER => $self->urlmaker,
@@ -3556,7 +3556,7 @@ sub print_instance_attribute_value_table {
 		    } else {
 			print join('<BR />', @v);
 		    }
-		    
+
 		} else {
 		    print '&nbsp;'
 		    }
@@ -3715,7 +3715,7 @@ sub get_format {
     my $cookie_format = get_format_from_cookie($cgi);
     my $config_format = $GKB::Config::DEFAULT_VIEW_FORMAT;
     my $format = $cgi_format || $cookie_format || $config_format;
-    
+
 #    # Diagnostics
 #    if (!(defined $cgi_format)){
 #    	$cgi_format = "";
@@ -3727,7 +3727,7 @@ sub get_format {
 #    	$config_format = "";
 #    }
 #    print STDERR "WebUtils.get_format: cgi_format=$cgi_format, cookie_format=$cookie_format, config_format=$config_format, format=$format\n";
-    
+
     return $format;
 }
 
@@ -3741,7 +3741,7 @@ sub set_cgi_format_parameter_if_unset {
 
 sub print_userdefined_view {
     my ($self,$ar) = @_;
-    my @instructions = split(/\r\n|\n\r|\r|\n|,/,$self->cgi->param('OUTPUTINSTRUCTIONS'));    
+    my @instructions = split(/\r\n|\n\r|\r|\n|,/,$self->cgi->param('OUTPUTINSTRUCTIONS'));
 #    print "<PRE>\n";
     GKB::Utils::print_values_according_to_instructions($ar,\@instructions);
 #    print "</PRE>\n";
@@ -3818,10 +3818,10 @@ sub focus_species_changes {
 # written.  It relies on the user's browser supporting Javascript.
 sub form_redirect {
     my ($self, $url) = @_;
-    
+
 	my $tool = "WebUtils";
     my $form = <<__HERE__;
-<form target="_top" id="$tool" name="$tool" enctype="multipart/form-data" action="$url" method="post"></form> 
+<form target="_top" id="$tool" name="$tool" enctype="multipart/form-data" action="$url" method="post"></form>
 <script type="text/javascript">
 	document.forms['$tool'].submit('Check in');
 </script>
@@ -3852,19 +3852,19 @@ __HERE__
 # meta objects, that can be directly implanted into CGI->start_html(-head => [...])
 sub meta_tag_builder {
     my ($self, $meta_tag_array) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     my @cgi_meta_descriptors = ();
     if (!(defined $meta_tag_array)) {
     	return @cgi_meta_descriptors;
     }
-    
+
     my $cgi = $self->cgi;
     if (!(defined $cgi)) {
     	return @cgi_meta_descriptors;
     }
-    
+
     foreach my $meta_descriptor_pair (@{$meta_tag_array}) {
     	if (!(defined $meta_descriptor_pair)) {
     	    $logger->warn("META tag description pair is undefined, skipping!!\n");
@@ -3877,7 +3877,7 @@ sub meta_tag_builder {
 	my $name = $meta_descriptor_pair->[0];
 	my $content = $meta_descriptor_pair->[1];
 	my $cgi_meta_descriptor = $cgi->meta({'name'=>$name, 'content'=>$content});
-	
+
 	push(@cgi_meta_descriptors, $cgi_meta_descriptor);
     }
 
@@ -3889,7 +3889,7 @@ sub meta_tag_builder {
 # for the instance with the given DB_ID.
 sub instance_meta_tag_builder {
     my ($self, $db_id) = @_;
-    
+
     my @cgi_meta_descriptors = ();
     if (!(defined $db_id)) {
 	return @cgi_meta_descriptors;
@@ -3900,7 +3900,7 @@ sub instance_meta_tag_builder {
     if (!(defined $cgi) || !(defined $dba)) {
 	return @cgi_meta_descriptors;
     }
-    
+
     my $instances = $dba->fetch_instance_by_db_id($db_id);
     if (scalar(@{$instances}) == 0) {
 	return @cgi_meta_descriptors;
@@ -3909,10 +3909,10 @@ sub instance_meta_tag_builder {
     if (!(defined $instance)) {
 	return @cgi_meta_descriptors;
     }
-    
+
     my $description_cgi_meta_descriptor = $cgi->meta({'name'=>"description", 'content'=>$instance->displayName()});
     push(@cgi_meta_descriptors, $description_cgi_meta_descriptor);
-    
+
     # Get the keywords from the appropriate attribute, if it exists.
     if ($instance->is_valid_attribute("keywords")) {
 	my $keywordss = $instance->attribute_value("keywords");
@@ -3931,7 +3931,7 @@ sub instance_meta_tag_builder {
 	my $robots_noindex_meta_descriptor = $cgi->meta({'name'=>"robots", 'content'=>'noindex,nofollow'});
 	push(@cgi_meta_descriptors, $robots_noindex_meta_descriptor);
     }
-    
+
 #	# Emergency hack to stop search engines from indexing eventbrowser pages
 #	my $robots_noindex_meta_descriptor = $cgi->meta({'name'=>"robots", 'content'=>'noindex,nofollow'});
 #	push(@cgi_meta_descriptors, $robots_noindex_meta_descriptor);
@@ -3944,14 +3944,14 @@ sub instance_meta_tag_builder {
 # containing HTML that can be printed to provide a warning.
 sub forbid_page_access {
     my ($self) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
 
     my $dba = $self->dba;
     if (!(defined $self->cgi) || !(defined $dba)) {
 	return "Cannot access page data or database\n";
     }
-    
+
     # Get the number of open database connections.  This uses the MySQL
     # "status" command; use the number of "threads".
     my ($sth,$res) = $dba->execute("show status like 'Threads_connected'");
@@ -3963,7 +3963,7 @@ sub forbid_page_access {
     my $error_message = "Sorry, there is a temporary technical problem (too many database connections: $connections), please refresh this page again in a few minutes.";
     my $out = qq(<h1 CLASS="frontpage"><FONT COLOR="RED">Internal error</FONT></h1>\n);
     $out .= qq(<PRE>\n\n\n$error_message\n\n</PRE>\n);
-    
+
     if ($connections > 145) {
 	# We are getting close to the default upper limit of 150 database
 	# connections in MySQL, don't allow any more.
@@ -3989,7 +3989,7 @@ sub forbid_page_access {
 
 sub remote_host_isa_search_indexer {
     my ($self) = @_;
-    
+
     my $cgi = $self->cgi;
     my $remote_host = $cgi->remote_host();
 
@@ -3997,27 +3997,27 @@ sub remote_host_isa_search_indexer {
     if	($remote_host =~ /google/i || $remote_host =~ /^66.249.6[56]/) {
     	return 1;
     }
-    
+
     # MSN
     if	($remote_host =~ /msn/i || $remote_host =~ /^65.5[45]/) {
     	return 1;
     }
-    
+
     # Yahoo
     if	($remote_host =~ /slurp/i || $remote_host =~ /yahoo/i || $remote_host =~ /inktomi/i) {
     	return 1;
     }
-    
+
     # Altavista
     if	($remote_host =~ /scooter/i || $remote_host =~ /alta-*vista/i) {
     	return 1;
     }
-    
+
     # Excite
     if	($remote_host =~ /excite/i) {
     	return 1;
     }
-    
+
     # Lycos
     if	($remote_host =~ /lycos/i) {
     	return 1;
@@ -4037,4 +4037,3 @@ sub remote_host_isa_search_indexer {
 }
 
 1;
-

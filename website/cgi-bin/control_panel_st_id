@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w 
+#!/usr/local/bin/perl -w
 
 # This CGI script understands the command line
 # argument ST_ID, which is of the form: StableId.Version,
@@ -73,7 +73,7 @@ else {
 
 my $instance = eval{$dba->fetch_instance_by_db_id($instance_db_id)->[0]};
 unless ($instance) {
-    handle_error("Could not find a database entry for DB_ID $instance_db_id"); 
+    handle_error("Could not find a database entry for DB_ID $instance_db_id");
 }
 
 my $display_name = $instance->displayName;
@@ -99,10 +99,10 @@ my @keys = sort {$a <=> $b} keys %event;
 my @rows = (th(['Release','Identifier','Change']));
 for my $release (@keys) {
     for my $evt (@{$event{$release}}) {
-	if ($release == $highest_release) {	
+	if ($release == $highest_release) {
 	    $evt->[0] = a(
 	    {
-		-href => '/cgi-bin/eventbrowser?ST_ID='.$evt->[0],
+		-href => '/content/detail/'.$evt->[0],
 		-target => '_BLANK'
 	    },
 	    $evt->[0]
@@ -132,7 +132,7 @@ sub handle_message {
 
 sub handle_error {
 	my ($error_message) = @_;
-	
+
 	# Print to web page
 	print_page_start();
 	print handle_warning($error_message);
@@ -161,11 +161,11 @@ sub print_page_end {
 
 sub print_page_start {
     my ($title) = @_;
-    
+
     if (!(defined $title)) {
 	$title = "$PROJECT_NAME ($script_name)";
     }
-    
+
     print $CGI->header(-charset => 'UTF-8');
     print $header, $enclosing_div_start;
 }
@@ -174,9 +174,9 @@ sub print_page_start {
 sub get_current_stable_id {
     my $id = shift;
     my $json = REST_query($id);
-    my $stable_id = $json->{stableIdentifier} 
+    my $stable_id = $json->{stableIdentifier}
       or warn "get_current_stable_id: No stable identifier found!\n";
-    my $display_name = $stable_id->{displayName} 
+    my $display_name = $stable_id->{displayName}
       or warn "get_current_stable_id: No stable identifier dsiplayName found!\n";
     return $display_name;
 }
