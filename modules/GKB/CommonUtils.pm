@@ -576,7 +576,6 @@ get_components
 get_instance_creator
 get_instance_modifier
 get_event_modifier
-get_most_recent_author_instance
 is_human
 get_unique_instances
 report
