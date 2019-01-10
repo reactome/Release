@@ -93,4 +93,19 @@ foreach my $electronic_inference_db_id (keys %electronic_inference_to_source) {
 
     is_deeply(\@received_source_db_ids, \@expected_source_db_ids, "checking source instances for electronic instance $electronic_inference_db_id");
 }
+
+# Testing the retrieval of an event and the name of its modifier
+my $db_id = 2262749; # Cellular response to hypoxia (human)
+my $event = $release_dba->fetch_instance_by_db_id($db_id)->[0];
+is($event->db_id, $db_id, "checking db id of retrieved event $db_id");
+is($event->displayName, "Cellular response to hypoxia", "checking display name of retrieved event $db_id");
+is(get_event_modifier($event), "D'Eustachio, Peter", "checking event modifier for event $db_id");
+
+# Testing the retrieval of an event and the name of its creator when no modifier is present
+$db_id = 5669318; # Expression of Rora (mouse)
+$event = $release_dba->fetch_instance_by_db_id($db_id)->[0];
+is($event->db_id, $db_id, "checking db id of retrieved event $db_id");
+is($event->displayName, "Expression of Rora", "checking display name of retrieved event $db_id");
+is(get_event_modifier($event), "May, Bruce", "checking event modifier for event $db_id");
+
 done_testing();
