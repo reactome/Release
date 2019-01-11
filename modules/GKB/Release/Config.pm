@@ -41,6 +41,7 @@ $archive (base archive directory)
 $release_server (release server host name)
 $live_server (live server host name)
 $dev_server (development server host name)
+$curator_server (curator server host name - where gk_central resides)
 %hosts (hash of host to gkb alias and vice-versa)
 %maillist (hash of 'role' to e-mail address)
 $log_conf (configuration file for Log4perl)
@@ -140,6 +141,7 @@ our %passwords = (
 our $release_server = "reactomerelease.oicr.on.ca";
 our $live_server = "reactomeprd1.oicr.on.ca";
 our $dev_server = "reactomedev.oicr.on.ca";
+our $curator_server = "reactomecurator.oicr.on.ca";
 
 if ($TEST_MODE) {
     $live_server = "reactomeclean.oicr.on.ca";
@@ -150,6 +152,7 @@ our %hosts = (
     $release_server => "gkbdev",
     $dev_server => "gkbdev",
     $live_server => "gkb",
+    $curator_server => "gkb",
    
     "gkbdev" => $release_server,
     "gkb" => $live_server,
@@ -174,7 +177,7 @@ our @EXPORT = qw/
     $user $pass $sudo $date $version $prevver
     $db $slicedb $stable_id_db $gkcentral $gkcentral_host
     $base_dir $gkbdev $scripts $release $website $website_static $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
-    %passwords $release_server $live_server $dev_server %hosts %maillist
+    %passwords $release_server $live_server $dev_server $curator_server %hosts %maillist
     $log_conf
 /;
 

@@ -50,7 +50,7 @@ sub new {
     $self->_make_attribute_registry;
     return $self;
 }
-	
+
 sub swap_pathwaybrowserdata_for_eventbrowser {
     my ($self, $pathwaybrowserdata_string) = @_;
     my $eventbrowser_string = $pathwaybrowserdata_string;
@@ -124,7 +124,7 @@ sub all {
     }
     foreach my $att ($self->list_valid_reverse_attributes) {
 	push @out, ["($att)",
-		   map {$self->prettyfy_instance($_)->small} @{$self->referer_value($att)}]; 
+		   map {$self->prettyfy_instance($_)->small} @{$self->referer_value($att)}];
     }
     return \@out;
 }
@@ -226,7 +226,7 @@ sub html_table_rows_if_necessary_1 {
 	    qq(</TD></TR>\n);
     } else {
 	# Description shown
-	$out .= 
+	$out .=
 	    qq(<TR><TD COLSPAN="2" ALIGN="left" CLASS="descButtonCell"><A ONMOUSEOVER="ddrivetip('Hide description','#DCDCDC',150)" ONMOUSEOUT="hideddrivetip()" ONCLICK="setValue($db_id,'description','off');setValue($db_id,'ID',$db_id);submitForm($db_id);"><IMG SRC="/icons/minus-box.gif" HEIGHT="10" WIDTH="10" BORDER="0"></A></TD></TR>\n) .
 	    $self->html_table_rows .
 	    $self->_view_switch_html;
@@ -258,13 +258,13 @@ sub hyperlinked_extended_displayName {
 # as above but given protege id if present.
 sub hyperlinked_extended_displayName2 {
     my $self = shift;
-    return $self->hyperlinked_string('['.$self->class.':'. ($self->attribute_value('_Protege_id')->[0] || $self->db_id) . '] '.($self->displayName || ''));    
+    return $self->hyperlinked_string('['.$self->class.':'. ($self->attribute_value('_Protege_id')->[0] || $self->db_id) . '] '.($self->displayName || ''));
 }
 
 sub soft_displayName {
     my $self = shift;
     # Should be implemented by subclasses
-    return $self->hyperlinked_string('['.$self->class.'] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('['.$self->class.'] '.($self->displayName || ''));
 }
 
 sub class_and_id_as_row {
@@ -383,13 +383,13 @@ sub _make_tree_html {
 	$out .= qq(<UL CLASS="attributes">$tmp</UL>\n);
     }
     $seen_hr->{$node->db_id || "$node"}--;
-    return $out;    
+    return $out;
 }
 
 sub make_attribute_tree_as_2rows {
     my ($self,@args, $tip) = @_;
     $self->debug && print "", (caller(0))[3], "\n";
-    my ($title,$attributes,$reverse) = 
+    my ($title,$attributes,$reverse) =
 	$self->_rearrange([qw(
 			      TITLE
 			      ATTRIBUTES
@@ -459,7 +459,7 @@ sub recursive_value_list_as_2rows {
         (-INSTANCE => $self,
 	 @args
          );
-    my @values = map {$self->prettyfy_instance($_)->hyperlinked_displayName} 
+    my @values = map {$self->prettyfy_instance($_)->hyperlinked_displayName}
     sort {lc($a->displayName) cmp lc($b->displayName)} grep {$_ != $self} values %{$followed_path};
     @values || return '';
     my $desc_cell;
@@ -468,7 +468,7 @@ sub recursive_value_list_as_2rows {
 	$desc_cell = qq(<TH COLSPAN="2" CLASS="$th_class"><A NAME="${th_class}Anchor" HREF="javascript:void(0)" onMouseover="ddrivetip('$tip','#DCDCDC', 250)" onMouseout="hideddrivetip()">$title</A></TH>);
     } else {
 	$desc_cell = qq(<TH COLSPAN="2" CLASS="$th_class"><A NAME="${th_class}Anchor">$title</A></TH>);
-    }   
+    }
     return qq(<TR>$desc_cell</TR>\n) . qq(<TD COLSPAN="2" CLASS="$th_class">) .
 	   join($delimiter, @values) . qq(</TD></TR>\n);
 #    return qq(<TR><TH COLSPAN="2" CLASS="$th_class"><A HREF="javascript:void(0)" onMouseover="ddrivetip('','#DCDCDC', 250)" onMouseout="hideddrivetip()">$title</A></TH></TR>\n) .
@@ -827,13 +827,13 @@ sub multiple_reverse_attribute_values_as_1row {
 	push @values, @instances;
     }
     @values || return '';
-    @values = 
+    @values =
 	map {ref($_->[1]) ? $self->prettyfy_instance($_->[1])->hyperlinked_displayName : $_->[1]}
 	sort {$a->[0] cmp $b->[0]}
 	map {ref($_) ? [$_->displayName, $_] : [$_, $_]} @values;
-    return 
+    return
 	qq(<TR><TH CLASS="$th_class">$desc</TH><TD CLASS="$th_class">) .
-	join("<BR>", @values) . 
+	join("<BR>", @values) .
 	qq(</TD></TR>\n);
 }
 
@@ -849,11 +849,11 @@ sub compound_attribute_value_as_2rows {
     }
     for (my $j = 0; $j < @{$values[0]}; $j++) {
 	$out .= qq(<TR>);
-	map {$out .= qq(<TD CLASS="$att">) . 
+	map {$out .= qq(<TD CLASS="$att">) .
 	(defined $values[$_]->[$j] ? $values[$_]->[$j] : $empty_str) . qq(</TD>)} (0 .. $i - 1);
 	$out .= qq(</TR>\n);
     }
-    @{$values[0]} || return ''; 
+    @{$values[0]} || return '';
     return qq(<TR><TH CLASS="$att" COLSPAN="$i"><A NAME="$ {att}Anchor">$desc</A></TH></TR>\n$out);
 }
 
@@ -879,7 +879,7 @@ sub html_table {
 	return $self->attribute_value('_html')->[0];
     }
     return
-	$self->page_title 
+	$self->page_title
 	. $self->reactionmap_html
 	. $LINK_TO_SURVEY
 	. qq(<DIV CLASS="section">)
@@ -927,7 +927,7 @@ sub html_table2 {
 		    $logger->info("attribute values undefined!\n");
 		}
 	    }
-	    
+
 	    if (!$str && defined $self->attribute_value($attribute) && scalar(@{$self->attribute_value($attribute)})>0) {
 	        $logger->error("ERROR!\n");
 	        $str = "ERROR: valid values do exist for this attribute, but tree HTML could not be generated!";
@@ -945,7 +945,7 @@ sub html_table2 {
 		$logger->info("non-recursive attribute\n");
 	    }
 
-#	    my @values = map {(ref($_)) ? $self->prettyfy_instance($_)->hyperlinked_extended_displayName : $_} 
+#	    my @values = map {(ref($_)) ? $self->prettyfy_instance($_)->hyperlinked_extended_displayName : $_}
 #	        @{$self->attribute_value($attribute)};
 	    my @values;
 	    foreach my $val (@{$self->attribute_value($attribute)}) {
@@ -1026,39 +1026,39 @@ sub _view_stable_link {
     my $self = shift;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     $logger->info("entered\n");
-    
+
     my $wu = $self->webutils;
     if (!(defined $wu)) {
     	return '';
     }
-    
+
     # Don't insert a link if no stable ID is available
     if (!($self->is_valid_attribute('stableIdentifier'))) {
     	return '';
     }
-    
+
     if (!($self->exists_identifier_database())) {
     	return '';
     }
-    
+
     my $stable_identifier = $self->stableIdentifier->[0];
     if (!$stable_identifier) {
     	return '';
     }
-	
+
     if (!$stable_identifier->is_valid_attribute('identifier')) {
 	$logger->error("Could not extract identifier from StableIdentifier instance\n");
 	return '';
     }
     my $identifier = $stable_identifier->identifier->[0];
-	
+
 #	my $version = undef;
 #	if ($stable_identifier->is_valid_attribute('identifierVersion')) {
 #		$version = $stable_identifier->identifierVersion->[0];
 #	}
-	
+
     my $style = "font-weight: bold; text-decoration: underline;";
     my $link = $wu->link_to_eventbrowser_st_id($style, $identifier, '', '', 'Stable link for this page', '');
     my $cgi = $self->cgi;
@@ -1068,7 +1068,7 @@ sub _view_stable_link {
     }
 
     my $stable_link = "<P>$link</P>\n";
-    
+
     return $stable_link;
 }
 
@@ -1264,7 +1264,7 @@ sub _stable_identifier {
     }
     return '';
 }
-    
+
 sub _doi {
     my $self = shift;
     if ($self->is_valid_attribute('doi')) {
@@ -1277,14 +1277,14 @@ sub _doi {
 sub _user_feedback {
     my ($self) = @_;
 
-	my $title = $self->name->[0] . " (DB_ID=" . $self->db_id() .")";    
+	my $title = $self->name->[0] . " (DB_ID=" . $self->db_id() .")";
     my $subject = "Comment on: $title";
     my $body = "Hi\%2C\%0D\%0A\%0D\%0AI took a look at\%3A\%0D\%0A\%0D\%0A$title\%0D\%0A\%0D\%0A..and here's what I think:";
     my $mail_link= "<A HREF=\"" . $PROJECT_HELP_URL . "?subject=$subject&body=$body\">Let us know what you think of this article (click here)</A>";
 	my $desc_cell = qq(<TH CLASS="summation" WIDTH="25%"><B>Your feedback</B></TH>);
     return qq(<TR>$desc_cell<TD CLASS="summation" WIDTH="75%">$mail_link</TD></TR>\n);
 }
-    
+
 sub reactionmap_js {
     my $self = shift;
     my $db = $self->cgi->param('DB');
@@ -1467,7 +1467,7 @@ sub reactionmap_html {
     my $db_id = $self->db_id;
     if (lc($preferences{'reactionmap'}) eq 'off') {
 #    if (lc($preferences{'reactionmap'}) ne 'on') {
-	my $out = 
+	my $out =
 	    $self->reactionmap_js() .
 	    qq(<TABLE cellspacing="0" ALIGN="center" WIDTH="$mapwidth" CLASS="reactionmap">) .
 	    $cgi->start_form(-method =>'POST',-name =>$form_name,-action => '/cgi-bin/eventbrowser');
@@ -1516,7 +1516,7 @@ sub reactionmap_html {
     $rm->highlites_as_hidden_param;
 #    print qq(<PRE>), (caller(0))[3],"\t",  time() - $start, qq(</PRE>\n);
     my $key_str = '';
-    if (my $tmp = $self->reactionmap_key) {	
+    if (my $tmp = $self->reactionmap_key) {
 	$key_str = qq(<TR><TD COLSPAN="12" ALIGN="center">$tmp</TD></TR>\n);
     }
     return
@@ -1619,9 +1619,9 @@ sub complexes_and_polymers {
 	 -OUT_CLASSES => ['Complex','Polymer']
 	 );
     @{$ar} = grep {$_ != $self} @{$ar};
-#    @{$ar} = grep {$_->reverse_attribute_value('input')->[0] 
-#		       || $_->reverse_attribute_value('output')->[0] 
-#		       || $_->reverse_attribute_value('physicalEntity')->[0] 
+#    @{$ar} = grep {$_->reverse_attribute_value('input')->[0]
+#		       || $_->reverse_attribute_value('output')->[0]
+#		       || $_->reverse_attribute_value('physicalEntity')->[0]
 #		       || $_->reverse_attribute_value('regulator')->[0]} @{$ar};
     # David Croft: attempt to fix problems that Peter encountered with EWAS in
     # clostridium, where the "Other forms of this molecule"
@@ -1639,12 +1639,12 @@ sub exists_identifier_database {
 	# Gives access to a whole bunch of methods for dealing with
 	# previous releases and stable identifiers.
 	my $si = GKB::StableIdentifiers->new($self->cgi);
-	
+
 	my $identifier_database_dba = $si->get_identifier_database_dba();
 	if ($identifier_database_dba) {
 		return 1;
 	}
-	
+
 	return 0;
 }
 
@@ -1655,7 +1655,7 @@ sub page_title {
 	#$_[0]->hyperlinked_displayName .
 	GKB::PrettyInstance::hyperlinked_displayName(@_) .
 	qq(</DIV>) .
-	qq(</DIV><!-- section -->\n);	
+	qq(</DIV><!-- section -->\n);
 }
 
 # Has to be properly implemented by subclasses.
@@ -1708,7 +1708,7 @@ sub other_cell_aware_entity_display_names {
 package GKB::PrettyInstance::Affiliation;
 use vars qw(@ISA);
 use strict;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -1722,7 +1722,7 @@ sub html_table_rows {
 package GKB::PrettyInstance::CatalystActivity;
 use vars qw(@ISA);
 use strict;
-@ISA = qw(GKB::PrettyInstance);  
+@ISA = qw(GKB::PrettyInstance);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -1735,24 +1735,24 @@ sub html_table_rows {
 package GKB::PrettyInstance::Complex;
 use vars qw(@ISA);
 use strict;
-@ISA = qw(GKB::PrettyInstance::PhysicalEntity);    
+@ISA = qw(GKB::PrettyInstance::PhysicalEntity);
 
 sub soft_displayName {
     my $self = shift;
-    return $self->hyperlinked_string('[Molecular complex] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[Molecular complex] '.($self->displayName || ''));
 }
 
 package GKB::PrettyInstance::Polymer;
 use vars qw(@ISA);
 use strict;
-@ISA = qw(GKB::PrettyInstance::PhysicalEntity);    
+@ISA = qw(GKB::PrettyInstance::PhysicalEntity);
 
 
 package GKB::PrettyInstance::DatabaseIdentifier;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub hyperlinked_identifier {
     my ($self) = @_;
@@ -1803,7 +1803,7 @@ sub html_table {
 	return $self->prettyfy_instance($self->reverse_attribute_value('crossReference')->[0])->html_table;
     } else {
 	return
-	    $self->page_title 
+	    $self->page_title
 	    . $self->reactionmap_html
 	    . $LINK_TO_SURVEY
 	    . qq(<DIV CLASS="section">)
@@ -1830,12 +1830,12 @@ sub html_table_rows {
 
 sub soft_displayName {
     my $self = shift;
-    return 
+    return
 	$self->hyperlinked_string('[Identifier] '.($self->displayName || ''))
-	#. ($self->reverse_attribute_value('crossReference')->[0] 
+	#. ($self->reverse_attribute_value('crossReference')->[0]
 	#   ? ' ' . $self->reverse_attribute_value('crossReference')->[0]->displayName
 	#   : '')
-	    ; 
+	    ;
 }
 
 sub hyperlinked_abbreviation {
@@ -1860,13 +1860,13 @@ sub hyperlinked_abbreviation {
 package GKB::PrettyInstance::ConceptualEvent;
 use vars qw(@ISA);
 use strict;
-@ISA = qw(GKB::PrettyInstance::Event); 
+@ISA = qw(GKB::PrettyInstance::Event);
 
 
 package GKB::PrettyInstance::EquivalentEventSet;
 use vars qw(@ISA);
 use strict;
-@ISA = qw(GKB::PrettyInstance::Event); 
+@ISA = qw(GKB::PrettyInstance::Event);
 
 
 package GKB::PrettyInstance::Event;
@@ -1878,7 +1878,7 @@ use Data::Dumper;
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 
 sub create_image {
@@ -1914,16 +1914,16 @@ sub top_browsing_view {
     #$self->urlmaker->turn_off_pwb_link();
     my $current_url_maker = $self->urlmaker();
     $self->urlmaker($self->create_url_maker('author_contributions'));
-    
+
     my $authors = GKB::Utils::get_authors_recursively($self);
-    my $authors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$authors}) || '&nbsp';
-        
+    my $authors_str = join(", ",map {get_person_link($_)} @{$authors}) || '&nbsp';
+
     my $reviewers = GKB::Utils::get_reviewers_recursively($self);
-    my $reviewers_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$reviewers}) || '&nbsp';
+    my $reviewers_str = join(", ",map {get_person_link($_)} @{$reviewers}) || '&nbsp';
 
     my $editors = GKB::Utils::get_editors_recursively($self);
-    my $editors_str = join(", ",map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$editors}) || '&nbsp';
-    
+    my $editors_str = join(", ",map {get_person_link($_)} @{$editors}) || '&nbsp';
+
     my $out = qq(<TR CLASS="contents"><TD CLASS="sidebar" WIDTH="33%">);
     if ($doi_flag) {
         $out .= $self->displayName();
@@ -1983,9 +1983,18 @@ sub top_browsing_view {
     return $out;
 }
 
+sub get_person_link {
+    my $person_instance = shift;
+
+    my $person_id = $person_instance->db_id;
+    my $person_name = $person_instance->displayName;
+
+    return qq{<a href="content/detail/person/$person_id">$person_name</a>};
+}
+
 sub create_url_maker {
     my ($self, $script_name) = @_;
-    
+
     return GKB::URLMaker->new(
         -SCRIPTNAME => $script_name,
         'DB' => scalar $self->cgi->param('DB')
@@ -2029,7 +2038,7 @@ sub html_table_w_dynamic_eventhierarchy {
 sub dynamic_eventhierarchy_and_details_side_by_side {
     my $self = shift;
     my $eh = GKB::DTreeMaker::EventHierarchy->new(-WEBUTILS => $self->webutils);
-    return 
+    return
 	qq(<script language="javascript" src="/javascript/dtree/dtree.js"></script>\n)
 	. qq(<link href="/javascript/dtree/dtree.css" rel="stylesheet" type="text/css">\n)
 	. qq(<TD CLASS="sidebar" VALIGN="top" WIDTH="300px">)
@@ -2108,14 +2117,14 @@ sub html_table_rows {
 	$self->attribute_value_as_1row('Preceding event(s)',['precedingEvent'], 'The events that directly precede the current event') .
 	$self->reverse_attribute_value_as_1row('Following event(s)',['precedingEvent'], 'The events that proceed directly after the current event') .
 	$self->_reverseReactions .
-	$self->attribute_value_as_1row('Organism',['species']) . 
+	$self->attribute_value_as_1row('Organism',['species']) .
 	$self->attribute_value_as_1row('Cellular compartment',['compartment'], 'The compartment in the cell where the event takes place') .
 	$self->attribute_value_as_1row('Cell type',['cellType'], 'The type of the cell in which this instance resides') .
 	$self->attribute_value_as_1row('External identifier',['crossReference'], 'The name of the external database identifier') .
 	($self->is_valid_attribute('entityOnOtherCell') ? $self->attribute_value_as_1row('Entity on other cell',['entityOnOtherCell'], 'Entity on other cell') : '') .
 	$self->regulation_as_rows .
 	$self->literaturereferences_as_2rows .
-	
+
 	($self->is_valid_attribute('goBiologicalProcess') ?
 	 $self->attribute_value_as_1row('Represents GO biological process',['goBiologicalProcess'], 'This constitutes the GO Biological Process terms which is used for cross-referencing our Events') :
 	 '') .
@@ -2149,13 +2158,13 @@ sub few_details {
 	$self->attribute_value_as_1row('Preceding event(s)',['precedingEvent'], 'The events that directly precede the current event') .
 	$self->reverse_attribute_value_as_1row('Following event(s)',['precedingEvent'], 'The events that proceed directly after the current event') .
 	$self->_reverseReactions .
-	$self->attribute_value_as_1row('Organism',['species']) . 
+	$self->attribute_value_as_1row('Organism',['species']) .
 	$self->attribute_value_as_1row('Cellular compartment',['compartment'], 'The compartment in the cell where the event takes place') .
 	$self->attribute_value_as_1row('Cell type',['cellType'], 'The type of the cell in which this instance resides') .
 	$self->attribute_value_as_1row('External identifier',['crossReference'], 'The name of the external database identifier') .
 	$self->regulation_as_rows .
 	$self->literaturereferences_as_2rows .
-	
+
 	($self->is_valid_attribute('goBiologicalProcess') ?
 	 $self->attribute_value_as_1row('Represents GO biological process',['goBiologicalProcess'], 'This constitutes the GO Biological Process terms which is used for cross-referencing our Events') :
 	 '') .
@@ -2206,13 +2215,13 @@ sub _orthologous_and_inferredFrom {
     # Restore original
     $self->attribute_value('orthologousEvent',@orthologousEvents);
     return $out;
-} 
+}
 
 sub _normal_reaction {
     my $self = shift;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     my $out = '';
     $logger->info("entered\n");
     if ($self->is_valid_attribute("normalReaction") && (defined $self->normalReaction) && scalar(@{$self->normalReaction})>0) {
@@ -2220,7 +2229,7 @@ sub _normal_reaction {
         $logger->info("found a normal reaction\n");
     }
     return $out;
-} 
+}
 
 sub _catalyst_stuff {
     my ($self) = @_;
@@ -2280,7 +2289,7 @@ sub get_participating_molecules {
     @{$ar} = grep {! ($_->is_a('Set') && $_->HasMember->[0])} @{$ar};
     return [] unless (@{$ar});
     @{$ar} = sort {lc($a->displayName) cmp lc($b->displayName)} @{$ar};
-    
+
     return $ar;
 }
 
@@ -2448,7 +2457,7 @@ package GKB::PrettyInstance::Figure;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub html_text {
     my ($self) = @_;
@@ -2467,9 +2476,9 @@ sub html_table {
 #	    return $self->attribute_value('_html')->[0];
 #	}
 	return $self->html_text;
-	
+
     }
- 
+
 }
 
 
@@ -2540,8 +2549,8 @@ sub html_table_rows {
 	 -HIGHLITE1_CLASS => 'bold'
 	 );
     $treeMaker->show_attribute(1);
-    my $tree_str = 
-	qq(<TR><TH CLASS="instanceOf" COLSPAN="2">Parent processes and immediate children</TH></TR><TR><TD CLASS="instanceOf" COLSPAN="2">) . 
+    my $tree_str =
+	qq(<TR><TH CLASS="instanceOf" COLSPAN="2">Parent processes and immediate children</TH></TR><TR><TD CLASS="instanceOf" COLSPAN="2">) .
 	$treeMaker->tree .
 	qq(</TD></TR>\n);
     @{$events} = map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$events};
@@ -2598,8 +2607,8 @@ sub few_details {
 	 -HIGHLITE1_CLASS => 'bold'
 	 );
     $treeMaker->show_attribute(1);
-    my $tree_str = 
-	qq(<TR><TH CLASS="instanceOf" COLSPAN="2">Parent processes and immediate children</TH></TR><TR><TD CLASS="instanceOf" COLSPAN="2">) . 
+    my $tree_str =
+	qq(<TR><TH CLASS="instanceOf" COLSPAN="2">Parent processes and immediate children</TH></TR><TR><TD CLASS="instanceOf" COLSPAN="2">) .
 	$treeMaker->tree .
 	qq(</TD></TR>\n);
     @{$events} = map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$events};
@@ -2618,7 +2627,7 @@ sub few_details {
 
 sub soft_displayName {
     my $self = shift;
-    return $self->hyperlinked_string('[GO biological process] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[GO biological process] '.($self->displayName || ''));
 }
 
 # Returns a list of all attributes pertaining to relationships between GO terms.
@@ -2674,7 +2683,7 @@ sub go_relationship_reverse_attribute_values {
 package GKB::PrettyInstance::InstanceEdit;
 use vars qw(@ISA);
 use strict;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub hyperlinked_displayName {
     my $self = shift;
@@ -2737,7 +2746,7 @@ sub hyperlinked_displayName {
     if (!($chapter_details eq "")) {
     	$chapter_details .= ' in ';
     }
-    
+
     my $title = '';
     if ($self->is_valid_attribute('title') && defined $self->title && defined $self->title->[0]) {
     	$title = qq( <I>) . $self->hyperlinked_string($self->title->[0]) . qq(</I>);
@@ -2765,8 +2774,8 @@ sub hyperlinked_displayName {
     if ($self->is_valid_attribute('ISBN') && defined $self->ISBN && defined $self->ISBN->[0]) {
     	$isbn = $self->ISBN->[0];
     }
-    my $book_details = $title . ' ' . $authors . ' ' . $pages . ' ' . $publisher . ' ' . $year . ' ' . $isbn ; 
-    
+    my $book_details = $title . ' ' . $authors . ' ' . $pages . ' ' . $publisher . ' ' . $year . ' ' . $isbn ;
+
     return $chapter_details . $book_details;
 }
 
@@ -2775,7 +2784,7 @@ package GKB::PrettyInstance::LiteratureReference;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub html_table_rows {
     my $self = shift;
@@ -2816,7 +2825,7 @@ sub hyperlinked_displayName {
     my ($self) = @_;
     return
 	join(", ", map {$self->prettyfy_instance($_)->hyperlinked_displayName} @{$self->Author}) .
-	qq( <I>) . $self->hyperlinked_string($self->Title->[0]) . qq(</I> <STRONG>) . 
+	qq( <I>) . $self->hyperlinked_string($self->Title->[0]) . qq(</I> <STRONG>) .
 	$self->Year->[0] . qq(</STRONG> ) . $self->Journal->[0] . ' ' .
 	$self->hyperlinked_pubMedIdentifier;
 }
@@ -2861,7 +2870,7 @@ sub author_year {
 
 sub soft_displayName {
     my $self = shift;
-    return $self->hyperlinked_string('[Reference] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[Reference] '.($self->displayName || ''));
 }
 
 
@@ -2869,7 +2878,7 @@ package GKB::PrettyInstance::AbstractModifiedResidue;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 
 
@@ -2877,7 +2886,7 @@ package GKB::PrettyInstance::ModifiedResidue;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::AbstractModifiedResidue);    
+@ISA = qw(GKB::PrettyInstance::AbstractModifiedResidue);
 
 sub html_table_rows {
     my $self = shift;
@@ -2904,7 +2913,7 @@ sub displayName {
 
 sub soft_displayName {
     my $self = shift;
-    return $self->hyperlinked_string('[Modified residue] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[Modified residue] '.($self->displayName || ''));
 }
 
 
@@ -2912,7 +2921,7 @@ package GKB::PrettyInstance::NegativeRegulation;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::Regulation);    
+@ISA = qw(GKB::PrettyInstance::Regulation);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -2933,11 +2942,11 @@ package GKB::PrettyInstance::Pathway;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::Event);    
+@ISA = qw(GKB::PrettyInstance::Event);
 
 sub soft_displayName {
     my $self = shift;
-    return $self->hyperlinked_string('[Pathway] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[Pathway] '.($self->displayName || ''));
 }
 
 
@@ -2945,7 +2954,7 @@ package GKB::PrettyInstance::Person;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -3025,42 +3034,42 @@ package GKB::PrettyInstance::EntitySet;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::PhysicalEntity); 
+@ISA = qw(GKB::PrettyInstance::PhysicalEntity);
 
 
 package GKB::PrettyInstance::OpenSet;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::EntitySet); 
+@ISA = qw(GKB::PrettyInstance::EntitySet);
 
 
 package GKB::PrettyInstance::DefinedSet;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::EntitySet); 
+@ISA = qw(GKB::PrettyInstance::EntitySet);
 
 
 package GKB::PrettyInstance::CandidateSet;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::EntitySet); 
+@ISA = qw(GKB::PrettyInstance::EntitySet);
 
 
 package GKB::PrettyInstance::OtherEntity;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::PhysicalEntity);    
+@ISA = qw(GKB::PrettyInstance::PhysicalEntity);
 
 
 package GKB::PrettyInstance::PhysicalEntity;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub create_image {
     my ($self,$format) = @_;
@@ -3108,7 +3117,7 @@ sub create_image {
 	$o{$_} && (push @o, $_) && next;
 	$c{$_} && (push @c, $_) && next;
     }
-    
+
     my $rm = new GKB::ReactionMap(-DBA => $self->dba,-CGI => $self->cgi,-NO_DEFAULT_IMAGE => 1,-ORIGIN_INSTANCE=>$self,-FORMAT=>$format);
     $rm->set_reaction_color(128,0,0,\@i);
     $rm->set_reaction_color(0,128,0,\@o);
@@ -3127,7 +3136,7 @@ sub html_table {
     my ($self) = @_;
     $self->debug && print join("\t", (caller(0))[3], $self,  $self->class, ($self->db_id || '')), "\n";
     return
-	$self->page_title 
+	$self->page_title
 	. $self->reactionmap_html
 	. qq(<DIV CLASS="section">)
 	. qq(<TABLE cellspacing="0" WIDTH="$HTML_PAGE_WIDTH" BORDER="0" CLASS=") . $self->class . qq(">\n)
@@ -3162,7 +3171,7 @@ sub html_table_rows {
 	$self->attribute_value_as_1row('Cellular compartment',['compartment'], 'The compartment in the cell where the entity is localized') .
 	$self->attribute_value_as_1row('Cell type',['cellType'], 'The type of the cell in which this instance resides') .
 	($self->is_valid_attribute('species')
-	 ? $self->attribute_value_as_1row('Organism',['species']) 
+	 ? $self->attribute_value_as_1row('Organism',['species'])
 	 : '') .
         ($self->is_a('EntitySet') && $self->attribute_value_as_1row('Represents entities',['hasMember'])) .
         ($self->is_a('CandidateSet') && $self->attribute_value_as_1row('<B>May</B> represent entities',['hasCandidate'])) .
@@ -3185,25 +3194,25 @@ sub html_table_rows {
 	$self->collapsed_Events_as_1_row('Catalyses events',
 					 'physicalEntityRev',
 					 {-INSTRUCTIONS => {
-					     'PhysicalEntity' => {'reverse_attributes' => [qw(physicalEntity hasMember hasCandidate repeatedUnit)]}, 
-					     'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}, 
-					     #'EntitySet' => {'attributes' => [qw(hasMember)]}, 
+					     'PhysicalEntity' => {'reverse_attributes' => [qw(physicalEntity hasMember hasCandidate repeatedUnit)]},
+					     'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']},
+					     #'EntitySet' => {'attributes' => [qw(hasMember)]},
 					     #'CandidateSet' => {'attributes' => [qw(hasCandidate)]}
 					  }, -OUT_CLASSES => ['Event']}, 'The events catalysed by the named entity'
 					 ) .
 	$self->collapsed_Events_as_1_row('Produced by events',
 					 'outputRev',
 					 {-INSTRUCTIONS => {
-					     'PhysicalEntity' => {'reverse_attributes' => [qw(output hasMember hasCandidate repeatedUnit)]}, 
-					     #'EntitySet' => {'attributes' => [qw(hasMember)]}, 
+					     'PhysicalEntity' => {'reverse_attributes' => [qw(output hasMember hasCandidate repeatedUnit)]},
+					     #'EntitySet' => {'attributes' => [qw(hasMember)]},
 					     #'CandidateSet' => {'attributes' => [qw(hasCandidate)]}
 					  }, -OUT_CLASSES => ['Event']}, 'The named entity is an output for these events'
 					 ) .
 	$self->collapsed_Events_as_1_row('Consumed by events',
 					 'inputRev',
 					 {-INSTRUCTIONS => {
-					     'PhysicalEntity' => {'reverse_attributes' => [qw(input hasMember hasCandidate repeatedUnit)]}, 
-					     #'EntitySet' => {'attributes' => [qw(hasMember)]}, 
+					     'PhysicalEntity' => {'reverse_attributes' => [qw(input hasMember hasCandidate repeatedUnit)]},
+					     #'EntitySet' => {'attributes' => [qw(hasMember)]},
 					     #'CandidateSet' => {'attributes' => [qw(hasCandidate)]}
 					  }, -OUT_CLASSES => ['Event']}, 'The named entity is an input for these events'
 					 ) .
@@ -3249,8 +3258,8 @@ sub few_details {
 #	$self->attribute_value_as_1row('Cellular compartment',['compartment'], 'The compartment in the cell where the entity is localized') .
 	$self->attribute_value_as_1row('Cell type',['cellType'], 'The type of the cell in which this instance resides') .
 	($self->is_valid_attribute('species')
-	 ? $self->attribute_value_as_1row_swap_pathwaybrowserdata_for_eventbrowser('Organism',['species']) 
-#	 ? $self->attribute_value_as_1row('Organism',['species']) 
+	 ? $self->attribute_value_as_1row_swap_pathwaybrowserdata_for_eventbrowser('Organism',['species'])
+#	 ? $self->attribute_value_as_1row('Organism',['species'])
 	 : '') .
         ($self->is_a('EntitySet') && $self->attribute_value_as_1row('Represents entities',['hasMember'])) .
         ($self->is_a('CandidateSet') && $self->attribute_value_as_1row('<B>May</B> represent entities',['hasCandidate'])) .
@@ -3277,25 +3286,25 @@ sub few_details {
 	$self->collapsed_Events_as_1_row('Catalyses events',
 					 'physicalEntityRev',
 					 {-INSTRUCTIONS => {
-					     'PhysicalEntity' => {'reverse_attributes' => [qw(physicalEntity hasMember hasCandidate repeatedUnit)]}, 
-					     'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']}, 
-					     #'EntitySet' => {'attributes' => [qw(hasMember)]}, 
+					     'PhysicalEntity' => {'reverse_attributes' => [qw(physicalEntity hasMember hasCandidate repeatedUnit)]},
+					     'CatalystActivity' => {'reverse_attributes' => ['catalystActivity']},
+					     #'EntitySet' => {'attributes' => [qw(hasMember)]},
 					     #'CandidateSet' => {'attributes' => [qw(hasCandidate)]}
 					  }, -OUT_CLASSES => ['Event']}, 'The events catalysed by the named entity'
 					 ) .
 	$self->collapsed_Events_as_1_row('Produced by events',
 					 'outputRev',
 					 {-INSTRUCTIONS => {
-					     'PhysicalEntity' => {'reverse_attributes' => [qw(output hasMember hasCandidate repeatedUnit)]}, 
-					     #'EntitySet' => {'attributes' => [qw(hasMember)]}, 
+					     'PhysicalEntity' => {'reverse_attributes' => [qw(output hasMember hasCandidate repeatedUnit)]},
+					     #'EntitySet' => {'attributes' => [qw(hasMember)]},
 					     #'CandidateSet' => {'attributes' => [qw(hasCandidate)]}
 					  }, -OUT_CLASSES => ['Event']}, 'The named entity is an output for these events'
 					 ) .
 	$self->collapsed_Events_as_1_row('Consumed by events',
 					 'inputRev',
 					 {-INSTRUCTIONS => {
-					     'PhysicalEntity' => {'reverse_attributes' => [qw(input hasMember hasCandidate repeatedUnit)]}, 
-					     #'EntitySet' => {'attributes' => [qw(hasMember)]}, 
+					     'PhysicalEntity' => {'reverse_attributes' => [qw(input hasMember hasCandidate repeatedUnit)]},
+					     #'EntitySet' => {'attributes' => [qw(hasMember)]},
 					     #'CandidateSet' => {'attributes' => [qw(hasCandidate)]}
 					  }, -OUT_CLASSES => ['Event']}, 'The named entity is an input for these events'
 					 ) .
@@ -3354,7 +3363,7 @@ sub _component_tree_wo_duplicates {
 	    unless($count{$_->db_id}) {
 		push @components,$_;
 		if (defined $self->MinUnitCount->[0] || defined $self->MaxUnitCount->[0]) {
-		    $count{$_->db_id} = $self->MinUnitCount->[0] . 
+		    $count{$_->db_id} = $self->MinUnitCount->[0] .
 			($self->MaxUnitCount->[0] ? '..' . $self->MaxUnitCount->[0] : '+ ');
 		} else {
 		    $count{$_->db_id} = 1;
@@ -3385,7 +3394,7 @@ sub modifications_as_1row {
 
 sub soft_displayName {
     my $self = shift;
-    return $self->hyperlinked_string('[Molecular entity] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[Molecular entity] '.($self->displayName || ''));
 }
 
 sub other_PhysicalEntities_with_same_referenceEntity {
@@ -3393,9 +3402,9 @@ sub other_PhysicalEntities_with_same_referenceEntity {
     return '' unless ($self->is_valid_attribute('referenceEntity'));
     return '' unless ($self->ReferenceEntity->[0]);
     # HACK to catch cases where invalid values have been assigned (by converter probably)
-    return '' unless ($self->ReferenceEntity->[0]->is_valid_reverse_attribute('referenceEntity')); 
+    return '' unless ($self->ReferenceEntity->[0]->is_valid_reverse_attribute('referenceEntity'));
     my @others = grep {! $_->is_a('Domain')} grep {$_ != $self} @{$self->ReferenceEntity->[0]->reverse_attribute_value('referenceEntity')};
-    
+
     return '' unless (@others);
 #    print STDERR "other_PhysicalEntities_with_same_referenceEntity: others=@others\n";
     my @prettified_others = map {$self->prettyfy_instance($_)->SUPER::hyperlinked_displayName} @others;
@@ -3526,7 +3535,7 @@ package GKB::PrettyInstance::PositiveRegulation;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::Regulation);    
+@ISA = qw(GKB::PrettyInstance::Regulation);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -3547,7 +3556,7 @@ package GKB::PrettyInstance::ReactionlikeEvent;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::Event);    
+@ISA = qw(GKB::PrettyInstance::Event);
 
 
 package GKB::PrettyInstance::BlackBoxEvent;
@@ -3575,11 +3584,11 @@ package GKB::PrettyInstance::Reaction;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::ReactionlikeEvent);    
+@ISA = qw(GKB::PrettyInstance::ReactionlikeEvent);
 
 sub soft_displayName {
     my $self = shift;
-    return $self->hyperlinked_string('[Reaction] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[Reaction] '.($self->displayName || ''));
 }
 
 
@@ -3587,7 +3596,7 @@ package GKB::PrettyInstance::ReferenceDatabase;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub hyperlinked_displayName {
     my ($self) = @_;
@@ -3604,7 +3613,7 @@ sub html_table_rows {
 	$self->attribute_value_as_1row('Name(s)',['name']) .
 	($url ?
 	 $self->prepared_attribute_value_as_1row('URL',
-						 'url', 
+						 'url',
 						 [qq(<A HREF="$url">$url</A>)]) :
 	 ''
 	 );
@@ -3612,7 +3621,7 @@ sub html_table_rows {
 
 sub soft_displayName {
     my $self = shift;
-    return $self->hyperlinked_string('[Database] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[Database] '.($self->displayName || ''));
 }
 
 package GKB::PrettyInstance::PsiMod;
@@ -3647,11 +3656,11 @@ sub hyperlinked_identifier {
         if (my $refdb = $self->ReferenceDatabase->[0]) {
             if (my $id = $self->Identifier->[0]) {
                 if (my $url = $refdb->AccessUrl->[0]) {
-                    $url =~ s/###ID###/$id/g;                                                                                                                                                               
-                    #return qq(<A HREF="$url">$id</A>);                                                                                                                                                     
+                    $url =~ s/###ID###/$id/g;
+                    #return qq(<A HREF="$url">$id</A>);
                     return qq(<A HREF="$url">) . $refdb->displayName . ':' . $id . qq(</A>);
                 } else {
-                    #return $id;                                                                                                                                                                            
+                    #return $id;
                     return $refdb->displayName . ':' . $id;
                 }
             }
@@ -3705,7 +3714,7 @@ package GKB::PrettyInstance::Regulation;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -3723,7 +3732,7 @@ sub html_table_rows {
 
 sub soft_displayName {
     my $self = shift;
-    return $self->hyperlinked_string('[Regulation] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[Regulation] '.($self->displayName || ''));
 }
 
 sub _make_switch_html {
@@ -3737,7 +3746,7 @@ package GKB::PrettyInstance::RegulationType;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -3747,7 +3756,7 @@ sub html_table_rows {
 sub soft_displayName {
     my $self = shift;
     # Should be implemented by subclasses
-    return $self->hyperlinked_string('[Regulation type] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[Regulation type] '.($self->displayName || ''));
 }
 
 
@@ -3770,7 +3779,7 @@ package GKB::PrettyInstance::Requirement;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::PositiveRegulation);    
+@ISA = qw(GKB::PrettyInstance::PositiveRegulation);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -3790,12 +3799,12 @@ package GKB::PrettyInstance::SimpleEntity;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::PhysicalEntity);    
+@ISA = qw(GKB::PrettyInstance::PhysicalEntity);
 
 #sub soft_displayName {
 #    my $self = shift;
 #    # Should be implemented by subclasses
-#    return $self->hyperlinked_string('[Molecule] '.($self->displayName || '')); 
+#    return $self->hyperlinked_string('[Molecule] '.($self->displayName || ''));
 #}
 
 
@@ -3803,7 +3812,7 @@ package GKB::PrettyInstance::Species;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::Taxon);    
+@ISA = qw(GKB::PrettyInstance::Taxon);
 
 sub create_image {
     my ($self,$format) = @_;
@@ -3869,12 +3878,12 @@ package GKB::PrettyInstance::Summation;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub html_text {
     my ($self) = @_;
     $self->debug && print join("\t", (caller(0))[3], $self,  $self->class, ($self->db_id || '')), "\n";
-    my $str = 
+    my $str =
 	$self->Text->[0] .
 	(($self->LiteratureReference->[0])
 	 ? ' ['. join(', ',
@@ -3917,7 +3926,7 @@ sub html_table_rows {
 
 sub soft_displayName {
     my $self = shift;
-    return $self->hyperlinked_string('[Descriptive text] '.($self->displayName || '')); 
+    return $self->hyperlinked_string('[Descriptive text] '.($self->displayName || ''));
 }
 
 
@@ -3925,7 +3934,7 @@ package GKB::PrettyInstance::Taxon;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);    
+@ISA = qw(GKB::PrettyInstance);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -3961,7 +3970,7 @@ package GKB::PrettyInstance::ReferenceEntity;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance);  
+@ISA = qw(GKB::PrettyInstance);
 
 sub create_image {
     my ($self,$format) = @_;
@@ -4017,7 +4026,7 @@ sub create_image {
 	$o{$_} && (push @o, $_) && next;
 	$c{$_} && (push @c, $_) && next;
     }
-    
+
     my $rm = new GKB::ReactionMap(-DBA => $self->dba,-CGI => $self->cgi,-NO_DEFAULT_IMAGE => 1,-ORIGIN_INSTANCE=>$self, -FORMAT=>$format);
     $rm->set_reaction_color(128,0,0,\@i);
     $rm->set_reaction_color(0,128,0,\@o);
@@ -4097,7 +4106,7 @@ package GKB::PrettyInstance::ReferenceMolecule;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::ReferenceEntity); 
+@ISA = qw(GKB::PrettyInstance::ReferenceEntity);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -4160,13 +4169,13 @@ package GKB::PrettyInstance::ReferenceMoleculeClass;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::ReferenceEntity); 
+@ISA = qw(GKB::PrettyInstance::ReferenceEntity);
 
 package GKB::PrettyInstance::ReferenceGroup;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::ReferenceEntity); 
+@ISA = qw(GKB::PrettyInstance::ReferenceEntity);
 
 sub html_table_rows {
     my ($self) = @_;
@@ -4222,7 +4231,7 @@ package GKB::PrettyInstance::ReferenceSequence;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::ReferenceEntity); 
+@ISA = qw(GKB::PrettyInstance::ReferenceEntity);
 
 sub other_identifiers {
     my $self = shift;
@@ -4244,10 +4253,10 @@ sub hyperlinked_extended_displayName {
 sub soft_displayName {
     my $self = shift;
     return $self->hyperlinked_string('[Sequence] '
-				     . ($self->displayName || '') 
-				     . ' ' . $self->Description->[0] 
+				     . ($self->displayName || '')
+				     . ' ' . $self->Description->[0]
 				     . ($self->Species->[0] ? ' [' .$self->Species->[0]->displayName . ']' : '')
-				     ); 
+				     );
 }
 
 sub extended_crossreferences {
@@ -4259,7 +4268,7 @@ sub extended_crossreferences {
 	     'ReferenceRNASequence' => {'attributes' => [qw(referenceGene)]},
 	     $protein_class => {'attributes' => [qw(referenceGene referenceTranscript)]},
 	     'ReferenceEntity' => {'attributes' => [qw(crossReference)]}}
-	);    
+	);
     @{$ar} = grep {defined $_} map {$self->prettyfy_instance($_)->hyperlinked_identifier}
     sort {$a->displayName cmp $b->displayName} @{$ar};
     return '' unless (@{$ar});
@@ -4339,26 +4348,26 @@ use strict;
 use GKB::Config;
 @ISA = qw(GKB::PrettyInstance::ReferenceSequence);
 
-# ReferencePeptideSequence is deprecated, since it is no longer part of the Reactome                                                                                                      # data model, but it is being kept for backwards compatibility.   
+# ReferencePeptideSequence is deprecated, since it is no longer part of the Reactome                                                                                                      # data model, but it is being kept for backwards compatibility.
 package GKB::PrettyInstance::ReferencePeptideSequence;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::ReferenceSequence); 
+@ISA = qw(GKB::PrettyInstance::ReferenceSequence);
 
 
 package GKB::PrettyInstance::ReferenceDNASequence;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::ReferenceSequence); 
+@ISA = qw(GKB::PrettyInstance::ReferenceSequence);
 
 
 package GKB::PrettyInstance::ReferenceRNASequence;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::ReferenceSequence); 
+@ISA = qw(GKB::PrettyInstance::ReferenceSequence);
 
 
 package GKB::PrettyInstance::GenomeEncodedEntity;
@@ -4409,7 +4418,7 @@ sub links_2_external_sequence_records {
 		     'ReferenceRNASequence' => {'attributes' => [qw(referenceGene)]},
 		     $protein_class => {'attributes' => [qw(referenceGene referenceTranscript)]},
 		     'ReferenceEntity' => {'attributes' => [qw(crossReference)]}}
-		);    
+		);
     }
     if (my $cr = $self->crossReference->[0]) {
 	    push(@{$ar}, @{$self->crossReference});
@@ -4459,13 +4468,13 @@ package GKB::PrettyInstance::GO_CellularComponent;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::GO_Like_Thing);  
+@ISA = qw(GKB::PrettyInstance::GO_Like_Thing);
 
 package GKB::PrettyInstance::Compartment;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance::GO_CellularComponent);  
+@ISA = qw(GKB::PrettyInstance::GO_CellularComponent);
 
 sub create_image {
     my ($self,$format) = @_;
@@ -4518,8 +4527,8 @@ sub html_table_rows1 {
 	 -HIGHLITE1_CLASS => 'bold'
 	 );
     $parentTreeMaker->show_attribute(1);
-    my $tree_str = 
-	qq(<TR><TH CLASS="instanceOf">Parent components and immediate children</TH><TD CLASS="instanceOf">) . 
+    my $tree_str =
+	qq(<TR><TH CLASS="instanceOf">Parent components and immediate children</TH><TD CLASS="instanceOf">) .
 	$parentTreeMaker->tree .
 	qq(</TD></TR>\n);
 
@@ -4550,12 +4559,12 @@ sub html_table_rows1 {
     my $protein_class = &GKB::Utils::get_reference_protein_class($self->dba);
     $self->dba->load_class_attribute_values_of_multiple_instances($protein_class,'referenceGene',\@tmp);
     $self->dba->load_class_attribute_values_of_multiple_instances('ReferenceEntity','crossReference',\@tmp);
-    @tmp = $self->dba->instance_cache->values; 
+    @tmp = $self->dba->instance_cache->values;
     $self->dba->load_class_attribute_values_of_multiple_instances('DatabaseIdentifier','referenceDatabase',\@tmp);
     $self->dba->load_class_attribute_values_of_multiple_instances('ReferenceEntity','referenceDatabase',\@tmp);
     $self->dba->load_class_attribute_values_of_multiple_instances('DatabaseIdentifier','identifier',\@tmp);
     $self->dba->load_class_attribute_values_of_multiple_instances('ReferenceEntity','identifier',\@tmp);
-    @tmp = $self->dba->instance_cache->values; 
+    @tmp = $self->dba->instance_cache->values;
     $self->dba->load_class_attribute_values_of_multiple_instances('DatabaseObject','_displayName',\@tmp);
 #    print qq(<PRE>load att values\t), (caller(0))[3],"\t",  time() - $start, qq(</PRE>\n);
     $start = time();
@@ -4603,8 +4612,8 @@ sub html_table_rows {
 	 -HIGHLITE1_CLASS => 'bold'
 	 );
     $parentTreeMaker->show_attribute(1);
-    my $tree_str = 
-	qq(<TR><TH CLASS="instanceOf">Parent components and immediate children</TH><TD CLASS="instanceOf">) . 
+    my $tree_str =
+	qq(<TR><TH CLASS="instanceOf">Parent components and immediate children</TH><TD CLASS="instanceOf">) .
 	$parentTreeMaker->tree .
 	qq(</TD></TR>\n);
 
@@ -4666,8 +4675,8 @@ sub few_details {
 	 -HIGHLITE1_CLASS => 'bold'
 	 );
     $parentTreeMaker->show_attribute(1);
-    my $tree_str = 
-	qq(<TR><TH CLASS="instanceOf">Parent components and immediate children</TH><TD CLASS="instanceOf">) . 
+    my $tree_str =
+	qq(<TR><TH CLASS="instanceOf">Parent components and immediate children</TH><TD CLASS="instanceOf">) .
 	$parentTreeMaker->tree .
 	qq(</TD></TR>\n);
 
@@ -4730,7 +4739,7 @@ sub hyperlinked_displayName {
 package GKB::PrettyInstance::GO_MolecularFunction;
 use vars qw(@ISA);
 use strict;
-@ISA = qw(GKB::PrettyInstance::GO_Like_Thing);    
+@ISA = qw(GKB::PrettyInstance::GO_Like_Thing);
 
 sub create_image {
     my ($self,$format) = @_;
@@ -4862,7 +4871,7 @@ package GKB::PrettyInstance::StableIdentifier;
 use vars qw(@ISA);
 use strict;
 use GKB::Config;
-@ISA = qw(GKB::PrettyInstance); 
+@ISA = qw(GKB::PrettyInstance);
 
 =head
 sub html_table_rows {
@@ -4896,15 +4905,15 @@ sub hyperlinked_displayName {
     	if (defined $identifier_version) {
     		$identifier .= '.' . $identifier_version;
     	}
-    	
+
     	$out = $identifier;
-    	
+
 	    # Only create a clickable link if an identifier database is
 	    # available.
 		my $cgi = $self->cgi;
 		my $format = GKB::WebUtils::get_format($cgi);
 	    if ($self->exists_identifier_database()) {
-			# use $CACHE_GENERATED_DOCUMENTS to detect dev/curator server		
+			# use $CACHE_GENERATED_DOCUMENTS to detect dev/curator server
 #		    if ($CACHE_GENERATED_DOCUMENTS eq 0 || !(defined $format) || (defined $format && !($format eq 'elv'))) {
 		     	my $control_panel = "control_panel_st_id?ST_ID=$identifier";
 		    	$out = "<A HREF=\"$control_panel\">$identifier</A>";
@@ -4915,9 +4924,3 @@ sub hyperlinked_displayName {
 }
 
 1;
-
-
-
-
-
-
