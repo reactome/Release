@@ -5,78 +5,81 @@ use Cwd 'abs_path';
 use GKB::Secrets;
 
 use vars qw(
-	@ISA
-	@EXPORT
-	$GK_DOCKBLASTER_USER
-	$GK_DOCKBLASTER_PASS
-	$GK_BRENDA_USER
-	$GK_BRENDA_PASS
-	$GK_COSMIC_USER
-	$GK_COSMIC_PASS
+    @ISA
+    @EXPORT
+    $GK_DOCKBLASTER_USER
+    $GK_DOCKBLASTER_PASS
+    $GK_BRENDA_USER
+    $GK_BRENDA_PASS
+    $GK_COSMIC_USER
+    $GK_COSMIC_PASS
     $GK_ORPHAN_USER
     $GK_ORPHAN_PASS
     $GK_SOLR_USER
-    $GK_SOLR_PASS 
-	$GK_DB_NAME
-	$GK_IDB_NAME
-	$GK_DB_HOST 
-	$GK_DB_USER
-	$GK_DB_PASS
-	$GK_DB_PORT
-	$GK_ENTITY_DB_NAME
-	$REACTOME_ROOT_DIR
+    $GK_SOLR_PASS
+    $GK_DB_NAME
+    $GK_IDB_NAME
+    $GK_DB_HOST
+    $GK_DB_USER
+    $GK_DB_PASS
+    $GK_DB_PORT
+    $GK_CURATOR_DB_HOST
+    $GK_CURATOR_DB_NAME
+    $GK_CURATOR_DB_PORT
+    $GK_ENTITY_DB_NAME
+    $REACTOME_ROOT_DIR
     $GK_ROOT_DIR
-	$GK_JAVA_CODEBASE
-	$GK_FETCH_SCRIPT
-	$GK_TMP_IMG_DIR
-	$COMPARA_DIR
-	$ENSEMBL_API_DIR
-	$HTML_PAGE_WIDTH
-	$PROJECT_NAME
-	$PROJECT_ABBREVIATION
-	$PROJECT_LOGO_URL
-	$PROJECT_HELP_URL
-	$PROJECT_HELP_TITLE
-	$PROJECT_FUNDING
-	$PROJECT_LOGOS
-	$PROJECT_TITLE
-	$PROJECT_COPYRIGHT
-	$SKY_REPLACEMENT_IMAGE
-	$DEFAULT_IMAGE_FORMAT
-	$FRONTPAGE_IMG_DIR
-	$REACTIONMAP_WIDTH
-	$SHOW_REACTIONMAP_IN_EVENTBROWSER
-	$DB_BACKUP_DIR
-	$NEWS_FILE
+    $GK_JAVA_CODEBASE
+    $GK_FETCH_SCRIPT
+    $GK_TMP_IMG_DIR
+    $COMPARA_DIR
+    $ENSEMBL_API_DIR
+    $HTML_PAGE_WIDTH
+    $PROJECT_NAME
+    $PROJECT_ABBREVIATION
+    $PROJECT_LOGO_URL
+    $PROJECT_HELP_URL
+    $PROJECT_HELP_TITLE
+    $PROJECT_FUNDING
+    $PROJECT_LOGOS
+    $PROJECT_TITLE
+    $PROJECT_COPYRIGHT
+    $SKY_REPLACEMENT_IMAGE
+    $DEFAULT_IMAGE_FORMAT
+    $FRONTPAGE_IMG_DIR
+    $REACTIONMAP_WIDTH
+    $SHOW_REACTIONMAP_IN_EVENTBROWSER
+    $DB_BACKUP_DIR
+    $NEWS_FILE
     $LAST_RELEASE_DATE
     $CONFIRMED_REACTION_COLOR
     $MANUALLY_INFERRED_REACTION_COLOR
     $ELECTRONICALLY_INFERRED_REACTION_COLOR
     $REACTION_CONNECTOR_COLOR
     $DEFAULT_REACTION_COLOR
-	$LINK_TO_SURVEY
-	$DEFAULT_VIEW_FORMAT
+    $LINK_TO_SURVEY
+    $DEFAULT_VIEW_FORMAT
     $NO_SCHEMA_VALIDITY_CHECK
     $WARNING
-	$CACHE_GENERATED_DOCUMENTS
+    $CACHE_GENERATED_DOCUMENTS
     $JAVA_PATH
     $WWW_USER
-	$MART_URL
-	$MART_DB_NAME
-	$WIKI_URL
-	$USER_GUIDE_URL
-	$LOG_DIR
-	$WORDPRESS_ROOT_URL
-	$DATA_MODEL_URL
-	$NAVIGATION_BAR_MENUS
-	$DISPLAY_VIEW_SWITCH_TOOLBAR
-	$USE_REACTOME_GWT
-	$REACTOME_VERSION
-	$GLOBAL_META_TAGS
-	$PATHWAY_OF_THE_MONTH
-	$SERVLET_CONTAINER_DEPLOY_DIR
-	$LIBSBML_LD_LIBRARY_PATH
-	$LOG_CONF
+    $MART_URL
+    $MART_DB_NAME
+    $WIKI_URL
+    $USER_GUIDE_URL
+    $LOG_DIR
+    $WORDPRESS_ROOT_URL
+    $DATA_MODEL_URL
+    $NAVIGATION_BAR_MENUS
+    $DISPLAY_VIEW_SWITCH_TOOLBAR
+    $USE_REACTOME_GWT
+    $REACTOME_VERSION
+    $GLOBAL_META_TAGS
+    $PATHWAY_OF_THE_MONTH
+    $SERVLET_CONTAINER_DEPLOY_DIR
+    $LIBSBML_LD_LIBRARY_PATH
+    $LOG_CONF
 );
 
 use Exporter();
@@ -90,6 +93,9 @@ $GK_DB_PASS  = $GKB::Secrets::GK_DB_PASS;
 $GK_DB_NAME  = $GKB::Secrets::GK_DB_NAME;
 $GK_IDB_NAME = $GKB::Secrets::GK_IDB_NAME;
 $GK_DB_PORT  = $GKB::Secrets::GK_DB_PORT;
+$GK_CURATOR_DB_HOST = $GKB::Secrets::GK_CURATOR_DB_HOST;
+$GK_CURATOR_DB_NAME = $GKB::Secrets::GK_CURATOR_DB_NAME;
+$GK_CURATOR_DB_PORT = $GKB::Secrets::GK_CURATOR_DB_PORT;
 $GK_ORPHAN_USER = $GKB::Secrets::GK_ORPHAN_USER;
 $GK_ORPHAN_PASS = $GKB::Secrets::GK_ORPHAN_PASS;
 $GK_DOCKBLASTER_USER = $GKB::Secrets::GK_DOCKBLASTER_USER;
@@ -114,7 +120,7 @@ $GK_ROOT_DIR = '/usr/local/gkb';
 $GK_JAVA_CODEBASE = "/jars";
 $GK_TMP_IMG_DIR = "$REACTOME_ROOT_DIR/Website/static/figures";
 #$GK_TMP_IMG_DIR = "/opt/GKB/website/images";
-# Place for frontpage images 
+# Place for frontpage images
 $FRONTPAGE_IMG_DIR = "$REACTOME_ROOT_DIR/Website/static/cgi-tmp/img-fp";
 $NEWS_FILE = "$GK_ROOT_DIR/website/html/news.html";
 $DB_BACKUP_DIR = "$GK_ROOT_DIR/database_backups";
@@ -155,7 +161,7 @@ $DEFAULT_REACTION_COLOR = [160,160,160];
 $LINK_TO_SURVEY = '';
 #$LINK_TO_SURVEY =
 #qq(<DIV STYLE="text-align:center;padding-bottom:10px;color:red;">
-#We appreciate your feedback and thoughts about Reactome. 
+#We appreciate your feedback and thoughts about Reactome.
 #<b><a href="http://www.advancedsurvey.com/default.asp?SurveyID=27617" target="new">
 #Please take a moment to take our online survey.
 #</b></a></DIV>\n);
@@ -177,7 +183,7 @@ $WARNING =
 #qq{
 #<DIV STYLE="font-size:9pt;font-weight:bold;text-align:center;color:red;padding-top:10px;">
 #This is the Reactome internal repository. It includes data which have not been reviewed and released
-#and is possibly incomplete. Our released data are at <A 
+#and is possibly incomplete. Our released data are at <A
 #HREF="http://www.reactome.org">www.reactome.org</A>.
 #</DIV>\n };
 
@@ -221,32 +227,32 @@ $DATA_MODEL_URL = "http://www.reactome.org/pages/documentation/data-model";
 my $wordpress_root = 'http://reactomedev.oicr.on.ca/static_wordpress';
 $NAVIGATION_BAR_MENUS =
 {
-	'About'=>
-	{
-		'url' => "$wordpress_root/about",
-		'subitems_hash' =>
-		{
-			'About Reactome'=>{'title' => 'About Reactome', 'url' => "$WORDPRESS_ROOT_URL/about"},
-			'News'=>{'title' => 'News', 'url' => $WORDPRESS_ROOT_URL},
-			'Other Reactomes'=>{'title' => 'Other Reactomes', 'url' => "$WORDPRESS_ROOT_URL/other-reactomes"},
-			'Reactome Group'=>{'title' => 'Reactome Group', 'url' => "$WORDPRESS_ROOT_URL/reactome-team"},
-			'SAB Members'=>{'title' => 'SAB Members', 'url' => "$WORDPRESS_ROOT_URL/reactome-scientific-advisory-board"},
-			'Disclaimer'=>{'title' => 'Disclaimer', 'url' => "$WORDPRESS_ROOT_URL/reactome-disclaimer"},
-			'License Agreement'=>{'title' => 'License Agreement', 'url' => "$WORDPRESS_ROOT_URL/license-agreement"},
-		}
-	},
-	'Documentation'=>
-	{
-		'subitems_hash' =>
-		{
-			'Data Model'=>{'title' => 'Data Model', 'url' => "$wordpress_root/data-model"},
-			'Orthology Prediction'=>{'title' => 'Orthology Prediction', 'url' => "$wordpress_root/electronically-inferred-events"},
-			'Object/Relational mapping'=>{'title' => 'Object/Relational mapping', 'url' => "$wordpress_root/objectrelational-mapping"},
-			'Linking to Reactome'=>{'title' => 'Linking to Reactome', 'url' => "$wordpress_root/linking-to-reactome"},
-		}
-	},
-	'Tools'=>{'subitems_hash' => {'SkyPainter'=>undef, 'User Interface II (beta)'=>undef, 'FI Cytoscape Plugin'=>{'title' => 'FI Cytoscape Plugin', 'url' => 'http://wiki.reactome.org/index.php/Reactome_FI_Cytoscape_Plugin'}, 'SBML Generator'=>{'title' => 'SBML Generator', 'url' => '/Analysis/entrypoint.html#SBMLRetrievalPage'}}},
-	'Contact Us'=>{'url' => "$wordpress_root/contact-us"},
+    'About'=>
+    {
+        'url' => "$wordpress_root/about",
+        'subitems_hash' =>
+        {
+            'About Reactome'=>{'title' => 'About Reactome', 'url' => "$WORDPRESS_ROOT_URL/about"},
+            'News'=>{'title' => 'News', 'url' => $WORDPRESS_ROOT_URL},
+            'Other Reactomes'=>{'title' => 'Other Reactomes', 'url' => "$WORDPRESS_ROOT_URL/other-reactomes"},
+            'Reactome Group'=>{'title' => 'Reactome Group', 'url' => "$WORDPRESS_ROOT_URL/reactome-team"},
+            'SAB Members'=>{'title' => 'SAB Members', 'url' => "$WORDPRESS_ROOT_URL/reactome-scientific-advisory-board"},
+            'Disclaimer'=>{'title' => 'Disclaimer', 'url' => "$WORDPRESS_ROOT_URL/reactome-disclaimer"},
+            'License Agreement'=>{'title' => 'License Agreement', 'url' => "$WORDPRESS_ROOT_URL/license-agreement"},
+        }
+    },
+    'Documentation'=>
+    {
+        'subitems_hash' =>
+        {
+            'Data Model'=>{'title' => 'Data Model', 'url' => "$wordpress_root/data-model"},
+            'Orthology Prediction'=>{'title' => 'Orthology Prediction', 'url' => "$wordpress_root/electronically-inferred-events"},
+            'Object/Relational mapping'=>{'title' => 'Object/Relational mapping', 'url' => "$wordpress_root/objectrelational-mapping"},
+            'Linking to Reactome'=>{'title' => 'Linking to Reactome', 'url' => "$wordpress_root/linking-to-reactome"},
+        }
+    },
+    'Tools'=>{'subitems_hash' => {'SkyPainter'=>undef, 'User Interface II (beta)'=>undef, 'FI Cytoscape Plugin'=>{'title' => 'FI Cytoscape Plugin', 'url' => 'http://wiki.reactome.org/index.php/Reactome_FI_Cytoscape_Plugin'}, 'SBML Generator'=>{'title' => 'SBML Generator', 'url' => '/Analysis/entrypoint.html#SBMLRetrievalPage'}}},
+    'Contact Us'=>{'url' => "$wordpress_root/contact-us"},
 };
 
 # If set to 1, this variable enables the semi-transparent black
@@ -267,7 +273,7 @@ $REACTOME_VERSION = "3.0";
 # about.  The inner arrays each contain just two terms, corresponding
 # to the "name" and "content" parts of a META tag respectively.
 $GLOBAL_META_TAGS = [["description", "Reactome is an open-source and manually curated pathway database that provides pathway analysis tools for life science researchers."],
-					 ["keywords", "reactome, pathway, pathways, pathway database, pathway analysis, pathways analysis, bioinformatics software, genomics, proteomics, metabolomics, data mining, gene expression"]];
+                     ["keywords", "reactome, pathway, pathways, pathway database, pathway analysis, pathways analysis, bioinformatics software, genomics, proteomics, metabolomics, data mining, gene expression"]];
 
 # This changes the sample pathway displayed on the frontpage in the new web interface.
 $PATHWAY_OF_THE_MONTH = 1433557;
@@ -282,7 +288,7 @@ $SERVLET_CONTAINER_DEPLOY_DIR = "$GK_ROOT_DIR/../apache-tomcat/webapps";
 $LIBSBML_LD_LIBRARY_PATH = "/usr/local/lib";
 
 ############################################################
-# A simple root logger with a Log::Log4perl::Appender::File 
+# A simple root logger with a Log::Log4perl::Appender::File
 # file appender in Perl.
 ############################################################
 $LOG_CONF = '
@@ -316,81 +322,82 @@ log4perl.appender.Screen.layout = Log::Log4perl::Layout::SimpleLayout
 
 sub get_name {
     my ($name) = $0 =~ /(.*)\./;
-    
+
     return $name;
 }
 
 ##################################################################################
 @EXPORT = qw(
-	     $GK_DB_NAME
-	     $GK_IDB_NAME
-	     $GK_DB_HOST 
-	     $GK_DB_USER
-	     $GK_DB_PASS
-	     $GK_DB_PORT
-		 	$GK_DOCKBLASTER_USER
-	$GK_DOCKBLASTER_PASS
-	$GK_BRENDA_USER
-	$GK_BRENDA_PASS
-	$GK_COSMIC_USER
-	$GK_COSMIC_PASS
-	$GK_ORPHAN_USER
-	$GK_ORPHAN_PASS
-	     $GK_ENTITY_DB_NAME
-             $GK_ROOT_DIR
-	     $GK_JAVA_CODEBASE
-	     $GK_FETCH_SCRIPT
-	     $GK_TMP_IMG_DIR
-	     $COMPARA_DIR
-	     $ENSEMBL_API_DIR
-	     $HTML_PAGE_WIDTH
-	     $PROJECT_NAME
-	     $PROJECT_ABBREVIATION
-	     $PROJECT_LOGO_URL
-	     $PROJECT_HELP_URL
-	     $PROJECT_HELP_TITLE
-	     $PROJECT_FUNDING
-	     $PROJECT_LOGOS
-	     $PROJECT_TITLE
-	     $PROJECT_COPYRIGHT
-	     $SKY_REPLACEMENT_IMAGE
-	     $DEFAULT_IMAGE_FORMAT
-	     $FRONTPAGE_IMG_DIR
-	     $REACTIONMAP_WIDTH
-	     $SHOW_REACTIONMAP_IN_EVENTBROWSER
-	     $DB_BACKUP_DIR
-	     $NEWS_FILE
-             $LAST_RELEASE_DATE
-             $CONFIRMED_REACTION_COLOR
-             $MANUALLY_INFERRED_REACTION_COLOR
-             $ELECTRONICALLY_INFERRED_REACTION_COLOR
-             $REACTION_CONNECTOR_COLOR
-             $DEFAULT_REACTION_COLOR
-	     $LINK_TO_SURVEY
-	     $DEFAULT_VIEW_FORMAT
-	     $NO_SCHEMA_VALIDITY_CHECK
-             $WARNING
-	     $CACHE_GENERATED_DOCUMENTS
-             $JAVA_PATH
-             $WWW_USER
-	     $MART_URL
-	     $MART_DB_NAME
-	     $WIKI_URL
-	     $USER_GUIDE_URL
-	     $LOG_DIR
-	     $WORDPRESS_ROOT_URL
-	     $DATA_MODEL_URL
-	     $NAVIGATION_BAR_MENUS
-	     $DISPLAY_VIEW_SWITCH_TOOLBAR
-	     $USE_REACTOME_GWT
-	     $REACTOME_VERSION
-	     $GLOBAL_META_TAGS
-	     $PATHWAY_OF_THE_MONTH
-	     $SERVLET_CONTAINER_DEPLOY_DIR
-	     $LIBSBML_LD_LIBRARY_PATH
-	     $LOG_CONF
-	     );
-
+    $GK_DB_NAME
+    $GK_IDB_NAME
+    $GK_DB_HOST
+    $GK_DB_USER
+    $GK_DB_PASS
+    $GK_DB_PORT
+    $GK_CURATOR_DB_HOST
+    $GK_CURATOR_DB_NAME
+    $GK_CURATOR_DB_PORT
+    $GK_DOCKBLASTER_USER
+    $GK_DOCKBLASTER_PASS
+    $GK_BRENDA_USER
+    $GK_BRENDA_PASS
+    $GK_COSMIC_USER
+    $GK_COSMIC_PASS
+    $GK_ORPHAN_USER
+    $GK_ORPHAN_PASS
+    $GK_ENTITY_DB_NAME
+    $GK_ROOT_DIR
+    $GK_JAVA_CODEBASE
+    $GK_FETCH_SCRIPT
+    $GK_TMP_IMG_DIR
+    $COMPARA_DIR
+    $ENSEMBL_API_DIR
+    $HTML_PAGE_WIDTH
+    $PROJECT_NAME
+    $PROJECT_ABBREVIATION
+    $PROJECT_LOGO_URL
+    $PROJECT_HELP_URL
+    $PROJECT_HELP_TITLE
+    $PROJECT_FUNDING
+    $PROJECT_LOGOS
+    $PROJECT_TITLE
+    $PROJECT_COPYRIGHT
+    $SKY_REPLACEMENT_IMAGE
+    $DEFAULT_IMAGE_FORMAT
+    $FRONTPAGE_IMG_DIR
+    $REACTIONMAP_WIDTH
+    $SHOW_REACTIONMAP_IN_EVENTBROWSER
+    $DB_BACKUP_DIR
+    $NEWS_FILE
+    $LAST_RELEASE_DATE
+    $CONFIRMED_REACTION_COLOR
+    $MANUALLY_INFERRED_REACTION_COLOR
+    $ELECTRONICALLY_INFERRED_REACTION_COLOR
+    $REACTION_CONNECTOR_COLOR
+    $DEFAULT_REACTION_COLOR
+    $LINK_TO_SURVEY
+    $DEFAULT_VIEW_FORMAT
+    $NO_SCHEMA_VALIDITY_CHECK
+    $WARNING
+    $CACHE_GENERATED_DOCUMENTS
+    $JAVA_PATH
+    $WWW_USER
+    $MART_URL
+    $MART_DB_NAME
+    $WIKI_URL
+    $USER_GUIDE_URL
+    $LOG_DIR
+    $WORDPRESS_ROOT_URL
+    $DATA_MODEL_URL
+    $NAVIGATION_BAR_MENUS
+    $DISPLAY_VIEW_SWITCH_TOOLBAR
+    $USE_REACTOME_GWT
+    $REACTOME_VERSION
+    $GLOBAL_META_TAGS
+    $PATHWAY_OF_THE_MONTH
+    $SERVLET_CONTAINER_DEPLOY_DIR
+    $LIBSBML_LD_LIBRARY_PATH
+    $LOG_CONF
+);
 
 1;
-
