@@ -117,7 +117,7 @@ sub get_dba {
 # C shell environment
 sub set_environment {
     my $host = shift;
-    my $gkb = $hosts{$host};
+    my $gkb = $hosts{$host} // 'gkb';
 
     $ENV{'HOME'} = "/home/$user";
     $ENV{'PATH'} = "/usr/local/bin:$ENV{'PATH'}";
