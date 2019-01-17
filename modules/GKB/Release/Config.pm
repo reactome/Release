@@ -166,6 +166,7 @@ our %maillist = (
     'internal' => 'internal@reactome.org',
     'curation' => 'lmatthews.nyumc@gmail.com',
     'automation' => 'solomon.shorser@oicr.on.ca, justin.cook@oicr.on.ca, joel.weiser@oicr.on.ca',
+    'default_sender' => 'joel.weiser@oicr.on.ca',
     'outreach' => 'robin.haw@oicr.on.ca'
 );
 
