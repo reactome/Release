@@ -17,7 +17,7 @@ has '+mail' => ( default => sub {
 			'to' => '',
 			'subject' => $self->name,
 			'body' => '',
-			'attachment' => $gsea_output_file
+			'attachment' => $self->directory . '/' . $gsea_output_file
 		};
 	}
 );
