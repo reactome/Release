@@ -10,14 +10,14 @@ has '+gkb' => ( default => 'gkbdev' );
 has '+passwords' => ( default => sub { ['mysql'] } );
 has '+directory' => ( default => "$release/msigdb-gsea" );
 has '+mail' => ( default => sub {
-					my $self = shift;
-					return {
-						'to' => '',
-						'subject' => $self->name,
-						'body' => '',
-						'attachment' => "Reactome_GeneSet_$version.txt"
-					};
-				}
+	my $self = shift;
+		return {
+			'to' => '',
+			'subject' => $self->name,
+			'body' => '',
+			'attachment' => "Reactome_GeneSet_$version.txt"
+		};
+	}
 );
 
 override 'run_commands' => sub {
