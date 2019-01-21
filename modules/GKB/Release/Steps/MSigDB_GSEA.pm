@@ -6,6 +6,8 @@ use GKB::Release::Utils;
 use Moose;
 extends qw/GKB::Release::Step/;
 
+my $gsea_output_file = "Reactome_GeneSet_$version.txt";
+
 has '+gkb' => ( default => 'gkbdev' );
 has '+passwords' => ( default => sub { ['mysql'] } );
 has '+directory' => ( default => "$release/msigdb-gsea" );
@@ -15,7 +17,7 @@ has '+mail' => ( default => sub {
 			'to' => '',
 			'subject' => $self->name,
 			'body' => '',
-			'attachment' => "Reactome_GeneSet_$version.txt"
+			'attachment' => $gsea_output_file
 		};
 	}
 );
@@ -33,12 +35,22 @@ override 'run_commands' => sub {
         $user, # database user
         $pass, # database pass
         $port, # database port
-        "Reactome_GeneSet_$version.txt", # output file
+        $gsea_output_file, # output file
         $human_species, # species (human = 48887)
         'true' # isForMsigDB? (when false, GMT format used)
     );
 
     $self->cmd('Running GSEA output script', [["./runGSEAOutput.sh @gsea_args > msigdb-gsea.out 2> msigdb-gsea.err"]]);
+};
+
+
+override 'archive_files' => sub {
+    my ($self, $version) = @_;
+
+    # arguments passed to this method are implicitly passed to the superclass method by Moose
+    # https://metacpan.org/pod/release/DOY/Moose-2.0604/lib/Moose/Manual/MethodModifiers.pod#OVERRIDE-AND-SUPER
+    my $archive_directory = super();
+    system "mv $gsea_output_file $archive_directory";
 };
 
 1;
