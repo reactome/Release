@@ -8,12 +8,12 @@ use autodie qw/:all/;
 use Cwd;
 
 my %repositories = (
-    PathwayExchange => {
+    'Pathway-Exchange' => {
         url => 'https://github.com/reactome/Pathway-Exchange.git',
         ant_xml_file => 'GSEAdeployAsApplication.xml',
         output => 'GSEAExport.jar'
     },
-    CuratorTool => {
+    'CuratorTool' => {
         url => 'https://github.com/reactome/CuratorTool.git',
         ant_xml_file => 'WebELVDiagram.xml',
         output => 'WebELVTool/*.jar'
@@ -23,7 +23,6 @@ my %repositories = (
 foreach my $repository_name (keys %repositories) {
     my $current_dir = getcwd;
     if (-d "$repository_name/.git") {
-
         chdir $repository_name;
         system 'git pull';
         chdir $current_dir;
