@@ -25,7 +25,7 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
-    $self->cmd('Build GSEA jar and dependencies', [['perl build_gsea.pl']]);
+    $self->cmd('Build GSEA jar and dependencies', [['perl build_gsea.pl > build_gsea.out 2> build_gsea.err']]);
 
     my $port = 3306;
     my $human_species = 48887;
