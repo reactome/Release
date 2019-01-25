@@ -28,8 +28,7 @@ foreach my $repository_name (keys %repositories) {
         my $stderr = capture_stderr {
             system 'git pull';
         };
-        $stderr =~ s/\s//g;
-        if ($stderr) {
+        if (trim($stderr)) {
             print STDERR "Problem pulling $repository_name:\n$stderr";
         }
 
@@ -40,8 +39,7 @@ foreach my $repository_name (keys %repositories) {
             system "git clone $repository_url";
         };
         $stderr =~ s/^Cloning into .*//m;
-        $stderr =~ s/\s//g;
-        if ($stderr) {
+        if (trim($stderr)) {
             print STDERR "Problem cloning $repository_url:\n$stderr";
         }
     }
@@ -53,4 +51,13 @@ foreach my $repository_name (keys %repositories) {
 
     my $output = $repositories{$repository_name}{'output'};
     system "mv $repository_name/$output .";
+}
+
+sub trim {
+    my $string = shift;
+
+    $string =~ s/^\s+//; # Remove leading white space
+    $string =~ s/\s+$//; # Remove trailing white space
+
+    return $string;
 }
