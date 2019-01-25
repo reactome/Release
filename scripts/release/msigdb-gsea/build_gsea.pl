@@ -5,6 +5,7 @@ use warnings;
 our $VERSION = 1.0;
 
 use autodie qw/:all/;
+use Capture::Tiny ':all';
 use Cwd;
 
 my %repositories = (
@@ -24,11 +25,25 @@ foreach my $repository_name (keys %repositories) {
     my $current_dir = getcwd;
     if (-d "$repository_name/.git") {
         chdir $repository_name;
-        system 'git pull';
+        my $stderr = capture_stderr {
+            system 'git pull';
+        };
+        $stderr =~ s/\s//g;
+        if ($stderr) {
+            print STDERR "Problem pulling $repository_name:\n$stderr";
+        }
+
         chdir $current_dir;
     } else {
         my $repository_url = $repositories{$repository_name}{'url'};
-        system "git clone $repository_url";
+        my $stderr = capture_stderr {
+            system "git clone $repository_url";
+        };
+        $stderr =~ s/^Cloning into .*//m;
+        $stderr =~ s/\s//g;
+        if ($stderr) {
+            print STDERR "Problem cloning $repository_url:\n$stderr";
+        }
     }
 
     chdir "$repository_name/ant";
