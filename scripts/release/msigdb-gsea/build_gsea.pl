@@ -21,8 +21,10 @@ my %repositories = (
     }
 );
 
+# Build required output from each repository
 foreach my $repository_name (keys %repositories) {
     my $current_dir = getcwd;
+    # Pull latest changes if local repository exists
     if (-d "$repository_name/.git") {
         chdir $repository_name;
         my $stderr = capture_stderr {
@@ -33,22 +35,27 @@ foreach my $repository_name (keys %repositories) {
         }
 
         chdir $current_dir;
+    # Clone repository if it doesn't exist locally
     } else {
         my $repository_url = $repositories{$repository_name}{'url'};
         my $stderr = capture_stderr {
             system "git clone $repository_url";
         };
+        # Remove unneeded message of cloning repository from STDERR
+        # Then output any error messages remaining back to STDERR
         $stderr =~ s/^Cloning into .*//m;
         if (trim($stderr)) {
             print STDERR "Problem cloning $repository_url:\n$stderr";
         }
     }
 
+    # Find the appropriate ant file and build the required output
     chdir "$repository_name/ant";
     my $ant_xml_file = $repositories{$repository_name}{'ant_xml_file'};
     system "ant -buildfile $ant_xml_file";
     chdir $current_dir;
 
+    # Move the output to the directory containing this script
     my $output = $repositories{$repository_name}{'output'};
     system "mv $repository_name/$output .";
 }
