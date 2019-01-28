@@ -7,23 +7,37 @@ our $VERSION = 1.0;
 use autodie qw/:all/;
 use Capture::Tiny ':all';
 use Cwd;
+use Getopt::Long;
+use Readonly;
+
+Readonly my $DEFAULT_REPO_VERSION => 'master';
+my ($pathway_exchange_repo_version, $curator_tool_repo_verison);
+GetOptions(
+    'pathway-exchange-version:s' => \$pathway_exchange_repo_version,
+    'curator-tool-version:s' => \$curator_tool_repo_verison
+);
+$pathway_exchange_repo_version ||= $DEFAULT_REPO_VERSION;
+$curator_tool_repo_verison ||= $DEFAULT_REPO_VERSION;
 
 my %repositories = (
     'Pathway-Exchange' => {
         url => 'https://github.com/reactome/Pathway-Exchange.git',
+        version => $pathway_exchange_repo_version,
         ant_xml_file => 'GSEAdeployAsApplication.xml',
-        output => 'GSEAExport.jar'
+        output => 'GSEAExport.jar',
     },
     'CuratorTool' => {
         url => 'https://github.com/reactome/CuratorTool.git',
+        version => $curator_tool_repo_verison,
         ant_xml_file => 'WebELVDiagram.xml',
-        output => 'WebELVTool/*.jar'
+        output => 'WebELVTool/*.jar',
     }
 );
 
 # Build required output from each repository
 foreach my $repository_name (keys %repositories) {
     my $current_dir = getcwd;
+    my $repo_version = $repositories{$repository_name}{'version'};
     # Pull latest changes if local repository exists
     if (-d "$repository_name/.git") {
         chdir $repository_name;
@@ -50,9 +64,10 @@ foreach my $repository_name (keys %repositories) {
     }
 
     # Find the appropriate ant file and build the required output
-    chdir "$repository_name/ant";
+    chdir $repository_name;
+    system "git checkout $repo_version";
     my $ant_xml_file = $repositories{$repository_name}{'ant_xml_file'};
-    system "ant -buildfile $ant_xml_file";
+    system "ant -buildfile ant/$ant_xml_file";
     chdir $current_dir;
 
     # Move the output to the directory containing this script
