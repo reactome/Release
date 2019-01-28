@@ -41,9 +41,7 @@ foreach my $repository_name (keys %repositories) {
     # Pull latest changes if local repository exists
     if (-d "$repository_name/.git") {
         chdir $repository_name;
-        my $stderr = capture_stderr {
-            system 'git pull';
-        };
+        my $stderr = run_command('git pull');
         if (trim($stderr)) {
             print STDERR "Problem pulling $repository_name:\n$stderr";
         }
@@ -52,12 +50,10 @@ foreach my $repository_name (keys %repositories) {
     # Clone repository if it doesn't exist locally
     } else {
         my $repository_url = $repositories{$repository_name}{'url'};
-        my $stderr = capture_stderr {
-            system "git clone $repository_url";
-        };
-        # Remove unneeded message of cloning repository from STDERR
-        # Then output any error messages remaining back to STDERR
-        $stderr =~ s/^Cloning into .*//m;
+        my $stderr = run_command("git clone $repository_url", {
+            ignore_error => qr/^Cloning into .*/
+        });
+
         if (trim($stderr)) {
             print STDERR "Problem cloning $repository_url:\n$stderr";
         }
@@ -65,7 +61,14 @@ foreach my $repository_name (keys %repositories) {
 
     # Find the appropriate ant file and build the required output
     chdir $repository_name;
-    system "git checkout $repo_version";
+    my $stderr = run_command("git checkout $repo_version", {
+        ignore_error => qr/^Already on .*/
+    });
+    if (trim($stderr)) {
+        print STDERR "Problem checking out $repo_version:\n$stderr";
+    }
+
+
     my $ant_xml_file = $repositories{$repository_name}{'ant_xml_file'};
     system "ant -buildfile ant/$ant_xml_file";
     chdir $current_dir;
@@ -82,4 +85,21 @@ sub trim {
     $string =~ s/\s+$//; # Remove trailing white space
 
     return $string;
+}
+
+sub run_command {
+    my $command = shift;
+    my $options = shift;
+
+    my $stderr = capture_stderr {
+        system $command;
+    };
+    # Remove unneeded message of cloning repository from STDERR
+    # Then output any error messages remaining back to STDERR
+    my $error_to_ignore = $options->{'ignore_error'};
+    if ($error_to_ignore) {
+        $stderr =~ s/$error_to_ignore//m;
+    }
+
+    return $stderr;
 }
