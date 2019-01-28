@@ -7,15 +7,23 @@ our $VERSION = 1.0;
 use autodie qw/:all/;
 use Capture::Tiny ':all';
 use Cwd;
+use English qw/-no_match_vars/;
 use Getopt::Long;
 use Readonly;
 
 Readonly my $DEFAULT_REPO_VERSION => 'master';
-my ($pathway_exchange_repo_version, $curator_tool_repo_verison);
+my ($pathway_exchange_repo_version, $curator_tool_repo_verison, $help);
 GetOptions(
     'pathway-exchange-version:s' => \$pathway_exchange_repo_version,
-    'curator-tool-version:s' => \$curator_tool_repo_verison
+    'curator-tool-version:s' => \$curator_tool_repo_verison,
+    'help' => \$help,
 );
+
+if ($help) {
+    print usage_instructions();
+    exit;
+}
+
 $pathway_exchange_repo_version ||= $DEFAULT_REPO_VERSION;
 $curator_tool_repo_verison ||= $DEFAULT_REPO_VERSION;
 
@@ -102,4 +110,14 @@ sub run_command {
     }
 
     return $stderr;
+}
+
+sub usage_instructions {
+    return <<"END";
+Usage: $PROGRAM_NAME [-pathway-exchange-version BRANCH_OR_TAG] [-curator-tool-version BRANCH_OR_TAG]
+
+This script builds the GSEA jar and its dependencies (obtained from the Pathway-Exchange and CuratorTool
+projects on GitHub at https://github.com/reactome).  The $DEFAULT_REPO_VERSION branch/tag is used for both
+repositories unless otherwise specified when invoking the script.
+END
 }
