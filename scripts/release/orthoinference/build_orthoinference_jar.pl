@@ -57,6 +57,7 @@ create_config_properties_file(File::Spec->catfile($resources_dir, 'config.proper
     release_date => $release_date,
     person_id => $person_id,
 });
+system "ln -s $starting_directory/normal_event_skip_list.txt $resources_dir";
 
 sub create_config_properties_file {
     my $config_properties_file = shift;
