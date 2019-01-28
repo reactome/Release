@@ -27,7 +27,6 @@ override 'run_commands' => sub {
 
     $self->cmd('Build GSEA jar and dependencies', [['perl build_gsea.pl > build_gsea.out 2> build_gsea.err']]);
 
-    my $port = 3306;
     my $human_species = 48887;
     my @gsea_args = (
         $self->{host}, # database host
