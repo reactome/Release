@@ -1,3 +1,7 @@
+output/
 Reactome_GeneSet_*
 msigdb-gsea.out
 msigdb-gsea.err
+*.jar
+CuratorTool/
+Pathway-Exchange

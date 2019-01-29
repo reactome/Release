@@ -466,7 +466,7 @@ sub mail_now {
     my $mail_error = '';
     try {
         if (!$params->{'attachment'}) {
-            $mail->{'Message'} =  $params->{'body'};
+            $mail->{'Message'} = $params->{'body'};
             # Handled by Mail::Sendmail
             $mail_sent = sendmail(%{$mail});
         } else {
@@ -638,8 +638,8 @@ sub _add_body_and_attachment {
     my $body = shift;
     my $attachment_path = shift;
 
-    my ($filename) = $attachment_path =~ /\\(.*)$/;
-    $mail->{'Type'} = "multipart/mixed";
+    my $filename = fileparse($attachment_path);
+    $mail->{'Type'} = 'multipart/mixed';
 
     # Construct e-mail message
     my $msg = MIME::Lite->new(%{$mail});
