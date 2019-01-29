@@ -16,6 +16,7 @@ $user (user running release)
 $pass (mysql password for user)
 $sudo (sudo password for user)
 $port (port for database connection)
+$reactome_unix_group (unix group to use for assigning/changing permissions)
 $date (today's date)
 $version (Reactome release version)
 $prevver (previous Reactome release version)
@@ -97,8 +98,8 @@ chomp(our $user = `whoami`);
 
 our $pass; # mysql password
 our $sudo; # Sudo password
-
 our $port = 3306;
+our $reactome_unix_group = 'reactome';
 
 chomp(our $date = `date "+%Y%m%d"`); # Today's date
 
@@ -177,7 +178,7 @@ our $log_conf = dirname(__FILE__)."/releaselog.conf";
 
 our @EXPORT = qw/
     $TEST_MODE
-    $user $pass $sudo $port $date $version $prevver
+    $user $pass $sudo $port $reactome_unix_group $date $version $prevver
     $db $slicedb $stable_id_db $gkcentral $gkcentral_host
     $base_dir $gkbdev $scripts $release $website $website_static $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server $curator_server %hosts %maillist
