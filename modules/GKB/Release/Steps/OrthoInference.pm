@@ -23,11 +23,14 @@ has '+mail' => ( default => sub {
 });
 has '+user_input' => (default => sub { {
     'skip_list_verified' => {'query' => "Has the normal event skip list been verified for version $version (y/n):"},
-    'release_date' => {'query' => "Enter release date for version $version as yyyy-mm-dd (e.g. 2017-12-13):" }
+    'release_date' => {'query' => "Enter release date for version $version as yyyy-mm-dd (e.g. 2017-12-13):" },
+    'person_id' => {'query' => 'Enter person instance db id to be used for the orthoinference instance edit:'},
 } });
 
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
+
+    my $host = $self->host;
 
     my $skip_list_verified = $self->user_input->{'skip_list_verified'}->{'response'} =~ /^y/i;
     if (!$skip_list_verified) {
@@ -39,15 +42,22 @@ override 'run_commands' => sub {
         croak "Release date for version $version needed as yyyy-mm-dd\n";
     }
 
+    my $person_id = $self->user_input->{'person_id'}->{'response'};
+    if (!$person_id || $person_id !~ /^\d+$/) {
+        croak "Person instance db id for instance edit is needed\n";
+    }
+
     $self->cmd('Creating orthopredictions and backing up database',
         [
             ["mkdir -p $version"],
             ["perl create_orthoinference_db.pl -source_db $slicedb -target_db $db"],
-            ['perl build_orthoinference_jar.pl'],
+            ["perl build_orthoinference_jar.pl -release $version -release_date $release_date -person_id $person_id"],
             ['./runOrthoinference.sh'],
+            ["perl remove_unused_PE.pl -user $user -pass $pass -host $host -port $port -db $db"],
+            ["perl updateDisplayName.pl -user $user -pass $pass -host $host -port $port -db $db -class PhysicalEntity"],
             ['rm -f ../website_files_update/report_ortho_inference.txt'],
             ["ln $release/orthoinference/$version/report_ortho_inference_$db.txt ../website_files_update/report_ortho_inference.txt"],
-            ["mysqldump --opt -u$user -p$pass -P3306 $db > $db\_after_ortho.dump"]
+            ["mysqldump --opt -u$user -p$pass -P$port $db > $db\_after_ortho.dump"]
         ]
     );
 };
