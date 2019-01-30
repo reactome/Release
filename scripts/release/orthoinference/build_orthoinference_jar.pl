@@ -9,6 +9,7 @@ use File::Spec;
 use Getopt::Long;
 
 use GKB::Config;
+use GKB::CommonUtils;
 
 my ($user, $password, $database, $host, $port, $orthopairs_path, $release, $release_date, $person_id);
 GetOptions(
@@ -30,7 +31,7 @@ $password ||= $GKB::Config::GK_DB_PASS;
 $database ||= $GKB::Config::GK_DB_NAME;
 $host ||= $GKB::Config::GK_DB_HOST;
 $port ||= $GKB::Config::GK_DB_PORT;
-$orthopairs_path ||= File::Spec->catfile(dirname(getcwd), 'orthopairs', $release);
+$orthopairs_path ||= File::Spec->catfile(dirname(getcwd), 'orthopairs', $release, '/');
 
 my $starting_directory = getcwd;
 my $orthoinference_repository = 'data-release-pipeline';
@@ -40,31 +41,38 @@ if (! (-d "$orthoinference_repository/.git")) {
 }
 chdir $orthoinference_repository;
 system 'git pull';
-system 'git checkout develop';
+run_command('git checkout develop', {
+    ignore_error => qr/^Already on .*/;
+});
 chdir 'release-common-lib';
 system 'mvn clean install';
-chdir File::Spec->catfile($starting_directory, $orthoinference_repository, 'orthoinference');
+my $orthoinference_project_dir = File::Spec->catfile($starting_directory, $orthoinference_repository, 'orthoinference');
+chdir $orthoinference_project_dir;
 
-my $resources_dir = File::Spec->catfile(qw/src main resources/);
-create_config_properties_file(File::Spec->catfile($resources_dir, 'config.properties'), {
+my $resources_dir = File::Spec->catfile($orthoinference_project_dir, 'src', 'main', 'resources');
+my $config_file = File::Spec->catfile($resources_dir, 'config.properties');
+my $species_config = File::Spec->catfile($resources_dir, 'Species.json');
+create_config_properties_file($config_file, {
     username => $user,
     password => $password,
     database => $database,
     host => $host,
     port => $port,
-    orthopairs_path => $orthopairs_path,
-    release_number => $release,
-    release_date => $release_date,
-    person_id => $person_id,
+    pathToSpeciesConfig => $species_config,
+    pathToOrthopairs => $orthopairs_path,
+    releaseNumber => $release,
+    dateOfRelease => $release_date,
+    personId => $person_id,
 });
-system "ln -s $starting_directory/normal_event_skip_list.txt $resources_dir";
+system "git update-index --assume-unchanged $config_file"; 
+system "ln -sf $starting_directory/normal_event_skip_list.txt $resources_dir";
+system "ln -sf $orthoinference_project_dir/runOrthoinference.sh $starting_directory/runOrthoinference.sh";
 
 sub create_config_properties_file {
     my $config_properties_file = shift;
     my $options = shift;
     open(my $config_fh, '>', $config_properties_file);
     my @properties = map { $_ . '=' . $options->{$_} } keys %{$options};
-    push @properties, 'pathToSpeciesConfig=src/main/resources/Species.json';
     foreach my $property (@properties) {
         print {$config_fh} "$property\n";
     }
