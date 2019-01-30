@@ -9,7 +9,7 @@ extends qw/GKB::Release::Step/;
 has '+gkb' => ( default => "gkbdev" );
 has '+passwords' => ( default => sub { ['mysql', 'sudo'] } );
 has '+directory' => ( default => "$release/uniprot_update" );
-has '+mail' => ( default => sub { 
+has '+mail' => ( default => sub {
     my $self = shift;
     return {
         'to' => 'curation',
