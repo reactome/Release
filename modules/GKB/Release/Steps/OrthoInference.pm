@@ -50,11 +50,15 @@ override 'run_commands' => sub {
     $self->cmd('Creating orthopredictions and backing up database',
         [
             ["mkdir -p $version"],
-            ["perl create_orthoinference_db.pl -source_db $slicedb -target_db $db"],
-            ["perl build_orthoinference_jar.pl -release $version -release_date $release_date -person_id $person_id"],
-            ['./runOrthoinference.sh'],
-            ["perl remove_unused_PE.pl -user $user -pass $pass -host $host -port $port -db $db"],
-            ["perl updateDisplayName.pl -user $user -pass $pass -host $host -port $port -db $db -class PhysicalEntity"],
+            ["perl create_orthoinference_db.pl -source_db $slicedb -target_db $db" . 
+             " > create_orthoinference_db.out 2> create_orthoinference_db.err"],
+            ["perl build_orthoinference_jar.pl -release $version -release_date $release_date -person_id $person_id" . 
+             " > build_orthoinference_jar.out 2> build_orthoinference_jar.err"],
+            ['./runOrthoinference.sh > runOrthoinference.out 2> runOrthoinference.err'],
+            ["perl remove_unused_PE.pl -user $user -pass $pass -host $host -port $port -db $db" . 
+             " > remove_unused_PE.out 2> remove_unused_PE.err"],
+            ["perl updateDisplayName.pl -user $user -pass $pass -host $host -port $port -db $db -class PhysicalEntity" .
+             " > updateDisplayName.out 2> updateDisplayName.err"],
             ['rm -f ../website_files_update/report_ortho_inference.txt'],
             ["ln $release/orthoinference/$version/report_ortho_inference_$db.txt ../website_files_update/report_ortho_inference.txt"],
             ["mysqldump --opt -u$user -p$pass -P$port $db > $db\_after_ortho.dump"]
