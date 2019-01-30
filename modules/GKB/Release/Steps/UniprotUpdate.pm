@@ -22,8 +22,10 @@ has '+mail' => ( default => sub {
 override 'run_commands' => sub {
     my ($self) = @_;
 
-    $self->cmd("Setting all UniProt files to have group permissions", [["echo $sudo | sudo -S chgrp gkb *"]]);
- 
+    $self->cmd("Setting all UniProt files to have group permissions",
+        [["echo $sudo | sudo -S chgrp $reactome_unix_group *"]]
+    );
+
     $self->cmd("Backing up database and downloading necessary files",
         [
             ["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral > $gkcentral.dump"],
