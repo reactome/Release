@@ -89,6 +89,7 @@ use feature qw/state/;
 
 use base 'Exporter';
 use Carp;
+use Capture::Tiny qw/:all/;
 use DateTime;
 use List::MoreUtils qw/any all none/;
 use Readonly;
@@ -177,6 +178,23 @@ sub get_name_and_id {
 
     return '' unless $instance && $instance->is_a('DatabaseObject');
     return $instance->displayName . '(' . $instance->db_id . ')';
+}
+
+sub run_command {
+    my $command = shift;
+    my $options = shift;
+
+    my $stderr = capture_stderr {
+        system $command;
+    };
+    # Remove unneeded message of cloning repository from STDERR
+    # Then output any error messages remaining back to STDERR
+    my $error_to_ignore = $options->{'ignore_error'};
+    if ($error_to_ignore) {
+        $stderr =~ s/$error_to_ignore//m;
+    }
+
+    return $stderr;
 }
 
 sub get_all_species_in_entity {
@@ -560,6 +578,7 @@ backup_database
 restore_database
 database_exists
 get_name_and_id
+run_command
 get_all_species_in_entity
 is_electronically_inferred
 in_curator_database
