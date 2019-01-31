@@ -5,11 +5,12 @@ use warnings;
 our $VERSION = 1.0;
 
 use autodie qw/:all/;
-use Capture::Tiny ':all';
 use Cwd;
 use English qw/-no_match_vars/;
 use Getopt::Long;
 use Readonly;
+
+use GKB::CommonUtils;
 
 Readonly my $DEFAULT_REPO_VERSION => 'master';
 my ($pathway_exchange_repo_version, $curator_tool_repo_verison, $help);
@@ -93,23 +94,6 @@ sub trim {
     $string =~ s/\s+$//; # Remove trailing white space
 
     return $string;
-}
-
-sub run_command {
-    my $command = shift;
-    my $options = shift;
-
-    my $stderr = capture_stderr {
-        system $command;
-    };
-    # Remove unneeded message of cloning repository from STDERR
-    # Then output any error messages remaining back to STDERR
-    my $error_to_ignore = $options->{'ignore_error'};
-    if ($error_to_ignore) {
-        $stderr =~ s/$error_to_ignore//m;
-    }
-
-    return $stderr;
 }
 
 sub usage_instructions {
