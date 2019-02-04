@@ -107,23 +107,24 @@ our $version;
 our $prevver;
 
 # Set database names
-our $db = "test_reactome_{version}"; # Test Reactome Database (e.g. test_reactome_38)
-our $slicedb = "test_slice_{version}"; # Slice Database (e.g. test_slice_38)
+our $db = "release_current"; # Test Reactome Database (e.g. test_reactome_38)
+our $slicedb = "slice_current"; # Slice Database (e.g. test_slice_38)
 our $stable_id_db = "stable_identifiers";
-our $gkcentral = "gk_central";
-our $gkcentral_host = "reactomecurator.oicr.on.ca";
+our $gkcentral = "central";
+our $gkcentral_host = "localhost";
 
 if ($TEST_MODE) {
-    $stable_id_db = "test_stable_identifiers",
-    $gkcentral = "test_gk_central";
-    $gkcentral_host = "reactomerelease.oicr.on.ca";
+    $user = 'piper';
+    #$stable_id_db = "stable_identifiers",
+    #$gkcentral = "central";
+    #$gkcentral_host = "localhost";
     $version = 999;
-    $prevver = 57;
+    $prevver = 66;
 }
 
 # Set directory paths
 our $base_dir = "/usr/local/reactomes/Reactome/production";
-our $gkbdev = "/usr/local/gkb";
+our $gkbdev = "$base_dir/Release";
 our $scripts = "$gkbdev/scripts";
 our $release = "$scripts/release";
 our $website = "$base_dir/Website";
@@ -134,7 +135,7 @@ our $tmp = "$gkbdev/tmp";
 our $cvs = "/usr/local/cvs_repository";
 our $logdir = "$release/logs";
 our $logfile = "$logdir/release{version}.log";
-our $archive = "/nfs/reactome/archive/release";
+our $archive = "$base_dir/Release/archive";
 
 our %passwords = (
     'sudo' => \$sudo, 
@@ -142,7 +143,7 @@ our %passwords = (
 );
 
 
-our $release_server = "reactomerelease.oicr.on.ca";
+our $release_server = "release.reactome.org";
 our $live_server = "reactomeprd1.oicr.on.ca";
 our $dev_server = "reactomedev.oicr.on.ca";
 our $curator_server = "reactomecurator.oicr.on.ca";
