@@ -32,7 +32,7 @@ fi
 
 if [[ -n $DB && -n $USER && -n $PASS ]]
 then
-    if [[ $USER =~ "curator" ]]
+    if [[ $USER =~ "piper" ]]
     then
         # Attempts to find and use database $DB and if successful it is backed up
         # before being dropped (errors, if any, stored in $DB_ERROR)
