@@ -21,7 +21,7 @@ echo "Would you like to run the version topic comparison between this release an
 read ver_topic
 if [[ $ver_topic == y* ]] || [[ $ver_topic == Y* ]]
 then
-# TODO add script to do version topic comparison
+    java -jar VersionTopicComparer.jar
 fi
 
 if [[ $RUN_CHAR_FIX == "true" ]]
