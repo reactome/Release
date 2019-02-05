@@ -923,7 +923,7 @@ END
 	$text_unit->set_contents($text);
 	push @text_units, $text_unit;
 	push @text_units,
-	$self->hyperlink("Navigating Disease pathways", "http://wiki.reactome.org/index.php/Usersguide#Navigating_Disease_Pathway_Diagrams");
+	$self->hyperlink("Navigating Disease pathways", "https://reactome.org/user/guide/diseases");
     }
 
     $text = 'A more detailed description of the website and its features can be found in our Users Guide.';
@@ -932,7 +932,7 @@ END
     $text_unit->set_contents($text);
     push @text_units, $text_unit;
 
-    push @text_units, $self->hyperlink("Reactome User Guide","http://wiki.reactome.org/index.php/Usersguide");
+    push @text_units, $self->hyperlink("Reactome User Guide","https://reactome.org/user/guide");
 
     $text = qq(<b>\*Note that the \"Expression\" and \"Structure\" data are not available before public release as it is provided by external resources.</b>);
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
@@ -1544,7 +1544,7 @@ sub get_regulation_text_units_from_instance()
 	my ($self, $instance) = @_;
 	my @text_units = ();
 	my $text_unit;
-  
+
 	my $regulators = $instance->regulatedBy;
 	if (!(defined $regulators) || scalar(@{$regulators}) < 1) {
 		return @text_units;
