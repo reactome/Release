@@ -17,7 +17,7 @@ RUN_CHAR_FIX=$(grep runCharacterFixer slicingTool.prop | grep -v '\#' |perl -pe 
 #    exit
 #fi
 
-echo "Would you like to run the version topic comparison between this release and last? (y/n)"
+echo -n "Would you like to run the version topic comparison between this release and last? (y/n): "
 read ver_topic
 if [[ $ver_topic == y* ]] || [[ $ver_topic == Y* ]]
 then
