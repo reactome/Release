@@ -34,10 +34,9 @@ if [[ -n $DB && -n $USER && -n $PASS ]]
 then
     if [[ $USER =~ "curator" ]]
     then
-        # Attempts to find database $DB and if successful (mysqlshow returns a zero exit status) it is backed up
+        # Attempts to find and use database $DB and if successful it is backed up
         # before being dropped
-        mysqlshow $DB > /dev/null 2>&1
-        if [[ $? == 0 ]]
+        if [[ mysql -u $USER -p$PASS -e 'use $DB' ]]
         then
             echo Backing up $DB ...
             mysqldump -u$USER -p$PASS $DB > $DB.dump
