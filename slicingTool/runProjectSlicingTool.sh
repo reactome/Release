@@ -36,7 +36,8 @@ then
     then
         # Attempts to find and use database $DB and if successful it is backed up
         # before being dropped (errors, if any, stored in $DB_ERROR)
-        if DB_ERROR=$(mysql -u $USER -p$PASS -e "use $DB" 2>&1 > /dev/null);
+        DB_ERROR=$(mysql -u $USER -p$PASS -e "use $DB" 2>&1 > /dev/null)
+        if [ -z "$DB_ERROR" ]
         then
             echo Backing up $DB ...
             mysqldump -u$USER -p$PASS $DB > $DB.dump
