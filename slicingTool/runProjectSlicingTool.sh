@@ -36,10 +36,12 @@ then
     then
         # Attempts to find and use database $DB and if successful it is backed up
         # before being dropped
-        if [[ mysql -u $USER -p$PASS -e 'use $DB' ]]
+        if mysql -u $USER -p$PASS -e "use $DB";
         then
             echo Backing up $DB ...
             mysqldump -u$USER -p$PASS $DB > $DB.dump
+        else
+            echo Database $DB does not exist - no need to create back up
         fi
 
         echo Dropping $DB ...
