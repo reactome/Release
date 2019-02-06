@@ -35,13 +35,17 @@ then
     if [[ $USER =~ "curator" ]]
     then
         # Attempts to find and use database $DB and if successful it is backed up
-        # before being dropped
-        if mysql -u $USER -p$PASS -e "use $DB";
+        # before being dropped (errors, if any, stored in $DB_ERROR)
+        if DB_ERROR=$(mysql -u $USER -p$PASS -e "use $DB" 2>&1 > /dev/null);
         then
             echo Backing up $DB ...
             mysqldump -u$USER -p$PASS $DB > $DB.dump
+        elif [[ $DB_ERROR == *"Unknown database"* ]]
+        then
+            echo "Database $DB does not exist - no need to create back up"
         else
-            echo Database $DB does not exist - no need to create back up
+            echo -e "Problem accessing $DB: $DB_ERROR\nAborting slicing"
+            exit
         fi
 
         echo Dropping $DB ...
