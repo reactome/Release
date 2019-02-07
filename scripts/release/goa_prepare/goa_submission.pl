@@ -333,7 +333,7 @@ sub check_catalyst_activity {
     }
 
     if ($ontology_letter eq $MOLECULAR_FUNCTION) {
-        if ((scalar @active_units == 0) && (any {$physical_entity->is_a($_)} qw/Complex EntitySet Polymer/)) {
+        if (!@active_units && $physical_entity && (any {$physical_entity->is_a($_)} qw/Complex EntitySet Polymer/)) {
             push @reasons_to_exclude, "No active unit and physical entity is a complex, set or, polymer: $catalyst_id";
         } elsif (scalar @active_units == 1) {
             if ($active_units[0]->disease->[0]) {
