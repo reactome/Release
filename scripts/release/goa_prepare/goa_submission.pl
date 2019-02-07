@@ -293,6 +293,9 @@ sub get_proteins_from_catalyst_activity {
 
     my @reasons_to_exclude = check_catalyst_activity($catalyst_activity, $ontology_letter);
     if (@reasons_to_exclude) {
+        my $catalyst_name_and_id = get_name_and_id($catalyst_activity);
+        my $event_name_and_id = get_name_and_id($parameters->{'event'});
+        $logger->info("Excluding catalyst activity $catalyst_name_and_id for $event_name_and_id");
         $logger->info(join("\n", @reasons_to_exclude) . "\n");
         return;
     }
@@ -312,7 +315,7 @@ sub check_catalyst_activity {
     my $catalyst_activity = shift;
     my $ontology_letter = shift;
 
-    my $catalyst_id = $catalyst_activity->displayName . ' (' . $catalyst_activity->db_id . ')';
+    my $catalyst_id = get_name_and_id($catalyst_activity);
     my $physical_entity = $catalyst_activity->physicalEntity->[0];
     my @active_units = @{$catalyst_activity->activeUnit};
 
@@ -347,6 +350,13 @@ sub check_catalyst_activity {
     }
 
     return @reasons_to_exclude;
+}
+
+sub get_name_and_id {
+    my $instance = shift;
+    return unless $instance;
+
+    return $instance->displayName . ' (' . $instance->db_id . ')';
 }
 
 sub get_proteins_for_molecular_function {
