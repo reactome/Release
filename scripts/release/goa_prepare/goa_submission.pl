@@ -198,7 +198,7 @@ sub process_proteins {
         process_protein($protein, $parameters, \%rows);
     }
 
-    return keys %rows;
+    return (sort keys %rows);
 }
 
 sub process_protein {
