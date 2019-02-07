@@ -295,7 +295,8 @@ sub get_proteins_from_catalyst_activity {
     if (@reasons_to_exclude) {
         my $catalyst_name_and_id = get_name_and_id($catalyst_activity);
         my $event_name_and_id = get_name_and_id($parameters->{'event'});
-        $logger->info("Excluding catalyst activity $catalyst_name_and_id for $event_name_and_id");
+        $logger->info("For event $event_name_and_id");
+        $logger->info("Excluding catalyst activity $catalyst_name_and_id");
         $logger->info(join("\n", @reasons_to_exclude) . "\n");
         return;
     }
