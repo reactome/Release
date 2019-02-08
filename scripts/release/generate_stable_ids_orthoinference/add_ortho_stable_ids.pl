@@ -35,10 +35,6 @@ GetOptions(
 
 ($release_db && $release_num && $slice_db) || die $usage;
 
-back_up_databases(
-    [$user, $pass, $release_db, $db_host]
-) unless $dry_run;
-
 get_api_connections()->{$release_db}->execute("START TRANSACTION") unless $dry_run;
 # Get list of all curated instances that have or need ST_IDs
 foreach my $db_id (get_db_ids($release_db)) {    
