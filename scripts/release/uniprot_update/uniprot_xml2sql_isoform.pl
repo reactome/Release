@@ -44,9 +44,9 @@ my @temp = split(/\n/, `ls -1tr $update_dir/uniprot-reviewed*`);	# look for file
 die "Can't find $update_dir/uniprot-reviewed_no.list.gz\n" unless ($trembl_file);
 
 if ($trembl_file =~ /\.gz$/) {
-    (my $unzipped_trembl_file = $trembl_file) =~ s/\.gz$//;
-    gunzip "$update_dir/$trembl_file" => "$update_dir/$unzipped_trembl_file" or die "Can't gunzip $trembl_file: $GunzipError\n";
-    $trembl_file = $unzipped_trembl_file;
+    print "Found trembl file with .gz extension\n";
+    (system("gunzip $update_dir/$trembl_file") == 0) or die "Can't unzip $update_dir/$trembl_file\n";
+    $trembl_file =~ s/\.gz$//;
 }
 
 # Download sprot file
@@ -55,9 +55,9 @@ if ($trembl_file =~ /\.gz$/) {
 die "Can't find $update_dir/uniprot_sprot.xml.gz\n" unless ($sprot_file);
 
 if ($sprot_file =~ /\.gz$/) {
-    (my $unzipped_sprot_file = $sprot_file) =~ s/\.gz$//;
-    gunzip "$update_dir/$sprot_file" => "$update_dir/$unzipped_sprot_file" or die "Can't gunzip $sprot_file: $GunzipError\n";
-    $sprot_file = $unzipped_sprot_file;
+    print "Found sprot file with .gz extension\n";
+    (system("gunzip $update_dir/$sprot_file") == 0) or die "Can't gunzip $update_dir/$sprot_file\n";
+    $sprot_file =~ s/\.gz//;
 }
 
 # Prepare to update InstanceEdit

@@ -1,3 +1,7 @@
 archive
 GO_submission/*
-
+gene_association.reactome*
+gofilter.report
+*.out
+*.err
+*.log

@@ -8,3 +8,4 @@ archive
 log
 *.gz
 old_jars
+nohup.out

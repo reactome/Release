@@ -15,6 +15,8 @@ $TEST_MODE (1 for test; 0 for production)
 $user (user running release)
 $pass (mysql password for user)
 $sudo (sudo password for user)
+$port (port for database connection)
+$reactome_unix_group (unix group to use for assigning/changing permissions)
 $date (today's date)
 $version (Reactome release version)
 $prevver (previous Reactome release version)
@@ -41,6 +43,7 @@ $archive (base archive directory)
 $release_server (release server host name)
 $live_server (live server host name)
 $dev_server (development server host name)
+$curator_server (curator server host name - where gk_central resides)
 %hosts (hash of host to gkb alias and vice-versa)
 %maillist (hash of 'role' to e-mail address)
 $log_conf (configuration file for Log4perl)
@@ -95,6 +98,8 @@ chomp(our $user = `whoami`);
 
 our $pass; # mysql password
 our $sudo; # Sudo password
+our $port = 3306;
+our $reactome_unix_group = 'reactome';
 
 chomp(our $date = `date "+%Y%m%d"`); # Today's date
 
@@ -140,6 +145,7 @@ our %passwords = (
 our $release_server = "reactomerelease.oicr.on.ca";
 our $live_server = "reactomeprd1.oicr.on.ca";
 our $dev_server = "reactomedev.oicr.on.ca";
+our $curator_server = "reactomecurator.oicr.on.ca";
 
 if ($TEST_MODE) {
     $live_server = "reactomeclean.oicr.on.ca";
@@ -150,6 +156,7 @@ our %hosts = (
     $release_server => "gkbdev",
     $dev_server => "gkbdev",
     $live_server => "gkb",
+    $curator_server => "gkb",
    
     "gkbdev" => $release_server,
     "gkb" => $live_server,
@@ -163,6 +170,7 @@ our %maillist = (
     'internal' => 'internal@reactome.org',
     'curation' => 'lmatthews.nyumc@gmail.com',
     'automation' => 'solomon.shorser@oicr.on.ca, justin.cook@oicr.on.ca, joel.weiser@oicr.on.ca',
+    'default_sender' => 'joel.weiser@oicr.on.ca',
     'outreach' => 'robin.haw@oicr.on.ca'
 );
 
@@ -170,10 +178,10 @@ our $log_conf = dirname(__FILE__)."/releaselog.conf";
 
 our @EXPORT = qw/
     $TEST_MODE
-    $user $pass $sudo $date $version $prevver
+    $user $pass $sudo $port $reactome_unix_group $date $version $prevver
     $db $slicedb $stable_id_db $gkcentral $gkcentral_host
     $base_dir $gkbdev $scripts $release $website $website_static $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
-    %passwords $release_server $live_server $dev_server %hosts %maillist
+    %passwords $release_server $live_server $dev_server $curator_server %hosts %maillist
     $log_conf
 /;
 

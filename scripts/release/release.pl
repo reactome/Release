@@ -70,7 +70,8 @@ unless ($TEST_MODE) {
     die "Current version number must be an integer" unless $version && $version =~ /^\d+$/;
     $prevver = $version - 1;
 } else {
-    print "REMINDER: You are in TEST MODE.  To enable normal operation, edit \$TEST_MODE in the GKB::Release::Config module and restart this script\n";
+    print "REMINDER: You are in TEST MODE as user $user releasing as version $version and previous version of $prevver.\n";
+    print "To enable normal operation, edit \$TEST_MODE in the GKB::Release::Config module and restart this script\n";
 }
 set_version_for_config_variables($version);
 
