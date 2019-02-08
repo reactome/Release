@@ -1,100 +1,110 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 use strict;
+use warnings;
 
-#This script should be run over a release database as it requires stable identifiers to be present
-#This script produces a tab delimited file for submission to goa - including Reactome annotations for cellular components, molecular function and biological process.
+# This script should be run over a release database as it requires stable identifiers to be present
+# This script produces a tab delimited file for submission to goa - including Reactome annotations for
+# cellular components, molecular function and biological process.
 
-#NOTE: after running this script, run goa_submission_stats.pl to produce stats
+use lib '/usr/local/gkb/modules';
 
-# Make sure you don't have "competing" libraries...
-# for use @CSHL
-use lib "/usr/local/gkb/modules";
-# for use @HOME
-use lib "$ENV{HOME}/bioperl-1.0";
-use lib "$ENV{HOME}/GKB/modules";
+use GKB::Config;
 use GKB::Instance;
 use GKB::DBAdaptor;
 use GKB::Utils;
+
+use autodie;
 use Data::Dumper;
+use English qw/-no_match_vars/;
 use Getopt::Long;
 
 # Database connection
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db, $opt_date, $opt_debug);
+my($user, $host, $pass, $port, $db, $output_file, $debug);
 
-(@ARGV) || die "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name -date date(YYYYMMDD) -debug\n";
-
-&GetOptions("user:s", "host:s", "pass:s", "port:i", "db:s", "date:i", "debug");
-
-$opt_db || die "Need database name (-db).\n";
-#$opt_date || die "Need date (-date).\n";  #need to revisit this, at present some instances don't have InstanceEdits attached, this should be fixed
-
-my $dba= GKB::DBAdaptor->new
-    (
-     -user   => $opt_user || '',
-     -host   => $opt_host,
-     -pass   => $opt_pass,
-     -port   => $opt_port,
-     -dbname => $opt_db,
-     -DEBUG => $opt_debug
-     );
-
-$opt_db =~ /(\d+)$/;
-my $outfile = "Reactome2GoV" . $1;
-
-open(FILE, ">$outfile") or die "$0: could not open file $outfile";
-binmode(FILE, ":utf8");
-my $ar = $dba->fetch_instance(-CLASS => 'Event'); # Obtains a reference to the array of all Reactome events
-
-# Each event in Reactome is processed
-binmode(STDOUT, ":utf8");
-foreach my $ev (@{$ar}) {
-    print "$0: ev->db_id=" . $ev->db_id() . "\n";
-    Reactome2GO($ev);
+if (@ARGV == 0) {
+    die "Usage: $PROGRAM_NAME -user db_user -host db_host -pass db_pass " .
+        "-port db_port -db db_name -output_file file_name -debug\n";
 }
 
-close(FILE); # The output file has all entries now and is closed
+GetOptions(
+    'user:s' => \$user,
+    'host:s' => \$host,
+    'pass:s' => \$pass,
+    'port:i' => \$port,
+    'db:s' => \$db,
+    'output_file:s' => \$output_file,
+    'debug' => \$debug
+);
 
-print "$0 has finished its job\n";
+$db || die "Need database name (-db).\n";
+$user ||= $GKB::Config::GK_DB_USER;
+$host ||= $GKB::Config::GK_DB_HOST;
+$pass ||= $GKB::Config::GK_DB_PASS;
+$port ||= $GKB::Config::GK_DB_PORT;
 
+my $dba= GKB::DBAdaptor->new(
+    -user   => $user,
+    -host   => $host,
+    -pass   => $pass,
+    -port   => $port,
+    -dbname => $db,
+    -DEBUG => $debug
+);
 
+if (!$output_file) {
+    $output_file = 'Reactome2GoV' . get_version($db);
+}
 
-sub Reactome2GO {
-	my $event = shift;
-	my @go;
-	push @go, $event->GoBiologicalProcess->[0];
-	
-	foreach my $cat (@{$event->CatalystActivity}) {
-		push @go, $cat->Activity->[0];	
-	}
-	
-	return unless $event->stableIdentifier->[0];
-	my $eventid = $event->stableIdentifier->[0]->identifier->[0];
-	
-	my $eventdisplayname = $event->_displayName->[0];
-	$eventdisplayname =~ s/\s+/ /g;
-	$eventdisplayname = trim($eventdisplayname);
-	
-	my $eventspecies = $event->species->[0]->name->[0];
-	
-	foreach my $go (@go) {
-		next unless $go;
-		my $goid;
-		my $goname;
-		if ($go->accession) {
-			$goid = $go->accession->[0];
-		}
-		if ($go->_displayName) {
-			$goname = $go->_displayName->[0];
-		}
-	
-		print FILE "Reactome:$eventid $eventdisplayname, $eventspecies > GO:$goname ; GO:$goid \n";
-	}
+open my $file, '>', $output_file;
+binmode $file, ':encoding(UTF-8)';
+binmode STDOUT, ':encoding(UTF-8)';
+
+foreach my $event (@{$dba->fetch_instance(-CLASS => 'Event')}) {
+    print "$PROGRAM_NAME: event->db_id=" . $event->db_id() . "\n";
+    foreach my $line (get_reactome_2_go_mapping_lines($event)) {
+        print {$file} "$line\n";
+    }
+}
+close $file;
+
+print "$PROGRAM_NAME has finished its job\n";
+
+sub get_version {
+    my $db_name = shift;
+
+    my ($version) = $db_name =~ /(\d+)$/msx;
+    $version ||= $db_name;
+
+    return $version;
+}
+
+sub get_reactome_2_go_mapping_lines {
+    my $event = shift;
+
+    if (!$event->stableIdentifier->[0]) {
+        return;
+    }
+
+    my $event_id = $event->stableIdentifier->[0]->identifier->[0];
+    (my $event_displayname = trim($event->displayName)) =~ s/\s+/ /msxg; # Removes extra whitespace from displayName
+    my $event_species = $event->species->[0] ? $event->species->[0]->displayName : 'N/A';
+
+    my @go = grep { defined } (
+        $event->GoBiologicalProcess->[0], # GO Biological Process instance
+        map { $_->activity->[0] } @{$event->catalystActivity} # GO Molecular Function instances
+    );
+
+    return map {
+        "Reactome:$event_id $event_displayname, $event_species > " .
+        'GO:' . $_->displayName . ' ; ' .
+        'GO:' . $_->accession->[0]
+    } @go;
 }
 
 # Trims white space from beginning and end of string
 sub trim {
-	my $name = shift;
-	$name =~ s/^ +//;
-	$name =~ s/ +$//;
-	return $name;
+    my $name = shift;
+    $name =~ s/^\s+//msx;
+    $name =~ s/\s+$//msx;
+    return $name;
 }

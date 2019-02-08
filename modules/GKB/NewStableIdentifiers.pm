@@ -8,7 +8,6 @@ use Carp;
 use Data::Dumper;
 use List::MoreUtils qw/all any uniq/;
 use Log::Log4perl qw/get_logger/;
-use Parallel::Loops;
 use Scalar::Util qw/blessed/;
 
 use lib '/usr/local/gkb/modules';
@@ -109,10 +108,6 @@ sub get_stable_id_QA_problems_as_hash {
 		{
 			if (is_missing_stable_identifier($instance)) {
 				push @{$qa_problems{'missing stable identifier'}}, {'st_id_instance' => [undef], 'instance' => [$instance]};
-				if (scalar @{$qa_problems{'missing stable identifier'}} > 10)
-		        {
-		        	last;
-		        }
 			} elsif (has_multiple_stable_identifiers($instance)) {
 				push @{$qa_problems{'multiple stable identifiers'}}, {'st_id_instance' => \@{$instance->stableIdentifier}, 'instance' => [$instance]};
 			}
