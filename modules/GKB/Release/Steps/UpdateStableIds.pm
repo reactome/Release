@@ -39,22 +39,27 @@ override 'run_commands' => sub {
         ]
     );
 
-    $self->cmd("Creating snapshot of $slicedb",
+    $self->cmd("Loading previous slice into $previous_slice_db database",
         [
-            ["perl restore_database.pl -user $user -pass $pass -host $host -db $slicedb\_snapshot -source $slicedb.dump"]
+            ["mysql -e 'drop database if exists $previous_slice_db; create database $previous_slice_db'"],
+            ["zcat $archive/$prevver/$slicedb.dump.gz | mysql $previous_slice_db"],
         ]
     );
     
-    $stable_identifier_to_version{$_->identifier->[0]}{'before_update'} = $_->identifierVersion->[0] foreach get_all_stable_identifier_instances(get_dba($slicedb));
+    foreach get_all_stable_identifier_instances(get_dba($slicedb)) {
+        $stable_identifier_to_version{$_->identifier->[0]}{'before_update'} = $_->identifierVersion->[0];
+    }
     $self->cmd("Updating stable IDs",
         [
             ["perl update_stable_ids.pl -ghost $gkcentral_host -host $host -user $user -pass $pass -sdb $slicedb ".
-             "-pdb " . get_test_slice($prevver, $host) . " -release $version -gdb $gkcentral > generate_stable_ids_$version.out ".
+             "-pdb $previous_slice_db -release $version -gdb $gkcentral > generate_stable_ids_$version.out ".
              "2> generate_stable_ids_$version.err"]
         ]
     );
-    $stable_identifier_to_version{$_->identifier->[0]}{'after_update'} = $_->identifierVersion->[0] foreach get_all_stable_identifier_instances(get_dba($slicedb));
-    
+    foreach get_all_stable_identifier_instances(get_dba($slicedb)) {
+        $stable_identifier_to_version{$_->identifier->[0]}{'after_update'} = $_->identifierVersion->[0];
+    }
+
     $self->cmd("Backing up databases",
         [
             ["mysqldump --opt -u $user -h $gkcentral_host -p$pass --lock-tables=FALSE $gkcentral > $gkcentral\_$version\_after_st_id.dump"],
@@ -93,7 +98,7 @@ override 'post_step_tests' => sub {
        $version_before_update && $version_after_update && !(($version_after_update - $version_before_update == 0) || ($version_after_update - $version_before_update == 1));
     } keys %stable_identifier_to_version;
 
-    my $stable_id_count_error = _check_stable_id_count($slicedb, "test_slice_$prevver");
+    my $stable_id_count_error = _check_stable_id_count($slicedb, $previous_slice_db);
 
     return grep { defined } (
         super(),
