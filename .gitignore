@@ -27,3 +27,4 @@ logs
 mysql_databases
 container/stable_id_mapping.stored_data
 slicingToolinnodb
+archive/

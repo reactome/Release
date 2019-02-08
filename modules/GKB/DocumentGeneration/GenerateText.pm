@@ -78,6 +78,7 @@ disclaimers of warranty.
 
 =cut
 
+use Carp;
 use GKB::Config;
 use GKB::HTMLUtils;
 use GKB::FileUtils;
@@ -382,12 +383,13 @@ sub generate_image_from_file {
     
     my $logger = get_logger(__PACKAGE__);
     
+    $image_file =~ s/\.svg$/\.png/;
     $image_file =~ /^(.+)$/;
     my $detainted_image_file = $1;
     
     if (!(-e $detainted_image_file)) {
-    	$logger->warn("detainted_image_file=$detainted_image_file does not exist!!");
-    	return;
+        $logger->warn("detainted_image_file=$detainted_image_file does not exist!!");
+        return;
     }
 
     my $image = undef;
@@ -396,16 +398,15 @@ sub generate_image_from_file {
     };
 
     if (defined $image) {
-    	$detainted_image_file =~ /([^\/]+)\.[a-zA-Z]*$/;
-    	my $filename = $1;
-    	
-	$self->generate_image($image, $filename);
+        $detainted_image_file =~ /([^\/]+)\.[a-zA-Z]*$/;
+        my $filename = $1;
+        $self->generate_image($image, $filename);
     } else {
-	$self->generate_image_from_file_basic($detainted_image_file);
+        $self->generate_image_from_file_basic($detainted_image_file);
     }
     
     if ($delete_flag) {
-	unlink($detainted_image_file);
+        unlink($detainted_image_file);
     }
 }
 

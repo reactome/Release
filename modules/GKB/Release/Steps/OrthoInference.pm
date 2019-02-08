@@ -53,8 +53,13 @@ override 'post_step_tests' => sub {
     my $self = shift;
 
     my @errors = super();
-    my @species_instance_count_errors = _check_orthoinferred_instance_count_for_all_species();
-    push @errors, @species_instance_count_errors if @species_instance_count_errors;
+    
+    # TODO: The algorithm needs to be changed to check only Orthoinference specific species instances in the current
+    #       and previous databases.  Currently, the previous database has its post-Orthoinference species instances
+    #       (e.g. from AddLinks) counted also which leads to false reports of low species instance counts in the 
+    #       current database
+    #my @species_instance_count_errors = _check_orthoinferred_instance_count_for_all_species();
+    #push @errors, @species_instance_count_errors if @species_instance_count_errors;
 
     return @errors;
 };
