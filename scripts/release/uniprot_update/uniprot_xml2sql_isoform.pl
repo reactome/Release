@@ -921,6 +921,7 @@ sub updateinstance {
 
         if (lc $attribute eq 'checksum' && is_sequence_changed_attribute_needs_updating($i, $new_values)) {
             $changed = 1;
+            print $sequence_report_fh $i->displayName . ' (' . $i->db_id . ") has a new is_sequence_changed value\n";
         }
 
         if (lc $attribute eq 'chain') {
@@ -1021,7 +1022,7 @@ sub is_sequence_changed_attribute_needs_updating {
     my $sequence_changed = is_sequence_changed($old_checksum, $new_checksum);
 
     if ($sequence_changed) {
-        print $sequence_report_fh $instance->db_id . " sequence has changed\n";
+        print $sequence_report_fh $instance->displayName . ' (' . $instance->db_id . ") sequence has changed\n";
     }
     my $old_is_sequence_changed_value = $instance->isSequenceChanged->[0];
     $instance->isSequenceChanged($sequence_changed ? "true" : "false");
