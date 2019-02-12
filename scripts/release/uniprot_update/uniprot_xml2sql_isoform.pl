@@ -1025,9 +1025,10 @@ sub is_sequence_changed_attribute_needs_updating {
         print $sequence_report_fh $instance->displayName . ' (' . $instance->db_id . ") sequence has changed\n";
     }
     my $old_is_sequence_changed_value = $instance->isSequenceChanged->[0];
-    $instance->isSequenceChanged($sequence_changed ? "true" : "false");
+    my $new_is_sequence_changed_value = $sequence_changed ? "true" : "false";
+    $instance->isSequenceChanged($new_is_sequence_changed_value);
 
-    return !$old_is_sequence_changed_value || $old_is_sequence_changed_value ne ($sequence_changed ? "true" : "false");
+    return !$old_is_sequence_changed_value || $old_is_sequence_changed_value ne $new_is_sequence_changed_value;
 }
 
 sub is_sequence_changed {
