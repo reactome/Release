@@ -919,7 +919,7 @@ sub updateinstance {
             next;
         }
 
-        if (lc $attribute eq 'checksum' && update_attribute_is_sequence_changed($i, $new_values)) {
+        if (lc $attribute eq 'checksum' && is_sequence_changed_attribute_needs_updating($i, $new_values)) {
             $changed = 1;
         }
 
@@ -1012,7 +1012,7 @@ sub update_chain_log {
     }
 }
 
-sub update_attribute_is_sequence_changed {
+sub is_sequence_changed_attribute_needs_updating {
     my $instance = shift;
     my $new_values = shift;
 
