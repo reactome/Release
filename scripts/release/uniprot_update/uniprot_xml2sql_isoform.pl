@@ -81,7 +81,8 @@ unless (
     $db_inst->inflated(1);
 }
 
-my $instance_edit = GKB::Utils_esther::create_instance_edit( $dba, $surname, $initial, $date );
+my $note = "UniProt Update on $date";
+my $instance_edit = GKB::Utils_esther::create_instance_edit( $dba, $surname, $initial, $note );
 
 #list of species to be maintained within the Reactome repository
 my %species = (
