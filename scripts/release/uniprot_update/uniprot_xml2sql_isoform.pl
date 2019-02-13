@@ -456,7 +456,7 @@ while (<$uniprot_records_fh>) {
             ## master sequence update finished
 
 
-            if (!species_value_exists($values->{'species'})) {
+            if (!species_value_exists($values{'species'})) {
                 #Inherit species instance (if not already specified) from isoform parent
                 $values{'species'}->[0] = $sdi->species->[0];
             }
@@ -925,7 +925,7 @@ sub updateinstance {
 
             # Update the RGP 'isSequenceChanged' attribute if it has a new or changed value
             if (!$old_is_sequence_changed_value || $old_is_sequence_changed_value ne $new_is_sequence_changed_value) {
-                $instance->isSequenceChanged($new_is_sequence_changed_value);
+                $i->isSequenceChanged($new_is_sequence_changed_value);
                 print $sequence_report_fh $i->displayName . ' (' . $i->db_id . ") has a new is_sequence_changed value\n";
                 $changed = 1;
             }
