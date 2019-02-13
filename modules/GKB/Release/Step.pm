@@ -242,11 +242,7 @@ has 'host' => (
     is => 'ro',
     isa => 'Str',
     lazy => 1,
-    default => sub {
-        my $host = 'localhost';
-        chomp $host;
-        return $host;
-    }
+    default => 'localhost'
 );
 
 has 'mail' => (
@@ -297,7 +293,9 @@ sub run {
         binmode $post_step_test_fh, ':encoding(UTF-8)';
         print {$post_step_test_fh} join "\n", @post_step_test_errors;
         close $post_step_test_fh;
-        say releaselog("ERRORS from $self->{name} post-step tests - see e-mail report or $post_step_test_log");
+        say releaselog("ERRORS from $self->{name} post-step tests reported -- see $post_step_test_log");
+
+        say releaselog("Errors from $self->{name} post-step tests -- sending e-mail");
         $self->mail->{'body'} = "Errors Reported\n\n" . join("\n", @post_step_test_errors);
         $self->mail->{'to'} = 'automation';
     } else {
