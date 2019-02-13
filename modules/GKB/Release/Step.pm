@@ -250,6 +250,11 @@ has 'mail' => (
     isa => 'HashRef[Str]'
 );
 
+has 'files_to_archive' => (
+    is => 'ro',
+    isa => 'ArrayRef[Str]'
+);
+
 sub set_user_input_and_passwords {
     my $self = shift;
 
@@ -421,7 +426,7 @@ sub archive_files {
             system "gzip -qf $sql_dump_file";
         }
 
-        foreach my $file (map { glob } qw/*.err *.log *.out *.dump.gz/) {
+        foreach my $file ($self->_get_files_to_archive()) {
             system "mv --backup=numbered $file $step_version_archive";
         }
 
@@ -431,6 +436,15 @@ sub archive_files {
     }
 
     return $step_version_archive;
+}
+
+sub _get_files_to_archive {
+    my $self = shift;
+
+    my @files_to_archive;
+    push @files_to_archive, map { glob } qw/*.err *.log *.out *.dump.gz/;
+    push @files_to_archive, @{$self->files_to_archive};
+    return @files_to_archive;
 }
 
 sub mail_now {
