@@ -457,7 +457,7 @@ while (<$uniprot_records_fh>) {
 
 
             if (!species_value_exists(\%values)) {
-            #Inherit species instance (if not already specified) from isoform parent
+                #Inherit species instance (if not already specified) from isoform parent
                 $values{'species'}->[0] = $sdi->species->[0];
             }
             foreach my $is_ac ( sort keys %isoids ) {    #isoforms update
@@ -919,9 +919,16 @@ sub updateinstance {
             next;
         }
 
-        if (lc $attribute eq 'checksum' && is_sequence_changed_attribute_needs_updating($i, $new_values)) {
-            $changed = 1;
-            print $sequence_report_fh $i->displayName . ' (' . $i->db_id . ") has a new is_sequence_changed value\n";
+        if (lc $attribute eq 'checksum') {
+            my $old_is_sequence_changed_value = $i->isSequenceChanged->[0];
+            my $new_is_sequence_changed_value = get_new_is_sequence_changed_attribute_value($i, $new_values);
+
+            # Update the RGP 'isSequenceChanged' attribute if it has a new or changed value
+            if (!$old_is_sequence_changed_value || $old_is_sequence_changed_value ne $new_is_sequence_changed_value) {
+                $instance->isSequenceChanged($new_is_sequence_changed_value);
+                print $sequence_report_fh $i->displayName . ' (' . $i->db_id . ") has a new is_sequence_changed value\n";
+                $changed = 1;
+            }
         }
 
         if (lc $attribute eq 'chain') {
@@ -1013,22 +1020,16 @@ sub update_chain_log {
     }
 }
 
-sub is_sequence_changed_attribute_needs_updating {
+# Compares the new and curent checksum values of the reference gene product to
+# determine if the is_sequence_changed attribute should be set to "true" or "false".
+sub get_new_is_sequence_changed_attribute_value {
     my $instance = shift;
     my $new_values = shift;
 
     my $old_checksum = $instance->checksum->[0];
     my $new_checksum = $new_values->[0];
-    my $sequence_changed = is_sequence_changed($old_checksum, $new_checksum);
 
-    if ($sequence_changed) {
-        print $sequence_report_fh $instance->displayName . ' (' . $instance->db_id . ") sequence has changed\n";
-    }
-    my $old_is_sequence_changed_value = $instance->isSequenceChanged->[0];
-    my $new_is_sequence_changed_value = $sequence_changed ? "true" : "false";
-    $instance->isSequenceChanged($new_is_sequence_changed_value);
-
-    return !$old_is_sequence_changed_value || $old_is_sequence_changed_value ne $new_is_sequence_changed_value;
+    return is_sequence_changed($old_checksum, $new_checksum) ? "true" : "false";
 }
 
 sub is_sequence_changed {
