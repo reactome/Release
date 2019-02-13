@@ -456,8 +456,8 @@ while (<$uniprot_records_fh>) {
             ## master sequence update finished
 
 
+            if (!species_value_exists(\%values)) {
             #Inherit species instance (if not already specified) from isoform parent
-            if (!(grep { defined } @{$values{'species'}})) {
                 $values{'species'}->[0] = $sdi->species->[0];
             }
             foreach my $is_ac ( sort keys %isoids ) {    #isoforms update
@@ -1036,6 +1036,11 @@ sub is_sequence_changed {
     my $new_checksum = shift;
 
     return $old_checksum && $new_checksum && $old_checksum ne $new_checksum;
+}
+
+sub species_value_exists {
+    my $values = shift;
+    return grep { defined } @{$values->{'species'}};
 }
 
 sub get_skip_list {
