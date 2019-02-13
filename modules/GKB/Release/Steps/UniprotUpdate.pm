@@ -18,6 +18,13 @@ has '+mail' => ( default => sub {
         'attachment' => $self->directory . "/uniprot.wiki"
     };
 });
+has '+files_to_archive' => ( default => sub {[
+    'duplicated_db_id.txt',
+    'reference_DNA_sequence_report.txt',
+    'sequence_uniprot_report.txt',
+    'trembl_to_update.acc',
+    'uniprot.wiki',
+]});
 
 override 'run_commands' => sub {
     my ($self) = @_;
@@ -36,24 +43,6 @@ override 'run_commands' => sub {
 
     my @args = ("-db", $gkcentral, "-host", $gkcentral_host, "-user", $user, "-pass", $pass);
     $self->cmd("Running uniprot perl script",[["perl uniprot_xml2sql_isoform.pl @args > uniprot.out 2> uniprot.err"]]);
-};
-
-override 'archive_files' => sub {
-    my ($self, $version) = @_;
-
-    my @files_to_archive = (
-        'duplicated_db_id.txt',
-        'reference_DNA_sequence_report.txt',
-        'sequence_uniprot_report.txt',
-        'trembl_to_update.acc',
-        'uniprot.wiki'
-    );
-    # arguments passed to this method are implicitly passed to the superclass method by Moose
-    # https://metacpan.org/pod/release/DOY/Moose-2.0604/lib/Moose/Manual/MethodModifiers.pod#OVERRIDE-AND-SUPER
-    my $archive_directory = super();
-    foreach my $file_to_archive (@files_to_archive) {
-        system "mv $file_to_archive $archive_directory";
-    }
 };
 
 1;
