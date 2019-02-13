@@ -112,6 +112,16 @@ sub create_resources_symbolic_link {
     return;
 }
 
+sub create_reports_directories {
+    my $addlinks_script_dir = shift;
+
+    my $current_dir = getcwd;
+    chdir $addlinks_script_dir;
+    system("mkdir -p reports/duplicateReports");
+    system("mkdir -p reports/diffReports");
+    chdir $current_dir;
+}
+
 sub create_jar_file_symbolic_link {
     my $addlinks_script_dir = shift;
 
