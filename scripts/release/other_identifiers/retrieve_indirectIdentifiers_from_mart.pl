@@ -29,7 +29,6 @@ if ($help) {
 }
 
 foreach my $species_abbreviation (get_species_to_query($species_abbr)) {
-    next if $species_abbreviation eq 'hsap';
     my $species_mart_name = get_species_mart_name($species_abbreviation);
 
     foreach my $identifier (get_identifiers($species_mart_name)) {
