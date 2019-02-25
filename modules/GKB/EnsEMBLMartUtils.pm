@@ -34,6 +34,8 @@ get_uniprot_attributes
 get_default_uniprot_attributes
 get_wget_query
 get_xml_query
+get_wget_query_for_identifier
+get_species_mart_name
 get_uniprot_attribute_tags
 check_for_attribute_error
 get_registry
@@ -204,6 +206,53 @@ $attribute_tags
 XML
 }
 
+sub get_wget_query_for_identifier {
+    my $species_abbreviation = shift;
+    my $identifier = shift;
+
+    return "wget -q -O - '" . get_mart_info_for_species($species_abbreviation)->{'url'} . "?query=" .
+        get_xml_query_for_identifier($species_abbreviation, $identifier) . "'";
+}
+
+sub get_xml_query_for_identifier {
+    my $species_abbreviation = shift;
+    my $identifier = shift;
+
+    my $mart_info = get_mart_info_for_species($species_abbreviation);
+
+    my $dataset = $mart_info->{'dataset'};
+    my $virtual_schema = $mart_info->{'virtual_schema'};
+
+    $dataset // confess "No dataset defined\n";
+    $virtual_schema // confess "No virtual schema defined\n";
+
+    return <<XML;
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Query>
+<Query  virtualSchemaName = "$virtual_schema" formatter = "TSV" header = "0" uniqueRows = "0" count = "">
+    <Dataset name = "$dataset" interface = "default" >
+        <Attribute name = "ensembl_gene_id" />
+        <Attribute name = "ensembl_transcript_id" />
+        <Attribute name = "ensembl_peptide_id" />
+        <Attribute name = "$identifier" />
+    </Dataset>
+</Query>
+XML
+}
+
+sub get_species_mart_name {
+    my $species_abbreviation = shift;
+
+    my $logger = get_logger(__PACKAGE__);
+
+    my $species_name = $species_info{$species_abbreviation}->{'name'}->[0];
+    if ($species_name =~ /^(\w)\w+ (\w+)$/) {
+        return lc("$1$2");
+    } else {
+        $logger->error("Can't form species abbreviation for mart from $species_name\n");
+    }
+}
+
 sub get_uniprot_attribute_tags {
     my @uniprot_attributes = @_;
 
@@ -265,8 +314,10 @@ sub update_registry_file {
     $contents =~ s/(fungi_mart_)(\d+)/$1$ensembl_genome_version/;
     $update ||= ($ensembl_genome_version != $2);
     
-    `echo '$contents' > $registry_file` if $update;
-    `rm -rf *[Cc]ached*/` if $update;
+    if ($update) {
+        `echo '$contents' > $registry_file`;
+        `rm -rf *[Cc]ached*/`;
+    }
     
     return $update;
 }
