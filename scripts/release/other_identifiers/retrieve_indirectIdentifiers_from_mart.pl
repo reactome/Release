@@ -1,12 +1,12 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 use strict;
+use warnings;
 
 use lib "/usr/local/reactomes/Reactome/development/GKB/modules";
 
 use GKB::Config;
-use GKB::DBAdaptor;
-use GKB::EnsEMBLMartUtils qw/:all/;
-use GKB::Utils;
+use GKB::Config_Species;
+use GKB::EnsEMBLMartUtils qw/get_identifiers get_species_mart_name get_wget_query_for_identifier/;
 
 use Data::Dumper;
 use Getopt::Long;
@@ -16,62 +16,62 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_sp);
+our($species_abbr, $help);
 
-(@ARGV) || die "Usage: $0 -sp 'species name'
--user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
+&GetOptions(
+    "sp=s" => \$species_abbr,
+    "help" => \$help
+);
 
-&GetOptions("user:s", "host:s", "pass:s", "port:i", "db:s", "debug", "sp=s");
-
-$opt_db || die "Need database name (-db).\n";    
-
-# Get connection to reactome db
-my $dba = GKB::DBAdaptor->new
-    (
-     -user   => $opt_user,
-     -host   => $opt_host,
-     -pass   => $opt_pass,
-     -port   => $opt_port,
-     -dbname => $opt_db,
-#     -DEBUG => $opt_debug
-     );
-
-# Fetch the species
-$opt_sp ||= 'Homo sapiens';
-
-my $sp = $dba->fetch_instance_by_attribute('Species',[['name',[$opt_sp]]])->[0]
-    || $logger->error_die("No species '$opt_sp' found.\n");
-my $sp_mart_name;
-if ($sp->displayName =~ /^(\w)\w+ (\w+)$/) {
-    $sp_mart_name = lc("$1$2");
-} else {
-    $logger->error_die("Can't form species abbreviation for mart from '" . $sp->displayName . "'.\n");
+if ($help) {
+    print usage_instructions();
+    exit;
 }
 
-my $registry = get_registry();
-IDENTIFIER:foreach my $identifier (get_identifiers($sp_mart_name)) {
-    next if $identifier =~ /chembl|clone_based|dbass|description|ottg|ottt|ottp|shares_cds|merops|mirbase|reactome/;
-    my $query = get_query($registry);
+foreach my $species_abbreviation (get_species_to_query($species_abbr)) {
+    next if $species_abbreviation eq 'hsap';
+    my $species_mart_name = get_species_mart_name($species_abbreviation);
 
-    $query->setDataset($sp_mart_name . "_gene_ensembl");
+    foreach my $identifier (get_identifiers($species_mart_name)) {
+        next if $identifier =~ /chembl|clone_based|dbass|description|ottg|ottt|ottp|shares_cds|merops|mirbase|reactome/;
 
-    $query->addAttribute("ensembl_gene_id");
-    $query->addAttribute("ensembl_transcript_id");
-    $query->addAttribute("ensembl_peptide_id");
-    my $error_occurred;
-    try {
-        $query->addAttribute($identifier);
-    } catch {
-        $logger->warn("could not add attribute $identifier for $sp_mart_name");
-        $error_occurred = 1;
-    };
-    next IDENTIFIER if $error_occurred;
-    
-    $query->formatter("TSV");
+        my $wget_query = get_wget_query_for_identifier($species_abbreviation, $identifier);
+        system "$wget_query > output/$species_mart_name\_$identifier";
+    }
+}
 
-    my $query_runner = get_query_runner();
-    $query_runner->execute($query);
-    open(my $fh, '>', "output/$sp_mart_name\_$identifier");
-    $query_runner->printResults($fh);
-    close $fh;
+# Returns all configured species abbreviations by default
+# or the single species abbreviation if it exists in the
+# @species array imported from Config_Species.pm
+sub get_species_to_query {
+    my $selected_species = shift;
+
+    my @species_to_query;
+    if ($selected_species) {
+        if (any { $_ eq $selected_species } @species) {
+            @species_to_query = ($selected_species);
+        } else {
+            $logger->logconfess("EnsEMBL mart information is unknown for $selected_species");
+        }
+    } else {
+        @species_to_query = @species;
+    }
+
+    return @species_to_query;
+}
+
+sub usage_instructions {
+    return <<END;
+
+This script will attempt to retreive tab-delimited files from EnsEMBL Mart for various
+external identifiers.  The output of the files will have four columns:
+
+EnsEMBL Gene ID\tEnsEMBL Transcript ID\tEnsEMBL Peptide ID\tExternal Identifier ID
+
+By default, this script will query for the set of available identifiers for each species
+specified in the Reactome Config_Species.pm perl module.  A single species can also be
+queried by providing its abbreviation (e.g. hsap for Homo sapiens) with the flag -sp.
+
+Usage: $0 [-sp 'species abbreviation']
+END
 }
