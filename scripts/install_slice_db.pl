@@ -24,7 +24,8 @@ if ($EFFECTIVE_USER_ID != $SUDO_USER) {
 
 my ($db_name, $use_cache) = @ARGV;
 if (!$db_name) {
-    print STDERR "Usage $0 slice_db_name [use_cache=false - default is true if not specified, but only type false after the slice name for no cache]\n";
+    print STDERR "Usage $0 slice_db_name [use_cache=false - default is true if not specified, but only type false after the slice name for no cache]\n\n";
+    print STDERR "For example:\n $0 test_slice_68 use_cache=false\n";
     exit 1;
 }
 
