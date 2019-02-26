@@ -329,7 +329,7 @@ sub get_identifiers {
     my $ensembl_url = 'http://www.ensembl.org/biomart/martservice?' .
         'type=listAttributes&mart=ENSEMBL_MART_ENSEMBL' .
         '&virtualSchema=default' .
-        "&dataset=$species_gene_ensembl" .
+        '&dataset='.$species.'_gene_ensembl' .
         '&interface=default' .
         '&attributePage=feature_page' .
         '&attributeGroup=external' .
