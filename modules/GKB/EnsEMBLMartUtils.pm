@@ -56,28 +56,28 @@ sub get_species_results {
 
 sub get_species_results_with_attribute_info {
     my $species = shift;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     my $species_results_with_attribute_info;
     my $results_complete;
     my $query_attempts = 0;
     until (($species_results_with_attribute_info && $results_complete) || $query_attempts == 3) {
         $query_attempts += 1;
-        
+
         my $five_minutes = 5 * 60;
         timeout $five_minutes => sub {
             $species_results_with_attribute_info = query_for_species_results($species);
         };
 
         $results_complete = $species_results_with_attribute_info->{'results'} =~ /\[success\]$/;
-                            
+
         $logger->info("Query attempt $query_attempts for species $species");
-        $results_complete ? 
-            $logger->info("Results obtained successfully") : 
+        $results_complete ?
+            $logger->info("Results obtained successfully") :
             $logger->warn("Problem obtaining results - got " . $species_results_with_attribute_info->{'results'});
     }
-    
+
     return $species_results_with_attribute_info;
 }
 
@@ -99,7 +99,7 @@ sub query_for_species_results {
         $attribute_with_error
     );
     my $cached_attribute_errors = $uniprot_attribute_info->{'cached_attribute_errors'} // {};
-    
+
     my $species_results = capture_stdout {
         system(get_wget_query($mart_info, $uniprot_attributes));
     };
@@ -112,13 +112,13 @@ sub query_for_species_results {
             {
                 'error' => $attribute_with_error,
                 'attributes' => $uniprot_attributes,
-                'cached_attribute_errors' => $cached_attribute_errors 
+                'cached_attribute_errors' => $cached_attribute_errors
             }
         );
     }
 
     if ($species_results =~ /ERROR/) {
-        $logger->warn("Problem obtaining results - got $species_results"); 
+        $logger->warn("Problem obtaining results - got $species_results");
     }
 
     return {
@@ -146,7 +146,7 @@ sub get_uniprot_attributes {
     my $attribute_with_error = shift;
 
     my $default_uniprot_attributes = get_default_uniprot_attributes();
-    
+
     # Set uniprot attributes to default attributes if no values present
     if (!@{$uniprot_attributes}) {
         $uniprot_attributes = [keys %{$default_uniprot_attributes}];
@@ -154,7 +154,7 @@ sub get_uniprot_attributes {
 
     my @uniprot_attributes = grep { defined } map {
         # Use default if no error with attribute or alternative otherwise
-        $attribute_with_error && ($_ eq $attribute_with_error) ? 
+        $attribute_with_error && ($_ eq $attribute_with_error) ?
             $default_uniprot_attributes->{$_} :
             $_;
     } @{$uniprot_attributes};
@@ -175,7 +175,7 @@ sub get_default_uniprot_attributes {
 sub get_wget_query {
     my $mart_info = shift;
     my $uniprot_attributes = shift;
-    
+
     return "wget -q -O - '" . $mart_info->{'url'} . "?query=" . get_xml_query($mart_info, $uniprot_attributes) . "'";
 }
 
@@ -184,7 +184,7 @@ sub get_xml_query {
 
     my $dataset = $mart_info->{'dataset'};
     my $virtual_schema = $mart_info->{'virtual_schema'};
-    
+
     $dataset // confess "No dataset defined\n";
     $virtual_schema // confess "No virtual schema defined\n";
 
@@ -198,7 +198,7 @@ sub get_xml_query {
     return <<XML;
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Query>
-<Query  virtualSchemaName = "$virtual_schema" formatter = "TSV" header = "0" uniqueRows = "0" count = "" completionStamp = "1">	
+<Query  virtualSchemaName = "$virtual_schema" formatter = "TSV" header = "0" uniqueRows = "0" count = "" completionStamp = "1">
     <Dataset name = "$dataset" interface = "default" >
 $attribute_tags
     </Dataset>
@@ -229,7 +229,7 @@ sub get_xml_query_for_identifier {
     return <<XML;
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Query>
-<Query  virtualSchemaName = "$virtual_schema" formatter = "TSV" header = "0" uniqueRows = "0" count = "">
+<Query  virtualSchemaName = "$virtual_schema" formatter = "TSV" header = "0" uniqueRows = "0" count = "" completionStamp = "1">
     <Dataset name = "$dataset" interface = "default" >
         <Attribute name = "ensembl_gene_id" />
         <Attribute name = "ensembl_transcript_id" />
@@ -269,16 +269,16 @@ sub check_for_attribute_error {
 
     return;
 }
-                   
+
 sub get_registry {
     my $action = shift // 'cached';
     my $registry_file = shift;
-    
+
     if (!$registry_file) {
         $registry_file = get_registry_file_path();
         update_registry_file($registry_file);
     }
-    
+
     my $initializer = BioMart::Initializer->new('registryFile'=>$registry_file,'action'=>$action);
 
     return $initializer->getRegistry();
@@ -288,7 +288,7 @@ sub get_query {
     my $registry = shift // get_registry();
 
     return BioMart::Query->new('registry'=>$registry,'virtualSchemaName'=>'default');
-}    
+}
 
 sub get_query_runner {
     return BioMart::QueryRunner->new();
@@ -296,13 +296,13 @@ sub get_query_runner {
 
 sub update_registry_file {
     my $registry_file = shift // get_registry_file_path();
-    
+
     my $ensembl_version = get_version();
     return unless $ensembl_version =~ /^\d+$/;
-    
+
     my $ensembl_genome_version = get_ensembl_genome_version();
     return unless $ensembl_genome_version =~ /^\d+$/;
-    
+
     my $contents = get_registry_xml_contents($registry_file);
     chomp $contents;
     $contents =~ s/(ensembl_mart_)(\d+)/$1$ensembl_version/;
@@ -313,37 +313,37 @@ sub update_registry_file {
     $update ||= ($ensembl_genome_version != $2);
     $contents =~ s/(fungi_mart_)(\d+)/$1$ensembl_genome_version/;
     $update ||= ($ensembl_genome_version != $2);
-    
+
     if ($update) {
         `echo '$contents' > $registry_file`;
         `rm -rf *[Cc]ached*/`;
     }
-    
+
     return $update;
 }
 
 sub get_identifiers {
     my $species = shift;
     my $ensembl_url = 'http://www.ensembl.org/biomart/martservice?type=listAttributes&mart=ENSEMBL_MART_ENSEMBL&virtualSchema=default&dataset='.$species.'_gene_ensembl&interface=default&attributePage=feature_page&attributeGroup=external&attributeCollection=';
-    
+
     my @identifiers;
-    
+
     foreach my $attribute_type ('xrefs', 'microarray') {
         my $url = $ensembl_url.$attribute_type;
         my $results = `wget -qO- '$url'`;
         push @identifiers, (split /\n/, $results);
     }
-    
+
     return @identifiers, "interpro", "smart", "pfam", "prints", "go_id", "goslim_goa_accession";
 }
 
 sub get_registry_xml_contents {
     my $registry_file = shift // get_registry_file_path();
-    
+
     open(my $registry_file_handle, '<', $registry_file);
     my $contents = join("", <$registry_file_handle>);
     close $registry_file_handle;
-    
+
     return $contents;
 }
 
