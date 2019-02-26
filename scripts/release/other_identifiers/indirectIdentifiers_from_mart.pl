@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 use strict;
 use warnings;
 
@@ -9,13 +9,15 @@ use GKB::Config_Species;
 use GKB::EnsEMBLMartUtils qw/get_species_mart_name/;
 use GKB::DBAdaptor;
 use GKB::Utils;
+
 use Data::Dumper;
 use Getopt::Long;
 use Unicode::CaseFold;
 
 our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_sp);
 
-(@ARGV) || die "Usage: $0 -sp 'species name' -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
+(@ARGV) || die
+    "Usage: $0 -sp 'species code (e.g. hsap)' -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
 
 &GetOptions("user:s", "host:s", "pass:s", "port:i", "db:s", "debug", "sp=s");
 

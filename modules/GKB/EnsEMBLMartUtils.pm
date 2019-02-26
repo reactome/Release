@@ -105,7 +105,9 @@ sub query_for_species_results {
     };
 
     $attribute_with_error = check_for_attribute_error($species_results);
-    if ($attribute_with_error && !$cached_attribute_errors->{$mart_url}{$mart_dataset}{$mart_virtual_schema}{$attribute_with_error}) {
+    if ($attribute_with_error &&
+        !$cached_attribute_errors->{$mart_url}{$mart_dataset}{$mart_virtual_schema}{$attribute_with_error}) {
+
         $cached_attribute_errors->{$mart_url}{$mart_dataset}{$mart_virtual_schema}{$attribute_with_error}++;
         return query_for_species_results(
             $species,
@@ -324,7 +326,14 @@ sub update_registry_file {
 
 sub get_identifiers {
     my $species = shift;
-    my $ensembl_url = 'http://www.ensembl.org/biomart/martservice?type=listAttributes&mart=ENSEMBL_MART_ENSEMBL&virtualSchema=default&dataset='.$species.'_gene_ensembl&interface=default&attributePage=feature_page&attributeGroup=external&attributeCollection=';
+    my $ensembl_url = 'http://www.ensembl.org/biomart/martservice?' .
+        'type=listAttributes&mart=ENSEMBL_MART_ENSEMBL' .
+        '&virtualSchema=default' .
+        "&dataset=$species_gene_ensembl" .
+        '&interface=default' .
+        '&attributePage=feature_page' .
+        '&attributeGroup=external' .
+        '&attributeCollection=';
 
     my @identifiers;
 
