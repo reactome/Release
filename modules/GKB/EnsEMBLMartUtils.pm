@@ -264,7 +264,7 @@ sub get_species_mart_name {
     if ($species_name =~ /^(\w)\w+ (\w+)$/) {
         return lc("$1$2");
     } else {
-        $logger->log_confess("Can't form species abbreviation for mart from $species_name\n");
+        $logger->logconfess("Can't form species abbreviation for mart from $species_name\n");
     }
 }
 
