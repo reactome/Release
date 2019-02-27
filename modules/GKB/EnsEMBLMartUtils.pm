@@ -50,14 +50,16 @@ our %EXPORT_TAGS = (all => [@EXPORT_OK],
                    query => [qw/get_query get_query_runner/]);
 
 sub get_species_results {
-    my $species = shift;
-    return get_species_results_with_attribute_info($species)->{'results'};
+    my $logger = get_logger(__PACKAGE__);
+
+    my $species_abbreviation = shift // $logger->logconfess("Need species abbreviation");
+    return get_species_results_with_attribute_info($species_abbreviation)->{'results'};
 }
 
 sub get_species_results_with_attribute_info {
-    my $species = shift;
-
     my $logger = get_logger(__PACKAGE__);
+
+    my $species_abbreviation = shift // $logger->logconfess("Need species abbreviation");
 
     my $species_results_with_attribute_info;
     my $results_complete;
@@ -67,12 +69,12 @@ sub get_species_results_with_attribute_info {
 
         my $five_minutes = 5 * 60;
         timeout $five_minutes => sub {
-            $species_results_with_attribute_info = query_for_species_results($species);
+            $species_results_with_attribute_info = query_for_species_results($species_abbreviation);
         };
 
         $results_complete = $species_results_with_attribute_info->{'results'} =~ /\[success\]$/;
 
-        $logger->info("Query attempt $query_attempts for species $species");
+        $logger->info("Query attempt $query_attempts for species $species_abbreviation");
         $results_complete ?
             $logger->info("Results obtained successfully") :
             $logger->warn("Problem obtaining results - got " . $species_results_with_attribute_info->{'results'});
@@ -82,12 +84,12 @@ sub get_species_results_with_attribute_info {
 }
 
 sub query_for_species_results {
-    my $species = shift;
-    my $uniprot_attribute_info = shift // {};
-
     my $logger = get_logger(__PACKAGE__);
 
-    my $mart_info = get_mart_info_for_species($species);
+    my $species_abbreviation = shift // $logger->logconfess("Need species abbreviation");
+    my $uniprot_attribute_info = shift // {};
+
+    my $mart_info = get_mart_info_for_species($species_abbreviation);
     my $mart_url = $mart_info->{'url'};
     my $mart_dataset = $mart_info->{'dataset'};
     my $mart_virtual_schema = $mart_info->{'virtual_schema'};
@@ -110,7 +112,7 @@ sub query_for_species_results {
 
         $cached_attribute_errors->{$mart_url}{$mart_dataset}{$mart_virtual_schema}{$attribute_with_error}++;
         return query_for_species_results(
-            $species,
+            $species_abbreviation,
             {
                 'error' => $attribute_with_error,
                 'attributes' => $uniprot_attributes,
@@ -130,11 +132,13 @@ sub query_for_species_results {
 }
 
 sub get_mart_info_for_species {
-    my $species = shift;
+    my $logger = get_logger(__PACKAGE__);
 
-    my $species_dataset = $species_info{$species}->{'mart_group'};
-    my $species_virtual_schema = $species_info{$species}->{'mart_virtual_schema'} || 'default';
-    my $species_mart_url  = $species_info{$species}->{'mart_url'} || 'http://www.ensembl.org/biomart/martservice';
+    my $species_abbreviation = shift // $logger->logconfess("Need species abbreviation");
+
+    my $species_dataset = $species_info{$species_abbreviation}->{'mart_group'};
+    my $species_virtual_schema = $species_info{$species_abbreviation}->{'mart_virtual_schema'} || 'default';
+    my $species_mart_url  = $species_info{$species_abbreviation}->{'mart_url'} || 'http://www.ensembl.org/biomart/martservice';
 
     return {
         'dataset' => $species_dataset,
@@ -175,14 +179,19 @@ sub get_default_uniprot_attributes {
 }
 
 sub get_wget_query {
-    my $mart_info = shift;
-    my $uniprot_attributes = shift;
+    my $logger = get_logger(__PACKAGE__);
+
+    my $mart_info = shift // $logger->logconfess("Need EnsEMBL Mart information");
+    my $uniprot_attributes = shift // $logger->logconfess("Need UniProt attributes to query EnsEMBL Mart Dataset");
 
     return "wget -q -O - '" . $mart_info->{'url'} . "?query=" . get_xml_query($mart_info, $uniprot_attributes) . "'";
 }
 
 sub get_xml_query {
-    my ($mart_info, $uniprot_attributes) = @_;
+    my $logger = get_logger(__PACKAGE__);
+
+    my $mart_info = shift // $logger->logconfess("Need EnsEMBL Mart information");
+    my $uniprot_attributes = shift // $logger->logconfess("Need UniProt attributes to query EnsEMBL Mart Dataset");
 
     my $dataset = $mart_info->{'dataset'};
     my $virtual_schema = $mart_info->{'virtual_schema'};
@@ -209,16 +218,20 @@ XML
 }
 
 sub get_wget_query_for_identifier {
-    my $species_abbreviation = shift;
-    my $identifier = shift;
+    my $logger = get_logger(__PACKAGE__);
+
+    my $species_abbreviation = shift // $logger->logconfess("Need species abbreviation");
+    my $identifier = shift // $logger->logconfess("Need identifier to query");
 
     return "wget -q -O - '" . get_mart_info_for_species($species_abbreviation)->{'url'} . "?query=" .
         get_xml_query_for_identifier($species_abbreviation, $identifier) . "'";
 }
 
 sub get_xml_query_for_identifier {
-    my $species_abbreviation = shift;
-    my $identifier = shift;
+    my $logger = get_logger(__PACKAGE__);
+
+    my $species_abbreviation = shift // $logger->logconfess("Need species abbreviation");
+    my $identifier = shift // $logger->logconfess("Need identifier to query");
 
     my $mart_info = get_mart_info_for_species($species_abbreviation);
 
@@ -243,9 +256,9 @@ XML
 }
 
 sub get_species_mart_name {
-    my $species_abbreviation = shift;
-
     my $logger = get_logger(__PACKAGE__);
+
+    my $species_abbreviation = shift // $logger->logconfess("Need species abbreviation");
 
     my $species_name = $species_info{$species_abbreviation}->{'name'}->[0];
     if ($species_name =~ /^(\w)\w+ (\w+)$/) {
@@ -262,7 +275,7 @@ sub get_uniprot_attribute_tags {
 }
 
 sub check_for_attribute_error {
-    my $species_results = shift;
+    my $species_results = shift // '';
 
     # Capture and return attribute that caused error
     if ($species_results =~ /Attribute (?<attribute>\w+) NOT FOUND/) {
