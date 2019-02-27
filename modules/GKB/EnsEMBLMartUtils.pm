@@ -325,7 +325,8 @@ sub update_registry_file {
 }
 
 sub get_identifiers {
-    my $species = shift;
+    my $species = shift // confess "Need species name in form like 'hsapiens' to retrieve identifiers";
+
     my $ensembl_url = 'http://www.ensembl.org/biomart/martservice?' .
         'type=listAttributes&mart=ENSEMBL_MART_ENSEMBL' .
         '&virtualSchema=default' .
