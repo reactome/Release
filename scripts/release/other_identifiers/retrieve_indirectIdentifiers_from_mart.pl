@@ -15,7 +15,10 @@ use Try::Tiny;
 
 use Log::Log4perl qw/get_logger/;
 
-run(@ARGV) unless caller();
+# This statement allows the script either to be executed or loaded as a module
+# for testing purposes.
+# https://www.perl.com/article/107/2014/8/7/Rescue-legacy-code-with-modulinos/
+run(@ARGV) if !caller();
 
 sub run {
     Log::Log4perl->init(\$LOG_CONF);
@@ -37,6 +40,7 @@ sub run {
         my $species_mart_name = get_species_mart_name($species_abbreviation);
 
         foreach my $identifier (get_identifiers($species_mart_name)) {
+            # TODO: Add these values to a configured skip list in a separate file
             next if $identifier =~ /chembl|clone_based|dbass|description|ottg|ottt|ottp|shares_cds|merops|mirbase|reactome/;
 
             my $output_file = "output/$species_mart_name\_$identifier";
