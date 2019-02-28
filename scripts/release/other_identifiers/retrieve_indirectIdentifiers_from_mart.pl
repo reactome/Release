@@ -18,7 +18,9 @@ use Log::Log4perl qw/get_logger/;
 # This statement allows the script either to be executed or loaded as a module
 # for testing purposes.
 # https://www.perl.com/article/107/2014/8/7/Rescue-legacy-code-with-modulinos/
-run(@ARGV) if !caller();
+if (!caller()) {
+    run(@ARGV);
+}
 
 sub run {
     Log::Log4perl->init(\$LOG_CONF);
