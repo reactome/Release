@@ -11,25 +11,6 @@ use Exporter();
 @species = qw(hsap ddis pfal spom scer cele sscr btau cfam mmus rnor ggal xtro drer dmel);
 
 %species_info = (
-    # 'atha' => {
-    #     'name' => ['Arabidopsis thaliana'],
-    #     'refdb' => {'
-    #         dbname' => ['ENSEMBL', 'Ensembl', 'ENSEMBL_Arabidopsis_PROTEIN'],
-    #         'url' => 'http://plants.ensembl.org/Arabidopsis_thaliana',
-    #         'access' => 'http://plants.ensembl.org/Arabidopsis_thaliana/Transcript/ProteinSummary?peptide=###ID###',
-    #         'ensg_access' => 'http://plants.ensembl.org/Arabidopsis_thaliana/geneview?gene=###ID###&db=core'
-    #     },
-    #     'alt_refdb' => {
-    #         'dbname' => ['TAIR'],
-    #         'url' => 'http://www.arabidopsis.org/index.jsp',
-    #         'access' => 'http://www.arabidopsis.org/servlets/TairObject?type=locus&name=###ID###',
-    #         'alt_id' => '-TAIR-G'
-    #     }, #regex to remove suffix from ENSG identifier
-    #     'group' => 'Fungi/Plants',
-    #     'mart_url' => 'http://plants.ensembl.org/biomart/martservice',
-    #     'mart_virtual_schema' => 'plants_mart',
-    #     'mart_group' => 'athaliana_eg_gene'
-    # },
     'btau' => {
         'name' => ['Bos taurus'],
         'refdb' => {
@@ -141,19 +122,6 @@ use Exporter();
         'group' => 'Human',
         'mart_group' => 'hsapiens_gene_ensembl'
     },
-    # 'mtub' => {
-    #     'name' => ['Mycobacterium tuberculosis'],
-    #     'pan_name' => 'mycobacterium_tuberculosis_h37rv_asm19595v2',
-    #     'refdb' => {
-    #         'dbname' => ['ENSEMBL', 'Ensembl', 'Ensembl', 'ENSEMBL_M_tuberculosis_PROTEIN'],
-    #         'url' => 'http://bacteria.ensembl.org/Mycobacterium/M_tuberculosis_H37Rv/Info/Index',
-    #         'access' => 'http://bacteria.ensembl.org/Mycobacterium/M_tuberculosis_H37Rv/Transcript/ProteinSummary?peptide=###ID###',
-    #         'ensg_access' => 'http://bacteria.ensembl.org/Mycobacterium/M_tuberculosis_H37Rv/geneview?gene=###ID###&db=core'
-    #     },
-    #     'group' => 'Eubacteria',
-    #     'mart_group' => 'myc_30_gene',
-    #     'prokaryote' => 1
-    # },
     'mmus' => {
         'name' => ['Mus musculus'],
         'refdb' => {
@@ -166,19 +134,6 @@ use Exporter();
         'compara' => 'core',
         'mart_group' => 'mmusculus_gene_ensembl'
     },
-    # 'osat' => {
-    #     'name' => ['Oryza sativa'],
-    #     'refdb' => {
-    #         'dbname' => ['ENSEMBL', 'Ensembl', 'ENSEMBL_Oryza_sativa_PROTEIN'],
-    #         'url' => 'http://plants.ensembl.org/Oryza_sativa/Info/Index',
-    #         'access' => 'http://plants.ensembl.org/Oryza_sativa/Transcript/ProteinSummary?peptide=###ID###',
-    #         'ensg_access' => 'http://plants.ensembl.org/Oryza_sativa/geneview?gene=###ID###&db=core'
-    #     },
-    #     'group' => 'Fungi/Plants',
-    #     'mart_url' => 'http://plants.ensembl.org/biomart/martservice',
-    #     'mart_virtual_schema' => 'plants_mart',
-    #     'mart_group' => 'osativa_eg_gene'
-    # },
     'pfal' => {
         'name' => ['Plasmodium falciparum'],
         'refdb' => {
@@ -256,18 +211,6 @@ use Exporter();
         'mart_group' => 'sscrofa_gene_ensembl',
         'compara' => 'core'
     },
-    # 'tgut' => {
-    #     'name' => ['Taeniopygia guttata'],
-    #     'refdb' => {
-    #         'dbname' => ['ENSEMBL', 'Ensembl', 'ENSEMBL_Taeniopygia_guttata_PROTEIN'],
-    #         'url' => 'http://www.ensembl.org/Taeniopygia_guttata/Info/Index/',
-    #         'access' => 'http://www.ensembl.org/Taeniopygia_guttata/Transcript/ProteinSummary?peptide=###ID###',
-    #         'ensg_access' => 'http://www.ensembl.org/Taeniopygia_guttata/geneview?gene=###ID###&db=core'
-    #     },
-    #     'group' => 'Vertebrate',
-    #     'mart_group' => 'tguttata_gene_ensembl',
-    #     'compara' => 'core'
-    # },
     'xtro' => {
         'name' => ['Xenopus tropicalis'],
         'refdb' => {
