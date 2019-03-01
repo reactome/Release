@@ -1,10 +1,16 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 use strict;
+use warnings;
 
-#This script wraps the various steps needed for inference from one species to another. It creates the ortho database, tweaks the datamodel needed for the inference, and runs the inference script, followed by two clean-up scripts.
-#The standard run (for Reactome releases) only requires the reactome release version on the command line. One can also change the source species, restrict the run to one target species, or indicate a source database other than the default test_slice_reactomeversion_myisam. It's also possible to limit inference to specific Events by giving the internal id of the upstream event(s) on the command line. Inference will then be performed for these Events and all their downstream Events.
+# This script wraps the various steps needed for inference from one species to another. It creates the ortho database,
+# tweaks the datamodel needed for the inference, and runs the inference script, followed by two clean-up scripts.
+# The standard run (for Reactome releases) only requires the reactome release version on the command line. One can also
+# change the source species, restrict the run to one target species, or indicate a source database other than the
+# default test_slice_reactomeversion_myisam. It's also possible to limit inference to specific Events by giving the
+# internal id of the upstream event(s) on the command line. Inference will then be performed for these Events and all
+# their downstream Events.
 
-use lib "/usr/local/gkb/modules";
+use lib '/usr/local/gkb/modules';
 
 use GKB::Config;
 use GKB::DBAdaptor;
@@ -13,87 +19,107 @@ use GKB::Utils_esther;
 use GKB::Config_Species;
 
 use Data::Dumper;
-use Getopt::Long;
 use DBI;
+use English qw/-no_match_vars/;
+use Getopt::Long;
+use List::MoreUtils qw/any/;
+use Readonly;
 
 use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-our($opt_r, $opt_from, $opt_sp, $opt_source_db, $opt_debug, $opt_host, $opt_port, $opt_user, $opt_pass, $opt_release_date);
+@ARGV || die "Usage: $PROGRAM_NAME -source_db [source database] -target_db [database_to_create] " .
+    '-source_species [species_to_infer_from - default hsap] -target_species [species_to_infer_to - default all] ' .
+    '-release [Reactome version number] -release_date [scheduled release date as yyyy-mm-dd]';
 
-@ARGV || die "Usage: $0 -r reactome_version(e.g.14)  -from source species (default = hsap) -sp sp_abbreviation (only for species-specific Reactome) -source_db name of source database (default = test_slice_reactomeversion_myisam)   (optional list of top event ids for limited inference) -debug\n";
+my ($user, $pass, $host, $port, $source_db, $target_db, $source_species, $target_species, $release, $release_date, $debug);
+GetOptions(
+    'user:s' => \$user,
+    'pass:s' => \$pass,
+    'host:s' => \$host,
+    'port:i' => \$port,
+    'source_db:s' => \$source_db,
+    'target_db:s' => \$target_db,
+    'source_species:s' => \$source_species,
+    'target_species:s' => \$target_species,
+    'release:i' => \$release,
+    'release_date:s' => \$release_date,
+    'debug' => \$debug
+);
+$source_db || die "Need source database: -source_db [database from which to copy content]\n";
+$release || die "Need release version: -release [Reactome version number]\n";
+$release_date || die "Need release date: -release_date [scheduled release date as yyyy-mm-dd]\n";
+$user ||= $GKB::Config::GK_DB_USER;
+$pass ||= $GKB::Config::GK_DB_PASS;
+$host ||= $GKB::Config::GK_DB_HOST;
+$port ||= $GKB::Config::GK_DB_PORT;
+$target_db ||= 'release_current';
+$source_species ||= 'hsap'; # Human is defined as default source species
 
-&GetOptions("r:i", "from:s", "sp:s", "source_db:s", "debug", "host:s", "port:s", "user:s", "pass:s", "release_date:s");
-
-
-my %db_options = ("-host" => ($opt_host ||= "localhost"),
-		  "-port" => ($opt_port ||= 3306),
-		  "-user" => $opt_user,
-		  "-pass" => $opt_pass		  
-		  );
+my %db_options = (
+    '-host' => $host,
+    '-port' => $port,
+    '-user' => $user,
+    '-pass' => $pass,
+);
 my $db_option_string = create_db_option_string(\%db_options);
 
-
-#Define the source database
-my $source = ($opt_source_db) ? $opt_source_db : "test_slice_$opt_r\_myisam";
-
 #create database handle - needed to create the source database copy which will be used to add orthology data
-my $dbc = DBI->connect("DBI:mysql:database=$source;host=$opt_host;port=$opt_port", $opt_user, $opt_pass,
-            { RaiseError => 1, AutoCommit => 1});
+my $dbc = DBI->connect(
+    "DBI:mysql:database=$source_db;host=$host;port=$port",
+    $user,
+    $pass,
+    { RaiseError => 1, AutoCommit => 1}
+);
 if (!$dbc) {
-     $logger->error_die("Error connecting to database; $DBI::errstr\n");
+    $logger->error_die("Error connecting to database; $DBI::errstr\n");
 }
 
-# create database - depending on whether all target species are used, or only one ($opt_sp),
-# whether a source species ($opt_from) is specified, and whether a source database ($opt_source_db) is given,
-# or the default source (test_reactome_XX) is used, the database name is constructed to reflect this
-my $db = construct_db_name($opt_sp, $opt_from, $opt_source_db, $opt_r);
+# Create and populate target db from source db
+system("mysql -u$user -p$pass -e 'drop database if exists $target_db; create database $target_db'") == 0 or die "$?";
+run("mysqldump --opt -u$user -p$pass -h$host $source_db | mysql -u$user -p$pass -h$host $target_db") == 0 or die "$?";
 
-# Create and populate test_reactome_XX from test_slice_XX_myisam
-system("mysql -u$opt_user -p$opt_pass -e 'drop database if exists $db'") == 0 or die "$?";
-system("mysql -u$opt_user -p$opt_pass -e 'create database $db'") == 0 or die "$?";
-run("mysqldump --opt -u$opt_user -p$opt_pass -h$opt_host $source | mysql -u$opt_user -p$opt_pass -h$opt_host $db") == 0 or die "$?";
-
-#Human is defined as default source species
-$opt_from || ($opt_from = 'hsap');
-
-#Some datamodel changes are required for running the script, mainly to adjust defining attributes in order to avoid either duplication or merging of instances in the inference procedure, plus introduction of some additional attributes
-my $exit_value = run("perl tweak_datamodel.pl -db $db $db_option_string");
+# Some datamodel changes are required for running the script, mainly to adjust defining attributes in order to avoid
+# either duplication or merging of instances in the inference procedure, plus introduction of some additional attributes
+my $exit_value = run("perl tweak_datamodel.pl -db $target_db $db_option_string");
 if ($exit_value != 0) {
     $logger->error_die("problem encountered during tweak_datamodel, aborting\n");
 }
 
 #run script for each species (order defined in config.pm)
-foreach my $sp (@species) {
-    $logger->info("wrapper_ortho_inference: considering sp=$sp\n");
-    next if $sp eq $opt_from; #skip source species in species list
-    if ($opt_sp) {
-       next unless $sp eq $opt_sp;
-    } else {
-       next if $sp eq 'mtub';
+my @species_to_exclude = qw/mtub/;
+foreach my $current_species (@species) {
+    $logger->info("wrapper_ortho_inference: considering species=$current_species\n");
+    next if $current_species eq $source_species; #skip source species in species list
+    next if any { $_ eq $current_species } @species_to_exclude;
+    if ($target_species) {
+       next unless $current_species eq $target_species;
     }
     $logger->info("wrapper_ortho_inference: running infer_events script\n");
-    run("perl infer_events.pl -db $db -r $opt_r -from $opt_from -sp $sp -release_date $opt_release_date -thr 75 @ARGV $db_option_string"); #run script with 75% complex threshold
+    run(
+        "perl infer_events.pl -db $target_db -r $release -from $source_species -sp $target_species " .
+        " -release_date $release_date -thr 75 @ARGV $db_option_string"
+    ); #run script with 75% complex threshold
 }
-`chgrp gkb $opt_r/* 2> /dev/null`; # Allows all group members to read/write compara release files
+`chgrp reactome $release/* 2> /dev/null`; # Allows all group members to read/write compara release files
 
 $logger->info("wrapper_ortho_inference: run clean up scripts\n");
 #These are two "clean-up" scripts to remove unused PhysicalEntities and to update display names
-run("perl remove_unused_PE.pl -db $db $db_option_string");
-run("perl updateDisplayName.pl -db $db -class PhysicalEntity $db_option_string");
+run("perl remove_unused_PE.pl -db $target_db $db_option_string");
+run("perl updateDisplayName.pl -db $target_db -class PhysicalEntity $db_option_string");
 
-$logger->info("$0 has finished its job\n");
+$logger->info("$PROGRAM_NAME has finished its job\n");
 
 sub create_db_option_string {
      my $db_options_hashref = shift;
 
      my $logger = get_logger(__PACKAGE__);
 
-     my $db_option_string = "";	
+     my $db_option_string = '';
      foreach my $option_key (keys %{$db_options_hashref}) {
 	  my $option_value = $db_options_hashref->{$option_key};
-	  
+
 	  if ($option_value) {
 	       $db_option_string .= " $option_key $option_value";
 	  }
@@ -104,30 +130,11 @@ sub create_db_option_string {
      return $db_option_string;
 }
 
-sub construct_db_name {
-     my $target_species = shift;
-     my $source_species = shift;
-     my $source_db = shift;
-     my $release_number = shift;
-
-     # Default is test_reactome_XX
-     my $db = ($source_db) ? "$source_db\_ortho" : "test_reactome_$release_number";
-
-     if ($source_species) { # Other than default (i.e. human) as source species
-	  my $sp = ($target_species) ? $target_species : 'all'; # Individual target species
-	  $db .= "\_$source_species\_$sp";
-     } elsif ($target_species) { # Individual target species
-	  $db .= "\_$target_species";
-     }
-
-     return $db;
-}
-
 sub run {
     my $cmd = shift;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     $logger->info("Now starting: $cmd\n");
     my $exit_value = system($cmd);
     if ($exit_value != 0) {
