@@ -55,8 +55,6 @@ override 'run_commands' => sub {
             ["perl build_orthoinference_jar.pl -release $version -release_date $release_date -person_id $person_id" . 
              " > build_orthoinference_jar.out 2> build_orthoinference_jar.err"],
             ['./runOrthoinference.sh > runOrthoinference.out 2> runOrthoinference.err'],
-            ["perl remove_unused_PE.pl -user $user -pass $pass -host $host -port $port -db $db" . 
-             " > remove_unused_PE.out 2> remove_unused_PE.err"],
             ["perl updateDisplayName.pl -user $user -pass $pass -host $host -port $port -db $db -class PhysicalEntity" .
              " > updateDisplayName.out 2> updateDisplayName.err"],
             ['rm -f ../website_files_update/report_ortho_inference.txt'],
