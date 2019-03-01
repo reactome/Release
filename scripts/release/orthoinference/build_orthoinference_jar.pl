@@ -42,7 +42,7 @@ if (! (-d "$orthoinference_repository/.git")) {
 chdir $orthoinference_repository;
 system 'git pull';
 run_command('git checkout develop', {
-    ignore_error => qr/^Already on .*/;
+    ignore_error => qr/^Already on .*/
 });
 chdir 'release-common-lib';
 system 'mvn clean install';
