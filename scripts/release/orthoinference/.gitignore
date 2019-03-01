@@ -1,2 +1,4 @@
 [0-9]*
 data-release-pipeline
+*.out
+runOrthoinference.sh
