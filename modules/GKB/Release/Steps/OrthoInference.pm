@@ -34,17 +34,17 @@ override 'run_commands' => sub {
 
     my $skip_list_verified = $self->user_input->{'skip_list_verified'}->{'response'} =~ /^y/i;
     if (!$skip_list_verified) {
-        croak "Skip list must be verified before running the orthoinference process\n";
+        confess "Skip list must be verified before running the orthoinference process\n";
     }
 
     my $release_date = $self->user_input->{'release_date'}->{'response'};
     if (!$release_date || $release_date !~ /^\d{4}-\d{2}-\d{2}$/) {
-        croak "Release date for version $version needed as yyyy-mm-dd\n";
+        confess "Release date for version $version needed as yyyy-mm-dd\n";
     }
 
     my $person_id = $self->user_input->{'person_id'}->{'response'};
     if (!$person_id || $person_id !~ /^\d+$/) {
-        croak "Person instance db id for instance edit is needed\n";
+        confess "Person instance db id for instance edit is needed\n";
     }
 
     $self->cmd('Creating orthopredictions and backing up database',
