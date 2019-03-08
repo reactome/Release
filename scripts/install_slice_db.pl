@@ -8,6 +8,9 @@ use English;
 use File::Basename;
 use Readonly;
 
+use lib '/opt/GKB/modules';
+use GKB::Config;
+
 Readonly my $SUDO_USER => 0;
 Readonly my $STAGING => "/usr/local/reactomes/Reactome/production/staging";
 Readonly my $RESTFUL_API => "$STAGING/webapps/ReactomeRESTfulAPI";
@@ -21,9 +24,16 @@ if ($EFFECTIVE_USER_ID != $SUDO_USER) {
 
 my ($db_name, $use_cache) = @ARGV;
 if (!$db_name) {
-    print STDERR "Usage $0 slice_db_name [use_cache=false - default is true if not specified, but only type false after the slice name for no cache]\n";
+    print STDERR "Usage $0 slice_db_name [use_cache=false - default is true if not specified, but only type false after the slice name for no cache]\n\n";
+    print STDERR "For example:\n $0 test_slice_68 use_cache=false\n";
     exit 1;
 }
+
+if (!db_exists($db_name)) {
+    print STDERR "The database provided $db_name does not exist on the local mysql server\n";
+    exit 1;
+}
+
 $use_cache && $use_cache =~ /^use_cache=(true|false)/;
 $use_cache = $1 || 'true'; 
 
@@ -66,5 +76,17 @@ system(qq(perl -i -pe "s/GK_DB_NAME\\s*=\\s*\\K'\\S+';/'$db_name';/" $CONFIG_SEC
 if (!(`grep $db_name $CONFIG_SECRETS`)) {
     print STDERR "Database renaming for $CONFIG_SECRETS failed\n";
     exit 1;
+}
+
+sub db_exists {
+    my $db_name = shift;
+    my $user = $GK_DB_USER;
+    my $pass = $GK_DB_PASS;
+
+    no autodie qw/system/;
+    my $return_value = system("mysql -u $user -p$pass -e \"use $db_name\" > /dev/null 2>&1");
+    use autodie qw/system/;
+
+    return $return_value == 0; # 0 return value indicates success (i.e. db exists)
 }
 
