@@ -52,6 +52,7 @@ $addlinks_dir ||= "$cwd/AddLinks";
 build_jar($addlinks_dir); #if $rebuild_jar || !(-e "$addlinks_dir/target");
 create_resources_symbolic_link("$addlinks_dir/scripts");
 create_jar_file_symbolic_link("$addlinks_dir/scripts");
+create_reports_directories("$addlinks_dir/scripts");
 set_properties("$addlinks_dir/src/main/resources/db.properties", {
     'database.user' => $user,
     'database.password' => $pass,
@@ -67,6 +68,7 @@ set_properties("$addlinks_dir/src/main/resources/auth.properties", {
 }); # Orphanet, Brenda, Dock Blaster, and COSMIC credentials
 set_properties("$addlinks_dir/src/main/resources/addlinks.properties", {'executeAsPersonID' => $person_id});
 configure_application_context($configuration, "$addlinks_dir/src/main/resources/application-context.xml");
+
 run_addlinks("$addlinks_dir/scripts");
 
 sub update_addlinks_repo {
