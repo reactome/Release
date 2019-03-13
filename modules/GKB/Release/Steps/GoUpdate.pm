@@ -27,8 +27,8 @@ override 'run_commands' => sub {
     );
 
     $self->cmd('Backing up database',
-        [["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral >
-            $gkcentral\_after_uniprot_update.dump"]]
+        [["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral > " .
+          "$gkcentral\_after_uniprot_update.dump"]]
     );
 
     my @args = ('-db', $gkcentral, '-host', $gkcentral_host, '-user', $user, '-pass', $pass);
