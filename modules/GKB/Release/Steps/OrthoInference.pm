@@ -41,8 +41,14 @@ override 'run_commands' => sub {
     $self->cmd("Creating orthopredictions and backing up database",
         [
             ["mkdir -p $version"],
-            ["perl wrapper_ortho_inference.pl -r $version -user $user -pass $pass -port 3306 -release_date $release_date > $version/wrapper_ortho_inference.out"],
-            ["rm -f ../website_files_update/report_ortho_inference.txt"],
+            ["perl create_orthoinference_db.pl -source_db $slicedb -target_db $db" .
+             " > create_orthoinference_db.out 2> create_orthoinference_db.err"],
+            ["perl build_orthoinference_jar.pl -release $version -release_date $release_date -person_id $person_id" .
+             " > build_orthoinference_jar.out 2> build_orthoinference_jar.err"],
+            ['./runOrthoinference.sh > runOrthoinference.out 2> runOrthoinference.err'],
+            ["perl updateDisplayName.pl -user $user -pass $pass -host $host -port $port -db $db -class PhysicalEntity" .
+             " > updateDisplayName.out 2> updateDisplayName.err"],
+            ['rm -f ../website_files_update/report_ortho_inference.txt'],
             ["ln $release/orthoinference/$version/report_ortho_inference_$db.txt ../website_files_update/report_ortho_inference.txt"],
             ["mysqldump --opt -u$user -p$pass -P3306 $db > $db\_after_ortho.dump"]
         ]
