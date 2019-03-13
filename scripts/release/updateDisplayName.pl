@@ -3,6 +3,8 @@
 use lib "/usr/local/gkb/modules";
 use lib "$ENV{HOME}/bioperl-1.0";
 use lib "$ENV{HOME}/GKB/modules";
+
+use GKB::Config;
 use GKB::DBAdaptor;
 use GKB::Utils_esther;
 use Data::Dumper;
@@ -28,10 +30,10 @@ $opt_class || die "Need class name (-class).\n";
 my $dba = GKB::DBAdaptor->new
     (
      -dbname => $opt_db,
-     -user   => $opt_user,
-     -host   => $opt_host,
-     -pass   => $opt_pass,
-     -port   => $opt_port,
+     -user   => $opt_user || $GKB::Config::GK_DB_USER,
+     -host   => $opt_host || $GKB::Config::GK_DB_HOST,
+     -pass   => $opt_pass || $GKB::Config::GK_DB_PASS,
+     -port   => $opt_port || $GKB::Config::GK_DB_PORT,
      -driver => 'mysql',
      -DEBUG => $opt_debug
      );
@@ -54,7 +56,7 @@ foreach my $i (@{$ar}) {
     $i->namedInstance; # display name updated here
     next if $old_display_name eq $i->displayName;
     
-    print $i->extended_displayName, "\t", $old_display_name, "\n";
+    print $i->displayName, "\t", $old_display_name, "\n";
     
     $i->Modified( @{ $i->Modified } );
     $i->add_attribute_value( 'modified', $instance_edit );
