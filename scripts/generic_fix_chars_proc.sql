@@ -33,14 +33,14 @@ BEGIN
 		special_char VARCHAR(10),
 		replacement_char varchar(10),
         INDEX(special_char)
-	) character set 'utf8' collate 'utf8_general_ci';
+	) character set 'utf8mb4' collate 'utf8mb4_unicode_ci';
 
 	drop temporary table if exists fixed_vals;
 	create temporary table if not exists fixed_vals
 	(
 		db_id int unique key,
 		fixed_val text
-	) character set 'utf8' collate 'utf8_general_ci';
+	) character set 'utf8mb4' collate 'utf8mb4_unicode_ci';
 	-- The original mappings came from here: http://www.i18nqa.com/debug/utf8-debug.html
 	insert into special_chars
 		(replacement_char,special_char)
