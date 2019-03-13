@@ -22,6 +22,7 @@ $version (Reactome release version)
 $prevver (previous Reactome release version)
 $db (Reactome release database -- e.g. test_reactome_XX)
 $previous_db (previous Reactome release database)
+$live_db (production MySQL database name)
 $slicedb (Reactome slice database -- e.g. test_slice_XX)
 $previous_slice_db (Previous release's slice database)
 $stable_id_db (Reactome stable identifier database)
@@ -113,6 +114,7 @@ our $db = "release_current"; # Current release database (e.g. test_reactome_38)
 our $previous_db = 'release_previous'; # Previous release database
 our $slicedb = "slice_current"; # Current slice database (e.g. test_slice_38)
 our $previous_slice_db = 'slice_previous'; # Slice database from the previous release
+our $live_db = 'current';
 our $stable_id_db = "stable_identifiers";
 our $gkcentral = "central";
 our $gkcentral_host = "localhost";
@@ -184,7 +186,7 @@ our $log_conf = dirname(__FILE__)."/releaselog.conf";
 our @EXPORT = qw/
     $TEST_MODE
     $user $pass $sudo $port $reactome_unix_group $date $version $prevver
-    $db $previous_db $slicedb $previous_slice_db $stable_id_db $gkcentral $gkcentral_host
+    $db $previous_db $slicedb $previous_slice_db $live_db $stable_id_db $gkcentral $gkcentral_host
     $base_dir $gkbdev $scripts $release $website $website_static $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server $curator_server %hosts %maillist
     $log_conf
