@@ -202,7 +202,7 @@ sub is_electronically_inferred {
 
     my $dba = $instance->dba();
     my $db_name = $dba->db_name();
-    return 0 unless $db_name =~ /^test_reactome_\d+$/ || $db_name eq 'gk_current';
+    return 0 unless $db_name =~ /^test_reactome_\d+$/ || $db_name eq 'gk_current' || $db_name eq 'release_current';
 
     # first, let's check to see if the "magic" note is in the Created InstanceEdit for this object.
     my $created = $instance->created->[0];
