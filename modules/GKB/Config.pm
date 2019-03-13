@@ -116,7 +116,7 @@ $WWW_USER = 'nobody';
 # Various paths
 ##################################################################################
 $REACTOME_ROOT_DIR = '/usr/local/reactomes/Reactome/production';
-$GK_ROOT_DIR = '/usr/local/gkb';
+$GK_ROOT_DIR = "$REACTOME_ROOT_DIR/Release";
 $GK_JAVA_CODEBASE = "/jars";
 $GK_TMP_IMG_DIR = "$REACTOME_ROOT_DIR/Website/static/figures";
 #$GK_TMP_IMG_DIR = "/opt/GKB/website/images";
@@ -146,7 +146,7 @@ $SKY_REPLACEMENT_IMAGE = undef;
 $DEFAULT_IMAGE_FORMAT = 'png';
 
 # format YYYYMMDD
-$LAST_RELEASE_DATE = 20180927;
+$LAST_RELEASE_DATE = 20181213;
 
 #$DEFAULT_VIEW_FORMAT = 'sidebarwithdynamichierarchy';
 $DEFAULT_VIEW_FORMAT = 'elv';
