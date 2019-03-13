@@ -57,13 +57,13 @@ sub AUTOLOAD {
     $self->throw("invalid attribute method: ->$attr()") unless $ok_field{$attr};
     $self->{$attr} = shift if @_;
     return $self->{$attr};
-}  
+}
 
 sub new {
     my($pkg, $wsdl) = @_;
 
     update_registry_file();
-    
+
     # Get class variables from superclass and define any new ones
     # specific to this class.
     $pkg->get_ok_field();
@@ -93,9 +93,9 @@ sub convert {
 # You *must* supply a species name for list conversion to work.
 sub convert_list {
     my ($self, $input_db, $input_ids, $output_db, $species) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
-    
+
     if ($input_db eq 'UniProt') {
     	if ($output_db eq 'OMIM') {
 	    return $self->convert_list_uniprot_to_omim($input_ids, $species);
@@ -135,7 +135,7 @@ sub convert_list {
     }
 
     $logger->warn("unknown database pair, i/p=$input_db, o/p=$output_db\n");
-    
+
     return undef;
 }
 
@@ -157,7 +157,7 @@ sub convert_list_uniprot_to_omim {
 # the main UniProt ID by a hyphen.
 sub convert_list_uniprot_to_refseq_peptide {
     my ($self, $input_ids, $species) = @_;
-    
+
     my @input_variant_ids = ();
     my @input_no_variant_ids = ();
     foreach my $input_id (@{$input_ids}) {
@@ -167,7 +167,7 @@ sub convert_list_uniprot_to_refseq_peptide {
 	    push(@input_no_variant_ids, $input_id);
 	}
     }
-    
+
     my $output_id_hash = {};
     if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'refseq_peptide', $species))) {
     	return undef;
@@ -180,7 +180,7 @@ sub convert_list_uniprot_to_refseq_peptide {
 # the main UniProt ID by a hyphen.
 sub convert_list_uniprot_to_pdb {
     my ($self, $input_ids, $species) = @_;
-	
+
     my @input_variant_ids = ();
     my @input_no_variant_ids = ();
     foreach my $input_id (@{$input_ids}) {
@@ -224,7 +224,7 @@ sub convert_list_uniprot_to_refseq_rna {
 
 sub convert_list_uniprot_to_ensembl {
     my ($self, $input_ids, $species) = @_;
-    
+
     my $logger = get_logger(__PACKAGE__);
         my @input_variant_ids = ();
     my @input_no_variant_ids = ();
@@ -235,7 +235,7 @@ sub convert_list_uniprot_to_ensembl {
 	    push(@input_no_variant_ids, $input_id);
 	}
     }
-    
+
     my $output_id_hash = {};
     if (!($self->query_ensembl_mart(\@input_no_variant_ids, $output_id_hash, 'uniprot_swissprot', 'ensembl_gene_id', $species))) {
     	return undef;
@@ -298,9 +298,9 @@ sub convert_list_ensp_to_ensembl {
     my ($self, $input_ids, $species) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     my $output_id_hash = {};
-    
+
     if (!($self->query_ensembl_mart($input_ids, $output_id_hash, 'ensembl_peptide_id', 'ensembl_gene_id', $species))) {
     	return undef;
     }
@@ -321,12 +321,12 @@ sub query_ensembl_mart {
     my ($self, $input_ids, $output_id_hash, $input_table, $output_table, $species) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     if (scalar(@{$input_ids})<1) {
     	# Empty input, so no point in doing a query
     	return 1;
     }
-    
+
     if (!(defined $species)) {
     	$logger->warn("no species has been defined, aborting!\n");
     	return 0;
@@ -339,13 +339,13 @@ sub query_ensembl_mart {
 
     my %input;
     $input{$_}++ foreach @{$input_ids};
-    
+
     my $query_output = get_query_results($ensembl_mart_species_abbreviation, $input_table, $output_table);
     if (!$query_output) {
         $logger->warn("Query results could not be obtained");
         return 0;
     }
-    
+
     my @lines = split "\n", $query_output;
     foreach my $line (@lines) {
         chomp $line;
@@ -362,42 +362,43 @@ sub get_query_results {
     my $species = shift;
     my $input_table = shift;
     my $output_table = shift;
-    
+
     my $species_results;
     my $results_complete;
     my $query_attempts = 0;
     until (($species_results && $results_complete) || $query_attempts == 3) {
         $query_attempts += 1;
-        
+
         $species_results = capture_stdout {
-            system(get_wget_query($species . "_gene_ensembl", $input_table, $output_table));
+            system(get_wget_query_for_input_and_output_tables($species . "_gene_ensembl", $input_table, $output_table));
         };
 
         $results_complete = $species_results =~ /\[success\]$/;
     }
-    
+
     return $species_results;
 }
 
-sub get_wget_query {
+sub get_wget_query_for_input_and_output_tables {
     my $mart_dataset = shift;
     my $input_table = shift;
     my $output_table = shift;
-    
-    return "wget -q -O - 'http://www.ensembl.org/biomart/martservice?query=" . get_xml_query($mart_dataset, $input_table, $output_table) . "'";
+
+    return "wget -q -O - 'http://www.ensembl.org/biomart/martservice?query=" .
+        get_xml_query_for_input_and_output_tables($mart_dataset, $input_table, $output_table) . "'";
 }
 
-sub get_xml_query {
+sub get_xml_query_for_input_and_output_tables {
     my $dataset = shift;
     my $input_table = shift;
     my $output_table = shift;
-    
+
     $dataset // confess "No dataset defined\n";
-    
+
     return <<XML;
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Query>
-<Query  virtualSchemaName = "default" formatter = "TSV" header = "0" uniqueRows = "0" count = "" completionStamp = "1">	
+<Query  virtualSchemaName = "default" formatter = "TSV" header = "0" uniqueRows = "0" count = "" completionStamp = "1">
 	<Dataset name = "$dataset" interface = "default" >
 		<Attribute name = "$input_table" />
 		<Attribute name = "$output_table" />
@@ -420,7 +421,7 @@ XML
 # Returns 1 if everything ran normally, 0 if something went wrong.
 sub query_ensembl_mart_with_ensp {
     my ($self, $input_ids, $output_id_hash, $output_table, $species) = @_;
-    
+
     return $self->query_ensembl_mart($input_ids, $output_id_hash, 'ensembl_peptide_id', $output_table, $species);
 }
 
@@ -430,12 +431,12 @@ sub generate_ensembl_mart_species_abbreviation {
     my ($self, $species) = @_;
 
     my $logger = get_logger(__PACKAGE__);
-    
+
     if (!(defined $species)) {
         $logger->warn("species not defined!\n");
         return undef;
     }
-    
+
     my $ensembl_mart_species_abbreviation = undef;
     my $lc_species = lc($species);
     if ($lc_species =~ /^(\w)\w+[\s_]+(\w+)$/) {
@@ -443,7 +444,7 @@ sub generate_ensembl_mart_species_abbreviation {
     } else {
         $logger->warn("can't form species abbreviation for mart from '$species'.\n");
     }
-    
+
     return $ensembl_mart_species_abbreviation;
 }
 
@@ -452,4 +453,3 @@ sub close {
 }
 
 1;
-
