@@ -180,20 +180,23 @@ sub get_name_and_id {
     return $instance->displayName . '(' . $instance->db_id . ')';
 }
 
+# Run command and return only relevant errors
 sub run_command {
     my $command = shift;
-    my $options = shift;
+    my $options = shift; # Currently 'ignore_error' is the only used option
 
+    # Run command and store STDERR in variable
     my $stderr = capture_stderr {
         system $command;
     };
-    # Remove unneeded message of cloning repository from STDERR
-    # Then output any error messages remaining back to STDERR
+
+    # Remove unneeded messages, defined as a regex passed into $options, from captured STDERR
     my $error_to_ignore = $options->{'ignore_error'};
     if ($error_to_ignore) {
         $stderr =~ s/$error_to_ignore//m;
     }
 
+    # Then return any remaining errors
     return $stderr;
 }
 
