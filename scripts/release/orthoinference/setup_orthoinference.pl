@@ -44,8 +44,6 @@ system 'git pull';
 run_command('git checkout develop', {
     ignore_error => qr/^Already on .*/
 });
-chdir 'release-common-lib';
-system 'mvn clean install';
 my $orthoinference_project_dir = File::Spec->catfile($starting_directory, $orthoinference_repository, 'orthoinference');
 chdir $orthoinference_project_dir;
 
@@ -64,7 +62,7 @@ create_config_properties_file($config_file, {
     dateOfRelease => $release_date,
     personId => $person_id,
 });
-system "git update-index --assume-unchanged $config_file"; 
+system "git update-index --assume-unchanged $config_file";
 system "ln -sf $starting_directory/normal_event_skip_list.txt $resources_dir";
 system "ln -sf $orthoinference_project_dir/runOrthoinference.sh $starting_directory/runOrthoinference.sh";
 
