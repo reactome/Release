@@ -9,7 +9,7 @@ ensembl_release=$2
 echo reactome_release=$reactome_release
 echo ensembl_release==$ensembl_release
 
-GKB=/usr/local/gkbdev
+GKB=/usr/local/reactomes/Reactome/production/Release
 ensembl_dir=$GKB/modules/ensembl_api
 
 #do a git update of the Ensembl code

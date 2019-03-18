@@ -41,15 +41,12 @@ override 'run_commands' => sub {
          "> setup_add_links_$version.out 2> setup_add_links_$version.err"]
     ]);
 
-    my $exit_code = ($results[0])->{'exit_code'};
     # Backup the database or else drop and remake the database if the add links script fails
-    if ($exit_code == 0) {
-        $self->cmd("Backing up database $db",
-            [
-                ["mysqldump --opt -u$user -p$pass $db > $db\_after_addlinks.dump"]
-            ]
-        );
-    }
+    $self->cmd("Backing up database $db",
+        [
+            ["mysqldump --opt -u$user -p$pass $db > $db\_after_addlinks.dump"]
+        ]
+    );
 };
 
 override 'post_step_tests' => sub {

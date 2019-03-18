@@ -20,8 +20,11 @@ $reactome_unix_group (unix group to use for assigning/changing permissions)
 $date (today's date)
 $version (Reactome release version)
 $prevver (previous Reactome release version)
-$db (Reactome release database -- i.e. test_reactome_XX)
-$slicedb (Reactome slice database -- i.e. test_slice_XX)
+$db (Reactome release database -- e.g. test_reactome_XX)
+$previous_db (previous Reactome release database)
+$live_db (production MySQL database name)
+$slicedb (Reactome slice database -- e.g. test_slice_XX)
+$previous_slice_db (Previous release's slice database)
 $stable_id_db (Reactome stable identifier database)
 $gkcentral (Reactome curator database)
 $gkcentral_host (host server for Reactome database)
@@ -51,7 +54,7 @@ $log_conf (configuration file for Log4perl)
 =head2 METHODS
 
 =over 12
-	
+
 =item C<set_version_for_config_variables>
 
 Replace {version} with actual numeric
@@ -61,9 +64,9 @@ exported variables in this module.
 Parameters:
 	Reactome release version (Number - required)
 
-	
+
 =back
-	
+
 =head1 SEE ALSO
 
 GKB::Release::Step
@@ -107,8 +110,11 @@ our $version;
 our $prevver;
 
 # Set database names
-our $db = "release_current"; # Test Reactome Database (e.g. test_reactome_38)
-our $slicedb = "slice_current"; # Slice Database (e.g. test_slice_38)
+our $db = "release_current"; # Current release database (e.g. test_reactome_38)
+our $previous_db = 'release_previous'; # Previous release database
+our $slicedb = "slice_current"; # Current slice database (e.g. test_slice_38)
+our $previous_slice_db = 'slice_previous'; # Slice database from the previous release
+our $live_db = 'current';
 our $stable_id_db = "stable_identifiers";
 our $gkcentral = "central";
 our $gkcentral_host = "localhost";
@@ -135,10 +141,10 @@ our $tmp = "$gkbdev/tmp";
 our $cvs = "/usr/local/cvs_repository";
 our $logdir = "$release/logs";
 our $logfile = "$logdir/release{version}.log";
-our $archive = "$base_dir/Release/archive";
+our $archive = "$gkbdev/archive";
 
 our %passwords = (
-    'sudo' => \$sudo, 
+    'sudo' => \$sudo,
     'mysql' => \$pass
 );
 
@@ -158,15 +164,15 @@ our %hosts = (
     $dev_server => "gkbdev",
     $live_server => "gkb",
     $curator_server => "gkb",
-   
+
     "gkbdev" => $release_server,
     "gkb" => $live_server,
-    
-    # Alternate servers    
+
+    # Alternate servers
     "brie8.cshl.edu" => "gkbdev",
-    "reactomeclean.oicr.on.ca" => "gkbdev" 
+    "reactomeclean.oicr.on.ca" => "gkbdev"
 );
-   
+
 our %maillist = (
     'internal' => 'internal@reactome.org',
     'curation' => 'lmatthews.nyumc@gmail.com',
@@ -180,7 +186,7 @@ our $log_conf = dirname(__FILE__)."/releaselog.conf";
 our @EXPORT = qw/
     $TEST_MODE
     $user $pass $sudo $port $reactome_unix_group $date $version $prevver
-    $db $slicedb $stable_id_db $gkcentral $gkcentral_host
+    $db $previous_db $slicedb $previous_slice_db $live_db $stable_id_db $gkcentral $gkcentral_host
     $base_dir $gkbdev $scripts $release $website $website_static $gkbmodules $dumpdir $tmp $cvs $logdir $logfile $archive
     %passwords $release_server $live_server $dev_server $curator_server %hosts %maillist
     $log_conf
@@ -188,7 +194,7 @@ our @EXPORT = qw/
 
 sub set_version_for_config_variables {
     my $version_number = shift;
-    
+
     s/{version}/$version_number/ foreach ($db, $slicedb, $logfile);
 }
 

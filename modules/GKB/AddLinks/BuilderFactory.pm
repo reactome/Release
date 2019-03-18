@@ -42,7 +42,7 @@ use GKB::AddLinks::GenecardsReferenceDatabaseToReferencePeptideSequence;
 use GKB::AddLinks::RefseqReferenceDatabaseToReferencePeptideSequence;
 use GKB::AddLinks::RefseqReferenceRNASequenceToReferencePeptideSequence;
 use GKB::AddLinks::KEGGReferenceGeneToReferencePeptideSequence;
-use GKB::AddLinks::IntActDatabaseIdentifierToComplexOrReactionlikeEvent;
+#use GKB::AddLinks::IntActDatabaseIdentifierToComplexOrReactionlikeEvent;
 use GKB::AddLinks::BioModelsEventToDatabaseIdentifier;
 use GKB::AddLinks::FlyBaseToUniprotReferenceDNASequence;
 use GKB::AddLinks::OrphanetToUniprotReferenceDNASequence;

@@ -16,6 +16,9 @@ chdir $dir;
 print "Installing BioPerl\n";
 `git clone https://github.com/bioperl/bioperl-live.git`;
 
+print "Installing BioMart Perl\n";
+`git clone https://github.com/biomart/biomart-perl.git`;
+
 my $version = $ARGV[0];
 print "Installing version $version of Ensembl Core and Ensembl Compara Perl APIs\n";
 `git clone https://github.com/Ensembl/ensembl.git`;

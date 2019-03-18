@@ -9,7 +9,6 @@ use autodie qw/:all/;
 use Cwd;
 use File::Copy;
 use Getopt::Long;
-use Net::FTP;
 
 use Log::Log4perl qw/get_logger/;
 
@@ -40,7 +39,7 @@ sub run {
 
     my $link_name = 'biomodels';
     create_symbolic_link_to_biomodels_repository($tmp_dir, $link_name);
-	
+
     my $biomodels_jar_file = 'biomodels.jar';
     create_biomodels_jar_file($biomodels_jar_file, $link_name);
 
@@ -68,39 +67,36 @@ sub clone_biomodels_repository_from_github {
 }
 
 sub create_symbolic_link_to_biomodels_repository {
-	my $directory = shift;
-	my $link_name = shift;
-	return (system("rm -rf $link_name; ln -s $directory/biomodels-mapper $link_name") == 0);
+    my $directory = shift;
+    my $link_name = shift;
+    return (system("rm -rf $link_name; ln -s $directory/biomodels-mapper $link_name") == 0);
 }
 
 sub create_biomodels_jar_file {
-	my $jar_file = shift;
-	my $symbolic_link_to_repository = shift;
-	my $logger = get_logger(__PACKAGE__);
-	my $present_dir = getcwd();
-	chdir "$symbolic_link_to_repository";
-	system("mvn clean package");
-	my $return_value = copy("target/biomodels-mapper-1.0.jar", "$present_dir/$jar_file");
-	chdir $present_dir;
-	return ($return_value == 0);
+    my $jar_file = shift;
+    my $symbolic_link_to_repository = shift;
+    my $logger = get_logger(__PACKAGE__);
+    my $present_dir = getcwd();
+    chdir "$symbolic_link_to_repository";
+    system("mvn clean package");
+    my $return_value = copy("target/biomodels-mapper-1.0.jar", "$present_dir/$jar_file");
+    chdir $present_dir;
+    return ($return_value == 0);
 }
 
-sub download_biomodels_package {    
+sub download_biomodels_package {
     my $logger = get_logger(__PACKAGE__);
 
-    my $url = 'ftp.ebi.ac.uk';
-    my $ftp = Net::FTP->new($url, Passive => 0) or $logger->error_die("Could not create FTP object for $url");
-    $ftp->login() or $logger->error_die("Could not login to $url: " . $ftp->message);
-    my $dir = 'pub/databases/biomodels/releases/latest';
-    $ftp->cwd($dir) or $logger->error_die("Could not change directory to $dir");
-    my ($xml_tarball) = grep /sbml_files.tar.bz2/, $ftp->ls();
+    my $biomodels_download_url = 'http://ftp.ebi.ac.uk/pub/databases/biomodels/releases/latest';
+    my $biomodels_release_html = `wget -q -O - $biomodels_download_url`;
+    my ($xml_tarball) = $biomodels_release_html =~ /href=\"(.*?sbml_files.tar.bz2)\"/;
     $xml_tarball =~ s/.tar.bz2//;
     unless (-d $xml_tarball) {
         system("rm -rf BioModels_Database*");
-        system("wget --no-passive ftp://ftp.ebi.ac.uk/pub/databases/biomodels/releases/latest/$xml_tarball.tar.bz2");
+        system("wget -N $biomodels_download_url/$xml_tarball.tar.bz2");
         system("tar xvfj $xml_tarball.tar.bz2");
     }
-    
+
     return $xml_tarball;
 }
 
