@@ -45,7 +45,7 @@ abs() {
 }
 
 emit_and_log_info() {
-    $msg=1
+    $msg=$1
     $log_file=$2
     echo $msg
     echo "$(date) INFO $msg" >> $log_file
