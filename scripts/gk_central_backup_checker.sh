@@ -44,6 +44,13 @@ abs() {
     fi
 }
 
+emit_and_log_info() {
+    $msg=1
+    $log_file=$2
+    echo $msg
+    echo "$(date) INFO $msg" >> $log_file
+}
+
 emit_and_log_error() {
     $msg=$1
     $log_file=$2
@@ -114,9 +121,15 @@ tolerable_percent_drop=0.1 # 0.1 percent NOT 10 percent
 if difference_too_large "$percent_difference" "$tolerable_percent_drop"; then
     msg="Difference between gk_central back-ups from today $today and yesterday $yesterday is too large.  Check $backup_dir"
     emit_and_log_error $msg $log
+else
+    msg="Difference in size between today's and yesterday's backups was acceptable: $byte_size_difference bytes"
+    emit_and_log_info $msg $log
 fi
 
 if ! database_backup_restorable $todays_backup; then
     msg="$todays_backup could not be restored locally as a database.  Check if backup was corrupted in $backup_dir"
     emit_and_log_error $msg $log
+else
+    msg="$todays_backup was successfully restored"
+    emit_and_log_info $msg $log
 fi
