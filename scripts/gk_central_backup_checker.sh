@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e # Stop execution on error
 
 # Displays the help message.
 usage() {
@@ -69,24 +70,49 @@ database_backup_restorable() {
         # Load the db dump into the empty placeholder database
         if zcat $zipped_db_dump | mysql $placeholder_database 2>> $error_log; then
             # Return "true" that the database backup is restorable
-            return 0;
+            return 0
         else
             msg="Could not successfully load data from db dump"
             emit_and_log_error "$msg" "$log"
             emit_and_log_error "$msg" "$error_log"
-            return 1;
+            return 1
         fi
     else
         msg="Could not create empty placeholder database $placeholder_database"
         emit_and_log_error "$msg" "$log"
         emit_and_log_error "$msg" "$error_log"
-        return 1;
+        return 1
     fi
 }
 
+# Gets count of the database objects from a Reactome database
 get_db_object_count() {
     db_name=$1
     echo $(mysql --raw --batch -e "use $db_name; SELECT count(*) from DatabaseObject;" -s)
+}
+
+# Gets the count from a file or from a restored backup if no value from the file can be obtained
+get_yesterdays_db_object_count() {
+    yesterdays_stored_count_file=$1
+    yesterdays_backup=$2
+    yesterdays_restored_db_name=$3
+
+    yesterdays_db_object_count=$(<$yesterdays_stored_count_file)
+    # Checks if there is a valid (i.e. numeric) count stored from yesterday
+    if [[ -n "$yesterdays_db_object_count" && $yesterdays_db_object_count =~ '^[0-9]+$' ]]; then
+        echo $yesterdays_db_object_count
+        return 0
+    else
+        # Restore yesterdays's backup to get the count if it wasn't cached
+        if database_backup_restorable $yesterdays_backup $yesterdays_restored_db_name; then
+            yesterdays_db_object_count=$(get_db_object_count $yesterdays_restored_db_name)
+            echo $yesterdays_db_object_count
+            return 0
+        else
+            echo "Unable to get yesterday's count from file $yesterdays_stored_count_file or backup $yesterdays_backup" 2>> $error_log
+            return 1
+        fi
+    fi
 }
 
 drop_database() {
@@ -111,6 +137,7 @@ yesterday=$(date -d "yesterday" +"%Y_%m_%d")
 backup_dir="/nfs/reactome/reactomecurator/aws_mysqldump"
 todays_backup="$backup_dir/gk_central_$today.sql.gz"
 yesterdays_backup="$backup_dir/gk_central_$yesterday.sql.gz"
+yesterdays_stored_count_file="/var/log/previous_gk_central_object_count.txt"
 log="/var/log/gk_central_backup_checker.log"
 error_log="/var/log/gk_central_backup_checker.err"
 > $error_log # Creates new empty error log file
@@ -122,6 +149,9 @@ byte_size_difference=$(expr $todays_backup_filesize - $yesterdays_backup_filesiz
 
 typical_size_change=30000 # bytes
 typical_object_count_change=1000
+
+
+# Checks if the absolute change in file size was more than the typical size change and reports to the info or error log
 if [ $(abs $byte_size_difference) -le $typical_size_change ] ; then
     msg="Difference in size between today's and yesterday's backups was acceptable: $byte_size_difference bytes"
     emit_and_log_info "$msg" "$log"
@@ -131,14 +161,18 @@ else
     emit_and_log_error "$msg" "$log"
 fi
 
+# Attempts to restore today's database backup and compare the database object count with yesterday's backup
+# Yesterday's count is checked from a stored value in the file defined above or yesterday's backup is restored
+# to get a count if no valid stored count is found.  The info or error logs are written to depending on the results
+# and the restored backup database(s) is/are dropped.
 todays_restored_db_name="test_backup_restore_$today"
 if database_backup_restorable $todays_backup $todays_restored_db_name; then
     msg="$todays_backup was successfully restored"
     emit_and_log_info "$msg" "$log"
 
     yesterdays_restored_db_name="test_backup_restore_$yesterday"
-    if database_backup_restorable $yesterdays_backup $yesterdays_restored_db_name; then
-        yesterdays_object_count=$(get_db_object_count $yesterdays_restored_db_name)
+    yesterdays_object_count=$(get_yesterdays_db_object_count $yesterdays_stored_count_file $yesterdays_backup $yesterdays_restored_db_name)
+    if [ -n $yesterdays_object_count ]; then
         todays_object_count=$(get_db_object_count $todays_restored_db_name)
 
         db_object_count_difference=$(expr $todays_object_count - $yesterdays_object_count)
@@ -151,8 +185,9 @@ if database_backup_restorable $todays_backup $todays_restored_db_name; then
             emit_and_log_error "$msg" "$log"
         fi
 
+        echo $todays_object_count > $yesterdays_stored_count_file
     else
-        msg="Yesterday's backup $yesterdays_backup could not be restored locally as a database.  Unable to compare database object counts."
+        msg="Unable to compare database object counts: yesterday's database object count could not be obtained."
         emit_and_log_error "$msg" "$error_log"
         emit_and_log_error "$msg" "$log"
     fi
@@ -164,6 +199,7 @@ else
 fi
 drop_database "test_backup_restore_$today"
 
+# If anything was written to the error log, it is e-mailed as an alert to issues
 if [ -s $error_log ]; then
     mail -s 'gk_central backup errors' help@reactome.org < $error_log
 fi
