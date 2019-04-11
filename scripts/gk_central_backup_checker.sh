@@ -58,41 +58,43 @@ emit_and_log_error() {
     echo "$(date) ERROR $msg" >> $log_file
 }
 
-# Note - 0 is true and 1 is false
-difference_too_large() {
-    percent_difference=$1
-    if (( $(echo "$percent_difference > 0" | bc -l) )); then
-        return 1; # An increase in size is acceptable
-    else
-        tolerable_percent_drop=$2
-        absolute_percent_difference=$(abs $percent_difference)
-        if (( $(echo "$absolute_percent_difference > $tolerable_percent_drop" | bc -l) )); then
-            return 0;
-        else
-            return 1;
-        fi
-    fi
-}
-
 # Test ability of recent database to be restored
 database_backup_restorable() {
     zipped_db_dump=$1
-    placeholder_database="test_backup_restore_$today"
+    placeholder_database=$2
+
     # Create placeholder database for attempting restoring of the db dump file
-    mysql -e "DROP DATABASE IF EXISTS $placeholder_database" 2>> $log
-    if mysql -e "CREATE DATABASE $placeholder_database" 2>> $log; then
+    mysql -e "DROP DATABASE IF EXISTS $placeholder_database" 2>> $error_log
+    if mysql -e "CREATE DATABASE $placeholder_database" 2>> $error_log; then
         # Load the db dump into the empty placeholder database
-        if zcat $zipped_db_dump | mysql $placeholder_database 2>> $log; then
-            # Drop the placeholder database if loading was successful
-            $(mysql -e "DROP DATABASE $placeholder_database" 2>> $log)
+        if zcat $zipped_db_dump | mysql $placeholder_database 2>> $error_log; then
             # Return "true" that the database backup is restorable
             return 0;
         else
-            emit_and_log_error "Could not successfully load data from db dump" $log
+            msg="Could not successfully load data from db dump"
+            emit_and_log_error "$msg" "$log"
+            emit_and_log_error "$msg" "$error_log"
             return 1;
         fi
     else
-        emit_and_log_error "Could not create empty placeholder database $placeholder_database" $log
+        msg="Could not create empty placeholder database $placeholder_database"
+        emit_and_log_error "$msg" "$log"
+        emit_and_log_error "$msg" "$error_log"
+        return 1;
+    fi
+}
+
+get_db_object_count() {
+    db_name=$1
+    echo $(mysql --raw --batch -e "use $db_name; SELECT count(*) from DatabaseObject;" -s)
+}
+
+drop_database() {
+    db=$1
+
+    if mysql -e "DROP DATABASE IF EXISTS $db" 2>> $error_log; then
+        return 0;
+    else
         return 1;
     fi
 }
@@ -110,26 +112,58 @@ backup_dir="/nfs/reactome/reactomecurator/aws_mysqldump"
 todays_backup="$backup_dir/gk_central_$today.sql.gz"
 yesterdays_backup="$backup_dir/gk_central_$yesterday.sql.gz"
 log="/var/log/gk_central_backup_checker.log"
+error_log="/var/log/gk_central_backup_checker.err"
+> $error_log # Creates new empty error log file
 
 todays_backup_filesize=$(stat -c%s "$todays_backup")
 yesterdays_backup_filesize=$(stat -c%s "$yesterdays_backup")
 
 byte_size_difference=$(expr $todays_backup_filesize - $yesterdays_backup_filesize)
-percent_difference=$(echo "scale=10;$byte_size_difference*100/$yesterdays_backup_filesize" | bc)
 
-tolerable_percent_drop=0.1 # 0.1 percent NOT 10 percent
-if difference_too_large "$percent_difference" "$tolerable_percent_drop"; then
-    msg="Difference between gk_central back-ups from today $today and yesterday $yesterday is too large.  Check $backup_dir"
-    emit_and_log_error "$msg" "$log"
-else
+typical_size_change=30000 # bytes
+typical_object_count_change=1000
+if [ $(abs $byte_size_difference) -le $typical_size_change ] ; then
     msg="Difference in size between today's and yesterday's backups was acceptable: $byte_size_difference bytes"
     emit_and_log_info "$msg" "$log"
+else
+    msg="Difference between compressed gk_central back-ups from today $today and yesterday $yesterday was atypical at $byte_size_difference bytes.  Check $backup_dir"
+    emit_and_log_error "$msg" "$error_log"
+    emit_and_log_error "$msg" "$log"
 fi
 
-if ! database_backup_restorable $todays_backup; then
-    msg="$todays_backup could not be restored locally as a database.  Check if backup was corrupted in $backup_dir"
-    emit_and_log_error "$msg" "$log"
-else
+todays_restored_db_name="test_backup_restore_$today"
+if database_backup_restorable $todays_backup $todays_restored_db_name; then
     msg="$todays_backup was successfully restored"
     emit_and_log_info "$msg" "$log"
+
+    yesterdays_restored_db_name="test_backup_restore_$yesterday"
+    if database_backup_restorable $yesterdays_backup $yesterdays_restored_db_name; then
+        yesterdays_object_count=$(get_db_object_count $yesterdays_restored_db_name)
+        todays_object_count=$(get_db_object_count $todays_restored_db_name)
+
+        db_object_count_difference=$(expr $todays_object_count - $yesterdays_object_count)
+        if [ $(abs $db_object_count_difference) -le $typical_object_count_change ] ; then
+            msg="Difference in object count between today's and yesterday's backups was acceptable: $db_object_count_difference"
+            emit_and_log_info "$msg" "$log"
+        else
+            msg="Difference between database object counts for gk_central back-ups from today $today and yesterday $yesterday was atypical at $db_object_count_difference.  Check $backup_dir"
+            emit_and_log_error "$msg" "$error_log"
+            emit_and_log_error "$msg" "$log"
+        fi
+
+    else
+        msg="Yesterday's backup $yesterdays_backup could not be restored locally as a database.  Unable to compare database object counts."
+        emit_and_log_error "$msg" "$error_log"
+        emit_and_log_error "$msg" "$log"
+    fi
+    drop_database "test_backup_restore_$yesterday"
+else
+    msg="Today's backup $todays_backup could not be restored locally as a database.  Check if backup was corrupted in $backup_dir"
+    emit_and_log_error "$msg" "$error_log"
+    emit_and_log_error "$msg" "$log"
+fi
+drop_database "test_backup_restore_$today"
+
+if [ -s $error_log ]; then
+    mail -s 'gk_central backup errors' help@reactome.org < $error_log
 fi
