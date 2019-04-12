@@ -138,7 +138,9 @@ yesterday=$(date -d "yesterday" +"%Y_%m_%d")
 backup_dir="/nfs/reactome/reactomecurator/aws_mysqldump"
 todays_backup="$backup_dir/gk_central_$today.sql.gz"
 yesterdays_backup="$backup_dir/gk_central_$yesterday.sql.gz"
-yesterdays_stored_count_file="/var/log/previous_gk_central_object_count.txt"
+gk_central_object_counts_dir="/var/log/gk_central_object_counts"
+yesterdays_stored_count_file="$gk_central_object_counts_dir/previous_gk_central_object_count$yesterday.txt"
+todays_stored_count_file="$gk_central_object_counts_dir/previous_gk_central_object_count$today.txt"
 log="/var/log/gk_central_backup_checker.log"
 error_log="/var/log/gk_central_backup_checker.err"
 > $error_log # Creates new empty error log file
@@ -186,7 +188,7 @@ if database_backup_restorable $todays_backup $todays_restored_db_name; then
             emit_and_log_error "$msg" "$log"
         fi
 
-        echo -n $todays_object_count > $yesterdays_stored_count_file
+        echo -n $todays_object_count > $todays_stored_count_file
     else
         msg="Unable to compare database object counts: yesterday's database object count could not be obtained."
         emit_and_log_error "$msg" "$error_log"
