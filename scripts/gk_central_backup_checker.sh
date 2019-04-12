@@ -99,7 +99,8 @@ get_yesterdays_db_object_count() {
 
     yesterdays_db_object_count=$(<$yesterdays_stored_count_file)
     # Checks if there is a valid (i.e. numeric) count stored from yesterday
-    if [[ -n "$yesterdays_db_object_count" && $yesterdays_db_object_count =~ '^[0-9]+$' ]]; then
+    is_numeric='^[0-9]+$'
+    if [[ -n "$yesterdays_db_object_count" && $yesterdays_db_object_count =~ $is_numeric ]]; then
         echo $yesterdays_db_object_count
         return 0
     else
@@ -185,7 +186,7 @@ if database_backup_restorable $todays_backup $todays_restored_db_name; then
             emit_and_log_error "$msg" "$log"
         fi
 
-        echo $todays_object_count > $yesterdays_stored_count_file
+        echo -n $todays_object_count > $yesterdays_stored_count_file
     else
         msg="Unable to compare database object counts: yesterday's database object count could not be obtained."
         emit_and_log_error "$msg" "$error_log"
