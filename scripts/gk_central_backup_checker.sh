@@ -187,6 +187,10 @@ if database_backup_restorable $todays_backup $todays_restored_db_name; then
             emit_and_log_error "$msg" "$error_log"
             emit_and_log_error "$msg" "$log"
         fi
+        
+        if [ ! -f $yesterdays_stored_count_file ]; then
+            $yesterdays_object_count > $yesterdays_stored_count_file
+        fi
 
         echo -n $todays_object_count > $todays_stored_count_file
     else
