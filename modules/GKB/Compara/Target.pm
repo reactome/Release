@@ -34,7 +34,8 @@ use File::Basename;
 use GKB::Config;
 use GKB::Config_Species;
 use GKB::Compara::Utils;
-use GKB::EnsEMBLMartUtils qw/get_species_results/;
+use GKB::EnsEMBLMartUtils qw/get_species_results_with_attribute_info/;
+use List::MoreUtils qw/any/;
 use Log::Log4perl qw/get_logger/;
 
 Log::Log4perl->init(dirname(__FILE__) . '/compara_log.conf');
@@ -106,11 +107,26 @@ sub get_gene_to_protein_mapping {
     my $species = shift;
     
     my %gene_to_protein_identifier_type_to_protein;
-    my @lines = split "\n", get_species_results($species);
+    my $species_results_with_attribute_info = get_species_results_with_attribute_info($species);
+    my @attributes = @{$species_results_with_attribute_info->{'uniprot_attributes'}};
+    my @lines = split "\n", $species_results_with_attribute_info->{'results'};
+    #print "attributes: @attributes\n";
     foreach my $line (@lines) {
-        my ($gene_id, $swissprot_id, $trembl_id, $ensembl_protein) = split "\t", $line;
+        #print "$line\n";
+        my ($gene_id, $swissprot_id, $trembl_id, $ensembl_protein);
+        my @fields = split "\t", $line;
+        $gene_id = $fields[0];
+        $swissprot_id = $fields[1];
+        if (any {$_ =~ /trembl/} @attributes) {
+            $trembl_id = $fields[2];
+            $ensembl_protein = $fields[3];
+        } else {
+            $ensembl_protein = $fields[2];
+        }
         next unless $gene_id && ($swissprot_id || $trembl_id || $ensembl_protein);
-        
+
+        #print "Gene: $gene_id\tSwissprot: $swissprot_id\tTrembl: $trembl_id\tEnsEMBL Protein: $ensembl_protein\n";
+
         if ($swissprot_id) {
             $gene_to_protein_identifier_type_to_protein{$gene_id}{'swissprot'}{"SWISS:$swissprot_id"}++;
         }

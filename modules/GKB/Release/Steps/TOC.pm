@@ -12,16 +12,15 @@ extends qw/GKB::Release::Step/;
 
 has '+passwords' => ( default => sub { ['sudo'] } );
 has '+directory' => ( default => "$release/toc" );
-has '+mail' => ( default => sub { 
-					my $self = shift;
-					return {
-						'to' => '',
-						'subject' => $self->name,
-						'body' => "",
-						'attachment' => ""
-					};
-				}
-);
+has '+mail' => ( default => sub {
+    my $self = shift;
+    return {
+        'to' => '',
+        'subject' => $self->name,
+        'body' => "",
+        'attachment' => ""
+    };
+});
 
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
@@ -36,14 +35,14 @@ override 'run_commands' => sub {
                 ["mv --backup=numbered $img_fp_dir/$live_db $img_fp_dir/$live_db.old"]
             ]
         );
-    
+
         $self->cmd("Creating table of contents",
             [
                 ["mkdir -p $img_fp_dir"],
-                ["$website_static/cgi-bin/toc DB=$db"],
-                ["$website_static/cgi-bin/doi_toc DB=$db"],
-                ["mv $img_fp_dir/$db $img_fp_dir/$live_db"],
-                ["echo $sudo | sudo -S chown -R www-data:gkb $img_fp_dir/$live_db/*toc"]
+                ["$website_static/cgi-bin/toc DB=$live_db"],
+                ["$website_static/cgi-bin/doi_toc DB=$live_db"],
+                ["echo $sudo | sudo -S chown -R www-data:gkb $img_fp_dir/$live_db/*toc"],
+                ["cp -R $img_fp_dir/$live_db $img_fp_dir/$db"]
             ]
         );
     } elsif ($gkbdir eq "gkb") {
@@ -61,7 +60,7 @@ override 'run_commands' => sub {
 
 override 'post_step_tests' => sub {
     my $self = shift;
-    
+
     my @errors = super();
     push @errors, $self->_check_file_modification_times();
     return @errors;
@@ -69,18 +68,18 @@ override 'post_step_tests' => sub {
 
 sub get_server {
     my $self = shift;
-    
+
     return $self->gkb eq 'gkb' ? $live_server : undef;
 }
 
 sub _check_file_modification_times {
     my $self = shift;
-    
+
     my $live_db = 'gk_current';
-    
+
     my $TIME_ZONE = 'UTC';
     my $MAX_SINCE_MODIFIED = 2; # Minutes
-    
+
     my @errors;
     foreach my $file (map {"$website_static/cgi-tmp/img-fp/$_"} ("$live_db/doi_toc", "$live_db/toc")) {
         my $modification_time = $self->_get_modification_time($file, \@errors);
@@ -99,10 +98,10 @@ sub _check_file_modification_times {
 
 sub _get_modification_time {
     my $self = shift;
-    
+
     my $file = shift;
     my $errors = shift;
-    
+
     my $remote_server = $self->get_server();
     if ($remote_server) {
         my $sftp = Net::SFTP::Foreign->new($remote_server);
@@ -113,7 +112,7 @@ sub _get_modification_time {
         }
         return $attributes->mtime;
     }
-    
+
     my $stat = stat($file);
     unless ($stat) {
         push @{$errors}, "Unable to get modification time of $file";
