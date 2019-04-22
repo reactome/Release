@@ -19,10 +19,10 @@ $opt_db  || die "Need database name (-db).\n";
 my $gk_central_host = 'http://reactomecurator.oicr.on.ca';
 
 ## Download GO data file in OBO format
-my $obo_file = "gene_ontology_ext.obo";
+my $obo_file = "go.obo";
 
 if (-e "$obo_file") { system("mv $obo_file $obo_file.old"); }
-my $return = system("wget -q -Nc http://geneontology.org/ontology/obo_format_1_2/$obo_file");
+my $return = system("wget -q -Nc http://current.geneontology.org/ontology/$obo_file");
 if ($return != 0) { die "ERROR: Download of $obo_file failed."; }
 
 $return = system("wget -q -Nc http://geneontology.org/external2go/ec2go");
@@ -31,8 +31,8 @@ if ($return != 0) { die "ERROR: Download of ec2go file failed."; }
 my $file_age = int((time - (stat("$obo_file"))[9])/60/60/24);
 print "Today's date: ", scalar(localtime), "\n";
 print "$obo_file dated ", scalar(localtime((stat("$obo_file"))[9])), " is $file_age day(s) old\n";
-#($file_age <= 30) ? print "Proceeding...\n" : die "Terminating since 
-#file is more than 30 days old\nCheck the file version and rerun 
+#($file_age <= 30) ? print "Proceeding...\n" : die "Terminating since
+#file is more than 30 days old\nCheck the file version and rerun
 #script\n";
 
 ## Prepare date and author for instanceEdit:
@@ -91,7 +91,7 @@ my (%category_mismatch) = ();
 my (%total_name) = ();
 my (%new_go)     = ();
 my (%new_isa)    = ();
-my (%new_partof, %new_haspart, %new_regulates, %new_positively_regulates, %new_negatively_regulates) = ();
+my (%new_partof, %new_haspart) = ();
 
 foreach my $terms ( sort keys %categories ) {
     my $cc = 0;
@@ -128,7 +128,7 @@ while (<GO>) {
     my ($name) = $_ =~ /^name\:\s+(.*)$/m;              # term name
     my ($def)  = $_ =~ /^def\:\s+\"(.*)\"/m;            # definition of the term
     my ($cat)  = $_ =~ /^namespace\:\s+([a-z\_]*)/m;    # namespace(GO categories): biological_process, cellular_component, molecular_function
-        
+
     my @synonyms;# synonym of the term
     while ( $_ =~ /^synonym\:\s+\"(.*)\"/gms ) {
         push @synonyms, $1;
@@ -138,7 +138,7 @@ while (<GO>) {
         my $alt_id = $1;
         if ( defined $total_acc{$alt_id} ) {
             $alternate{$alt_id} = $total_acc{$alt_id};
-            $altacc_to_primaryacc{$alt_id} = $total_acc{$acc}; 
+            $altacc_to_primaryacc{$alt_id} = $total_acc{$acc};
         }
     }
 
@@ -154,6 +154,7 @@ while (<GO>) {
     }
 
 ## extract is_a, part_of, has_part, regulates, postively_regulates, negatively_regulates components of the given entry and put them in arrays:
+# regulates, postively_regulates, negatively_regulates are no longer in the data model. is_a, part_of, has_part only apply to GO_CellularComponent.
     while (/^is_a\:\s+GO\:(\d+)/gms) {
         # if ( not defined $total_acc{$1} ) {
         push @{ $new_isa{$acc} }, $1;
@@ -169,24 +170,24 @@ while (<GO>) {
         push @{ $new_haspart{$acc} }, $1;
     }
 
-    while (/^relationship\:\s+regulates GO\:(\d+)/gms) {
-        #if ( not defined $total_acc{$1} ) {
-        push @{ $new_regulates{$acc} }, $1;
-    }
+    # while (/^relationship\:\s+regulates GO\:(\d+)/gms) {
+    #     #if ( not defined $total_acc{$1} ) {
+    #     push @{ $new_regulates{$acc} }, $1;
+    # }
+	#
+    # while (/^relationship\:\s+positively_regulates GO\:(\d+)/gms) {
+    #     #if ( not defined $total_acc{$1} ) {
+    #     push @{ $new_positively_regulates{$acc} }, $1;
+    # }
+	#
+    # while (/^relationship\:\s+negatively_regulates GO\:(\d+)/gms) {
+    #     #if ( not defined $total_acc{$1} ) {
+    #     push @{ $new_negatively_regulates{$acc} }, $1;
+    # }
 
-    while (/^relationship\:\s+positively_regulates GO\:(\d+)/gms) {
-        #if ( not defined $total_acc{$1} ) {
-        push @{ $new_positively_regulates{$acc} }, $1;
-    }
-
-    while (/^relationship\:\s+negatively_regulates GO\:(\d+)/gms) {
-        #if ( not defined $total_acc{$1} ) {
-        push @{ $new_negatively_regulates{$acc} }, $1;
-    }
-    
 
 ## when all checks are completed we update the entry:
-    if ( defined $total_acc{$acc} ) {  	
+    if ( defined $total_acc{$acc} ) {
         my $GO_instances = $dba->fetch_instance_by_db_id( $total_acc{$acc} );
         foreach my $GO_instance ( @{$GO_instances} ) {
             if ($GO_instance->is_a($categories{$cat})) {
@@ -195,7 +196,7 @@ while (<GO>) {
                 print "Instance $GO_instance->{db_id} has incorrect category $cat\n";
                 $category_mismatch{$GO_instance->db_id} = $categories{$cat}; # Will be reported later and the mis-matched instance will be deleted
                 next if GO_instance_exists_in_db($dba, $acc, $categories{$cat});
-                
+
                 print "Creating instance for accession $acc with correct category $cat\n";
                 my $GO_instance = create_GO_instance($dba, { class => $categories{$cat}, accession => $acc, name => $name, def => $def }, $db_inst, $instance_edit);
                 $total_acc{$acc} = $GO_instance->db_id;
@@ -203,15 +204,15 @@ while (<GO>) {
             }
         }
     } else {
-        if (!/(is_obsolete: true)/m) {
+        if ($_ !~ /(is_obsolete: true)/m) {
             my $GO_instance = create_GO_instance($dba, { class => $categories{$cat}, accession => $acc, name => $name, def => $def }, $db_inst, $instance_edit);
             $total_acc{$acc} = $GO_instance->db_id;
             print "New $categories{$cat} instance\: $GO_instance->{db_id}\n";
         }
     }
     $checked{$acc} = 1;
-    
-    # check if updated entry is pending obsoletion by GO    
+
+    # check if updated entry is pending obsoletion by GO
     if (/(pending|scheduled for|slated for) obsoletion/mi) {
         $pending_obsoletion{$acc} = $total_acc{$acc};
     }
@@ -223,10 +224,7 @@ print "Main update is finished, now checking is_a and part_of....\n";
 
 my %relationships = ('instanceOf' => \%new_isa,
 		     'componentOf' => \%new_partof,
-		     'hasPart' => \%new_haspart,
-		     'regulate' => \%new_regulates,
-		     'positivelyRegulate' => \%new_positively_regulates,
-		     'negativelyRegulate' => \%new_negatively_regulates
+		     'hasPart' => \%new_haspart
 		     );
 
 foreach my $attribute (keys %relationships) {
@@ -242,7 +240,7 @@ foreach my $attribute (keys %relationships) {
                     push @new_instances, $sdn;
                 }
             }
-            
+
 	    my $current_instances = $sdi->attribute_value($attribute);
 	    if (different_go_instances($current_instances, \@new_instances)) {
 	        $sdi->inflate();
@@ -271,8 +269,8 @@ print FR "\{\| class \=\"wikitable\"
 foreach my $check_acc ( sort keys %total_acc ) {
     next if ( defined $checked{$check_acc} );
     next if ( defined $obsolete{$check_acc} );
-    next if ( defined $alternate{$check_acc} );    
-    
+    next if ( defined $alternate{$check_acc} );
+
     print FR "\|$check_acc\|";
     print FR "\|\[$gk_central_host/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$total_acc{$check_acc}\& $total_acc{$check_acc}\]\n";
     print FR "\|\-\n";
@@ -294,7 +292,7 @@ foreach my $db_id ( sort keys %category_mismatch) {
     my $GO_accession = $GO_instance->accession->[0];
     my $category_in_obo = $category_mismatch{$db_id};
     my @referrer_ids = map { $_->db_id } @{$dba->fetch_referer_by_instance($GO_instance)};
-    
+
     print "Deleting instance $GO_instance->{db_id} with mis-matched category\n";
     $dba->delete_by_db_id($GO_instance->db_id);
     print FR "\|$GO_accession\n";
@@ -326,7 +324,7 @@ foreach my $obs_id ( sort keys %obsolete ) {
 
 	foreach my $go_ref ( @{$ref} ) {
             $go_ref->inflate();
-            my $dbr = $go_ref->referenceDatabase->[0]; 
+            my $dbr = $go_ref->referenceDatabase->[0];
             if (!$dbr || $dbr->db_id != 1 ) {
                 $sz = 1;
             }
@@ -335,7 +333,7 @@ foreach my $obs_id ( sort keys %obsolete ) {
 	    print FR "";
 	    print FR "\|GO:$obs_id\n";
 	    print FR "\|\-\n";
-	    
+
             print "Deleting $db_id...\n";
             $dba->delete_by_db_id($db_id);
             delete( $obsolete{$obs_id} );
@@ -372,14 +370,14 @@ print FR "\{\| class \=\"wikitable\"
 \|\-\n";
 
 ## Checked above for obsolete instances without referers. If an instance contains only GO referers (referenceDatabase id=1) we remove it without reporting.
-## Report the rest of the obsolete instances here if they still exist.  GO instances that have become secondary/alternate to other instances are also reported here.  
+## Report the rest of the obsolete instances here if they still exist.  GO instances that have become secondary/alternate to other instances are also reported here.
 
 %obsolete = (%obsolete, %alternate, %pending_obsoletion);
 foreach my $obs_id ( sort keys %obsolete) {
-    
+
     print FR "\|\[$gk_central_host/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$obsolete{$obs_id}\& $total_name{$obs_id}\]\n";
     print FR "\|\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO:$obs_id GO:$obs_id\]\n";
-            
+
     my $action;
     my @terms = ();
     if ( $replaced{$obs_id}[0] ) {
@@ -390,36 +388,36 @@ foreach my $obs_id ( sort keys %obsolete) {
     	@terms = @{ $consider{$obs_id}};
     } elsif ( $alternate{$obs_id}) {
     	$action = 'alternate id -- no action required';
-	
+
 	# Move all referrers to the primary GO term
 	my $alternate_acc = $obs_id;
 	my $alt_ac = $dba->fetch_instance_by_db_id( $alternate{$alternate_acc} );
 	my $primary = $dba->fetch_instance_by_db_id($altacc_to_primaryacc{$alternate_acc})->[0];
-	
+
 	foreach my $sdi ( @{$alt_ac} ) {
 	    $sdi->inflate();
 	    my $alternate_accession = $sdi->accession->[0];
 	    my $ref   = $dba->fetch_referer_by_instance($sdi);
 	    foreach my $go_ref ( @{$ref} ) {
 	        $go_ref->inflate();
-		
+
 		# Skip referrers to other GO instances
-	        my $dbr = $go_ref->referenceDatabase->[0]; 
+	        my $dbr = $go_ref->referenceDatabase->[0];
 	        next unless (!$dbr || $dbr->db_id != 1 );
-	        
-		
+
+
 		foreach my $attribute ($go_ref->list_attributes()) {
 		    my $attribute_value = $go_ref->$attribute->[0];
 		    next unless $attribute_value;
-		    
+
 		    my $accession;
-		    
+
 		    eval {
 			$accession = $attribute_value->accession->[0];
 		    };
-		    
+
 		    next unless $accession;
-		    
+
 		    # If the attribute's value is a GO instance with an
 		    # accession matching the alternate term, give the
 		    # primary GO instance as the attribute value instead.
@@ -435,14 +433,14 @@ foreach my $obs_id ( sort keys %obsolete) {
 	    $dba->delete_by_db_id($sdi->db_id);
         }
     } elsif ( $pending_obsoletion{$obs_id}) {
-    	$action = 'pending obsoletion -- no action required';	
+    	$action = 'pending obsoletion -- no action required';
     } else {
     	$action = 'search for replacement -- none offered';
     }
-    
+
     print FR "\|$action\n\|";
     foreach (@terms) {
-		print FR "\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO\:$_ GO\:$_\]\t";    	
+		print FR "\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO\:$_ GO\:$_\]\t";
     }
     print FR "\n\|\-\n";
 }
@@ -456,16 +454,16 @@ print "go_obo_update.pl has finished its job";
 sub different_go_instances {
     my $first_list_ref = shift;
     my $second_list_ref = shift;
-    
+
     return 1 if (scalar @{$first_list_ref} != scalar @{$second_list_ref});
-    
+
     INSTANCE:foreach my $list1_instance (@{$first_list_ref}) {
         foreach my $list2_instance (@{$second_list_ref}) {
             next INSTANCE if $list1_instance->accession->[0] == $list2_instance->accession->[0];
         }
         return 1;
     }
-    
+
     return 0;
 }
 
@@ -474,7 +472,7 @@ sub update_GO_instance {
     my $GO_instance = shift;
     my $new_attributes = shift;
     my $instance_edit = shift;
-    
+
     my $ginst_name = $GO_instance->attribute_value('name')->[0];
     my $ginst_def = $GO_instance->attribute_value('definition')->[0];
 
@@ -489,7 +487,7 @@ sub update_GO_instance {
         $GO_instance->Created( @{ $GO_instance->Created } );
         $GO_instance->Modified( @{ $GO_instance->Modified } );
         $GO_instance->add_attribute_value( 'modified', $instance_edit );
-    
+
         $dba->update($GO_instance);
     }
 }
@@ -499,7 +497,7 @@ sub create_GO_instance {
     my $new_attributes = shift;
     my $reference_database = shift;
     my $instance_edit = shift;
-    
+
     my $sdi = GKB::Instance->new(
         -CLASS              => $new_attributes->{'class'},
         -ONTOLOGY           => $dba->ontology,
@@ -515,7 +513,7 @@ sub create_GO_instance {
     $sdi->InstanceOf(undef);
     $sdi->ComponentOf(undef);
     my $ddd = $dba->store($sdi);
-    
+
     return $sdi;
 }
 
@@ -523,8 +521,8 @@ sub GO_instance_exists_in_db {
     my $dba = shift;
     my $accession = shift;
     my $GO_class = shift;
-    
+
     my $instances = $dba->fetch_instance_by_attribute($GO_class, [['accession', [$accession]]]);
-    
+
     return scalar @{$instances} > 0;
 }
