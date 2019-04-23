@@ -220,12 +220,12 @@ while (<GO>) {
 
 ## Check for new instances in is_a and part_of
 
-print "Main update is finished, now checking is_a and part_of....\n";
+print "Main update is finished, now checking is_a, part_of, has_part....\n";
 
 my %relationships = ('instanceOf' => \%new_isa,
-		     'componentOf' => \%new_partof,
-		     'hasPart' => \%new_haspart
-		     );
+                     'componentOf' => \%new_partof,
+                     'hasPart' => \%new_haspart
+                    );
 
 foreach my $attribute (keys %relationships) {
     my %new_relationship = %{$relationships{$attribute}};
@@ -241,13 +241,13 @@ foreach my $attribute (keys %relationships) {
                 }
             }
 
-	    my $current_instances = $sdi->attribute_value($attribute);
-	    if (different_go_instances($current_instances, \@new_instances)) {
-	        $sdi->inflate();
-	        $sdi->$attribute(@new_instances);
-	        $dba->update($sdi);
-	    }
-	}
+            my $current_instances = $sdi->attribute_value($attribute);
+            if (different_go_instances($current_instances, \@new_instances)) {
+                $sdi->inflate();
+                $sdi->$attribute(@new_instances);
+                $dba->update($sdi);
+            }
+        }
     }
 }
 
@@ -482,8 +482,12 @@ sub update_GO_instance {
         $GO_instance->inflate();
         $GO_instance->Name($name);
         $GO_instance->Definition($def);
-        $GO_instance->InstanceOf(undef);
-        $GO_instance->ComponentOf(undef);
+        # InstanceOf and ComponentOf are now only valid for GO_CellularComponent
+        if ($GO_instance->is_a("GO_CellularComponent"))
+        {
+            $GO_instance->InstanceOf(undef);
+            $GO_instance->ComponentOf(undef);
+        }
         $GO_instance->Created( @{ $GO_instance->Created } );
         $GO_instance->Modified( @{ $GO_instance->Modified } );
         $GO_instance->add_attribute_value( 'modified', $instance_edit );
@@ -510,8 +514,12 @@ sub create_GO_instance {
     $sdi->modified(undef);
     $sdi->Name($new_attributes->{'name'});
     $sdi->Definition($new_attributes->{'def'});
-    $sdi->InstanceOf(undef);
-    $sdi->ComponentOf(undef);
+    # InstanceOf and ComponentOf are now only valid for GO_CellularComponent
+    if ($GO_instance->is_a("GO_CellularComponent"))
+    {
+        $sdi->InstanceOf(undef);
+        $sdi->ComponentOf(undef);
+    }
     my $ddd = $dba->store($sdi);
 
     return $sdi;
