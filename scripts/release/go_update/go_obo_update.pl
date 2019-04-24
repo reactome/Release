@@ -515,7 +515,7 @@ sub create_GO_instance {
     $sdi->Name($new_attributes->{'name'});
     $sdi->Definition($new_attributes->{'def'});
     # InstanceOf and ComponentOf are now only valid for GO_CellularComponent
-    if ($GO_instance->is_a("GO_CellularComponent"))
+    if ($sdi->is_a("GO_CellularComponent"))
     {
         $sdi->InstanceOf(undef);
         $sdi->ComponentOf(undef);
