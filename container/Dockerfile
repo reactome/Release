@@ -25,7 +25,7 @@ RUN apt-get install -y \
     libmail-sendmail-perl libswitch-perl libnet-sftp-foreign-perl curl maven ftp \
     vim mysql-client iputils-ping sendmail oracle-java8-installer oracle-java8-set-default mlocate \
     libdata-table-perl  libfile-homedir-perl libspreadsheet-writeexcel-perl libcgi-session-perl \
-    libbio-perl-perl libmail-sendmail-perl
+    libbio-perl-perl libmail-sendmail-perl libemail-address-perl
 
 RUN cpanm --notest Data::CTable CPANPLUS::Backend Ace Test::Base Bio::Root::TestObject \
     RTF::Tokenizer Parallel::Loops
@@ -50,7 +50,6 @@ RUN git clone https://github.com/biomart/biomart-perl.git && cd biomart-perl && 
 RUN ln -s /release/modules/biomart-perl/lib/BioMart /etc/perl/BioMart
 
 WORKDIR /tmp/gitroot
-ENV xx xxx
 ARG RELEASE_TAG=release-container
 RUN git clone https://github.com/reactome/Release.git && cd Release && git checkout $RELEASE_TAG
 RUN mv /tmp/gitroot/Release/java /release/java && \
@@ -63,7 +62,7 @@ RUN rm -rf /tmp/gitroot
 COPY ./Secrets.pm /usr/local/gkb/modules/GKB/Secrets.pm
 WORKDIR /release/scripts
 
-ARG ENSEMBL_API_VERSION=94
+ARG ENSEMBL_API_VERSION=96
 WORKDIR /usr/local/gkb/modules
 RUN perl install_ensembl_api.pl $ENSEMBL_API_VERSION
 

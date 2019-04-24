@@ -27,7 +27,6 @@ touch logs/go_update/go.out
 touch logs/go_update/go.err
 touch logs/go_update/go.wiki
 touch logs/go_update/gk_central_after_uniprot_update.dump.gz
-touch logs/go_update/ec2go
 touch logs/chebi_update/improve_chebi_ids.out
 touch logs/chebi_update/improve_chebi_ids.err
 touch logs/chebi_update/chebi.wiki
@@ -73,12 +72,11 @@ docker run -it --name release_system --net reactome_release \
 	-v $(pwd)/logs/orthopairs/$RELEASE_NUMBER:/release/scripts/release/orthopairs/$RELEASE_NUMBER \
 	-v $(pwd)/logs/orthopairs/compara.err:/release/scripts/release/orthopairs/compara.err \
 	-v $(pwd)/logs/orthopairs/compara.log:/release/scripts/release/orthopairs/compara.log \
-	-v $(pwd)/logs/go_update/ec_number.err:/usr/local/gkb/scripts/release/go_update/ec_number.err \
-	-v $(pwd)/logs/go_update/ec_number.out:/usr/local/gkb/scripts/release/go_update/ec_number.out \
-	-v $(pwd)/logs/go_update/go.out:/usr/local/gkb/scripts/release/go_update/go.out \
-	-v $(pwd)/logs/go_update/go.err:/usr/local/gkb/scripts/release/go_update/go.err \
-	-v $(pwd)/logs/go_update/go.wiki:/usr/local/gkb/scripts/release/go_update/go.wiki \
-	-v $(pwd)/logs/go_update/ec2go:/usr/local/gkb/scripts/release/go_update/ec2go \
+	-v $(pwd)/logs/go_update/ec_number.err:/usr/local/gkb/scripts/release/go_update/ec_number.err:rw \
+	-v $(pwd)/logs/go_update/ec_number.out:/usr/local/gkb/scripts/release/go_update/ec_number.out:rw \
+	-v $(pwd)/logs/go_update/go.out:/usr/local/gkb/scripts/release/go_update/go.out:rw \
+	-v $(pwd)/logs/go_update/go.err:/usr/local/gkb/scripts/release/go_update/go.err:rw \
+	-v $(pwd)/logs/go_update/go.wiki:/usr/local/gkb/scripts/release/go_update/go.wiki:rw \
 	-v $(pwd)/logs/chebi_update/improve_chebi_ids.out:/usr/local/gkb/scripts/release/chebi_update/improve_chebi_ids.out \
 	-v $(pwd)/logs/chebi_update/improve_chebi_ids.err:/usr/local/gkb/scripts/release/chebi_update/improve_chebi_ids.err \
 	-v $(pwd)/logs/chebi_update/chebi.wiki:/usr/local/gkb/scripts/release/chebi_update/chebi.wiki \
@@ -104,6 +102,6 @@ docker run -it --name release_system --net reactome_release \
 	-v $(pwd)/logs/orthoinference/simplified_database.log:/usr/local/gkb/scripts/release/simplified_database/simplified_database.log \
 	-v $(pwd)/logs/orthoinference/simplified_database.err:/usr/local/gkb/scripts/release/simplified_database/simplified_database.err \
 	-v $(pwd)/nfs_backup:/nfs \
-	reactome_release /bin/bash
+	reactome-release /bin/bash
 
 # TODO: Figure out a nice way to get the dump/backup files out of the container
