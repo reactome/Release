@@ -1,5 +1,6 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 use strict;
+use warnings;
 
 use lib "/usr/local/gkb/modules";
 
@@ -9,11 +10,12 @@ use GKB::DBAdaptor;
 use autodie;
 use Array::Utils qw/:all/;
 use Getopt::Long;
+use Readonly;
 use Term::ReadKey;
 
 my ($help);
 GetOptions(
-  'help'=> \$help 
+  'help'=> \$help
 );
 
 if ($help) {
@@ -21,12 +23,14 @@ if ($help) {
     exit;
 }
 
-my $recent_db = prompt('Enter more recent database: (e.g. test_slice_54):');
-my $previous_db = prompt('Enter older database: (e.g. test_slice_53):');
+Readonly my $default_recent_db = 'slice_current';
+Readonly my $default_previous_db = 'slice_previous'
+my $recent_db = prompt("Enter recent database name (leave blank for default of $default_recent_db):") || $default_recent_db;
+my $previous_db = prompt("Enter previous database name (leave blank for default of $default_previous_db):") || $default_previous_db;
 
 (my $output_file = $0) =~ s/.pl$/.txt/;
 $output_file = prompt('Enter name for the output file:') if ($output_file eq $0);
-open (my $output, ">", $output_file); 
+open (my $output, '>', $output_file);
 
 my @new_instance_edit_ids = array_minus(
     @{get_instance_edit_ids_from_db($recent_db)},
@@ -48,13 +52,13 @@ close($output);
 sub prompt {
     my $query = shift;
     my $is_password = shift;
-    
+
     print $query;
-    
+
     ReadMode 'noecho' if $is_password; # Don't show keystrokes if it is a password
     my $return = ReadLine 0;
     chomp $return;
-    
+
     ReadMode 'normal';
     print "\n" if $is_password;
     return $return;
@@ -63,12 +67,12 @@ sub prompt {
 sub get_instances_from_db_by_ids {
     my $db = shift;
     my $db_ids = shift;
-    
+
     my @instances;
     my $dba = get_dba($db);
-    
+
     push @instances, @{$dba->fetch_instance_by_db_id($_)} foreach @{$db_ids};
-    
+
     return @instances;
 }
 
@@ -83,18 +87,18 @@ sub get_dba {
     return GKB::DBAdaptor->new(
         -dbname => $db,
         -user   => $GKB::Config::GK_DB_USER,
-        -host   => $GKB::Config::GK_DB_HOST, # host where mysqld is running                                                                                                                              
+        -host   => $GKB::Config::GK_DB_HOST, # host where mysqld is running
         -pass   => $GKB::Config::GK_DB_PASS,
         -port   => '3306'
-    );	
+    );
 }
 
 sub report {
     my $message = shift;
     my @file_handles = @_;
-    
+
     push @file_handles, *STDOUT;
-    
+
     foreach my $file_handle (@file_handles) {
         print $file_handle $message;
     }
@@ -102,15 +106,15 @@ sub report {
 
 sub get_authors {
     my $instance_edit = shift;
-    
+
     return 'Unknown' unless ($instance_edit->author->[0]);
-    
+
     return join(';', map {$_->displayName} @{$instance_edit->author});
 }
 
 sub usage_instructions{
     return <<END;
-    
+
 This script compares two databases and reports database objects which
 have a new instance edit (i.e. present in the recent database but not
 the older one) in the authored, reviewed, or reported attributes.
@@ -121,6 +125,6 @@ id, attribute with the new instance edit, and the author(s) of the new
 instance edit.
 
 Usage: perl $0
-    
+
 END
 }
