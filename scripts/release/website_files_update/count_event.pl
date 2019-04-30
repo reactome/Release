@@ -35,6 +35,7 @@ report("Current release is version $recent_version\n", $output);
 
 my @recent_slice_events = get_slice_events($recent_db);
 my @previous_slice_events = get_slice_events($previous_db);
+my %previous_slice_event_db_ids = map { $_->db_id => 1 } @previous_slice_events;
 
 report("total events from $recent_db = " . get_unique_db_ids(@recent_slice_events) . "\n", $output);
 report("total events from $previous_db = " . get_unique_db_ids(@previous_slice_events) . "\n", $output);
@@ -43,7 +44,7 @@ my %new_events;
 my $total_new_events;
 foreach my $event (@recent_slice_events){
     my $event_db_id = $event->db_id;
-    if (! grep(/^$event_db_id$/, map($_->db_id, @previous_slice_events))) {
+    if (! (exists $previous_slice_event_db_ids{$event_db_id})) {
         my $curator = get_author_name($event) ? get_author_name($event) : 'Created Mysteriously';
         push(@{$new_events{$curator}}, $event->_class->[0] . " " . $event->db_id . ":" . $event->name->[0]);
 
