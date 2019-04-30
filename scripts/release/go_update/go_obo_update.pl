@@ -375,74 +375,77 @@ print FR "\{\| class \=\"wikitable\"
 %obsolete = (%obsolete, %alternate, %pending_obsoletion);
 foreach my $obs_id ( sort keys %obsolete) {
 
-    print FR "\|\[$gk_central_host/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$obsolete{$obs_id}\& $total_name{$obs_id}\]\n";
-    print FR "\|\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO:$obs_id GO:$obs_id\]\n";
+	print FR "\|\[$gk_central_host/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$obsolete{$obs_id}\& $total_name{$obs_id}\]\n";
+	print FR "\|\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO:$obs_id GO:$obs_id\]\n";
 
-    my $action;
-    my @terms = ();
-    if ( $replaced{$obs_id}[0] ) {
-        $action = 'replace by:';
-        @terms = @{ $replaced{$obs_id} };
-    } elsif ( $consider{$obs_id}[0]) {
-    	$action = 'consider:';
-    	@terms = @{ $consider{$obs_id}};
-    } elsif ( $alternate{$obs_id}) {
-    	$action = 'alternate id -- no action required';
+	my $action;
+	my @terms = ();
+	if ( $replaced{$obs_id}[0] ) {
+		$action = 'replace by:';
+		@terms = @{ $replaced{$obs_id} };
+	}
+	elsif ( $consider{$obs_id}[0]) {
+		$action = 'consider:';
+		@terms = @{ $consider{$obs_id}};
+	}
+	elsif ( $alternate{$obs_id}) {
+		$action = 'alternate id -- no action required';
 
-	# Move all referrers to the primary GO term
-	my $alternate_acc = $obs_id;
-	my $alt_ac = $dba->fetch_instance_by_db_id( $alternate{$alternate_acc} );
-	my $primary = $dba->fetch_instance_by_db_id($altacc_to_primaryacc{$alternate_acc})->[0];
+		# Move all referrers to the primary GO term
+		my $alternate_acc = $obs_id;
+		my $alt_ac = $dba->fetch_instance_by_db_id( $alternate{$alternate_acc} );
+		my $primary = $dba->fetch_instance_by_db_id($altacc_to_primaryacc{$alternate_acc})->[0];
 
-	foreach my $sdi ( @{$alt_ac} ) {
-	    $sdi->inflate();
-	    my $alternate_accession = $sdi->accession->[0];
-	    my $ref   = $dba->fetch_referer_by_instance($sdi);
-	    foreach my $go_ref ( @{$ref} ) {
-	        $go_ref->inflate();
+		foreach my $sdi ( @{$alt_ac} ) {
+			$sdi->inflate();
+			my $alternate_accession = $sdi->accession->[0];
+			my $ref   = $dba->fetch_referer_by_instance($sdi);
+			foreach my $go_ref ( @{$ref} ) {
+				$go_ref->inflate();
 
-		# Skip referrers to other GO instances
-	        my $dbr = $go_ref->referenceDatabase->[0];
-	        next unless (!$dbr || $dbr->db_id != 1 );
+				# Skip referrers to other GO instances
+				my $dbr = $go_ref->referenceDatabase->[0];
+				next unless (!$dbr || $dbr->db_id != 1 );
 
+				foreach my $attribute ($go_ref->list_attributes()) {
+					my $attribute_value = $go_ref->$attribute->[0];
+					next unless $attribute_value;
 
-		foreach my $attribute ($go_ref->list_attributes()) {
-		    my $attribute_value = $go_ref->$attribute->[0];
-		    next unless $attribute_value;
+					my $accession;
 
-		    my $accession;
+					eval {
+						$accession = $attribute_value->accession->[0];
+					};
 
-		    eval {
-			$accession = $attribute_value->accession->[0];
-		    };
+					next unless $accession;
 
-		    next unless $accession;
-
-		    # If the attribute's value is a GO instance with an
-		    # accession matching the alternate term, give the
-		    # primary GO instance as the attribute value instead.
-		    # This, in effect, moves the referrers from the alternate
-		    # GO term to the primary GO term
-		    if ($accession == $alternate_accession) {
-			$go_ref->$attribute($primary);
-			$dba->update($go_ref);
-		    }
+					# If the attribute's value is a GO instance with an
+					# accession matching the alternate term, give the
+					# primary GO instance as the attribute value instead.
+					# This, in effect, moves the referrers from the alternate
+					# GO term to the primary GO term
+					if ($accession == $alternate_accession) {
+						$go_ref->$attribute($primary);
+						$dba->update($go_ref);
+					}
+				}
+			}
+			print "Deleting alternate accession instance " . $sdi->db_id . "...\n";
+			$dba->delete_by_db_id($sdi->db_id);
 		}
-	    }
-	    print "Deleting alternate accession instance " . $sdi->db_id . "...\n";
-	    $dba->delete_by_db_id($sdi->db_id);
-        }
-    } elsif ( $pending_obsoletion{$obs_id}) {
-    	$action = 'pending obsoletion -- no action required';
-    } else {
-    	$action = 'search for replacement -- none offered';
+	}
+	elsif ( $pending_obsoletion{$obs_id}) {
+		$action = 'pending obsoletion -- no action required';
     }
+	else {
+		$action = 'search for replacement -- none offered';
+	}
 
-    print FR "\|$action\n\|";
-    foreach (@terms) {
+	print FR "\|$action\n\|";
+	foreach (@terms) {
 		print FR "\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO\:$_ GO\:$_\]\t";
-    }
-    print FR "\n\|\-\n";
+	}
+	print FR "\n\|\-\n";
 }
 
 print FR "\|\}\n";
