@@ -22,8 +22,8 @@ if ($help) {
     exit;
 }
 
-Readonly my $default_recent_db = 'slice_current';
-Readonly my $default_previous_db = 'slice_previous'
+Readonly my $default_recent_db => 'slice_current';
+Readonly my $default_previous_db => 'slice_previous';
 my $recent_db = prompt("Enter recent slice database name (leave blank for default of $default_recent_db):") || $default_recent_db;
 my $recent_version = prompt("Enter Reactome version of recent database:");
 die "Reactome version must be numeric" if !$recent_version || $recent_version !~ /^\d+$/;
@@ -128,12 +128,10 @@ sub get_author_name {
 
 sub usage_instructions{
     return <<END;
-
 This script counts and reports the number of new events between an old
 and new test slice as well as a break down by curator reporting the number
 of new events as well as the event names.
 
 Usage: perl $0
-
 END
 }

@@ -22,8 +22,8 @@ if ($help) {
     exit;
 }
 
-Readonly my $default_recent_db = 'slice_current';
-Readonly my $default_previous_db = 'slice_previous'
+Readonly my $default_recent_db => 'slice_current';
+Readonly my $default_previous_db => 'slice_previous';
 my $recent_db = prompt("Enter recent slice database name (leave blank for default of $default_recent_db):") || $default_recent_db;
 my $previous_db = prompt("Enter previous slice database name (leave blank for default of $default_previous_db):") || $default_previous_db;
 
@@ -54,7 +54,6 @@ sub prompt {
     ReadMode 'noecho' if $pass; # Don't show keystrokes if it is a password
     my $return = ReadLine 0;
     chomp $return;
-
     ReadMode 'normal';
     print "\n" if $pass;
     return $return;
@@ -83,14 +82,12 @@ sub get_new_instances {
     foreach my $recent_instance (@$recent_instances) {
         push @new_instances, $recent_instance unless (exists $db_id_to_instance{$recent_instance->db_id});
     }
-
     return @new_instances;
 }
 
 sub print_compartments {
     my $file_handle = shift;
     my @compartments = @_;
-
     foreach my $compartment (sort {$a->displayName cmp $b->displayName} @compartments) {
         print $file_handle join("\t",
             $compartment->db_id,

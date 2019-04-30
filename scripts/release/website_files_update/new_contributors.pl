@@ -23,8 +23,8 @@ if ($help) {
     exit;
 }
 
-Readonly my $default_recent_db = 'slice_current';
-Readonly my $default_previous_db = 'slice_previous'
+Readonly my $default_recent_db => 'slice_current';
+Readonly my $default_previous_db => 'slice_previous';
 my $recent_db = prompt("Enter recent database name (leave blank for default of $default_recent_db):") || $default_recent_db;
 my $previous_db = prompt("Enter previous database name (leave blank for default of $default_previous_db):") || $default_previous_db;
 
@@ -114,7 +114,6 @@ sub get_authors {
 
 sub usage_instructions{
     return <<END;
-
 This script compares two databases and reports database objects which
 have a new instance edit (i.e. present in the recent database but not
 the older one) in the authored, reviewed, or reported attributes.
@@ -125,6 +124,5 @@ id, attribute with the new instance edit, and the author(s) of the new
 instance edit.
 
 Usage: perl $0
-
 END
 }
