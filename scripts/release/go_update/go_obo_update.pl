@@ -22,7 +22,7 @@ my $gk_central_host = 'http://reactomecurator.oicr.on.ca';
 my $obo_file = "go.obo";
 
 if (-e "$obo_file") { system("mv $obo_file $obo_file.old"); }
-my $return = system("wget -q -Nc http://purl.obolibrary.org/obo/$obo_file");
+my $return = system("wget -q -Nc http://current.geneontology.org/ontology/$obo_file");
 if ($return != 0) { die "ERROR: Download of $obo_file failed."; }
 
 $return = system("wget -q -Nc http://geneontology.org/external2go/ec2go");
@@ -91,7 +91,7 @@ my (%category_mismatch) = ();
 my (%total_name) = ();
 my (%new_go)     = ();
 my (%new_isa)    = ();
-my (%new_partof, %new_haspart, %new_regulates, %new_positively_regulates, %new_negatively_regulates) = ();
+my (%new_partof, %new_haspart) = ();
 
 foreach my $terms ( sort keys %categories ) {
     my $cc = 0;
@@ -154,6 +154,7 @@ while (<GO>) {
     }
 
 ## extract is_a, part_of, has_part, regulates, postively_regulates, negatively_regulates components of the given entry and put them in arrays:
+# regulates, postively_regulates, negatively_regulates are no longer in the data model. is_a, part_of, has_part only apply to GO_CellularComponent.
     while (/^is_a\:\s+GO\:(\d+)/gms) {
         # if ( not defined $total_acc{$1} ) {
         push @{ $new_isa{$acc} }, $1;
@@ -169,20 +170,20 @@ while (<GO>) {
         push @{ $new_haspart{$acc} }, $1;
     }
 
-    while (/^relationship\:\s+regulates GO\:(\d+)/gms) {
-        #if ( not defined $total_acc{$1} ) {
-        push @{ $new_regulates{$acc} }, $1;
-    }
-
-    while (/^relationship\:\s+positively_regulates GO\:(\d+)/gms) {
-        #if ( not defined $total_acc{$1} ) {
-        push @{ $new_positively_regulates{$acc} }, $1;
-    }
-
-    while (/^relationship\:\s+negatively_regulates GO\:(\d+)/gms) {
-        #if ( not defined $total_acc{$1} ) {
-        push @{ $new_negatively_regulates{$acc} }, $1;
-    }
+    # while (/^relationship\:\s+regulates GO\:(\d+)/gms) {
+    #     #if ( not defined $total_acc{$1} ) {
+    #     push @{ $new_regulates{$acc} }, $1;
+    # }
+	#
+    # while (/^relationship\:\s+positively_regulates GO\:(\d+)/gms) {
+    #     #if ( not defined $total_acc{$1} ) {
+    #     push @{ $new_positively_regulates{$acc} }, $1;
+    # }
+	#
+    # while (/^relationship\:\s+negatively_regulates GO\:(\d+)/gms) {
+    #     #if ( not defined $total_acc{$1} ) {
+    #     push @{ $new_negatively_regulates{$acc} }, $1;
+    # }
 
 
 ## when all checks are completed we update the entry:
@@ -203,7 +204,7 @@ while (<GO>) {
             }
         }
     } else {
-        if (!/(is_obsolete: true)/m) {
+        if ($_ !~ /(is_obsolete: true)/m) {
             my $GO_instance = create_GO_instance($dba, { class => $categories{$cat}, accession => $acc, name => $name, def => $def }, $db_inst, $instance_edit);
             $total_acc{$acc} = $GO_instance->db_id;
             print "New $categories{$cat} instance\: $GO_instance->{db_id}\n";
@@ -219,15 +220,12 @@ while (<GO>) {
 
 ## Check for new instances in is_a and part_of
 
-print "Main update is finished, now checking is_a and part_of....\n";
+print "Main update is finished, now checking is_a, part_of, has_part....\n";
 
 my %relationships = ('instanceOf' => \%new_isa,
-		     'componentOf' => \%new_partof,
-		     'hasPart' => \%new_haspart,
-		     'regulate' => \%new_regulates,
-		     'positivelyRegulate' => \%new_positively_regulates,
-		     'negativelyRegulate' => \%new_negatively_regulates
-		     );
+                     'componentOf' => \%new_partof,
+                     'hasPart' => \%new_haspart
+                    );
 
 foreach my $attribute (keys %relationships) {
     my %new_relationship = %{$relationships{$attribute}};
@@ -243,13 +241,13 @@ foreach my $attribute (keys %relationships) {
                 }
             }
 
-	    my $current_instances = $sdi->attribute_value($attribute);
-	    if (different_go_instances($current_instances, \@new_instances)) {
-	        $sdi->inflate();
-	        $sdi->$attribute(@new_instances);
-	        $dba->update($sdi);
-	    }
-	}
+            my $current_instances = $sdi->attribute_value($attribute);
+            if (different_go_instances($current_instances, \@new_instances)) {
+                $sdi->inflate();
+                $sdi->$attribute(@new_instances);
+                $dba->update($sdi);
+            }
+        }
     }
 }
 
@@ -442,9 +440,9 @@ foreach my $obs_id ( sort keys %obsolete) {
 
     print FR "\|$action\n\|";
     foreach (@terms) {
-		print FR "\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO\:$_ GO\:$_\]\t";
     }
     print FR "\n\|\-\n";
+		print FR "\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO\:$_ GO\:$_\]\t";
 }
 
 print FR "\|\}\n";
@@ -484,8 +482,12 @@ sub update_GO_instance {
         $GO_instance->inflate();
         $GO_instance->Name($name);
         $GO_instance->Definition($def);
-        $GO_instance->InstanceOf(undef);
-        $GO_instance->ComponentOf(undef);
+        # InstanceOf and ComponentOf are now only valid for GO_CellularComponent
+        if ($GO_instance->is_a("GO_CellularComponent"))
+        {
+            $GO_instance->InstanceOf(undef);
+            $GO_instance->ComponentOf(undef);
+        }
         $GO_instance->Created( @{ $GO_instance->Created } );
         $GO_instance->Modified( @{ $GO_instance->Modified } );
         $GO_instance->add_attribute_value( 'modified', $instance_edit );
@@ -512,8 +514,12 @@ sub create_GO_instance {
     $sdi->modified(undef);
     $sdi->Name($new_attributes->{'name'});
     $sdi->Definition($new_attributes->{'def'});
-    $sdi->InstanceOf(undef);
-    $sdi->ComponentOf(undef);
+    # InstanceOf and ComponentOf are now only valid for GO_CellularComponent
+    if ($sdi->is_a("GO_CellularComponent"))
+    {
+        $sdi->InstanceOf(undef);
+        $sdi->ComponentOf(undef);
+    }
     my $ddd = $dba->store($sdi);
 
     return $sdi;

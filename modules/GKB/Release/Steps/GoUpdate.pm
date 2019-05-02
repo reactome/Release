@@ -54,4 +54,15 @@ override 'run_commands' => sub {
     }
 };
 
+# override 'run_commands' => sub {
+# 	my ($self) = @_;
+# 	$self->cmd("Backing up database",[["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral > $gkcentral\_before_go_update.dump"]]);
+#     $self->cmd("Running GO Update script",
+#     	[
+#  			["perl run_GO_Update.pl $version  > go.out 2> go.err"]
+#     	]
+#  	);
+# 	$self->cmd("Backing up database",[["mysqldump -u$user -p$pass -h$gkcentral_host --lock_tables=FALSE $gkcentral > $gkcentral\_after_go_update.dump"]]);
+# };
+
 1;
