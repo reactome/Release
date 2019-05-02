@@ -13,14 +13,9 @@ use GKB::Config;
 
 Readonly my $SUDO_USER => 0;
 Readonly my $STAGING => "/usr/local/reactomes/Reactome/production/staging";
-Readonly my $RESTFUL_API => "$STAGING/webapps/ReactomeRESTfulAPI";
+Readonly my $RESTFUL_API => "$STAGING/webapps/ReactomeRESTfulAPICurator";
 Readonly my $APPLICATION_CONTEXT => "$RESTFUL_API/WEB-INF/applicationContext.xml";
-Readonly my $CONFIG_SECRETS => "/opt/GKB/modules/GKB/Secrets.pm";
-
-if ($EFFECTIVE_USER_ID != $SUDO_USER) {
-    print STDERR "Please run this script as sudo or root\n";
-    exit 1;
-}
+Readonly my $CONFIG_SECRETS => "/usr/local/reactomes/Reactome/production/Release/modules/GKB/Secrets.pm";
 
 my ($db_name, $use_cache) = @ARGV;
 if (!$db_name) {
@@ -35,7 +30,7 @@ if (!db_exists($db_name)) {
 }
 
 $use_cache && $use_cache =~ /^use_cache=(true|false)/;
-$use_cache = $1 || 'true'; 
+$use_cache = $1 || 'true';
 
 if (-e $RESTFUL_API) {
     print "Backing up $RESTFUL_API directory\n";
@@ -89,4 +84,3 @@ sub db_exists {
 
     return $return_value == 0; # 0 return value indicates success (i.e. db exists)
 }
-
