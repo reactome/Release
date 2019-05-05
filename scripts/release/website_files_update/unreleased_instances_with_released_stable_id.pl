@@ -78,11 +78,11 @@ my($curated_user, $curated_host, $curated_pass, $curated_port, $curated_db, $cur
     "curated_db=s" => \$curated_db
 );
 
-$curated_user ||= $GKB::Config::GK_DB_USER;
-$curated_pass ||= $GKB::Config::GK_DB_PASS;
-$curated_port ||= $GKB::Config::GK_DB_PORT;
+$curated_user ||= $GKB::Config::GK_CURATOR_DB_USER;
+$curated_pass ||= $GKB::Config::GK_CURATOR_DB_PASS;
+$curated_port ||= $GKB::Config::GK_CURATOR_DB_PORT;
 $curated_db ||= 'gk_central';
-$curated_host ||= 'curator.reactome.org';
+$curated_host ||= $GKB::Config::GK_CURATOR_DB_HOST;
 
 my $curated_dba = GKB::DBAdaptor->new(
     -dbname => $curated_db,
@@ -157,10 +157,10 @@ sub usage_instructions {
     -release_port db_port (default: $GKB::Config::GK_DB_PORT)
     -release_db db_name (default: $GKB::Config::GK_DB_NAME)
     -release_debug (default: not used)
-    -curated_user db_user (default: $GKB::Config::GK_DB_USER)
-    -curated_host db_host (default: curator.reactome.org)
-    -curated_pass db_pass (default: password for $GKB::Config::GK_DB_USER)
-    -curated_port db_port (default: $GKB::Config::GK_DB_PORT)
+    -curated_user db_user (default: $GKB::Config::GK_CURATOR_DB_USER)
+    -curated_host db_host (default: $GKB::Config::GK_CURATOR_DB_HOST)
+    -curated_pass db_pass (default: password for $GKB::Config::GK_CURATOR_DB_PASS)
+    -curated_port db_port (default: $GKB::Config::GK_CURATOR_DB_PORT)
     -curated_db db_name (default: gk_central)
     -curated_debug (default: not used)
 
