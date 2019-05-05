@@ -10,7 +10,7 @@ use Getopt::Long;
 
 my $help;
 GetOptions(
-  'help' => \$help
+    'help' => \$help
 );
 
 if ($help) {
@@ -24,14 +24,14 @@ GetOptions(
 );
 unless ($class) {
     my @classes = qw/Event EntityWithAccessionedSequence/;
-    
+
     until ($class) {
-		print_choose_class_query(@classes);
-		my $answer = <STDIN>;
-		chomp $answer;
-		eval {
-			$class = $classes[$answer - 1] if $answer =~ /^\d+$/;
-		};
+        print_choose_class_query(@classes);
+        my $answer = <STDIN>;
+        chomp $answer;
+        eval {
+            $class = $classes[$answer - 1] if $answer =~ /^\d+$/;
+        };
     }
 }
 
@@ -58,18 +58,17 @@ if ($release_db eq $GKB::Config::GK_DB_NAME) {
     $release_db = $release_db_name if $release_db_name;
 }
 
-my $release_dba = GKB::DBAdaptor->new
-    (
-     -dbname => $release_db,
-     -user   => $release_user,
-     -host   => $release_host,
-     -pass   => $release_pass,
-     -port   => $release_port,
-     -driver => 'mysql',
-     -DEBUG => $release_debug
-    );
+my $release_dba = GKB::DBAdaptor->new(
+    -dbname => $release_db,
+    -user   => $release_user,
+    -host   => $release_host,
+    -pass   => $release_pass,
+    -port   => $release_port,
+    -driver => 'mysql',
+    -DEBUG => $release_debug
+);
 
-    
+
 my($curated_user, $curated_host, $curated_pass, $curated_port, $curated_db, $curated_debug);
 &GetOptions(
     "curated_user=s"=> \$curated_user,
@@ -83,18 +82,17 @@ $curated_user ||= $GKB::Config::GK_DB_USER;
 $curated_pass ||= $GKB::Config::GK_DB_PASS;
 $curated_port ||= $GKB::Config::GK_DB_PORT;
 $curated_db ||= 'gk_central';
-$curated_host ||= 'reactomecurator.oicr.on.ca';
+$curated_host ||= 'curator.reactome.org';
 
-my $curated_dba = GKB::DBAdaptor->new
-    (
-     -dbname => $curated_db,
-     -user   => $curated_user,
-     -host   => $curated_host,
-     -pass   => $curated_pass,
-     -port   => $curated_port,
-     -driver => 'mysql',
-     -DEBUG => $curated_debug
-    );
+my $curated_dba = GKB::DBAdaptor->new(
+    -dbname => $curated_db,
+    -user   => $curated_user,
+    -host   => $curated_host,
+    -pass   => $curated_pass,
+    -port   => $curated_port,
+    -driver => 'mysql',
+    -DEBUG => $curated_debug
+);
 
 my $released_instances = $release_dba->fetch_instance(-CLASS => $class);
 
@@ -121,10 +119,10 @@ foreach my $instance (@{$curated_instances}) {
     next unless $instance->stableIdentifier->[0]->released->[0] && $instance->stableIdentifier->[0]->released->[0] =~ /true/i;
     my $stable_id = $instance->stableIdentifier->[0]->identifier->[0];
     next if $released{$stable_id};
-    
+
     my $instance_db_id = $instance->db_id || '';
     my $instance_name = $instance->name->[0] || '';
-    
+
     print $out $instance_db_id . "\t" . $instance_name;
     print $out "\t";
     print $out $instance->created->[0]->author->[0]->displayName . " " . $instance->created->[0]->dateTime->[0] if $instance->created->[0] && $instance->created->[0]->author->[0];
@@ -138,9 +136,9 @@ sub print_choose_class_query {
     my @classes = @_;
     print "Choose class - \n";
     for (my $index = 0; $index < scalar @classes; $index++) {
-		my $class = $classes[$index];
-		my $num = $index + 1;
-		print "$class($num)\n";
+        my $class = $classes[$index];
+        my $num = $index + 1;
+        print "$class($num)\n";
     }
     print "Select number:"
 }
@@ -151,20 +149,20 @@ sub usage_instructions {
     are needed to find unreleased instances of the selected class in the latter
 
     Usage: perl $0 [options]
-    
+
     -class instance_class (will prompt if not specified)
     -release_user db_user (default: $GKB::Config::GK_DB_USER)
     -release_host db_host (default: $GKB::Config::GK_DB_HOST)
     -release_pass db_pass (default: password for $GKB::Config::GK_DB_USER)
     -release_port db_port (default: $GKB::Config::GK_DB_PORT)
     -release_db db_name (default: $GKB::Config::GK_DB_NAME)
-	-release_debug (default: not used)
+    -release_debug (default: not used)
     -curated_user db_user (default: $GKB::Config::GK_DB_USER)
-    -curated_host db_host (default: reactomecurator.oicr.on.ca)
+    -curated_host db_host (default: curator.reactome.org)
     -curated_pass db_pass (default: password for $GKB::Config::GK_DB_USER)
     -curated_port db_port (default: $GKB::Config::GK_DB_PORT)
     -curated_db db_name (default: gk_central)
-	-curated_debug (default: not used)
+    -curated_debug (default: not used)
 
 END
 }
