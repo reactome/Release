@@ -23,10 +23,17 @@ if ($help) {
     exit;
 }
 
-Readonly my $default_recent_db => 'slice_current';
-Readonly my $default_previous_db => 'slice_previous';
-my $recent_db = prompt("Enter recent database name (leave blank for default of $default_recent_db):") || $default_recent_db;
-my $previous_db = prompt("Enter previous database name (leave blank for default of $default_previous_db):") || $default_previous_db;
+my $recent_db = prompt("Enter recent slice database name:");
+while (!$recent_db) {
+    print "No value entered for recent slice database name.\n";
+    $recent_db = prompt("Enter recent slice database name:");
+}
+
+my $previous_db = prompt("Enter previous slice database name:");
+while (!$previous_db) {
+    print "No value entered for previous slice database name.\n";
+    $previous_db = prompt("Enter previous slice database name:");
+}
 
 (my $output_file = $0) =~ s/.pl$/.txt/;
 $output_file = prompt('Enter name for the output file:') if ($output_file eq $0);

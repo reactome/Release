@@ -22,13 +22,19 @@ if ($help) {
     exit;
 }
 
-Readonly my $default_recent_db => 'slice_current';
-Readonly my $default_previous_db => 'slice_previous';
-my $recent_db = prompt("Enter recent slice database name (leave blank for default of $default_recent_db):") || $default_recent_db;
+my $recent_db = prompt("Enter recent slice database name:");
+while (!$recent_db) {
+    print "No value entered for recent slice database name.\n";
+    $recent_db = prompt("Enter recent slice database name:");
+}
 my $recent_version = prompt("Enter Reactome version of recent database:");
 die "Reactome version must be numeric" if !$recent_version || $recent_version !~ /^\d+$/;
-my $previous_db = prompt("Enter previous slice database name (leave blank for default of $default_previous_db):") || $default_previous_db;
 
+my $previous_db = prompt("Enter previous slice database name:");
+while (!$previous_db) {
+    print "No value entered for previous slice database name.\n";
+    $previous_db = prompt("Enter previous slice database name:");
+}
 
 open (my $output, '>', "newevents$recent_version.txt");
 report("Current release is version $recent_version\n", $output);

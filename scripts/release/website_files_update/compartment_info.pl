@@ -22,10 +22,17 @@ if ($help) {
     exit;
 }
 
-Readonly my $default_recent_db => 'slice_current';
-Readonly my $default_previous_db => 'slice_previous';
-my $recent_db = prompt("Enter recent slice database name (leave blank for default of $default_recent_db):") || $default_recent_db;
-my $previous_db = prompt("Enter previous slice database name (leave blank for default of $default_previous_db):") || $default_previous_db;
+my $recent_db = prompt("Enter recent slice database name:");
+while (!$recent_db) {
+    print "No value entered for recent slice database name.\n";
+    $recent_db = prompt("Enter recent slice database name:");
+}
+
+my $previous_db = prompt("Enter previous slice database name:");
+while (!$previous_db) {
+    print "No value entered for previous slice database name.\n";
+    $previous_db = prompt("Enter previous slice database name:");
+}
 
 print "recent db is $recent_db\n";
 my $dba_recent = get_dba($recent_db, $GKB::Config::GK_DB_HOST);
