@@ -16,7 +16,7 @@ our ($opt_user, $opt_host,  $opt_pass, $opt_port, $opt_db, $opt_debug, $opt_spec
 $opt_db  || die "Need database name (-db).\n";
 
 # Host for gk_central
-my $gk_central_host = 'http://reactomecurator.oicr.on.ca';
+my $gk_central_host = 'https://curator.reactome.org';
 
 ## Download GO data file in OBO format
 my $obo_file = "go.obo";
@@ -174,12 +174,12 @@ while (<GO>) {
     #     #if ( not defined $total_acc{$1} ) {
     #     push @{ $new_regulates{$acc} }, $1;
     # }
-	#
+    #
     # while (/^relationship\:\s+positively_regulates GO\:(\d+)/gms) {
     #     #if ( not defined $total_acc{$1} ) {
     #     push @{ $new_positively_regulates{$acc} }, $1;
     # }
-	#
+    #
     # while (/^relationship\:\s+negatively_regulates GO\:(\d+)/gms) {
     #     #if ( not defined $total_acc{$1} ) {
     #     push @{ $new_negatively_regulates{$acc} }, $1;
@@ -234,6 +234,8 @@ foreach my $attribute (keys %relationships) {
         my $ar = $dba->fetch_instance_by_db_id( $total_acc{$ac_upd} );
         my @new_instances;
         foreach my $sdi ( @{$ar} ) {
+            next unless $sdi->is_a("GO_CellularComponent");
+
             foreach my $new_instance_id ( @{ $new_relationship{$ac_upd} } ) {
                 my $new_a = $dba->fetch_instance_by_db_id( $total_acc{$new_instance_id} );
                 foreach my $sdn ( @{$new_a} ) {
@@ -245,6 +247,7 @@ foreach my $attribute (keys %relationships) {
             if (different_go_instances($current_instances, \@new_instances)) {
                 $sdi->inflate();
                 $sdi->$attribute(@new_instances);
+                print "Updating relationship $attribute for " . $sdi->extended_displayName . "\n";
                 $dba->update($sdi);
             }
         }
@@ -255,9 +258,9 @@ foreach my $attribute (keys %relationships) {
 
 open( FR, ">go.wiki" ) || die "Can't open report file\n";
 print FR "\<h4\> Report date\: $date\n
-		<br>
-		Database name\: $opt_db\n
-		</h4>\n\n\n----\n";
+        <br>
+        Database name\: $opt_db\n
+        </h4>\n\n\n----\n";
 
 print FR "\{\| class \=\"wikitable\"
 \|\+ Incorrect GO IDs in Reactome
@@ -317,12 +320,12 @@ foreach my $obs_id ( sort keys %obsolete ) {
 
     my $obs_ac = $dba->fetch_instance_by_db_id( $obsolete{$obs_id} );
     foreach my $sdi ( @{$obs_ac} ) {
- 		$sdi->inflate();
+        $sdi->inflate();
         my $db_id = $sdi->db_id;
         my $sz    = 0;
         my $ref   = $dba->fetch_referer_by_instance($sdi);
 
-	foreach my $go_ref ( @{$ref} ) {
+        foreach my $go_ref ( @{$ref} ) {
             $go_ref->inflate();
             my $dbr = $go_ref->referenceDatabase->[0];
             if (!$dbr || $dbr->db_id != 1 ) {
@@ -330,9 +333,9 @@ foreach my $obs_id ( sort keys %obsolete ) {
             }
         }
         if ( $sz == 0 ) {
-	    print FR "";
-	    print FR "\|GO:$obs_id\n";
-	    print FR "\|\-\n";
+            print FR "";
+            print FR "\|GO:$obs_id\n";
+            print FR "\|\-\n";
 
             print "Deleting $db_id...\n";
             $dba->delete_by_db_id($db_id);
@@ -384,65 +387,65 @@ foreach my $obs_id ( sort keys %obsolete) {
         $action = 'replace by:';
         @terms = @{ $replaced{$obs_id} };
     } elsif ( $consider{$obs_id}[0]) {
-    	$action = 'consider:';
-    	@terms = @{ $consider{$obs_id}};
+        $action = 'consider:';
+        @terms = @{ $consider{$obs_id}};
     } elsif ( $alternate{$obs_id}) {
-    	$action = 'alternate id -- no action required';
+        $action = 'alternate id -- no action required';
 
-	# Move all referrers to the primary GO term
-	my $alternate_acc = $obs_id;
-	my $alt_ac = $dba->fetch_instance_by_db_id( $alternate{$alternate_acc} );
-	my $primary = $dba->fetch_instance_by_db_id($altacc_to_primaryacc{$alternate_acc})->[0];
+        # Move all referrers to the primary GO term
+        my $alternate_acc = $obs_id;
+        my $alt_ac = $dba->fetch_instance_by_db_id( $alternate{$alternate_acc} );
+        my $primary = $dba->fetch_instance_by_db_id($altacc_to_primaryacc{$alternate_acc})->[0];
 
-	foreach my $sdi ( @{$alt_ac} ) {
-	    $sdi->inflate();
-	    my $alternate_accession = $sdi->accession->[0];
-	    my $ref   = $dba->fetch_referer_by_instance($sdi);
-	    foreach my $go_ref ( @{$ref} ) {
-	        $go_ref->inflate();
+        foreach my $sdi ( @{$alt_ac} ) {
+            $sdi->inflate();
+            my $alternate_accession = $sdi->accession->[0];
+            my $ref   = $dba->fetch_referer_by_instance($sdi);
+            foreach my $go_ref ( @{$ref} ) {
+                $go_ref->inflate();
 
-		# Skip referrers to other GO instances
-	        my $dbr = $go_ref->referenceDatabase->[0];
-	        next unless (!$dbr || $dbr->db_id != 1 );
+                # Skip referrers to other GO instances
+                my $dbr = $go_ref->referenceDatabase->[0];
+                next unless (!$dbr || $dbr->db_id != 1 );
 
+                foreach my $attribute ($go_ref->list_attributes()) {
+                    my $attribute_value = $go_ref->$attribute->[0];
+                    next unless $attribute_value;
 
-		foreach my $attribute ($go_ref->list_attributes()) {
-		    my $attribute_value = $go_ref->$attribute->[0];
-		    next unless $attribute_value;
+                    my $accession;
 
-		    my $accession;
+                    eval {
+                    $accession = $attribute_value->accession->[0];
+                    };
 
-		    eval {
-			$accession = $attribute_value->accession->[0];
-		    };
+                    next unless $accession;
 
-		    next unless $accession;
-
-		    # If the attribute's value is a GO instance with an
-		    # accession matching the alternate term, give the
-		    # primary GO instance as the attribute value instead.
-		    # This, in effect, moves the referrers from the alternate
-		    # GO term to the primary GO term
-		    if ($accession == $alternate_accession) {
-			$go_ref->$attribute($primary);
-			$dba->update($go_ref);
-		    }
-		}
-	    }
-	    print "Deleting alternate accession instance " . $sdi->db_id . "...\n";
-	    $dba->delete_by_db_id($sdi->db_id);
+                    # If the attribute's value is a GO instance with an
+                    # accession matching the alternate term, give the
+                    # primary GO instance as the attribute value instead.
+                    # This, in effect, moves the referrers from the alternate
+                    # GO term to the primary GO term
+                    if ($accession == $alternate_accession) {
+                        $go_ref->$attribute($primary);
+                        $dba->update($go_ref);
+                    }
+                }
+            }
+            print "Deleting alternate accession instance " . $sdi->db_id . "...\n";
+            $dba->delete_by_db_id($sdi->db_id);
         }
     } elsif ( $pending_obsoletion{$obs_id}) {
-    	$action = 'pending obsoletion -- no action required';
+        $action = 'pending obsoletion -- no action required';
     } else {
-    	$action = 'search for replacement -- none offered';
+        $action = 'search for replacement -- none offered';
     }
 
     print FR "\|$action\n\|";
     foreach (@terms) {
+        print FR "\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO\:$_ GO\:$_\]\t";
     }
     print FR "\n\|\-\n";
-		print FR "\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO\:$_ GO\:$_\]\t";
+
 }
 
 print FR "\|\}\n";
