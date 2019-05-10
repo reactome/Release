@@ -101,10 +101,12 @@ use GKB::DBAdaptor;
 sub get_dba {
     my $db = shift;
     my $host = shift;
+    my $user = shift || $GKB::Config::GK_DB_USER;
+    my $pass = shift || $GKB::Config::GK_DB_PASS;
 
     return GKB::DBAdaptor->new (
-        -user => $GKB::Config::GK_DB_USER,
-        -pass => $GKB::Config::GK_DB_PASS,
+        -user => $user,
+        -pass => $pass,
         -host => $host,
         -dbname => $db
     );
