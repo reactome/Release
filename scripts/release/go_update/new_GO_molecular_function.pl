@@ -8,13 +8,19 @@ use English qw/-no_match_vars/;
 
 use lib '/usr/local/gkb/modules';
 use GKB::CommonUtils;
+use GKB::Config;
 
 if (!$ARGV[0] || $ARGV[0] !~ /^\d+$/msx) {
     print "Usage: perl $PROGRAM_NAME [db_id of GO update instance edit]\n";
     exit;
 }
 
-my $gk_central_dba = get_dba('gk_central', 'curator.reactome.org');
+my $gk_central_dba = get_dba(
+    'gk_central',
+    'curator.reactome.org',
+    $GKB::Config::GK_CURATOR_DB_USER,
+    $GKB::Config::GK_CURATOR_DB_PASS
+);
 
 my $instance_edit = $gk_central_dba->fetch_instance_by_db_id($ARGV[0])->[0];
 my @GO_molecular_function_instances = grep {
