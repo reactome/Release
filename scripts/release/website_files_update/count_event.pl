@@ -27,8 +27,10 @@ while (!$recent_db) {
     print "No value entered for recent slice database name.\n";
     $recent_db = prompt("Enter recent slice database name:");
 }
-my $recent_version = prompt("Enter Reactome version of recent database:");
-die "Reactome version must be numeric" if !$recent_version || $recent_version !~ /^\d+$/;
+my $recent_version = get_dba($recent_db)->fetch_instance(-CLASS => '_Release')->[0]->releaseNumber->[0];
+if ($recent_version !~ /^\d+$/) {
+    die "$recent_version is not numeric\n";
+}
 
 my $previous_db = prompt("Enter previous slice database name:");
 while (!$previous_db) {
