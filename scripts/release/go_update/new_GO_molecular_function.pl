@@ -13,7 +13,7 @@ if (!$ARGV[0] || $ARGV[0] !~ /^\d+$/) {
     exit;
 }
 
-my $gk_central_dba = get_dba('gk_central', 'reactomecurator.oicr.on.ca');        
+my $gk_central_dba = get_dba('gk_central', 'curator.reactome.org');
 
 my $instance_edit = $gk_central_dba->fetch_instance_by_db_id($ARGV[0])->[0];
 my @GO_molecular_function_instances = grep {$_->is_a('GO_MolecularFunction')} @{$instance_edit->reverse_attribute_value('created')};
