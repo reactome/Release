@@ -11,7 +11,7 @@ extends qw/GKB::Release::Step/;
 has '+gkb' => ( default => "gkbdev" );
 has '+passwords' => ( default => sub { ['mysql'] } );
 has '+directory' => ( default => "$release/update_stable_ids" );
-has '+mail' => ( default => sub { 
+has '+mail' => ( default => sub {
     my $self = shift;
     return {
         'to' => '',
@@ -26,7 +26,7 @@ override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
     #my $host = $self->host;
-    # The $self->host will evaluate to the hostname of the machine where the code is run. 
+    # The $self->host will evaluate to the hostname of the machine where the code is run.
     # This won't be useful inside a docker container, where the database is not hosted in the same
     # container as where the code runs. So we'll use the GK_DB_HOST from the config.
     my $host = $GKB::Config::GK_DB_HOST;
@@ -45,15 +45,13 @@ override 'run_commands' => sub {
             ["zcat $archive/update_stable_ids/$prevver/$slicedb.dump.gz | mysql -u $user -p$pass $previous_slice_db"],
         ]
     );
-    
+
     foreach (get_all_stable_identifier_instances(get_dba($slicedb))) {
         $stable_identifier_to_version{$_->identifier->[0]}{'before_update'} = $_->identifierVersion->[0];
     }
     $self->cmd("Updating stable IDs",
         [
-            ["perl update_stable_ids.pl -ghost $gkcentral_host -host $host -user $user -pass $pass -sdb $slicedb ".
-             "-pdb $previous_slice_db -release $version -gdb $gkcentral > generate_stable_ids_$version.out ".
-             "2> generate_stable_ids_$version.err"]
+            ["bash data-release-pipeline/updateStableIds/runUpdateStableIds.sh"]
         ]
     );
     foreach (get_all_stable_identifier_instances(get_dba($slicedb))) {
@@ -70,7 +68,7 @@ override 'run_commands' => sub {
 
 ## Collect and return problems with pre-requisites of stable identifiers
 override 'pre_step_tests' => sub {
-    my $self = shift;   
+    my $self = shift;
 
     return get_stable_id_QA_problems_as_list_of_strings(get_dba($slicedb));
 };
@@ -113,18 +111,18 @@ override 'post_step_tests' => sub {
 sub get_test_slice {
     my $version = shift;
     my $host = shift;
-    
+
     my $snapshot = "test_slice_$version\_snapshot";
-    
+
     return database_exists($snapshot, $host) ? $snapshot : "test_slice_$version";
 }
 
 sub _check_stable_id_count {
-	my $current_db = shift;
-	my $previous_db = shift;
+    my $current_db = shift;
+    my $previous_db = shift;
 
-	my $current_stable_id_count = get_dba($current_db)->class_instance_count('StableIdentifier');
-	my $previous_stable_id_count = get_dba($previous_db)->class_instance_count('StableIdentifier');
+    my $current_stable_id_count = get_dba($current_db)->class_instance_count('StableIdentifier');
+    my $previous_stable_id_count = get_dba($previous_db)->class_instance_count('StableIdentifier');
 
     my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
 
@@ -134,9 +132,9 @@ sub _check_stable_id_count {
         # *EXPLICITLY* return undef because post-step test relies on defined vs. undefined.
         # If you don't return undef, then it seems the empty string '' will be returned and that breaks
         # the logic of the post step test because '' is defined and the test checked for variables that are
-		# UNdefined.
-		return undef;
-	}
+        # UNdefined.
+        return undef;
+    }
 }
 
 1;
