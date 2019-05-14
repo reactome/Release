@@ -41,7 +41,7 @@ override 'run_commands' => sub {
 
     $self->cmd("Loading previous slice into $previous_slice_db database",
         [
-            ["mysql -e 'drop database if exists $previous_slice_db; create database $previous_slice_db'"],
+            ["mysql -u $user -p$pass -e 'drop database if exists $previous_slice_db; create database $previous_slice_db'"],
             ["zcat $archive/$prevver/$slicedb.dump.gz | mysql $previous_slice_db"],
         ]
     );
