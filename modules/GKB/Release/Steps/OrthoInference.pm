@@ -52,8 +52,8 @@ override 'run_commands' => sub {
             ["mkdir -p $version"],
             ["perl create_orthoinference_db.pl -source_db $slicedb -target_db $db" .
              " > create_orthoinference_db.out 2> create_orthoinference_db.err"],
-            ["perl build_orthoinference_jar.pl -release $version -release_date $release_date -person_id $person_id" .
-             " > build_orthoinference_jar.out 2> build_orthoinference_jar.err"],
+            ["perl setup_orthoinference_jar.pl -release $version -release_date $release_date -person_id $person_id" .
+             " > setup_orthoinference_jar.out 2> setup_orthoinference_jar.err"],
             ['./runOrthoinference.sh > runOrthoinference.out 2> runOrthoinference.err'],
             # TODO: A script to remove unused physical entities will be called here
             ["perl updateDisplayName.pl -user $user -pass $pass -host $host -port $port -db $db -class PhysicalEntity" .
