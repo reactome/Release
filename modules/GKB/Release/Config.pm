@@ -110,26 +110,26 @@ our $version;
 our $prevver;
 
 # Set database names
-our $db = "release_current"; # Current release database (e.g. test_reactome_38)
+our $db = 'release_current'; # Current release database (e.g. test_reactome_38)
 our $previous_db = 'release_previous'; # Previous release database
-our $slicedb = "slice_current"; # Current slice database (e.g. test_slice_38)
+our $slicedb = 'slice_current'; # Current slice database (e.g. test_slice_38)
 our $previous_slice_db = 'slice_previous'; # Slice database from the previous release
 our $live_db = 'current';
-our $stable_id_db = "stable_identifiers";
-our $gkcentral = "central";
-our $gkcentral_host = "localhost";
+our $stable_id_db = 'stable_identifiers';
+our $gkcentral = 'gk_central';
+our $gkcentral_host = 'curator.reactome.org';
 
 if ($TEST_MODE) {
     $user = 'piper';
     #$stable_id_db = "stable_identifiers",
-    #$gkcentral = "central";
-    #$gkcentral_host = "localhost";
+    $gkcentral = 'central';
+    $gkcentral_host = 'localhost';
     $version = 999;
-    $prevver = 66;
+    $prevver = 68;
 }
 
 # Set directory paths
-our $base_dir = "/usr/local/reactomes/Reactome/production";
+our $base_dir = '/usr/local/reactomes/Reactome/production';
 our $gkbdev = "$base_dir/Release";
 our $scripts = "$gkbdev/scripts";
 our $release = "$scripts/release";
@@ -138,7 +138,7 @@ our $website_static = "$website/static";
 our $gkbmodules = "$gkbdev/modules";
 our $dumpdir = "$gkbdev/tmp";
 our $tmp = "$gkbdev/tmp";
-our $cvs = "/usr/local/cvs_repository";
+our $cvs = '/usr/local/cvs_repository';
 our $logdir = "$release/logs";
 our $logfile = "$logdir/release{version}.log";
 our $archive = "$gkbdev/archive";
@@ -149,28 +149,24 @@ our %passwords = (
 );
 
 
-our $release_server = "release.reactome.org";
-our $live_server = "reactomeprd1.oicr.on.ca";
-our $dev_server = "reactomedev.oicr.on.ca";
-our $curator_server = "reactomecurator.oicr.on.ca";
+our $release_server = 'release.reactome.org';
+our $live_server = 'reactome.org';
+our $dev_server = 'dev.reactome.org';
+our $curator_server = 'curator.reactome.org';
 
 if ($TEST_MODE) {
-    $live_server = "reactomeclean.oicr.on.ca";
+    $live_server = 'localhost';
 }
 
 # Host to gkb directory and vice-versa
 our %hosts = (
-    $release_server => "gkbdev",
-    $dev_server => "gkbdev",
-    $live_server => "gkb",
-    $curator_server => "gkb",
+    $release_server => 'gkbdev',
+    $dev_server => 'gkbdev',
+    $live_server => 'gkb',
+    $curator_server => 'gkb',
 
-    "gkbdev" => $release_server,
-    "gkb" => $live_server,
-
-    # Alternate servers
-    "brie8.cshl.edu" => "gkbdev",
-    "reactomeclean.oicr.on.ca" => "gkbdev"
+    'gkbdev' => $release_server,
+    'gkb' => $live_server,
 );
 
 our %maillist = (
