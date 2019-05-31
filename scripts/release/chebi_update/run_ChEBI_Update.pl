@@ -134,7 +134,9 @@ sub collect_logs_and_cache {
     my $log_directory = cwd() . "/archive/$release_version";
 
     # TODO: Zip all the logs into an archive and then email them when the step finishes, instead of the old chebi.wiki
-    system "mkdir -p $log_directory";
+    if (! -e $log_directory) {
+        system "mkdir -p $log_directory";
+    }
     system "cp -a $application_directory/logs $log_directory";
     system "tar -czf $application_directory/chebi_update_logs_R$release_version.tgz $log_directory/logs";
     # keep a copy of any cache file
