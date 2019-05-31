@@ -416,11 +416,11 @@ sub archive_files {
 
     system "mkdir -p $step_version_archive";
     if (-d $step_version_archive) {
-        foreach my $sql_dump_file (glob "*.dump") {
+        foreach my $sql_dump_file (glob '*.dump') {
             if (-e "$sql_dump_file.gz") {
                 system "mv --backup=numbered $sql_dump_file.gz $step_version_archive";
             }
-            system "gzip -qf $sql_dump_file";
+            system "gzip -qf $sql_dump_file 2> /dev/null";
         }
 
         foreach my $file (map { glob } qw/*.err *.log *.out *.dump.gz/) {
