@@ -307,7 +307,7 @@ sub run {
         }
         $self->mail->{'body'} .= "$self->{name} step has completed successfully";
     }
-    $self->mail_now();
+    #$self->mail_now();
 
     say releaselog('Archiving output, logs, dump files...');
     $self->archive_files($version);
