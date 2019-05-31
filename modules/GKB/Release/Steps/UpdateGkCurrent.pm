@@ -12,15 +12,14 @@ has '+gkb' => ( default => "gkbdev" );
 has '+passwords' => ( default => sub { ['mysql'] } );
 has '+directory' => ( default => "$release/update_gk_current" );
 has '+mail' => ( default => sub {
-					my $self = shift;
-					return {
-						'to' => '',
-						'subject' => $self->name,
-						'body' => "",
-						'attachment' => ""
-					};
-				}
-);
+    my $self = shift;
+    return {
+        'to' => '',
+        'subject' => $self->name,
+        'body' => "",
+        'attachment' => ""
+    };
+});
 
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
@@ -58,7 +57,7 @@ override 'post_step_tests' => sub {
     my @errors = super();
 
     my @gk_current_databases =
-        map { get_dba('gk_current', $_) } ($GKB::Config::GK_DB_HOST,
+        map { get_dba('current', $_) } ($GKB::Config::GK_DB_HOST,
         # See TODO comment above for what needs to be done to re-enable checking for these hosts
         # $dev_server, $curator_server
         );
