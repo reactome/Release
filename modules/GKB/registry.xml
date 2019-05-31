@@ -1,6 +1,6 @@
 <MartRegistry>
-  <MartURLLocation database="ensembl_mart_95" default="1" displayName="ENSEMBL GENES (SANGER UK)" host="useast.ensembl.org" includeDatasets="" martUser="" name="ENSEMBL_MART_ENSEMBL" path="/biomart/martservice" port="80" serverVirtualSchema="default" visible="1" />
-  <MartURLLocation database="plants_mart_42" default="" displayName="Plant Mart" host="plants.ensembl.org" includeDatasets="" martUser="" name="plants_mart" path="/biomart/martservice" port="80" serverVirtualSchema="plants_mart" visible="1" />
-  <MartURLLocation database="protists_mart_42" default="" displayName="Protist Mart" host="protists.ensembl.org" includeDatasets="" martUser="" name="protists_mart" path="/biomart/martservice" port="80" serverVirtualSchema="protists_mart" visible="1" />
-  <MartURLLocation database="fungi_mart_42" default="" displayName="Ensembl Fungi Genes 42" host="fungi.ensembl.org" includeDatasets="" martUser="" name="fungi_mart" path="/biomart/martservice" port="80" serverVirtualSchema="fungi_mart" visible="1" />
+  <MartURLLocation database="ensembl_mart_96" default="1" displayName="ENSEMBL GENES (SANGER UK)" host="useast.ensembl.org" includeDatasets="" martUser="" name="ENSEMBL_MART_ENSEMBL" path="/biomart/martservice" port="80" serverVirtualSchema="default" visible="1" />
+  <MartURLLocation database="plants_mart_43" default="" displayName="Plant Mart" host="plants.ensembl.org" includeDatasets="" martUser="" name="plants_mart" path="/biomart/martservice" port="80" serverVirtualSchema="plants_mart" visible="1" />
+  <MartURLLocation database="protists_mart_43" default="" displayName="Protist Mart" host="protists.ensembl.org" includeDatasets="" martUser="" name="protists_mart" path="/biomart/martservice" port="80" serverVirtualSchema="protists_mart" visible="1" />
+  <MartURLLocation database="fungi_mart_43" default="" displayName="Fungi Mart" host="fungi.ensembl.org" includeDatasets="" martUser="" name="fungi_mart" path="/biomart/martservice" port="80" serverVirtualSchema="fungi_mart" visible="1" />
 </MartRegistry>
