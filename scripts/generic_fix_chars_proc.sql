@@ -31,16 +31,16 @@ BEGIN
 	create temporary table if not EXISTS special_chars
 	(
 		special_char VARCHAR(10),
-		replacement_char varchar(10),
+		replacement_char varchar(100),
         INDEX(special_char)
-	) character set 'utf8mb4' collate 'utf8mb4_unicode_ci';
+	) character set 'utf8' collate 'utf8_unicode_ci';
 
 	drop temporary table if exists fixed_vals;
 	create temporary table if not exists fixed_vals
 	(
 		db_id int unique key,
 		fixed_val text
-	) character set 'utf8mb4' collate 'utf8mb4_unicode_ci';
+	) character set 'utf8' collate 'utf8_unicode_ci';
 	-- The original mappings came from here: http://www.i18nqa.com/debug/utf8-debug.html
 	insert into special_chars
 		(replacement_char,special_char)
@@ -55,9 +55,9 @@ BEGIN
 		-- but 0xC2 0x9D can't be mapped to anything so the sequence "â€<0x9D>"
 		-- will not be produced (because of that extra 0xC2). So, this mapping
 		-- needed to be added explicitly.
-		('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0xC2,0x9D)),
-		('”',concat('Ã¢â‚¬Â',0x9D)),
-		('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0x9D)),
+		-- ('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0xC2,0x9D)),
+		-- ('”',concat('Ã¢â‚¬Â',0x9D)),
+		-- ('”',concat(0xC3,0xA2,0xE2,0x82,0xAC,0x9D)),
 		('-','â€‘'), -- <-- This mapping was discovered by Lisa.
 		('•','â€¢'),	('–','â€“'),	('—','â€”'),	('ª','Âª'),
 		('˜','Ëœ'),		('™','â„¢'),	('š','Å¡'),		('›','â€º'),
@@ -100,7 +100,7 @@ BEGIN
 		('δ', 'ÃŽÂ´'), ('ε', 'ÃŽÂµ'),
 		('δ', 'ÃƒÅ½Ã‚Â´'),
 		('γ', 'ÃƒÅ½Ã‚Â³'),
-		('γδ', 'ÃƒÅ½Ã‚Â³ÃƒÅ½Ã‚Â´'),
+		-- ('γδ', 'ÃƒÅ½Ã‚Â³ÃƒÅ½Ã‚Â´'),
 		('-', '‒'), -- This is actually a valid dash (FIGURE DASH), but some tools render it as "ΓÇæ".
 		('-', 'ΓÇæ'),
 		('-', concat( 0xE2, 0x80, 0x92 )) -- same thing as above, but with the hex code.
@@ -123,7 +123,7 @@ BEGIN
 					from ',tbl_name,', special_chars
 					where BINARY ',tbl_name,'.',col_name,'
 					like CONCAT(''%'',special_chars.special_char,''%'')
-					group by special_char
+					group by special_char, hex(special_char), replacement_char
 					order by count(distinct ',tbl_name,'.DB_ID) asc, special_char asc');
 
 	-- Before running the fix, let's see what there is that has "bad" characters.
