@@ -105,6 +105,8 @@ sub close {
 
     my $output_file_stream = $self->get_output_file_stream();
 
+    $rtf->print(\'}'); # Close group opened by prolog
+
     $rtf->close;
 }
 
@@ -222,12 +224,29 @@ sub generate_prolog {
 
     my $rtf = $self->rtf;
 
-    $rtf->prolog(
-		 'author' =>  $author,
-		 'company' =>  $company,
-		 'title' =>  $title ,
-		 'subject' =>    $subject
-		 );
+    # $rtf->prolog(
+	# 	 'author' =>  $author,
+	# 	 'company' =>  $company,
+	# 	 'title' =>  $title ,
+	# 	 'subject' =>    $subject,
+	# 	 );
+
+    my $rtf_timestamp = get_rtf_timestamp();
+
+    $rtf->print(
+        \'{',\'\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf400',
+            \'{',\'\fonttbl\f0\fswiss\fcharset0 Times New Roman;\f1\fswiss\fcharset0 Times New Roman;',\'}',
+            \'{',\'\colortbl;\red255\green0\blue0;\red0\green0\blue255;',\'}',
+            \'{',\'\info',
+                \'{',\"\\creatim $rtf_timestamp",\'}',
+                \'{',\"\\revtim $rtf_timestamp",\'}',
+                \'{',\"\\title $title",\'}',
+                \'{',\"\\subject $subject",\'}',
+                \'{',\"\\author $author",\'}',
+                \'{',\"\\company $company",\'}',
+                \'{',\'\doccomm written by /usr/local/gkb/website/cgi-bin/rtfexporter [Perl RT\\\'46::Writer v1\\\'2e11]',\'}',
+            \'}',
+    );
 
     $self->generate_stylesheet($self->get_depth_limit());
 
@@ -240,6 +259,15 @@ sub generate_prolog {
 		   \'\par', #'
 		\'}',  #'
 		);   # '
+}
+
+# Adapted from __time_to_rtf subroutine from https://metacpan.org/release/RTF-Writer/source/lib/RTF/Writer.pm
+sub get_rtf_timestamp {
+    my ($second, $minute, $hour, $day, $month, $year) = localtime(time);
+    $year += 1900; # Adjusted since localtime(time) returns year since 1900
+    $month += 1; # Adjusted since localtime(time) returns month number starting at an index of zero
+
+  return sprintf '\yr%d\mo%d\dy%d\hr%d\min%d\sec%d', ($year, $month, $day, $hour, $minute, $second);
 }
 
 sub generate_page_numbering {
