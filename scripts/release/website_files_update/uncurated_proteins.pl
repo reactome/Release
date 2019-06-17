@@ -25,10 +25,10 @@ GetOptions(
     "db=s"
 );
 
-$user ||= $GKB::Config::GK_DB_USER;
-$pass ||= $GKB::Config::GK_DB_PASS;
+$user ||= $GKB::Config::GK_CURATOR_DB_USER;
+$pass ||= $GKB::Config::GK_CURATOR_DB_PASS;
 $db ||= 'gk_central';
-$host ||= 'reactomecurator.oicr.on.ca';
+$host ||= 'curator.reactome.org';
 
 `java -jar $GK_ROOT_DIR/java/authorTool/uncurated_proteins.jar $host $db $user $pass`;
 
@@ -45,9 +45,9 @@ using the current date.
 
 Usage: perl $0 [options]
     
--user db_user (default: $GKB::Config::GK_DB_USER)
--host db_host (default: reactomecurator.oicr.on.ca)
--pass db_pass (default: $GKB::Config::GK_DB_PASS)
+-user db_user (default: $GKB::Config::GK_CURATOR_DB_USER)
+-host db_host (default: curator.oicr.on.ca)
+-pass db_pass (default: password for $GKB::Config::GK_CURATOR_DB_USER user)
 -db db_name (default: gk_central)
 
 END
