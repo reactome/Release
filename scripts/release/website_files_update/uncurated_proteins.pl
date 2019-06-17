@@ -46,7 +46,7 @@ using the current date.
 Usage: perl $0 [options]
     
 -user db_user (default: $GKB::Config::GK_CURATOR_DB_USER)
--host db_host (default: curator.oicr.on.ca)
+-host db_host (default: curator.reactome.org)
 -pass db_pass (default: password for $GKB::Config::GK_CURATOR_DB_USER user)
 -db db_name (default: gk_central)
 
