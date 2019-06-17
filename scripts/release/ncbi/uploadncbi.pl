@@ -18,7 +18,7 @@ $ftppass || die "NCBI ftp server password must be provided with -ftppass flag\n"
 $version || die "Reactome version must be provided with -version flag\n";
 $file_directory = 'archive';
 
-my $ftp = Net::FTP->new("ftp-private.ncbi.nih.gov", Debug => 0, Passive => 0);
+my $ftp = Net::FTP->new("ftp-private.ncbi.nih.gov", Debug => 0, Passive => 1);
 $ftp->login("reactome", $ftppass) || die "NCBI login failed\n";
 $ftp->cwd("holdings") || die "Unable to change to the holdings directory\n";
 
