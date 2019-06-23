@@ -6,22 +6,23 @@ use GKB::Release::Utils;
 use Moose;
 extends qw/GKB::Release::Step/;
 
+my $models2pathways_file = 'models2pathways.tsv';
+
 has '+gkb' => ( default => "gkbdev" );
 has '+passwords' => ( default => sub { ['mysql'] } );
 has '+directory' => ( default => "$release/biomodels" );
 has '+mail' => ( default => sub {
-					my $self = shift;
-					return {
-						'to' => '',
-						'subject' => $self->name,
-						'body' => "",
-						'attachment' => ""
-					};
-				}
-);
+    my $self = shift;
+    return {
+        'to' => '',
+        'subject' => $self->name,
+        'body' => "",
+        'attachment' => ""
+    };
+});
 
 override 'run_commands' => sub {
-	my ($self, $gkbdir) = @_;
+    my ($self, $gkbdir) = @_;
 
     # Backup database and run biomodels script
     $self->cmd("Backup database", [["mysqldump --opt -u$user -p$pass $db > $db\_before_biomodels.dump"]]);
@@ -30,11 +31,11 @@ override 'run_commands' => sub {
     my $exit_code = ($results[0])->{'exit_code'};
     # Backup the database
     if ($exit_code == 0) {
-    	$self->cmd("Backing up database $db",
-    		[
-    			["mysqldump --opt -u$user -p$pass $db > $db\_after_biomodels.dump"]
-    		]
-    	);
+        $self->cmd("Backing up database $db",
+            [
+                ["mysqldump --opt -u$user -p$pass $db > $db\_after_biomodels.dump"]
+            ]
+        );
     }
 };
 
@@ -44,6 +45,15 @@ override 'post_step_tests' => sub {
     my @errors = super();
     push @errors, _check_referrer_count_for_biomodels_reference_database();
     return @errors;
+};
+
+override 'archive_files' => sub {
+    my ($self, $version) = @_;
+
+    # arguments passed to this method are implicitly passed to the superclass method by Moose
+    # https://metacpan.org/pod/release/DOY/Moose-2.0604/lib/Moose/Manual/MethodModifiers.pod#OVERRIDE-AND-SUPER
+    my $archive_directory = super();
+    system "cp --backup=numbered $models2pathways_file $archive_directory";
 };
 
 sub _check_referrer_count_for_biomodels_reference_database {
