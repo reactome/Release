@@ -3,6 +3,8 @@ package GKB::Release::Steps::ExternalResourceLinks;
 use GKB::Release::Config;
 use GKB::Release::Utils;
 
+use List::MoreUtils qw/any/;
+
 use Moose;
 extends qw/GKB::Release::Step/;
 
@@ -101,7 +103,7 @@ sub _get_reference_database_to_referrer_count {
 
     my %reference_database_to_referrer_count;
     foreach my $reference_database_instance (_get_reference_database_instances($database_name)) {
-        my $reference_database_name = _get_name(@{$reference_database_instance->name});
+        my $reference_database_name = _get_name($reference_database_instance);
         my $referrer_count = scalar @{$reference_database_instance->reverse_attribute_value('referenceDatabase')};
         if (exists $reference_database_to_referrer_count{$reference_database_name}) {
             push @{$errors}, "There is more than one reference database instance for $reference_database_name. " .
@@ -120,7 +122,9 @@ sub _get_reference_database_instances {
 }
 
 sub _get_name {
-    my @names = @_;
+    my $instance = shift;
+
+    my @names = @{$instance->name};
 
     if (scalar @names == 0) {
         return;
@@ -130,7 +134,11 @@ sub _get_name {
         return $names[0];
     }
 
-    return _get_longest(@names);
+    if (any { $_ =~ /ENSEMBL/ || $_ =~ /KEGG/ } @names) {
+        return _get_longest(@names);
+    }
+
+    return $instance->displayName;
 }
 
 # Taken from answer to http://stackoverflow.com/questions/4182010/
