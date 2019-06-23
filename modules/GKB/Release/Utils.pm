@@ -21,7 +21,7 @@ release pipeline.
 
 Parameter:
 	Reactome server host (String -- required)
-	
+
 =item C<prompt>
 
 Queries the user for information and optionally
@@ -33,7 +33,7 @@ Parameter:
 
 Return:
 	Response (String)
-	
+
 =item C<releaselog>
 
 Takes input for logging and writes
@@ -45,7 +45,7 @@ Parameter:
 
 Return:
 	Lines (Array)
-	
+
 =item C<replace_gkb_alias_in_dir>
 
 Returns a directory path with the gkb alias in
@@ -60,7 +60,7 @@ Return:
 	Directory path with new alias (String)
 
 =back
-	
+
 =head1 SEE ALSO
 
 GKB::Release::Config
@@ -104,7 +104,7 @@ our @EXPORT = qw/get_dba set_environment prompt releaselog replace_gkb_alias_in_
 sub get_dba {
 	my $db = shift;
 	my $host = shift // $GKB::Config::GK_DB_HOST;
-	
+
 	return GKB::DBAdaptor->new(
 		-dbname => $db,
 		-user => $GKB::Config::GK_DB_USER,
@@ -133,7 +133,7 @@ sub prompt {
     ReadMode 'noecho' if $pass; # Don't show keystrokes if it is a password
     my $return = ReadLine 0;
     chomp $return;
-    
+
     ReadMode 'normal';
     print "\n" if $pass;
     return $return;
@@ -142,18 +142,18 @@ sub prompt {
 sub replace_gkb_alias_in_dir {
 	my $dir = shift;
 	my $gkb = shift;
-	
+
 	$dir =~ s/gkb.*?\//$gkb\//;
-	
+
 	return $dir;
 }
 
 sub releaselog {
 	my @lines = @_;
-	
+
 	_make_log_directory($logdir);
 	_write_to_log_file($logfile, @lines);
-	
+
 	return @lines;
 }
 
@@ -166,10 +166,10 @@ sub _make_log_directory {
 sub _write_to_log_file {
 	my $log_file = shift;
 	my @lines = @_;
-	
+
 	open(my $log, '>>', $log_file);
-	say $log @lines;
-	close $log;	
+	say $log $_ foreach @lines;
+	close $log;
 }
 
 1;

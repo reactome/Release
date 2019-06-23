@@ -297,7 +297,11 @@ sub run {
         binmode $post_step_test_fh, ':encoding(UTF-8)';
         print {$post_step_test_fh} join "\n", @post_step_test_errors;
         close $post_step_test_fh;
-        say releaselog("ERRORS from $self->{name} post-step tests - see e-mail report or $post_step_test_log");
+
+        say releaselog("ERRORS from $self->{name} post-step tests - also available in e-mail report or $post_step_test_log");
+        foreach my $post_step_test_error (@post_step_test_errors) {
+            say releaselog($post_step_test_error);
+        }
         $self->mail->{'body'} = "Errors Reported\n\n" . join("\n", @post_step_test_errors);
         $self->mail->{'to'} = 'automation';
     } else {
