@@ -55,8 +55,6 @@ override 'post_step_tests' => sub {
 sub _check_file_modification_times {
     my $self = shift;
 
-    my $live_db = 'gk_current';
-
     my $TIME_ZONE = 'UTC';
     my $MAX_MINUTES_SINCE_MODIFIED = 2;
 
@@ -89,4 +87,5 @@ sub _get_modification_time {
     }
     return $stat->mtime;
 }
+
 1;
