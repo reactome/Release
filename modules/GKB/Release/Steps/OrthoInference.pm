@@ -87,7 +87,7 @@ sub _check_orthoinferred_instance_count_for_all_species {
         next if $species_name =~ /Homo sapiens/i;
 
         my $current_species_count = _get_species_count($db, $species_name);
-        my $previous_species_count = _get_species_count("test_reactome_$prevver", $species_name);
+        my $previous_species_count = _get_species_count($previous_db, $species_name);
 
         if ($current_species_count < $previous_species_count) {
             push @errors, "$species_name has fewer instances compared to the previous release: $version - $current_species_count; $prevver - $previous_species_count";
