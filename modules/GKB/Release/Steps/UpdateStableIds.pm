@@ -30,11 +30,13 @@ override 'run_commands' => sub {
     # This won't be useful inside a docker container, where the database is not hosted in the same
     # container as where the code runs. So we'll use the GK_DB_HOST from the config.
     my $host = $GKB::Config::GK_DB_HOST;
+    my $gkcentral_user = $GKB::Config::GK_CURATOR_DB_USER;
+    my $gkcentral_pass = $GKB::Config::GK_CURATOR_DB_PASS;
 
     $self->cmd("Backing up databases",
         [
             ["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE $slicedb > $slicedb.dump"],
-            ["mysqldump --opt -u $user -h $gkcentral_host -p$pass --lock-tables=FALSE $gkcentral > ".
+            ["mysqldump --opt -u $gkcentral_user -h $gkcentral_host -p$gkcentral_pass --lock-tables=FALSE $gkcentral > ".
              "$gkcentral\_$version\_before_st_id.dump"]
         ]
     );
@@ -60,7 +62,8 @@ override 'run_commands' => sub {
 
     $self->cmd("Backing up databases",
         [
-            ["mysqldump --opt -u $user -h $gkcentral_host -p$pass --lock-tables=FALSE $gkcentral > $gkcentral\_$version\_after_st_id.dump"],
+            ["mysqldump --opt -u $gkcentral_user -h $gkcentral_host -p$gkcentral_pass --lock-tables=FALSE $gkcentral > " .
+             "$gkcentral\_$version\_after_st_id.dump"],
             ["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE $slicedb > $slicedb\_after_st_id.dump"],
         ]
     );
@@ -93,7 +96,9 @@ override 'post_step_tests' => sub {
        my $version_before_update = $stable_identifier_to_version{$_}{'before_update'};
        my $version_after_update = $stable_identifier_to_version{$_}{'after_update'};
 
-       $version_before_update && $version_after_update && !(($version_after_update - $version_before_update == 0) || ($version_after_update - $version_before_update == 1));
+       $version_before_update &&
+       $version_after_update &&
+       !(($version_after_update - $version_before_update == 0) || ($version_after_update - $version_before_update == 1));
     } keys %stable_identifier_to_version;
 
     my $stable_id_count_error = _check_stable_id_count($slicedb, $previous_slice_db);
@@ -118,7 +123,8 @@ sub _check_stable_id_count {
     my $stable_id_count_change = $current_stable_id_count - $previous_stable_id_count;
 
     if ($stable_id_count_change < 0) {
-        return "Stable id count has gone down from $current_stable_id_count for version $version from $previous_stable_id_count for version $prevver"
+        return "Stable id count has gone down from $current_stable_id_count for version $version from" .
+            " $previous_stable_id_count for version $prevver"
     } else {
         # *EXPLICITLY* return undef because post-step test relies on defined vs. undefined.
         # If you don't return undef, then it seems the empty string '' will be returned and that breaks
