@@ -108,15 +108,6 @@ override 'post_step_tests' => sub {
     );
 };
 
-sub get_test_slice {
-    my $version = shift;
-    my $host = shift;
-
-    my $snapshot = "test_slice_$version\_snapshot";
-
-    return database_exists($snapshot, $host) ? $snapshot : "test_slice_$version";
-}
-
 sub _check_stable_id_count {
     my $current_db = shift;
     my $previous_db = shift;
