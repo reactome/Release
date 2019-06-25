@@ -5,50 +5,39 @@ use warnings;
 use Data::Dumper;
 use File::Path qw/make_path/;
 use Getopt::Long;
+Getopt::Long::Configure('pass_through');
 
 use GKB::Config;
 use GKB::Config_Species;
 
-$GKB::Config::NO_SCHEMA_VALIDITY_CHECK = undef;
+my ($user, $pass, $host, $port, $db, $retrieve, $insert);
+GetOptions(
+    'user:s' => \$user,
+    'pass:s' => \$pass,
+    'host:s' => \$host,
+    'port:i' => \$port,
+    'db:s' => \$db,
+    'retrieve' => \$retrieve,
+    'insert' => \$insert
+);
 
-my @params = @ARGV;
-
-our ($opt_user, $opt_host, $opt_pass, $opt_port, $opt_db, $opt_debug);
-
-&GetOptions("user:s", "host:s", "pass:s", "port:i", "db:s", "debug");
-
-$opt_db || die "Need database name (-db).\n";
+if ($insert && !$db) {
+    die "Need database name (-db).\n";
+}
 
 print "My species:\n", Dumper(\@species);
 
-make_path('output', { mode => 0775 });
-my @cmds = (
-    qq(./retrieve_indirectIdentifiers_from_mart.pl @params),
-    qq(./indirectIdentifiers_from_mart.pl @params),
-    qq(./gene_names_from_mart.pl @params)
-);
-
 foreach my $sp (@species) {
-    foreach my $cmd (@cmds) {
-        my $tmp = "$cmd -sp '$sp'";
-        print "Command to be run: " . hide_password($tmp) . "\n";
-        system($tmp) == 0 or print(hide_password($tmp) . " failed.\n");
-    }
-}
-
-print "$0: no fatal errors.\n";
-
-sub hide_password {
-    my $string = shift;
-
-    $string =~ /-pass (.*?) /;
-    my $password = $1;
-
-    if (!$password) {
-        return $string;
+    if ($retrieve) {
+        make_path('output', { mode => oct(775) });
+        print "Retrieving other identifiers for $sp\n";
+        system("perl retrieve_indirectIdentifiers_from_mart.pl -sp $sp") == 0
+            or die "Could not retrieve other identifiers for $sp";
     }
 
-    my $asterisks = '*' x 5;
-    $string =~ s/-pass $password/-pass $asterisks/;
-    return $string;
+    if ($insert) {
+        print "Inserting other identifiers for $sp\n";
+        system("perl indirectIdentifiers_from_mart.pl -sp $sp -user $user -pass $pass -host $host -port $port -db $db") == 0
+            or die "Could not insert other identifiers for $sp";
+    }
 }

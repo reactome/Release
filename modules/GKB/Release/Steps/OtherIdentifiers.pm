@@ -8,7 +8,7 @@ use GKB::Release::Utils;
 use Moose;
 extends qw/GKB::Release::Step/;
 
-has '+gkb' => ( default => "gkbdev" );
+has '+gkb' => ( default => 'gkbdev' );
 has '+passwords' => ( default => sub { ['mysql'] } );
 has '+directory' => ( default => "$release/other_identifiers" );
 has '+mail' => ( default => sub {
@@ -16,17 +16,22 @@ has '+mail' => ( default => sub {
     return {
         'to' => '',
         'subject' => $self->name,
-        'body' => "",
-        'attachment' => ""
+        'body' => '',
+        'attachment' => ''
     };
 });
 
 override 'run_commands' => sub {
     my ($self, $gkbdir) = @_;
 
-    $self->cmd("Backing up database",[["mysqldump -u$user -p$pass $db > $db.before_other_identifiers.dump"]]);
-    $self->cmd("Adding other identifiers",[["perl add_identifiers_from_mart.pl -user $user -pass $pass -db $db > other_identifiers.$version.out 2> other_identifiers.$version.err"]]);
-    $self->cmd("Backing up database",[["mysqldump -u$user -p$pass $db > $db.after_other_identifiers.dump"]]);
+    $self->cmd('Backing up database',[["mysqldump -u$user -p$pass $db > $db.before_other_identifiers.dump"]]);
+    $self->cmd('Adding other identifiers',[
+        [
+            "perl indirectIdentifiers_for_all_species.pl -user $user -pass $pass -db $db -retrieve -insert " .
+            "> other_identifiers.$version.out 2> other_identifiers.$version.err"
+        ]
+    ]);
+    $self->cmd('Backing up database',[["mysqldump -u$user -p$pass $db > $db.after_other_identifiers.dump"]]);
 };
 
 override 'post_step_tests' => sub {

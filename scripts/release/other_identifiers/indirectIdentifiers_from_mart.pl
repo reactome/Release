@@ -14,12 +14,12 @@ use Data::Dumper;
 use Getopt::Long;
 use Unicode::CaseFold;
 
-our($opt_user,$opt_host,$opt_pass,$opt_port,$opt_db,$opt_debug,$opt_sp);
+our($opt_sp,$opt_user,$opt_host,$opt_pass,$opt_port,$opt_db);
 
 (@ARGV) || die
     "Usage: $0 -sp 'species code (e.g. hsap)' -user db_user -host db_host -pass db_pass -port db_port -db db_name\n";
 
-&GetOptions("user:s", "host:s", "pass:s", "port:i", "db:s", "debug", "sp=s");
+GetOptions('sp:s', 'user:s', 'host:s', 'pass:s', 'port:i', 'db:s');
 
 $opt_db || die "Need database name (-db).\n";
 
@@ -31,7 +31,6 @@ my $dba = GKB::DBAdaptor->new(
     -pass   => $opt_pass || $GKB::Config::GK_DB_PASS,
     -port   => $opt_port || $GKB::Config::GK_DB_PORT,
     -dbname => $opt_db,
-#     -DEBUG => $opt_debug
 );
 
 # Fetch ReferenceGeneProducts to be "annotated".
