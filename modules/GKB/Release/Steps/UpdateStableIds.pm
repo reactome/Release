@@ -38,7 +38,8 @@ override 'run_commands' => sub {
             ["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE $slicedb > $slicedb.dump"],
             ["mysqldump --opt -u $gkcentral_user -h $gkcentral_host -p$gkcentral_pass --lock-tables=FALSE $gkcentral > ".
              "$gkcentral\_$version\_before_st_id.dump"]
-        ]
+        ],
+        {'passwords' => { 'gkcentral_pass' => \$gkcentral_pass }}
     );
 
     $self->cmd("Loading previous slice into $previous_slice_db database",
@@ -65,7 +66,8 @@ override 'run_commands' => sub {
             ["mysqldump --opt -u $gkcentral_user -h $gkcentral_host -p$gkcentral_pass --lock-tables=FALSE $gkcentral > " .
              "$gkcentral\_$version\_after_st_id.dump"],
             ["mysqldump --opt -u $user -h $host -p$pass --lock-tables=FALSE $slicedb > $slicedb\_after_st_id.dump"],
-        ]
+        ],
+        {'passwords' => { 'gkcentral_pass' => \$gkcentral_pass }}
     );
 };
 
