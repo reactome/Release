@@ -29,7 +29,7 @@ my @options = (
     ['TOC', GKB_DEV_ALIAS, "-create cached toc and doi_toc files"],
     ['DownloadDirectory', GKB_DEV_ALIAS, "-Create the download directory"],
     ['CommitStatsFiles', GKB_DEV_ALIAS, "-commit inference statistics files to GitHub"],
-    ['NCBI', GKB_DEV_ALIAS, "-create gene,protein, and omim files as well as hapmap and ucsc"],
+    ['DataExporter', GKB_DEV_ALIAS, "-create files for NCBI, UCSC, EuropePMC and HapMap"],
     ['MSigDB_GSEA', GKB_DEV_ALIAS, "-creates Reactome_GeneSet_XX file in MSigDB format"],
     ['UncuratedProteins', GKB_DEV_ALIAS, "-creates a list of UniProt identifiers without EWAS referrers"]
 );
