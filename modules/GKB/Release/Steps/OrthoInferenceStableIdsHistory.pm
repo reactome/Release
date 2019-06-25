@@ -1,4 +1,4 @@
-package GKB::Release::Steps::GenerateOrthoInferenceStableIds;
+package GKB::Release::Steps::OrthoInferenceStableIdsHistory;
 
 use GKB::Release::Config;
 use GKB::Release::Utils;
@@ -32,23 +32,16 @@ override 'run_commands' => sub {
         ]
     );
 
-    $self->cmd("Generating stable ids for orthoinferences",
-        [
-            ["perl add_ortho_stable_ids.pl -user $user -host $host -pass $pass -db $db -sdb $slicedb " .
-             "-release_num $version > generate_stable_ids_$version.ortho.out 2> generate_stable_ids_$version.ortho.err"]
-        ]
-    );
-
     $self->cmd("Saving stable ids to history database",
         [
-            ["perl save_stable_id_history.pl -db $db -sdb $stable_id_db -host $host -user $user -pass $pass " . 
+            ["perl save_stable_id_history.pl -db $db -sdb $stable_id_db -host $host -user $user -pass $pass " .
              "-release $version > save_stable_id_history_$version.out 2> save_stable_id_history_$version.err"]
         ]
     );
 
     $self->cmd("Mapping old ST_IDs back to current set",
         [
-            ["perl old_stable_id_mapping.pl -db $db -host $host " . 
+            ["perl old_stable_id_mapping.pl -db $db -host $host " .
              "> old_stable_id_mapping_$version.out 2> old_stable_id_mapping_$version.err"]
         ]
     );
