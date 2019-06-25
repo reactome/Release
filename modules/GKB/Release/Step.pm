@@ -360,6 +360,10 @@ sub cmd {
         my ($cmd, @args) = @{$cmdarg};
 
         my $nopasscmd = _hide_passwords($cmd);
+        my $additional_passwords = $parameters->{'passwords'};
+        if ($additional_passwords) {
+            $nopasscmd = _hide_passwords($nopasscmd, $additional_passwords);
+        }
 
         print releaselog("Executing $nopasscmd -- " . `date`);
 
@@ -704,7 +708,7 @@ sub _hide_passwords {
     my $passwords = shift // {%passwords};
 
     foreach my $passtype (keys %{$passwords}) {
-        my $pass = ${$passwords{$passtype}};
+        my $pass = ${$passwords->{$passtype}};
         next unless $pass;
 
         my $hidden = '*' x (length $pass);
