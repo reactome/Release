@@ -114,27 +114,82 @@ foreach my $terms ( sort keys %categories ) {
 
 ## Then we process the OBO file
 ## and extract all the information we need:
-## accession, names, definition, synonyms.
-## For each entry in the file we also check if it already exists in the database using the hashes created on the previous step
+## accession, names, definition.
+## For each entry in the file we also check if it already exists in the database using the hashes created on the
+## previous step
 $dba->execute('START TRANSACTION');
 
 open( GO, "$obo_file" ) or die;
 
 local $/ = "\n\[Term\]\n";
 while (<GO>) {
-    my ($acc) = /^id\:\s+GO\:(\d+)/ms;
+    my ($acc) = /^id\:\s+GO\:(\d{1,})/ms;
 
     next if not defined $acc;
-    my ($name) = $_ =~ /^name\:\s+(.*)$/m;              # term name
-    my ($def)  = $_ =~ /^def\:\s+\"(.*)\"/m;            # definition of the term
-    my ($cat)  = $_ =~ /^namespace\:\s+([a-z\_]*)/m;    # namespace(GO categories): biological_process, cellular_component, molecular_function
 
-    my @synonyms;# synonym of the term
-    while ( $_ =~ /^synonym\:\s+\"(.*)\"/gms ) {
-        push @synonyms, $1;
+    # term name
+    my ($name) = $_ =~ /^name\:\s+(.*)$/m;
+    # definition of the term
+    my ($def)  = $_ =~ /^def\:\s+\"(.*)\"/m;
+    # namespace(GO categories): biological_process, cellular_component, molecular_function
+    my ($cat)  = $_ =~ /^namespace\:\s+([a-z\_]*)/m;
+
+    if ($_ !~ /is_obsolete: true/m) {
+        if ( defined $total_acc{$acc} ) {
+            my $GO_instances = $dba->fetch_instance_by_db_id( $total_acc{$acc} );
+            foreach my $GO_instance ( @{$GO_instances} ) {
+                if ($GO_instance->is_a($categories{$cat})) {
+                    update_GO_instance($dba, $GO_instance, {name => $name, def => $def}, $instance_edit);
+                } else {
+                    print "Instance $GO_instance->{db_id} has incorrect category $cat\n";
+                    # Will be reported later and the mis-matched instance will be deleted
+                    $category_mismatch{$GO_instance->db_id} = $categories{$cat};
+                    next if GO_instance_exists_in_db($dba, $acc, $categories{$cat});
+
+                    print "Creating instance for accession $acc with correct category $cat\n";
+                    my $GO_instance = create_GO_instance(
+                        $dba,
+                        { class => $categories{$cat}, accession => $acc, name => $name, def => $def },
+                        $db_inst,
+                        $instance_edit
+                    );
+                    $total_acc{$acc} = $GO_instance->db_id;
+                    print "New $categories{$cat} instance\: $GO_instance->{db_id}\n";
+                }
+            }
+        } else {
+            my $GO_instance = create_GO_instance(
+                $dba,
+                { class => $categories{$cat}, accession => $acc, name => $name, def => $def },
+                $db_inst,
+                $instance_edit
+            );
+            $total_acc{$acc} = $GO_instance->db_id;
+            print "New $categories{$cat} instance: " .
+                $GO_instance->{db_id} . ' ' .
+                $GO_instance->displayName . ' ' .
+                $GO_instance->accession->[0] . "\n";
+        }
+
+        # check if updated entry is pending obsoletion by GO
+        if (/(pending|scheduled for|slated for) obsoletion/mi) {
+            $pending_obsoletion{$acc} = $total_acc{$acc};
+        }
+    } else { ## check if the entry is obsolete and prepare report, to remove it or consider a replacement:
+        if (defined $total_acc{$acc}) {
+            $obsolete{$acc} = $total_acc{$acc};
+            while (/^replaced\_by\:\s+GO\:(\d+)/gm) {
+                push( @{ $replaced{$acc} }, $1 );
+            }
+            while (/^consider\:\s+GO\:(\d+)/gm) {
+                push( @{ $consider{$acc} }, $1 );
+            }
+        } else {
+            print "Obsolete accession $acc does not exist in $opt_db on $opt_host.  It was not created\n";
+        }
     }
 
-    while ( $_ =~ /^alt_id\:\s+GO\:(\d+)/gms ) {        # alternate id for the term
+    while ( $_ =~ /^alt_id\:\s+GO\:(\d+)/gms ) { # alternate id for the term
         my $alt_id = $1;
         if ( defined $total_acc{$alt_id} ) {
             $alternate{$alt_id} = $total_acc{$alt_id};
@@ -142,19 +197,10 @@ while (<GO>) {
         }
     }
 
-## check if the entry is obsolete and prepare report, to remove it or consider a replacement:
-    if ( /(is_obsolete: true)/m && defined $total_acc{$acc} ) {
-        $obsolete{$acc} = $total_acc{$acc};
-        while (/^replaced\_by\:\s+GO\:(\d+)/gm) {
-            push( @{ $replaced{$acc} }, $1 );
-        }
-        while (/^consider\:\s+GO\:(\d+)/gm) {
-            push( @{ $consider{$acc} }, $1 );
-        }
-    }
-
-## extract is_a, part_of, has_part, regulates, postively_regulates, negatively_regulates components of the given entry and put them in arrays:
-# regulates, postively_regulates, negatively_regulates are no longer in the data model. is_a, part_of, has_part only apply to GO_CellularComponent.
+    ## extract is_a, part_of, has_part, regulates, postively_regulates, negatively_regulates components of the given
+    # entry and put them in arrays: regulates, postively_regulates, negatively_regulates
+    # are no longer in the data model.
+    # is_a, part_of, has_part only apply to GO_CellularComponent.
     while (/^is_a\:\s+GO\:(\d+)/gms) {
         # if ( not defined $total_acc{$1} ) {
         push @{ $new_isa{$acc} }, $1;
@@ -170,52 +216,7 @@ while (<GO>) {
         push @{ $new_haspart{$acc} }, $1;
     }
 
-    # while (/^relationship\:\s+regulates GO\:(\d+)/gms) {
-    #     #if ( not defined $total_acc{$1} ) {
-    #     push @{ $new_regulates{$acc} }, $1;
-    # }
-    #
-    # while (/^relationship\:\s+positively_regulates GO\:(\d+)/gms) {
-    #     #if ( not defined $total_acc{$1} ) {
-    #     push @{ $new_positively_regulates{$acc} }, $1;
-    # }
-    #
-    # while (/^relationship\:\s+negatively_regulates GO\:(\d+)/gms) {
-    #     #if ( not defined $total_acc{$1} ) {
-    #     push @{ $new_negatively_regulates{$acc} }, $1;
-    # }
-
-
-## when all checks are completed we update the entry:
-    if ( defined $total_acc{$acc} ) {
-        my $GO_instances = $dba->fetch_instance_by_db_id( $total_acc{$acc} );
-        foreach my $GO_instance ( @{$GO_instances} ) {
-            if ($GO_instance->is_a($categories{$cat})) {
-                update_GO_instance($dba, $GO_instance, {name => $name, def => $def}, $instance_edit);
-            } else {
-                print "Instance $GO_instance->{db_id} has incorrect category $cat\n";
-                $category_mismatch{$GO_instance->db_id} = $categories{$cat}; # Will be reported later and the mis-matched instance will be deleted
-                next if GO_instance_exists_in_db($dba, $acc, $categories{$cat});
-
-                print "Creating instance for accession $acc with correct category $cat\n";
-                my $GO_instance = create_GO_instance($dba, { class => $categories{$cat}, accession => $acc, name => $name, def => $def }, $db_inst, $instance_edit);
-                $total_acc{$acc} = $GO_instance->db_id;
-                print "New $categories{$cat} instance\: $GO_instance->{db_id}\n";
-            }
-        }
-    } else {
-        if ($_ !~ /(is_obsolete: true)/m) {
-            my $GO_instance = create_GO_instance($dba, { class => $categories{$cat}, accession => $acc, name => $name, def => $def }, $db_inst, $instance_edit);
-            $total_acc{$acc} = $GO_instance->db_id;
-            print "New $categories{$cat} instance\: $GO_instance->{db_id}\n";
-        }
-    }
     $checked{$acc} = 1;
-
-    # check if updated entry is pending obsoletion by GO
-    if (/(pending|scheduled for|slated for) obsoletion/mi) {
-        $pending_obsoletion{$acc} = $total_acc{$acc};
-    }
 }
 
 ## Check for new instances in is_a and part_of
@@ -274,8 +275,11 @@ foreach my $check_acc ( sort keys %total_acc ) {
     next if ( defined $obsolete{$check_acc} );
     next if ( defined $alternate{$check_acc} );
 
+    my $go_instance_db_id = $total_acc{$check_acc};
+    my $url_link = "$gk_central_host/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$go_instance_db_id";
+
     print FR "\|$check_acc\|";
-    print FR "\|\[$gk_central_host/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$total_acc{$check_acc}\& $total_acc{$check_acc}\]\n";
+    print FR "\|\[$url_link\& $go_instance_db_id\]\n";
     print FR "\|\-\n";
 }
 print FR "\|\}\n";
@@ -372,13 +376,18 @@ print FR "\{\| class \=\"wikitable\"
 \! New GO terms
 \|\-\n";
 
-## Checked above for obsolete instances without referers. If an instance contains only GO referers (referenceDatabase id=1) we remove it without reporting.
-## Report the rest of the obsolete instances here if they still exist.  GO instances that have become secondary/alternate to other instances are also reported here.
+## Checked above for obsolete instances without referers. If an instance contains only GO referers
+## (referenceDatabase id=1) we remove it without reporting.
+## Report the rest of the obsolete instances here if they still exist.
+## GO instances that have become secondary/alternate to other instances are also reported here.
 
 %obsolete = (%obsolete, %alternate, %pending_obsoletion);
 foreach my $obs_id ( sort keys %obsolete) {
 
-    print FR "\|\[$gk_central_host/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$obsolete{$obs_id}\& $total_name{$obs_id}\]\n";
+    my $obsolete_go_instance_db_id = $obsolete{$obs_id};
+    my $url_link = "$gk_central_host/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$obsolete_go_instance_db_id";
+
+    print FR "\|\[$url_link\& $total_name{$obs_id}\]\n";
     print FR "\|\[http://www.ebi.ac.uk/ego/GTerm\?id\=GO:$obs_id GO:$obs_id\]\n";
 
     my $action;
@@ -395,13 +404,23 @@ foreach my $obs_id ( sort keys %obsolete) {
         # Move all referrers to the primary GO term
         my $alternate_acc = $obs_id;
         my $alt_ac = $dba->fetch_instance_by_db_id( $alternate{$alternate_acc} );
+        print "Primary accession is " . $altacc_to_primaryacc{$alternate_acc} . " in hash\n";
         my $primary = $dba->fetch_instance_by_db_id($altacc_to_primaryacc{$alternate_acc})->[0];
+
+        if ($primary) {
+            print "Primary accession: " . $primary->accession->[0] . "\n";
+        } else {
+            print "No primary instance found for $alternate_acc\n";
+        }
 
         foreach my $sdi ( @{$alt_ac} ) {
             $sdi->inflate();
             my $alternate_accession = $sdi->accession->[0];
+            print "Alternate accession: $alternate_accession\n";
+
             my $ref   = $dba->fetch_referer_by_instance($sdi);
             foreach my $go_ref ( @{$ref} ) {
+                print "Referrer: " . $go_ref->displayName . ' (' . $go_ref->db_id . ")\n";
                 $go_ref->inflate();
 
                 # Skip referrers to other GO instances
@@ -409,26 +428,35 @@ foreach my $obs_id ( sort keys %obsolete) {
                 next unless (!$dbr || $dbr->db_id != 1 );
 
                 foreach my $attribute ($go_ref->list_attributes()) {
+                    print "Checking referrer atrribute: $attribute\n";
                     my $attribute_value = $go_ref->$attribute->[0];
                     next unless $attribute_value;
 
                     my $accession;
 
                     eval {
-                    $accession = $attribute_value->accession->[0];
+                        $accession = $attribute_value->accession->[0];
                     };
 
                     next unless $accession;
+
+                    print "Referrer attribute $attribute has GO instance with accession $accession\n";
 
                     # If the attribute's value is a GO instance with an
                     # accession matching the alternate term, give the
                     # primary GO instance as the attribute value instead.
                     # This, in effect, moves the referrers from the alternate
                     # GO term to the primary GO term
+                    print "Checking if $accession is equal to $alternate_accession\n";
                     if ($accession == $alternate_accession) {
                         $go_ref->$attribute($primary);
                         $dba->update($go_ref);
+                        print "Referrer " . $go_ref->extended_displayName . " updated\n";
+                        if (!$primary) {
+                            print "But no primary accession was available\n";
+                        }
                     }
+
                 }
             }
             print "Deleting alternate accession instance " . $sdi->db_id . "...\n";
