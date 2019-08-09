@@ -22,7 +22,7 @@ Readonly my $data_release_pipeline_repository => 'data-release-pipeline';
 Readonly my $repo_url => "https://github.com/reactome/$data_release_pipeline_repository";
 Readonly my $repo_local_directory => cwd() . "/$data_release_pipeline_repository"; # Must be an absolute path
 Readonly my $repo_application => 'chebi-update';
-Readonly my $repo_version => '1.1.0';
+Readonly my $repo_version => '1.1.1';
 Readonly my $repo_tag => "$repo_application-$repo_version";
 Readonly my $application_properties => "$repo_application.properties";
 
@@ -109,7 +109,7 @@ sub build_jar_and_execute {
     # Need to build/install release-common-lib first.
     chdir "$repository_root/release-common-lib";
     system 'mvn clean compile install';
-    chdir "$repository_root/$repo_application";
+    chdir "$repository_root/$repository_application";
     system 'mvn clean compile assembly:single';
 
     # If there's a cache file that's been saved in the parent directory, move it back into position, it might be needed.
@@ -117,9 +117,9 @@ sub build_jar_and_execute {
         system "mv $start_directory/chebi-cache .";
     }
 
-    $logger->info("Executing $repo_application");
+    $logger->info("Executing $repository_application");
     system "java -jar target/$repository_tag-jar-with-dependencies.jar src/main/resources/$properties_file";
-    $logger->info("Finished executing $repo_application");
+    $logger->info("Finished executing $repository_application");
 
     chdir $start_directory;
 
