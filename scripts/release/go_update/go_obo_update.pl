@@ -22,10 +22,10 @@ my $gk_central_host = 'https://curator.reactome.org';
 my $obo_file = "go.obo";
 
 if (-e "$obo_file") { system("mv $obo_file $obo_file.old"); }
-my $return = system("wget -q -Nc http://current.geneontology.org/ontology/$obo_file");
+my $return = system("wget -q -N http://current.geneontology.org/ontology/$obo_file");
 if ($return != 0) { die "ERROR: Download of $obo_file failed."; }
 
-$return = system("wget -q -Nc http://geneontology.org/external2go/ec2go");
+$return = system("wget -q -N http://current.geneontology.org/ontology/external2go/ec2go");
 if ($return != 0) { die "ERROR: Download of ec2go file failed."; }
 
 my $file_age = int((time - (stat("$obo_file"))[9])/60/60/24);
