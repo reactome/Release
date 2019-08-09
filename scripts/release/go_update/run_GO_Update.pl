@@ -4,7 +4,7 @@ use strict;
 use lib '/usr/local/gkb/modules';
 use GKB::Config;
 
-use autodie qw/:all/;
+use autodie;
 use Cwd;
 use Getopt::Long;
 use Data::Dumper;
@@ -18,12 +18,16 @@ my $logger = get_logger(__PACKAGE__);
 
 my $data_release_pipeline_application_version = "1.0.0";
 my $data_release_pipeline_application = "go-update";
-my $data_release_pipeline_tag = "go-update-1.0.0";
+my $data_release_pipeline_tag = "feature/data-model-changes-for-GO";
 my $data_release_pipeline_repository = "https://github.com/reactome/data-release-pipeline";
-my $resource_dir = "data-release-pipeline/".$data_release_pipeline_application."/src/main/resources/";
+my $resource_dir = "data-release-pipeline/".$data_release_pipeline_application."/src/main/resources";
 my $start_directory = cwd(); # abs_path($0);
 
-my $release_version = @args[0];
+my $release_version = $ARGV[0];
+
+if (!$ARGV[0]) {
+    die "Usage: perl $0 [reactome_release_version]. E.g. perl $0 70\n";
+}
 
 print "start_directory: ".$start_directory."\n";
 
@@ -31,17 +35,14 @@ if (-e "data-release-pipeline") {
   $logger->info("data-release-pipeline exists, pulling");
   # Start on develop. Pull will fail if we're not already on a branch
   chdir "data-release-pipeline";
-  system("git checkout develop");
   if (!$data_release_pipeline_tag) {
-    system("git pull");
-  # if there is a tag defined, we should check that out.
+    system("git checkout develop");
   } else {
-    #chdir "data-release-pipeline";
     # Still need to do a pull, since the tag might be been created after the last pull
-    system("git pull");
-    system("git checkout ".$data_release_pipeline_tag);
-    #chdir "..";
+    system("git checkout $data_release_pipeline_tag");
   }
+  system("git pull");
+
   chdir $start_directory;
   system("cp ".$data_release_pipeline_application.".properties $resource_dir");
   chdir "data-release-pipeline";
@@ -52,9 +53,9 @@ if (-e "data-release-pipeline") {
 }
 
 chdir($start_directory."/data-release-pipeline/".$data_release_pipeline_application."/");
-$logger->info("Getting the GO files...")
-system("wget -O ".$resource_dir."go.obo http://current.geneontology.org/ontology/go.obo");
-system("wget -O ".$resource_dir."ec2go http://geneontology.org/external2go/ec2go");
+$logger->info("Getting the GO files...");
+system("wget -O $start_directory/$resource_dir/go.obo http://current.geneontology.org/ontology/go.obo");
+system("wget -O $start_directory/$resource_dir/ec2go http://geneontology.org/external2go/ec2go");
 
 $logger->info("Executing ".$data_release_pipeline_application);
 build_jar_and_execute();
