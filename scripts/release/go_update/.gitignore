@@ -7,3 +7,6 @@ go.out
 go.wiki
 ec2go
 new_GO_MF.txt
+go-update.properties
+run_GO_Update.out
+data-release-pipeline/
