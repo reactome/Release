@@ -23,7 +23,7 @@ my $dba = GKB::DBAdaptor->new
      -pass   => 'password for accessing mysql server',
      -ontology => $ontology # GKB::Ontology object
      );
-     
+
 my $db_name = 'your_database_name';
 
 # Drop the database if it exists already
@@ -35,7 +35,7 @@ $dba->execute("USE $db_name");
 # create tables and store ontology/schema
 $dba->create_tables;
 
-If you have created the database already and want to access it use following 
+If you have created the database already and want to access it use following
 construct:
 
 my $dba = GKB::DBAdaptor->new
@@ -45,7 +45,7 @@ my $dba = GKB::DBAdaptor->new
      -host   => 'localhost', # host where mysqld is running
      -pass   => 'password for accessing mysql server',
      );
-                      
+
 By giving the database name you bypass the requirement for ontology which is assumed
 to be stored in the database already and fetched from there.
 
@@ -282,7 +282,7 @@ my $dba = GKB::DBAdaptor->new
      -pass   => 'password for accessing mysql server',
      -no_ontology_flag => 1
      );
-     
+
 Most of the functionality of this class won't work anymore, but
 you can still use the following vey handy subroutines:
 
@@ -333,7 +333,7 @@ for my $attr
 	host
 	user
 	db_handle
-	driver		
+	driver
 	ontology
 	primary_key_type
 	instance_cache
@@ -400,8 +400,17 @@ sub new {
 	$dsn .= ";database=$db";
 	$self->db_name($db);
     }
-    
-    my $dbh = eval { DBI->connect($dsn,$user,$password, {RaiseError => 1, mysql_enable_utf8 => 1}); };
+
+    my $dbh = eval {
+        DBI->connect(
+            $dsn,$user,$password,
+            {
+                'mysql_ssl' => 1,
+                'mysql_enable_utf8' => 1,
+                'RaiseError' => 1,
+            }
+        );
+    };
 
     if ($@ || !$dbh) {
     	my $throw_string = "Could not connect to database ";
@@ -529,7 +538,7 @@ sub AUTOLOAD {
     $self->throw("invalid attribute method: ->$attr()") unless $ok_field{$attr};
     $self->{$attr} = shift if @_;
     return $self->{$attr};
-}  
+}
 
 sub DESTROY {
    my ($self) = @_;
@@ -689,13 +698,13 @@ sub create_multivalue_attribute_table {
     my $ar = $self->create_attribute_column_definitions($class,$attribute);
     $statement .= join(",\n", @{$ar}) . "\n)\nENGINE=" . $self->table_type . "\n";
 #    $self->debug && print "$statement\n";
-    $self->execute($statement);    
+    $self->execute($statement);
 }
 
 ### Function: store
 # Stores GKB::Instance in db and sets it's db_id (comes from mysql_insertid).
 # Is recursive, i.e. if the instance has other instances as attributes
-# it stores also these since their db_id is necessary to store the 
+# it stores also these since their db_id is necessary to store the
 # 1st instance.
 # Also sets $instance->{'newly_stored'} which can be used to check if the
 # instance was really stored or just given db_id from "identical" instance
@@ -715,7 +724,7 @@ sub store {
     # This is to catch attribute instances of instances which do not happen to
     # have defining attributes.
     my $store_func = ($use_store_if_necessary || ((caller(1))[3] and ((caller(1))[3] eq 'GKB::DBAdaptor::store_if_necessary')))
-	? \&store_if_necessary 
+	? \&store_if_necessary
 	    : \&store;
     my $o = $self->ontology || $self->throw("Need ontology.");
     ($i && ref($i) && ($i->isa("GKB::Instance"))) ||
@@ -846,14 +855,14 @@ sub _handle_sql_query_results {
 	}
 	push @out, $i;
     }
-    return \@out;    
+    return \@out;
 }
 
 sub _handle_ranked_instance_attribute {
     my ($self,$t_hr,$ar,$instr) = @_;
 #    $self->debug && print "", (caller(0))[3], "\n";
     if (defined $ar->[$instr->{'class'}]) {
-	$t_hr->{'attribute'}->{$instr->{'attribute'}}->[$ar->[$instr->{'rank'}]] = 
+	$t_hr->{'attribute'}->{$instr->{'attribute'}}->[$ar->[$instr->{'rank'}]] =
 	    $self->instance_cache->fetch($ar->[$instr->{'value'}]) ||
 		$self->instance_cache->store($ar->[$instr->{'value'}], GKB::Instance->new
 					      (
@@ -870,7 +879,7 @@ sub _handle_single_instance_attribute {
     my ($self,$t_hr,$ar,$instr) = @_;
 #    $self->debug && print "", (caller(0))[3], "\t",join("\t", $instr->{'attribute'},$instr->{'class'},$instr->{'value'}), "\n";
     if (defined $ar->[$instr->{'class'}]) {
-	$t_hr->{'attribute'}->{$instr->{'attribute'}}->[0] = 
+	$t_hr->{'attribute'}->{$instr->{'attribute'}}->[0] =
 	    $self->instance_cache->fetch($ar->[$instr->{'value'}]) ||
 		$self->instance_cache->store($ar->[$instr->{'value'}], GKB::Instance->new
 					      (
@@ -945,7 +954,7 @@ sub fetch_referer_by_instance {
     my ($self,$instance) = @_;
     $self->debug && print "", (caller(0))[3], "\n";
     ($instance && ref($instance) && ($instance->isa("GKB::Instance"))) ||
-	$self->throw("Need GK::Instance, got '$instance'.");    
+	$self->throw("Need GK::Instance, got '$instance'.");
     $instance->db_id || $self->throw("Instance has to have db_id in order for you to be able to use this method.");
     my $hr = $self->_fetch_referer_by_instance($instance);
 #    return [map {values %{$_}} values %{$hr}];
@@ -1028,7 +1037,7 @@ sub fetch_instance_by_attribute {
     $self->ontology->class($thing2get) || $self->throw("Don't know how to fetch '$thing2get'.");
     $query || $self->throw("Need query.");
     my @out;
-    
+
     if ($query && (scalar(@{$query}) == 1) && (! $query->[0]->[2]) && ($query->[0]->[0] eq $DB_ID_NAME)) {
 		my @tmp;
 		foreach my $val (@{$query->[0]->[1]}) {
@@ -1479,7 +1488,7 @@ sub follow_attributes {
 #			$Data::Dumper::Maxdepth = 3;
 #			print Data::Dumper->Dumpxs([$i1], ["$i1"]);
 			$self->throw("Got 'undef' when fetching attribute '$att' value on " . $i1->id_string);
-			
+
 		    };
 		    foreach my $i2 (@{$i1->attribute_value($att)}) {
 			(ref($i2) && $i2->isa("GKB::Instance")) || next;
@@ -1721,7 +1730,7 @@ sub _make_query_to_retrieve_identical_instance {
 	    }
 	}
     }
-    
+
 #    foreach my $attribute (keys %{$o->class($i->class)->{'check'}->{'any'}}) {
     foreach my $attribute ($o->list_class_attributes_with_defining_type($i->class,'any')) {
 	my @values;
@@ -1789,7 +1798,7 @@ sub _are_reasonably_identical {
 #				                           -QUERY => [$q3]);
 # Neat, eh ? ;)
 # What happens under the bonnet:
-# - All classes which are allowed classes for attribute 'canonicalMolecule' and 
+# - All classes which are allowed classes for attribute 'canonicalMolecule' and
 # which have attribute 'identifier' are searched for 'ORC1_HUMAN' as 'identifier'.
 # - All classes which are allowed classes for attribute 'hasComponent' and
 # which have attribute 'canonicalMolecule' are searched for db_id(s) from the
@@ -2010,7 +2019,7 @@ sub _create_minimal_instancefetching_sql {
     push @instructions, {'method'=> \&_handle_single_value_attribute,
 			 'attribute' => '_displayName',
 			 'value' => $#select};
-			 
+
 #    my $statement = "SELECT DISTINCT " . join(",\n",@select) . "\nFROM " . join(",\n",@{$from}); # Works with MySQL 4 only
     my $statement = "SELECT DISTINCT " . join(",\n",@select) . "\nFROM (" . join(",\n",@{$from}) . ")"; # MySQL 5 compliant
     $statement .= "\n" . join("\n",@{$join}) if (@{$join});
@@ -2018,11 +2027,11 @@ sub _create_minimal_instancefetching_sql {
     $statement .= "\nORDER BY $root_class.$DB_ID_NAME";
 
     my $sth = $self->prepare($statement);
-    
+
     $self->debug && print join("\n", $statement, @{$values}), "\n";
 #    print "<PRE>\n", join("\n", $statement, @{$values}), "\n</PRE>\n";
     my $res = $sth->execute(@{$values});
-    
+
     return ($sth,\@instructions);
 }
 
@@ -2171,7 +2180,7 @@ sub delete {
 #    ($i && ref($i) && ($i =~ /Instance/)) || $self->throw("Need instance, got '$i'!");
     ($i && ref($i) && $i->isa("GKB::Instance")) || $self->throw("Need instance, got '$i'!");
     my $db_id = $i->db_id || $self->throw("Instance has to have db_id for deleting.");
-				
+
 	# Create a _Deleted instance to record the deletion
 	$self->_insert__deleted($db_id, $replacement_db_id, $reason, $comment);
 
@@ -2225,7 +2234,7 @@ sub delete_by_db_id {
 # instance is created for wach instance deleted.
 sub delete_by_db_id_and_insert__deleted {
     my ($self, @db_ids) = @_;
-    
+
     $self->_insert__deleted(@db_ids);
     $self->delete_by_db_id(@db_ids);
 }
@@ -2242,7 +2251,7 @@ sub delete_instance_from_referers {
 	    @vals ? $ii->attribute_value($att,@vals) : $ii->attribute_value($att,undef);
 	    $self->update($ii);
 	}
-    }    
+    }
 }
 
 # When you delete an instance, record the occurence in a
@@ -2262,13 +2271,13 @@ sub delete_instance_from_referers {
 # A comment would be nice, but can also be undef.
 sub _insert__deleted {
     my ($self, $deleted_db_id, $replacement_db_id, $reason, $comment) = @_;
-    
+
     # If no DB_ID has been assigned yet, don't bother to
     # make a note of this deletion.
     if (!(defined $deleted_db_id)) {
     	return;
     }
-    
+
     # Check to see if _Deleted instance for this DB_ID exists already
     my $query = [["deletedInstanceDB_ID", [$deleted_db_id], 0]];
     my $ar = $self->fetch_instance_by_attribute("_Deleted", $query);
@@ -2276,7 +2285,7 @@ sub _insert__deleted {
 	if (scalar(@{$ar})>0) {
 	    return;
 	}
-	
+
     # Only keep track of  instances of certain classes; ignore
     # all others.
     $ar = $self->fetch_instance_by_db_id($deleted_db_id);
@@ -2288,7 +2297,7 @@ sub _insert__deleted {
     if (!$self->ontology->is_class_attribute_allowed_class("_Deleted", "replacementInstances", $deleted_class)) {
     	return;
     }
-    
+
     # Create the new _Deleted instance.
     my $deleted_display_name = "";
     if (defined $deleted->_displayName && defined $deleted->_displayName->[0]) {
@@ -2322,7 +2331,7 @@ sub _insert__deleted {
 	if (defined $comment) {
     	$_deleted->attribute_value("curatorComment", $comment);
 	}
-	
+
     # Insert the replacement instance, if available.
     my $replacement = undef;
     my $replacement_class = undef;
@@ -2333,12 +2342,12 @@ sub _insert__deleted {
 	    	$replacement_class = $replacement->class();
 	    	if (!$self->ontology->is_class_attribute_allowed_class("_Deleted", "replacementInstances", $replacement_class)) {
 	    	}
-	    	
+
 	    	$_deleted->attribute_value("replacementInstances", $replacement);
 	    } else {
 	    }
     }
-    
+
     # Store _Deleted instance
     $self->store($_deleted);
 }
@@ -2409,7 +2418,7 @@ sub fetch_single_attribute_value {
 	push @where, "A_$$.$ {attribute}_rank = 0" if ($first_only);
     } else {
 	push @select, "A_$$.$db_id_name";
-	push @select, "A_$$.$ {attribute}";	
+	push @select, "A_$$.$ {attribute}";
 	push @select, "NULL";
 	push @from, "$origin AS A_$$";
     }
@@ -2506,7 +2515,7 @@ sub fetch_paired_values {
 	$self->ontology->is_class_attribute_allowed_class($linker_origin1,$linker_attribute1,$origin1) ||
 	$self->throw("Can't link to class '$class1' over class '$linker_class' attribute '$linker_attribute1'.");
     $self->ontology->is_class_attribute_allowed_class($linker_origin2,$linker_attribute2,$class2) ||
-	$self->ontology->is_class_attribute_allowed_class($linker_origin2,$linker_attribute2,$origin2) ||    
+	$self->ontology->is_class_attribute_allowed_class($linker_origin2,$linker_attribute2,$origin2) ||
 	$self->throw("Can't link to class '$class2' over class '$linker_class' attribute '$linker_attribute2'.");
 
     my (@select,@from,@where);
@@ -2558,7 +2567,7 @@ sub fetch_paired_values {
 }
 
 sub fetch_multiple_attributes_values {
-    my ($self,$class,$attribute_ar,$first_only,$order) = @_;    
+    my ($self,$class,$attribute_ar,$first_only,$order) = @_;
     $self->debug && print "", (caller(0))[3], "\n";
     $order ||= [];
     my %order;
@@ -2594,13 +2603,13 @@ sub fetch_multiple_attributes_values {
 	    }
 	}
     }
-    my $statement = 
+    my $statement =
 	"SELECT " . join(",\n",@select) .
 	"\nFROM " . join(",\n",keys %from);
     $statement .= "\nWHERE " . join("\nAND ",@where) if (@where);
     $statement .= "\nORDER BY " . join("\n,",@order) if (@order);
     my ($sth,$res) = $self->execute($statement);
-    return $sth->fetchall_arrayref;	
+    return $sth->fetchall_arrayref;
 }
 
 sub store_or_merge {
@@ -2627,7 +2636,7 @@ sub store_or_merge {
 	$self->instance_cache->delete($stored->db_id);
     }
     return $instance->db_id;
-} 
+}
 
 # Fetches instances which are not values of given class attributes. I.e.
 # fetch_instances_which_are_not_class_attribute_values('PhysicalEntity',['Complex','hasComponent'])
@@ -2636,7 +2645,7 @@ sub store_or_merge {
 # would fetch all the root Activity, i.e. biological_function
 sub fetch_instances_which_are_not_class_attribute_values {
     my ($self,$class,$ar) = @_;
-    $self->debug && print "", (caller(0))[3], "\n";   
+    $self->debug && print "", (caller(0))[3], "\n";
     my (@left_join,@where);
     my $db_id_name = $GKB::Ontology::DB_ID_NAME;
     for (my $i = 0; $i < @{$ar}; $i += 2) {
@@ -2650,7 +2659,7 @@ sub fetch_instances_which_are_not_class_attribute_values {
 	push @left_join, "LEFT JOIN $tbl_name $alias ON ($alias.$att=$class.$db_id_name)";
 	push @where, "$alias.$att IS NULL";
     }
-    my $statement = "SELECT $class.$db_id_name FROM $class\n" . join("\n",@left_join) . 
+    my $statement = "SELECT $class.$db_id_name FROM $class\n" . join("\n",@left_join) .
                     "\nWHERE " . join ("\nAND ",@where);
     my ($sth,$res) = $self->execute($statement);
     my $ids = $self->db_handle->selectcol_arrayref($statement);
@@ -2659,7 +2668,7 @@ sub fetch_instances_which_are_not_class_attribute_values {
 
 sub class_instance_count {
     my ($self,$class) = @_;
-    $self->debug && print "", (caller(0))[3], "\n";   
+    $self->debug && print "", (caller(0))[3], "\n";
     $class ||= $self->ontology->root_class;
     $self->ontology->check_class_attribute($class);
     my $statement = qq(SELECT COUNT(*) FROM $class);
@@ -2669,8 +2678,8 @@ sub class_instance_count {
 
 sub fetch_all_class_instances_as_shells {
     my ($self,$class) = @_;
-    $self->debug && print "", (caller(0))[3], "\n";   
-    my $db_id_name = $GKB::Ontology::DB_ID_NAME;    
+    $self->debug && print "", (caller(0))[3], "\n";
+    my $db_id_name = $GKB::Ontology::DB_ID_NAME;
     my @out;
     $class ||= $self->ontology->root_class;
     foreach my $ar (@{$self->fetch_multiple_attributes_values($class,
@@ -2695,12 +2704,12 @@ sub fetch_db_ids_by_class {
     my $db_id_name = $GKB::Ontology::DB_ID_NAME;
     $self->ontology->check_class_attribute($class);
     my $statement = qq(SELECT $db_id_name FROM $class);
-    return $self->db_handle->selectcol_arrayref($statement);  
+    return $self->db_handle->selectcol_arrayref($statement);
 }
 
 sub delete_by_class {
     my $self = shift;
-    $self->debug && print "", (caller(0))[3], "\n";   
+    $self->debug && print "", (caller(0))[3], "\n";
     foreach (@_) {
 	$self->insert__deleted_by_db_id(@{$self->fetch_db_ids_by_class($_)});
 	$self->delete_by_db_id(@{$self->fetch_db_ids_by_class($_)});
@@ -2709,7 +2718,7 @@ sub delete_by_class {
 
 sub load_db_specific_modules {
     my ($self) = @_;
-    $self->debug && print "", (caller(0))[3], "\n";   
+    $self->debug && print "", (caller(0))[3], "\n";
     my $package_base_name = 'GKB';
     foreach my $i (@{$self->fetch_instance(-CLASS => 'PerlModule')}) {
 	print $i->displayName, "\n";
@@ -2722,7 +2731,7 @@ sub load_db_specific_modules {
 
 sub load_attribute_values {
     my ($self,$instance,$attribute) = @_;
-    $self->debug && print "", (caller(0))[3], "\n";   
+    $self->debug && print "", (caller(0))[3], "\n";
     $instance->check_attribute($attribute);
     my ($sth,$instructions) = $self->_create_attribute_loading_sql($instance,$attribute);
     my $t_hr = {};
@@ -2770,7 +2779,7 @@ sub load_class_attribute_values_of_multiple_instances {
 
 sub _load_class_attribute_values_of_multiple_instances {
     my ($self,$class,$attribute,$instance_ar) = @_;
-    $self->debug && print "", (caller(0))[3], "\n"; 
+    $self->debug && print "", (caller(0))[3], "\n";
     @{$instance_ar} || return;
     my $o = $self->ontology;
     $o->check_class_attribute($class,$attribute);
@@ -2849,10 +2858,10 @@ sub _load_class_attribute_values_of_multiple_instances {
 
 sub _create_attribute_loading_sql {
     my ($self,$instance,$attribute) = @_;
-    $self->debug && print "", (caller(0))[3], "\t$attribute\n";   
+    $self->debug && print "", (caller(0))[3], "\t$attribute\n";
     my $origin = $instance->attribute_origin($attribute);
     my (@select,@instructions,$from,@values);
-    my $db_id_name = $GKB::Ontology::DB_ID_NAME;    
+    my $db_id_name = $GKB::Ontology::DB_ID_NAME;
     if ($instance->ontology->is_multivalue_class_attribute($origin,$attribute)) {
 	$from = "$ {origin}_2_$ {attribute}";
 	push @select, $attribute;
@@ -2898,10 +2907,10 @@ sub _create_attribute_loading_sql {
 
 sub _create_single_attribute_loading_sql {
     my ($self,$instance,$attribute) = @_;
-    $self->debug && print "", (caller(0))[3], "\t$attribute\n";   
+    $self->debug && print "", (caller(0))[3], "\t$attribute\n";
     my $origin = $instance->attribute_origin($attribute);
     my (@select,@instructions,$from,@values);
-    my $db_id_name = $GKB::Ontology::DB_ID_NAME;    
+    my $db_id_name = $GKB::Ontology::DB_ID_NAME;
     if ($instance->ontology->is_multivalue_class_attribute($origin,$attribute)) {
 	$from = "$ {origin}_2_$ {attribute}";
 	push @select, $attribute;
@@ -3053,7 +3062,7 @@ sub _create_instancefetching_sql_query_attributes_only {
     }
     unless ($seen{$root_class_name}++) {
 	push @from, $root_class_name;
-	foreach my $attribute (grep {! /^(_class|$db_id_name)$/} 
+	foreach my $attribute (grep {! /^(_class|$db_id_name)$/}
 			       $self->ontology->list_singlevalue_own_attributes($root_class_name)) {
 	    push @select, "$root_class_name.$attribute";
 	    if ($self->ontology->is_instance_type_class_attribute($root_class_name,$attribute)) {
@@ -3075,7 +3084,7 @@ sub _create_instancefetching_sql_query_attributes_only {
 	push @from, $thing2get;
 	push @where, "$thing2get.$db_id_name=$root_class_name.$db_id_name";
     }
-    
+
     # Ensure that the root class name is last so that MySQL 5 left join will work.
     @from = grep {$_ ne $root_class_name} @from;
     push @from, $root_class_name;
@@ -3113,7 +3122,7 @@ sub _handle_sql_query_results2 {
 		    $t_hr = &{$instr->{'method'}}($self,$t_hr,$ar,$instr);
 		}
     }
-    
+
     if ($id) {
 #		$self->debug && print Data::Dumper->Dumpxs([$t_hr], ["$t_hr"]);
 		my $i = $self->_instance_from_hash2($t_hr,$class,$id,$instructions);
@@ -3143,7 +3152,7 @@ sub _instance_from_hash2 {
 #    }
     foreach my $k (map {$_->{'attribute'}} @{$instructions}) {
 	$instance->attribute_value($k, $t_hr->{'attribute'}->{$k} ? @{$t_hr->{'attribute'}->{$k}} : undef);
-    }    
+    }
     undef %{$t_hr};
     $self->debug && print "<==", (caller(0))[3], "\n";
     return $instance;
@@ -3170,7 +3179,7 @@ sub replace_strings_with_db_ids_where_appropriate {
 		my %tmp;
 		foreach my $cls ($self->ontology->list_allowed_classes($class,$q->[0])) {
 		    foreach my $att (grep {! ($_ eq '_Protege_id' or $_ eq '_class')}
-				     grep {$self->ontology->is_string_type_class_attribute($cls,$_)} 
+				     grep {$self->ontology->is_string_type_class_attribute($cls,$_)}
 				     $self->ontology->list_class_attributes($cls)) {
 			map {$tmp{$_->db_id}++} @{$self->fetch_instance_by_attribute($cls,[[$att,\@strings,$q->[2]]])};
 		    }
@@ -3210,7 +3219,7 @@ sub fetch_identical_instances {
 	$i->identical_instances_in_db(\@out);
     }
     delete $self->{'instances_being_checked'}->{"$i"};
-    return \@out;    
+    return \@out;
 }
 
 # This method also checks for ->attribute_value(DB_ID) rather than just
@@ -3246,7 +3255,7 @@ sub _make_query_to_retrieve_identical_instance2 {
 	    }
 	}
     }
-    
+
 #    foreach my $attribute (keys %{$o->class($i->class)->{'check'}->{'any'}}) {
     foreach my $attribute ($o->list_class_attributes_with_defining_type($i->class,'any')) {
 	my @values;
@@ -3281,7 +3290,7 @@ sub merge_instances {
     $self->debug && print "", (caller(0))[3], "\n";
     ($i1 && $i2) || $self->throw("Need 2 Instances.");
     $i1->merge($i2);
-    
+
     if ($i1->db_id) {
 		$self->update($i1);
     } elsif ($i2->db_id) {
@@ -3290,7 +3299,7 @@ sub merge_instances {
     } else {
 		$self->store_if_necessary($i1);
     }
-    
+
     if ($i2->db_id && ($i2->db_id != $i1->db_id)) {
         # Fetch the referers so that their display name can be reset later.
 		my $referers = $self->fetch_referer_by_instance($i2);
@@ -3367,7 +3376,7 @@ sub fetch_instance_by_string_type_attribute_and_species_db_id {
     $self->debug && print "", (caller(0))[3], "\n";
     my @out;
     my %seen;
-    
+
     # Loop over all ontology classes to see if $value can be found in
     # any instance of the corresponding class.
     foreach my $class ($self->ontology->list_classes) {
@@ -3381,7 +3390,7 @@ sub fetch_instance_by_string_type_attribute_and_species_db_id {
 				$att2 = 'taxon';
 		    }
 		}
-		
+
 		my @atts = grep {! /^_(P|i|h)/}
 		grep {$self->ontology->is_string_type_class_attribute($class,$_)}
 		$self->ontology->list_own_attributes($class);
@@ -3413,12 +3422,12 @@ sub fetch_instance_by_string_type_attribute_and_species_db_id_by_class {
     my $class;
     my $subclass;
     my @subclasses;
-    
+
     if (!(defined $forbidden_attributes)) {
     	my %empty = ();
     	$forbidden_attributes = \%empty;
     }
-    
+
 #    push(@{$allowed_classes}, 'DatabaseObject');
     # Loop over all allowed ontology classes to see if $value can be found in
     # any instance of the corresponding class.
@@ -3441,11 +3450,11 @@ sub fetch_instance_by_string_type_attribute_and_species_db_id_by_class {
 					$att2 = 'taxon';
 			    }
 			}
-			
+
 			my @atts = grep {! /^_(P|i|h)/}
 				grep {$self->ontology->is_string_type_class_attribute($subclass,$_)}
 				$self->ontology->list_own_attributes($subclass);
-			
+
 			# Loop over all attributes and create queries for each such that
 			# those whose values match $value get added to the list.
 			if ($att2) {
@@ -3464,7 +3473,7 @@ sub fetch_instance_by_string_type_attribute_and_species_db_id_by_class {
 			}
     	}
     }
-    
+
     return \@out;
 }
 
@@ -3530,14 +3539,14 @@ sub fetch_class_instance_by_fulltext_in_boolean_mode {
 	}
     }
     return [] unless (@match);
-    push @from, $root_class unless ($seen{$root_class}++);   
+    push @from, $root_class unless ($seen{$root_class}++);
     my $statement =
 	"SELECT DISTINCT $root_class.$DB_ID_NAME,$root_class._class,$root_class._displayName" .
 	"\nFROM\n" . join("\n,",@from) .
 	"\nWHERE\n" . join("\n AND ", ("MATCH(\n" . join("\n,",@match) . "\n)" . "\nAGAINST(? IN BOOLEAN MODE)"), @where);
 #    print qq(<PRE>$statement\n$value</PRE>\n);
     my $sth = $self->prepare($statement);
-    $sth->execute($value);   
+    $sth->execute($value);
     my @out;
     while (my $ar = $sth->fetchrow_arrayref) {
 	push @out,  $self->instance_cache->fetch($ar->[0]) ||
@@ -3602,14 +3611,14 @@ sub _from_where_join_values {
 # do not work otherwise. However, as this bit hasn't been tested properly either and
 # as I don't have time to do it now I leave it out for the time being.
 # Species.name != 'homo sapiens' (using extendedsearch) works
-# Pathway.species.name != 'homo sapiens' (using remoteattsearch) works in the sense that 
+# Pathway.species.name != 'homo sapiens' (using remoteattsearch) works in the sense that
 # it return al pathways w/o non-human species but also those which have human in addition
 # to something else.
 # Pathway.species != 'homo sapiens' (using extendedsearch)
-# and 
-# Reaction.orthologousEvent.species.name != 'homo sapiens' (using remoteattsearch) 
-# are something that I have to investigate further 
-#	    if ($self->ontology->is_multivalue_class_attribute($origin,$att) && 
+# and
+# Reaction.orthologousEvent.species.name != 'homo sapiens' (using remoteattsearch)
+# are something that I have to investigate further
+#	    if ($self->ontology->is_multivalue_class_attribute($origin,$att) &&
 #		(($operator eq 'NOT IN') || ($operator eq '!='))) {
 #		$value_ar = $self->fetch_instance_DB_ID_by_attribute($class,[[$att,$value_ar,'=']]);
 #		$att = $DB_ID_NAME;
@@ -3674,7 +3683,7 @@ sub find_1_directed_path_between_instances {
     ($from && ref($from) && $from->isa("GKB::Instance")) ||
 	$self->throw("Need GKB::Instance, got '$from'.");
     $filter_function ||= sub {1;};
-    $instructions = 
+    $instructions =
 	[
 	 ['PhysicalEntity',  \&GKB::Instance::reverse_attribute_value, 'input', 'Reaction'],
 	 ['Reaction', \&GKB::Instance::attribute_value, 'output', 'PhysicalEntity'],
@@ -3693,7 +3702,7 @@ sub find_1_directed_path_between_instances {
     my @t = ($from);
     my $cur_depth = 0;
     my $successful;
-  OUTER_WHILE: 
+  OUTER_WHILE:
     while ((@t > 0) && ((! defined $max_depth) || ($cur_depth < $max_depth))) {
 	my @instances = @t;
 	@t = ();
@@ -3707,7 +3716,7 @@ sub find_1_directed_path_between_instances {
 		my ($class,$f_ref,$att,$out_class) = @{$ar};
 		next unless $instance->is_a($class);
 		my @tmp =
-		grep {&{$filter_function}($_)} 
+		grep {&{$filter_function}($_)}
 		grep {! $seen{$_->db_id}++}
 		grep {! $kill_h{$_->db_id}}
 		grep {$_->is_a($out_class)}
@@ -4001,15 +4010,3 @@ END
 
 
 1;
-
-
-
-
-
-
-
-
-
-
-
-
