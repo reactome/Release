@@ -5,6 +5,7 @@ use lib "/usr/local/gkb/modules";
 use GKB::DBAdaptor;
 use GKB::Config;
 
+use autodie;
 use Data::Dumper;
 use Getopt::Long;
 
@@ -159,7 +160,7 @@ sub usage_instructions {
     -release_debug (default: not used)
     -curated_user db_user (default: $GKB::Config::GK_CURATOR_DB_USER)
     -curated_host db_host (default: $GKB::Config::GK_CURATOR_DB_HOST)
-    -curated_pass db_pass (default: password for $GKB::Config::GK_CURATOR_DB_PASS)
+    -curated_pass db_pass (default: password for $GKB::Config::GK_CURATOR_DB_USER)
     -curated_port db_port (default: $GKB::Config::GK_CURATOR_DB_PORT)
     -curated_db db_name (default: gk_central)
     -curated_debug (default: not used)
