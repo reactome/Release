@@ -32,66 +32,45 @@ fi
 
 if [[ -n $DB && -n $USER && -n $PASS ]]
 then
-    if [[ $USER =~ "piper" ]]
+    if [[ $USER =~ "curator" ]]
     then
         # Attempts to find and use database $DB and if successful it is backed up
         # before being dropped (errors, if any, stored in $DB_ERROR)
         DB_ERROR=$(mysql -u $USER -p$PASS -e "use $DB" 2>&1 > /dev/null)
-        if [ -z "$DB_ERROR" ]
-        then
+        DB_EXIT_CODE=$?
+
+        if [[ $DB_EXIT_CODE -eq 0 ]]; then
+            if [[ -n $DB_ERROR && $DB_ERROR != *"password on the command line interface can be insecure"* ]]; then
+                echo "WARNING: Error message received on checking database exists but exit code was 0: $DB_ERROR"
+                echo "Will backup $DB and continue slicing"
+            fi
             echo Backing up $DB ...
             mysqldump -u$USER -p$PASS $DB > $DB.dump
-        elif [[ $DB_ERROR == *"Unknown database"* ]]
-        then
+
+            echo Dropping $DB ...
+            mysql -u$USER -p $PASS -e "drop database if exists $DB"
+        elif [[ $DB_ERROR == *"Unknown database"* ]]; then
             echo "Database $DB does not exist - no need to create back up"
         else
             echo -e "Problem accessing $DB: $DB_ERROR\nAborting slicing"
-            exit
+            exit 1;
         fi
-
-        echo Dropping $DB ...
-        mysql -u$USER -p$PASS -e "drop database if exists $DB"
     else
         echo "I was expecting the database user to be 'curator'.  Please edit slicingTool.prop and try again"
     fi
 else
     echo -e "\nMissing parameters!  Please complete slicingTool.prop\n"
-    exit
+    exit 1
 fi
 
-echo "
-Running ProjectSlicingTool...
-"
+echo "Running ProjectSlicingTool..."
 
-echo "
- " > SlicingTool.log
-echo "
- " > $LOG
+echo "" > SlicingTool.log
+echo "" > $LOG
 
-nohup java -Xmx8G -Djava.awt.headless=true -jar ProjectSlicingTool.jar &
+nohup java -Xmx8G -Djava.awt.headless=true -jar ProjectSlicingTool.jar
 
-tail -f SlicingTool.log $LOG 2>/dev/null &
-
-WAIT=1
-while [[ -n $WAIT ]]
-do
-  sleep 30
-  DONE=$(grep 'Total time for slicing' SlicingTool.log | perl -pe 's/^.+Total/Total/')
-  if [[ -n $DONE ]]
-  then
-    echo Finished slicing $DONE
-    WAIT=
-  fi
-done
-
-killall -9 tail >/dev/null 2>&1
-
-#/usr/local/gkb/scripts/install_slice_db.pl $DB
-
-echo "
-
-All Done!
-"
+echo "All Done!"
 
 echo $DB `date` >> done.txt
 
