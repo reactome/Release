@@ -88,6 +88,5 @@ sub build_jar_and_execute {
 #  system("cp logs/* ../../");
   # TODO: Zip all the logs into an archive and then email them when the step finishes, instead of the old go.wiki
   system("cp -a logs ../../archive/$release_version/logs");
-  system("tar -czf go_update_logs_R$release_version.tgz ../../archive/$release_version/logs");
-
+  system("tar -czf go_update_logs_R$release_version.tgz -C ../../archive/$release_version/logs .");
 }
