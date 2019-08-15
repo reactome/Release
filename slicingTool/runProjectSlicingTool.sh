@@ -48,7 +48,7 @@ then
             mysqldump -u$USER -p$PASS $DB > $DB.dump
 
             echo Dropping $DB ...
-            mysql -u$USER -p $PASS -e "drop database if exists $DB"
+            mysql -u$USER -p$PASS -e "drop database if exists $DB"
         elif [[ $DB_ERROR == *"Unknown database"* ]]; then
             echo "Database $DB does not exist - no need to create back up"
         else
