@@ -300,8 +300,10 @@ sub has_human_source_instance {
 sub fetch_curator_database_physical_entity_lookup {
     my $database = shift // $GKB::Config::GK_CURATOR_DB_NAME;
     my $host = shift // $GKB::Config::GK_CURATOR_DB_HOST;
+    my $user = shift // $GKB::Config::GK_CURATOR_DB_USER;
+    my $pass = shift // $GKB::Config::GK_CURATOR_DB_PASS;
 
-    my $dba = get_dba($database, $host);
+    my $dba = get_dba($database, $host, $user, $pass);
 
     my @physical_entities = @{$dba->fetch_instance(-CLASS => 'PhysicalEntity')};
 
