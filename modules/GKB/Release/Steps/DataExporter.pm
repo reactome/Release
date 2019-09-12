@@ -13,7 +13,7 @@ has '+user_input' => (default => sub {
         'props' => {'query' => 'Have you updated data-exporter/config.properties? '},
     }
 });
-has '+directory' => ( default => "$release/ncbi" );
+has '+directory' => ( default => "$release/data-exporter" );
 has '+mail' => ( default => sub {
     my $self = shift;
     return {
