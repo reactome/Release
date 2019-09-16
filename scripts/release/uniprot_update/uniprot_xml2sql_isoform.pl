@@ -968,7 +968,7 @@ sub values_changed {
         $current = $current_values;
         $new = $new_values;
     }
-    return 0 if same_array_contents($current, $new);
+    return 0 if same_array_contents_in_same_order($current, $new);
 
     print "$attribute changed for instance $instance->{db_id}:\n";
     print "old attribute values - " . join(',', sort @{$current}) . "\n";
@@ -977,16 +977,22 @@ sub values_changed {
     return 1;
 }
 
-sub same_array_contents {
+sub same_array_contents_in_same_order {
     my $array1 = shift;
     my $array2 = shift;
 
     # Not the same if different number of elements
     return 0 if scalar @{$array1} != scalar @{$array2};
 
-    # Not the same if element in one array but not the other
-    foreach my $array1_element (@{$array1}) {
-        return 0 if none {$_ eq $array1_element} @{$array2};
+    # Not the same if any of the elements in each position of the
+    # arrays differ
+    for (my $index = 0; $index < scalar @{$array1}; $index++) {
+        my $array1_element = $array1->[$index];
+        my $array2_element = $array2->[$index];
+
+        #print "Comparing $array1_element to $array2_element\n";
+
+        return 0 if $array1_element ne $array2_element;
     }
 
     return 1;
