@@ -243,18 +243,25 @@ while (<$uniprot_records_fh>) {
     my ($checksum) = /\<sequence.*checksum=\"([0-9A-F]+)\"/ms;
 
     my $gn_str = "";
-    my @gene_name;
+    my @gene_names;
     while (/\<gene\>(.*?)\<\/gene\>/gms) {
         $gn_str = $1;
-        $gn_str =~ s/\<\/name\>//g;
-        $gn_str =~ s/\<name.*\"\>//g;
-        $gn_str =~ s/ //g;
-        my @names = split( /\n/, $gn_str );
-        shift @names;
-        push @gene_name, @names;
+
+        while ($gn_str =~ /\<name.*?type=\"(.*?)\".*?\>(.*?)\<\/name\>/gms) {
+            my $gene_name_type = $1;
+            my $gene_name = $2;
+
+            if ($gene_name_type eq 'primary') {
+                unshift @gene_names, $gene_name; # Primary gene name should be first in the list
+            } else {
+                push @gene_names, $gene_name;
+            }
+        }
+
+        print "Gene names: @gene_names" . "\n";
     }
 
-    my $name = $gene_name[0] ? $gene_name[0] : $rec_name;
+    my $name = $gene_names[0] ? $gene_names[0] : $rec_name;
 
     my @reference_dna_sequences;
     if ($taxon =~ /Homo sapiens/i) {
@@ -280,7 +287,7 @@ while (<$uniprot_records_fh>) {
                 $reference_dna_sequence = $dba->fetch_instance_by_db_id($reactome_rds{$gene_id})->[0];
                 $reference_dna_sequence->inflate();
                 my $added_reference_database = $reference_dna_sequence->add_attribute_value_if_necessary('referenceDatabase', $human_ensembl_gene_ref_db);
-                my $added_gene_names = $reference_dna_sequence->add_attribute_value_if_necessary('geneName', @gene_name);
+                my $added_gene_names = $reference_dna_sequence->add_attribute_value_if_necessary('geneName', @gene_names);
                 my $added_species_instance = $reference_dna_sequence->add_attribute_value_if_necessary('species', $species_instance);
 
                 if (@{$added_reference_database} || @{$added_gene_names} || @{$added_species_instance}) {
@@ -306,7 +313,7 @@ while (<$uniprot_records_fh>) {
                 $reference_dna_sequence->inflated(1);
                 $reference_dna_sequence->created($instance_edit);
                 $reference_dna_sequence->modified(undef);
-                $reference_dna_sequence->geneName(@gene_name);
+                $reference_dna_sequence->geneName(@gene_names);
                 $reference_dna_sequence->species($species_instance);
                 my $reference_dna_sequence_db_id = $dba->store($reference_dna_sequence);
 
@@ -378,7 +385,7 @@ while (<$uniprot_records_fh>) {
         'species' => [$species_instance],
         'checksum' => [$checksum],
         'name' => [$name],
-        'geneName' => [@gene_name],
+        'geneName' => [@gene_names],
         'comment' => [$cc],
         'keyword' => [@kw],
         'chain' => [@chains]
