@@ -968,31 +968,76 @@ sub values_changed {
         $current = $current_values;
         $new = $new_values;
     }
-    return 0 if same_array_contents_in_same_order($current, $new);
+
+    my $same_array_contents = same_array_contents($current, $new);
+    my $same_array_order = same_array_order($current, $new);
+
+    return 0 if $same_array_contents && $same_array_order;
 
     print "$attribute changed for instance $instance->{db_id}:\n";
-    print "old attribute values - " . join(',', sort @{$current}) . "\n";
-    print "new attribute values - " . join(',', sort @{$new}) . "\n";
+
+    if ($same_array_contents) {
+        print "Only ordering has changed - contents are the same\n";
+    }
+    print "old attribute values - " . join(',', @{$current}) . "\n";
+    print "new attribute values - " . join(',', @{$new}) . "\n";
 
     return 1;
 }
 
-sub same_array_contents_in_same_order {
+# Works by first ensuring the arrays are of the same size.  If they are not, their contents can not be the same.
+# The unique elements of the array and the number of times they occur are then found.
+# If the arrays have the same elements occurring the same number of times (with the overall array sizes being equal),
+# the contents of the array must be the same and 1 is returned.  Otherwise, 0 is returned.
+sub same_array_contents {
     my $array1 = shift;
     my $array2 = shift;
 
     # Not the same if different number of elements
     return 0 if scalar @{$array1} != scalar @{$array2};
 
-    # Not the same if any of the elements in each position of the
+    my (%array1_element_to_count, %array2_element_to_count);
+
+    $array1_element_to_count{$_}++ foreach @{$array1};
+    $array2_element_to_count{$_}++ foreach @{$array2};
+
+    # Not the same content if the number of unique elements is different
+    if (scalar keys %array1_element_to_count != scalar keys %array2_element_to_count) {
+        return 0;
+    }
+
+    # Not the same content if the count for any distinct element differs between the arrays
+    foreach my $element (keys %array1_element_to_count) {
+        my $array1_count_for_element = $array1_element_to_count{$element};
+        my $array2_count_for_element = $array2_element_to_count{$element};
+
+        if ($array1_count_for_element != $array2_count_for_element) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+# Works by first ensuring the arrays are of the same size.  If they are not, the order is not considered the same.
+# Each index position is then queried for the two arrays and their elements compared.  If they differ at any index
+# position, the order is not the same and 0 is returned.  If they all match, the order is the same and 1 is returned.
+sub same_array_order {
+    my $array1 = shift;
+    my $array2 = shift;
+
+    # Not the same if different number of elements
+    return 0 if scalar @{$array1} != scalar @{$array2};
+
+    # Not the same order if any of the elements in each position of the
     # arrays differ
     for (my $index = 0; $index < scalar @{$array1}; $index++) {
         my $array1_element = $array1->[$index];
         my $array2_element = $array2->[$index];
 
-        #print "Comparing $array1_element to $array2_element\n";
-
-        return 0 if $array1_element ne $array2_element;
+        if ($array1_element ne $array2_element) {
+            return 0;
+        }
     }
 
     return 1;
