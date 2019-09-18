@@ -261,7 +261,6 @@ while (<$uniprot_records_fh>) {
     }
 
     my @gene_names = (@primary_gene_names, @secondary_gene_names);
-    print "Gene names: @gene_names\n";
 
     my $name = $gene_names[0] ? $gene_names[0] : $rec_name;
 
