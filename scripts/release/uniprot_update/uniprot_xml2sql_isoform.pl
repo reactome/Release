@@ -33,6 +33,7 @@ my $dba = GKB::DBAdaptor->new(
     -dbname => $opt_db
 );
 
+my $curator_server = 'https://curator.reactome.org';
 
 # FILE DOWNLOAD
 my $update_dir = ".";
@@ -697,7 +698,7 @@ foreach my $t_ac ( sort keys %reactome_gp ) {
             if (@referrer) {
                 my $report_line = "\|\[http\://www.uniprot.org/uniprot/$all_ac $all_ac\]\n\|";
                 $report_line .= "$t_ac\n\|";		#CY addition
-                $report_line .= "\[http\://reactomecurator\.oicr\.on.ca/cgi-bin/instancebrowser\?DB=$opt_db\&ID\=$pid\& $pid\]\n\|";
+                $report_line .= "\[$curator_server/cgi-bin/instancebrowser\?DB=$opt_db\&ID\=$pid\& $pid\]\n\|";
                 $report_line .= '|'  . join('|', @referrer) . "\n\|";
                 $report_line .= $species;
                 $report_line .= "\n\|\-\n";
@@ -760,7 +761,7 @@ foreach my $rac ( sort keys %reactome_gp ) {
     if (@referrer) {
         my $report_line = "\|\n\|";
         $report_line .= "\|$rac\n\|";
-        $report_line .= "\[http\://reactomecurator.oicr.on.ca/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$pid\& $pid\]\n\|";
+        $report_line .= "\[$curator_server/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$pid\& $pid\]\n\|";
         $report_line .= '|' . join('|', @referrer) . "\n\|";
         $report_line .= $species;
         $report_line .= "\n\|\-\n";
@@ -803,7 +804,7 @@ foreach my $iac ( sort keys %reactome_iso ) {
 
             my $report_line = "\|\n\|";
             $report_line .= "\|$iac\n\|";
-            $report_line .= "\[http\://reactomecurator.oicr.on.ca/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$id\& $id\]\n\|";
+            $report_line .= "\[$curator_server/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$id\& $id\]\n\|";
             $report_line .= '|' . join('|', @referrer) . "\n\|";
             $report_line .= $species;
             $report_line .= "\n\|\-\n";
