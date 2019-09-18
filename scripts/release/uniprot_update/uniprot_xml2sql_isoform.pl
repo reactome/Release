@@ -1008,8 +1008,8 @@ sub same_array_contents {
 
     # Not the same content if the count for any distinct element differs between the arrays
     foreach my $element (keys %array1_element_to_count) {
-        my $array1_count_for_element = $array1_element_to_count{$element};
-        my $array2_count_for_element = $array2_element_to_count{$element};
+        my $array1_count_for_element = $array1_element_to_count{$element} // 0;
+        my $array2_count_for_element = $array2_element_to_count{$element} // 0;
 
         if ($array1_count_for_element != $array2_count_for_element) {
             return 0;
