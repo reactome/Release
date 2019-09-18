@@ -244,7 +244,7 @@ while (<$uniprot_records_fh>) {
     my ($checksum) = /\<sequence.*checksum=\"([0-9A-F]+)\"/ms;
 
     my $gn_str = "";
-    my @gene_names;
+    my (@primary_gene_names, @secondary_gene_names);
     while (/\<gene\>(.*?)\<\/gene\>/gms) {
         $gn_str = $1;
 
@@ -253,14 +253,15 @@ while (<$uniprot_records_fh>) {
             my $gene_name = $2;
 
             if ($gene_name_type eq 'primary') {
-                unshift @gene_names, $gene_name; # Primary gene name should be first in the list
+                push @primary_gene_names, $gene_name;
             } else {
-                push @gene_names, $gene_name;
+                push @secondary_gene_names, $gene_name;
             }
         }
-
-        print "Gene names: @gene_names" . "\n";
     }
+
+    my @gene_names = (@primary_gene_names, @secondary_gene_names);
+    print "Gene names: @gene_names\n";
 
     my $name = $gene_names[0] ? $gene_names[0] : $rec_name;
 
