@@ -49,7 +49,7 @@ sub run {
     remove_biomodels_repository($tmp_dir);
 
     chdir "$present_dir";
-    system("perl add_links_to_single_resource.pl -user $opt_user -pass $opt_pass -host $opt_host -port $opt_port -db $opt_db -res BioModelsEventToDatabaseIdentifier");
+    system("perl add_links_to_biomodels_resource.pl -user $opt_user -pass $opt_pass -host $opt_host -port $opt_port -db $opt_db");
 
     $logger->info("$0 has finished its job\n");
 }
