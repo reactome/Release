@@ -179,7 +179,7 @@ sub get_name_and_id {
     my $instance = shift;
 
     return '' unless $instance && $instance->is_a('DatabaseObject');
-    return $instance->displayName . '(' . $instance->db_id . ')';
+    return $instance->displayName . ' (' . $instance->db_id . ')';
 }
 
 # Run command and return only relevant errors
