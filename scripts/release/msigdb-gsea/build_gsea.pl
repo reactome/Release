@@ -50,7 +50,6 @@ foreach my $repository_name (keys %repositories) {
     # Pull latest changes if local repository exists
     if (-d "$repository_name/.git") {
         chdir $repository_name;
-        my $repository_url = $repositories{$repository_name}{'url'};
         my $stderr = run_command('git pull', {
             # Anything that does not contain the string "error:" (\A and \z match the absolute start and end of the
             # string, .* before and after 'error:' allow the string to occur anywhere)
