@@ -193,6 +193,12 @@ sub run_command {
     # Remove unneeded messages, defined as a regex passed into $options, from captured STDERR
     my $error_to_ignore = $options->{'ignore_error'};
 
+    # Only allow one of the options for now to avoid confusion in using them together
+    #
+    # If the $error_to_check is present, all errors will be reported so it is possible to
+    # then filter out the $error_to_ignore. This means allowing both options in the future
+    # could be done, but since they are regular expressions it could be confusing if their
+    # matches overlap.
     if ($error_to_check && $error_to_ignore) {
         confess "Only one of the options 'ignore_all_errors_unless' and 'ignore_error' may be used\n";
     }
