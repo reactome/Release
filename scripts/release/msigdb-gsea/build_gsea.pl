@@ -51,9 +51,7 @@ foreach my $repository_name (keys %repositories) {
     if (-d "$repository_name/.git") {
         chdir $repository_name;
         my $stderr = run_command('git pull', {
-            # Anything that does not contain the string "error:" (\A and \z match the absolute start and end of the
-            # string, .* before and after 'error:' allow the string to occur anywhere)
-            ignore_error => qr/(?!\A.*error:.*\z)/
+            ignore_all_errors_unless => qr/error:/
         });
         if (trim($stderr)) {
             print STDERR "Problem pulling $repository_name:\n$stderr";

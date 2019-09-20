@@ -185,17 +185,27 @@ sub get_name_and_id {
 # Run command and return only relevant errors
 sub run_command {
     my $command = shift;
-    my $options = shift; # Currently 'ignore_error' is the only used option
+    my $options = shift; # Currently 'ignore_error' and 'ignore_all_errors_unless' are the only options supported
+
+    # Ignore all errors except for the pattern passed
+    my $error_to_check = $options->{'ignore_all_errors_unless'};
+
+    # Remove unneeded messages, defined as a regex passed into $options, from captured STDERR
+    my $error_to_ignore = $options->{'ignore_error'};
+
+    if ($error_to_check && $error_to_ignore) {
+        confess "Only one of the options 'ignore_all_errors_unless' and 'ignore_error' may be used\n";
+    }
 
     # Run command and store STDERR in variable
     my $stderr = capture_stderr {
         system $command;
     };
 
-    # Remove unneeded messages, defined as a regex passed into $options, from captured STDERR
-    my $error_to_ignore = $options->{'ignore_error'};
-    if ($error_to_ignore) {
-        $stderr =~ s/$error_to_ignore//m;
+    if ($error_to_check && $stderr !~ /$error_to_check/) {
+        $stderr = ''; # Discard errors if the error to look for is not present
+    } elsif ($error_to_ignore) {
+        $stderr =~ s/$error_to_ignore//m; # Remove the error to ignore
     }
 
     # Then return any remaining errors
