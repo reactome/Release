@@ -57,7 +57,7 @@ $logger->info("Getting the GO files...");
 system("wget -O $start_directory/$resource_dir/go.obo http://current.geneontology.org/ontology/go.obo");
 system("wget -O $start_directory/$resource_dir/ec2go http://geneontology.org/external2go/ec2go");
 
-$logger->info("Executing $data_release_pipeline_application)";
+$logger->info("Executing $data_release_pipeline_application");
 build_jar_and_execute();
 # system("mv UpdateDOIs.log ../..");
 $logger->info("Finished executing $data_release_pipeline_application");
