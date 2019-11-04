@@ -22,7 +22,7 @@ Readonly my $data_release_pipeline_repository => 'data-release-pipeline';
 Readonly my $repo_url => "https://github.com/reactome/$data_release_pipeline_repository";
 Readonly my $repo_local_directory => cwd() . "/$data_release_pipeline_repository"; # Must be an absolute path
 Readonly my $repo_application => 'chebi-update';
-Readonly my $repo_version => '1.1.1';
+Readonly my $repo_version => '1.1.2';
 Readonly my $repo_tag => "$repo_application-$repo_version";
 Readonly my $application_properties => "$repo_application.properties";
 
