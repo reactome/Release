@@ -48,7 +48,7 @@ GetOptions(
 
 $user ||= $GKB::Config::GK_DB_USER;
 my $pass;
-if ($user ne $GKB::Config::GK_DB_PASS) {
+if ($user ne $GKB::Config::GK_DB_USER) {
     print "Enter password for $user: ";
     $pass = <>;
     chomp $pass;
