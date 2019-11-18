@@ -24,7 +24,7 @@ use GKB::Config_Species;
 use Getopt::Long;
 use strict;
 
-my($user, $host, $pass, $port, $db, $debug, $help);
+my($user, $host, $port, $db, $debug, $help);
 
 GetOptions(
   "help" => \$help
@@ -37,18 +37,25 @@ if ($help) {
 
 
 # Parse commandline
-my $usage = "Usage: $0 -user db_user -host db_host -pass db_pass -port db_port -db db_name'\n";
+my $usage = "Usage: $0 -user db_user -host db_host -port db_port -db db_name'\n";
 GetOptions(
     "user:s" => \$user,
     "host:s" => \$host,
-    "pass:s" => \$pass,
     "port:i" => \$port,
     "db=s" => \$db,
     "debug" => \$debug
 );
 
 $user ||= $GKB::Config::GK_DB_USER;
-$pass ||= $GKB::Config::GK_DB_PASS;
+my $pass;
+if ($user ne $GKB::Config::GK_DB_PASS) {
+    print "Enter password for $user: ";
+    $pass = <>;
+    chomp $pass;
+} else {
+    $pass = $GKB::Config::GK_DB_PASS;
+}
+
 $host ||= $GKB::Config::GK_DB_HOST;
 $port ||= $GKB::Config::GK_DB_PORT;
 $db ||= $GKB::Config::GK_DB_NAME;
@@ -58,9 +65,9 @@ if ($db =~ /_(\d+)$/) {
     $version = $1;
 } else {
     until ($version && $version =~ /^\d+$/) {
-	print "Enter release version number: ";
-	$version = <>;
-	chomp $version;
+        print "Enter release version number: ";
+        $version = <>;
+        chomp $version;
     }
 }
 
