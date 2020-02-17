@@ -1,13 +1,15 @@
-#!/usr/local/bin/perl  -w
+#!/usr/local/bin/perl
 use strict;
+use warnings;
 
 use lib '/usr/local/gkb/modules';
 use GKB::Config;
 
-use autodie;
+use autodie qw/:all/;
 use Cwd;
 use Getopt::Long;
 use Data::Dumper;
+use English qw( -no_match_vars );
 use File::Basename;
 use List::MoreUtils qw/uniq/;
 
@@ -16,77 +18,63 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-my $data_release_pipeline_application_version = "1.0.1";
-my $data_release_pipeline_application = "go-update";
-my $data_release_pipeline_tag = "$data_release_pipeline_application-$data_release_pipeline_application_version";
-my $data_release_pipeline_repository = "https://github.com/reactome/data-release-pipeline";
-my $resource_dir = "data-release-pipeline/$data_release_pipeline_application/src/main/resources";
 my $start_directory = cwd();
+my $go_update_application = 'release-go-update';
+my $go_update_application_dir = "$start_directory/$go_update_application";
+my $go_update_repository = "https://github.com/reactome/$go_update_application";
+my $go_update_version = '1.0.2';
+my $go_update_version_tag = "v$go_update_version";
+my $go_update_properties_file = 'go-update.properties';
+my $resource_dir = "$go_update_application_dir/src/main/resources";
+my $archive_dir = "$start_directory/archive";
 
-my $release_version = $ARGV[0];
-
-if (!$ARGV[0]) {
-    die "Usage: perl $0 [reactome_release_version]. E.g. perl $0 70\n";
-}
+my $release_version = $ARGV[0] || die "Usage: perl $PROGRAM_NAME [reactome_release_version]. E.g. perl $PROGRAM_NAME 70\n";
 
 print "start_directory: $start_directory\n";
 
-if (-e "data-release-pipeline") {
-  $logger->info("data-release-pipeline exists, pulling");
-  # Start on develop. Pull will fail if we're not already on a branch
-  chdir "data-release-pipeline";
-  if (!$data_release_pipeline_tag) {
-    system("git checkout develop");
-  } else {
-    # Still need to do a pull, since the tag might be been created after the last pull
-    system("git checkout $data_release_pipeline_tag");
-  }
-  system("git pull");
-
-  chdir $start_directory;
-  system("cp $data_release_pipeline_application.properties $resource_dir");
-  chdir "data-release-pipeline";
+if (!(-d $go_update_application_dir)) {
+    $logger->info("Cloning $go_update_repository");
+    system "git clone $go_update_repository";
 } else {
-  $logger->info("Cloning data-release-pipeline");
-  clone_repo();
-  chdir "data-release-pipeline/$data_release_pipeline_application";
+    $logger->info("$go_update_application_dir exists, pulling");
 }
 
-chdir("$start_directory/data-release-pipeline/$data_release_pipeline_application/");
-$logger->info("Getting the GO files...");
-system("wget -O $start_directory/$resource_dir/go.obo http://current.geneontology.org/ontology/go.obo");
-system("wget -O $start_directory/$resource_dir/ec2go http://geneontology.org/external2go/ec2go");
-
-$logger->info("Executing $data_release_pipeline_application");
-build_jar_and_execute();
-# system("mv UpdateDOIs.log ../..");
-$logger->info("Finished executing $data_release_pipeline_application");
-
-sub clone_repo {
-  system("git clone $data_release_pipeline_repository");
-  # if there is a tag defined, we should check that out.
-  if ($data_release_pipeline_tag ne '')
-  {
-    chdir "data-release-pipeline";
-    system("git checkout $data_release_pipeline_tag");
-    chdir $start_directory;
-  }
-  system("cp $data_release_pipeline_application.properties $resource_dir");
+chdir $go_update_application_dir;
+if (!$go_update_version_tag) {
+    # Start on develop. Pull will fail if we're not already on a branch
+    system 'git checkout develop';
+} else {
+    # Still need to do a pull, since the tag might be been created after the last pull
+    system "git checkout $go_update_version_tag";
 }
+system 'git pull';
+
+
+system "cp $start_directory/$go_update_properties_file $resource_dir";
+
+$logger->info('Getting the GO files...');
+system "wget -O $resource_dir/go.obo http://current.geneontology.org/ontology/go.obo";
+system "wget -O $resource_dir/ec2go http://geneontology.org/external2go/ec2go";
+
+$logger->info("Executing $go_update_application");
+build_jar_and_execute($go_update_version, $go_update_properties_file, $release_version, $archive_dir);
+$logger->info("Finished executing $go_update_application");
 
 sub build_jar_and_execute {
-  # Need to build/install release-common-lib first.
-  chdir("$start_directory/data-release-pipeline/");
-  print "currently in: " . cwd() . "\n";
-  chdir "release-common-lib";
-  system("mvn clean compile install");
-  chdir "../$data_release_pipeline_application";
-  system("mvn clean compile assembly:single");
+    my $go_update_version_tag = shift;
+    my $go_update_properties_file = shift;
+    my $release_version = shift;
+    my $archive_dir = shift;
 
-  system("java -jar target/$data_release_pipeline_application-$data_release_pipeline_application_version-jar-with-dependencies.jar src/main/resources/$data_release_pipeline_application.properties");
-  # Move the logs up to the main directory so that they can get archived.
-#  system("cp logs/* ../../");
-  # TODO: Zip all the logs into an archive and then email them when the step finishes, instead of the old go.wiki
-  system("cp -a logs ../../archive/$release_version/logs");
-  system("tar -czf go_update_logs_R$release_version.tgz -C ../../archive/$release_version/logs .");
+    my $logs_archive_dir = "$archive_dir/$release_version/logs";
+
+    system 'mvn clean compile assembly:single';
+
+    system "java -jar target/go-update-$go_update_version-jar-with-dependencies.jar src/main/resources/$go_update_properties_file";
+    # Move the logs up to the main directory so that they can get archived.
+    # system("cp logs/* ../../");
+    # TODO: Zip all the logs into an archive and then email them when the step finishes, instead of the old go.wiki
+    system "mkdir -p $logs_archive_dir";
+    system "cp -a logs $logs_archive_dir";
+    system "tar -czf go_update_logs_R$release_version.tgz -C $logs_archive_dir .";
 }
