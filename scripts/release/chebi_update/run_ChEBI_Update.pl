@@ -10,7 +10,7 @@ use Carp;
 use Cwd;
 use Getopt::Long;
 use Data::Dumper;
-use English qw/-no-match-vars/;
+use English qw( -no_match_vars );
 use File::Basename;
 use List::MoreUtils qw/uniq/;
 use Log::Log4perl qw/get_logger/;
@@ -18,29 +18,28 @@ use Readonly;
 
 Log::Log4perl->init(\$LOG_CONF);
 
-Readonly my $data_release_pipeline_repository => 'data-release-pipeline';
-Readonly my $repo_url => "https://github.com/reactome/$data_release_pipeline_repository";
-Readonly my $repo_local_directory => cwd() . "/$data_release_pipeline_repository"; # Must be an absolute path
-Readonly my $repo_application => 'chebi-update';
-Readonly my $repo_version => '1.1.3';
-Readonly my $repo_tag => "$repo_application-$repo_version";
-Readonly my $application_properties => "$repo_application.properties";
-
-Readonly my $application_directory => "$repo_local_directory/$repo_application";
-Readonly my $resource_dir => "$application_directory/src/main/resources/";
+Readonly my $start_directory => cwd();
+Readonly my $chebi_update_application => 'release-chebi-update';
+Readonly my $chebi_update_application_dir => "$start_directory/$chebi_update_application";
+Readonly my $chebi_update_repository_url => "https://github.com/reactome/$chebi_update_application";
+Readonly my $chebi_update_version => '1.1.4-SNAPSHOT';
+Readonly my $chebi_update_version_tag => 'develop';#"v$chebi_update_version";
+Readonly my $chebi_update_properties_file => 'chebi-update.properties';
+Readonly my $resource_dir => "$chebi_update_application_dir/src/main/resources/";
+Readonly my $archive_dir => "$start_directory/archive";
 
 my $reactome_version = $ARGV[0] || die "Reactome version as the first argument to $PROGRAM_NAME\n";
 
-if (-e $repo_local_directory) {
-    update_repo($repo_local_directory);
+if (-d $chebi_update_application_dir) {
+    update_repo($chebi_update_application_dir);
 } else {
-    clone_repo($repo_url);
+    clone_repo($chebi_update_repository_url);
 }
 
-checkout_branch($repo_local_directory, $repo_tag);
-copy_properties_file_to_repo($application_properties, $resource_dir);
-build_jar_and_execute($repo_local_directory, $repo_application, $repo_tag, $application_properties);
-collect_logs_and_cache($reactome_version, $application_directory);
+checkout_branch($chebi_update_application_dir, $chebi_update_version_tag);
+copy_properties_file_to_repo($chebi_update_properties_file, $resource_dir);
+build_jar_and_execute($chebi_update_application_dir, $chebi_update_version, $chebi_update_properties_file);
+collect_logs_and_cache($reactome_version, $chebi_update_application_dir);
 
 sub update_repo {
     my $logger = get_logger(__PACKAGE__);
@@ -99,17 +98,13 @@ sub copy_properties_file_to_repo {
 sub build_jar_and_execute {
     my $logger = get_logger(__PACKAGE__);
 
-    my $repository_root = shift || $logger->logconfess('Need repository directory');
-    my $repository_application = shift || $logger->logconfess('Need repository application directory');
-    my $repository_tag = shift || $logger->logconfess('Need repository tag');
+    my $repository_application_dir = shift || $logger->logconfess('Need repository directory');
+    my $repository_version = shift || $logger->logconfess('Need repository version');
     my $properties_file = shift || $logger->logconfess('Need properties file');
 
     my $start_directory = cwd(); # abs_path($0);
 
-    # Need to build/install release-common-lib first.
-    chdir "$repository_root/release-common-lib";
-    system 'mvn clean compile install';
-    chdir "$repository_root/$repository_application";
+    chdir "$repository_application_dir";
     system 'mvn clean compile assembly:single';
 
     # If there's a cache file that's been saved in the parent directory, move it back into position, it might be needed.
@@ -117,9 +112,9 @@ sub build_jar_and_execute {
         system "mv $start_directory/chebi-cache .";
     }
 
-    $logger->info("Executing $repository_application");
-    system "java -jar target/$repository_tag-jar-with-dependencies.jar src/main/resources/$properties_file";
-    $logger->info("Finished executing $repository_application");
+    $logger->info("Executing $repository_application_dir");
+    system "java -jar target/chebi-update-$repository_version-jar-with-dependencies.jar src/main/resources/$properties_file";
+    $logger->info("Finished executing $repository_application_dir");
 
     chdir $start_directory;
 
@@ -131,7 +126,8 @@ sub collect_logs_and_cache {
 
     my $release_version = shift || $logger->logconfess('Need Reactome release version');
     my $application_directory = shift || $logger->logconfess('Need application directory in repository');
-    my $log_directory = cwd() . "/archive/$release_version";
+    my $archive_dir = shift || $logger->logconfess('Need archive directory');
+    my $log_directory = "$archive_dir/$release_version";
 
     # TODO: Zip all the logs into an archive and then email them when the step finishes, instead of the old chebi.wiki
     if (! -e $log_directory) {
