@@ -16,10 +16,10 @@ use Log::Log4perl qw/get_logger/;
 Log::Log4perl->init(\$LOG_CONF);
 my $logger = get_logger(__PACKAGE__);
 
-my $data_release_pipeline_application_version = "1.0.1";
+my $data_release_pipeline_application_version = "1.0.2";
 my $data_release_pipeline_application = "go-update";
 my $data_release_pipeline_tag = "$data_release_pipeline_application-$data_release_pipeline_application_version";
-my $data_release_pipeline_repository = "https://github.com/reactome/data-release-pipeline";
+my $data_release_pipeline_repository = "https://github.com/reactome/release-go-update";
 my $resource_dir = "data-release-pipeline/$data_release_pipeline_application/src/main/resources";
 my $start_directory = cwd();
 
