@@ -68,11 +68,7 @@ sub upload_files_to_europe_pmc {
     foreach my $file_to_upload (@files_to_upload) {
         print "Uploading file '$file_to_upload' to EuropePMC ftp server " . $europe_pmc_ftp_connection->host() . "...\n";
 
-        if (1
-
-        #$europe_pmc_ftp_connection->put($file_to_upload)
-
-        ) {
+        if ($europe_pmc_ftp_connection->put($file_to_upload)) {
             print "Successfully uploaded '$file_to_upload' to EuropePMC ftp server " .
                   $europe_pmc_ftp_connection->host() . "\n";
         } else {
@@ -97,9 +93,7 @@ sub delete_old_files_from_europe_pmc {
             print "Deleting file '$file_to_delete' from EuropePMC ftp server " .
                   $europe_pmc_ftp_connection->host() . "...\n";
 
-            if (1
-            #$ftp->delete($file_to_delete)
-            ) {
+            if ($ftp->delete($file_to_delete)) {
                  print "Successfully deleted '$file_to_delete' from EuropePMC ftp server " .
                        $europe_pmc_ftp_connection->host() . "\n";
             } else {
