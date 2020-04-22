@@ -93,7 +93,7 @@ sub delete_old_files_from_europe_pmc {
             print "Deleting file '$file_to_delete' from EuropePMC ftp server " .
                   $europe_pmc_ftp_connection->host() . "...\n";
 
-            if ($ftp->delete($file_to_delete)) {
+            if ($europe_pmc_ftp_connection->delete($file_to_delete)) {
                  print "Successfully deleted '$file_to_delete' from EuropePMC ftp server " .
                        $europe_pmc_ftp_connection->host() . "\n";
             } else {
