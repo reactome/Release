@@ -88,6 +88,13 @@ sub delete_old_files_from_europe_pmc {
     my $previous_version = $reactome_version - 1;
 
     my @files_to_delete = get_remote_europepmc_file_names_to_delete($europe_pmc_ftp_connection, $previous_version);
+
+    if (scalar @files_to_delete == 0) {
+        print "No files from Reactome version $previous_version to delete on the EuropePMC ftp server " .
+              $europe_pmc_ftp_connection->host() . "\n"; 
+        return;
+    }
+
     foreach my $file_to_delete (@files_to_delete) {
         if (any { $_ eq $file_to_delete } get_all_files_on_europepmc_server($europe_pmc_ftp_connection)) {
             print "Deleting file '$file_to_delete' from EuropePMC ftp server " .
