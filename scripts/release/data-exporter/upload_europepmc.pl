@@ -73,7 +73,7 @@ sub upload_files_to_europe_pmc {
                   $europe_pmc_ftp_connection->host() . "\n";
         } else {
             print STDERR "There was a problem uploading '$file_to_upload' to the EuropePMC ftp server " .
-                         $europe_pmc_ftp_connection->host() . "\n";
+                         $europe_pmc_ftp_connection->host() . ": " . $europe_pmc_ftp_connection->message . "\n";
             return 0; # File failed to upload - indicate not all files were uploaded successfully
         }
     }
@@ -91,7 +91,7 @@ sub delete_old_files_from_europe_pmc {
 
     if (scalar @files_to_delete == 0) {
         print "No files from Reactome version $previous_version to delete on the EuropePMC ftp server " .
-              $europe_pmc_ftp_connection->host() . "\n"; 
+              $europe_pmc_ftp_connection->host() . "\n";
         return;
     }
 
@@ -105,7 +105,7 @@ sub delete_old_files_from_europe_pmc {
                        $europe_pmc_ftp_connection->host() . "\n";
             } else {
                 print STDERR "There was a problem deleting '$file_to_delete' from the EuropePMC ftp server " .
-                             $europe_pmc_ftp_connection->host() . "\n";
+                             $europe_pmc_ftp_connection->host() . ": " . $europe_pmc_ftp_connection->message . "\n";
             }
         }
     }
