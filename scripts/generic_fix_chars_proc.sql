@@ -282,4 +282,8 @@ SET @proc_call = concat('CALL fix_chars_in_table_col(\'Summation\',\'text\',',@r
 PREPARE stmt from @proc_call;
 EXECUTE stmt;
 
+SET @proc_call = concat('CALL fix_chars_in_table_col(\'Event_2_name\',\'name\',',@run_update,');');
+PREPARE stmt from @proc_call;
+EXECUTE stmt;
+
 deallocate prepare stmt;
