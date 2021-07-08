@@ -51,11 +51,6 @@ override 'run_commands' => sub {
             ["perl upload_europepmc.pl -version $version > upload_europepmc.out 2> upload_europepmc.err"]
         ]
     );
-
-    # Run hapmap
-    $self->cmd('Running hapmap script', [
-        ["./1haprefseq.pl -user $user -pass $pass -db $db > 1haprefseq.out 2> 1haprefseq.err"]
-    ]);
 };
 
 1;

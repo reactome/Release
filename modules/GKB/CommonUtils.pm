@@ -179,23 +179,39 @@ sub get_name_and_id {
     my $instance = shift;
 
     return '' unless $instance && $instance->is_a('DatabaseObject');
-    return $instance->displayName . '(' . $instance->db_id . ')';
+    return $instance->displayName . ' (' . $instance->db_id . ')';
 }
 
 # Run command and return only relevant errors
 sub run_command {
     my $command = shift;
-    my $options = shift; # Currently 'ignore_error' is the only used option
+    my $options = shift; # Currently 'ignore_error' and 'ignore_all_errors_unless' are the only options supported
+
+    # Ignore all errors except for the pattern passed
+    my $error_to_check = $options->{'ignore_all_errors_unless'};
+
+    # Remove unneeded messages, defined as a regex passed into $options, from captured STDERR
+    my $error_to_ignore = $options->{'ignore_error'};
+
+    # Only allow one of the options for now to avoid confusion in using them together
+    #
+    # If the $error_to_check is present, all errors will be reported so it is possible to
+    # then filter out the $error_to_ignore. This means allowing both options in the future
+    # could be done, but since they are regular expressions it could be confusing if their
+    # matches overlap.
+    if ($error_to_check && $error_to_ignore) {
+        confess "Only one of the options 'ignore_all_errors_unless' and 'ignore_error' may be used\n";
+    }
 
     # Run command and store STDERR in variable
     my $stderr = capture_stderr {
         system $command;
     };
 
-    # Remove unneeded messages, defined as a regex passed into $options, from captured STDERR
-    my $error_to_ignore = $options->{'ignore_error'};
-    if ($error_to_ignore) {
-        $stderr =~ s/$error_to_ignore//m;
+    if ($error_to_check && $stderr !~ /$error_to_check/) {
+        $stderr = ''; # Discard errors if the error to look for is not present
+    } elsif ($error_to_ignore) {
+        $stderr =~ s/$error_to_ignore//m; # Remove the error to ignore
     }
 
     # Then return any remaining errors
