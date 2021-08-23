@@ -8,9 +8,9 @@ BEGIN {
     my @a = split('/',$path);
     pop @a;
     if (@a && !$a[0]) {
-	$#a = $#a - 2;
+    $#a = $#a - 2;
     } else {
-	push @a, ('..','..');
+    push @a, ('..','..');
     }
     push @a, 'modules';
     my $libpath = join('/', @a);
@@ -40,7 +40,7 @@ eval {
 # Pull useful information from the URL
 $WU = GKB::WebUtils->new_from_cgi(
     -CGI => $CGI,
-    );
+);
 $DBA = $WU->dba;
 $ID = $CGI->param('ID');
 $DB = $CGI->param('DB');
@@ -78,25 +78,25 @@ if ( !(-e $cache_path) || !$CACHE_GENERATED_DOCUMENTS ) {
     # Set up reader for pulling information out of Reactome
     my $reader = GKB::DocumentGeneration::ReactomeDatabaseReader->new();
     $reader->set_dba($DBA);
-    $reader->init_pathways(\@ids);
+    $reader->init_events(\@ids);
     $reader->set_reaction_representation(2);
     if ($CACHE_GENERATED_DOCUMENTS) {
-    	$reader->set_document_style_report();
+        $reader->set_document_style_report();
     } else {
-    	$reader->set_document_style_reviewers_report();
+        $reader->set_document_style_reviewers_report();
     }
     if (defined $base_url) {
-		$reader->set_hyperlink_base_url($base_url);
+        $reader->set_hyperlink_base_url($base_url);
     }
-	if (defined $DB) {
-		$reader->set_hyperlink_db($DB);
-	}
+    if (defined $DB) {
+        $reader->set_hyperlink_db($DB);
+    }
 
     # Generate RTF
     my $text_generator = GKB::DocumentGeneration::GenerateTextRTF->new;
-	if (defined $FS) {
-		$text_generator->set_regular_text_font_size($FS);
-	}
+    if (defined $FS) {
+        $text_generator->set_regular_text_font_size($FS);
+    }
     $text_generator->set_params(\%params);
     $text_generator->set_reader($reader);
     $text_generator->open();
@@ -121,10 +121,10 @@ sub print_page_start {
     $IN_HTML = 1;
     print $CGI->header(-charset => 'UTF-8');
     print $CGI->start_html(
-	-style => {-src => '/stylesheet.css'},
-	-title => "$PROJECT_NAME ($script_name)",
-	-script => {-src => '/google.js'}
-	);
+    -style => {-src => '/stylesheet.css'},
+    -title => "$PROJECT_NAME ($script_name)",
+    -script => {-src => '/google.js'}
+    );
     print $WU->top_navigation_box;
 }
 

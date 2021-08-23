@@ -592,40 +592,40 @@ sub is_pathway_with_content {
     my ($self, $event, $depth, $depth_limit, $include_diagrams_flag) = @_;
 
     if (!$event) {
-	return 0;
+        return 0;
     }
 
     # This event has text?  Great!
     if (get_pathway_text($self, $event)) {
-	return 1;
+        return 1;
     }
 
     # This event has an image?  Great!
     if ($include_diagrams_flag && find_image_file($self, $event)) {
-	return 1;
+        return 1;
     }
 
     # Don't recurse deeper than the user-specified depth limit, since we
     # won't be emitting any text/images below that level anyway.
     if ($depth eq $depth_limit) {
-	return 0;
+        return 0;
     }
 
     # If the event has components, then it is also considered as having content.
     my @components = ();
     my $components_ref = \@components;
-    if ($event->is_a("Pathway")) {
-	$components_ref = $event->attribute_value($event->is_valid_attribute('hasEvent') ? 'hasEvent' : 'hasComponent');
+    if ($event->is_a("Pathway") || $event->is_a("CellLineagePath")) {
+        $components_ref = $event->attribute_value($event->is_valid_attribute('hasEvent') ? 'hasEvent' : 'hasComponent');
     } elsif ($event->is_a("EquivalentEventSet")) {
-	$components_ref = $event->attribute_value("hasMember");
+        $components_ref = $event->attribute_value("hasMember");
     } elsif ($event->is_a("ConceptualEvent")) {
-	$components_ref = $event->attribute_value("hasSpecialisedForm");
+        $components_ref = $event->attribute_value("hasSpecialisedForm");
     } else {
-	#print STDERR "is_pathway_with_content: WARNING - unkown event type!!\n";
+        #print STDERR "is_pathway_with_content: WARNING - unkown event type!!\n";
     }
 
     if ($components_ref && scalar($components_ref) =~ /ARRAY/ && scalar(@{$components_ref})>0) {
-	return 1;
+        return 1;
     }
 
     return 0;
@@ -639,23 +639,23 @@ sub get_pathway_text {
     my $text = "";
 
     if (!$pathway) {
-	return $text;
+        return $text;
     }
 
     # By preference, return the text in the summation (usually
     # more complete).
     my $summation = $pathway->attribute_value("summation")->[0];
-    if ($summation) {
-	$text = $summation->attribute_value("text")->[0];
-	if ($text) {
-	    return $text;
-	}
+        if ($summation) {
+            $text = $summation->attribute_value("text")->[0];
+        if ($text) {
+            return $text;
+        }
     }
 
     # If the summation is empty, make do with the definition.
     $text = $pathway->attribute_value("definition")->[0];
     if ($text) {
-	return $text;
+        return $text;
     }
 
     return "";
@@ -852,23 +852,23 @@ sub find_image_file {
     my $logger = get_logger(__PACKAGE__);
 
     unless ($pathway) {
-#	print STDERR "find_image_file: WARNING - pathway is null!!!\n";
-	return "";
+        #print STDERR "find_image_file: WARNING - pathway is null!!!\n";
+        return "";
     }
 
     # Lets see if there is an image associated with this pathway
     my $figure = $pathway->attribute_value("figure")->[0];
     my $image_file = "";
     if ($figure) {
-	# find the file associated with the figure
-	$image_file = $figure->attribute_value("url")->[0];
-	if (defined $image_file) {
-	    my $images_dir = $GK_TMP_IMG_DIR;
-	    $images_dir =~ s/html\/img-tmp/images/;
-	
-	    $image_file =~ s/\/figures/$images_dir/;
-	} else {
-	    $logger->warn("crikey, no image file!!\n");
+        # find the file associated with the figure
+        $image_file = $figure->attribute_value("url")->[0];
+        if (defined $image_file) {
+            my $images_dir = $GK_TMP_IMG_DIR;
+            $images_dir =~ s/html\/img-tmp/images/;
+
+            $image_file =~ s/\/figures/$images_dir/;
+        } else {
+            $logger->warn("crikey, no image file!!\n");
         }
     } else {
 #        print STDERR "find_image_file: WARNING - for the current pathway, we have no figure.\n";
@@ -936,7 +936,7 @@ sub get_pathways_by_id {
     my @pathways = ();
 
     foreach my $id (@{$ids}) {
-	@pathways = (@pathways, @{$dba->fetch_instance_by_db_id($id)});
+        @pathways = (@pathways, @{$dba->fetch_instance_by_db_id($id)});
     }
 
     return @pathways;
@@ -967,6 +967,24 @@ sub get_all_pathways {
     return @{$pathways};
 }
 
+# Return a list of all known top-level events.
+# Will return top-level pathways from the front page instance
+# and all top-level cell lineage path instances
+#
+# Arguments:
+#
+# dba - database adaptor for Reactome database
+#
+# Returns array of top level pathway instances
+sub get_top_level_pathways {
+    my ($self, $dba) = @_;
+
+    my @top_level_events;
+    push @top_level_events, get_top_level_pathways($dba);
+    push @top_level_events, get_top_level_cell_lineage_paths($dba);
+    return @top_level_events;
+}
+
 # Return a list of all known top-level pathways.
 # Will first look to see if there are any known front page pathways;
 # if so, these will be returned.  Otherwise, returns a list of all
@@ -983,10 +1001,18 @@ sub get_top_level_pathways {
     my @top_level_pathways = get_frontPageItem_pathways($self, $dba);
 
     if (!(@top_level_pathways) || scalar(@top_level_pathways)<1) {
-	@top_level_pathways = get_root_pathways($self, $dba);
+        @top_level_pathways = get_root_pathways($self, $dba);
     }
 
     return @top_level_pathways;
+}
+
+sub get_top_level_cell_lineage_paths {
+    my ($self, $dba) = @_;
+
+    my @cell_lineage_paths = @{$dba->fetch_instance(-CLASS => 'CellLineagePath')};
+
+    return grep { scalar @{$_->reverse_attribute_value("hasEvent")} == 0 } @cell_lineage_paths;
 }
 
 # Return a list of top-level pathways as seen on the front

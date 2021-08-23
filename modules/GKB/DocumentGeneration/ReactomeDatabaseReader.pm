@@ -66,7 +66,7 @@ Log::Log4perl->init(\$LOG_CONF);
 
 @ISA = qw(GKB::DocumentGeneration::Reader);
 
-my $pathways;
+my ($pathways, $events);
 my $reaction_representation = 2;
 my $chapter_num = 1;
 my @global_text_units = ();
@@ -107,49 +107,49 @@ sub AUTOLOAD {
 sub new {
     my($pkg, @args) = @_;
     my $self = bless {}, $pkg;
-    
+
     $self->document_style($DOCUMENT_STYLE_BOOK);
-    $self->hyperlink_base_url("http://www.reactome.org");
+    $self->hyperlink_base_url("https://www.reactome.org");
     $self->hyperlink_db("gk_current");
-    
+
     my $instance_hash = {};
     $self->instance_hash($instance_hash);
-    
+
     return $self;
 }
 
 sub set_document_style {
     my ($self, $document_style) = @_;
-	
+
     $self->document_style($document_style);
 }
 
 sub set_document_style_book {
     my ($self) = @_;
-	
+
     $self->document_style($DOCUMENT_STYLE_BOOK);
 }
 
 sub set_document_style_report {
     my ($self) = @_;
-	
+
     $self->document_style($DOCUMENT_STYLE_REPORT);
 }
 
 sub set_document_style_reviewers_report {
     my ($self) = @_;
-	
+
     $self->document_style($DOCUMENT_STYLE_REVIEWERS_REPORT);
 }
 
 sub is_document_style_book {
     my ($self) = @_;
-	
-	if ($self->document_style() eq $DOCUMENT_STYLE_BOOK) {
-		return 1;
-	}
-	
-	return 0;
+
+    if ($self->document_style() eq $DOCUMENT_STYLE_BOOK) {
+        return 1;
+    }
+
+    return 0;
 }
 
 sub is_document_style_report {
@@ -267,17 +267,36 @@ sub set_dba {
     $dba = $external_dba;
 }
 
+sub init_events {
+    my ($self, $ids) = @_;
+
+    my @local_pathways_and_cell_lineage_paths;
+    if (@{$ids} && scalar(@{$ids}) > 0) {
+        @local_pathways_and_cell_lineage_paths = get_events_by_id($dba, $ids);
+    } else {
+        @local_pathways_and_cell_lineage_paths = GKB::Utils->get_top_level_events($dba);
+    }
+
+    $events = \@local_pathways_and_cell_lineage_paths;
+}
+
+sub set_events {
+    my ($self, $external_events) = @_;
+
+    $events = $external_events;
+}
+
 sub init_pathways {
     my ($self, $ids) = @_;
 
     my @local_pathways;
-    if (@{$ids} && scalar(@{$ids})>0) {
-	# $ids is a list of DB_IDs for pathways or reactions that
-	# you want to use to restrict the scope of what gets printed
-	# out.
-	@local_pathways = GKB::Utils->get_pathways_by_id($dba, $ids);
+    if (@{$ids} && scalar(@{$ids}) > 0) {
+        # $ids is a list of DB_IDs for pathways or reactions that
+        # you want to use to restrict the scope of what gets printed
+        # out.
+        @local_pathways = get_events_by_id($dba, $ids);
     } else {
-	@local_pathways = GKB::Utils->get_top_level_pathways($dba);
+        @local_pathways = GKB::Utils->get_top_level_pathways($dba);
     }
 
     $pathways = \@local_pathways;
@@ -476,12 +495,12 @@ sub get_next_text_unit {
     # the end of the chapter has been reached and try to start a new
     # chapter.
     unless ($text_unit) {
-    	# Get next top-level pathway
-		my $pathway = shift @{$pathways};
-		if ($pathway) {
-		    my @initial_pathways = ($pathway);
-		    	
-		    my @text_units = $self->get_chapters_from_events_text_units($depth, $depth_limit, $chapter_num, "", \@initial_pathways, $include_images_flag);
+    	# Get next top-level event
+		my $event = shift @{$events};
+		if ($event) {
+		    my @initial_events = ($event);
+
+		    my @text_units = $self->get_chapters_from_events_text_units($depth, $depth_limit, $chapter_num, "", \@initial_events, $include_images_flag);
 	
 		    if (@text_units && scalar(@text_units)>0) {
 		    	$self->store_array(\@text_units);
@@ -649,15 +668,18 @@ sub get_chapters_from_events_text_units {
     my $logger = get_logger(__PACKAGE__);
     
     my @actual_events = @{$events};
-    if (scalar(@actual_events) == 2 && $events->[0]->is_a("Pathway") && $events->[1]->is_a("Pathway")) {
-        $logger->info("we have 2 pathways");
+    if (scalar(@actual_events) == 2 &&
+        ($events->[0]->is_a("Pathway") || $events->[0]->is_a("CellLineagePath")) &&
+        ($events->[1]->is_a("Pathway") || $events->[1]->is_a("CellLineagePath"))
+    ) {
+        $logger->info("we have 2 top-level events");
 
         if (scalar(@{$events->[0]->disease}) > 0 && scalar(@{$events->[1]->disease}) == 0) {
-            $logger->info("first pathway is diseased");
+            $logger->info("first top-level event is diseased");
             @actual_events = ($events->[0]);
         }
         if (scalar(@{$events->[0]->disease}) == 0 && scalar(@{$events->[1]->disease}) > 0) {
-            $logger->info("second pathway is diseased");
+            $logger->info("second top-level event is diseased");
             @actual_events = ($events->[1]);
         }
     }
@@ -698,7 +720,7 @@ sub get_chapters_from_events_text_units {
     my $new_section;
     my $instance_hash = $self->instance_hash;
     my $instance_text;
-    for ($event_num = 0; $event_num<scalar(@actual_events); $event_num++) {
+    for ($event_num = 0; $event_num < scalar(@actual_events); $event_num++) {
 		# Limit recursion to a single event.
 		if ($step_thru_increments) {
 		    if ($event_num<$step_thru_position) {
@@ -711,11 +733,11 @@ sub get_chapters_from_events_text_units {
 		$event = $actual_events[$event_num];
 
 		# Add a title and/or a list of authors to the beginning of the document
-		if ($depth==0 && !($self->is_document_style_book()) && $event->is_a("Pathway") && scalar(GKB::Utils->get_instance_sub_events($event))>0) {
+		if ($depth==0 && !($self->is_document_style_book()) && ($event->is_a("Pathway") || $event->is_a("CellLineagePath")) && scalar(GKB::Utils->get_instance_sub_events($event))>0) {
 			if ($self->is_document_style_report()) {
 				@text_units = (@text_units, $self->get_report_title($event, $depth));
 				@text_units = (@text_units, $self->get_report_authors($event));
-			} elsif ($depth==0 && !$self->is_document_style_report() && $event->is_a("Pathway") && scalar(GKB::Utils->get_instance_sub_events($event))>0) {
+			} elsif ($depth==0 && !$self->is_document_style_report() && ($event->is_a("Pathway") || $event->is_a("CellLineagePath")) && scalar(GKB::Utils->get_instance_sub_events($event))>0) {
 				@text_units = (@text_units, $self->get_reviewers_report_title($event, $depth));
 				@text_units = (@text_units, $self->get_reviewers_report_introduction($event, $depth));
 			}
@@ -728,12 +750,12 @@ sub get_chapters_from_events_text_units {
 		}
 	
 		# Don't try to emit an event that lacks content (text or image)
-		if ($event->is_a("Pathway") && !( GKB::Utils->is_pathway_with_content($event, $new_depth, $depth_limit) )) {
+		if (($event->is_a("Pathway") || $event->is_a("CellLineagePath")) && !( GKB::Utils->is_pathway_with_content($event, $new_depth, $depth_limit) )) {
 			next;
 		}
 		
 		# If we are reporting a disease pathway, skip normal pathways
-		if (!(@{$event->disease} > 0) && $self->{diseased} && $event->is_a("Pathway")) {
+		if (!(@{$event->disease} > 0) && $self->{diseased} && ($event->is_a("Pathway") || $event->is_a("CellLineagePath"))) {
 		    next;
 		}
 
@@ -756,15 +778,15 @@ sub get_chapters_from_events_text_units {
 		    @text_units = (@text_units, @new_text_units);
 		} else {
 		    if ($step_thru_increments) {
-			# If the next level of recursion no longer returns any
-			# text units, it's an indication that it has been exhausted
-			# and so we can go on to the next event.
-			$step_thru_increments->[$depth]++;
+			    # If the next level of recursion no longer returns any
+			    # text units, it's an indication that it has been exhausted
+			    # and so we can go on to the next event.
+			    $step_thru_increments->[$depth]++;
 		    }
 		}
 		
 		# Add a literature list to the end of the document
-		if ($depth==0 && !($self->document_style() eq $DOCUMENT_STYLE_BOOK) && $event->is_a("Pathway") && scalar(GKB::Utils->get_instance_sub_events($event))>0) {
+		if ($depth==0 && !($self->document_style() eq $DOCUMENT_STYLE_BOOK) && ($event->is_a("Pathway") || $event->is_a("CellLineagePath")) && scalar(GKB::Utils->get_instance_sub_events($event))>0) {
 			@text_units = (@text_units, $self->get_event_literature_summary($event, $depth));
 		}
     }
@@ -1110,8 +1132,8 @@ sub get_instance_text_units {
     my $text_unit;
 
     unless ($instance) {
-	$logger->info("instance is null!");
-	return @text_units;
+        $logger->info("instance is null!");
+        return @text_units;
     }
 
     my $instance_name = $self->get_instance_name($instance);
@@ -1124,52 +1146,53 @@ sub get_instance_text_units {
     
     my $event_type = lc($instance->class());
     if ($instance->is_a("Event")) {
-	$event_type = "event";
-	if ($instance->is_a("ReactionlikeEvent")) {
-	    $event_type = "reaction";
-	} elsif ($instance->is_a("Pathway")) {
-	    $event_type = "pathway";
-	}
+        $event_type = "event";
+        if ($instance->is_a("ReactionlikeEvent")) {
+            $event_type = "reaction";
+        } elsif ($instance->is_a("CellLineagePath")) {
+            $event_type = "celllineagepath";
+        } elsif ($instance->is_a("Pathway")) {
+            $event_type = "pathway";
+        }
     }
 
     # Emit a header containing the instance name, to start the new section
     my $disease = @{$instance->disease} > 0;
-    my $skip_pathway = $instance->is_a("Pathway") && !$disease && $self->{diseased};
+    my $skip_pathway = ($instance->is_a("Pathway") || $instance->is_a("CellLineagePath") && !$disease && $self->{diseased};
 
     $text_unit = GKB::DocumentGeneration::TextUnit->new();
     $text_unit->set_type("section_header");
     if ($disease) {
-	$text_unit->set_contents('<font color="red">'.$new_section . "  " . $instance_name . " (" . $instance->class . ")" . '</font>');
+        $text_unit->set_contents('<font color="red">'.$new_section . "  " . $instance_name . " (" . $instance->class . ")" . '</font>');
     }
     else {
-	$text_unit->set_contents($new_section . "  " . $instance_name . " (" . $instance->class . ")");
+        $text_unit->set_contents($new_section . "  " . $instance_name . " (" . $instance->class . ")");
     }
     $text_unit->set_depth($depth);
     push @text_units, $text_unit;
 
     if ($instance->is_a("ReactionlikeEvent")) {
-	if ($reaction_representation==1) {
-	    @text_units = (@text_units, $self->get_reaction_description_text_units($instance));
-	} elsif ($reaction_representation==2) {
-	    @text_units = (@text_units, $self->get_reaction_diagram_text_units($instance));
-	}
+        if ($reaction_representation==1) {
+            @text_units = (@text_units, $self->get_reaction_description_text_units($instance));
+        } elsif ($reaction_representation==2) {
+            @text_units = (@text_units, $self->get_reaction_diagram_text_units($instance));
+        }
     }
 
-    if ($instance->is_a("Pathway") || $instance->is_a("ReactionlikeEvent") || $instance->is_a("BlackBoxEvent")) { 
+    if ($instance->is_a("Pathway") || $instance->is_a("CellLineagePath") || $instance->is_a("ReactionlikeEvent") || $instance->is_a("BlackBoxEvent")) {
         if (defined $self->hyperlink_base_url && defined $self->hyperlink_db) {
             $text_unit = GKB::DocumentGeneration::TextUnit->new();
             push @text_units, $text_unit;
             $text_unit = GKB::DocumentGeneration::TextUnit->new();
             $text_unit->set_type("hyperlink");
             $text_unit->set_contents("See web page for this $event_type");
-	    
-	    my $url = $self->hyperlink_base_url;
-	    if ($instance->is_a("Pathway") && GKB::WebUtils->has_diagram($db_name,$instance)) {
-		$url .= "/PathwayBrowser/#FOCUS_PATHWAY_ID=$instance_db_id";
-	    }
-	    else {
-		$url .= "/content/detail/$instance_db_id";
-	    }
+
+            my $url = $self->hyperlink_base_url;
+            if (($instance->is_a("Pathway") || $instance->is_a("CellLineagePath")) && GKB::WebUtils->has_diagram($db_name,$instance)) {
+                $url .= "/PathwayBrowser/#FOCUS_PATHWAY_ID=$instance_db_id";
+            } else {
+                $url .= "/content/detail/$instance_db_id";
+            }
 
             $text_unit->set_url($url);
             push @text_units, $text_unit;
@@ -1848,6 +1871,25 @@ sub get_instance_diagram_text_units {
     }
 
     return @text_units;
+}
+
+#
+# Arguments:
+#
+# dba - database adaptor for Reactome database
+# ids - reference to an array of IDs
+#
+# Returns array of event instances
+sub get_events_by_id {
+    my ($self, $dba, $ids) = @_;
+
+    my @events = ();
+
+    foreach my $id (@{$ids}) {
+        @events = (@events, @{$dba->fetch_instance_by_db_id($id)});
+    }
+
+    return @events;
 }
 
 1;

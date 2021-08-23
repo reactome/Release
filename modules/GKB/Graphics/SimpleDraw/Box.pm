@@ -87,6 +87,49 @@ sub render {
   1;  # just to return a true value
 }
 
+sub cell {
+    my ($self,$gd,$options,$x1,$y1,$x2,$y2) = @_;
+
+    my $orange = $gd->colorResolve(194,128,0);
+
+    # Outer box for cell membrane
+    my $ox1 = $x1 + 2;
+    my $ox2 = $x2 - 2;
+    my $oy1 = $y1 + 2;
+    my $oy2 = $y2 - 2;
+    $self->box($gd,$options,$ox1,$oy1,$ox2,$oy2);
+
+    # Inner box for nucleus
+    my $ix1 = $x1;
+    my $ix2 = $x2;
+    my $iy1 = $y1 + (($y2 - $y1) / 2);
+    my $iy2 = $y2;
+    $self->box($gd,$options,$ix1,$iy1,$ix2,$iy2);
+
+    my $outer_width = $ox2 - $ox1;
+    my $outer_height = $oy2 - $oy1;
+
+    # Eclipses for organelles
+
+    ## Left organelle
+    my $left_oval_width = $outer_width / 3;
+    my $left_oval_height = $outer_height / 4;
+    my $left_oval_x =  $ox1 + ($outer_width / 12);
+    my $left_oval_y = $oy1 + ($outer_height / 8);
+    my $left_oval_centre_x = $left_oval_x + ($left_oval_width / 2);
+    my $left_oval_centre_y = $left_oval_y + ($left_oval_height / 2);
+    $gd->ellipse($left_oval_centre_x, $left_oval_centre_y, $left_oval_width, $left_oval_height, $orange);
+
+    ## Right organelle
+    my $right_oval_width = $outer_width / 3;
+    my $right_oval_height = $outer_height / 4;
+    my $right_oval_x =  $ox1 + ($outer_width / 12) * 7;
+    my $right_oval_y = $oy1 + ($outer_height / 8);
+    my $right_oval_centre_x = $right_oval_x + ($right_oval_width / 2);
+    my $right_oval_centre_y = $right_oval_y + ($right_oval_height / 2);
+    $gd->ellipse($right_oval_centre_x, $right_oval_centre_y, $right_oval_width, $right_oval_height, $orange);
+}
+
 sub double_box {
     my ($self,$gd,$options,$x1,$y1,$x2,$y2) = @_;
     my $ox1 = $x1 + 2;

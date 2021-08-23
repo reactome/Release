@@ -11,6 +11,7 @@ use constant PROTEIN_COLOR  => [206,253,208];
 use constant COMPLEX_COLOR  => [208,255,255];
 use constant SMALLMOL_COLOR => [206,253,208];
 use constant SET_COLOR      => [208,255,255];
+use constant CELL_COLOR     => [229,170,0];
 
 use constant SMALLMOL_RENDERING_PARAMS => {elipse=>1,fill=>SMALLMOL_COLOR};
 use constant COMPLEX_RENDERING_PARAMS => {box=>1,fill=>COMPLEX_COLOR};
@@ -28,14 +29,16 @@ use constant DEFINEDSET_RENDERING_PARAMS => {double_box=>1,fill=> SET_COLOR};
 use constant OPENSET_RENDERING_PARAMS => {double_box=>1,fill=>SET_COLOR};
 use constant CANDIDATESET_RENDERING_PARAMS => {double_box=>1,fill=>SET_COLOR};
 
+use constant CELL_RENDERING_PARAMS => {double_box=>1,fill=>SET_COLOR};
+
 sub new {
     my $class = shift;
     $class = ref($class) if ref $class;
     my ($instance,$coefficient,$rp) = rearrange([qw(INSTANCE COEFFICIENT RENDERING_PARAMS)],@_);
     return bless {
-	instance => $instance,
-	coefficient => $coefficient,
-#	rendering_params => $rp,
+        instance => $instance,
+        coefficient => $coefficient,
+        # rendering_params => $rp,
     },$class;
 }
 
@@ -44,12 +47,13 @@ sub coefficient { return shift->{coefficient} }
 sub box { if (@_ > 1) { $_[0]->{box} = $_[1];} return $_[0]->{box}}
 sub left { if (@_ > 1) { $_[0]->{left} = $_[1];} return $_[0]->{left}}
 sub top { if (@_ > 1) { $_[0]->{top} = $_[1];} return $_[0]->{top}}
+
 sub rendering_params {
     if (@_ > 1) {
-	$_[0]->{rendering_params} = $_[1];
+        $_[0]->{rendering_params} = $_[1];
     }
     if (my $t = $_[0]->{rendering_params}) {
-	return $t;
+        return $t;
     }
     return $_[0]->default_rendering_params;
 }
@@ -77,19 +81,19 @@ sub out_edge_y {
 
 sub in_edge_y {
 #    warn("in_edge_y: " . scalar(@{$_[0]->in_edges}) . " " . $_[0]->instance->extended_displayName . "\n" .
-#	join("\n", map {$_->type . " " . $_->from->instance->extended_displayName} @{$_[0]->in_edges}) . "\n");
+#   join("\n", map {$_->type . " " . $_->from->instance->extended_displayName} @{$_[0]->in_edges}) . "\n");
     return $_[0]->find_edge_y($_[1], $_[0]->in_edges);
 }
 
 sub find_edge_y {
     my ($self,$edge,$ar) = @_;
     foreach my $i (0 .. $#{$ar}) {
-	if ($edge == $ar->[$i]) {
-#	    warn("$self, $edge, $i\n");
-	    return $self->top + $self->height/(@{$ar} + 1) * ($i + 1);
-	}
+        if ($edge == $ar->[$i]) {
+            #    warn("$self, $edge, $i\n");
+            return $self->top + $self->height/(@{$ar} + 1) * ($i + 1);
+        }
     }
-#    warn("Edge not found for this node.\n");
+    #    warn("Edge not found for this node.\n");
     return $self->top + $self->height/2;
 }
 
@@ -101,10 +105,10 @@ sub add_out_edge { push @{shift->{out_edges}},@_ }
 sub coords {
     my $self = shift;
     return (
-	$self->left,
-	$self->top,
-	$self->left + $self->width,
-	$self->top + $self->height
+        $self->left,
+        $self->top,
+        $self->left + $self->width,
+        $self->top + $self->height
     );
 }
 
@@ -112,41 +116,44 @@ sub default_rendering_params {
     my $self = shift;
     my $i = $self->instance;
     unless ($i) {
-	return HELPER_RENDERING_PARAMS;
+        return HELPER_RENDERING_PARAMS;
     }
+
     if ($i->is_a('PhysicalEntity')) {
-	if ($i->is_a('SequenceEntity') || $i->is_a('EntityWithAccessionedSequence')) {
-	    if ($i->ReferenceEntity->[0] && ($i->ReferenceEntity->[0]->is_a('ReferenceGeneProduct') || $i->ReferenceEntity->[0]->is_a('ReferencePeptideSequence'))) {
-		return PROTEIN_RENDERING_PARAMS;
-	    } else {
-		return SEQUENCE_RENDERING_PARAMS;
-	    }
-	} elsif ($i->is_a('GenomeEncodedEntity')) {
-	    return GEE_RENDERING_PARAMS;
-	} elsif ($i->is_a('Complex')) {
-	    return COMPLEX_RENDERING_PARAMS;
-	} elsif ($i->is_a('ConcreteSimpleEntity') || ($i->class eq 'SimpleEntity')) {
-	    return SMALLMOL_RENDERING_PARAMS;
-	} elsif ($i->is_a('EntitySet')) {
-	    if ($i->is_a('DefinedSet')) {
-		return DEFINEDSET_RENDERING_PARAMS;
-	    } elsif ($i->is_a('OpenSet')) {
-		return OPENSET_RENDERING_PARAMS;
-	    } else {
-		return CANDIDATESET_RENDERING_PARAMS;
-	    }
-	} else {
-	    return OTHER_RENDERING_PARAMS;
-	}
+        if ($i->is_a('SequenceEntity') || $i->is_a('EntityWithAccessionedSequence')) {
+            if ($i->ReferenceEntity->[0] && ($i->ReferenceEntity->[0]->is_a('ReferenceGeneProduct') || $i->ReferenceEntity->[0]->is_a('ReferencePeptideSequence'))) {
+                return PROTEIN_RENDERING_PARAMS;
+            } else {
+                return SEQUENCE_RENDERING_PARAMS;
+            }
+        } elsif ($i->is_a('GenomeEncodedEntity')) {
+            return GEE_RENDERING_PARAMS;
+        } elsif ($i->is_a('Complex')) {
+            return COMPLEX_RENDERING_PARAMS;
+        } elsif ($i->is_a('ConcreteSimpleEntity') || ($i->class eq 'SimpleEntity')) {
+            return SMALLMOL_RENDERING_PARAMS;
+        } elsif ($i->is_a('EntitySet')) {
+            if ($i->is_a('DefinedSet')) {
+            return DEFINEDSET_RENDERING_PARAMS;
+            } elsif ($i->is_a('OpenSet')) {
+            return OPENSET_RENDERING_PARAMS;
+            } else {
+            return CANDIDATESET_RENDERING_PARAMS;
+            }
+        } elsif ($i->is_a("Cell")) {
+            return CELL_RENDERING_PARAMS;
+        } else {
+            return OTHER_RENDERING_PARAMS;
+        }
     } else {
-	return EVENT_RENDERING_PARAMS;
+        return EVENT_RENDERING_PARAMS;
     }
 }
 
 sub clean {
     my $self = shift;
     foreach my $k (keys %{$self}) {
-	delete $self->{$k};
+        delete $self->{$k};
     }
 }
 
