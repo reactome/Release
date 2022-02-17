@@ -13,6 +13,7 @@ use GKB::EnsEMBLUtils qw/on_EnsEMBL_primary_assembly/;
 use GKB::Utils_esther;
 
 use autodie;
+use Carp;
 use Data::Dumper;
 use DateTime;
 use Getopt::Long;
@@ -580,8 +581,9 @@ open(my $duplicate_db_id_fh, '>', "$update_dir/duplicated_db_id.txt" );
 
 print "Deleting obsolete instances with no referers....\n";
 
+my $trembl_hash = get_trembl_hash("$update_dir/$trembl_file");
 foreach my $sp_ac ( sort keys %reactome_gp ) {
-    if ( `grep -m 1 '^$sp_ac\$' $update_dir/$trembl_file` ) {
+    if (exists $trembl_hash{$sp_ac}) {
         print $trembl_fh "$sp_ac\n";
         delete( $reactome_gp{$sp_ac} );
     } else {
@@ -645,7 +647,7 @@ print "Preparing reports...\n";
 my %no_referrer = ();
 
 foreach ( sort keys %dup_db_id ) {
-    next if `grep -m 1 '^$dup_db_id{$_}\$' $update_dir/$trembl_file`;
+    next if exists $trembl_hash{$dup_db_id{$_}};
     print $duplicate_db_id_fh "$dup_db_id{$_}\t$_\n";
 }
 close $duplicate_db_id_fh;
@@ -688,9 +690,9 @@ foreach my $t_ac ( sort keys %reactome_gp ) {
                 }
             }
             if (@referrer) {
-                my $report_line = "\|\[http\://www.uniprot.org/uniprot/$all_ac $all_ac\]\n\|";
+                my $report_line = "\|\[https\://www.uniprot.org/uniprot/$all_ac $all_ac\]\n\|";
                 $report_line .= "$t_ac\n\|";		#CY addition
-                $report_line .= "\[http\://reactomecurator\.oicr\.on.ca/cgi-bin/instancebrowser\?DB=$opt_db\&ID\=$pid\& $pid\]\n\|";
+                $report_line .= "\[https\://curator.reactome.org/cgi-bin/instancebrowser\?DB=$opt_db\&ID\=$pid\& $pid\]\n\|";
                 $report_line .= '|'  . join('|', @referrer) . "\n\|";
                 $report_line .= $species;
                 $report_line .= "\n\|\-\n";
@@ -753,7 +755,7 @@ foreach my $rac ( sort keys %reactome_gp ) {
     if (@referrer) {
         my $report_line = "\|\n\|";
         $report_line .= "\|$rac\n\|";
-        $report_line .= "\[http\://reactomecurator.oicr.on.ca/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$pid\& $pid\]\n\|";
+        $report_line .= "\[https\://curator.reactome.org/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$pid\& $pid\]\n\|";
         $report_line .= '|' . join('|', @referrer) . "\n\|";
         $report_line .= $species;
         $report_line .= "\n\|\-\n";
@@ -796,7 +798,7 @@ foreach my $iac ( sort keys %reactome_iso ) {
 
             my $report_line = "\|\n\|";
             $report_line .= "\|$iac\n\|";
-            $report_line .= "\[http\://reactomecurator.oicr.on.ca/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$id\& $id\]\n\|";
+            $report_line .= "\[https\://curator.reactome.org/cgi-bin/instancebrowser\?DB\=$opt_db\&ID\=$id\& $id\]\n\|";
             $report_line .= '|' . join('|', @referrer) . "\n\|";
             $report_line .= $species;
             $report_line .= "\n\|\-\n";
@@ -1070,4 +1072,17 @@ sub get_skip_list {
     closedir $dir;
 
     return keys %skip_list_id;
+}
+
+sub get_trembl_hash {
+    my $trembl_file_path = shift || confess "TrEBML file path required\n");
+    my %trembl_hash = ();
+
+    open(my $trembl_fh, '<', $trembl_file_path);
+    while(my $trembl_id = <$trembl_fh>) {
+        chomp $trembl_id;
+        $trembl_hash{$trembl_id} = 1;
+    }
+    close $trembl_file_path;
+    return \%trembl_hash;
 }
