@@ -30,13 +30,13 @@ $curator_tool_repo_verison ||= $DEFAULT_REPO_VERSION;
 
 my %repositories = (
     'Pathway-Exchange' => {
-        url => 'https://github.com/reactome/Pathway-Exchange.git',
+        url => 'https://github.com/reactome/Pathway-Exchange',
         version => $pathway_exchange_repo_version,
         ant_xml_file => 'GSEAdeployAsApplication.xml',
         output => 'GSEAExport.jar',
     },
     'CuratorTool' => {
-        url => 'https://github.com/reactome/CuratorTool.git',
+        url => 'https://github.com/reactome/CuratorTool',
         version => $curator_tool_repo_verison,
         ant_xml_file => 'WebELVDiagram.xml',
         output => 'WebELVTool/*.jar',
@@ -50,7 +50,9 @@ foreach my $repository_name (keys %repositories) {
     # Pull latest changes if local repository exists
     if (-d "$repository_name/.git") {
         chdir $repository_name;
-        my $stderr = run_command('git pull');
+        my $stderr = run_command('git pull', {
+            ignore_all_errors_unless => qr/error:/
+        });
         if (trim($stderr)) {
             print STDERR "Problem pulling $repository_name:\n$stderr";
         }

@@ -47,9 +47,10 @@ sub run {
     execute_biomodels_jar_file($biomodels_jar_file, $xml_tarball);
 
     remove_biomodels_repository($tmp_dir);
+    remove_symbolic_link_to_biomodels_repository($link_name);
 
     chdir "$present_dir";
-    system("perl add_links_to_single_resource.pl -user $opt_user -pass $opt_pass -host $opt_host -port $opt_port -db $opt_db -res BioModelsEventToDatabaseIdentifier");
+    system("perl add_links_to_biomodels_resource.pl -user $opt_user -pass $opt_pass -host $opt_host -port $opt_port -db $opt_db");
 
     $logger->info("$0 has finished its job\n");
 }
@@ -58,6 +59,7 @@ sub clone_biomodels_repository_from_github {
     my $directory = shift;
 
     my $present_dir = getcwd();
+
     chdir $directory;
     system "rm -fr biomodels-mapper" if -d "biomodels-mapper";
     my $return_value = system("git clone https://github.com/reactome/biomodels-mapper.git");
@@ -69,14 +71,17 @@ sub clone_biomodels_repository_from_github {
 sub create_symbolic_link_to_biomodels_repository {
     my $directory = shift;
     my $link_name = shift;
+
     return (system("rm -rf $link_name; ln -s $directory/biomodels-mapper $link_name") == 0);
 }
 
 sub create_biomodels_jar_file {
     my $jar_file = shift;
     my $symbolic_link_to_repository = shift;
+
     my $logger = get_logger(__PACKAGE__);
     my $present_dir = getcwd();
+
     chdir "$symbolic_link_to_repository";
     system("mvn clean package");
     my $return_value = copy("target/biomodels-mapper-1.0.jar", "$present_dir/$jar_file");
@@ -114,4 +119,10 @@ sub remove_biomodels_repository {
 
     chdir $directory;
     return (system("rm -rf biomodels-mapper") == 0);
+}
+
+sub remove_symbolic_link_biomodels_repository {
+    my $link_name = shift;
+
+    return (system("rm -rf $link_name") == 0);
 }
